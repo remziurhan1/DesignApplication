@@ -1,0 +1,22 @@
+﻿using MVC.ProductManagement.Domain.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MVC.ProductManagement.Application.DTOs.MaterialFormDTOs
+{
+    public class MaterialFormListDto
+    {
+        public Guid Id { get; set; }
+        public Guid MaterialId { get; set; }
+
+        public MaterialFormType FormType { get; set; }
+        public double ThicknessMin { get; set; }
+        public double ThicknessMax { get; set; }
+        public double UnitPrice { get; set; }
+        public string MaterialName { get; set; }
+
+    }
+}

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialFormVms.MaterialFormListVm>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+        @*     <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaterialId)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.FormType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThicknessMin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThicknessMax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaterialName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+              @*   <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaterialId)
+                </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.FormType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThicknessMin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThicknessMax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaterialName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-area="Admin"
+                       asp-controller="YieldStrength"
+                       asp-action="Index"
+                       asp-route-materialFormId="@item.Id">
+                        View Yield Strengths
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,48 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialFormVms.MaterialFormCreateVm
+@{
+    ViewData["Title"] = "Create Material Form";
+}
+
+<h2>Create Material Form</h2>
+
+<form asp-area="Admin" asp-controller="MaterialForm" asp-action="Create" method="post">
+   
+    <div class="form-group">
+    <label for="MaterialId">Material</label>
+    <select asp-for="MaterialId" asp-items="ViewBag.Materials" class="form-control"></select>
+</div>
+
+    <div class="mb-3">
+        <label asp-for="FormType" class="form-label"></label>
+        <select asp-for="FormType" class="form-select"
+                asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.MaterialFormType>()"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ThicknessMin" class="form-label"></label>
+        <input asp-for="ThicknessMin" class="form-control" type="number" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ThicknessMax" class="form-label"></label>
+        <input asp-for="ThicknessMax" class="form-control" type="number" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProductStandard" class="form-label"></label>
+        <input asp-for="ProductStandard" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="WeldingFactor" class="form-label"></label>
+        <input asp-for="WeldingFactor" class="form-control" type="number" step="0.01" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-area="Admin" asp-controller="MaterialForm" asp-action="Index" asp-route-materialId="@Model.MaterialId" class="btn btn-secondary">Cancel</a>
+</form>

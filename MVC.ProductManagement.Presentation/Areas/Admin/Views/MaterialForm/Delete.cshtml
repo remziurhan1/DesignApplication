@@ -1,0 +1,17 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialFormVms.MaterialFormDetailVm
+@{
+    ViewData["Title"] = "Delete Material Form";
+}
+
+<h2>Delete Confirmation</h2>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete <strong>@Model.FormType</strong> with thickness range <strong>@Model.ThicknessMin - @Model.ThicknessMax mm</strong>?
+</div>
+
+<form asp-area="Admin" asp-controller="MaterialForm" asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="MaterialId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-area="Admin" asp-controller="MaterialForm" asp-action="Index" asp-route-materialId="@Model.MaterialId" class="btn btn-secondary">Cancel</a>
+</form>

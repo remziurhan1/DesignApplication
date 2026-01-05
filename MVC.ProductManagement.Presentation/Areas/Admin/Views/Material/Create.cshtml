@@ -1,0 +1,72 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialVMs.MaterialCreateVm
+
+@{
+    ViewData["Title"] = "Create Material";
+}
+
+<h2>Create Material</h2>
+
+<form asp-area="Admin" asp-controller="Material" asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MaterialNumber" class="form-label"></label>
+        <input asp-for="MaterialNumber" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Standard" class="form-label"></label>
+        <select asp-for="Standard" class="form-select"
+                asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.MaterialStandard>()"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Group" class="form-label"></label>
+        <input asp-for="Group" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Density" class="form-label"></label>
+        <input asp-for="Density" class="form-control" type="number" step="0.01" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-area="Admin" asp-controller="Material" asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+    <h4>Material Info</h4>
+    <!-- burada malzeme alanları olacak -->
+
+    <h4>Form Info</h4>
+    <div id="forms-container">
+        <div class="form-block">
+            <label>Form Type</label>
+            <select name="Forms[0].FormType" class="form-select"
+                    asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.MaterialFormType>()"></select>
+
+            <label>Thickness Min</label>
+            <input name="Forms[0].ThicknessMin" type="number" class="form-control" />
+
+            <label>Thickness Max</label>
+            <input name="Forms[0].ThicknessMax" type="number" class="form-control" />
+
+            <label>Product Standard</label>
+            <input name="Forms[0].ProductStandard" type="text" class="form-control" />
+
+            <label>Welding Factor</label>
+            <input name="Forms[0].WeldingFactor" type="number" step="0.01" class="form-control" />
+
+            <label>Notes</label>
+            <textarea name="Forms[0].Notes" class="form-control"></textarea>
+        </div>
+    </div>
+
+</form>

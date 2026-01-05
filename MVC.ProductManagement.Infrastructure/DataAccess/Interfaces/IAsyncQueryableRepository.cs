@@ -1,0 +1,17 @@
+﻿using MVC.ProductManagement.Domain.Core.BaseEntities;
+using MVC.ProductManagement.Domain.Core.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MVC.ProductManagement.Infrastructure.DataAccess.Interfaces
+{
+    public interface IAsyncQueryableRepository<TEntity> where TEntity : BaseEntity
+    {
+        Task<IEnumerable<TEntity>> GetAllAsync(bool tracking = true); // hepsini getir çoklu sorgu
+        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> expression, bool tracking = true); // koşula göre getir. Overload çoklu sorgu
+    }
+}

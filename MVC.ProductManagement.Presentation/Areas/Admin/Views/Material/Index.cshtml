@@ -1,0 +1,42 @@
+﻿ @model List<MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialVMs.MaterialListVm>
+
+@{
+    ViewData["Title"] = "Material List";
+}
+
+<h2>Materials</h2>
+
+<p>
+    <a asp-area="Admin" asp-controller="Material" asp-action="Create" class="btn btn-primary">+ New Material</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Standard</th>
+            <th>Group</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Standard</td>
+                <td>@item.Group</td>
+                <td>
+                    <a asp-area="Admin" asp-controller="Material" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                    <a asp-area="Admin" asp-controller="Material" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-area="Admin" asp-controller="Material" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                    <!-- ✅ Yeni Forms butonu -->
+                    <a asp-area="Admin" asp-controller="MaterialForm" asp-action="Index" asp-route-materialId="@item.Id"
+                       class="btn btn-secondary btn-sm">Forms</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

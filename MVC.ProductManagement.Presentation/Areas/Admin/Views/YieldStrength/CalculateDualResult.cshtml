@@ -1,0 +1,27 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.YieldStrengthListVMs.YieldStrengthDualResultVM
+
+<h2>Result</h2>
+<div class="mb-3">
+    <strong>Malzeme:</strong> @Model.MaterialName <br />
+    <strong>Form:</strong> @Model.MaterialFormName
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Temperature (°C)</th>
+            <th>Rp0.2 Shell</th>
+            <th>Rm Shell</th>
+            <th>Rp0.2 Head</th>
+            <th>Rm Head</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Temperature</td>
+            <td>@Model.Rp02_Shell</td>
+            <td>@Model.Rm_Shell</td>
+            <td>@Model.Rp02_Head</td>
+            <td>@Model.Rm_Head</td>
+        </tr>
+    </tbody>
+</table>
