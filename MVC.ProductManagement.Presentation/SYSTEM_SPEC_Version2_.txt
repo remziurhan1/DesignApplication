@@ -1,0 +1,146 @@
+# 🏭 Tank Otomasyon Sistemi - Teknik Şartname
+
+## 📋 Proje Özeti
+
+Tank satış sürecini otomatikleştiren bir sistem.  Satışçılar dropdown'lardan seçim yaparak hatasız talep oluşturacak, sistem otomatik hesaplama yapacak, yönetici onaylayacak ve PDF teklif çıkacak.
+
+---
+
+## 👥 Kullanıcı Rolleri
+
+| Rol | Görevi |
+|-----|--------|
+| **Satışçı** | Dropdown'lardan seçim yapar, talep oluşturur |
+| **Teklif Mühendisi** | Özel tanklar için hesaplama yapar |
+| **Yönetici** | Fiyat/indirim onayı verir |
+| **Admin** | Standart ürünleri tanımlar |
+
+---
+
+## 🏷️ Tank Kodu Yapısı
+
+```
+CRYO-06-STR-20-V-26-A-1675
+  │    │   │   │  │  │  │   │
+  │    │   │   │  │  │  │   └── 1675:  İç tank çapı (mm)
+  │    │   │   │  │  │  └────── A: Aboveground / U: Underground
+  │    │   │   │  │  └───────── 26: Basınç (bar)
+  │    │   │   │  └──────────── V: Vertical / H: Horizontal
+  │    │   │   └─────────────── 20: Hacim (m³)
+  │    │   └──────���──────────── STR: Storage / TRN: Transport
+  │    └─────────────────────── 06: Gaz tipi kodu
+  └──────────────────────────── CRYO:  Firma prefix
+```
+
+---
+
+## ⛽ Gaz Tipleri
+
+| Gaz | Kod | Mamül Prefix | Basınçlar |
+|-----|-----|--------------|-----------|
+| LPG | 01 | CAA0 | 17.16 bar |
+| LIN | 02 | CDA0 | 17, 37 bar |
+| LOX | 03 | CCA0 | 17, 37 bar |
+| LAR | 04 | CPA0 | 17, 37 bar |
+| LNG | 05 | CBA0 | 5, 10, 12 bar |
+| LCO2 | 06 | CEA0 | 22 bar |
+
+---
+
+## 📐 Tasarım Standartları
+
+### LPG için:
+- ASME Section VIII Div. 1
+- ASME Section VIII Div.2
+- AD2000
+- EN 13445
+
+### LLL (LIN/LOX/LAR), LNG, LCO2 için:
+- EN 13458 Annex C
+- ASME Section VIII Div.1 Mandatory 44
+- GOST
+
+---
+
+## 📦 Kullanım Tipleri
+
+```
+KULLANIM
+├── DEPOLAMA (STR)
+│   ├── Dikey (V)
+│   └── Yatay (H)
+│       ├── Yer üstü (A)
+│       └── Yer altı (U)
+│
+└── TRANSPORT (TRN)
+    ├── SMT (Semi-trailer)
+    ├── BBT (Bobtail - Kamyon üstü)
+    └── ISO (ISO Container)
+```
+
+---
+
+## 📊 Kapasite Grupları
+
+### Grup 1 (Aktif) - Çap:  1675 mm
+| Kapasite | Durum |
+|----------|-------|
+| 3 m³ | ✅ |
+| 6 m³ | ✅ |
+| 10 m³ | ✅ |
+| 15 m³ | ✅ |
+| 20 m³ | ✅ |
+| 22 m³ | ✅ |
+
+### Grup 2 (Gelecek) - Çap: TBD
+- 35-42 m³
+
+### Grup 3 (Gelecek) - Çap: TBD
+- 42-80 m³
+
+---
+
+## 🔄 Dropdown Akışı (Cascade)
+
+```
+1. Ürün Tipi:  [Standart] / Özel
+       ↓
+2. Gaz Tipi:  LPG / LIN / LOX / LAR / LNG / LCO2
+       ↓
+3. Tasarım Standartı: (Gaz tipine göre filtrelenir)
+       ↓
+4. Kullanım:  Depolama / Transport
+       ↓
+5a. Depolama → Yön (V/H) → Konum (A/U)
+5b. Transport → Tip (SMT/BBT/ISO)
+       ↓
+6. Kapasite:  3 / 6 / 10 / 15 / 20 / 22 m³
+       ↓
+7. Basınç: (Gaz tipine göre filtrelenir)
+       ↓
+SONUÇ: Tank Kodu + Mamül Kodu oluşur
+```
+
+---
+
+## 🏭 Mamül Kodu Mantığı
+
+1.  Yeni talep gelir → Tank kodu oluşur
+2. Sistem kontrol eder:  Bu kombinasyon daha önce var mı?
+   - EVET → Mevcut mamül kodunu kullan
+   - HAYIR → Yeni mamül kodu üret (sıradaki numara)
+3. Mikro ERP'ye gönderilir
+
+---
+
+## 📅 Geliştirme Önceliği
+
+1. ✅ Sadece STD (Standart) tanklar için başla
+2. 🔜 Özel (Special/CST) tanklar sonra eklenecek
+3. 🔜 Mikro ERP entegrasyonu en son
+
+---
+
+## 🗓️ Son Güncelleme
+- Tarih: 2026-01-09
+- Güncellenen: @remziurhan1
