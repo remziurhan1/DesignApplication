@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MVC.ProductManagement.Domain.Core.BaseEntities;
 using MVC.ProductManagement.Domain.Entities;
+using MVC.ProductManagement.Domain.Entities.MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.Configurations;
 using MVC.ProductManagement.Infrastructure.Seeds;
@@ -28,6 +29,14 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<EN13458Calculation> EN13458Calculations { get; set; }
         public DbSet<StorageTypeProperties> StorageTypeProperties { get; set; }
         public DbSet<StorageType> StorageTypes { get; set; }
+        public DbSet<GasType> GasTypes { get; set; }
+        public DbSet<GasTypePressure> GasTypePressures { get; set; }
+        public DbSet<DesignStandard> DesignStandards { get; set; }
+        public DbSet<GasTypeDesignStandard> GasTypeDesignStandards { get; set; }
+        public DbSet<CapacityGroup> CapacityGroups { get; set; }
+        public DbSet<CapacityOption> CapacityOptions { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<ThermodynamicProperty> ThermodynamicProperties { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,6 +48,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<Material>().HasData(MaterialSeed.Get());
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
+
         }
         public override int SaveChanges()
         {
