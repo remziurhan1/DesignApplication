@@ -5,6 +5,7 @@ using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
+using MVC.ProductManagement.Application.Services.TankRequestServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IYieldStrengthService, YieldStrengthService>();
             services.AddScoped<IAllowableStressService, AllowableStressService>();
             services.AddScoped<IStorageTypeService, StorageTypeService>();
+            services.AddScoped<ITankRequestService, TankRequestService>();
 
 
             return services;

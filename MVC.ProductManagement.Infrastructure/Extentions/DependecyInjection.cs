@@ -3,11 +3,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Infrastructure.Repositories.DesignStandardRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.EN13458Repositories;
+using MVC.ProductManagement.Infrastructure.Repositories.GasTypeRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.IAllowableStressRepository;
+using MVC.ProductManagement.Infrastructure.Repositories.IProductCodeRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypeRepositories;
+using MVC.ProductManagement.Infrastructure.Repositories.TankRequestRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.YieldStrengthRepositories;
 using MVC.ProductManagement.Infrastructure.Seeds;
 using System;
@@ -35,6 +39,11 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IAllowableStressRepository, AllowableStressRepository>();
             services.AddScoped<IEN13458Repository, EN13458Repository>();
             services.AddScoped<IStorageTypeRepositories, StorageTypeRepository>();
+            services.AddScoped<ITankRequestRepository, TankRequestRepository>();
+            services.AddScoped<IGasTypeRepository, GasTypeRepository>();
+            services.AddScoped<IDesignStandardRepository, DesignStandardRepository>();
+            services.AddScoped<IProductCodeRepository, ProductCodeRepository>();
+
 
 
 

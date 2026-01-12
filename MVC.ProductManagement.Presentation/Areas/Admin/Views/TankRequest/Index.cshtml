@@ -1,0 +1,41 @@
+﻿@model List<MVC.ProductManagement.Presentation.Areas.Admin.Models.TankRequestVMs.TankRequestListViewModel>
+
+<h2>Tank Request List</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Gas Type</th>
+            <th>Design Standard</th>
+            <th>Usage Type</th>
+            <th>Orientation</th>
+            <th>Placement</th>
+            <th>Capacity</th>
+            <th>Operating Pressure</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TankCode</td>
+                <td>@item.GasTypeName</td>
+                <td>@item.DesignStandardName</td>
+                <td>@item.UsageType</td>
+                <td>@item.Orientation</td>
+                <td>@item.Placement</td>
+                <td>@item.CapacityValue</td>
+                <td>@item.OperatingPressure</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-link">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Create" class="btn btn-primary">New Tank Request</a>

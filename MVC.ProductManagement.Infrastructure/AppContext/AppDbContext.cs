@@ -37,6 +37,9 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<CapacityOption> CapacityOptions { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<ThermodynamicProperty> ThermodynamicProperties { get; set; }
+        public DbSet<TankRequest> TankRequests { get; set; }
+        public DbSet<TankCalculationResult> TankCalculationResults { get; set; }
+        public DbSet<Quote> Quotes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
