@@ -1,0 +1,78 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.TankRequestVMs.TankRequestCreateViewModel
+
+<h2>Yeni Tank Talebi</h2>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="TankCode"></label>
+        <input asp-for="TankCode" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="GasTypeId"></label>
+        <select asp-for="GasTypeId" asp-items="Model.GasTypes" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DesignStandardId"></label>
+        <select asp-for="DesignStandardId" asp-items="Model.DesignStandards" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="ProductCodeId"></label>
+        <select asp-for="ProductCodeId" asp-items="Model.ProductCodes" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="UsageType"></label>
+        <select asp-for="UsageType" class="form-control">
+            @foreach (var value in Enum.GetValues(typeof(MVC.ProductManagement.Domain.Enums.UsageType)))
+            {
+                <option value="@value">@value</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Orientation"></label>
+        <select asp-for="Orientation" class="form-control">
+            @foreach (var value in Enum.GetValues(typeof(MVC.ProductManagement.Domain.Enums.TankOrientation)))
+            {
+                <option value="@value">@value</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Placement"></label>
+        <select asp-for="Placement" class="form-control">
+            @foreach (var value in Enum.GetValues(typeof(MVC.ProductManagement.Domain.Enums.PlacementType)))
+            {
+                <option value="@value">@value</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="CapacityValue"></label>
+        <input asp-for="CapacityValue" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="OperatingPressure"></label>
+        <input asp-for="OperatingPressure" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DesignPressure"></label>
+        <input asp-for="DesignPressure" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="InnerDiameter"></label>
+        <input asp-for="InnerDiameter" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="IsInnerTankStainless"></label>
+        <input asp-for="IsInnerTankStainless" type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label asp-for="TransportType"></label>
+        <input asp-for="TransportType" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes"></label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a asp-action="Index" class="btn btn-secondary">Geri</a>
+</form>
