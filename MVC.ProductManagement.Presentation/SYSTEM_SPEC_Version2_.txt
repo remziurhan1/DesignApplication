@@ -144,3 +144,5 @@ SONUÇ: Tank Kodu + Mamül Kodu oluşur
 ## 🗓️ Son Güncelleme
 - Tarih: 2026-01-09
 - Güncellenen: @remziurhan1
+
+proje değişti
