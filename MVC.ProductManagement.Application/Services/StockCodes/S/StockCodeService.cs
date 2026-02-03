@@ -42,6 +42,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             _context = context;
         }
 
+
         public async Task<IReadOnlyList<LookupDto>> GetFluidsAsync(CancellationToken cancellationToken = default)
         {
             var list = await _fluidRepo.GetAllAsync(tracking: false);
@@ -63,10 +64,14 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
         public async Task<IReadOnlyList<LookupDto>> GetSProductsAsync(Guid sProductGroupId, CancellationToken cancellationToken = default)
         {
             var list = await _productRepo.GetAllAsync(x => x.SProductGroupId == sProductGroupId, tracking: false);
+            //return list
+            //    .OrderBy(x => x.Code)
+            //    .Select(x => new LookupDto { Id = x.Id, Code = x.Code, Name = x.Name })
+            //    .ToList();
             return list
-                .OrderBy(x => x.Code)
-                .Select(x => new LookupDto { Id = x.Id, Code = x.Code, Name = x.Name })
-                .ToList();
+    .OrderBy(x => x.PrefixIndex) // ✅ Code yerine PrefixIndex
+    .Select(x => new LookupDto { Id = x.Id, Code = x.Code, Name = x.Name })
+    .ToList();
         }
 
         public async Task<IReadOnlyList<LookupDto>> GetSAssemblyGroupsAsync(Guid? sProductGroupId = null, CancellationToken cancellationToken = default)
@@ -113,6 +118,23 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 })
                 .ToList();
         }
+
+        private static string GetFluidLetter(Fluid fluid)
+        {
+            // LIN / LOX / LNG => C
+            var cryoSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "LNG", "LIN", "LOX"
+    };
+
+            // Burada Name senin seed’inde LNG/LIN/LOX diye duruyor.
+            // Eğer başka bir yerde Code üzerinden gidiyorsan, Name yerine fluid.Code kullan.
+            if (cryoSet.Contains(fluid.Name))
+                return "C";
+
+            // Default (şimdilik)
+            return "A";
+        }
         public async Task<IReadOnlyList<LookupDto>> GetPrefixRulesAsync(
     Guid fluidId,
     Guid sProductGroupId,
@@ -136,25 +158,28 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 .ToList();
         }
 
+
         public async Task<SStockCodeGenerateResultDto> GenerateSAsync(
-    SStockCodeGenerateRequestDto request,
-    CancellationToken cancellationToken = default)
+     SStockCodeGenerateRequestDto request,
+     CancellationToken cancellationToken = default)
         {
-            // 1️⃣ PrefixRule BUL (Akışkan + Ürün Grubu)
-            var rule = await _prefixRuleRepo.GetAsync(x =>
-                x.FluidId == request.FluidId &&
-                x.SProductGroupId == request.SProductGroupId,
-                tracking: false);
+            // 1) Lookup (fluid/group/product)
+            var fluid = await _fluidRepo.GetByIdAsync(request.FluidId, tracking: false);
+            var group = await _groupRepo.GetByIdAsync(request.SProductGroupId, tracking: false);
+            var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
 
-            if (rule == null)
-                throw new InvalidOperationException("PrefixRule bulunamadı.");
+            if (fluid == null || group == null || product == null)
+                throw new InvalidOperationException("Fluid / Group / Product bulunamadı.");
 
-            // 2️⃣ Aynı kod daha önce üretilmiş mi?
+            // 2) Prefix4 HESAPLA (PrefixRule yok)
+            var fluidLetter = GetFluidLetter(fluid); // LNG/LIN/LOX => C, diğerleri A
+            var prefix4 = $"S{group.Code}{fluidLetter}{product.PrefixIndex}";
+
+            // 3) Aynı seçimle daha önce üretilmiş mi? (varsa getir)
             var existing = await _stockCardRepo.GetAsync(x =>
                 x.FluidId == request.FluidId &&
                 x.SProductGroupId == request.SProductGroupId &&
-                x.SProductId == request.SProductId &&
-                x.Prefix4 == rule.Prefix4,
+                x.SProductId == request.SProductId,
                 tracking: false);
 
             if (existing != null)
@@ -170,35 +195,26 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 };
             }
 
-            // 3️⃣ Sequence artır
+            // 4) Sequence artır
             await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
 
-            var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == rule.Prefix4, tracking: true);
+            var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
             if (seq == null)
-                throw new InvalidOperationException($"StockSequence yok: {rule.Prefix4}");
+                throw new InvalidOperationException($"StockSequence yok: {prefix4}");
 
-            var nextSerial = seq.LastNumber < seq.StartNumber
-                ? seq.StartNumber
-                : seq.LastNumber + 1;
+            var nextSerial = seq.LastNumber + 1; // 0 -> 1 (ilk kod 0001)
 
             if (nextSerial > 9999)
-                throw new InvalidOperationException($"Seri no limiti aşıldı: {rule.Prefix4}");
+                throw new InvalidOperationException($"Seri no limiti aşıldı: {prefix4}");
 
             seq.LastNumber = nextSerial;
             await _sequenceRepo.UpdateAsync(seq);
             await _sequenceRepo.SaveChangeAsync();
 
-            // 4️⃣ Açıklama
-            var fluid = await _fluidRepo.GetByIdAsync(request.FluidId, tracking: false);
-            var group = await _groupRepo.GetByIdAsync(request.SProductGroupId, tracking: false);
-            var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
+            // 5) Açıklama
+            var description = $"{fluid.Name} | {group.Name} | {product.Name}";
 
-            if (fluid == null || group == null || product == null)
-                throw new InvalidOperationException("Fluid / Group / Product bulunamadı.");
-
-            var description = $"{fluid.Code} | {group.Name} | {product.Name}";
-
-            // 5️⃣ Kart oluştur
+            // 6) Kart oluştur
             var card = new StockCard
             {
                 Id = Guid.NewGuid(),
@@ -206,9 +222,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 SProductGroupId = request.SProductGroupId,
                 SProductId = request.SProductId,
 
-                Prefix4 = rule.Prefix4,
+                Prefix4 = prefix4,
                 Serial4 = nextSerial,
-                StockCode8 = $"{rule.Prefix4}{nextSerial:0000}",
+                StockCode8 = $"{prefix4}{nextSerial:0000}",
                 Description = description,
 
                 StockSequenceId = seq.Id
@@ -226,8 +242,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 Prefix4 = card.Prefix4,
                 Serial4 = card.Serial4,
                 Description = card.Description
+                // inş olmuştur
             };
-        }
+        } 
+
 
 
 
