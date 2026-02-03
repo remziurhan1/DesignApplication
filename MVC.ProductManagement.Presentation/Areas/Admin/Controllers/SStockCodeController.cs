@@ -28,20 +28,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             await FillLookups(vm);
 
-            var result = await _service.GenerateSAsync(new SStockCodeGenerateRequestDto
+            try
             {
-                FluidId = vm.FluidId,
-                SProductGroupId = vm.SProductGroupId,
-                SProductId = vm.SProductId,
-                PrefixRuleId = vm.PrefixRuleId
-            });
+                var result = await _service.GenerateSAsync(new SStockCodeGenerateRequestDto
+                {
+                    FluidId = vm.FluidId,
+                    SProductGroupId = vm.SProductGroupId,
+                    SProductId = vm.SProductId
+                });
 
-            vm.StockCode8 = result.StockCode8;
-            vm.Description = result.Description;
-            vm.AlreadyExists = result.AlreadyExists;
+                vm.StockCode8 = result.StockCode8;
+                vm.Description = result.Description;
+                vm.AlreadyExists = result.AlreadyExists;
+            }
+            catch (InvalidOperationException ex)
+            {
+                vm.StockCode8 = null;
+                vm.Description = null;
+                vm.AlreadyExists = null;
+
+                vm.ErrorMessage = ex.Message; // vm'e string ErrorMessage ekle
+            }
 
             return View("~/Areas/Admin/Views/StockCodes/Generate.cshtml", vm);
         }
+
 
         // Ajax: ürün grubu seçilince ürünleri getir
         [HttpGet]
@@ -74,8 +85,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 var products = await _service.GetSProductsAsync(vm.SProductGroupId);
                 vm.Products = products
-                    .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
-                    .ToList();
+     .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+     .ToList();
+
             }
 
             // PREFIX RULE (SFA0, SFC1, ...)

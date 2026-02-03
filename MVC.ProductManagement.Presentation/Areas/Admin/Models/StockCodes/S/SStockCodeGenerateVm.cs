@@ -19,6 +19,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.S
         public string? StockCode8 { get; set; }
         public string? Description { get; set; }
         public bool? AlreadyExists { get; set; }
+        public string? ErrorMessage { get; set; }
         public bool? Prefix4 { get; set; }
     }
 }
