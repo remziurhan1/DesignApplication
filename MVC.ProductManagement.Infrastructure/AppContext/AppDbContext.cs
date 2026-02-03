@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MVC.ProductManagement.Domain.Core.BaseEntities;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.MVC.ProductManagement.Domain.Entities;
+using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.Configurations;
 using MVC.ProductManagement.Infrastructure.Seeds;
+using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,9 +39,14 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<CapacityOption> CapacityOptions { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<ThermodynamicProperty> ThermodynamicProperties { get; set; }
-        public DbSet<TankRequest> TankRequests { get; set; }
-        public DbSet<TankCalculationResult> TankCalculationResults { get; set; }
-        public DbSet<Quote> Quotes { get; set; }
+        public DbSet<Fluid> Fluids { get; set; }
+        public DbSet<SProductGroup> SProductGroups { get; set; }
+        public DbSet<SProduct> SProducts { get; set; }
+        public DbSet<SAssemblyGroup> SAssemblyGroups { get; set; }
+        public DbSet<PrefixRule> PrefixRules { get; set; }
+        public DbSet<StockSequence> StockSequences { get; set; }
+        public DbSet<StockCard> StockCards { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -51,6 +58,20 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<Material>().HasData(MaterialSeed.Get());
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
+
+
+            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.FluidSeed_SAll());
+
+            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SProductGroupSeed_SAll());
+
+            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SProductSeed_SAll());
+
+            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.PrefixRuleSeed_SAll());
+
+            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.StockSequenceSeed_SAll());
+
+        
+
 
         }
         public override int SaveChanges()
