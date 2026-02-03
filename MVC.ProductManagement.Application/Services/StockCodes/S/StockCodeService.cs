@@ -242,8 +242,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 Prefix4 = card.Prefix4,
                 Serial4 = card.Serial4,
                 Description = card.Description
+                // inş olmuştur
             };
-        }
+        } 
 
 
 
