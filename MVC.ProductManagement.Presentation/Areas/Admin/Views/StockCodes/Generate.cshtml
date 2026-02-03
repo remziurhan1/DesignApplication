@@ -1,0 +1,85 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.S.SStockCodeGenerateVm
+
+@{
+    ViewData["Title"] = "S Stok Kodu Üret";
+}
+
+<h2>S Stok Kodu Üret</h2>
+
+<form asp-action="Generate" asp-area="Admin" method="post">
+
+    <div class="mb-3">
+        <label class="form-label">Akışkan</label>
+        <select asp-for="FluidId" asp-items="Model.Fluids" class="form-select" id="fluidSelect">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ürün Grubu (S – 2. basamak)</label>
+        <select asp-for="SProductGroupId" asp-items="Model.Groups" class="form-select" id="groupSelect">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ürün</label>
+        <select asp-for="SProductId" asp-items="Model.Products" class="form-select" id="productSelect">
+            <option value="">@(Model.SProductGroupId == Guid.Empty ? "Önce ürün grubu seçiniz" : "Seçiniz")</option>
+        </select>
+    </div>
+
+    <!-- PREFIX = SONUÇ (READONLY) -->
+    <div class="mb-3">
+        <label class="form-label">Oluşan Prefix</label>
+        <input type="text"
+               class="form-control"
+               value="@Model.Prefix4"
+               placeholder="Ürün seçildiğinde otomatik oluşur"
+               readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Kod Üret
+    </button>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(Model.StockCode8))
+{
+    <hr />
+    <div class="alert @(Model.AlreadyExists == true ? "alert-warning" : "alert-success")">
+        <div><strong>Kod:</strong> @Model.StockCode8</div>
+        <div><strong>Açıklama:</strong> @Model.Description</div>
+        <div><strong>Durum:</strong> @(Model.AlreadyExists == true ? "Mevcut kod getirildi" : "Yeni kod oluşturuldu")</div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        const groupSelect   = document.getElementById("groupSelect");
+        const productSelect = document.getElementById("productSelect");
+
+        // Ürün grubu → ürünler
+        groupSelect.addEventListener("change", async function () {
+            const groupId = this.value;
+
+            productSelect.innerHTML = "<option>Yükleniyor...</option>";
+
+            if (!groupId) return;
+
+            const url = '@Url.Action("ProductsByGroup", "SStockCode", new { area = "Admin" })'
+                      + `?groupId=${groupId}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            productSelect.innerHTML = "<option value=''>Seçiniz</option>";
+            data.forEach(item => {
+                const opt = document.createElement("option");
+                opt.value = item.id;
+                opt.textContent = `${item.code} - ${item.name}`;
+                productSelect.appendChild(opt);
+            });
+        });
+    </script>
+}
