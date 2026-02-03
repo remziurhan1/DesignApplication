@@ -13,6 +13,6 @@ namespace MVC.ProductManagement.Domain.Entities
         public virtual MaterialForm MaterialForm { get; set; }
 
         public double Temperature { get; set; }    // °C
-        public double Stress { get; set; }         // MPa
+        public double Stress { get; set; }         // MPaasdasdad
     }
 }
