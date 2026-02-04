@@ -61,6 +61,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
             SASeed.Seed(builder); // <-- bunu ekle
+            SBSeed.Seed(builder); // <-- bunu ekle
 
 
             //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.FluidSeed_SAll());

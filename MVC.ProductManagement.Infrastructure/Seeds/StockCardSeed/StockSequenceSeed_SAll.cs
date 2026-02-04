@@ -23,8 +23,8 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed
                 {
                     Id = SeedId.From($"StockSequence:{prefix4}"),
                     Prefix4 = prefix4,
-                    StartNumber = 1000,
-                    LastNumber = 0,
+                    StartNumber = 0,
+                    LastNumber = -1,
                     CreatedBy = "SEED",
                     CreatedDate = now
                 });
