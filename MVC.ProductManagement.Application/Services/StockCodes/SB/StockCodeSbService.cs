@@ -1,17 +1,19 @@
-﻿using MVC.ProductManagement.Application.DTOs.StockCodes.S;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
+﻿// Dosya: Application/Services/StockCodes/SB/StockCodeSbService.cs
+
+using MVC.ProductManagement.Application.DTOs.StockCodes.S;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SB;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.SA
+namespace MVC.ProductManagement.Application.Services.StockCodes.SB
 {
-    public class StockCodeSaService : IStockCodeSaService
+    public class StockCodeSbService : IStockCodeSbService
     {
         private readonly ISProductRepositories _productRepo;
         private readonly IStockSequenceRepositories _sequenceRepo;
@@ -20,13 +22,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         private readonly ISProductGroupRepositories _groupRepo;
         private readonly AppDbContext _context;
 
-        public StockCodeSaService(
-     IFluidRepositories fluidRepo,
-     ISProductGroupRepositories groupRepo,
-     ISProductRepositories productRepo,
-     IStockSequenceRepositories sequenceRepo,
-     IStockCardRepositories stockCardRepo,
-     AppDbContext context)
+        public StockCodeSbService(
+            IFluidRepositories fluidRepo,
+            ISProductGroupRepositories groupRepo,
+            ISProductRepositories productRepo,
+            IStockSequenceRepositories sequenceRepo,
+            IStockCardRepositories stockCardRepo,
+            AppDbContext context)
         {
             _fluidRepo = fluidRepo;
             _groupRepo = groupRepo;
@@ -35,6 +37,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             _stockCardRepo = stockCardRepo;
             _context = context;
         }
+
         public async Task<IReadOnlyList<LookupDto>> GetFluidsAsync(CancellationToken cancellationToken = default)
         {
             var fluids = await _fluidRepo.GetAllAsync(tracking: false);
@@ -44,7 +47,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 .ToList();
         }
 
-        public async Task<IReadOnlyList<LookupDto>> GetSaProductsAsync(
+        public async Task<IReadOnlyList<LookupDto>> GetSbProductsAsync(
             Guid sProductGroupId,
             CancellationToken cancellationToken = default)
         {
@@ -52,15 +55,17 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 x => x.SProductGroupId == sProductGroupId,
                 tracking: false);
 
+            // SA'da PrefixIndex'e göre sıralıyordun.
+            // SB'de de aynı devam edelim (SBSeed içinde PrefixIndex dolduruyorsan düzgün sıralanır).
             return products
                 .OrderBy(x => x.PrefixIndex)
                 .Select(x => new LookupDto { Id = x.Id, Code = x.Code, Name = x.Name })
                 .ToList();
         }
 
-        public async Task<SaStockCodeGenerateResultDto> GenerateSaAsync(
-      SaStockCodeGenerateRequestDto request,
-      CancellationToken cancellationToken = default)
+        public async Task<SbStockCodeGenerateResultDto> GenerateSbAsync(
+            SbStockCodeGenerateRequestDto request,
+            CancellationToken cancellationToken = default)
         {
             // 0) Aynı kombinasyon var mı? (unique index bunu zorluyor)
             var existing = await _stockCardRepo.GetAsync(x =>
@@ -71,7 +76,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
 
             if (existing != null)
             {
-                return new SaStockCodeGenerateResultDto
+                return new SbStockCodeGenerateResultDto
                 {
                     AlreadyExists = true,
                     StockCardId = existing.Id,
@@ -81,7 +86,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                     Description = existing.Description
                 };
             }
-            // 1) Lookup: Product + Fluid + Group (SA'da prefix kuraldan bağımsız, ama fluid seçilecek)
+
+            // 1) Lookup: Product + Fluid + Group
             var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
             if (product == null)
                 throw new InvalidOperationException("SProduct bulunamadı.");
@@ -94,8 +100,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             if (group == null)
                 throw new InvalidOperationException("SProductGroup bulunamadı.");
 
-            // SA prefix: doğrudan product.Code
-            var prefix4 = product.Code; // SAA0, SAB3...
+            // SB prefix: doğrudan product.Code (SBA0, SBB3...)
+            var prefix4 = product.Code;
 
             // 2) Transaction: sequence + card
             await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
@@ -104,7 +110,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             if (seq == null)
                 throw new InvalidOperationException($"StockSequence yok: {prefix4}");
 
-            // ✅ 1000’den başlat (SF ile aynı mantık)
+            // ✅ 1000’den başlat (SA ile aynı)
             var nextSerial = seq.LastNumber + 1;
 
             if (nextSerial > 9999)
@@ -114,13 +120,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             await _sequenceRepo.UpdateAsync(seq);
             await _sequenceRepo.SaveChangeAsync();
 
+            // Şimdilik SA ile aynı açıklama kuralı:
+            // İleride SB'ye özel özellikler gelince bunu builder'a böleceğiz.
             var description = $"{fluid.Name} | {group.Name} | {product.Name}";
 
             var card = new StockCard
             {
                 Id = Guid.NewGuid(),
 
-                FluidId = request.FluidId,              // ✅ SA’da da seçiliyor
+                FluidId = request.FluidId,
                 SProductGroupId = request.SProductGroupId,
                 SProductId = request.SProductId,
 
@@ -137,7 +145,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
 
             await tx.CommitAsync(cancellationToken);
 
-            return new SaStockCodeGenerateResultDto
+            return new SbStockCodeGenerateResultDto
             {
                 AlreadyExists = false,
                 StockCardId = card.Id,
@@ -147,6 +155,5 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 Description = card.Description
             };
         }
-
     }
 }

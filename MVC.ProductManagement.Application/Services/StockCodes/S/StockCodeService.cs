@@ -106,13 +106,46 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
         }
 
         public async Task<SStockCodeGenerateResultDto> GenerateSAsync(
-            SStockCodeGenerateRequestDto request,
-            CancellationToken cancellationToken = default)
+    SStockCodeGenerateRequestDto request,
+    CancellationToken cancellationToken = default)
         {
+            // 0) SPrefixRule’dan Prefix al (önce prefix’i buluyoruz ki SFC0 özel kuralını uygulayabilelim)
+            var rule = await _context.SPrefixRules
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x =>
+                    x.FluidId == request.FluidId &&
+                    x.SProductGroupId == request.SProductGroupId &&
+                    x.SProductId == request.SProductId,
+                    cancellationToken);
 
-            // 1) Aynı kombinasyon var mı?
+            if (rule == null)
+                throw new InvalidOperationException("SPrefixRule bulunamadı (Group+Fluid+Product).");
+
+            var prefix4 = rule.Prefix;
+
+            // 0.1) ✅ SFC0 için FluidId sabitle (migration yoksa tek pratik çözüm)
+            // Amaç: LIN/LOX/LNG/LCO2 seçilse bile aynı StockCard’a gitmesi (DB unique index FluidId’ye bağlı)
+            var effectiveFluidId = request.FluidId;
+            var fluidNameForDescription = (string?)null;
+
+            if (string.Equals(prefix4, "SFC0", StringComparison.OrdinalIgnoreCase))
+            {
+                // Canonical CRYO fluid: LIN (bulamazsa ilk fluid)
+                var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
+                var canonical = allFluids.FirstOrDefault(x => x.Code == "LIN") ?? allFluids.FirstOrDefault();
+
+                if (canonical == null)
+                    throw new InvalidOperationException("Sistemde akışkan tanımı yok.");
+
+                effectiveFluidId = canonical.Id;
+
+                // Açıklamada LIN/LOX/LNG yerine CRYO yazacağız (senin isteğin)
+                fluidNameForDescription = "CRYO";
+            }
+
+            // 1) Aynı kombinasyon var mı? (✅ artık effectiveFluidId ile kontrol)
             var existing = await _stockCardRepo.GetAsync(x =>
-                x.FluidId == request.FluidId &&
+                x.FluidId == effectiveFluidId &&
                 x.SProductGroupId == request.SProductGroupId &&
                 x.SProductId == request.SProductId,
                 tracking: false);
@@ -130,37 +163,23 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 };
             }
 
-            // 2) SPrefixRule’dan Prefix al
-            var rule = await _context.SPrefixRules
-                .AsNoTracking()
-                .SingleOrDefaultAsync(x =>
-                    x.FluidId == request.FluidId &&
-                    x.SProductGroupId == request.SProductGroupId &&
-                    x.SProductId == request.SProductId,
-                    cancellationToken);
-
-            if (rule == null)
-                throw new InvalidOperationException("SPrefixRule bulunamadı (Group+Fluid+Product).");
-
-            var prefix4 = rule.Prefix; // ✅ artık hesap yok
-
-            // 3) Lookup (Description için)
-            var fluid = await _fluidRepo.GetByIdAsync(request.FluidId, tracking: false);
+            // 2) Lookup (Description için)
+            // Fluid: SFC0 ise CRYO yazacağımız için asıl request.FluidId'ye bağlı kalmıyoruz
+            var fluid = await _fluidRepo.GetByIdAsync(effectiveFluidId, tracking: false);
             var group = await _groupRepo.GetByIdAsync(request.SProductGroupId, tracking: false);
             var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
 
             if (fluid == null || group == null || product == null)
                 throw new InvalidOperationException("Fluid / Group / Product bulunamadı.");
 
-            // 4) Transaction: sequence + card
+            // 3) Transaction: sequence + card
             await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
 
             var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
             if (seq == null)
                 throw new InvalidOperationException($"StockSequence yok: {prefix4}");
 
-            // ✅ 1000’den başlat
-            var nextSerial = (seq.LastNumber == 0) ? seq.StartNumber : (seq.LastNumber + 1);
+            var nextSerial = seq.LastNumber + 1;
 
             if (nextSerial > 9999)
                 throw new InvalidOperationException($"Seri no limiti aşıldı: {prefix4}");
@@ -169,13 +188,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             await _sequenceRepo.UpdateAsync(seq);
             await _sequenceRepo.SaveChangeAsync();
 
-            var description = $"{fluid.Name} | {group.Name} | {product.Name}";
+            var fluidName = fluidNameForDescription ?? fluid.Name;
+            var description = $"{fluidName} | {group.Name} | {product.Name}";
 
             var card = new StockCard
             {
                 Id = Guid.NewGuid(),
 
-                FluidId = request.FluidId,
+                // ✅ DB’ye yazılan FluidId: SFC0 ise canonical (LIN), değilse seçilen
+                FluidId = effectiveFluidId,
                 SProductGroupId = request.SProductGroupId,
                 SProductId = request.SProductId,
 
