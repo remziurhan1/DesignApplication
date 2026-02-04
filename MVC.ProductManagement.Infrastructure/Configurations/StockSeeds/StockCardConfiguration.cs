@@ -1,11 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
 {
@@ -13,7 +8,8 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
     {
         public void Configure(EntityTypeBuilder<StockCard> builder)
         {
-            builder.ToTable("StockCards");
+            builder.ToTable("StockCards"); // ToTable sorunu yaşıyorsan kapalı kalsın
+
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.StockCode8)
@@ -34,13 +30,12 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
             builder.HasIndex(x => x.StockCode8)
                    .IsUnique();
 
-            // ✅ YENİ BENZERSİZLİK KURALI (AssemblyGroup YOK)
+            // ✅ Asıl benzersizlik: aynı seçim tekrar açılmasın
             builder.HasIndex(x => new
             {
                 x.FluidId,
                 x.SProductGroupId,
-                x.SProductId,
-                x.Prefix4
+                x.SProductId
             }).IsUnique();
 
             builder.HasOne(x => x.Fluid)

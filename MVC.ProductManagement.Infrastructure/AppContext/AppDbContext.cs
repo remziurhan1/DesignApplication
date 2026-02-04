@@ -47,6 +47,8 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<StockSequence> StockSequences { get; set; }
         public DbSet<StockCard> StockCards { get; set; }
 
+        public DbSet<SPrefixRule> SPrefixRules => Set<SPrefixRule>();
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)
