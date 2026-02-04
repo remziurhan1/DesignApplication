@@ -9,13 +9,6 @@
 <form asp-action="Generate" asp-area="Admin" method="post">
 
     <div class="mb-3">
-        <label class="form-label">Akışkan</label>
-        <select asp-for="FluidId" asp-items="Model.Fluids" class="form-select" id="fluidSelect">
-            <option value="">Seçiniz</option>
-        </select>
-    </div>
-
-    <div class="mb-3">
         <label class="form-label">Ürün Grubu (S – 2. basamak)</label>
         <select asp-for="SProductGroupId" asp-items="Model.Groups" class="form-select" id="groupSelect">
             <option value="">Seçiniz</option>
@@ -23,9 +16,16 @@
     </div>
 
     <div class="mb-3">
+        <label class="form-label">Akışkan</label>
+        <select asp-for="FluidId" asp-items="Model.Fluids" class="form-select" id="fluidSelect">
+            <option value="">@(Model.SProductGroupId == Guid.Empty ? "Önce ürün grubu seçiniz" : "Seçiniz")</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
         <label class="form-label">Ürün</label>
         <select asp-for="SProductId" asp-items="Model.Products" class="form-select" id="productSelect">
-            <option value="">@(Model.SProductGroupId == Guid.Empty ? "Önce ürün grubu seçiniz" : "Seçiniz")</option>
+            <option value="">@((Model.SProductGroupId == Guid.Empty || Model.FluidId == Guid.Empty) ? "Önce ürün grubu + akışkan seçiniz" : "Seçiniz")</option>
         </select>
     </div>
 
@@ -35,7 +35,7 @@
         <input type="text"
                class="form-control"
                value="@Model.Prefix4"
-               placeholder="Ürün seçildiğinde otomatik oluşur"
+               placeholder="Kod üretince oluşur"
                readonly />
     </div>
 
@@ -60,34 +60,64 @@
     </div>
 }
 
-
 @section Scripts {
     <script>
-        const groupSelect   = document.getElementById("groupSelect");
+        const groupSelect = document.getElementById("groupSelect");
+        const fluidSelect = document.getElementById("fluidSelect");
         const productSelect = document.getElementById("productSelect");
 
-        // Ürün grubu → ürünler
+        function resetSelect(selectEl, placeholder) {
+            selectEl.innerHTML = "";
+            const opt = document.createElement("option");
+            opt.value = "";
+            opt.textContent = placeholder;
+            selectEl.appendChild(opt);
+        }
+
+        // Group değişince -> Fluids yükle
         groupSelect.addEventListener("change", async function () {
             const groupId = this.value;
 
-            productSelect.innerHTML = "<option>Yükleniyor...</option>";
+            resetSelect(fluidSelect, groupId ? "Yükleniyor..." : "Önce ürün grubu seçiniz");
+            resetSelect(productSelect, "Önce ürün grubu + akışkan seçiniz");
 
             if (!groupId) return;
 
-            const url = '@Url.Action("ProductsByGroup", "SStockCode", new { area = "Admin" })'
-                      + `?groupId=${groupId}`;
+            const url = '@Url.Action("FluidsByGroup", "SStockCode", new { area = "Admin" })'
+                + `?groupId=${groupId}`;
 
             const response = await fetch(url);
             const data = await response.json();
 
-            productSelect.innerHTML = "<option value=''>Seçiniz</option>";
+            resetSelect(fluidSelect, "Seçiniz");
             data.forEach(item => {
                 const opt = document.createElement("option");
                 opt.value = item.id;
+                opt.textContent = `${item.code} - ${item.name}`;
+                fluidSelect.appendChild(opt);
+            });
+        });
 
-                // ✅ SADECE ÜRÜN ADI GÖRÜNECEK
-                opt.textContent = item.name;
+        // Fluid değişince -> Products yükle
+        fluidSelect.addEventListener("change", async function () {
+            const groupId = groupSelect.value;
+            const fluidId = this.value;
 
+            resetSelect(productSelect, (groupId && fluidId) ? "Yükleniyor..." : "Önce ürün grubu + akışkan seçiniz");
+
+            if (!groupId || !fluidId) return;
+
+            const url = '@Url.Action("ProductsByGroupAndFluid", "SStockCode", new { area = "Admin" })'
+                + `?groupId=${groupId}&fluidId=${fluidId}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            resetSelect(productSelect, "Seçiniz");
+            data.forEach(item => {
+                const opt = document.createElement("option");
+                opt.value = item.id;
+                opt.textContent = item.name; // sadece ürün adı
                 productSelect.appendChild(opt);
             });
         });
