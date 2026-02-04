@@ -1,18 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.ProductManagement.Application.DTOs.StockCodes.S;
 using MVC.ProductManagement.Application.Services.StockCodes.S;
+using MVC.ProductManagement.Application.Services.StockCodes.S.Handlers;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.S;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
     public class SStockCodeController : AdminBaseController
     {
-        private readonly IStockCodeService _service;
+        private readonly IStockCodeService _lookupService;
+        private readonly ISStockCodeGroupHandlerFactory _handlerFactory;
 
-        public SStockCodeController(IStockCodeService service)
+        public SStockCodeController(IStockCodeService lookupService, ISStockCodeGroupHandlerFactory handlerFactory)
         {
-            _service = service;
+            _lookupService = lookupService;
+            _handlerFactory = handlerFactory;
         }
 
         [HttpGet]
@@ -30,12 +35,25 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             try
             {
-                var result = await _service.GenerateSAsync(new SStockCodeGenerateRequestDto
-                {
-                    FluidId = vm.FluidId,
-                    SProductGroupId = vm.SProductGroupId,
-                    SProductId = vm.SProductId
-                });
+                if (vm.SProductGroupId == Guid.Empty)
+                    throw new InvalidOperationException("Ürün grubu seçiniz.");
+
+                if (vm.SProductId == Guid.Empty)
+                    throw new InvalidOperationException("Ürün seçiniz.");
+
+                var groups = await _lookupService.GetSProductGroupsAsync();
+                var group = groups.FirstOrDefault(x => x.Id == vm.SProductGroupId);
+                if (group == null)
+                    throw new InvalidOperationException("Seçilen ürün grubu bulunamadı.");
+
+                var handler = _handlerFactory.GetByGroupCode(group.Code);
+
+                if (handler.RequiresFluid && vm.FluidId == Guid.Empty)
+                    throw new InvalidOperationException("Akışkan seçiniz.");
+
+                Guid? fluidId = handler.RequiresFluid ? vm.FluidId : null;
+
+                var result = await handler.GenerateAsync(vm.SProductGroupId, fluidId, vm.SProductId);
 
                 vm.StockCode8 = result.StockCode8;
                 vm.Description = result.Description;
@@ -60,51 +78,89 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             if (!Guid.TryParse(groupId, out var gid))
                 return BadRequest();
 
-            var list = await _service.GetFluidsByGroupAsync(gid);
-            return Json(list.Select(x => new { x.Id, x.Code, x.Name }));
+            var groups = await _lookupService.GetSProductGroupsAsync();
+            var group = groups.FirstOrDefault(x => x.Id == gid);
+            if (group == null)
+                return Json(Array.Empty<object>());
+
+            var handler = _handlerFactory.GetByGroupCode(group.Code);
+
+            if (!handler.RequiresFluid)
+                return Json(Array.Empty<object>());
+
+            var fluids = await handler.GetFluidsAsync(gid);
+
+            return Json(fluids.Select(x => new { id = x.Id, code = x.Code, name = x.Name }));
         }
 
-        // ✅ Ajax: Group + Fluid seçilince Product’ları getir
+        // ✅ Ajax: Group + Fluid (opsiyonel) seçilince Product’ları getir
         [HttpGet]
-        public async Task<IActionResult> ProductsByGroupAndFluid(string groupId, string fluidId)
+        public async Task<IActionResult> ProductsByGroupAndFluid(string groupId, string? fluidId)
         {
             if (!Guid.TryParse(groupId, out var gid)) return BadRequest();
-            if (!Guid.TryParse(fluidId, out var fid)) return BadRequest();
 
-            var list = await _service.GetSProductsAsync(gid, fid);
-            return Json(list.Select(x => new { x.Id, x.Code, x.Name }));
+            Guid? fid = null;
+            if (!string.IsNullOrWhiteSpace(fluidId) && Guid.TryParse(fluidId, out var parsed))
+                fid = parsed;
+
+            var groups = await _lookupService.GetSProductGroupsAsync();
+            var group = groups.FirstOrDefault(x => x.Id == gid);
+            if (group == null)
+                return Json(Array.Empty<object>());
+
+            var handler = _handlerFactory.GetByGroupCode(group.Code);
+
+            // fluid zorunlu değilse fid null kalabilir
+            var products = await handler.GetProductsAsync(gid, fid);
+
+            return Json(products.Select(x => new { id = x.Id, code = x.Code, name = x.Name }));
         }
 
         private async Task FillLookups(SStockCodeGenerateVm vm)
         {
-            // 1) Gruplar her zaman dolu
-            var groups = await _service.GetSProductGroupsAsync();
+            var groups = await _lookupService.GetSProductGroupsAsync();
             vm.Groups = groups
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToList();
 
-            // 2) Fluid listesi: sadece Group seçilince dolacak
-            vm.Fluids = new List<SelectListItem>();
-            if (vm.SProductGroupId != Guid.Empty)
+            vm.Fluids = new System.Collections.Generic.List<SelectListItem>();
+            vm.Products = new System.Collections.Generic.List<SelectListItem>();
+
+            if (vm.SProductGroupId == Guid.Empty)
             {
-                var fluids = await _service.GetFluidsByGroupAsync(vm.SProductGroupId);
+                vm.PrefixRules = new System.Collections.Generic.List<SelectListItem>();
+                return;
+            }
+
+            var group = groups.FirstOrDefault(x => x.Id == vm.SProductGroupId);
+            if (group == null)
+            {
+                vm.PrefixRules = new System.Collections.Generic.List<SelectListItem>();
+                return;
+            }
+
+            var handler = _handlerFactory.GetByGroupCode(group.Code);
+
+            // Fluids: sadece gerekiyorsa doldur
+            if (handler.RequiresFluid)
+            {
+                var fluids = await handler.GetFluidsAsync(vm.SProductGroupId);
                 vm.Fluids = fluids
                     .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                     .ToList();
             }
 
-            // 3) Product listesi: Group + Fluid seçilince dolacak
-            vm.Products = new List<SelectListItem>();
-            if (vm.SProductGroupId != Guid.Empty && vm.FluidId != Guid.Empty)
-            {
-                var products = await _service.GetSProductsAsync(vm.SProductGroupId, vm.FluidId);
-                vm.Products = products
-                    .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
-                    .ToList();
-            }
+            // Products: fluid zorunlu değilse null gönder
+            Guid? fluidId = handler.RequiresFluid
+                ? (vm.FluidId == Guid.Empty ? null : vm.FluidId)
+                : null;
 
-            // ❌ PrefixRules dropdown kaldırıldı (prefix kural tablosundan otomatik bulunuyor)
-            vm.PrefixRules = new List<SelectListItem>();
+            var products = await handler.GetProductsAsync(vm.SProductGroupId, fluidId);
+            vm.Products = products
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+                .ToList();
+
+            vm.PrefixRules = new System.Collections.Generic.List<SelectListItem>();
         }
     }
 }

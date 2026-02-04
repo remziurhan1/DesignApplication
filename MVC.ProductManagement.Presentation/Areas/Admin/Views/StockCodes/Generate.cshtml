@@ -60,55 +60,45 @@
     </div>
 }
 
-@section Scripts {
-    <script>
-        const groupSelect = document.getElementById("groupSelect");
-        const fluidSelect = document.getElementById("fluidSelect");
-        const productSelect = document.getElementById("productSelect");
+<script>
+    const groupSelect = document.getElementById("groupSelect");
+    const fluidSelect = document.getElementById("fluidSelect");
+    const productSelect = document.getElementById("productSelect");
 
-        function resetSelect(selectEl, placeholder) {
-            selectEl.innerHTML = "";
-            const opt = document.createElement("option");
-            opt.value = "";
-            opt.textContent = placeholder;
-            selectEl.appendChild(opt);
-        }
+    function getGroupCodeFromText() {
+        const txt = groupSelect.options[groupSelect.selectedIndex]?.textContent || "";
+        return (txt.split("-")[0] || "").trim(); // "A", "F" ...
+    }
 
-        // Group değişince -> Fluids yükle
-        groupSelect.addEventListener("change", async function () {
-            const groupId = this.value;
+    function resetSelect(selectEl, placeholder) {
+        selectEl.innerHTML = "";
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = placeholder;
+        selectEl.appendChild(opt);
+    }
 
-            resetSelect(fluidSelect, groupId ? "Yükleniyor..." : "Önce ürün grubu seçiniz");
-            resetSelect(productSelect, "Önce ürün grubu + akışkan seçiniz");
+    groupSelect.addEventListener("change", async function () {
+        const groupId = this.value;
+        const groupCode = getGroupCodeFromText();
 
-            if (!groupId) return;
+        // Ürünleri her durumda resetle
+        resetSelect(productSelect, "Ürün yükleniyor...");
 
-            const url = '@Url.Action("FluidsByGroup", "SStockCode", new { area = "Admin" })'
-                + `?groupId=${groupId}`;
+        // ✅ Akışkan sadece F için
+        if (groupCode !== "F") {
+            // fluid disable
+            fluidSelect.disabled = true;
+            resetSelect(fluidSelect, "Bu grup için akışkan kullanılmaz");
 
-            const response = await fetch(url);
-            const data = await response.json();
-
-            resetSelect(fluidSelect, "Seçiniz");
-            data.forEach(item => {
-                const opt = document.createElement("option");
-                opt.value = item.id;
-                opt.textContent = `${item.code} - ${item.name}`;
-                fluidSelect.appendChild(opt);
-            });
-        });
-
-        // Fluid değişince -> Products yükle
-        fluidSelect.addEventListener("change", async function () {
-            const groupId = groupSelect.value;
-            const fluidId = this.value;
-
-            resetSelect(productSelect, (groupId && fluidId) ? "Yükleniyor..." : "Önce ürün grubu + akışkan seçiniz");
-
-            if (!groupId || !fluidId) return;
+            // products: fluid'siz çağır
+            if (!groupId) {
+                resetSelect(productSelect, "Önce ürün grubu seçiniz");
+                return;
+            }
 
             const url = '@Url.Action("ProductsByGroupAndFluid", "SStockCode", new { area = "Admin" })'
-                + `?groupId=${groupId}&fluidId=${fluidId}`;
+                + `?groupId=${groupId}`;
 
             const response = await fetch(url);
             const data = await response.json();
@@ -117,9 +107,56 @@
             data.forEach(item => {
                 const opt = document.createElement("option");
                 opt.value = item.id;
-                opt.textContent = item.name; // sadece ürün adı
+                opt.textContent = item.name;
                 productSelect.appendChild(opt);
             });
+
+            return;
+        }
+
+        // F grubu: fluid aktif
+        fluidSelect.disabled = false;
+
+        resetSelect(fluidSelect, groupId ? "Yükleniyor..." : "Önce ürün grubu seçiniz");
+        resetSelect(productSelect, "Önce ürün grubu + akışkan seçiniz");
+
+        if (!groupId) return;
+
+        const url = '@Url.Action("FluidsByGroup", "SStockCode", new { area = "Admin" })'
+            + `?groupId=${groupId}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        resetSelect(fluidSelect, "Seçiniz");
+        data.forEach(item => {
+            const opt = document.createElement("option");
+            opt.value = item.id;
+            opt.textContent = `${item.code} - ${item.name}`;
+            fluidSelect.appendChild(opt);
         });
-    </script>
-}
+    });
+
+    fluidSelect.addEventListener("change", async function () {
+        const groupId = groupSelect.value;
+        const fluidId = this.value;
+
+        resetSelect(productSelect, (groupId && fluidId) ? "Yükleniyor..." : "Önce ürün grubu + akışkan seçiniz");
+
+        if (!groupId || !fluidId) return;
+
+        const url = '@Url.Action("ProductsByGroupAndFluid", "SStockCode", new { area = "Admin" })'
+            + `?groupId=${groupId}&fluidId=${fluidId}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        resetSelect(productSelect, "Seçiniz");
+        data.forEach(item => {
+            const opt = document.createElement("option");
+            opt.value = item.id;
+            opt.textContent = item.name;
+            productSelect.appendChild(opt);
+        });
+    });
+</script>
