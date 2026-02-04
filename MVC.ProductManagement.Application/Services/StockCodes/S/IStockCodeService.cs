@@ -25,5 +25,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
         Task<IReadOnlyList<StockCardListItemDto>> ListSStockCardsAsync(
             int take = 200,
             CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyList<LookupDto>> GetAllFluidsAsync(CancellationToken cancellationToken = default);
+
     }
 }

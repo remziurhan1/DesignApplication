@@ -1,0 +1,109 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA.SAStockCodeGenerateVm
+
+@{
+    ViewData["Title"] = "SA Stok Kodu Üret";
+}
+
+<h3>SA Stok Kodu Üret</h3>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.StockCode8))
+{
+    <div class="alert alert-success">
+        <div><strong>Kod:</strong> @Model.StockCode8</div>
+        <div><strong>Açıklama:</strong> @Model.Description</div>
+        @if (Model.AlreadyExists.HasValue)
+        {
+            <div><strong>Durum:</strong> @(Model.AlreadyExists.Value ? "Zaten vardı" : "Yeni oluşturuldu")</div>
+        }
+    </div>
+}
+
+<form asp-action="Generate" method="post">
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Grup</label>
+            <select asp-for="SProductGroupId" asp-items="Model.Groups" class="form-select" id="groupSelect">
+                <option value="">Seçiniz</option>
+            </select>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Akışkan</label>
+            <select asp-for="FluidId" asp-items="Model.Fluids" class="form-select" id="fluidSelect">
+                <option value="">Seçiniz</option>
+            </select>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Ürün</label>
+            <select asp-for="SProductId" asp-items="Model.Products" class="form-select" id="productSelect">
+                <option value="">Önce grup seçiniz</option>
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kod Üret</button>
+</form>
+
+@section Scripts {
+    <script>
+        (function () {
+            const groupSelect = document.getElementById("groupSelect");
+            const productSelect = document.getElementById("productSelect");
+
+            function clearProducts(message) {
+                productSelect.innerHTML = "";
+                const opt = document.createElement("option");
+                opt.value = "";
+                opt.text = message || "Seçiniz";
+                productSelect.appendChild(opt);
+            }
+
+            async function loadProductsByGroup(groupId) {
+                if (!groupId) {
+                    clearProducts("Önce grup seçiniz");
+                    return;
+                }
+
+                clearProducts("Yükleniyor...");
+
+                try {
+                    const resp = await fetch(`@Url.Action("ProductsByGroup", "SAStockCode")?groupId=${groupId}`);
+                    if (!resp.ok) throw new Error("İstek başarısız");
+
+                    const data = await resp.json();
+
+                    productSelect.innerHTML = "";
+                    const empty = document.createElement("option");
+                    empty.value = "";
+                    empty.text = "Seçiniz";
+                    productSelect.appendChild(empty);
+
+                    for (const item of data) {
+                        const opt = document.createElement("option");
+                        opt.value = item.id;
+                        opt.text = item.name; // İstersen: `${item.code} - ${item.name}`
+                        productSelect.appendChild(opt);
+                    }
+                } catch (e) {
+                    clearProducts("Ürünler yüklenemedi");
+                    console.error(e);
+                }
+            }
+
+            groupSelect.addEventListener("change", function () {
+                loadProductsByGroup(this.value);
+            });
+
+            // Sayfa postback sonrası group seçiliyse products tekrar dolsun
+            if (groupSelect.value) {
+                loadProductsByGroup(groupSelect.value);
+            }
+        })();
+    </script>
+}

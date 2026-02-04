@@ -18,14 +18,17 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed
 
             foreach (var prefix in SAllDefinitions.AllPrefixes())
             {
-                // prefix: "SFA0"  => group = 'F', step3='A', digit=0
-                var groupCode = prefix[1].ToString();         // 'F'
-                var step3 = prefix[2].ToString();             // 'A' (burayı Code üretmek için kullanıyoruz)
-                var digit = int.Parse(prefix[3].ToString());  // 0..9
+                var groupCode = prefix[1].ToString();
+
+                // ✅ SA, SB, SC buradan çıkartıldı
+                if (groupCode != "F")
+                    continue;
+
+                var digit = int.Parse(prefix[3].ToString());
 
                 var sProductGroupId = SeedId.From($"SProductGroup:{groupCode}");
-                var code = $"{groupCode}{digit}";             // ✅ Code: F0, F1... (istersen A0 yerine bu daha anlamlı)
-                var name = GetProductTypeName(digit);         // ✅ Name: kullanıcıya görünen
+                var code = $"{groupCode}{digit}";
+                var name = GetProductTypeName(digit);
 
                 products.Add(new SProduct
                 {
@@ -38,6 +41,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed
                     CreatedDate = now
                 });
             }
+
 
             // Aynı grup+digit birden fazla prefix'ten gelebilir (SFA0, SFC0, ...)
             // SProduct'u "grup+digit" bazlı tekilleştirelim:

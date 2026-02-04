@@ -60,6 +60,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<Material>().HasData(MaterialSeed.Get());
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
+            SASeed.Seed(builder); // <-- bunu ekle
 
 
             //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.FluidSeed_SAll());
@@ -72,7 +73,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
 
             //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.StockSequenceSeed_SAll());
 
-        
+
 
 
         }

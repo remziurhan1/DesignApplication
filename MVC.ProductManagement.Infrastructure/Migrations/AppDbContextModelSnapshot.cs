@@ -752,7 +752,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1487),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9389),
                             Density = 7850.0,
                             Group = "Fine grain pressure vessel steel",
                             MaterialNumber = "1.0565",
@@ -829,7 +829,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1514),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9420),
                             FormType = 0,
                             MaterialId = new Guid("11111111-1111-1111-1111-111111111111"),
                             Notes = "Standard plate form for P355NH",
@@ -1884,534 +1884,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8e133ac0-47b3-64c8-5a57-979025e331bf"),
-                            Code = "A0",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vana / Valfler (Globe vb.)",
-                            PrefixIndex = 0,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("541b451a-a990-338a-8bfb-1dbce7a10125"),
-                            Code = "A1",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Emniyet / Relief Valfleri",
-                            PrefixIndex = 1,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("f17d0e4f-443e-41ee-1e2d-b334b53a0647"),
-                            Code = "A2",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Regülatör",
-                            PrefixIndex = 2,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("367c27df-38a5-07ff-fbd4-58f47fccb93d"),
-                            Code = "A3",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Seviye / Gösterge",
-                            PrefixIndex = 3,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("908f658b-1d87-bf50-e065-2456f6eb1847"),
-                            Code = "A4",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Check / Excess Flow",
-                            PrefixIndex = 4,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("49254e06-8a1f-369d-9554-89c3710780c0"),
-                            Code = "A5",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Filtre / Strainer",
-                            PrefixIndex = 5,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("afd1908a-73b3-679e-3901-94b15e4970f4"),
-                            Code = "A6",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Manometre / Basınç Göstergesi",
-                            PrefixIndex = 6,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("3da5522d-7c31-14d3-f0f0-768df252e92f"),
-                            Code = "A7",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Termometre / Sıcaklık Göstergesi",
-                            PrefixIndex = 7,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("6e6ea87c-c14c-28a0-6c17-34537a6401c2"),
-                            Code = "A8",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bağlantı Elemanları / Fittings",
-                            PrefixIndex = 8,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("4ac370ab-76bb-6ac6-2fbc-483cca51e34e"),
-                            Code = "A9",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Diğer",
-                            PrefixIndex = 9,
-                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("18905295-d4f1-92cf-159a-0584871092eb"),
-                            Code = "B0",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vana / Valfler (Globe vb.)",
-                            PrefixIndex = 0,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("177e44a6-40d3-a37c-01d6-556565feb02d"),
-                            Code = "B1",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Emniyet / Relief Valfleri",
-                            PrefixIndex = 1,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("7b3ac40f-6fb1-9108-6079-8ee98558ebcc"),
-                            Code = "B2",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Regülatör",
-                            PrefixIndex = 2,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("2c726f47-6c5e-5b26-7c54-e5243b1d3cb2"),
-                            Code = "B3",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Seviye / Gösterge",
-                            PrefixIndex = 3,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("117e023c-61a0-9e16-ab8c-4abc262f756a"),
-                            Code = "B4",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Check / Excess Flow",
-                            PrefixIndex = 4,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("efa50840-b929-33a3-b3a2-d0cefa2edb4c"),
-                            Code = "B5",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Filtre / Strainer",
-                            PrefixIndex = 5,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("438f68a2-8bdd-9be7-9b69-5fd4b4a68875"),
-                            Code = "B6",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Manometre / Basınç Göstergesi",
-                            PrefixIndex = 6,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("f7cb1073-9761-3a61-94f9-da0f2a35fafc"),
-                            Code = "B7",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Termometre / Sıcaklık Göstergesi",
-                            PrefixIndex = 7,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("dee2cc29-abed-6701-7d6f-f6e77e70c946"),
-                            Code = "B8",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bağlantı Elemanları / Fittings",
-                            PrefixIndex = 8,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("136ccea1-4997-9653-5e42-1ee394b28827"),
-                            Code = "B9",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Diğer",
-                            PrefixIndex = 9,
-                            SProductGroupId = new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("ce94aa75-f4b3-8529-7e92-77f4325e1900"),
-                            Code = "C0",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vana / Valfler (Globe vb.)",
-                            PrefixIndex = 0,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("1d73997a-c7ef-14dd-1924-c0a15fe3a84d"),
-                            Code = "C1",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Emniyet / Relief Valfleri",
-                            PrefixIndex = 1,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("d5d4c070-86e1-40d7-2b48-787b4327e185"),
-                            Code = "C2",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Regülatör",
-                            PrefixIndex = 2,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("af33897a-ae25-a1bb-986e-e40cd4d8db95"),
-                            Code = "C3",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Seviye / Gösterge",
-                            PrefixIndex = 3,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("3a8b39a1-3516-eb74-c13d-1407ea38d286"),
-                            Code = "C4",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Check / Excess Flow",
-                            PrefixIndex = 4,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("3badcf1e-9eee-c4a5-84f0-767a1c7708fd"),
-                            Code = "C5",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Filtre / Strainer",
-                            PrefixIndex = 5,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("9a7cbb4b-a582-5a24-22f4-67ff8806a726"),
-                            Code = "C6",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Manometre / Basınç Göstergesi",
-                            PrefixIndex = 6,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("58ee14e9-0ad8-eceb-0b70-fd7ec56dcb5b"),
-                            Code = "C7",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Termometre / Sıcaklık Göstergesi",
-                            PrefixIndex = 7,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("07869504-adf4-2e9c-a77c-1392271719c6"),
-                            Code = "C8",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bağlantı Elemanları / Fittings",
-                            PrefixIndex = 8,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("0a562b70-f1ef-5bb6-0e5b-072ec5646ada"),
-                            Code = "C9",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Diğer",
-                            PrefixIndex = 9,
-                            SProductGroupId = new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("828baa99-21bc-afe0-b5c4-d8e9f562cbaa"),
-                            Code = "D0",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vana / Valfler (Globe vb.)",
-                            PrefixIndex = 0,
-                            SProductGroupId = new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("844f9b63-72b7-f634-3f6d-33eb46b4cd74"),
-                            Code = "D1",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Emniyet / Relief Valfleri",
-                            PrefixIndex = 1,
-                            SProductGroupId = new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("5b511e3f-7b80-2153-d900-56f6f6bae46a"),
-                            Code = "D2",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Regülatör",
-                            PrefixIndex = 2,
-                            SProductGroupId = new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("f21a548f-cce9-df44-f320-5176fe4b478d"),
-                            Code = "D3",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Seviye / Gösterge",
-                            PrefixIndex = 3,
-                            SProductGroupId = new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("f4b123da-b8a6-3b97-a001-693b0266114e"),
-                            Code = "D4",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Check / Excess Flow",
-                            PrefixIndex = 4,
-                            SProductGroupId = new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("1778dc56-8f34-b9d8-861a-126b4c623ce5"),
-                            Code = "D5",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Filtre / Strainer",
-                            PrefixIndex = 5,
-                            SProductGroupId = new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("f1ad1052-860a-83a4-09eb-e80a768e9646"),
-                            Code = "D6",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Manometre / Basınç Göstergesi",
-                            PrefixIndex = 6,
-                            SProductGroupId = new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("4f333fdc-4333-4914-6a0d-9b9abdf304a4"),
-                            Code = "D7",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Termometre / Sıcaklık Göstergesi",
-                            PrefixIndex = 7,
-                            SProductGroupId = new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("ad5f341a-f2dd-f5b2-5188-93f9239a3231"),
-                            Code = "E0",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vana / Valfler (Globe vb.)",
-                            PrefixIndex = 0,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("0bf19af3-89e8-a449-1711-e469dfe45171"),
-                            Code = "E1",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Emniyet / Relief Valfleri",
-                            PrefixIndex = 1,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("c2ba78dd-4f60-c7a1-ab68-fc31ae06f99d"),
-                            Code = "E2",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Regülatör",
-                            PrefixIndex = 2,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("e3cc2b0c-589d-3721-7999-286b250e97e5"),
-                            Code = "E3",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Seviye / Gösterge",
-                            PrefixIndex = 3,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("0cebb1d1-3687-2696-0453-36816e1ef6b1"),
-                            Code = "E4",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Check / Excess Flow",
-                            PrefixIndex = 4,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("8db6c73e-9763-7e83-509e-07a08dbff7d2"),
-                            Code = "E5",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Filtre / Strainer",
-                            PrefixIndex = 5,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("50fea148-89c7-30c6-b9f4-1ef6b75e1546"),
-                            Code = "E6",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Manometre / Basınç Göstergesi",
-                            PrefixIndex = 6,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("abce0c5d-01ca-afdc-f53d-8f858d4481ed"),
-                            Code = "E7",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Termometre / Sıcaklık Göstergesi",
-                            PrefixIndex = 7,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("8e4b467b-e11b-84b8-2765-a4e130670c50"),
-                            Code = "E8",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bağlantı Elemanları / Fittings",
-                            PrefixIndex = 8,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("de414254-687f-71b9-cd00-043f805c78d3"),
-                            Code = "E9",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Diğer",
-                            PrefixIndex = 9,
-                            SProductGroupId = new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"),
-                            Status = 0
-                        },
-                        new
-                        {
                             Id = new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"),
                             Code = "F0",
                             CreatedBy = "SEED",
@@ -2522,234 +1994,421 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7fae0826-2b18-2218-a9e7-50dfaf6e43c8"),
-                            Code = "G0",
+                            Id = new Guid("04bcf5e1-610b-3bd3-cdd1-5fecac31070b"),
+                            Code = "SAA0",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vana / Valfler (Globe vb.)",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB 8.8",
                             PrefixIndex = 0,
-                            SProductGroupId = new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("63886412-0c68-3b65-a4b7-59c82c286c7a"),
-                            Code = "G1",
+                            Id = new Guid("7768d271-f5c2-5adb-4378-d76423e6d36c"),
+                            Code = "SAA1",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Emniyet / Relief Valfleri",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB 10.9",
                             PrefixIndex = 1,
-                            SProductGroupId = new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("20c181aa-1e2c-23ee-456c-71c48889419f"),
-                            Code = "G2",
+                            Id = new Guid("0409cab9-f4df-6455-3219-207ed5cb7500"),
+                            Code = "SAA2",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Regülatör",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB 12.9",
                             PrefixIndex = 2,
-                            SProductGroupId = new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("501e2963-96f2-64f2-36b9-3695459b74ad"),
-                            Code = "G3",
+                            Id = new Guid("189f0a7e-f8cc-9eb9-9c97-5a2f896c8f11"),
+                            Code = "SAA3",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Seviye / Gösterge",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB SAPKALI 8.8",
                             PrefixIndex = 3,
-                            SProductGroupId = new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("9e58a97d-6755-595b-d239-539aaef05ce9"),
-                            Code = "G4",
+                            Id = new Guid("7eb9e490-2b9b-4d3f-81e0-50e4d50b8215"),
+                            Code = "SAA4",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Check / Excess Flow",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB SAPKALI 10.9",
                             PrefixIndex = 4,
-                            SProductGroupId = new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("98d273fd-61c5-4a9c-ddbc-b54fd53a8338"),
-                            Code = "G5",
+                            Id = new Guid("f3e684e0-3327-7e78-0877-f97e78c4c802"),
+                            Code = "SAA5",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Filtre / Strainer",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB SAPKALI 12.9",
                             PrefixIndex = 5,
-                            SProductGroupId = new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("49a451e6-dc19-d6ef-2427-9cb1af599635"),
-                            Code = "G6",
+                            Id = new Guid("88d20b0d-6a11-9a22-0fa5-cdb42f9baa19"),
+                            Code = "SAA6",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Manometre / Basınç Göstergesi",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB CROM",
                             PrefixIndex = 6,
-                            SProductGroupId = new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("704a9881-4365-e5af-1012-67faac58fdec"),
-                            Code = "H0",
+                            Id = new Guid("5136e62d-85ad-61d6-c6b1-7d7e40bbd264"),
+                            Code = "SAA7",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vana / Valfler (Globe vb.)",
-                            PrefixIndex = 0,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("60e327c2-5e10-fda5-97df-1eefd0e631cd"),
-                            Code = "H1",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Emniyet / Relief Valfleri",
-                            PrefixIndex = 1,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("c8593c41-39af-f7c8-6647-36814c6f63e4"),
-                            Code = "H2",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Regülatör",
-                            PrefixIndex = 2,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("a28c2b2a-ed47-c459-fdd2-a747693bf999"),
-                            Code = "H3",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Seviye / Gösterge",
-                            PrefixIndex = 3,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("8f5ad3f6-b48f-3c18-b581-3c3b9f08dd4a"),
-                            Code = "H4",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Check / Excess Flow",
-                            PrefixIndex = 4,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("174a2516-dd50-e5ac-684c-64dbd56a60d1"),
-                            Code = "H5",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Filtre / Strainer",
-                            PrefixIndex = 5,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("112bfab2-e126-35ef-9746-9b4cc53d0fad"),
-                            Code = "H6",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Manometre / Basınç Göstergesi",
-                            PrefixIndex = 6,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("ab4e24b7-788e-de5f-e7b9-cf34ef51753d"),
-                            Code = "H7",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Termometre / Sıcaklık Göstergesi",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA SB İNBUS 8.8",
                             PrefixIndex = 7,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("ee23ec5e-db4c-6bbf-5fbd-532f82c0fe99"),
-                            Code = "H8",
+                            Id = new Guid("702b7d59-97ef-5cd3-121f-a0a44d662ae9"),
+                            Code = "SAA8",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bağlantı Elemanları / Fittings",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA SB İNBUS 10.9",
                             PrefixIndex = 8,
-                            SProductGroupId = new Guid("b43750d3-04ec-8f05-4b24-189e79142179"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("c4451f2a-1b24-ce27-8ec1-f1b34078961b"),
-                            Code = "Z0",
+                            Id = new Guid("f124c5f8-2216-e46a-c282-a4c9e7ea3ee8"),
+                            Code = "SAA9",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vana / Valfler (Globe vb.)",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA SB İNBUS 12.9",
+                            PrefixIndex = 9,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f216c606-cf03-3719-ebab-e8e076b30342"),
+                            Code = "SAB0",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA SB TORNAVİDA YARIKLI 8.8",
                             PrefixIndex = 0,
-                            SProductGroupId = new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("0d7c5031-91bf-0803-d4b2-fad9cfa48922"),
-                            Code = "Z1",
+                            Id = new Guid("46039844-5ec8-f886-1122-e5cc57a251e2"),
+                            Code = "SAB1",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Emniyet / Relief Valfleri",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA SB YILDIZ KANALLI 8.8",
                             PrefixIndex = 1,
-                            SProductGroupId = new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("65c7b15a-fc48-fc25-fcd5-05cfd6c83ccc"),
-                            Code = "Z2",
+                            Id = new Guid("66a828dc-1a3d-50c8-ab9a-3f03482c3f33"),
+                            Code = "SAB2",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Regülatör",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA SB İNBUS CROM",
                             PrefixIndex = 2,
-                            SProductGroupId = new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("18d60e82-7c26-e97c-5ccb-47e4bd390f22"),
-                            Code = "Z3",
+                            Id = new Guid("80b9d5c8-d750-4551-b52b-3e7deb7e7d57"),
+                            Code = "SAB3",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Seviye / Gösterge",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA HB İNBUS 8.8",
                             PrefixIndex = 3,
-                            SProductGroupId = new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         },
                         new
                         {
-                            Id = new Guid("15965458-2450-9a6a-db03-90adc5e4cd2c"),
-                            Code = "Z4",
+                            Id = new Guid("1c67a48e-5605-01b2-f7fa-c3c329dfb1fd"),
+                            Code = "SAB4",
                             CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Check / Excess Flow",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA HB İNBUS 10.9",
                             PrefixIndex = 4,
-                            SProductGroupId = new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"),
-                            Status = 0
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("49664db8-c818-1487-a167-98cfbc0aa49a"),
+                            Code = "SAB5",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA HB İNBUS 12.9",
+                            PrefixIndex = 5,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f052e6f1-db3c-ddee-01d9-50d4f464a86e"),
+                            Code = "SAB6",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA HB TORNAVİDA YARIKLI 8.8",
+                            PrefixIndex = 6,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("00f359f8-f909-6e41-8199-107dab592d28"),
+                            Code = "SAB7",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA HB YILDIZ KANALLI 8.8",
+                            PrefixIndex = 7,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d26a1eda-0156-ea1d-4ccc-54dcbcada052"),
+                            Code = "SAB8",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA HB İNBUS CROM",
+                            PrefixIndex = 8,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("adb99942-c0b7-5d41-15ed-31d8b095b313"),
+                            Code = "SAB9",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA HB YILDIZ KANALLI CROM",
+                            PrefixIndex = 9,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cd3cef44-b779-bde1-a6b3-64c71f51740a"),
+                            Code = "SAC0",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA HB SAC VİDASI/AKILLI VİDA CROM",
+                            PrefixIndex = 0,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ddb1fd59-13f8-a331-91f5-64e88513bac9"),
+                            Code = "SAC1",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA MB DUZ 8.8",
+                            PrefixIndex = 1,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("07296a28-d928-a2fe-8963-f1d197db6c8d"),
+                            Code = "SAC2",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA MB TORNAVİDA YARIKLI 8.8",
+                            PrefixIndex = 2,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("18544984-e22e-ba94-1793-bbdeb7077dc1"),
+                            Code = "SAC3",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA MB YILDIZ KANALLI 8.8",
+                            PrefixIndex = 3,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a5794d46-cc52-f4cf-a405-e4421a230f83"),
+                            Code = "SAC4",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA MB İNBUS CROM",
+                            PrefixIndex = 4,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0a4eb10a-9be7-022c-0161-f447da601c0d"),
+                            Code = "SAC5",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA MB SAC VİDASI/AKILLI VİDA CROM",
+                            PrefixIndex = 5,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5e772c5b-1018-297d-f5e2-43b7b83f5a83"),
+                            Code = "SAC6",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA KB (KELEBEK BASLI)",
+                            PrefixIndex = 6,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6501ad7d-02ff-064d-9028-af5309e8adee"),
+                            Code = "SAD0",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB A193 B7",
+                            PrefixIndex = 0,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7dc6a4cd-dee6-7589-081a-242765e86591"),
+                            Code = "SAD1",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA AKB A320 L7",
+                            PrefixIndex = 1,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9a85af55-3bdf-0352-6504-013c174cf772"),
+                            Code = "SAE0",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA WHITWORTH / UNC / UNF",
+                            PrefixIndex = 0,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7910a9e2-7729-72e1-6706-466be3504025"),
+                            Code = "SAE1",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA ÖZEL GRUP",
+                            PrefixIndex = 1,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2e77ec30-edf3-1106-6ad2-cbed09d21340"),
+                            Code = "SAE2",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "PERCIN CELIK",
+                            PrefixIndex = 2,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("51fdf347-dc24-52f3-90ec-8f24ef4c6a61"),
+                            Code = "SAE3",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "PERCIN ALUMINYUM",
+                            PrefixIndex = 3,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("19de7aa0-f01e-7cc5-986f-0312e9725df0"),
+                            Code = "SAE4",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "PERCIN KROM",
+                            PrefixIndex = 4,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c60d528b-fdd2-9126-0b59-0a7c38e6436d"),
+                            Code = "SAE5",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "PERCIN SOMUN",
+                            PrefixIndex = 5,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c80f6791-daef-b541-dbda-d33e7e262744"),
+                            Code = "SAE6",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "SAPLAMALAR",
+                            PrefixIndex = 6,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7bda3e77-53b3-bcea-6947-07f89c1c4079"),
+                            Code = "SAE7",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "CİVATA SETŞKUR",
+                            PrefixIndex = 7,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1cbbe91b-83db-7235-f6c4-503acc567781"),
+                            Code = "SAE8",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "U-BOLT",
+                            PrefixIndex = 8,
+                            SProductGroupId = new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"),
+                            Status = 1
                         });
                 });
 
@@ -2956,7 +2615,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.HasIndex("StockSequenceId");
 
-                    b.HasIndex("FluidId", "SProductGroupId", "SProductId", "Prefix4")
+                    b.HasIndex("FluidId", "SProductGroupId", "SProductId")
                         .IsUnique();
 
                     b.ToTable("StockCards", (string)null);
@@ -5140,9 +4799,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0655f1b6-d1e3-4f7c-97d7-66195e740281"),
+                            Id = new Guid("7da88bce-d1a8-4d21-be77-3ceb96530691"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1663),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9442),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 355.0,
@@ -5153,9 +4812,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4cbf626e-20e1-47d2-bffa-3db59a94eb51"),
+                            Id = new Guid("910a3b1e-7c3c-4eb3-9558-7ac0260f38e7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1666),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9445),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 343.0,
@@ -5166,9 +4825,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8e8f67cc-0ef5-4f37-a88e-5a497faddb3a"),
+                            Id = new Guid("becf0816-dbf4-4793-acd6-6ec2c032f28b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1669),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9451),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 323.0,
@@ -5179,9 +4838,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3a566006-146c-42e1-ad81-f502e095220b"),
+                            Id = new Guid("121996b2-43c4-4d45-a198-23f188bca446"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1672),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9453),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 299.0,
@@ -5192,9 +4851,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("33753251-b95d-4779-a64a-a0bc78e90ba9"),
+                            Id = new Guid("80b8f2e7-5004-45e2-8b2b-10daa196c1ed"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1674),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9455),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 275.0,
@@ -5205,9 +4864,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9c367f82-09c6-43f5-9d72-9afd3573bd4a"),
+                            Id = new Guid("c6526d77-5d79-407a-9ac0-a70c30f90fc6"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1676),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9459),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 252.0,
@@ -5218,9 +4877,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e4b186e6-445b-4237-be37-2a88b79d9557"),
+                            Id = new Guid("733b84ed-4eb2-4027-9844-0e0faeffc243"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1678),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9462),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 232.0,
@@ -5231,9 +4890,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("15526aac-4962-4ab1-90d1-a8d43535750a"),
+                            Id = new Guid("43bf74bd-9587-4410-8c98-690a7437e349"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1681),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9464),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 214.0,
@@ -5244,9 +4903,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("95e16fdd-94cc-425a-a4c4-1423899eabc2"),
+                            Id = new Guid("68650454-857d-45aa-8da6-82785906bf43"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1683),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9466),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 202.0,
@@ -5257,9 +4916,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6fb545eb-4f19-46c8-9187-c6a6dc11fdff"),
+                            Id = new Guid("9e75c7cb-05bb-43c8-ab3d-0735423a36e2"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1685),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9468),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 345.0,
@@ -5270,9 +4929,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3b5fb691-f68b-4aed-ba8f-f9187b152907"),
+                            Id = new Guid("432ce09c-3861-43f3-bae8-96f1b36d7197"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1687),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9471),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 334.0,
@@ -5283,9 +4942,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d202b180-a318-4994-a1ac-4e0394112b3a"),
+                            Id = new Guid("cba876a6-4472-451e-8bb1-ec2769cdc71d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1690),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9473),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 314.0,
@@ -5296,9 +4955,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d97dde59-dd50-4562-9fee-2ced4bf0d9dc"),
+                            Id = new Guid("e6b72fd0-d966-4b2e-863d-57e0f1f3df3c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1691),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9475),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 291.0,
@@ -5309,9 +4968,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1722bece-37d1-4bf6-9f00-ab96a22e7519"),
+                            Id = new Guid("ad8bf7f1-5eaf-4fe6-ae8c-c8ec746f1a9d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1693),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9505),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 267.0,
@@ -5322,9 +4981,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("92c7da20-5a23-4ee2-9032-da11a1939d41"),
+                            Id = new Guid("06893024-3402-4c1e-9d82-8b3dbef5f00c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1695),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9508),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 245.0,
@@ -5335,9 +4994,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0337b90a-0b59-4d41-b181-548f90c085b1"),
+                            Id = new Guid("f6baceda-c366-436f-89a9-d996bc8b4241"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1698),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9510),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 225.0,
@@ -5348,9 +5007,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("17612529-fb1d-4655-8cd5-03d668e79c8f"),
+                            Id = new Guid("c70829a6-245c-4392-a2a3-4e88164503b3"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1701),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9512),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 208.0,
@@ -5361,9 +5020,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5fa72045-c74b-4a15-b92f-949ad9fc7a5f"),
+                            Id = new Guid("e6802c0f-8944-4027-a981-50843f31bbf0"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1706),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9515),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 196.0,
@@ -5374,9 +5033,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("05bbe017-85e2-4461-8415-e2184bf11727"),
+                            Id = new Guid("ac1fdb4b-5051-46d2-8db8-7145b29fde19"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1709),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9518),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 335.0,
@@ -5387,9 +5046,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8e5ca707-3346-4631-bfeb-094891b98a05"),
+                            Id = new Guid("00f52db5-ebf0-4db1-9437-530f2356de16"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1712),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9520),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 324.0,
@@ -5400,9 +5059,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5c3df48e-10f0-4881-81a8-408c2b37b213"),
+                            Id = new Guid("fd5d7f44-d6a3-4103-9fb5-2b1afbf4bede"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1714),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9522),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 305.0,
@@ -5413,9 +5072,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b0fc97de-d93e-450f-b9ea-b48b135872a0"),
+                            Id = new Guid("3532060c-3c88-4ad3-b3c1-c3f406c3349d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1716),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9524),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 282.0,
@@ -5426,9 +5085,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fb4c1618-bbaa-48c1-8d7c-f34e2bec8a77"),
+                            Id = new Guid("dbdf26e9-1abb-4fc1-9a61-353b9c4fd9a7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1717),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9527),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 259.0,
@@ -5439,9 +5098,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("192b916f-7b07-4831-86e6-648c667a9464"),
+                            Id = new Guid("0062692a-40d6-44a8-bcb4-785ed67f0f55"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1720),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9529),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 238.0,
@@ -5452,9 +5111,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f56bf9e7-2a8a-40e2-8786-fc84f4331b80"),
+                            Id = new Guid("ef2db162-88aa-41fb-9e5c-61165edfe087"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1722),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9530),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 219.0,
@@ -5465,9 +5124,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d5c05196-7161-4693-a1ba-75fe3a9737af"),
+                            Id = new Guid("6a17c742-3a31-463c-bce1-0eb7ce9c4045"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1723),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9532),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 202.0,
@@ -5478,9 +5137,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a8f029b4-230a-4c78-be0b-559122df4c81"),
+                            Id = new Guid("04493b76-0275-4949-9395-62e446338abf"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1725),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9536),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 190.0,
@@ -5491,9 +5150,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1a35633c-cfed-4475-a1a4-dfa3d8233cd2"),
+                            Id = new Guid("08b0602c-0d36-4b09-aaeb-e330e308f97d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1729),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9538),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 315.0,
@@ -5504,9 +5163,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ee899e36-6d0a-45f9-9dc1-dac8fce9f703"),
+                            Id = new Guid("4d80beb4-3788-440e-98d5-bcb043749109"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1731),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9539),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -5517,9 +5176,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("12b7d904-0665-4cec-9116-470b73866e57"),
+                            Id = new Guid("ce1aa245-ab38-4a0e-adb0-5cb125b7132d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1732),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9541),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 287.0,
@@ -5530,9 +5189,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c38c8a1f-a1ac-47db-95ff-86605468ce9c"),
+                            Id = new Guid("600f2b8d-b781-4b13-8f80-e32a531ededa"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1734),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9544),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 265.0,
@@ -5543,9 +5202,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ca8e2ac3-6bea-474b-be84-0748c4a8f721"),
+                            Id = new Guid("471dcde6-2bc4-4769-ade0-d2b972d81a2d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1737),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9546),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 244.0,
@@ -5556,9 +5215,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c8f986ce-a158-472a-bff1-0b8b6a43891e"),
+                            Id = new Guid("4a3d083a-03db-4e42-a4f7-f0ac88f683ab"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1738),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9548),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 224.0,
@@ -5569,9 +5228,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("832e74ba-288a-484e-982e-21d2f58c96eb"),
+                            Id = new Guid("c87cae89-1256-4fec-ad6b-d2f02b1bbdcc"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1764),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9551),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 206.0,
@@ -5582,9 +5241,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("915358c9-bb3b-4976-8002-f4300802e4e4"),
+                            Id = new Guid("ad8a8216-a66a-47d9-b460-28a262619d93"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1766),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9554),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 190.0,
@@ -5595,9 +5254,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2bf03613-3f18-4b91-b4ec-fde22e6809e1"),
+                            Id = new Guid("fa41ff85-0e60-4245-a721-09fa348feaef"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1769),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9556),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 179.0,
@@ -5608,9 +5267,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8ed5725b-8ae3-4272-81d8-dfda19124cda"),
+                            Id = new Guid("84486234-9471-4031-aa90-7f2ca3e32b96"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1771),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9557),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -5621,9 +5280,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ce639fe9-2984-48bb-beb8-35751e127b22"),
+                            Id = new Guid("c9041d4c-72e1-463d-81f4-afb8f417d90f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1772),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9559),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 295.0,
@@ -5634,9 +5293,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6993b3bb-43d3-40d8-bea8-a7cb5530e0c6"),
+                            Id = new Guid("acbf3f4c-8c3c-4bff-9b6d-33322a6772ee"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1774),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9562),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 277.0,
@@ -5647,9 +5306,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("553ff9ce-8f59-47e2-9af6-1726feefd268"),
+                            Id = new Guid("a77b09e1-db87-4ae3-826e-172f004d31dc"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1778),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9564),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 257.0,
@@ -5660,9 +5319,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("64fb0e55-638a-48a7-b827-64d465af0c0c"),
+                            Id = new Guid("6ceca8d3-859b-489b-bc78-97bd513e4c4b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1780),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9566),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 236.0,
@@ -5673,9 +5332,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("cf744930-b6c7-4f02-9ca7-77b59b85b6a2"),
+                            Id = new Guid("673ca2ed-d8fd-4f1a-88bb-051bcbce941b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1781),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9568),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 216.0,
@@ -5686,9 +5345,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5e154692-67a5-4d4f-80c3-27d5f52fe4d3"),
+                            Id = new Guid("5efaedae-a5d1-4737-8142-d9e8e6dfebb3"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1783),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9570),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 199.0,
@@ -5699,9 +5358,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b8e026c5-0687-48ee-bd6b-f8bc871250df"),
+                            Id = new Guid("5e1e2ac8-c101-42cd-9c50-dfe13ea4ec57"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1786),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9572),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 184.0,
@@ -5712,9 +5371,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("013e589b-1649-4eef-ad2e-c9b6b4b92060"),
+                            Id = new Guid("25515cfb-c205-438c-92fd-83d1a082c8fa"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1787),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9574),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 173.0,
@@ -5725,9 +5384,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("edc36206-0269-4dc0-843e-f568adb1b469"),
+                            Id = new Guid("d46a7f1b-04f7-4c13-8bbf-748847b01892"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1789),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9576),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 295.0,
@@ -5738,9 +5397,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e6e8a37f-9810-4253-803b-302e57a47e45"),
+                            Id = new Guid("30c31dc7-5db5-46f3-802b-c57e614ab0b7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1791),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9579),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 285.0,
@@ -5751,9 +5410,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("056c01eb-7d77-4639-9413-415d2d09bc16"),
+                            Id = new Guid("8d1f9cb1-38a9-42b5-a8cc-3b8975c7b78e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1793),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9581),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 268.0,
@@ -5764,9 +5423,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b0bff9e1-35cc-4dc3-959d-8527d8e9980e"),
+                            Id = new Guid("442b9414-54d1-4c64-b4ef-0328f70c1423"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1795),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9583),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 249.0,
@@ -5777,9 +5436,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("18834044-7d74-4e2f-85e5-d2d08c3b5c8e"),
+                            Id = new Guid("9fb95b36-dbda-4061-8432-2b3f528df651"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1796),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9584),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 228.0,
@@ -5790,9 +5449,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8aaedad3-2364-4c90-9699-d5d1694e72a7"),
+                            Id = new Guid("ddb58ebe-7c49-47b3-81a6-5f4c2fc67374"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1798),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9587),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 209.0,
@@ -5803,9 +5462,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4f413e95-0e9a-451b-b8d4-eeb7122d2149"),
+                            Id = new Guid("5d7b0d21-d0d2-4669-bb90-a972a433a9f7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1801),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9589),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 192.0,
@@ -5816,9 +5475,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9b1a3b82-9005-43ff-b720-4a50b6f3d420"),
+                            Id = new Guid("bf5a623b-6448-4d05-a3fa-9837848f4ecb"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1802),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9591),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 178.0,
@@ -5829,9 +5488,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1fb37969-de13-4f5d-86b9-229f943793db"),
+                            Id = new Guid("9eac8df0-d305-4a12-9c4e-a8525e5a85b0"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 3, 20, 0, 55, 671, DateTimeKind.Utc).AddTicks(1804),
+                            CreatedDate = new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9593),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 167.0,

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MVC.ProductManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class v33 : Migration
+    public partial class saseeddd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -223,6 +223,26 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Materials", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -577,6 +597,45 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SGroupFilterRules",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FluidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SProductGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SGroupFilterRules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SGroupFilterRules_Fluids_FluidId",
+                        column: x => x.FluidId,
+                        principalTable: "Fluids",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SGroupFilterRules_SCategories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "SCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SGroupFilterRules_SProductGroups_SProductGroupId",
+                        column: x => x.SProductGroupId,
+                        principalTable: "SProductGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SProducts",
                 columns: table => new
                 {
@@ -842,6 +901,46 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SPrefixRules",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SProductGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FluidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Prefix = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SPrefixRules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SPrefixRules_Fluids_FluidId",
+                        column: x => x.FluidId,
+                        principalTable: "Fluids",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SPrefixRules_SProductGroups_SProductGroupId",
+                        column: x => x.SProductGroupId,
+                        principalTable: "SProductGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SPrefixRules_SProducts_SProductId",
+                        column: x => x.SProductId,
+                        principalTable: "SProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StockCards",
                 columns: table => new
                 {
@@ -916,7 +1015,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Materials",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "Density", "Group", "MaterialNumber", "ModifiedBy", "ModifiedDate", "Name", "Notes", "Standard", "Status" },
-                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4293), null, null, 7850.0, "Fine grain pressure vessel steel", "1.0565", null, null, "P355NH", "Normalized delivery condition according to EN 10028-3", 0, 0 });
+                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9389), null, null, 7850.0, "Fine grain pressure vessel steel", "1.0565", null, null, "P355NH", "Normalized delivery condition according to EN 10028-3", 0, 0 });
 
             migrationBuilder.InsertData(
                 table: "SProductGroups",
@@ -1134,92 +1233,123 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "MaterialForms",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "FormType", "MaterialId", "ModifiedBy", "ModifiedDate", "Notes", "ProductStandard", "Status", "ThicknessMax", "ThicknessMin", "UnitPrice", "WeldingFactor" },
-                values: new object[] { new Guid("22222222-2222-2222-2222-222222222222"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4314), null, null, 0, new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Standard plate form for P355NH", "EN 10028-3", 0, 250.0, 1.0, 1.5, null });
+                values: new object[] { new Guid("22222222-2222-2222-2222-222222222222"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9420), null, null, 0, new Guid("11111111-1111-1111-1111-111111111111"), null, null, "Standard plate form for P355NH", "EN 10028-3", 0, 250.0, 1.0, 1.5, null });
 
             migrationBuilder.InsertData(
                 table: "SProducts",
                 columns: new[] { "Id", "Code", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "ModifiedBy", "ModifiedDate", "Name", "PrefixIndex", "SProductGroupId", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("07869504-adf4-2e9c-a77c-1392271719c6"), "C8", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Bağlantı Elemanları / Fittings", 8, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("0a562b70-f1ef-5bb6-0e5b-072ec5646ada"), "C9", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Diğer", 9, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("0bf19af3-89e8-a449-1711-e469dfe45171"), "E1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
+                    { new Guid("00f359f8-f909-6e41-8199-107dab592d28"), "SAB7", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA HB YILDIZ KANALLI 8.8", 7, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("0409cab9-f4df-6455-3219-207ed5cb7500"), "SAA2", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB 12.9", 2, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("04bcf5e1-610b-3bd3-cdd1-5fecac31070b"), "SAA0", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB 8.8", 0, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("07296a28-d928-a2fe-8963-f1d197db6c8d"), "SAC2", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA MB TORNAVİDA YARIKLI 8.8", 2, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("0a4eb10a-9be7-022c-0161-f447da601c0d"), "SAC5", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA MB SAC VİDASI/AKILLI VİDA CROM", 5, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("0c7c8c5e-ba44-87d2-e68c-c29b874741b1"), "F9", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Diğer", 9, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("0cebb1d1-3687-2696-0453-36816e1ef6b1"), "E4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
-                    { new Guid("0d7c5031-91bf-0803-d4b2-fad9cfa48922"), "Z1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"), 0 },
-                    { new Guid("112bfab2-e126-35ef-9746-9b4cc53d0fad"), "H6", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Manometre / Basınç Göstergesi", 6, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
-                    { new Guid("117e023c-61a0-9e16-ab8c-4abc262f756a"), "B4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("136ccea1-4997-9653-5e42-1ee394b28827"), "B9", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Diğer", 9, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("15965458-2450-9a6a-db03-90adc5e4cd2c"), "Z4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"), 0 },
-                    { new Guid("174a2516-dd50-e5ac-684c-64dbd56a60d1"), "H5", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Filtre / Strainer", 5, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
-                    { new Guid("1778dc56-8f34-b9d8-861a-126b4c623ce5"), "D5", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Filtre / Strainer", 5, new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"), 0 },
-                    { new Guid("177e44a6-40d3-a37c-01d6-556565feb02d"), "B1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("18905295-d4f1-92cf-159a-0584871092eb"), "B0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("18d60e82-7c26-e97c-5ccb-47e4bd390f22"), "Z3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"), 0 },
-                    { new Guid("1d73997a-c7ef-14dd-1924-c0a15fe3a84d"), "C1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("20c181aa-1e2c-23ee-456c-71c48889419f"), "G2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"), 0 },
+                    { new Guid("18544984-e22e-ba94-1793-bbdeb7077dc1"), "SAC3", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA MB YILDIZ KANALLI 8.8", 3, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("189f0a7e-f8cc-9eb9-9c97-5a2f896c8f11"), "SAA3", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB SAPKALI 8.8", 3, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("19de7aa0-f01e-7cc5-986f-0312e9725df0"), "SAE4", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "PERCIN KROM", 4, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("1c67a48e-5605-01b2-f7fa-c3c329dfb1fd"), "SAB4", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA HB İNBUS 10.9", 4, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("1cbbe91b-83db-7235-f6c4-503acc567781"), "SAE8", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "U-BOLT", 8, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("2bdeeeb4-881c-60e3-eaf6-785f58f9581d"), "F8", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Bağlantı Elemanları / Fittings", 8, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("2c726f47-6c5e-5b26-7c54-e5243b1d3cb2"), "B3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("367c27df-38a5-07ff-fbd4-58f47fccb93d"), "A3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("3a8b39a1-3516-eb74-c13d-1407ea38d286"), "C4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("3badcf1e-9eee-c4a5-84f0-767a1c7708fd"), "C5", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Filtre / Strainer", 5, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("3da5522d-7c31-14d3-f0f0-768df252e92f"), "A7", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Termometre / Sıcaklık Göstergesi", 7, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("438f68a2-8bdd-9be7-9b69-5fd4b4a68875"), "B6", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Manometre / Basınç Göstergesi", 6, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("49254e06-8a1f-369d-9554-89c3710780c0"), "A5", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Filtre / Strainer", 5, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("49a451e6-dc19-d6ef-2427-9cb1af599635"), "G6", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Manometre / Basınç Göstergesi", 6, new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"), 0 },
-                    { new Guid("4ac370ab-76bb-6ac6-2fbc-483cca51e34e"), "A9", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Diğer", 9, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("4f333fdc-4333-4914-6a0d-9b9abdf304a4"), "D7", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Termometre / Sıcaklık Göstergesi", 7, new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"), 0 },
-                    { new Guid("501e2963-96f2-64f2-36b9-3695459b74ad"), "G3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"), 0 },
-                    { new Guid("50fea148-89c7-30c6-b9f4-1ef6b75e1546"), "E6", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Manometre / Basınç Göstergesi", 6, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
-                    { new Guid("541b451a-a990-338a-8bfb-1dbce7a10125"), "A1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("58ee14e9-0ad8-eceb-0b70-fd7ec56dcb5b"), "C7", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Termometre / Sıcaklık Göstergesi", 7, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
+                    { new Guid("2e77ec30-edf3-1106-6ad2-cbed09d21340"), "SAE2", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "PERCIN CELIK", 2, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("46039844-5ec8-f886-1122-e5cc57a251e2"), "SAB1", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA SB YILDIZ KANALLI 8.8", 1, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("49664db8-c818-1487-a167-98cfbc0aa49a"), "SAB5", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA HB İNBUS 12.9", 5, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("5136e62d-85ad-61d6-c6b1-7d7e40bbd264"), "SAA7", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA SB İNBUS 8.8", 7, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("51fdf347-dc24-52f3-90ec-8f24ef4c6a61"), "SAE3", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "PERCIN ALUMINYUM", 3, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("5969b997-be8e-7379-49f2-29e50c47214a"), "F5", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Filtre / Strainer", 5, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("5b511e3f-7b80-2153-d900-56f6f6bae46a"), "D2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"), 0 },
-                    { new Guid("60e327c2-5e10-fda5-97df-1eefd0e631cd"), "H1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
+                    { new Guid("5e772c5b-1018-297d-f5e2-43b7b83f5a83"), "SAC6", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA KB (KELEBEK BASLI)", 6, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("630620f8-22dd-2d86-1e64-01917e2a3d5e"), "F7", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Termometre / Sıcaklık Göstergesi", 7, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("63886412-0c68-3b65-a4b7-59c82c286c7a"), "G1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"), 0 },
-                    { new Guid("65c7b15a-fc48-fc25-fcd5-05cfd6c83ccc"), "Z2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"), 0 },
+                    { new Guid("6501ad7d-02ff-064d-9028-af5309e8adee"), "SAD0", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB A193 B7", 0, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("66a828dc-1a3d-50c8-ab9a-3f03482c3f33"), "SAB2", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA SB İNBUS CROM", 2, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("697cf80a-b06a-c5cf-204c-914210302181"), "F3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("6e6ea87c-c14c-28a0-6c17-34537a6401c2"), "A8", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Bağlantı Elemanları / Fittings", 8, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("704a9881-4365-e5af-1012-67faac58fdec"), "H0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
-                    { new Guid("7b3ac40f-6fb1-9108-6079-8ee98558ebcc"), "B2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("7fae0826-2b18-2218-a9e7-50dfaf6e43c8"), "G0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"), 0 },
-                    { new Guid("828baa99-21bc-afe0-b5c4-d8e9f562cbaa"), "D0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"), 0 },
-                    { new Guid("844f9b63-72b7-f634-3f6d-33eb46b4cd74"), "D1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"), 0 },
+                    { new Guid("702b7d59-97ef-5cd3-121f-a0a44d662ae9"), "SAA8", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA SB İNBUS 10.9", 8, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("7768d271-f5c2-5adb-4378-d76423e6d36c"), "SAA1", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB 10.9", 1, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("7910a9e2-7729-72e1-6706-466be3504025"), "SAE1", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA ÖZEL GRUP", 1, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("7bda3e77-53b3-bcea-6947-07f89c1c4079"), "SAE7", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA SETŞKUR", 7, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("7dc6a4cd-dee6-7589-081a-242765e86591"), "SAD1", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB A320 L7", 1, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("7eb9e490-2b9b-4d3f-81e0-50e4d50b8215"), "SAA4", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB SAPKALI 10.9", 4, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("80b9d5c8-d750-4551-b52b-3e7deb7e7d57"), "SAB3", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA HB İNBUS 8.8", 3, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("88cb5d5a-4124-86f0-8d8e-6a99927f6387"), "F2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("8db6c73e-9763-7e83-509e-07a08dbff7d2"), "E5", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Filtre / Strainer", 5, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
-                    { new Guid("8e133ac0-47b3-64c8-5a57-979025e331bf"), "A0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("8e4b467b-e11b-84b8-2765-a4e130670c50"), "E8", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Bağlantı Elemanları / Fittings", 8, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
-                    { new Guid("8f5ad3f6-b48f-3c18-b581-3c3b9f08dd4a"), "H4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
-                    { new Guid("908f658b-1d87-bf50-e065-2456f6eb1847"), "A4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
+                    { new Guid("88d20b0d-6a11-9a22-0fa5-cdb42f9baa19"), "SAA6", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB CROM", 6, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("93f0410e-4d2a-91ee-ae47-3521cf19469e"), "F6", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Manometre / Basınç Göstergesi", 6, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("98d273fd-61c5-4a9c-ddbc-b54fd53a8338"), "G5", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Filtre / Strainer", 5, new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"), 0 },
-                    { new Guid("9a7cbb4b-a582-5a24-22f4-67ff8806a726"), "C6", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Manometre / Basınç Göstergesi", 6, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("9e58a97d-6755-595b-d239-539aaef05ce9"), "G4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("2a21da1e-4ead-f7ba-ae7a-da4a7302bfb5"), 0 },
-                    { new Guid("a28c2b2a-ed47-c459-fdd2-a747693bf999"), "H3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
-                    { new Guid("ab4e24b7-788e-de5f-e7b9-cf34ef51753d"), "H7", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Termometre / Sıcaklık Göstergesi", 7, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
-                    { new Guid("abce0c5d-01ca-afdc-f53d-8f858d4481ed"), "E7", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Termometre / Sıcaklık Göstergesi", 7, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
-                    { new Guid("ad5f341a-f2dd-f5b2-5188-93f9239a3231"), "E0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
+                    { new Guid("9a85af55-3bdf-0352-6504-013c174cf772"), "SAE0", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA WHITWORTH / UNC / UNF", 0, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("a5794d46-cc52-f4cf-a405-e4421a230f83"), "SAC4", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA MB İNBUS CROM", 4, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("adb99942-c0b7-5d41-15ed-31d8b095b313"), "SAB9", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA HB YILDIZ KANALLI CROM", 9, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("addc1b17-517b-327d-c5c7-9de15e5741b0"), "F4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("af33897a-ae25-a1bb-986e-e40cd4d8db95"), "C3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("afd1908a-73b3-679e-3901-94b15e4970f4"), "A6", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Manometre / Basınç Göstergesi", 6, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("c2ba78dd-4f60-c7a1-ab68-fc31ae06f99d"), "E2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
-                    { new Guid("c4451f2a-1b24-ce27-8ec1-f1b34078961b"), "Z0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("ebef5bc7-149c-df51-376b-5a741c7944c6"), 0 },
-                    { new Guid("c8593c41-39af-f7c8-6647-36814c6f63e4"), "H2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
+                    { new Guid("c60d528b-fdd2-9126-0b59-0a7c38e6436d"), "SAE5", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "PERCIN SOMUN", 5, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("c80f6791-daef-b541-dbda-d33e7e262744"), "SAE6", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "SAPLAMALAR", 6, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("cb7f7456-8a37-e22b-e356-15d3c28b965b"), "F1", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Emniyet / Relief Valfleri", 1, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 },
-                    { new Guid("ce94aa75-f4b3-8529-7e92-77f4325e1900"), "C0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("d5d4c070-86e1-40d7-2b48-787b4327e185"), "C2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("a64be34f-a9e9-807d-5a36-98d9cba07f0e"), 0 },
-                    { new Guid("de414254-687f-71b9-cd00-043f805c78d3"), "E9", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Diğer", 9, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
-                    { new Guid("dee2cc29-abed-6701-7d6f-f6e77e70c946"), "B8", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Bağlantı Elemanları / Fittings", 8, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("e3cc2b0c-589d-3721-7999-286b250e97e5"), "E3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("60264c1a-09bf-78bb-c79a-d22015d5a889"), 0 },
-                    { new Guid("ee23ec5e-db4c-6bbf-5fbd-532f82c0fe99"), "H8", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Bağlantı Elemanları / Fittings", 8, new Guid("b43750d3-04ec-8f05-4b24-189e79142179"), 0 },
-                    { new Guid("efa50840-b929-33a3-b3a2-d0cefa2edb4c"), "B5", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Filtre / Strainer", 5, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
-                    { new Guid("f17d0e4f-443e-41ee-1e2d-b334b53a0647"), "A2", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Regülatör", 2, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 0 },
-                    { new Guid("f1ad1052-860a-83a4-09eb-e80a768e9646"), "D6", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Manometre / Basınç Göstergesi", 6, new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"), 0 },
-                    { new Guid("f21a548f-cce9-df44-f320-5176fe4b478d"), "D3", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Seviye / Gösterge", 3, new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"), 0 },
-                    { new Guid("f4b123da-b8a6-3b97-a001-693b0266114e"), "D4", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Check / Excess Flow", 4, new Guid("9fc398c5-6d04-4186-6e11-e48d26aba256"), 0 },
-                    { new Guid("f7cb1073-9761-3a61-94f9-da0f2a35fafc"), "B7", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Termometre / Sıcaklık Göstergesi", 7, new Guid("7589ae70-1766-4a48-83b8-03edb7807ac6"), 0 },
+                    { new Guid("cd3cef44-b779-bde1-a6b3-64c71f51740a"), "SAC0", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA HB SAC VİDASI/AKILLI VİDA CROM", 0, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("d26a1eda-0156-ea1d-4ccc-54dcbcada052"), "SAB8", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA HB İNBUS CROM", 8, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("ddb1fd59-13f8-a331-91f5-64e88513bac9"), "SAC1", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA MB DUZ 8.8", 1, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("f052e6f1-db3c-ddee-01d9-50d4f464a86e"), "SAB6", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA HB TORNAVİDA YARIKLI 8.8", 6, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("f124c5f8-2216-e46a-c282-a4c9e7ea3ee8"), "SAA9", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA SB İNBUS 12.9", 9, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("f216c606-cf03-3719-ebab-e8e076b30342"), "SAB0", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA SB TORNAVİDA YARIKLI 8.8", 0, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
+                    { new Guid("f3e684e0-3327-7e78-0877-f97e78c4c802"), "SAA5", "SEED", new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "CİVATA AKB SAPKALI 12.9", 5, new Guid("87dc6bec-5d3d-6f46-ac7a-0e37de723335"), 1 },
                     { new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"), "F0", "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, null, "Vana / Valfler (Globe vb.)", 0, new Guid("e36337f1-7967-db93-2e0d-242546697931"), 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SPrefixRules",
+                columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "FluidId", "ModifiedBy", "ModifiedDate", "Prefix", "SProductGroupId", "SProductId", "Status" },
+                values: new object[,]
+                {
+                    { new Guid("09bca16d-618c-1f36-a4b4-08c452a4e2e2"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA1", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("cb7f7456-8a37-e22b-e356-15d3c28b965b"), 0 },
+                    { new Guid("0d27e762-6758-cbce-49cc-852c44436c54"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC7", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("630620f8-22dd-2d86-1e64-01917e2a3d5e"), 0 },
+                    { new Guid("14ddbcf4-c820-201f-17e2-01dcefe0f4b6"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC6", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("93f0410e-4d2a-91ee-ae47-3521cf19469e"), 0 },
+                    { new Guid("175362d3-b45f-cb5b-a3e2-21c7e186dae0"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA7", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("630620f8-22dd-2d86-1e64-01917e2a3d5e"), 0 },
+                    { new Guid("1b019ef8-3079-d437-5640-00b4117ea08f"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA8", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("2bdeeeb4-881c-60e3-eaf6-785f58f9581d"), 0 },
+                    { new Guid("1cb09bdc-dff1-3000-8ac2-8af33cd3282f"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF3", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("697cf80a-b06a-c5cf-204c-914210302181"), 0 },
+                    { new Guid("299949d5-be36-8c6e-470f-faa28fb7e5af"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC6", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("93f0410e-4d2a-91ee-ae47-3521cf19469e"), 0 },
+                    { new Guid("2b375a53-07bf-ffe4-9c21-a482bf77be8c"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC0", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"), 0 },
+                    { new Guid("2e568aa1-f9db-5848-7d98-582d5b5357c8"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF2", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("88cb5d5a-4124-86f0-8d8e-6a99927f6387"), 0 },
+                    { new Guid("31e59bf6-5de3-0750-10fe-39615ef71ff5"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC5", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("5969b997-be8e-7379-49f2-29e50c47214a"), 0 },
+                    { new Guid("33594ffd-4ded-1466-93d1-800ebe82b0b0"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC3", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("697cf80a-b06a-c5cf-204c-914210302181"), 0 },
+                    { new Guid("36cebe7d-dcd2-3089-2033-d3e6ec4b850d"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA6", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("93f0410e-4d2a-91ee-ae47-3521cf19469e"), 0 },
+                    { new Guid("3cd700fb-ae47-30b9-b441-bc78c1a2c9f0"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC1", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("cb7f7456-8a37-e22b-e356-15d3c28b965b"), 0 },
+                    { new Guid("4b707bf9-ef53-3625-dfe4-647bbf55625a"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF7", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("630620f8-22dd-2d86-1e64-01917e2a3d5e"), 0 },
+                    { new Guid("4d88655d-5386-2d8b-90a4-75563bf95b90"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC2", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("88cb5d5a-4124-86f0-8d8e-6a99927f6387"), 0 },
+                    { new Guid("53a7c554-32fc-968a-04e3-dcf680a3c79f"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC6", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("93f0410e-4d2a-91ee-ae47-3521cf19469e"), 0 },
+                    { new Guid("58b6f4b2-633f-8531-b71e-2ea1a78b4c71"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC0", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"), 0 },
+                    { new Guid("5c3cc8f9-cc84-9ae7-7d9a-89183ee9704e"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC2", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("88cb5d5a-4124-86f0-8d8e-6a99927f6387"), 0 },
+                    { new Guid("60a073db-7557-32eb-854d-280833eacd77"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF8", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("2bdeeeb4-881c-60e3-eaf6-785f58f9581d"), 0 },
+                    { new Guid("62fb66d4-7d9c-6712-38d8-e97d499980f6"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA2", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("88cb5d5a-4124-86f0-8d8e-6a99927f6387"), 0 },
+                    { new Guid("6a895009-83fc-600f-0b0b-54ac4730544a"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC3", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("697cf80a-b06a-c5cf-204c-914210302181"), 0 },
+                    { new Guid("6fdc4b46-4f76-df0e-ba02-66a04b1eeac3"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF4", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("addc1b17-517b-327d-c5c7-9de15e5741b0"), 0 },
+                    { new Guid("70f23f5a-ce75-1382-901f-8f160ef5fdc0"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC2", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("88cb5d5a-4124-86f0-8d8e-6a99927f6387"), 0 },
+                    { new Guid("719f2cc5-44df-4f94-759b-e0b3ddd8917b"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC8", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("2bdeeeb4-881c-60e3-eaf6-785f58f9581d"), 0 },
+                    { new Guid("730d4c3a-b37c-ec1f-8865-36e7399b5787"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC4", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("addc1b17-517b-327d-c5c7-9de15e5741b0"), 0 },
+                    { new Guid("73e9e267-69c4-1957-f2d8-0edfe36fcde3"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA4", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("addc1b17-517b-327d-c5c7-9de15e5741b0"), 0 },
+                    { new Guid("76dfa081-e967-949d-4c70-ee51c242b58a"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF1", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("cb7f7456-8a37-e22b-e356-15d3c28b965b"), 0 },
+                    { new Guid("777c1470-dab3-e66d-7a57-4569a02b086f"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC8", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("2bdeeeb4-881c-60e3-eaf6-785f58f9581d"), 0 },
+                    { new Guid("7c24ea52-93b5-0ca0-23db-35879d4482fe"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF6", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("93f0410e-4d2a-91ee-ae47-3521cf19469e"), 0 },
+                    { new Guid("7d1b1307-76db-97a7-bd95-1e0d134f349c"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC1", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("cb7f7456-8a37-e22b-e356-15d3c28b965b"), 0 },
+                    { new Guid("7e2038c7-653a-9d23-9f8b-91d5a8a4dead"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF0", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"), 0 },
+                    { new Guid("7fabe1cc-25b8-4c60-04b0-afb2928b2664"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC6", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("93f0410e-4d2a-91ee-ae47-3521cf19469e"), 0 },
+                    { new Guid("82a971b5-42af-16a5-a22f-1ece9e8741ea"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC1", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("cb7f7456-8a37-e22b-e356-15d3c28b965b"), 0 },
+                    { new Guid("9bb78401-11ed-b5e6-40ea-8ee8cf633241"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC4", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("addc1b17-517b-327d-c5c7-9de15e5741b0"), 0 },
+                    { new Guid("9d34aaac-acb0-1168-624d-c86293435a23"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC8", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("2bdeeeb4-881c-60e3-eaf6-785f58f9581d"), 0 },
+                    { new Guid("a21d6956-84d3-daf6-d55a-2c0dcfb88202"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC4", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("addc1b17-517b-327d-c5c7-9de15e5741b0"), 0 },
+                    { new Guid("a85523df-5b7b-3442-8c63-ff117b76ba4d"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA5", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("5969b997-be8e-7379-49f2-29e50c47214a"), 0 },
+                    { new Guid("b078e392-c5d1-e408-61e8-eabc0c26fa96"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF9", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("0c7c8c5e-ba44-87d2-e68c-c29b874741b1"), 0 },
+                    { new Guid("c0caf8c0-fc14-9d22-e349-263b17e4f092"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC3", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("697cf80a-b06a-c5cf-204c-914210302181"), 0 },
+                    { new Guid("ca046319-441a-c8d9-84fa-461c31dbbed7"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC1", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("cb7f7456-8a37-e22b-e356-15d3c28b965b"), 0 },
+                    { new Guid("cadfa220-8767-f769-9f7f-270c497bc80d"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC2", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("88cb5d5a-4124-86f0-8d8e-6a99927f6387"), 0 },
+                    { new Guid("cae0e0a2-7343-0045-5cab-b6291a23930f"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC7", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("630620f8-22dd-2d86-1e64-01917e2a3d5e"), 0 },
+                    { new Guid("d781f29c-19d5-550e-5ebf-d292a2c0663b"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC5", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("5969b997-be8e-7379-49f2-29e50c47214a"), 0 },
+                    { new Guid("d78f180a-7f6d-75bf-7f2d-5dc4560c8854"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"), null, null, "SFC5", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("5969b997-be8e-7379-49f2-29e50c47214a"), 0 },
+                    { new Guid("db55bd8a-9ce4-136b-3c9a-c4e9a599397b"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC5", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("5969b997-be8e-7379-49f2-29e50c47214a"), 0 },
+                    { new Guid("e521982b-e38d-08bc-8733-709206009e73"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC4", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("addc1b17-517b-327d-c5c7-9de15e5741b0"), 0 },
+                    { new Guid("ecbffe18-76ec-3663-83f0-17a91c850d93"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"), null, null, "SFC0", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"), 0 },
+                    { new Guid("ee3184f7-ad60-6d13-ffe1-00dfde6401ad"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC0", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"), 0 },
+                    { new Guid("ee50326a-e5ab-445a-2a5d-81342060452d"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC7", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("630620f8-22dd-2d86-1e64-01917e2a3d5e"), 0 },
+                    { new Guid("f1cc7f4a-c2de-f90a-693e-62f881173b08"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA0", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"), 0 },
+                    { new Guid("f1ea3b4b-68d6-19df-391b-5ee511364c54"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"), null, null, "SFC3", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("697cf80a-b06a-c5cf-204c-914210302181"), 0 },
+                    { new Guid("f331d41a-0601-9f4c-5545-09a3e1b1ad63"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"), null, null, "SFA3", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("697cf80a-b06a-c5cf-204c-914210302181"), 0 },
+                    { new Guid("f6926b04-61a2-e553-aa01-1fc50f063237"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC8", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("2bdeeeb4-881c-60e3-eaf6-785f58f9581d"), 0 },
+                    { new Guid("f758b8d5-3efb-a9a0-ab27-5035792caaa4"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"), null, null, "SFC7", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("630620f8-22dd-2d86-1e64-01917e2a3d5e"), 0 },
+                    { new Guid("f7c52295-50da-8a53-f40e-b8be15ebbec8"), "SEED", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"), null, null, "SFF5", new Guid("e36337f1-7967-db93-2e0d-242546697931"), new Guid("5969b997-be8e-7379-49f2-29e50c47214a"), 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -1227,60 +1357,60 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "MaterialFormId", "ModifiedBy", "ModifiedDate", "Rm", "Rp02", "Status", "Temperature", "ThicknessMax", "ThicknessMin" },
                 values: new object[,]
                 {
-                    { new Guid("00936626-acb5-4ed6-afa5-bb52df68715a"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4380), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 334.0, 0, 50.0, 40.0, 16.0 },
-                    { new Guid("06575926-f44d-4c1a-a4b5-b36913012197"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4431), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 179.0, 0, 400.0, 100.0, 60.0 },
-                    { new Guid("07c085c3-af08-4a8a-8159-60e88737b5d2"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4414), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 315.0, 0, 20.0, 100.0, 60.0 },
-                    { new Guid("093541ea-818d-4bbb-b400-66f93ad67c99"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4408), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 219.0, 0, 300.0, 60.0, 40.0 },
-                    { new Guid("09c750a2-f656-4922-ac32-ed8619d0f12a"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4472), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 295.0, 0, 20.0, 250.0, 150.0 },
-                    { new Guid("1aa5b62e-47a1-4c32-8598-38d4caa2e358"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4389), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 225.0, 0, 300.0, 40.0, 16.0 },
-                    { new Guid("1b12f380-2152-4cbf-a25f-e9d3dbd44ca9"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4374), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 202.0, 0, 400.0, 16.0, 1.0 },
-                    { new Guid("1f0f29d3-7881-47fa-8a63-41e101d42906"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4426), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 206.0, 0, 300.0, 100.0, 60.0 },
-                    { new Guid("1fb15df1-2943-45f4-93af-6ece003d290c"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4385), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 267.0, 0, 200.0, 40.0, 16.0 },
-                    { new Guid("203bb889-ba1c-4f2d-b3ce-f3ba190688b1"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4489), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 167.0, 0, 400.0, 250.0, 150.0 },
-                    { new Guid("2823384a-bea9-4ff8-850c-f2310e3080f6"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4480), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 228.0, 0, 200.0, 250.0, 150.0 },
-                    { new Guid("2929ae09-2697-4b84-93be-55d8077a5bd2"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4372), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 214.0, 0, 350.0, 16.0, 1.0 },
-                    { new Guid("298f2ff3-bc49-4d03-ae4c-65a5036414f5"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4394), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 196.0, 0, 400.0, 40.0, 16.0 },
-                    { new Guid("301ed8ef-41ff-47db-bab8-6246ed105306"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4440), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 236.0, 0, 200.0, 150.0, 100.0 },
-                    { new Guid("3048108c-5164-4ed8-9f86-c82695d7e0dc"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4363), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 299.0, 0, 150.0, 16.0, 1.0 },
-                    { new Guid("349ee51e-0655-43ce-8bfa-5b38b3fd09a5"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4381), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 314.0, 0, 100.0, 40.0, 16.0 },
-                    { new Guid("3aa9a8ec-b7d5-4763-9b3c-8eed8fbfa808"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4424), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 224.0, 0, 250.0, 100.0, 60.0 },
-                    { new Guid("4247c01f-f55e-4552-aa66-2766fe7001e8"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4420), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 265.0, 0, 150.0, 100.0, 60.0 },
-                    { new Guid("45dd9de5-5797-4b9a-8dd1-ebde58bf68c6"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4416), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 305.0, 0, 50.0, 100.0, 60.0 },
-                    { new Guid("48179f7e-a282-4e16-b3a9-add6caa0e439"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4475), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 285.0, 0, 50.0, 250.0, 150.0 },
-                    { new Guid("4ec7003e-2f51-4bf0-abca-075287726189"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4405), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 259.0, 0, 200.0, 60.0, 40.0 },
-                    { new Guid("591f6adb-45b6-49cb-ae67-440f3d35952f"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4400), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 305.0, 0, 100.0, 60.0, 40.0 },
-                    { new Guid("5fdf53af-95c0-4c38-b62d-27ab3b0b1105"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4418), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 287.0, 0, 100.0, 100.0, 60.0 },
-                    { new Guid("602f2c17-15ac-4d0b-986b-74e307392b24"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4406), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 238.0, 0, 250.0, 60.0, 40.0 },
-                    { new Guid("608897e0-7a6d-4216-a0e3-bcd465de2761"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4439), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 257.0, 0, 150.0, 150.0, 100.0 },
-                    { new Guid("62d84253-25bb-487a-9677-a0c34aba72fa"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4468), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 184.0, 0, 350.0, 150.0, 100.0 },
-                    { new Guid("694ec5ac-a183-40ed-beef-07deb61bd856"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4371), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 232.0, 0, 300.0, 16.0, 1.0 },
-                    { new Guid("716a778c-c7a6-461e-bab3-3fce83c55896"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4437), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 277.0, 0, 100.0, 150.0, 100.0 },
-                    { new Guid("73914074-98b4-4f9a-afd6-85fdba8f99d3"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4485), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 192.0, 0, 300.0, 250.0, 150.0 },
-                    { new Guid("759b3be7-215a-45d4-b735-c5a62d805589"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4383), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 291.0, 0, 150.0, 40.0, 16.0 },
-                    { new Guid("776f6865-af0a-42a3-9f53-38fc449ea436"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4350), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 355.0, 0, 20.0, 16.0, 1.0 },
-                    { new Guid("78b9551a-8829-4694-a18b-e0b0ea7d7797"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4410), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 202.0, 0, 350.0, 60.0, 40.0 },
-                    { new Guid("7fbe7cde-fad5-434b-8796-1bc0680ba950"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4429), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 190.0, 0, 350.0, 100.0, 60.0 },
-                    { new Guid("85549c41-f177-4595-986c-866ef486a0ac"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4398), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 324.0, 0, 50.0, 60.0, 40.0 },
-                    { new Guid("95da8362-b496-4ac9-8182-17568bc97019"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4487), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 178.0, 0, 350.0, 250.0, 150.0 },
-                    { new Guid("96eea502-15a5-4c95-aca1-58b2c56400c3"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4353), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 343.0, 0, 50.0, 16.0, 1.0 },
-                    { new Guid("a06ca5be-25e6-4d95-ad61-3e906df6c5b1"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4377), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 345.0, 0, 20.0, 40.0, 16.0 },
-                    { new Guid("a2806160-952b-4793-ae41-6938903203c0"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4470), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 173.0, 0, 400.0, 150.0, 100.0 },
-                    { new Guid("a6c548d4-3b76-4b1b-ad22-b0d8d3e73840"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4402), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 282.0, 0, 150.0, 60.0, 40.0 },
-                    { new Guid("a9bce915-632f-4238-9325-dc4f2e597211"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4397), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 335.0, 0, 20.0, 60.0, 40.0 },
-                    { new Guid("b056b9e8-e59c-48ea-bdfb-a68c2193b441"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4361), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 323.0, 0, 100.0, 16.0, 1.0 },
-                    { new Guid("b2ca4063-98c4-4990-b26f-c4d96d1b1b2a"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4434), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 295.0, 0, 50.0, 150.0, 100.0 },
-                    { new Guid("c4c7db89-7cc5-426e-ae36-3f92ae71bb91"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4467), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 199.0, 0, 300.0, 150.0, 100.0 },
-                    { new Guid("c58e8169-f0e5-4c7a-8f56-299837825450"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4391), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 208.0, 0, 350.0, 40.0, 16.0 },
-                    { new Guid("c6b1e7d4-b4bc-4ebb-be0b-467575eebea9"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4483), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 209.0, 0, 250.0, 250.0, 150.0 },
-                    { new Guid("c710e01d-b114-4403-9e9d-2b216f8cf4a2"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4433), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 305.0, 0, 20.0, 150.0, 100.0 },
-                    { new Guid("c874c363-19ba-4486-9dd3-1eb8d143e755"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4413), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 190.0, 0, 400.0, 60.0, 40.0 },
-                    { new Guid("c9731deb-6d4c-43b0-82f7-4692c8e79b57"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4477), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 268.0, 0, 100.0, 250.0, 150.0 },
-                    { new Guid("d634060d-576f-4ebd-974f-38c9d748f2cf"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4365), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 275.0, 0, 200.0, 16.0, 1.0 },
-                    { new Guid("d676f2ac-71e2-410a-9c1c-6aa6c3ecf171"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4442), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 216.0, 0, 250.0, 150.0, 100.0 },
-                    { new Guid("dba86ad9-417d-4e84-a3ae-ffe99485cc64"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4479), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 249.0, 0, 150.0, 250.0, 150.0 },
-                    { new Guid("ecb0cbab-8cba-4a60-bff6-975cf42fad91"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4367), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 252.0, 0, 250.0, 16.0, 1.0 },
-                    { new Guid("ed8c1f28-ada8-4bf4-9879-749eec8d36fb"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4388), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 245.0, 0, 250.0, 40.0, 16.0 },
-                    { new Guid("f526071d-95e3-45e6-82e9-5a82f32c80e0"), "SeedData", new DateTime(2026, 2, 3, 16, 53, 8, 484, DateTimeKind.Utc).AddTicks(4422), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 244.0, 0, 200.0, 100.0, 60.0 }
+                    { new Guid("0062692a-40d6-44a8-bcb4-785ed67f0f55"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9529), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 238.0, 0, 250.0, 60.0, 40.0 },
+                    { new Guid("00f52db5-ebf0-4db1-9437-530f2356de16"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9520), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 324.0, 0, 50.0, 60.0, 40.0 },
+                    { new Guid("04493b76-0275-4949-9395-62e446338abf"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9536), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 190.0, 0, 400.0, 60.0, 40.0 },
+                    { new Guid("06893024-3402-4c1e-9d82-8b3dbef5f00c"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9508), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 245.0, 0, 250.0, 40.0, 16.0 },
+                    { new Guid("08b0602c-0d36-4b09-aaeb-e330e308f97d"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9538), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 315.0, 0, 20.0, 100.0, 60.0 },
+                    { new Guid("121996b2-43c4-4d45-a198-23f188bca446"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9453), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 299.0, 0, 150.0, 16.0, 1.0 },
+                    { new Guid("25515cfb-c205-438c-92fd-83d1a082c8fa"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9574), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 173.0, 0, 400.0, 150.0, 100.0 },
+                    { new Guid("30c31dc7-5db5-46f3-802b-c57e614ab0b7"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9579), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 285.0, 0, 50.0, 250.0, 150.0 },
+                    { new Guid("3532060c-3c88-4ad3-b3c1-c3f406c3349d"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9524), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 282.0, 0, 150.0, 60.0, 40.0 },
+                    { new Guid("432ce09c-3861-43f3-bae8-96f1b36d7197"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9471), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 334.0, 0, 50.0, 40.0, 16.0 },
+                    { new Guid("43bf74bd-9587-4410-8c98-690a7437e349"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9464), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 214.0, 0, 350.0, 16.0, 1.0 },
+                    { new Guid("442b9414-54d1-4c64-b4ef-0328f70c1423"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9583), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 249.0, 0, 150.0, 250.0, 150.0 },
+                    { new Guid("471dcde6-2bc4-4769-ade0-d2b972d81a2d"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9546), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 244.0, 0, 200.0, 100.0, 60.0 },
+                    { new Guid("4a3d083a-03db-4e42-a4f7-f0ac88f683ab"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9548), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 224.0, 0, 250.0, 100.0, 60.0 },
+                    { new Guid("4d80beb4-3788-440e-98d5-bcb043749109"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9539), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 305.0, 0, 50.0, 100.0, 60.0 },
+                    { new Guid("5d7b0d21-d0d2-4669-bb90-a972a433a9f7"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9589), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 192.0, 0, 300.0, 250.0, 150.0 },
+                    { new Guid("5e1e2ac8-c101-42cd-9c50-dfe13ea4ec57"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9572), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 184.0, 0, 350.0, 150.0, 100.0 },
+                    { new Guid("5efaedae-a5d1-4737-8142-d9e8e6dfebb3"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9570), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 199.0, 0, 300.0, 150.0, 100.0 },
+                    { new Guid("600f2b8d-b781-4b13-8f80-e32a531ededa"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9544), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 265.0, 0, 150.0, 100.0, 60.0 },
+                    { new Guid("673ca2ed-d8fd-4f1a-88bb-051bcbce941b"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9568), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 216.0, 0, 250.0, 150.0, 100.0 },
+                    { new Guid("68650454-857d-45aa-8da6-82785906bf43"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9466), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 202.0, 0, 400.0, 16.0, 1.0 },
+                    { new Guid("6a17c742-3a31-463c-bce1-0eb7ce9c4045"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9532), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 202.0, 0, 350.0, 60.0, 40.0 },
+                    { new Guid("6ceca8d3-859b-489b-bc78-97bd513e4c4b"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9566), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 236.0, 0, 200.0, 150.0, 100.0 },
+                    { new Guid("733b84ed-4eb2-4027-9844-0e0faeffc243"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9462), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 232.0, 0, 300.0, 16.0, 1.0 },
+                    { new Guid("7da88bce-d1a8-4d21-be77-3ceb96530691"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9442), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 355.0, 0, 20.0, 16.0, 1.0 },
+                    { new Guid("80b8f2e7-5004-45e2-8b2b-10daa196c1ed"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9455), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 275.0, 0, 200.0, 16.0, 1.0 },
+                    { new Guid("84486234-9471-4031-aa90-7f2ca3e32b96"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9557), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 305.0, 0, 20.0, 150.0, 100.0 },
+                    { new Guid("8d1f9cb1-38a9-42b5-a8cc-3b8975c7b78e"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9581), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 268.0, 0, 100.0, 250.0, 150.0 },
+                    { new Guid("910a3b1e-7c3c-4eb3-9558-7ac0260f38e7"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9445), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 343.0, 0, 50.0, 16.0, 1.0 },
+                    { new Guid("9e75c7cb-05bb-43c8-ab3d-0735423a36e2"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9468), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 345.0, 0, 20.0, 40.0, 16.0 },
+                    { new Guid("9eac8df0-d305-4a12-9c4e-a8525e5a85b0"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9593), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 167.0, 0, 400.0, 250.0, 150.0 },
+                    { new Guid("9fb95b36-dbda-4061-8432-2b3f528df651"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9584), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 228.0, 0, 200.0, 250.0, 150.0 },
+                    { new Guid("a77b09e1-db87-4ae3-826e-172f004d31dc"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9564), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 257.0, 0, 150.0, 150.0, 100.0 },
+                    { new Guid("ac1fdb4b-5051-46d2-8db8-7145b29fde19"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9518), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 335.0, 0, 20.0, 60.0, 40.0 },
+                    { new Guid("acbf3f4c-8c3c-4bff-9b6d-33322a6772ee"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9562), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 277.0, 0, 100.0, 150.0, 100.0 },
+                    { new Guid("ad8a8216-a66a-47d9-b460-28a262619d93"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9554), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 190.0, 0, 350.0, 100.0, 60.0 },
+                    { new Guid("ad8bf7f1-5eaf-4fe6-ae8c-c8ec746f1a9d"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9505), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 267.0, 0, 200.0, 40.0, 16.0 },
+                    { new Guid("becf0816-dbf4-4793-acd6-6ec2c032f28b"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9451), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 323.0, 0, 100.0, 16.0, 1.0 },
+                    { new Guid("bf5a623b-6448-4d05-a3fa-9837848f4ecb"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9591), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 178.0, 0, 350.0, 250.0, 150.0 },
+                    { new Guid("c6526d77-5d79-407a-9ac0-a70c30f90fc6"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9459), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 252.0, 0, 250.0, 16.0, 1.0 },
+                    { new Guid("c70829a6-245c-4392-a2a3-4e88164503b3"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9512), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 208.0, 0, 350.0, 40.0, 16.0 },
+                    { new Guid("c87cae89-1256-4fec-ad6b-d2f02b1bbdcc"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9551), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 206.0, 0, 300.0, 100.0, 60.0 },
+                    { new Guid("c9041d4c-72e1-463d-81f4-afb8f417d90f"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9559), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 295.0, 0, 50.0, 150.0, 100.0 },
+                    { new Guid("cba876a6-4472-451e-8bb1-ec2769cdc71d"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9473), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 314.0, 0, 100.0, 40.0, 16.0 },
+                    { new Guid("ce1aa245-ab38-4a0e-adb0-5cb125b7132d"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9541), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 287.0, 0, 100.0, 100.0, 60.0 },
+                    { new Guid("d46a7f1b-04f7-4c13-8bbf-748847b01892"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9576), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 295.0, 0, 20.0, 250.0, 150.0 },
+                    { new Guid("dbdf26e9-1abb-4fc1-9a61-353b9c4fd9a7"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9527), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 259.0, 0, 200.0, 60.0, 40.0 },
+                    { new Guid("ddb58ebe-7c49-47b3-81a6-5f4c2fc67374"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9587), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 209.0, 0, 250.0, 250.0, 150.0 },
+                    { new Guid("e6802c0f-8944-4027-a981-50843f31bbf0"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9515), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 196.0, 0, 400.0, 40.0, 16.0 },
+                    { new Guid("e6b72fd0-d966-4b2e-863d-57e0f1f3df3c"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9475), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 291.0, 0, 150.0, 40.0, 16.0 },
+                    { new Guid("ef2db162-88aa-41fb-9e5c-61165edfe087"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9530), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 219.0, 0, 300.0, 60.0, 40.0 },
+                    { new Guid("f6baceda-c366-436f-89a9-d996bc8b4241"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9510), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 225.0, 0, 300.0, 40.0, 16.0 },
+                    { new Guid("fa41ff85-0e60-4245-a721-09fa348feaef"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9556), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 179.0, 0, 400.0, 100.0, 60.0 },
+                    { new Guid("fd5d7f44-d6a3-4103-9fb5-2b1afbf4bede"), "SeedData", new DateTime(2026, 2, 4, 11, 34, 45, 616, DateTimeKind.Utc).AddTicks(9522), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 305.0, 0, 100.0, 60.0, 40.0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1455,6 +1585,44 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_SCategories_Code",
+                table: "SCategories",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SGroupFilterRules_CategoryId_FluidId_SProductGroupId",
+                table: "SGroupFilterRules",
+                columns: new[] { "CategoryId", "FluidId", "SProductGroupId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SGroupFilterRules_FluidId",
+                table: "SGroupFilterRules",
+                column: "FluidId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SGroupFilterRules_SProductGroupId",
+                table: "SGroupFilterRules",
+                column: "SProductGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SPrefixRules_FluidId",
+                table: "SPrefixRules",
+                column: "FluidId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SPrefixRules_SProductGroupId_FluidId_SProductId",
+                table: "SPrefixRules",
+                columns: new[] { "SProductGroupId", "FluidId", "SProductId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SPrefixRules_SProductId",
+                table: "SPrefixRules",
+                column: "SProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SProductGroups_Code",
                 table: "SProductGroups",
                 column: "Code",
@@ -1467,9 +1635,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_StockCards_FluidId_SProductGroupId_SProductId_Prefix4",
+                name: "IX_StockCards_FluidId_SProductGroupId_SProductId",
                 table: "StockCards",
-                columns: new[] { "FluidId", "SProductGroupId", "SProductId", "Prefix4" },
+                columns: new[] { "FluidId", "SProductGroupId", "SProductId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1563,6 +1731,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 name: "PrefixRules");
 
             migrationBuilder.DropTable(
+                name: "SGroupFilterRules");
+
+            migrationBuilder.DropTable(
+                name: "SPrefixRules");
+
+            migrationBuilder.DropTable(
                 name: "StockCards");
 
             migrationBuilder.DropTable(
@@ -1585,6 +1759,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "DesignStandards");
+
+            migrationBuilder.DropTable(
+                name: "SCategories");
 
             migrationBuilder.DropTable(
                 name: "Fluids");

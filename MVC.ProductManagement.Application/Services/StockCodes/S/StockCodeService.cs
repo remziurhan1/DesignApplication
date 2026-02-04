@@ -30,6 +30,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             _stockCardRepo = stockCardRepo;
             _context = context;
         }
+        public async Task<IReadOnlyList<LookupDto>> GetAllFluidsAsync(CancellationToken cancellationToken = default)
+        {
+            var fluids = await _fluidRepo.GetAllAsync(tracking: false);
+
+            return fluids
+                .OrderBy(x => x.Code)
+                .Select(x => new LookupDto { Id = x.Id, Code = x.Code, Name = x.Name })
+                .ToList();
+        }
 
         public async Task<IReadOnlyList<LookupDto>> GetSProductGroupsAsync(CancellationToken cancellationToken = default)
         {
@@ -100,6 +109,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             SStockCodeGenerateRequestDto request,
             CancellationToken cancellationToken = default)
         {
+
             // 1) Aynı kombinasyon var mı?
             var existing = await _stockCardRepo.GetAsync(x =>
                 x.FluidId == request.FluidId &&
