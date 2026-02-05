@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed
+namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common
 {
     public class SProductSeed_SAll : IEntityTypeConfiguration<SProduct>
     {

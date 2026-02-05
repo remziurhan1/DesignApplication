@@ -10,9 +10,9 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.SB
     {
         public bool AlreadyExists { get; set; }
         public Guid StockCardId { get; set; }
-        public string StockCode8 { get; set; }
-        public string Prefix4 { get; set; }
+        public string StockCode8 { get; set; } = default!;
+        public string Prefix4 { get; set; } = default!;
         public int Serial4 { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } = default!;
     }
 }

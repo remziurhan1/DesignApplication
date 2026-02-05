@@ -6,16 +6,23 @@ using MVC.ProductManagement.Domain.Core.BaseEntities;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
+using MVC.ProductManagement.Domain.Entities.StockCodes.S;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.Configurations;
 using MVC.ProductManagement.Infrastructure.Seeds;
-using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed;
+using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
+using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA;
+using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SB;
+using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF.Features;
+using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF.SFFeatureSeed;
+using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using static MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.SASeed;
 
 namespace MVC.ProductManagement.Infrastructure.AppContext
 {
@@ -45,7 +52,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<SAssemblyGroup> SAssemblyGroups { get; set; }
         public DbSet<PrefixRule> PrefixRules { get; set; }
         public DbSet<StockSequence> StockSequences { get; set; }
-        public DbSet<StockCard> StockCards { get; set; }
+      //  public DbSet<StockCard> StockCards { get; set; }
 
         public DbSet<SPrefixRule> SPrefixRules => Set<SPrefixRule>();
 
@@ -60,24 +67,28 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<Material>().HasData(MaterialSeed.Get());
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
-            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SFeatureSeed_SAll());
-            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SFeatureValueSeed_SAll());
-            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SProductFeatureSeed_SAll());
 
-            SASeed.Seed(builder); // <-- bunu ekle
-            SBSeed.Seed(builder); // <-- bunu ekle
+            //// ==================== ORTAK SEED'LER ====================
+            //modelBuilder.ApplyConfiguration(new FluidSeed());
+            //modelBuilder.ApplyConfiguration(new SProductGroupSeed());
 
+            //// ==================== SA (Cıvatalar) SEED'LERİ ====================
+            //modelBuilder.ApplyConfiguration(new SAProductSeed());
+            //modelBuilder.ApplyConfiguration(new SASequenceSeed());
 
-            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.FluidSeed_SAll());
+            //// ==================== SB (Somunlar) SEED'LERİ ====================
+            //modelBuilder.ApplyConfiguration(new SBProductSeed());
+            //modelBuilder.ApplyConfiguration(new SBSequenceSeed());
 
-            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SProductGroupSeed_SAll());
+            //// ==================== SF (Aksesuarlar) SEED'LERİ ====================
+            //modelBuilder.ApplyConfiguration(new SFProductSeed());
+            //modelBuilder.ApplyConfiguration(new SFPrefixRuleSeed());
+            //modelBuilder.ApplyConfiguration(new SFSequenceSeed());
 
-            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SProductSeed_SAll());
-
-            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.PrefixRuleSeed_SAll());
-
-            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.StockSequenceSeed_SAll());
-
+            //// SF Features
+            //modelBuilder.ApplyConfiguration(new SFFeatureSeed());
+            //modelBuilder.ApplyConfiguration(new SFFeatureValueSeed());
+            //modelBuilder.ApplyConfiguration(new SFProductFeatureSeed());
 
 
 

@@ -7,6 +7,7 @@ using MVC.ProductManagement.Infrastructure.Repositories.EN13458Repositories;
 using MVC.ProductManagement.Infrastructure.Repositories.IAllowableStressRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypeRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.YieldStrengthRepositories;
@@ -43,6 +44,7 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IPrefixRuleRepositories, PrefixRuleRepository>();
             services.AddScoped<IStockSequenceRepositories, StockSequenceRepository>();
             services.AddScoped<IStockCardRepositories, StockCardRepository>();
+
 
 
 

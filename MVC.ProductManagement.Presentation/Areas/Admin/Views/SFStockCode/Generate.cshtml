@@ -1,0 +1,156 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SF.SFStockCodeGenerateVm
+
+@{
+    ViewData["Title"] = "SF Stok Kodu Üret (Aksesuarlar)";
+}
+
+<div class="container mt-4">
+    <h2>SF Stok Kodu Üret - Aksesuarlar (Vana, Termometre vs.)</h2>
+    <hr />
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+            </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.StockCode8))
+    {
+            <div class="alert @(Model.AlreadyExists == true ? "alert-warning" : "alert-success")">
+                <h5>
+                    <i class="bi bi-@(Model.AlreadyExists == true ? "info-circle" : "check-circle")"></i>
+                @(Model.AlreadyExists == true ? "Mevcut Kod Getirildi" : "Yeni Kod Oluşturuldu")
+                </h5>
+                <hr />
+                <p><strong>Stok Kodu:</strong> <span class="badge bg-primary fs-5">@Model.StockCode8</span></p>
+                <p><strong>Açıklama:</strong> @Model.Description</p>
+            </div>
+    }
+
+    <form asp-action="Generate" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Akışkan *</label>
+                    <select asp-for="FluidId" asp-items="Model.Fluids" class="form-select" id="fluidSelect">
+                        <option value="">-- Akışkan Seçiniz --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Ürün *</label>
+                    <select asp-for="SProductId" asp-items="Model.Products" class="form-select" id="productSelect">
+                        <option value="">Önce akışkan seçiniz</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dinamik Özellikler (PN, DN, SURFACE...) -->
+        <div id="featuresContainer"></div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-gear"></i> Kod Üret
+        </button>
+        <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Geri
+        </a>
+    </form>
+</div>
+
+@section Scripts {
+        <script>
+            const fluidSelect = document.getElementById("fluidSelect");
+            const productSelect = document.getElementById("productSelect");
+            const featuresContainer = document.getElementById("featuresContainer");
+
+            // ========== Akışkan değişince ürünleri yükle ==========
+            fluidSelect.addEventListener("change", async function () {
+                const fluidId = fluidSelect.value;
+
+                // Ürün dropdown'unu temizle
+                productSelect.innerHTML = '<option value="">Yükleniyor...</option>';
+                featuresContainer.innerHTML = "";
+
+                if (!fluidId) {
+                    productSelect.innerHTML = '<option value="">Önce akışkan seçiniz</option>';
+                    return;
+                }
+
+                try {
+                    const resp = await fetch(`/Admin/SFStockCode/ProductsByFluid?fluidId=${fluidId}`);
+                    if (!resp.ok) throw new Error("İstek başarısız");
+
+                    const products = await resp.json();
+
+                    productSelect.innerHTML = '<option value="">-- Ürün Seçiniz --</option>';
+                    products.forEach(p => {
+                        const option = document.createElement("option");
+                        option.value = p.id;
+                        option.textContent = `${p.code} - ${p.name}`;
+                        productSelect.appendChild(option);
+                    });
+                } catch (err) {
+                    productSelect.innerHTML = '<option value="">Hata: ' + err.message + '</option>';
+                }
+            });
+
+            // ========== Ürün değişince özellikleri yükle ==========
+            productSelect.addEventListener("change", async function () {
+                const productId = productSelect.value;
+
+                featuresContainer.innerHTML = "";
+
+                if (!productId) return;
+
+                try {
+                    const resp = await fetch(`/Admin/SFStockCode/FeaturesByProduct?productId=${productId}`);
+                    if (!resp.ok) throw new Error("İstek başarısız");
+
+                    const features = await resp.json();
+
+                    if (!features || features.length === 0) {
+                        featuresContainer.innerHTML = '<div class="alert alert-info">Bu ürün için özellik tanımı bulunmuyor.</div>';
+                        return;
+                    }
+
+                    features.sort((a, b) => a.sortOrder - b.sortOrder);
+
+                    features.forEach(feature => {
+                        const div = document.createElement("div");
+                        div.className = "mb-3";
+
+                        const label = document.createElement("label");
+                        label.className = "form-label";
+                        label.textContent = feature.name + (feature.isRequired ? " *" : "");
+
+                        const select = document.createElement("select");
+                        select.className = "form-select";
+                        select.name = `SelectedFeatureValues[${feature.id}]`;
+
+                        const defaultOption = document.createElement("option");
+                        defaultOption.value = "";
+                        defaultOption.textContent = "-- Seçiniz --";
+                        select.appendChild(defaultOption);
+
+                        feature.values.forEach(value => {
+                            const option = document.createElement("option");
+                            option.value = value.id;
+                            option.textContent = `${value.code} - ${value.name}`;
+                            select.appendChild(option);
+                        });
+
+                        div.appendChild(label);
+                        div.appendChild(select);
+                        featuresContainer.appendChild(div);
+                    });
+
+                } catch (err) {
+                    featuresContainer.innerHTML = '<div class="alert alert-danger">Hata: ' + err.message + '</div>';
+                }
+            });
+        </script>
+}

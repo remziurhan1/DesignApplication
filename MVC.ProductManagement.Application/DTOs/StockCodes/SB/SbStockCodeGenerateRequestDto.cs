@@ -9,7 +9,6 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.SB
     public class SbStockCodeGenerateRequestDto
     {
         public Guid FluidId { get; set; }
-        public Guid SProductGroupId { get; set; } // B grubu id
-        public Guid SProductId { get; set; }      // SB ürün id (SBA0..)
+        public Guid SProductId { get; set; } // SBA0, SBB3...
     }
 }

@@ -1,9 +1,11 @@
 ﻿// Dosya: Application/Services/StockCodes/SB/StockCodeSbService.cs
 
-using MVC.ProductManagement.Application.DTOs.StockCodes.S;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SB;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using System;
 using System.Collections.Generic;
@@ -23,23 +25,24 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
         private readonly AppDbContext _context;
 
         public StockCodeSbService(
-            IFluidRepositories fluidRepo,
-            ISProductGroupRepositories groupRepo,
             ISProductRepositories productRepo,
             IStockSequenceRepositories sequenceRepo,
             IStockCardRepositories stockCardRepo,
+            IFluidRepositories fluidRepo,
+            ISProductGroupRepositories groupRepo,
             AppDbContext context)
         {
-            _fluidRepo = fluidRepo;
-            _groupRepo = groupRepo;
             _productRepo = productRepo;
             _sequenceRepo = sequenceRepo;
             _stockCardRepo = stockCardRepo;
+            _fluidRepo = fluidRepo;
+            _groupRepo = groupRepo;
             _context = context;
         }
 
         public async Task<IReadOnlyList<LookupDto>> GetFluidsAsync(CancellationToken cancellationToken = default)
         {
+            // SB tüm akışkanları kullanabilir
             var fluids = await _fluidRepo.GetAllAsync(tracking: false);
             return fluids
                 .OrderBy(x => x.Code)
@@ -47,18 +50,17 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
                 .ToList();
         }
 
-        public async Task<IReadOnlyList<LookupDto>> GetSbProductsAsync(
-            Guid sProductGroupId,
-            CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<LookupDto>> GetSbProductsAsync(CancellationToken cancellationToken = default)
         {
+            var sbGroupId = await GetSbGroupIdAsync();
+
             var products = await _productRepo.GetAllAsync(
-                x => x.SProductGroupId == sProductGroupId,
+                x => x.SProductGroupId == sbGroupId,
                 tracking: false);
 
-            // SA'da PrefixIndex'e göre sıralıyordun.
-            // SB'de de aynı devam edelim (SBSeed içinde PrefixIndex dolduruyorsan düzgün sıralanır).
             return products
                 .OrderBy(x => x.PrefixIndex)
+                .ThenBy(x => x.Code)
                 .Select(x => new LookupDto { Id = x.Id, Code = x.Code, Name = x.Name })
                 .ToList();
         }
@@ -67,11 +69,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
             SbStockCodeGenerateRequestDto request,
             CancellationToken cancellationToken = default)
         {
-            // 0) Aynı kombinasyon var mı? (unique index bunu zorluyor)
+            var sbGroupId = await GetSbGroupIdAsync();
+
+            // 1) Product'tan prefix al (SB prefix'i doğrudan product.Code)
+            var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
+            if (product == null)
+                throw new InvalidOperationException("SB ürünü bulunamadı.");
+
+            var prefix4 = product.Code; // SBA0, SBB3...
+
+            // 2) Duplicate kontrol
             var existing = await _stockCardRepo.GetAsync(x =>
-                x.FluidId == request.FluidId &&
-                x.SProductGroupId == request.SProductGroupId &&
-                x.SProductId == request.SProductId,
+                    x.FluidId == request.FluidId &&
+                    x.SProductGroupId == sbGroupId &&
+                    x.SProductId == request.SProductId,
                 tracking: false);
 
             if (existing != null)
@@ -87,32 +98,23 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
                 };
             }
 
-            // 1) Lookup: Product + Fluid + Group
-            var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
-            if (product == null)
-                throw new InvalidOperationException("SProduct bulunamadı.");
-
+            // 3) Lookup
             var fluid = await _fluidRepo.GetByIdAsync(request.FluidId, tracking: false);
-            if (fluid == null)
-                throw new InvalidOperationException("Fluid bulunamadı.");
+            var group = await _groupRepo.GetByIdAsync(sbGroupId, tracking: false);
 
-            var group = await _groupRepo.GetByIdAsync(request.SProductGroupId, tracking: false);
-            if (group == null)
-                throw new InvalidOperationException("SProductGroup bulunamadı.");
+            if (fluid == null || group == null)
+                throw new InvalidOperationException("Fluid/Group bulunamadı.");
 
-            // SB prefix: doğrudan product.Code (SBA0, SBB3...)
-            var prefix4 = product.Code;
+            var description = $"{fluid.Name} | {group.Name} | {product.Name}";
 
-            // 2) Transaction: sequence + card
+            // 4) Transaction
             await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
 
             var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
             if (seq == null)
                 throw new InvalidOperationException($"StockSequence yok: {prefix4}");
 
-            // ✅ 1000’den başlat (SA ile aynı)
             var nextSerial = seq.LastNumber + 1;
-
             if (nextSerial > 9999)
                 throw new InvalidOperationException($"Seri no limiti aşıldı: {prefix4}");
 
@@ -120,26 +122,21 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
             await _sequenceRepo.UpdateAsync(seq);
             await _sequenceRepo.SaveChangeAsync();
 
-            // Şimdilik SA ile aynı açıklama kuralı:
-            // İleride SB'ye özel özellikler gelince bunu builder'a böleceğiz.
-            var description = $"{fluid.Name} | {group.Name} | {product.Name}";
-
             var card = new StockCard
             {
                 Id = Guid.NewGuid(),
-
                 FluidId = request.FluidId,
-                SProductGroupId = request.SProductGroupId,
+                SProductGroupId = sbGroupId,
                 SProductId = request.SProductId,
-
                 Prefix4 = prefix4,
                 Serial4 = nextSerial,
                 StockCode8 = $"{prefix4}{nextSerial:0000}",
                 Description = description,
-
                 StockSequenceId = seq.Id,
                 OptionKey = "LEGACY",
-
+                CreatedBy = "SYSTEM",
+                CreatedDate = DateTime.UtcNow,
+                Status = Domain.Enums.Status.Added
             };
 
             await _stockCardRepo.AddAsync(card);
@@ -156,6 +153,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
                 Serial4 = card.Serial4,
                 Description = card.Description
             };
+        }
+
+        private async Task<Guid> GetSbGroupIdAsync()
+        {
+            var groups = await _groupRepo.GetAllAsync(tracking: false);
+            var sbGroup = groups.FirstOrDefault(x => x.Code == "B");
+            if (sbGroup == null)
+                throw new InvalidOperationException("SB (B) grubu tanımlı değil.");
+            return sbGroup.Id;
         }
     }
 }
