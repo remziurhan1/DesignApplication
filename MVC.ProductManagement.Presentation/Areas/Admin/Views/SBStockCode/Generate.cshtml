@@ -1,0 +1,59 @@
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SB.SBStockCodeGenerateVm
+
+@{
+    ViewData["Title"] = "SB Stok Kodu Üret (Somunlar)";
+}
+
+<div class="container mt-4">
+    <h2>SB Stok Kodu Üret - Somunlar</h2>
+    <hr />
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.StockCode8))
+    {
+        <div class="alert @(Model.AlreadyExists == true ? "alert-warning" : "alert-success")">
+            <h5>
+                <i class="bi bi-@(Model.AlreadyExists == true ? "info-circle" : "check-circle")"></i>
+                @(Model.AlreadyExists == true ? "Mevcut Kod Getirildi" : "Yeni Kod Oluşturuldu")
+            </h5>
+            <hr />
+            <p><strong>Stok Kodu:</strong> <span class="badge bg-primary fs-5">@Model.StockCode8</span></p>
+            <p><strong>Açıklama:</strong> @Model.Description</p>
+        </div>
+    }
+
+    <form asp-action="Generate" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Akışkan *</label>
+                    <select asp-for="FluidId" asp-items="Model.Fluids" class="form-select">
+                        <option value="">-- Akışkan Seçiniz --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Ürün *</label>
+                    <select asp-for="SProductId" asp-items="Model.Products" class="form-select">
+                        <option value="">-- Ürün Seçiniz --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-gear"></i> Kod Üret
+        </button>
+        <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Geri
+        </a>
+    </form>
+</div>

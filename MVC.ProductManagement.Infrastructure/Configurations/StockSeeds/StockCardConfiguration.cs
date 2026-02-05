@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 
 namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
 {

@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
 {
-    public sealed class SaStockCodeGenerateResultDto
+    public class SaStockCodeGenerateResultDto
     {
-        public bool AlreadyExists { get; set; }   // SA’da şimdilik false döneceğiz
+        public bool AlreadyExists { get; set; }
         public Guid StockCardId { get; set; }
-
         public string StockCode8 { get; set; } = default!;
         public string Prefix4 { get; set; } = default!;
         public int Serial4 { get; set; }
-
         public string Description { get; set; } = default!;
     }
 }

@@ -310,6 +310,28 @@
                     <span>Storage Type</span>
                 </a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    Stok Kodu Üret
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="SAStockCode" asp-action="Generate">
+                            <i class="bi bi-gear"></i> SA - Cıvatalar
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="SBStockCode" asp-action="Generate">
+                            <i class="bi bi-gear"></i> SB - Somunlar
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="SFStockCode" asp-action="Generate">
+                            <i class="bi bi-gear"></i> SF - Aksesuarlar
+                        </a>
+                    </li>
+                </ul>
+            </li>
            
         </ul>
 

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
 {
-    public sealed class SaStockCodeGenerateRequestDto
+    public class SaStockCodeGenerateRequestDto
     {
-        public Guid FluidId { get; set; }          // ✅ seçilecek
-        public Guid SProductGroupId { get; set; }  // A
-        public Guid SProductId { get; set; }       // SAA0...
+        public Guid SProductId { get; set; } // SAA0, SAB1, SAC2...
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
+using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

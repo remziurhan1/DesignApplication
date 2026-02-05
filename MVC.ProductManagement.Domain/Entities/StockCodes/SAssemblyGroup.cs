@@ -1,4 +1,5 @@
 ﻿using MVC.ProductManagement.Domain.Core.BaseEntities;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
