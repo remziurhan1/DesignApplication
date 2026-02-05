@@ -1,8 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.StockCodes.S;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.S
 {
@@ -30,6 +36,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             _stockCardRepo = stockCardRepo;
             _context = context;
         }
+
         public async Task<IReadOnlyList<LookupDto>> GetAllFluidsAsync(CancellationToken cancellationToken = default)
         {
             var fluids = await _fluidRepo.GetAllAsync(tracking: false);
@@ -106,10 +113,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
         }
 
         public async Task<SStockCodeGenerateResultDto> GenerateSAsync(
-    SStockCodeGenerateRequestDto request,
-    CancellationToken cancellationToken = default)
+            SStockCodeGenerateRequestDto request,
+            CancellationToken cancellationToken = default)
         {
-            // 0) SPrefixRule’dan Prefix al (önce prefix’i buluyoruz ki SFC0 özel kuralını uygulayabilelim)
+            // 0) SPrefixRule’dan Prefix al
             var rule = await _context.SPrefixRules
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x =>
@@ -123,14 +130,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
 
             var prefix4 = rule.Prefix;
 
-            // 0.1) ✅ SFC0 için FluidId sabitle (migration yoksa tek pratik çözüm)
-            // Amaç: LIN/LOX/LNG/LCO2 seçilse bile aynı StockCard’a gitmesi (DB unique index FluidId’ye bağlı)
+            // 0.1) ✅ SFC0 için FluidId sabitle (mevcut mantığın korunuyor)
             var effectiveFluidId = request.FluidId;
-            var fluidNameForDescription = (string?)null;
+            string? fluidNameForDescription = null;
 
             if (string.Equals(prefix4, "SFC0", StringComparison.OrdinalIgnoreCase))
             {
-                // Canonical CRYO fluid: LIN (bulamazsa ilk fluid)
                 var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
                 var canonical = allFluids.FirstOrDefault(x => x.Code == "LIN") ?? allFluids.FirstOrDefault();
 
@@ -138,16 +143,18 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                     throw new InvalidOperationException("Sistemde akışkan tanımı yok.");
 
                 effectiveFluidId = canonical.Id;
-
-                // Açıklamada LIN/LOX/LNG yerine CRYO yazacağız (senin isteğin)
                 fluidNameForDescription = "CRYO";
             }
 
-            // 1) Aynı kombinasyon var mı? (✅ artık effectiveFluidId ile kontrol)
+            // 1) ✅ OptionKey üret
+            var optionKey = await BuildOptionKeyAsync(request.SelectedFeatureValues, cancellationToken);
+
+            // 2) ✅ Duplicate kontrol: (FluidId, GroupId, ProductId, OptionKey)
             var existing = await _stockCardRepo.GetAsync(x =>
-                x.FluidId == effectiveFluidId &&
-                x.SProductGroupId == request.SProductGroupId &&
-                x.SProductId == request.SProductId,
+                    x.FluidId == effectiveFluidId &&
+                    x.SProductGroupId == request.SProductGroupId &&
+                    x.SProductId == request.SProductId &&
+                    x.OptionKey == optionKey,
                 tracking: false);
 
             if (existing != null)
@@ -163,8 +170,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 };
             }
 
-            // 2) Lookup (Description için)
-            // Fluid: SFC0 ise CRYO yazacağımız için asıl request.FluidId'ye bağlı kalmıyoruz
+            // 3) Lookup (Description için)
             var fluid = await _fluidRepo.GetByIdAsync(effectiveFluidId, tracking: false);
             var group = await _groupRepo.GetByIdAsync(request.SProductGroupId, tracking: false);
             var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
@@ -172,7 +178,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             if (fluid == null || group == null || product == null)
                 throw new InvalidOperationException("Fluid / Group / Product bulunamadı.");
 
-            // 3) Transaction: sequence + card
+            // 4) Transaction: sequence + card + selections
             await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
 
             var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
@@ -195,7 +201,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             {
                 Id = Guid.NewGuid(),
 
-                // ✅ DB’ye yazılan FluidId: SFC0 ise canonical (LIN), değilse seçilen
                 FluidId = effectiveFluidId,
                 SProductGroupId = request.SProductGroupId,
                 SProductId = request.SProductId,
@@ -205,11 +210,32 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 StockCode8 = $"{prefix4}{nextSerial:0000}",
                 Description = description,
 
-                StockSequenceId = seq.Id
+                StockSequenceId = seq.Id,
+
+                // ✅ NEW
+                OptionKey = optionKey
             };
 
             await _stockCardRepo.AddAsync(card);
             await _stockCardRepo.SaveChangeAsync();
+
+            // 5) ✅ Feature seçimlerini kaydet
+            if (request.SelectedFeatureValues != null && request.SelectedFeatureValues.Count > 0)
+            {
+                var selections = request.SelectedFeatureValues.Select(kvp => new StockCardFeatureSelection
+                {
+                    Id = Guid.NewGuid(),
+                    StockCardId = card.Id,
+                    SFeatureId = kvp.Key,
+                    SFeatureValueId = kvp.Value,
+                    CreatedBy = "SYSTEM",
+                    CreatedDate = DateTime.UtcNow,
+                    Status = Domain.Enums.Status.Added
+                }).ToList();
+
+                _context.Set<StockCardFeatureSelection>().AddRange(selections);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
 
             await tx.CommitAsync(cancellationToken);
 
@@ -222,6 +248,50 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
                 Serial4 = card.Serial4,
                 Description = card.Description
             };
+        }
+
+        private async Task<string> BuildOptionKeyAsync(
+            Dictionary<Guid, Guid> selectedFeatureValues,
+            CancellationToken cancellationToken)
+        {
+            if (selectedFeatureValues == null || selectedFeatureValues.Count == 0)
+                return string.Empty;
+
+            var featureIds = selectedFeatureValues.Keys.ToList();
+            var valueIds = selectedFeatureValues.Values.ToList();
+
+            var features = await _context.Set<SFeature>()
+                .AsNoTracking()
+                .Where(f => featureIds.Contains(f.Id))
+                .Select(f => new { f.Id, f.Code, f.SortOrder })
+                .ToListAsync(cancellationToken);
+
+            var values = await _context.Set<SFeatureValue>()
+                .AsNoTracking()
+                .Where(v => valueIds.Contains(v.Id))
+                .Select(v => new { v.Id, v.Code })
+                .ToListAsync(cancellationToken);
+
+            var featureMap = features.ToDictionary(x => x.Id);
+            var valueMap = values.ToDictionary(x => x.Id);
+
+            var parts = selectedFeatureValues
+                .Select(kvp =>
+                {
+                    if (!featureMap.TryGetValue(kvp.Key, out var f))
+                        throw new InvalidOperationException("Feature bulunamadı (OptionKey).");
+
+                    if (!valueMap.TryGetValue(kvp.Value, out var v))
+                        throw new InvalidOperationException("FeatureValue bulunamadı (OptionKey).");
+
+                    return new { f.SortOrder, f.Code, ValueCode = v.Code };
+                })
+                .OrderBy(x => x.SortOrder)
+                .ThenBy(x => x.Code)
+                .Select(x => $"{x.Code}={x.ValueCode}")
+                .ToList();
+
+            return string.Join("|", parts);
         }
     }
 }

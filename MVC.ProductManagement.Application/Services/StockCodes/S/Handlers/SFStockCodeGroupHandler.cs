@@ -1,6 +1,11 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.S;
 using MVC.ProductManagement.Application.Services.StockCodes.S;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.S.Handlers
 {
@@ -31,17 +36,29 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S.Handlers
             return products.Select(x => (x.Id, x.Code, x.Name)).ToList();
         }
 
-        public async Task<StockCodeGenerateResultDto> GenerateAsync(Guid groupId, Guid? fluidId, Guid productId)
+        public async Task<StockCodeGenerateResultDto> GenerateAsync(
+            Guid groupId,
+            Guid? fluidId,
+            Guid productId,
+            Dictionary<Guid, Guid>? selectedFeatureValues = null,
+            CancellationToken cancellationToken = default)
         {
             if (fluidId == null || fluidId == Guid.Empty)
                 throw new InvalidOperationException("Akışkan seçiniz.");
+
+            // ✅ Feature seçimleri boş gelmesin (F0 için PN/DN zorunlu)
+            if (selectedFeatureValues == null || selectedFeatureValues.Count == 0)
+                throw new InvalidOperationException("PN/DN seçimlerini yapınız.");
 
             var result = await _sfService.GenerateSAsync(new SStockCodeGenerateRequestDto
             {
                 FluidId = fluidId.Value,
                 SProductGroupId = groupId,
-                SProductId = productId
-            });
+                SProductId = productId,
+
+                // ✅ NEW: servis tarafına taşıyoruz
+                SelectedFeatureValues = selectedFeatureValues
+            }, cancellationToken);
 
             return new StockCodeGenerateResultDto
             {

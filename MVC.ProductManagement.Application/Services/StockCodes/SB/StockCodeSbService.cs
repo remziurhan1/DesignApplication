@@ -137,7 +137,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
                 StockCode8 = $"{prefix4}{nextSerial:0000}",
                 Description = description,
 
-                StockSequenceId = seq.Id
+                StockSequenceId = seq.Id,
+                OptionKey = "LEGACY",
+
             };
 
             await _stockCardRepo.AddAsync(card);

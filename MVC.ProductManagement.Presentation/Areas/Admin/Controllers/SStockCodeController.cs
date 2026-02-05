@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.ProductManagement.Application.Services.StockCodes.S;
 using MVC.ProductManagement.Application.Services.StockCodes.S.Handlers;
+using MVC.ProductManagement.Application.Services.StockCodes.S.Features;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.S;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
@@ -13,11 +15,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
     {
         private readonly IStockCodeService _lookupService;
         private readonly ISStockCodeGroupHandlerFactory _handlerFactory;
+        private readonly ISFeatureQueryService _featureQueryService;
 
-        public SStockCodeController(IStockCodeService lookupService, ISStockCodeGroupHandlerFactory handlerFactory)
+        public SStockCodeController(
+            IStockCodeService lookupService,
+            ISStockCodeGroupHandlerFactory handlerFactory,
+            ISFeatureQueryService featureQueryService)
         {
             _lookupService = lookupService;
             _handlerFactory = handlerFactory;
+            _featureQueryService = featureQueryService;
         }
 
         [HttpGet]
@@ -29,7 +36,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Generate(SStockCodeGenerateVm vm)
+        public async Task<IActionResult> Generate(SStockCodeGenerateVm vm, CancellationToken cancellationToken)
         {
             await FillLookups(vm);
 
@@ -52,8 +59,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     throw new InvalidOperationException("Akışkan seçiniz.");
 
                 Guid? fluidId = handler.RequiresFluid ? vm.FluidId : null;
+                var debugCount = vm.SelectedFeatureValues?.Count ?? 0;
 
-                var result = await handler.GenerateAsync(vm.SProductGroupId, fluidId, vm.SProductId);
+
+                var result = await handler.GenerateAsync(
+    vm.SProductGroupId,
+    fluidId,
+    vm.SProductId,
+    vm.SelectedFeatureValues,
+    cancellationToken);
 
                 vm.StockCode8 = result.StockCode8;
                 vm.Description = result.Description;
@@ -114,6 +128,32 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var products = await handler.GetProductsAsync(gid, fid);
 
             return Json(products.Select(x => new { id = x.Id, code = x.Code, name = x.Name }));
+        }
+
+        // ✅ Ajax: Product seçilince Feature + Values getir
+        [HttpGet]
+        public async Task<IActionResult> FeaturesByProduct(string sProductId, CancellationToken cancellationToken)
+        {
+            if (!Guid.TryParse(sProductId, out var pid))
+                return BadRequest();
+
+            var data = await _featureQueryService.GetProductFeaturesAsync(pid, cancellationToken);
+
+            return Json(data.Select(f => new
+            {
+                featureId = f.FeatureId,
+                code = f.Code,
+                name = f.Name,
+                isRequired = f.IsRequired,
+                sortOrder = f.SortOrder,
+                values = f.Values.Select(v => new
+                {
+                    valueId = v.ValueId,
+                    code = v.Code,
+                    name = v.Name,
+                    sortOrder = v.SortOrder
+                })
+            }));
         }
 
         private async Task FillLookups(SStockCodeGenerateVm vm)

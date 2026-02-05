@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC.ProductManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260204133626_sbseed")]
-    partial class sbseed
+    [Migration("20260204165110_filterseed")]
+    partial class filterseed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -755,7 +755,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(3954),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4162),
                             Density = 7850.0,
                             Group = "Fine grain pressure vessel steel",
                             MaterialNumber = "1.0565",
@@ -832,7 +832,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(3982),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4212),
                             FormType = 0,
                             MaterialId = new Guid("11111111-1111-1111-1111-111111111111"),
                             Notes = "Standard plate form for P355NH",
@@ -842,6 +842,298 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             ThicknessMin = 1.0,
                             UnitPrice = 1.5
                         });
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("SFeatures", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1c92e394-c09b-3566-0cad-be123fa6dc4b"),
+                            Code = "PN",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Basınç Sınıfı",
+                            SortOrder = 10,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cebf4994-d702-7b47-d116-99c34fcdcfbd"),
+                            Code = "DN",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Anma Çapı",
+                            SortOrder = 20,
+                            Status = 1
+                        });
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeatureValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("SFeatureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SFeatureId", "Code")
+                        .IsUnique();
+
+                    b.ToTable("SFeatureValues", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7be9e6da-eefe-c0e4-ecc3-608a9383e280"),
+                            Code = "PN16",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "PN16",
+                            SFeatureId = new Guid("1c92e394-c09b-3566-0cad-be123fa6dc4b"),
+                            SortOrder = 10,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("74e9ef59-a048-1164-302d-f1d699aaf487"),
+                            Code = "PN40",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "PN40",
+                            SFeatureId = new Guid("1c92e394-c09b-3566-0cad-be123fa6dc4b"),
+                            SortOrder = 20,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fa142548-accf-ed1e-37ef-6b8822863ef6"),
+                            Code = "DN25",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DN25",
+                            SFeatureId = new Guid("cebf4994-d702-7b47-d116-99c34fcdcfbd"),
+                            SortOrder = 10,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("37c22a01-f8e0-1c82-3f83-d867697be94b"),
+                            Code = "DN50",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DN50",
+                            SFeatureId = new Guid("cebf4994-d702-7b47-d116-99c34fcdcfbd"),
+                            SortOrder = 20,
+                            Status = 1
+                        });
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SProductFeature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("SFeatureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SFeatureId");
+
+                    b.HasIndex("SProductId", "SFeatureId")
+                        .IsUnique();
+
+                    b.ToTable("SProductFeatures", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("5b69b03e-13d2-7512-e186-c79cdadf8c73"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsRequired = true,
+                            SFeatureId = new Guid("1c92e394-c09b-3566-0cad-be123fa6dc4b"),
+                            SProductId = new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"),
+                            SortOrder = 10,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("98b94f94-0d62-ac05-7fd6-3a9864172f2b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsRequired = true,
+                            SFeatureId = new Guid("cebf4994-d702-7b47-d116-99c34fcdcfbd"),
+                            SProductId = new Guid("fb3fb765-6013-41a4-e0f8-f46bff05077a"),
+                            SortOrder = 20,
+                            Status = 1
+                        });
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.StockCardFeatureSelection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("SFeatureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SFeatureValueId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StockCardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SFeatureId");
+
+                    b.HasIndex("SFeatureValueId");
+
+                    b.HasIndex("StockCardId", "SFeatureId")
+                        .IsUnique();
+
+                    b.ToTable("StockCardFeatureSelections", (string)null);
                 });
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", b =>
@@ -2885,6 +3177,11 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OptionKey")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
                     b.Property<string>("Prefix4")
                         .IsRequired()
                         .HasMaxLength(4)
@@ -2926,7 +3223,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.HasIndex("StockSequenceId");
 
-                    b.HasIndex("FluidId", "SProductGroupId", "SProductId")
+                    b.HasIndex("FluidId", "SProductGroupId", "SProductId", "OptionKey")
                         .IsUnique();
 
                     b.ToTable("StockCards", (string)null);
@@ -2984,9 +3281,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("dbcd451e-e187-31f5-67a4-07a6b68d9770"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -2994,9 +3291,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f02185ee-de2e-1ea1-8d97-ce46ac24db9e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3004,9 +3301,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bac90f00-80b6-2703-f447-e3819d07f044"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3014,9 +3311,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("937b88be-cbbc-e1bf-ffa5-a04499d06579"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3024,9 +3321,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("fb04a072-8da4-f2de-5089-00f2a9526cd0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3034,9 +3331,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("257bd970-05c4-751f-8180-fdb0233d77e1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3044,9 +3341,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a12f6d5b-ef10-c238-78ed-9fcd906056c3"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3054,9 +3351,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("446aed7c-61ff-62f6-f34a-90f3471964e6"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3064,9 +3361,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("38cb1d14-d4d0-c02e-3f17-14797270a8ba"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3074,9 +3371,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a4141846-5dc9-4824-baff-c9c87e444c1b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAA9",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3084,9 +3381,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("3bb55cc5-fe82-75ca-abec-b0798d295939"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3094,9 +3391,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("6f1467f9-f6b0-d017-184c-f1ba8bb8d23d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3104,9 +3401,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("67da5134-fb6a-97d5-b623-2c752cd8cf9a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3114,9 +3411,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("6c4fc270-699a-a103-6678-9771a29672ff"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3124,9 +3421,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("85c836c6-9327-a681-34a2-a9cfe15298da"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3134,9 +3431,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("7c2b25b3-d160-7949-fd8c-a682e5fd3b0a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3144,9 +3441,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("d2747ea3-4527-4dec-5d48-19f9cb86f4d5"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3154,9 +3451,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("88e424db-ad8c-5ced-1d8c-6951705b3039"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3164,9 +3461,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("5894bd46-0272-1c11-5340-4f3b8a4808f4"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3174,9 +3471,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("34d9cc2d-feec-edfe-3a15-296f01769dd9"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAB9",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3184,9 +3481,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1e7f8749-39bf-9828-b6c8-f0b4885201a0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAC0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3194,9 +3491,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("83da4f95-2247-a1d3-484c-d11a7b55879b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAC1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3204,9 +3501,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f4233558-4090-5239-b767-e190a532efac"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAC2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3214,9 +3511,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("27a4669d-51b4-6aff-3f89-8afe3021291d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAC3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3224,9 +3521,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2a7e5b70-d953-e686-4d16-b8dbdec08c3e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAC4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3234,9 +3531,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("dfebc11f-4b48-2226-5cbe-ee78206f7520"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAC5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3244,9 +3541,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("d2cbcf8c-1d36-0a28-5ac1-c985d79243d2"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAC6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3254,9 +3551,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2bae01fc-51b6-e4a0-1e1e-1e2d7632ca52"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAD0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3264,9 +3561,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("52ff9dec-e03a-7b3a-5ccb-5bedd50678e2"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAD1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3274,9 +3571,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("04b46eea-2124-7e22-841f-18923c928c0f"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAE0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3284,9 +3581,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2b2074cd-dbd0-5f20-c6bb-fa36013ee4cd"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAE1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3294,9 +3591,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4f695a4c-db8f-56ed-8b48-b04a04138844"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAE2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3304,9 +3601,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("d63acd7f-1016-9dfa-bc31-b7f8e19ff3e1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAE3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3314,9 +3611,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("516d4a63-72bd-bc79-a964-b5695fc5c16a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAE4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3324,9 +3621,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("15c7507a-9f9b-20fd-6ec0-e39cacc0e59e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAE5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3334,9 +3631,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a1340f00-e620-466a-2dab-253915b62123"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SAE6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3344,9 +3641,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1692528e-624a-89c7-65a3-be284d6a673d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3354,9 +3651,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2947ec74-c544-cbb4-dc6f-ab077e6c9b1e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3364,9 +3661,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a2eb0676-290d-f924-452e-d49d9a9b1006"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3374,9 +3671,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2b42df79-8ebd-4d8f-a582-b09b22da3451"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3384,9 +3681,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("40933366-a230-60ef-ed1b-8dfe6bb95cdc"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3394,9 +3691,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("24647e99-46dc-6a79-e589-0bd97659aea4"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3404,9 +3701,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e925807e-38b2-20cc-2171-1aeb1c7a1624"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3414,9 +3711,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e699ca25-e08c-ecf0-5ee2-cfde3649093b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3424,9 +3721,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a91c7959-db11-10f5-bd76-0280bde2e27e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3434,9 +3731,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("da9e8ef3-83ad-985a-bf4a-0636c1d49e6b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBA9",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3444,9 +3741,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("168a8095-3cc6-c69c-a0bd-ebb53caeafa7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3454,9 +3751,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("5971ee4a-2baa-aa54-b533-d9fcec909249"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3464,9 +3761,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4c2d1dae-aea9-f36f-01df-0c3d29e18136"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3474,9 +3771,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("8cb063c8-b5d7-1667-4b4e-6b0dc8bc8ed3"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3484,9 +3781,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("25bed300-11ac-8798-e35b-99ff8a9cc130"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3494,9 +3791,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("9ea57885-a3d7-87e3-0188-e5721d680e38"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3504,9 +3801,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("6e9184c7-db20-fb4b-1fb6-0c494b13a7f2"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3514,9 +3811,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("7b28731a-c4c5-e59d-1e8a-825237ab36fc"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3524,9 +3821,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("eea332da-4c6c-0e1d-cccf-608e79670f40"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3534,9 +3831,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2ad2b3c7-d999-080b-c743-e66c58458a46"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBB9",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3544,9 +3841,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4382d52a-173e-a191-81c2-5ced16b2407c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBC0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3554,9 +3851,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("ac9ea1f0-238d-0be4-3b45-f4933a8d300c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBC1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3564,9 +3861,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("be8207cf-2545-1c28-b048-e21a3f19c5c7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBC2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3574,9 +3871,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bdd0c721-a225-bc8f-a811-0e3aeb17c79c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBC3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3584,9 +3881,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2f6dfa2b-8f7f-7e4e-b0d6-8fd5c39cc3b8"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBD0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3594,9 +3891,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("5fc1f762-9b00-aa70-021e-200ecfb9362d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBD1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3604,9 +3901,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e82626da-cb3e-58c5-e940-95ddd2a8c5f0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBE0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3614,9 +3911,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("93047b51-4c62-fecb-0295-194fdbe9e9d7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SBE1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3624,9 +3921,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("d685a442-7ad5-25fc-d906-d4432cb0cf6a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3634,9 +3931,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("41a4f38a-3c2e-f05a-304a-0fc3b14e2b09"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3644,9 +3941,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("89c00860-6b37-aa9e-b1cf-cd7dca094cf7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3654,9 +3951,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f8347ba4-dede-4271-c5e0-f1d7dc323f83"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3664,9 +3961,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4aa75aba-ea91-14ea-2139-5992dbc367e4"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3674,9 +3971,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("ea8443d3-005a-dd34-006d-26e743dc92d0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3684,9 +3981,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("98267808-32bb-684e-9e23-4e1af135b155"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3694,9 +3991,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bf50ae35-7ae6-48ba-d91a-7a86c20da203"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3704,9 +4001,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("be609388-2af8-5387-4c8c-9f4a750284df"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3714,9 +4011,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("9f76636d-46fd-baed-ba76-d95b34fe2562"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA9",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3724,9 +4021,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f70dcab0-81cc-a0ce-374f-0111822d91db"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCE1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3734,9 +4031,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("9d2f0012-6fff-9f61-9baf-d132817a797a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3744,9 +4041,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("76f609bb-e88f-ce9f-4012-4df1064e502d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3754,9 +4051,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bc39e87b-0266-21fb-225d-1ca23f7b61a6"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3764,9 +4061,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("70e7b39b-5fb1-860d-1179-7941308024ed"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3774,9 +4071,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a61dbce8-c966-34d7-d1b2-5947ff8fdbf6"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3784,9 +4081,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e2bac1a2-c0d7-795d-f0fd-31837fbb6fab"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDA5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3794,9 +4091,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2ad12443-bc53-c844-eb53-2434f761a351"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDA6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3804,9 +4101,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("033cd817-2d1c-02c3-eb9e-33449dadc1ec"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDA7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3814,9 +4111,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("d98b8232-4691-7fbd-ff92-ff0789a26392"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDB0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3824,9 +4121,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("0850a96e-4557-b6d5-26a6-3ba4eb76ef05"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDB1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3834,9 +4131,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("dc7fb47b-c77a-0242-3d4e-e78fc89b16e7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDB2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3844,9 +4141,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("0ffce261-8b1e-1783-3131-fc6880ea7360"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDB3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3854,9 +4151,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("026ff68f-8b91-d336-7bd8-408e2eac676e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDB4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3864,9 +4161,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a0a9d0b6-235f-ab93-8bd0-560fa3817283"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDC0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3874,9 +4171,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("7291b6e6-bd74-ad49-5d47-1e634cd50c95"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDC1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3884,9 +4181,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("73c7ab1a-023b-829b-3512-a7ae8cbc9a90"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDC2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3894,9 +4191,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4084f42b-47ee-5e7a-bcd9-00ec7e7458eb"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDC3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3904,9 +4201,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("c3e8d964-26f7-6389-bb31-f90716c8016a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDC4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3914,9 +4211,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("b582257e-1b5c-5964-4631-20547ba44592"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDD0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3924,9 +4221,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("66b0ce40-3eae-dbdb-9fbb-32c0e7d2fe1b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDD1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3934,9 +4231,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("6f30aff2-10dc-778e-09ec-7a5f2ab1f752"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDD2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3944,9 +4241,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("c17016ba-69b6-f4fa-d6d8-cdd3efa9f740"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDD3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3954,9 +4251,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("6ce5b980-58dd-4d23-97e3-89a49788f264"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDD4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3964,9 +4261,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("047c2958-e3b2-8809-efa0-c833c3fb3cfb"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDE0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3974,9 +4271,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("93a9c8f0-b4e2-2b7a-9899-d38aa4e97989"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDE1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3984,9 +4281,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("b0a4edc9-f77a-2684-21a5-2067dc1a884e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDE2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -3994,9 +4291,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1eeb6a1f-931a-e0a5-f4a6-f8ad3580a219"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDE3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4004,9 +4301,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("42053fca-9c80-ed5c-a554-b4cd8b778a8b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDE4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4014,9 +4311,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f628aa1d-3760-a37f-909a-9ebd0d83094a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDF0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4024,9 +4321,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("381a7564-293f-e5fe-86d0-a70c17983bce"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDF1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4034,9 +4331,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f2c1b37e-9021-99de-0ad7-5055a2a94734"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDF2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4044,9 +4341,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2049c50b-fb75-3712-5acc-a7b44705ff62"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDF3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4054,9 +4351,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("78d46a40-0dc1-b48e-0fc3-ee5871cf71f1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SDF4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4064,9 +4361,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("62a3a33d-bcfd-d26d-3370-e5aa4f1a874d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4074,9 +4371,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("14f0c4bc-b7c8-c675-613f-602b7a2884bb"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4084,9 +4381,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("c8583115-6b55-731a-2b2a-2d0eb382fc06"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4094,9 +4391,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f58714c8-8314-a1c2-5363-ed189d83b7bf"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4104,9 +4401,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1ba6f76b-7ab3-4c0b-f750-eb707113adad"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4114,9 +4411,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("5c79bd1f-a61f-712a-2d8c-b25cff7d50b1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4124,9 +4421,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("512d794b-1e3a-3ac4-f6fb-572a68e073a2"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4134,9 +4431,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("88aab533-0b82-a2ea-7280-d2da776c6173"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4144,9 +4441,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1651d064-8636-6a2e-fe51-2b568d92c9b0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4154,9 +4451,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e9b7da90-238b-0b70-cff5-3d4663ad8f55"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEA9",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4164,9 +4461,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("987934f7-622e-9b77-1a7c-68187ac287b2"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4174,9 +4471,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("ce52ef9f-93a9-c315-8020-beeb7c788166"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4184,9 +4481,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a8a21162-31b8-7049-3bf3-811294d88422"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4194,9 +4491,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1ab1da7d-715c-a5ce-5787-526010badd51"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4204,9 +4501,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("954a9b87-1112-896e-2da5-1021dc3e92a5"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4214,9 +4511,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("9bbfbde8-5399-b302-f435-90f865304bc6"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4224,9 +4521,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("c9072b3f-8f91-1fdc-c100-db4d882feec1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4234,9 +4531,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("63e2f7ac-2277-8a35-ef30-859b79381d74"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4244,9 +4541,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1401adb3-3e29-b8ac-2941-b2bbcc2f8668"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4254,9 +4551,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("07c30f21-da46-546e-493c-fe6f567c4561"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SEB9",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4264,9 +4561,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1c313c8d-33d3-f18c-5bfa-114bcb62a55e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4274,9 +4571,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2fbf1894-a8ae-2edb-5a77-4c2fd63e25aa"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4284,9 +4581,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("0e152dff-4c00-8e5c-a4d2-55b54960206f"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4294,9 +4591,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("01016317-a4e0-e483-e2a4-2ceb7fa8f1ac"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4304,9 +4601,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("33aac10b-421b-4644-58ab-a0b2207dd006"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4314,9 +4611,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("b4519f06-565e-4fbd-574c-b6a09e8aeecf"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4324,9 +4621,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("6588efc8-40c2-3c85-c069-3e8a2d2400a1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4334,9 +4631,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("6bf7293e-6d93-57ee-6baf-a4fc88ae187c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4344,9 +4641,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("cac01515-f504-becb-0f75-7d183d246fd1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFA8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4354,9 +4651,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("49d63223-95aa-dbc2-6c4a-94658a969eb1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4364,9 +4661,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("661ec3a1-aab2-c08d-222a-4f7661c9ec76"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4374,9 +4671,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("302ac8ae-1132-043b-fd25-5fc33b8f71b0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4384,9 +4681,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f9bac86b-1090-67e4-4ef8-af587ee5c44c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4394,9 +4691,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("c57d23cc-6821-713c-ceda-84f56c6e9439"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4404,9 +4701,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bfd2f5af-07e7-a2da-f90d-81af14e90920"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4414,9 +4711,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("0b9e68d8-e8bb-7345-f141-92c305e1e816"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4424,9 +4721,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("16359c70-042f-9e42-85a9-0c4aa4c56d21"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4434,9 +4731,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4d366856-c4f4-5783-32da-bba6ec7a0981"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFC8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4444,9 +4741,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("7c47ba34-0281-cbf8-d305-1f6431d2ff30"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4454,9 +4751,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("d1199c79-94d8-1902-e0a5-d905dc8729c0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4464,9 +4761,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("63efac71-abd9-09e3-ba04-9bb3aab352f5"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4474,9 +4771,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("59fd2e1f-ef7d-895e-1b09-7550c7cdc02d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4484,9 +4781,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("db31f507-351c-ca53-2b55-b7dfca6b3a9a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4494,9 +4791,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("b8a956d6-3815-42ef-c54c-3b71c39e66e1"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4504,9 +4801,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("54b68a8c-52a8-a0b8-6e9f-9474d6c9f338"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4514,9 +4811,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("35dc9616-c0b6-f384-0da8-c20f8a866ce9"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4524,9 +4821,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("5eaf082c-951d-02e1-1106-d96879ff7e21"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4534,9 +4831,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("75a71400-e49e-ebca-b206-b09024e3ee83"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFF9",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4544,9 +4841,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("16ac98eb-93a8-e0e4-4a85-9ea02377c18f"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFG0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4554,9 +4851,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1834f459-e64d-e88d-fc90-59f2dd1d98cd"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFG1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4564,9 +4861,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("d4c3cb4b-f24f-120c-2af8-9d2723c44fa4"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFG2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4574,9 +4871,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f0ac6813-aace-e0ac-64df-a64d6b73eb95"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFG3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4584,9 +4881,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4f5e667b-07e6-cdeb-0de4-a936f2b00e79"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFG4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4594,9 +4891,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("9c066750-d0fa-909c-849b-1ccbabefc72d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFG5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4604,9 +4901,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("47c38e85-b440-3303-fa91-a4e54b16722b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFG6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4614,9 +4911,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bdb9c62b-87cb-5114-7749-ddb0729541c3"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFH0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4624,9 +4921,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("481b5bab-8979-baa5-32f3-e3fdb0ba44b5"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFH1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4634,9 +4931,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e59c4f35-cac4-2ae4-aeb6-809d035489bd"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFH2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4644,9 +4941,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a6de6da8-154e-04f2-382c-28b6283900dc"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SFH3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4654,9 +4951,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bce72a21-7ad0-6ce7-2456-83e896acd05d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SGA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4664,9 +4961,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("8beffd20-396e-a055-d5a3-67f5469b4826"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SGA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4674,9 +4971,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("74580410-8ef2-2bc3-0982-efcae6c1c6e7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SGA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4684,9 +4981,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("0bbca75c-b6b1-5f3f-2126-ae11325aa6ae"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SGA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4694,9 +4991,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("ef4b768d-cf6e-6f2c-6ad7-5455d36a8b09"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SGA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4704,9 +5001,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("58524f7a-45e8-8bcc-4ce3-9dda977200ec"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SGA5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4714,9 +5011,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("5d9179b2-b817-c059-2948-819f539dfcde"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SGA6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4724,9 +5021,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2a99ea51-9817-8290-2567-2212bc022ff3"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4734,9 +5031,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f434663d-f33e-790d-a100-e3a0c9743891"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4744,9 +5041,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("07618501-16f5-3853-6df1-bc7f5150766b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4754,9 +5051,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("8a052553-c2ed-9701-d346-5be964ff764c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4764,9 +5061,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("0a9c14fe-fc4b-f925-0453-bd51b98b681b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4774,9 +5071,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("568dc66c-34cf-ad28-fd92-06eea4de1ef2"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4784,9 +5081,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("108b32b0-7276-cbfe-b980-e3a8a9b3100e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA6",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4794,9 +5091,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("3673972d-0beb-5ae6-2109-c3e0606f0d61"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA7",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4804,9 +5101,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("450d5b11-4a42-d898-63dd-7ae0227b29e9"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHA8",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4814,9 +5111,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1a92d47f-f539-6409-17bc-7aad707b6c20"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHC1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4824,9 +5121,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e317c334-8932-667f-8f47-39c10efa0a5a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SHC5",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4834,9 +5131,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("c59277f4-d054-f341-14d3-d14cb1f79c60"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SZA0",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4844,9 +5141,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f1945380-4ca0-6571-e051-93eef64fbb5b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SZA1",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4854,9 +5151,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("aea33ed8-d596-b8a9-849b-a932a322bc2e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SZA2",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4864,9 +5161,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("c8d3dc25-582a-4125-cc02-5de10f69a562"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SZA3",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         },
                         new
@@ -4874,9 +5171,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("b4658e35-5eff-673d-e715-3326439adb3d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SZA4",
-                            StartNumber = 1000,
+                            StartNumber = 0,
                             Status = 0
                         });
                 });
@@ -5110,9 +5407,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c9c40813-7be6-4aa9-90ea-4c5045fb22c6"),
+                            Id = new Guid("3ff67da2-4280-4fc3-b22d-ea43fd5ec827"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4003),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4233),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 355.0,
@@ -5123,9 +5420,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("45c7258a-f70a-4248-b7ff-d97f1cb2cf6f"),
+                            Id = new Guid("7f17b20d-8d51-41e4-b428-e6856db956ed"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4006),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4237),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 343.0,
@@ -5136,9 +5433,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("274450c9-d08f-4b31-8d3d-c83290cebfcb"),
+                            Id = new Guid("ad01b604-c5cd-47ef-a2e3-ebe51e837647"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4015),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4240),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 323.0,
@@ -5149,9 +5446,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2ad43461-8d3d-4495-bd16-3145dd3325e5"),
+                            Id = new Guid("7dc0b264-a239-4830-ad5f-789d279dee31"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4018),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4243),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 299.0,
@@ -5162,9 +5459,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("791d829a-fb6a-42d2-9c09-59cf7305f191"),
+                            Id = new Guid("70915c39-3995-49f4-9c19-6b3943425ac5"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4020),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4245),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 275.0,
@@ -5175,9 +5472,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("daacebed-9bc9-4b08-9046-3d9263667273"),
+                            Id = new Guid("f2cbbc84-19db-441f-bd12-f2df794897d0"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4023),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4248),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 252.0,
@@ -5188,9 +5485,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("84319b60-6f4c-4fde-ae41-bd5677294171"),
+                            Id = new Guid("1e3e5505-c741-4c5b-9bfd-7279af17f606"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4027),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4250),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 232.0,
@@ -5201,9 +5498,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("107441a9-c2a1-41c5-8141-86faf7e9ebb8"),
+                            Id = new Guid("69bd549c-ad60-43cb-9437-3a81449a6d4d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4029),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4253),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 214.0,
@@ -5214,9 +5511,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5225d3f6-fb38-4c11-a395-8d26bdd3dec7"),
+                            Id = new Guid("b6744a4c-6e94-442e-aa5d-f0e3fa837206"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4032),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4256),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 202.0,
@@ -5227,9 +5524,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0b50defb-4abf-4039-94eb-ceeaa58c3380"),
+                            Id = new Guid("db002695-2fda-4e20-82a6-10d5d6570a75"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4035),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4258),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 345.0,
@@ -5240,9 +5537,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5a129540-621e-431d-abd1-3c73e958fa47"),
+                            Id = new Guid("ee4d2e74-e2e3-4cf5-b3fe-461a8da5b2b5"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4038),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4260),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 334.0,
@@ -5253,9 +5550,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ff6f349c-2d4c-4107-ad3c-bbd3444bc87a"),
+                            Id = new Guid("cf2bdf3d-c7b7-41a9-a5c8-665116244a40"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4040),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4263),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 314.0,
@@ -5266,9 +5563,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a7b2e9d8-d0e4-4374-8240-e99995a970fb"),
+                            Id = new Guid("c393b396-f378-4491-bc79-885a5cd592f0"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4042),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4265),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 291.0,
@@ -5279,9 +5576,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b0b14efb-2d15-45f3-a55f-9745a751d78e"),
+                            Id = new Guid("8fa39d3f-8a21-4181-961f-c9978a7f19f7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4044),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4267),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 267.0,
@@ -5292,9 +5589,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2e7b70ad-fdd9-4711-be3b-746a6292c3c4"),
+                            Id = new Guid("2a045e31-bcc0-49fa-9244-0b53f48595a2"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4047),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4268),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 245.0,
@@ -5305,9 +5602,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5fe1b15d-d278-4647-9590-36dbba7a58b2"),
+                            Id = new Guid("a60e6bc9-b2ae-4a57-81ae-a915f3a87cb3"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4049),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4273),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 225.0,
@@ -5318,9 +5615,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("39b9ab06-1f71-4861-ab82-72f761aaf008"),
+                            Id = new Guid("0fa8fab9-e0f0-4d51-9a40-ee2d457465d3"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4052),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4275),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 208.0,
@@ -5331,9 +5628,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("18036d12-07fc-467e-a401-24564490b688"),
+                            Id = new Guid("e97b6355-aa05-4b3c-a654-c69d32b6ab66"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4055),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4277),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 196.0,
@@ -5344,9 +5641,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8b1e5854-2519-442d-a19a-23e7be87e094"),
+                            Id = new Guid("da030b1a-310d-4e57-a39b-a21d8a317151"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4058),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4279),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 335.0,
@@ -5357,9 +5654,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e8c043d8-0858-4f16-bdb8-de8e001bb51f"),
+                            Id = new Guid("74642ee9-a49f-4ad5-a434-c98b709226f9"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4060),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4283),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 324.0,
@@ -5370,9 +5667,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2c6eeaea-171f-4578-a55e-d6037639486b"),
+                            Id = new Guid("4b509de4-9293-4907-9be3-73a9882d93be"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4062),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4285),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 305.0,
@@ -5383,9 +5680,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("97f8e45a-ef94-4f8b-aa89-ac7893a11cd8"),
+                            Id = new Guid("0d175396-5864-468e-88ee-b221874c7a7f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4064),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4287),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 282.0,
@@ -5396,9 +5693,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fbce3611-4bb1-4e8a-92df-a71eb3ccebc0"),
+                            Id = new Guid("47fc922a-58b3-4e19-ac0d-2c449b8a3fd7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4068),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4289),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 259.0,
@@ -5409,9 +5706,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("577f856d-ba9c-408f-9855-24f86b7541a1"),
+                            Id = new Guid("eaacc751-8d49-4abe-8bb6-2f412244b59b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4070),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4292),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 238.0,
@@ -5422,9 +5719,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("69ae52ed-dbda-4647-bd76-abe96d33c00f"),
+                            Id = new Guid("f8cae0cd-a530-4d28-970c-3e786374570a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4071),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4293),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 219.0,
@@ -5435,9 +5732,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ca09d266-6e69-40eb-89a2-ec875f414c87"),
+                            Id = new Guid("9610f58b-792e-42c0-87ac-ecc0036e395e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4073),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4295),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 202.0,
@@ -5448,9 +5745,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d5a62d00-ca9c-4f02-a4c1-f40a3ab09375"),
+                            Id = new Guid("6d36e1f6-988a-47c8-bfa3-210ceb2b84ac"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4077),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4297),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 190.0,
@@ -5461,9 +5758,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8a9513b2-490f-4557-840a-2db767c95a02"),
+                            Id = new Guid("7b9b1e7a-30e1-4621-b195-e402f17e1f34"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4079),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4300),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 315.0,
@@ -5474,9 +5771,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5b304bd8-6cca-463c-9e7b-4b11529a7158"),
+                            Id = new Guid("a85bb67a-83cb-4386-80ca-b34cf968928c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4081),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4301),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -5487,9 +5784,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c66817dc-af15-4977-811c-32cc7042fdfa"),
+                            Id = new Guid("40750eec-c3ce-4595-9a62-bca38f5b3cd8"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4083),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4303),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 287.0,
@@ -5500,9 +5797,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("665d32d5-a008-49ba-80d2-5112b5faaab0"),
+                            Id = new Guid("8f8c49f5-b715-4f85-939e-61acd7eab311"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4116),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4305),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 265.0,
@@ -5513,9 +5810,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c6c2d20e-daaa-414c-af90-1cf9813773f4"),
+                            Id = new Guid("aa047eff-5e6a-4ca9-8967-9bf7b0f11475"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4119),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4309),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 244.0,
@@ -5526,9 +5823,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b0456293-92f3-4614-a84b-4824540749d2"),
+                            Id = new Guid("af729ac9-2ae4-46c9-b549-5698635b34cb"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4121),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4310),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 224.0,
@@ -5539,9 +5836,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8c93ae2c-866d-4820-813d-b43720b4a656"),
+                            Id = new Guid("9702633a-0178-42c7-b26e-2b15bc2cb81e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4123),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4313),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 206.0,
@@ -5552,9 +5849,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c1accae8-0e2a-4dd3-bba4-e9b46d02f963"),
+                            Id = new Guid("9af07ba9-b3a3-4a53-ace1-3aa879ebadb1"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4127),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4315),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 190.0,
@@ -5565,9 +5862,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("09519885-506b-4676-8fbc-91d2efbd47de"),
+                            Id = new Guid("b5251dd1-777e-4dbd-828e-4c4ab2bbf7c2"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4129),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4317),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 179.0,
@@ -5578,9 +5875,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8fe94a16-dd2f-4f09-be3a-89405ba4d2b2"),
+                            Id = new Guid("4902f720-8d9a-4831-a335-18a0ce340e39"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4131),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4319),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -5591,9 +5888,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("59333286-5b87-4208-98f4-4fda26245f17"),
+                            Id = new Guid("a80c1392-d720-4d6e-8c1b-ee195fda3ec2"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4133),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4352),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 295.0,
@@ -5604,9 +5901,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a8a84d49-6172-4e32-b7da-8200df723a80"),
+                            Id = new Guid("7aad8c16-e4a6-42e7-849e-2f4aec97be2e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4136),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4355),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 277.0,
@@ -5617,9 +5914,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0b089205-7235-4b30-aa00-f84e17667795"),
+                            Id = new Guid("dc81dc9b-d789-4ca1-a5fe-3363fa527d4a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4139),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4358),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 257.0,
@@ -5630,9 +5927,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d7270db3-7bfd-4edd-b359-7bbe2a8c57b9"),
+                            Id = new Guid("f8948611-a342-4434-86d4-dd0d5043797e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4141),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4360),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 236.0,
@@ -5643,9 +5940,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d0f71b8c-1ea3-4941-b83c-3c8d50a9a107"),
+                            Id = new Guid("af675288-658d-4c2d-a752-341a9d6e5f08"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4143),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4361),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 216.0,
@@ -5656,9 +5953,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("876ffd0d-f194-48ff-a380-7317fb841ff3"),
+                            Id = new Guid("1f5e9ae1-9699-4901-9ad4-9b39d8ceaf4a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4146),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4363),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 199.0,
@@ -5669,9 +5966,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("967f8493-125f-4a8e-b52b-62fd2dfd741e"),
+                            Id = new Guid("21e4b75b-5e05-4525-b04b-2f22f26ebdc5"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4148),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4366),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 184.0,
@@ -5682,9 +5979,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9f218984-6727-4867-b840-1972b53ce459"),
+                            Id = new Guid("73ad494c-7ce7-4103-8adb-4215f989236b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4150),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4368),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 173.0,
@@ -5695,9 +5992,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b01dae36-1433-4a81-a3a4-94ef64f4102f"),
+                            Id = new Guid("11f04920-cc9b-44aa-9e69-46af96ccdb24"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4152),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4369),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 295.0,
@@ -5708,9 +6005,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f1db84b6-ca26-474a-a47a-2467a9f46f65"),
+                            Id = new Guid("df547868-fa5c-4437-9706-1425ca452787"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4155),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4371),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 285.0,
@@ -5721,9 +6018,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("27fa2c76-5e1d-4b53-8985-faa0126ec7ac"),
+                            Id = new Guid("0631ce50-d27f-43cc-85a1-67a53744bce4"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4157),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4374),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 268.0,
@@ -5734,9 +6031,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("836a421a-8f1a-47c1-80d2-e63f2da81734"),
+                            Id = new Guid("e2ee2c1c-ff13-4586-af33-0774c9ce0663"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4159),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4376),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 249.0,
@@ -5747,9 +6044,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9c6a5cb0-b090-408f-8d13-2b2118047fc9"),
+                            Id = new Guid("e6497d88-0783-4bbc-b5b1-62b284677e9c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4161),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4377),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 228.0,
@@ -5760,9 +6057,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("658bf318-1a51-4c74-8b13-26bfc8471fe1"),
+                            Id = new Guid("e26e7580-3d56-49d6-8f10-fbb93d984f10"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4164),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4379),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 209.0,
@@ -5773,9 +6070,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8eaa57c7-0840-4044-b91c-06066ec903f6"),
+                            Id = new Guid("9177311a-ca1d-478d-a04b-7453a165d9fd"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4166),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4382),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 192.0,
@@ -5786,9 +6083,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2ea19772-123e-403c-a5a1-6a2a03fabaa6"),
+                            Id = new Guid("79bb784b-f454-4145-ba38-bc50ef603fd5"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4168),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4384),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 178.0,
@@ -5799,9 +6096,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("98ec817b-49ab-424b-96cb-a1b179c474ea"),
+                            Id = new Guid("2b309d3b-a3c1-4b0a-af2b-90d082429c0e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 4, 13, 36, 25, 948, DateTimeKind.Utc).AddTicks(4170),
+                            CreatedDate = new DateTime(2026, 2, 4, 16, 51, 9, 790, DateTimeKind.Utc).AddTicks(4385),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 167.0,
@@ -6148,6 +6445,63 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Navigation("Material");
                 });
 
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeatureValue", b =>
+                {
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeature", "SFeature")
+                        .WithMany("Values")
+                        .HasForeignKey("SFeatureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SFeature");
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SProductFeature", b =>
+                {
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeature", "SFeature")
+                        .WithMany("ProductFeatures")
+                        .HasForeignKey("SFeatureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.SProduct", "SProduct")
+                        .WithMany()
+                        .HasForeignKey("SProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SFeature");
+
+                    b.Navigation("SProduct");
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.StockCardFeatureSelection", b =>
+                {
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeature", "SFeature")
+                        .WithMany()
+                        .HasForeignKey("SFeatureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeatureValue", "SFeatureValue")
+                        .WithMany()
+                        .HasForeignKey("SFeatureValueId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.StockCard", "StockCard")
+                        .WithMany("FeatureSelections")
+                        .HasForeignKey("StockCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SFeature");
+
+                    b.Navigation("SFeatureValue");
+
+                    b.Navigation("StockCard");
+                });
+
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.PrefixRule", b =>
                 {
                     b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", "Fluid")
@@ -6407,6 +6761,13 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Navigation("YieldStrengths");
                 });
 
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeature", b =>
+                {
+                    b.Navigation("ProductFeatures");
+
+                    b.Navigation("Values");
+                });
+
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", b =>
                 {
                     b.Navigation("PrefixRules");
@@ -6433,6 +6794,11 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("StockCards");
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCard", b =>
+                {
+                    b.Navigation("FeatureSelections");
                 });
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockSequence", b =>

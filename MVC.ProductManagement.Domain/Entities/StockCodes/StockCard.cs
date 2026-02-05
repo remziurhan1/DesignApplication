@@ -1,4 +1,5 @@
 ﻿using MVC.ProductManagement.Domain.Core.BaseEntities;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes
         public string StockCode8 { get; set; } = default!;
         public string Prefix4 { get; set; } = default!;
         public int Serial4 { get; set; }
+        public string OptionKey { get; set; } = default!;
 
         public Guid FluidId { get; set; }
         public virtual Fluid Fluid { get; set; } = default!;
@@ -28,6 +30,9 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes
 
         public Guid StockSequenceId { get; set; }
         public virtual StockSequence StockSequence { get; set; } = default!;
+
+        public virtual ICollection<StockCardFeatureSelection> FeatureSelections { get; set; }
+    = new List<StockCardFeatureSelection>();
 
         public string Description { get; set; } = default!;
     }

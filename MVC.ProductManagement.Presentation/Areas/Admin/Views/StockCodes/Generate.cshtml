@@ -29,6 +29,9 @@
         </select>
     </div>
 
+    <!-- ✅ DİNAMİK FEATURES -->
+    <div id="featuresContainer"></div>
+
     <!-- PREFIX = SONUÇ (READONLY) -->
     <div class="mb-3">
         <label class="form-label">Oluşan Prefix</label>
@@ -64,6 +67,7 @@
     const groupSelect = document.getElementById("groupSelect");
     const fluidSelect = document.getElementById("fluidSelect");
     const productSelect = document.getElementById("productSelect");
+    const featuresContainer = document.getElementById("featuresContainer");
 
     function getGroupCodeFromText() {
         const txt = groupSelect.options[groupSelect.selectedIndex]?.textContent || "";
@@ -78,20 +82,84 @@
         selectEl.appendChild(opt);
     }
 
+    function clearFeatures() {
+        featuresContainer.innerHTML = "";
+    }
+
+    function renderFeatures(features) {
+        clearFeatures();
+
+        if (!features || features.length === 0) return;
+
+        features
+            .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+            .forEach(f => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "mb-3";
+
+                const label = document.createElement("label");
+                label.className = "form-label";
+                label.textContent = (f.name || "") + (f.isRequired ? " *" : "");
+
+                const select = document.createElement("select");
+                select.className = "form-select";
+
+                // ✅ Toleranslı: featureId veya id
+                const featureId = f.featureId || f.id;
+                select.name = `SelectedFeatureValues[${featureId}]`;
+
+                const opt0 = document.createElement("option");
+                opt0.value = "";
+                opt0.textContent = "Seçiniz";
+                select.appendChild(opt0);
+
+                (f.values || [])
+                    .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+                    .forEach(v => {
+                        const opt = document.createElement("option");
+
+                        // ✅ Toleranslı: valueId veya id
+                        const valueId = v.valueId || v.id;
+                        opt.value = valueId;
+
+                        const text = `${v.code ?? ""} - ${v.name ?? ""}`.trim();
+                        opt.textContent = text === "-" ? "Seçiniz" : text;
+
+                        select.appendChild(opt);
+                    });
+
+                wrapper.appendChild(label);
+                wrapper.appendChild(select);
+                featuresContainer.appendChild(wrapper);
+            });
+    }
+
+    async function loadFeaturesByProduct(productId) {
+        clearFeatures();
+        if (!productId) return;
+
+        const url = '@Url.Action("FeaturesByProduct", "SStockCode", new { area = "Admin" })'
+            + `?sProductId=${productId}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        renderFeatures(data);
+    }
+
     groupSelect.addEventListener("change", async function () {
+        clearFeatures();
+
         const groupId = this.value;
         const groupCode = getGroupCodeFromText();
 
-        // Ürünleri her durumda resetle
         resetSelect(productSelect, "Ürün yükleniyor...");
 
         // ✅ Akışkan sadece F için
         if (groupCode !== "F") {
-            // fluid disable
             fluidSelect.disabled = true;
             resetSelect(fluidSelect, "Bu grup için akışkan kullanılmaz");
 
-            // products: fluid'siz çağır
             if (!groupId) {
                 resetSelect(productSelect, "Önce ürün grubu seçiniz");
                 return;
@@ -111,6 +179,8 @@
                 productSelect.appendChild(opt);
             });
 
+            // ürün listesi dolduysa feature yüklemesini tetikle
+            productSelect.dispatchEvent(new Event("change"));
             return;
         }
 
@@ -138,6 +208,8 @@
     });
 
     fluidSelect.addEventListener("change", async function () {
+        clearFeatures();
+
         const groupId = groupSelect.value;
         const fluidId = this.value;
 
@@ -158,5 +230,20 @@
             opt.textContent = item.name;
             productSelect.appendChild(opt);
         });
+
+        // ürün listesi dolduysa feature yüklemesini tetikle
+        productSelect.dispatchEvent(new Event("change"));
+    });
+
+    productSelect.addEventListener("change", async function () {
+        const productId = this.value;
+        await loadFeaturesByProduct(productId);
+    });
+
+    // Sayfa reload olup product seçili gelirse feature'ları otomatik yükle
+    document.addEventListener("DOMContentLoaded", async function () {
+        if (productSelect && productSelect.value) {
+            await loadFeaturesByProduct(productSelect.value);
+        }
     });
 </script>

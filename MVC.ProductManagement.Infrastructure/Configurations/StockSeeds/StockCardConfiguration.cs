@@ -8,7 +8,7 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
     {
         public void Configure(EntityTypeBuilder<StockCard> builder)
         {
-            builder.ToTable("StockCards"); // ToTable sorunu yaşıyorsan kapalı kalsın
+            builder.ToTable("StockCards");
 
             builder.HasKey(x => x.Id);
 
@@ -27,15 +27,29 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
                    .HasMaxLength(500)
                    .IsRequired();
 
+            // ✅ NEW
+            builder.Property(x => x.OptionKey)
+                   .HasMaxLength(300)
+                   .IsRequired();
+
             builder.HasIndex(x => x.StockCode8)
                    .IsUnique();
 
-            // ✅ Asıl benzersizlik: aynı seçim tekrar açılmasın
+            // ❌ ESKİ UNIQUE (bunu kaldırıyoruz)
+            // builder.HasIndex(x => new
+            // {
+            //     x.FluidId,
+            //     x.SProductGroupId,
+            //     x.SProductId
+            // }).IsUnique();
+
+            // ✅ YENİ UNIQUE: aynı ürün + aynı feature seçiminde duplicate oluşmasın
             builder.HasIndex(x => new
             {
                 x.FluidId,
                 x.SProductGroupId,
-                x.SProductId
+                x.SProductId,
+                x.OptionKey
             }).IsUnique();
 
             builder.HasOne(x => x.Fluid)
@@ -64,6 +78,12 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
                    .WithMany(x => x.StockCards)
                    .HasForeignKey(x => x.StockSequenceId)
                    .OnDelete(DeleteBehavior.Restrict);
+
+            // ✅ NEW: FeatureSelections ilişkisi (StockCardFeatureSelection)
+            builder.HasMany(x => x.FeatureSelections)
+                   .WithOne(x => x.StockCard)
+                   .HasForeignKey(x => x.StockCardId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

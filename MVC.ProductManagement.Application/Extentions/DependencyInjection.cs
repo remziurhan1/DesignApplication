@@ -35,6 +35,9 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<ISStockCodeGroupHandler, SBStockCodeGroupHandler>();
 
             services.AddScoped<ISStockCodeGroupHandlerFactory, SStockCodeGroupHandlerFactory>();
+            services.AddScoped<
+    MVC.ProductManagement.Application.Services.StockCodes.S.Features.ISFeatureQueryService,
+    MVC.ProductManagement.Application.Services.StockCodes.S.Features.SFeatureQueryService>();
 
 
             return services;
