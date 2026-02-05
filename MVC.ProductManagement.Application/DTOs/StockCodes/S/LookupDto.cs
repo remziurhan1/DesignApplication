@@ -11,5 +11,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.S
         public Guid Id { get; set; }
         public string Code { get; set; } = default!;
         public string Name { get; set; } = default!;
+        public int? PrefixIndex { get; set; }
+
     }
 }

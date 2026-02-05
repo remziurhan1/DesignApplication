@@ -27,6 +27,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             CancellationToken cancellationToken = default);
 
         Task<IReadOnlyList<LookupDto>> GetAllFluidsAsync(CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<LookupDto>> GetProductsByIdsAsync(
+       List<Guid> productIds,
+       CancellationToken cancellationToken = default);
 
     }
 }

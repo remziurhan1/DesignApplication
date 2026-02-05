@@ -36,7 +36,19 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
             _stockCardRepo = stockCardRepo;
             _context = context;
         }
+        public async Task<IReadOnlyList<LookupDto>> GetProductsByIdsAsync(
+    List<Guid> productIds,
+    CancellationToken cancellationToken = default)
+        {
+            var products = await _productRepo.GetAllAsync(
+                x => productIds.Contains(x.Id),
+                tracking: false);
 
+            return products
+                .OrderBy(x => x.PrefixIndex)
+                .Select(x => new LookupDto { Id = x.Id, Code = x.Code, Name = x.Name })
+                .ToList();
+        }
         public async Task<IReadOnlyList<LookupDto>> GetAllFluidsAsync(CancellationToken cancellationToken = default)
         {
             var fluids = await _fluidRepo.GetAllAsync(tracking: false);
