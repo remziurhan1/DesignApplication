@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA
 {
@@ -7,6 +8,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA
         public Guid SProductId { get; set; }
 
         public List<SelectListItem> Products { get; set; } = new();
+        // ✅ YENİ: Feature seçimleri (Metrik + Boy)
+        // ✅ YENİ: Feature'lar (Metrik, Boy)
+        public IReadOnlyList<FeatureDto> Features { get; set; } = new List<FeatureDto>();
+
+        public Dictionary<Guid, Guid> SelectedFeatureValues { get; set; } = new();
 
         // Sonuç
         public string? StockCode8 { get; set; }

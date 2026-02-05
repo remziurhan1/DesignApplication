@@ -1,5 +1,6 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
     public interface IStockCodeSaService
     {
         Task<IReadOnlyList<LookupDto>> GetSaProductsAsync(CancellationToken cancellationToken = default);
+        // ✅ YENİ: Ürüne göre feature'ları getir
+        Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductAsync(
+            Guid productId,
+            CancellationToken cancellationToken = default);
 
         Task<SaStockCodeGenerateResultDto> GenerateSaAsync(
             SaStockCodeGenerateRequestDto request,

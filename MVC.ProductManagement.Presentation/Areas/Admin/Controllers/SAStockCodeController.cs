@@ -21,22 +21,59 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             var vm = new SAStockCodeGenerateVm();
             await FillLookups(vm);
+
+            // ✅ FEATURE'LARI YÜKLE
+            var products = await _saService.GetSaProductsAsync();
+            if (products != null && products.Any())
+            {
+                var firstProductId = products.First().Id;
+                vm.Features = await _saService.GetFeaturesByProductAsync(firstProductId);
+
+                // ✅ DEBUG
+                Console.WriteLine($"[SA GET] Products Count: {products.Count}");
+                Console.WriteLine($"[SA GET] Features Count: {vm.Features?.Count ?? 0}");
+            }
+
             return View(vm);
         }
 
         [HttpPost]
         public async Task<IActionResult> Generate(SAStockCodeGenerateVm vm)
         {
+            // ✅ DEBUG: Form'dan gelen veri
+            Console.WriteLine($"[SA POST] SProductId: {vm.SProductId}");
+            Console.WriteLine($"[SA POST] SelectedFeatureValues Count: {vm.SelectedFeatureValues?.Count ?? 0}");
+
+            if (vm.SelectedFeatureValues != null)
+            {
+                foreach (var kvp in vm.SelectedFeatureValues)
+                {
+                    Console.WriteLine($"[SA POST] Feature: {kvp.Key} => Value: {kvp.Value}");
+                }
+            }
+
             await FillLookups(vm);
+
+            // ✅ POST'ta da feature'ları yükle
+            var products = await _saService.GetSaProductsAsync();
+            if (products != null && products.Any())
+            {
+                var firstProductId = products.First().Id;
+                vm.Features = await _saService.GetFeaturesByProductAsync(firstProductId);
+            }
 
             try
             {
                 if (vm.SProductId == Guid.Empty)
                     throw new InvalidOperationException("Ürün seçiniz.");
 
+                if (vm.SelectedFeatureValues == null || !vm.SelectedFeatureValues.Any())
+                    throw new InvalidOperationException("Metrik ve Boy seçimlerini yapınız.");
+
                 var result = await _saService.GenerateSaAsync(new SaStockCodeGenerateRequestDto
                 {
-                    SProductId = vm.SProductId
+                    SProductId = vm.SProductId,
+                    SelectedFeatureValues = vm.SelectedFeatureValues
                 });
 
                 vm.StockCode8 = result.StockCode8;

@@ -68,28 +68,6 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
 
-            //// ==================== ORTAK SEED'LER ====================
-            //modelBuilder.ApplyConfiguration(new FluidSeed());
-            //modelBuilder.ApplyConfiguration(new SProductGroupSeed());
-
-            //// ==================== SA (Cıvatalar) SEED'LERİ ====================
-            //modelBuilder.ApplyConfiguration(new SAProductSeed());
-            //modelBuilder.ApplyConfiguration(new SASequenceSeed());
-
-            //// ==================== SB (Somunlar) SEED'LERİ ====================
-            //modelBuilder.ApplyConfiguration(new SBProductSeed());
-            //modelBuilder.ApplyConfiguration(new SBSequenceSeed());
-
-            //// ==================== SF (Aksesuarlar) SEED'LERİ ====================
-            //modelBuilder.ApplyConfiguration(new SFProductSeed());
-            //modelBuilder.ApplyConfiguration(new SFPrefixRuleSeed());
-            //modelBuilder.ApplyConfiguration(new SFSequenceSeed());
-
-            //// SF Features
-            //modelBuilder.ApplyConfiguration(new SFFeatureSeed());
-            //modelBuilder.ApplyConfiguration(new SFFeatureValueSeed());
-            //modelBuilder.ApplyConfiguration(new SFProductFeatureSeed());
-
 
 
         }
