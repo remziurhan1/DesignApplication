@@ -9,5 +9,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
     public class SaStockCodeGenerateRequestDto
     {
         public Guid SProductId { get; set; } // SAA0, SAB1, SAC2...
+        // ✅ YENİ: Feature seçimleri (Metrik + Boy)
+        public Dictionary<Guid, Guid> SelectedFeatureValues { get; set; } = new();
     }
 }

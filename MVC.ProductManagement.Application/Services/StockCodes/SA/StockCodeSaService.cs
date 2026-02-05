@@ -1,15 +1,12 @@
-﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
-using MVC.ProductManagement.Domain.Entities.StockCodes;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.SA
 {
@@ -53,28 +50,68 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 .ToList();
         }
 
+        public async Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductAsync(
+            Guid productId,
+            CancellationToken cancellationToken = default)
+        {
+            var features = await _context.Set<SProductFeature>()
+                .AsNoTracking()
+                .Include(pf => pf.SFeature)
+                    .ThenInclude(f => f.Values)
+                .Where(pf => pf.SProductId == productId)
+                .OrderBy(pf => pf.SFeature.SortOrder)
+                .Select(pf => new FeatureDto
+                {
+                    Id = pf.SFeatureId,
+                    Code = pf.SFeature.Code,
+                    Name = pf.SFeature.Name,
+                    IsRequired = pf.IsRequired,
+                    SortOrder = pf.SFeature.SortOrder,
+                    Values = pf.SFeature.Values
+                        .OrderBy(v => v.SortOrder)
+                        .Select(v => new FeatureValueDto
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name,
+                            SortOrder = v.SortOrder
+                        }).ToList()
+                })
+                .ToListAsync(cancellationToken);
+
+            return features;
+        }
+
         public async Task<SaStockCodeGenerateResultDto> GenerateSaAsync(
             SaStockCodeGenerateRequestDto request,
             CancellationToken cancellationToken = default)
         {
             var saGroupId = await GetSaGroupIdAsync();
 
-            // 1) Product'tan prefix al (SA prefix'i doğrudan product.Code)
+            // 1) Product'tan prefix al
             var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
             if (product == null)
                 throw new InvalidOperationException("SA ürünü bulunamadı.");
 
             var prefix4 = product.Code; // SAA0, SAB1...
 
-            // 2) Default fluid (SA akışkan seçmez, DB için zorunlu)
+            // 2) Default fluid
             var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
             var defaultFluid = allFluids.FirstOrDefault(x => x.Code == "A") ?? allFluids.First();
 
-            // 3) Duplicate kontrol
+            // ✅ 3) OptionKey oluştur (metrik + boy)
+            var optionKey = await BuildOptionKeyAsync(request.SelectedFeatureValues, cancellationToken);
+
+            // ✅ DEBUG (isteğe bağlı - çalıştığında silebilirsiniz)
+            Console.WriteLine($"[SA DEBUG] OptionKey: '{optionKey}'");
+            Console.WriteLine($"[SA DEBUG] Feature Count: {request.SelectedFeatureValues?.Count ?? 0}");
+
+            // ✅ 4) Duplicate kontrol (OptionKey dahil)
             var existing = await _stockCardRepo.GetAsync(x =>
                     x.FluidId == defaultFluid.Id &&
                     x.SProductGroupId == saGroupId &&
-                    x.SProductId == request.SProductId,
+                    x.SProductId == request.SProductId &&
+                    x.OptionKey == optionKey, // ✅ OptionKey'i de kontrol et
                 tracking: false);
 
             if (existing != null)
@@ -90,14 +127,19 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 };
             }
 
-            // 4) Lookup
+            // 5) Lookup
             var group = await _groupRepo.GetByIdAsync(saGroupId, tracking: false);
             if (group == null)
                 throw new InvalidOperationException("SA grubu bulunamadı.");
 
-            var description = $"{defaultFluid.Name} | {group.Name} | {product.Name}";
+            // ✅ 6) Feature açıklaması
+            var featureDescription = await BuildFeatureDescriptionAsync(request.SelectedFeatureValues, cancellationToken);
 
-            // 5) Transaction
+            var description = string.IsNullOrWhiteSpace(featureDescription)
+                ? $"{defaultFluid.Name} | {group.Name} | {product.Name}"
+                : $"{defaultFluid.Name} | {group.Name} | {product.Name} | {featureDescription}";
+
+            // 7) Transaction
             await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
 
             var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
@@ -123,7 +165,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 StockCode8 = $"{prefix4}{nextSerial:0000}",
                 Description = description,
                 StockSequenceId = seq.Id,
-                OptionKey = "LEGACY",
+                OptionKey = optionKey, // ✅ Artık LEGACY değil, gerçek optionKey
                 CreatedBy = "SYSTEM",
                 CreatedDate = DateTime.UtcNow,
                 Status = Domain.Enums.Status.Added
@@ -131,6 +173,24 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
 
             await _stockCardRepo.AddAsync(card);
             await _stockCardRepo.SaveChangeAsync();
+
+            // ✅ 8) Feature seçimlerini kaydet
+            if (request.SelectedFeatureValues != null && request.SelectedFeatureValues.Any())
+            {
+                var selections = request.SelectedFeatureValues.Select(kvp => new StockCardFeatureSelection
+                {
+                    Id = Guid.NewGuid(),
+                    StockCardId = card.Id,
+                    SFeatureId = kvp.Key,
+                    SFeatureValueId = kvp.Value,
+                    CreatedBy = "SYSTEM",
+                    CreatedDate = DateTime.UtcNow,
+                    Status = Domain.Enums.Status.Added
+                }).ToList();
+
+                _context.Set<StockCardFeatureSelection>().AddRange(selections);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
 
             await tx.CommitAsync(cancellationToken);
 
@@ -145,6 +205,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             };
         }
 
+        // ========== HELPER METHODS ==========
+
         private async Task<Guid> GetSaGroupIdAsync()
         {
             var groups = await _groupRepo.GetAllAsync(tracking: false);
@@ -152,6 +214,82 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             if (saGroup == null)
                 throw new InvalidOperationException("SA (A) grubu tanımlı değil.");
             return saGroup.Id;
+        }
+
+        private async Task<string> BuildOptionKeyAsync(
+            Dictionary<Guid, Guid> selectedFeatureValues,
+            CancellationToken cancellationToken)
+        {
+            if (selectedFeatureValues == null || !selectedFeatureValues.Any())
+                return string.Empty;
+
+            var featureIds = selectedFeatureValues.Keys.ToList();
+            var valueIds = selectedFeatureValues.Values.ToList();
+
+            var features = await _context.Set<SFeature>()
+                .AsNoTracking()
+                .Where(f => featureIds.Contains(f.Id))
+                .Select(f => new { f.Id, f.Code, f.SortOrder })
+                .ToListAsync(cancellationToken);
+
+            var values = await _context.Set<SFeatureValue>()
+                .AsNoTracking()
+                .Where(v => valueIds.Contains(v.Id))
+                .Select(v => new { v.Id, v.Code })
+                .ToListAsync(cancellationToken);
+
+            var parts = selectedFeatureValues
+                .Select(kvp =>
+                {
+                    var f = features.FirstOrDefault(x => x.Id == kvp.Key);
+                    var v = values.FirstOrDefault(x => x.Id == kvp.Value);
+                    if (f == null || v == null) return null;
+                    return new { f.SortOrder, f.Code, ValueCode = v.Code };
+                })
+                .Where(x => x != null)
+                .OrderBy(x => x.SortOrder)
+                .Select(x => $"{x.Code}={x.ValueCode}")
+                .ToList();
+
+            return string.Join("|", parts);
+        }
+
+        private async Task<string> BuildFeatureDescriptionAsync(
+            Dictionary<Guid, Guid> selectedFeatureValues,
+            CancellationToken cancellationToken)
+        {
+            if (selectedFeatureValues == null || !selectedFeatureValues.Any())
+                return string.Empty;
+
+            var featureIds = selectedFeatureValues.Keys.ToList();
+            var valueIds = selectedFeatureValues.Values.ToList();
+
+            var features = await _context.Set<SFeature>()
+                .AsNoTracking()
+                .Where(f => featureIds.Contains(f.Id))
+                .Select(f => new { f.Id, f.SortOrder })
+                .ToListAsync(cancellationToken);
+
+            var values = await _context.Set<SFeatureValue>()
+                .AsNoTracking()
+                .Where(v => valueIds.Contains(v.Id))
+                .Select(v => new { v.Id, v.Code })
+                .ToListAsync(cancellationToken);
+
+            var parts = selectedFeatureValues
+                .Select(kvp =>
+                {
+                    var f = features.FirstOrDefault(x => x.Id == kvp.Key);
+                    var v = values.FirstOrDefault(x => x.Id == kvp.Value);
+                    if (f == null || v == null) return null;
+                    return new { f.SortOrder, Text = v.Code };
+                })
+                .Where(x => x != null)
+                .OrderBy(x => x.SortOrder)
+                .Select(x => x.Text)
+                .ToList();
+
+            return string.Join(" | ", parts);
         }
     }
 }

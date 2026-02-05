@@ -28,24 +28,232 @@
         </div>
     }
 
-    <form asp-action="Generate" method="post">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label class="form-label">Ürün Seçiniz *</label>
-                    <select asp-for="SProductId" asp-items="Model.Products" class="form-select">
-                        <option value="">-- Ürün Seçiniz --</option>
-                    </select>
-                    <small class="text-muted">SA grubu için sadece ürün seçimi yeterlidir (akışkan seçimine gerek yok).</small>
-                </div>
+    <form id="saForm" asp-action="Generate" method="post">
+        <input type="hidden" name="SProductId" id="productId" />
+
+        <!-- ✅ ÜRÜN SEÇİMİ (0. adım) -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label class="form-label fw-bold text-primary">Ürün Seçiniz *</label>
+                <select id="productSelect" class="form-select form-select-lg" required>
+                    <option value="">-- Ürün Seçiniz --</option>
+                    @foreach (var item in Model.Products)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">
-            <i class="bi bi-gear"></i> Kod Üret
+        <hr />
+
+        <!-- ✅ FEATURE DROPDOWNS (Sıralı) -->
+        @if (Model.Features != null && Model.Features.Any())
+        {
+            <div class="row">
+                @{
+                    int stepNumber = 1;
+                }
+                @foreach (var feature in Model.Features.OrderBy(f => f.SortOrder))
+                {
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            <span class="badge bg-secondary">@stepNumber</span>
+                            @feature.Name @(feature.IsRequired ? "<span class=text-danger>*</span>" : "")
+                        </label>
+                        <select class="form-select feature-select"
+                                data-feature-id="@feature.Id"
+                                data-step="@stepNumber"
+                                required="@feature.IsRequired"
+                                disabled>
+                            <option value="">@(stepNumber == 1 ? "-- Önce ürün seçiniz --" : $"-- Önce {stepNumber - 1}. adımı tamamlayın --")</option>
+                            @foreach (var value in feature.Values.OrderBy(v => v.SortOrder))
+                            {
+                                <option value="@value.Id">@value.Name</option>
+                            }
+                        </select>
+                    </div>
+                    stepNumber++;
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                ⚠️ Özellik tanımları bulunamadı. Lütfen seed verilerini kontrol edin.
+            </div>
+        }
+
+        <div id="hiddenInputs"></div>
+
+        <hr />
+
+        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>
+            <i class="bi bi-gear-fill"></i> Kod Üret
         </button>
-        <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+        <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg">
             <i class="bi bi-arrow-left"></i> Geri
         </a>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        const productSelect = document.getElementById("productSelect");
+        const featureSelects = document.querySelectorAll(".feature-select");
+        const submitBtn = document.getElementById("submitBtn");
+        const saForm = document.getElementById("saForm");
+
+        // ========== Ürün seçilince ilk feature'ı aktif et ==========
+        productSelect.addEventListener("change", function () {
+            const productId = this.value;
+
+            // Tüm feature'ları sıfırla
+            featureSelects.forEach((select, index) => {
+                select.disabled = true;
+                select.value = "";
+                const step = index + 1;
+                select.options[0].text = step === 1
+                    ? "-- Önce ürün seçiniz --"
+                    : `-- Önce ${step - 1}. adımı tamamlayın --`;
+            });
+
+            submitBtn.disabled = true;
+
+            if (productId) {
+                // İlk feature'ı (Ürün Tipi) aktif et
+                const firstFeature = featureSelects[0];
+                if (firstFeature) {
+                    firstFeature.disabled = false;
+                    firstFeature.options[0].text = "-- Seçiniz --";
+                }
+            }
+        });
+
+        // ========== Feature seçilince bir sonrakini aktif et ==========
+        featureSelects.forEach((select, index) => {
+            select.addEventListener("change", function () {
+                const selectedValue = this.value;
+
+                // Sonraki tüm dropdown'ları sıfırla
+                for (let i = index + 1; i < featureSelects.length; i++) {
+                    featureSelects[i].disabled = true;
+                    featureSelects[i].value = "";
+                    const step = i + 1;
+                    featureSelects[i].options[0].text = `-- Önce ${step - 1}. adımı tamamlayın --`;
+                }
+
+                submitBtn.disabled = true;
+
+                // Eğer seçim yapıldıysa bir sonrakini aktif et
+                if (selectedValue) {
+                    const nextFeature = featureSelects[index + 1];
+                    if (nextFeature) {
+                        nextFeature.disabled = false;
+                        nextFeature.options[0].text = "-- Seçiniz --";
+                    } else {
+                        // Son feature seçildiyse submit'i aktif et
+                        checkFormCompletion();
+                    }
+                }
+            });
+        });
+
+        // ========== Form tamamlandı mı kontrol et ==========
+        function checkFormCompletion() {
+            const productId = productSelect.value;
+            if (!productId) {
+                submitBtn.disabled = true;
+                return;
+            }
+
+            let allSelected = true;
+            featureSelects.forEach(select => {
+                if (select.required && !select.value) {
+                    allSelected = false;
+                }
+            });
+
+            submitBtn.disabled = !allSelected;
+        }
+
+        // ========== Form submit ==========
+        saForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const productId = productSelect.value;
+            if (!productId) {
+                alert("Ürün seçiniz!");
+                return;
+            }
+
+            document.getElementById("productId").value = productId;
+
+            const hiddenContainer = document.getElementById("hiddenInputs");
+            hiddenContainer.innerHTML = "";
+
+            let index = 0;
+            let allValid = true;
+
+            featureSelects.forEach(select => {
+                const featureId = select.getAttribute("data-feature-id");
+                const valueId = select.value;
+
+                if (select.required && !valueId) {
+                    allValid = false;
+                    return;
+                }
+
+                if (valueId) {
+                    const keyInput = document.createElement("input");
+                    keyInput.type = "hidden";
+                    keyInput.name = `SelectedFeatureValues[${index}].Key`;
+                    keyInput.value = featureId;
+                    hiddenContainer.appendChild(keyInput);
+
+                    const valueInput = document.createElement("input");
+                    valueInput.type = "hidden";
+                    valueInput.name = `SelectedFeatureValues[${index}].Value`;
+                    valueInput.value = valueId;
+                    hiddenContainer.appendChild(valueInput);
+
+                    console.log(`[JS] Added: Key=${featureId}, Value=${valueId}`);
+                    index++;
+                }
+            });
+
+            if (!allValid) {
+                alert("Tüm zorunlu alanları doldurunuz!");
+                return;
+            }
+
+            this.submit();
+        });
+    </script>
+
+    <style>
+        /* ✅ Disabled dropdown'lar gri */
+        .feature-select:disabled {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* ✅ Aktif dropdown'lar yeşil kenarlık */
+        .feature-select:not(:disabled) {
+            border-color: #28a745;
+            border-width: 2px;
+        }
+
+        /* ✅ Seçilmiş dropdown'lar yeşil arka plan */
+        .feature-select:not(:disabled):valid:not([value=""]) {
+            background-color: #d4edda;
+        }
+
+        /* ✅ Buton disabled görünümü */
+        #submitBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+}
