@@ -11,6 +11,8 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.S
         public Guid FluidId { get; set; }          // LPG/LNG...
         public Guid SProductGroupId { get; set; }  // Tablo-5 (A..H,Z)
         public Guid SProductId { get; set; }       // Ürün (Küresel/Emniyet...)
+        public Dictionary<Guid, Guid> SelectedFeatureValues { get; set; } = new();
+
         public Guid PrefixRuleId { get; set; }
 
     }

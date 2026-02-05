@@ -17,10 +17,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.S
         // ✅ Group + Fluid seçilince: Product listesi
         Task<IReadOnlyList<LookupDto>> GetSProductsAsync(Guid sProductGroupId, Guid fluidId, CancellationToken cancellationToken = default);
 
-        // Asıl iş: kod üret / varsa getir
         Task<SStockCodeGenerateResultDto> GenerateSAsync(
-            SStockCodeGenerateRequestDto request,
-            CancellationToken cancellationToken = default);
+    SStockCodeGenerateRequestDto request,
+    CancellationToken cancellationToken = default);
+
 
         Task<IReadOnlyList<StockCardListItemDto>> ListSStockCardsAsync(
             int take = 200,

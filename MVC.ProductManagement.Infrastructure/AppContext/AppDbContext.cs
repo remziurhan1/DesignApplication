@@ -60,6 +60,10 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<Material>().HasData(MaterialSeed.Get());
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
+            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SFeatureSeed_SAll());
+            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SFeatureValueSeed_SAll());
+            //builder.ApplyConfiguration(new MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SProductFeatureSeed_SAll());
+
             SASeed.Seed(builder); // <-- bunu ekle
             SBSeed.Seed(builder); // <-- bunu ekle
 
