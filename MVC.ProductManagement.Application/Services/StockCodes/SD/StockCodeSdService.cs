@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SB;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SD;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
@@ -9,9 +9,9 @@ using MVC.ProductManagement.Infrastructure.DataAccess;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.SB
+namespace MVC.ProductManagement.Application.Services.StockCodes.SD
 {
-    public class StockCodeSbService : IStockCodeSbService
+    public class StockCodeSdService : IStockCodeSdService
     {
         private readonly ISProductRepositories _productRepo;
         private readonly IStockSequenceRepositories _sequenceRepo;
@@ -20,7 +20,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
         private readonly ISProductGroupRepositories _groupRepo;
         private readonly AppDbContext _context;
 
-        public StockCodeSbService(
+        public StockCodeSdService(
             ISProductRepositories productRepo,
             IStockSequenceRepositories sequenceRepo,
             IStockCardRepositories stockCardRepo,
@@ -37,14 +37,14 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
         }
 
         /// <summary>
-        /// Tüm SB ürünlerini getirir (SBA0, SBA1, SBA2...)
+        /// Tüm SD ürünlerini getirir (SDA0, SDB1, SDC2...)
         /// </summary>
-        public async Task<IReadOnlyList<LookupDto>> GetSbProductsAsync(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<LookupDto>> GetSdProductsAsync(CancellationToken cancellationToken = default)
         {
-            var sbGroupId = await GetSbGroupIdAsync();
+            var sdGroupId = await GetSdGroupIdAsync();
 
             var products = await _productRepo.GetAllAsync(
-                x => x.SProductGroupId == sbGroupId,
+                x => x.SProductGroupId == sdGroupId,
                 tracking: false);
 
             return products
@@ -90,20 +90,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
         }
 
         /// <summary>
-        /// SB stok kodu üretir (akışkan yok, feature'larla)
+        /// SD stok kodu üretir (akışkan yok, feature'larla)
         /// </summary>
-        public async Task<SbStockCodeGenerateResultDto> GenerateSbAsync(
-            SbStockCodeGenerateRequestDto request,
+        public async Task<SdStockCodeGenerateResultDto> GenerateSdAsync(
+            SdStockCodeGenerateRequestDto request,
             CancellationToken cancellationToken = default)
         {
-            var sbGroupId = await GetSbGroupIdAsync();
+            var sdGroupId = await GetSdGroupIdAsync();
 
             // 1) Ürün kontrolü
             var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
             if (product == null)
-                throw new InvalidOperationException("SB ürünü bulunamadı.");
+                throw new InvalidOperationException("SD ürünü bulunamadı.");
 
-            var prefix4 = product.Code; // SBA0, SBA1...
+            var prefix4 = product.Code; // SDA0, SDB1...
 
             // 2) ✅ Akışkan yok - Default kullan
             var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
@@ -115,20 +115,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
             var optionKey = await BuildOptionKeyAsync(request.SelectedFeatureValues, cancellationToken);
 
             // ✅ DEBUG (isteğe bağlı)
-            Console.WriteLine($"[SB DEBUG] OptionKey: '{optionKey}'");
-            Console.WriteLine($"[SB DEBUG] Feature Count: {request.SelectedFeatureValues?.Count ?? 0}");
+            Console.WriteLine($"[SD DEBUG] OptionKey: '{optionKey}'");
+            Console.WriteLine($"[SD DEBUG] Feature Count: {request.SelectedFeatureValues?.Count ?? 0}");
 
             // 4) ✅ Duplicate kontrol (ürün + optionKey)
             var existing = await _stockCardRepo.GetAsync(x =>
                     x.FluidId == defaultFluid.Id &&
-                    x.SProductGroupId == sbGroupId &&
+                    x.SProductGroupId == sdGroupId &&
                     x.SProductId == request.SProductId &&
                     x.OptionKey == optionKey,
                 tracking: false);
 
             if (existing != null)
             {
-                return new SbStockCodeGenerateResultDto
+                return new SdStockCodeGenerateResultDto
                 {
                     AlreadyExists = true,
                     StockCardId = existing.Id,
@@ -140,9 +140,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
             }
 
             // 5) Lookup
-            var group = await _groupRepo.GetByIdAsync(sbGroupId, tracking: false);
+            var group = await _groupRepo.GetByIdAsync(sdGroupId, tracking: false);
             if (group == null)
-                throw new InvalidOperationException("SB grubu bulunamadı.");
+                throw new InvalidOperationException("SD grubu bulunamadı.");
 
             // 6) ✅ Feature açıklaması
             var featureDescription = await BuildFeatureDescriptionAsync(request.SelectedFeatureValues, cancellationToken);
@@ -170,7 +170,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
             {
                 Id = Guid.NewGuid(),
                 FluidId = defaultFluid.Id,
-                SProductGroupId = sbGroupId,
+                SProductGroupId = sdGroupId,
                 SProductId = request.SProductId,
                 Prefix4 = prefix4,
                 Serial4 = nextSerial,
@@ -206,7 +206,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
 
             await tx.CommitAsync(cancellationToken);
 
-            return new SbStockCodeGenerateResultDto
+            return new SdStockCodeGenerateResultDto
             {
                 AlreadyExists = false,
                 StockCardId = card.Id,
@@ -219,13 +219,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
 
         // ========== HELPER METHODS ==========
 
-        private async Task<Guid> GetSbGroupIdAsync()
+        private async Task<Guid> GetSdGroupIdAsync()
         {
             var groups = await _groupRepo.GetAllAsync(tracking: false);
-            var sbGroup = groups.FirstOrDefault(x => x.Code == "B");
-            if (sbGroup == null)
-                throw new InvalidOperationException("SB (B) grubu tanımlı değil.");
-            return sbGroup.Id;
+            var sdGroup = groups.FirstOrDefault(x => x.Code == "D");
+            if (sdGroup == null)
+                throw new InvalidOperationException("SD (D) grubu tanımlı değil.");
+            return sdGroup.Id;
         }
 
         private async Task<string> BuildOptionKeyAsync(

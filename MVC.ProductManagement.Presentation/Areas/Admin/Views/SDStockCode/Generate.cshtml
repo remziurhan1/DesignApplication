@@ -1,11 +1,12 @@
-﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SB.SBStockCodeGenerateVm
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SD.SDStockCodeGenerateVm
 
 @{
-    ViewData["Title"] = "SB Stok Kodu Üret (Somunlar)";
+    ViewData["Title"] = "SD Stok Kodu Üret (Bağlantı Elemanları)";
 }
 
 <div class="container mt-4">
-    <h2>SB Stok Kodu Üret - Somunlar</h2>
+    <h2>SD Stok Kodu Üret - Bağlantı Elemanları</h2>
+    <p class="text-muted">Hidrolik, Pnömatik, Çelik, Alüminyum, Paslanmaz, Pirinç, PPR, PE, Polyemid, Galvaniz, Bronz</p>
     <hr />
 
     @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
@@ -28,16 +29,19 @@
         </div>
     }
 
-    <form id="sbForm" asp-action="Generate" method="post">
+    <form id="sdForm" asp-action="Generate" method="post">
         <input type="hidden" name="SProductId" id="productId" />
 
-        <!-- ✅ ÜRÜN SEÇİMİ (Tag Helper ile) -->
+        <!-- ✅ ÜRÜN SEÇİMİ -->
         <div class="row mb-3">
             <div class="col-md-12">
                 <label class="form-label fw-bold text-primary">Ürün Seçiniz *</label>
                 <select asp-for="SProductId" asp-items="Model.Products" id="productSelect" class="form-select form-select-lg" required>
                     <option value="">-- Ürün Seçiniz --</option>
                 </select>
+                <small class="form-text text-muted">
+                    41 farklı bağlantı elemanı türü mevcuttur (Hidrolik, Pnömatik, Çelik, Alüminyum, Paslanmaz, Pirinç, PPR/PE, Polyemid, Galvaniz, Bronz)
+                </small>
             </div>
         </div>
 
@@ -64,7 +68,7 @@
         const featuresContainer = document.getElementById("featuresContainer");
         const submitBtn = document.getElementById("submitBtn");
         const productIdInput = document.getElementById("productId");
-        const sbForm = document.getElementById("sbForm");
+        const sdForm = document.getElementById("sdForm");
 
         let featureSelects = [];
 
@@ -80,7 +84,7 @@
             if (!productId) return;
 
             try {
-                const resp = await fetch(`/Admin/SBStockCode/FeaturesByProduct?productId=${productId}`);
+                const resp = await fetch(`/Admin/SDStockCode/FeaturesByProduct?productId=${productId}`);
                 if (!resp.ok) throw new Error("İstek başarısız");
 
                 const features = await resp.json();
@@ -194,7 +198,7 @@
         }
 
         // ========== Form submit ==========
-        sbForm.addEventListener("submit", function (e) {
+        sdForm.addEventListener("submit", function (e) {
             e.preventDefault();
 
             const productId = productSelect.value;
@@ -278,6 +282,12 @@
         #submitBtn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        /* ✅ Ürün dropdown daha büyük */
+        #productSelect {
+            font-size: 1.1rem;
+            font-weight: 500;
         }
     </style>
 }

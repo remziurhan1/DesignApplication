@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SB;
 using MVC.ProductManagement.Application.Services.StockCodes.SB;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SB;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -29,18 +29,24 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             await FillLookups(vm);
 
+            // Feature'ları yükle (POST'ta validation hatası için)
+            if (vm.SProductId != Guid.Empty)
+            {
+                vm.Features = await _sbService.GetFeaturesByProductAsync(vm.SProductId);
+            }
+
             try
             {
-                if (vm.FluidId == Guid.Empty)
-                    throw new InvalidOperationException("Akışkan seçiniz.");
-
                 if (vm.SProductId == Guid.Empty)
                     throw new InvalidOperationException("Ürün seçiniz.");
 
+                if (vm.SelectedFeatureValues == null || !vm.SelectedFeatureValues.Any())
+                    throw new InvalidOperationException("Tüm özellikleri seçiniz.");
+
                 var result = await _sbService.GenerateSbAsync(new SbStockCodeGenerateRequestDto
                 {
-                    FluidId = vm.FluidId,
-                    SProductId = vm.SProductId
+                    SProductId = vm.SProductId,
+                    SelectedFeatureValues = vm.SelectedFeatureValues
                 });
 
                 vm.StockCode8 = result.StockCode8;
@@ -59,13 +65,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return View(vm);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> FeaturesByProduct(string productId)
+        {
+            if (!Guid.TryParse(productId, out var pid))
+                return BadRequest();
+
+            var features = await _sbService.GetFeaturesByProductAsync(pid);
+            return Json(features);
+        }
+
         private async Task FillLookups(SBStockCodeGenerateVm vm)
         {
-            var fluids = await _sbService.GetFluidsAsync();
-            vm.Fluids = fluids
-                .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
-                .ToList();
-
             var products = await _sbService.GetSbProductsAsync();
             vm.Products = products
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))

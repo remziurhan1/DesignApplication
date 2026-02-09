@@ -9,6 +9,8 @@ using MVC.ProductManagement.Application.Services.StockCodes.S;
 using MVC.ProductManagement.Application.Services.StockCodes.S.Features;
 using MVC.ProductManagement.Application.Services.StockCodes.SA;
 using MVC.ProductManagement.Application.Services.StockCodes.SB;
+using MVC.ProductManagement.Application.Services.StockCodes.SC;
+using MVC.ProductManagement.Application.Services.StockCodes.SD;
 using MVC.ProductManagement.Application.Services.StockCodes.SF;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
 using System;
@@ -30,11 +32,14 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStorageTypeService, StorageTypeService>();
             services.AddScoped<IStockCodeSaService, StockCodeSaService>();
             services.AddScoped<IStockCodeSbService, StockCodeSbService>();
+            services.AddScoped<IStockCodeScService, StockCodeScService>();
+            services.AddScoped<IStockCodeSdService, StockCodeSdService>();
             services.AddScoped<IStockCodeSfService, StockCodeSfService>();
             services.AddScoped<ISFeatureQueryService, SFeatureQueryService>();
             services.AddScoped<IStockCodeLookupService, StockCodeLookupService>();
          
             services.AddScoped<IStockCodeSbService, StockCodeSbService>();
+
             
             services.AddScoped<
     MVC.ProductManagement.Application.Services.StockCodes.S.Features.ISFeatureQueryService,

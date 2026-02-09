@@ -1,25 +1,26 @@
-﻿// Dosya: MVC.ProductManagement.Application/Services/StockCodes/SB/IStockCodeSbService.cs
-
-using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
+﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SB;
-using System.Threading;
-using System.Threading.Tasks;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.SB
 {
-    /// <summary>
-    /// SB (Somunlar) stok kodu üretimi.
-    /// Neden ayrı interface?
-    /// - Tek ekranda handler bu servisi çağıracak.
-    /// - İleride SB'ye özel "özellik entity'leri" (diş standardı, kaplama vb.) eklenince
-    ///   SB'nin Generate akışı bozulmadan genişletilecek.
-    /// </summary>
     public interface IStockCodeSbService
     {
-        Task<IReadOnlyList<LookupDto>> GetFluidsAsync(CancellationToken cancellationToken = default);
-
+        /// <summary>
+        /// Tüm SB ürünlerini getirir (SBA0, SBA1...)
+        /// </summary>
         Task<IReadOnlyList<LookupDto>> GetSbProductsAsync(CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Seçilen ürüne göre feature'ları getirir
+        /// </summary>
+        Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductAsync(
+            Guid productId,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// SB stok kodu üretir (akışkan yok, feature'larla)
+        /// </summary>
         Task<SbStockCodeGenerateResultDto> GenerateSbAsync(
             SbStockCodeGenerateRequestDto request,
             CancellationToken cancellationToken = default);

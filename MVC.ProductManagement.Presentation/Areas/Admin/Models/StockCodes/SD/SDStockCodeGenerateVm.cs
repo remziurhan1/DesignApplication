@@ -1,18 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 
-namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SB
+namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SD
 {
-    public class SBStockCodeGenerateVm
+    public class SDStockCodeGenerateVm
     {
         public Guid SProductId { get; set; }
-
         public List<SelectListItem> Products { get; set; } = new();
-
-        // ✅ Feature'lar (Somun Tipi, Mukavemet, Standart, Ölçü, Yüzey İşlemi)
         public IReadOnlyList<FeatureDto> Features { get; set; } = new List<FeatureDto>();
-
-        // ✅ Feature seçimleri
         public Dictionary<Guid, Guid> SelectedFeatureValues { get; set; } = new();
 
         // Sonuç
