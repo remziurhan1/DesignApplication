@@ -1,11 +1,11 @@
-﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SB.SBStockCodeGenerateVm
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SC.SCStockCodeGenerateVm
 
 @{
-    ViewData["Title"] = "SB Stok Kodu Üret (Somunlar)";
+    ViewData["Title"] = "SC Stok Kodu Üret (Rondelalar)";
 }
 
 <div class="container mt-4">
-    <h2>SB Stok Kodu Üret - Somunlar</h2>
+    <h2>SC Stok Kodu Üret - Rondelalar / Pullar</h2>
     <hr />
 
     @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
@@ -28,10 +28,10 @@
         </div>
     }
 
-    <form id="sbForm" asp-action="Generate" method="post">
+    <form id="scForm" asp-action="Generate" method="post">
         <input type="hidden" name="SProductId" id="productId" />
 
-        <!-- ✅ ÜRÜN SEÇİMİ (Tag Helper ile) -->
+        <!-- ✅ ÜRÜN SEÇİMİ -->
         <div class="row mb-3">
             <div class="col-md-12">
                 <label class="form-label fw-bold text-primary">Ürün Seçiniz *</label>
@@ -64,7 +64,7 @@
         const featuresContainer = document.getElementById("featuresContainer");
         const submitBtn = document.getElementById("submitBtn");
         const productIdInput = document.getElementById("productId");
-        const sbForm = document.getElementById("sbForm");
+        const scForm = document.getElementById("scForm");
 
         let featureSelects = [];
 
@@ -80,7 +80,7 @@
             if (!productId) return;
 
             try {
-                const resp = await fetch(`/Admin/SBStockCode/FeaturesByProduct?productId=${productId}`);
+                const resp = await fetch(`/Admin/SCStockCode/FeaturesByProduct?productId=${productId}`);
                 if (!resp.ok) throw new Error("İstek başarısız");
 
                 const features = await resp.json();
@@ -194,7 +194,7 @@
         }
 
         // ========== Form submit ==========
-        sbForm.addEventListener("submit", function (e) {
+        scForm.addEventListener("submit", function (e) {
             e.preventDefault();
 
             const productId = productSelect.value;
@@ -269,10 +269,10 @@
             border-width: 2px;
         }
 
-            /* ✅ Seçilmiş dropdown'lar yeşil arka plan */
-            .feature-select:not(:disabled):valid:not([value=""]) {
-                background-color: #d4edda;
-            }
+        /* ✅ Seçilmiş dropdown'lar yeşil arka plan */
+        .feature-select:not(:disabled):valid:not([value=""]) {
+            background-color: #d4edda;
+        }
 
         /* ✅ Buton disabled görünümü */
         #submitBtn:disabled {

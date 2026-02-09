@@ -1,6 +1,12 @@
-﻿namespace MVC.ProductManagement.Application.DTOs.StockCodes.SB
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MVC.ProductManagement.Application.DTOs.StockCodes.SC
 {
-    public class SbStockCodeGenerateResultDto
+    public class ScStockCodeGenerateResultDto
     {
         public bool AlreadyExists { get; set; }
         public Guid StockCardId { get; set; }

@@ -320,34 +320,58 @@
                 <a class="dropdown-item" asp-area="Admin" asp-controller="SBStockCode" asp-action="Generate">
                     <i class="bi bi-gear"></i> SB - Somunlar
                 </a>
+            </li><li>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="SCStockCode" asp-action="Generate">
+                    <i class="bi bi-gear"></i> SC - Rondelalar
+                </a>
             </li>
+            <li>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="SDStockCode" asp-action="Generate">
+                    <i class="bi bi-gear"></i> SD - Bağlantı Elemanları
+                </a>
+            </li>
+            
             <li>
                 <a class="dropdown-item" asp-area="Admin" asp-controller="SFStockCode" asp-action="Generate">
                     <i class="bi bi-gear"></i> SF - Aksesuarlar
                 </a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    Stok Kodu Üret
+            <li class="nav-item">
+                <a class="nav-link collapsed"
+                   data-bs-target="#stok-kodu-nav"
+                   data-bs-toggle="collapse"
+                   href="#">
+                    <i class="bi bi-gear"></i><span>Stok Kodu Üret</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul class="dropdown-menu">
+
+                <ul id="stok-kodu-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                        <a class="dropdown-item" asp-area="Admin" asp-controller="SAStockCode" asp-action="Generate">
-                            <i class="bi bi-gear"></i> SA - Cıvatalar
+                        <a asp-area="Admin" asp-controller="SAStockCode" asp-action="Generate">
+                            <i class="bi bi-circle"></i><span>SA - Cıvatalar</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" asp-area="Admin" asp-controller="SBStockCode" asp-action="Generate">
-                            <i class="bi bi-gear"></i> SB - Somunlar
+                        <a asp-area="Admin" asp-controller="SBStockCode" asp-action="Generate">
+                            <i class="bi bi-circle"></i><span>SB - Somunlar</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" asp-area="Admin" asp-controller="SFStockCode" asp-action="Generate">
-                            <i class="bi bi-gear"></i> SF - Aksesuarlar
+                        <a asp-area="Admin" asp-controller="SCStockCode" asp-action="Generate">
+                            <i class="bi bi-circle"></i><span>SC - Rondelalar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Admin" asp-controller="SDStockCode" asp-action="Generate">
+                            <i class="bi bi-circle"></i><span>SD - Bağlantı Elemanları</span>
+                        </a>
+                    </li><li>
+                        <a asp-area="Admin" asp-controller="SFStockCode" asp-action="Generate">
+                            <i class="bi bi-circle"></i><span>SF - Aksesuarlar</span>
                         </a>
                     </li>
                 </ul>
             </li>
+
 
         </ul>
 

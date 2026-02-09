@@ -59,7 +59,12 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label">
                             <span class="badge bg-secondary">@stepNumber</span>
-                            @feature.Name @(feature.IsRequired ? "<span class=text-danger>*</span>" : "")
+                            @feature.Name
+                            @if (feature.IsRequired)
+                            {
+                                <span class="text-danger">*</span>
+                            }
+
                         </label>
                         <select class="form-select feature-select"
                                 data-feature-id="@feature.Id"
