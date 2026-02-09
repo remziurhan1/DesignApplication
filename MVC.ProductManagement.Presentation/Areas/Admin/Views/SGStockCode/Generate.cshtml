@@ -1,14 +1,14 @@
-﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA.SAStockCodeGenerateVm
+﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SG.SGStockCodeGenerateVm
 
 @{
-    ViewData["Title"] = "SA Stok Kodu Üret (Cıvatalar)";
+    ViewData["Title"] = "SG Stok Kodu Üret (Gresorlar ve Pimler)";
 }
 
 <div class="container mt-4">
-    <h2>SA Stok Kodu Üret - Cıvatalar</h2>
+    <h2>SG Stok Kodu Üret - Gresorlar ve Pimler</h2>
     <p class="text-muted">
-        <i class="bi bi-gear-fill text-primary"></i>
-        Altı köşe, ince adım, metrik, imbus, trapez ve daha fazlası...
+        <i class="bi bi-circle-fill text-info"></i>
+        Gresorluk, Gupilya/Kopilya, Pim Silindirik, Pim Konik, Segmanlar, Perçin ve daha fazlası...
     </p>
     <hr />
 
@@ -41,7 +41,7 @@
         </div>
     }
 
-    <form id="saForm" asp-action="Generate" method="post">
+    <form id="sgForm" asp-action="Generate" method="post">
         <input type="hidden" name="SProductId" id="productId" />
 
         <!-- ✅ ÜRÜN SEÇİMİ -->
@@ -58,7 +58,7 @@
                         </select>
                         <small class="form-text text-muted">
                             <i class="bi bi-info-circle"></i>
-                            Cıvata tipi seçimi
+                            10 farklı gresor ve pim türü mevcuttur
                         </small>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
         const featuresCard = document.getElementById("featuresCard");
         const submitBtn = document.getElementById("submitBtn");
         const productIdInput = document.getElementById("productId");
-        const saForm = document.getElementById("saForm");
+        const sgForm = document.getElementById("sgForm");
 
         let featureSelects = [];
 
@@ -114,7 +114,7 @@
             if (!productId) return;
 
             try {
-                const resp = await fetch(`/Admin/SAStockCode/FeaturesByProduct?productId=${productId}`);
+                const resp = await fetch(`/Admin/SGStockCode/FeaturesByProduct?productId=${productId}`);
                 if (!resp.ok) throw new Error("İstek başarısız");
 
                 const features = await resp.json();
@@ -236,7 +236,7 @@
         }
 
         // ========== Form submit ==========
-        saForm.addEventListener("submit", function (e) {
+        sgForm.addEventListener("submit", function (e) {
             e.preventDefault();
 
             const productId = productSelect.value;
@@ -275,7 +275,7 @@
                     valueInput.value = valueId;
                     hiddenContainer.appendChild(valueInput);
 
-                    console.log(`[SA JS] Added: Key=${featureId}, Value=${valueId}`);
+                    console.log(`[SG JS] Added: Key=${featureId}, Value=${valueId}`);
                     index++;
                 }
             });
@@ -338,10 +338,10 @@
             transition: all 0.3s ease;
         }
 
-            .card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-            }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
 
         /* ✅ Alert animasyonu */
         .alert {
@@ -349,18 +349,14 @@
         }
 
         @@keyframes slideDown {
-            from
-
-        {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 }
