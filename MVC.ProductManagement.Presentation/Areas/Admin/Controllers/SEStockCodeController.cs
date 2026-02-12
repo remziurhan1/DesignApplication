@@ -1,38 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
-using MVC.ProductManagement.Application.Services.StockCodes.SA;
-using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SE;
+using MVC.ProductManagement.Application.Services.StockCodes.SE;
+using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SE;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class SAStockCodeController : Controller
+    public class SEStockCodeController : Controller
     {
-        private readonly IStockCodeSaService _saService;
+        private readonly IStockCodeSeService _seService;
 
-        public SAStockCodeController(IStockCodeSaService saService)
+        public SEStockCodeController(IStockCodeSeService seService)
         {
-            _saService = saService;
+            _seService = seService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Generate()
         {
-            var vm = new SAStockCodeGenerateVm();
+            var vm = new SEStockCodeGenerateVm();
             await FillLookups(vm);
             return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Generate(SAStockCodeGenerateVm vm)
+        public async Task<IActionResult> Generate(SEStockCodeGenerateVm vm)
         {
             await FillLookups(vm);
 
             // Feature'ları yükle (POST'ta validation hatası için)
             if (vm.SProductId != Guid.Empty)
             {
-                vm.Features = await _saService.GetFeaturesByProductAsync(vm.SProductId);
+                vm.Features = await _seService.GetFeaturesByProductAsync(vm.SProductId);
             }
 
             try
@@ -43,7 +43,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 if (vm.SelectedFeatureValues == null || !vm.SelectedFeatureValues.Any())
                     throw new InvalidOperationException("Tüm özellikleri seçiniz.");
 
-                var result = await _saService.GenerateSaAsync(new SaStockCodeGenerateRequestDto
+                var result = await _seService.GenerateSeAsync(new SeStockCodeGenerateRequestDto
                 {
                     SProductId = vm.SProductId,
                     SelectedFeatureValues = vm.SelectedFeatureValues
@@ -65,27 +65,19 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return View(vm);
         }
 
-        // ✅ AJAX için feature'ları getiren action
         [HttpGet]
         public async Task<IActionResult> FeaturesByProduct(string productId)
         {
             if (!Guid.TryParse(productId, out var pid))
-                return BadRequest("Geçersiz ürün ID");
+                return BadRequest();
 
-            try
-            {
-                var features = await _saService.GetFeaturesByProductAsync(pid);
-                return Json(features);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
+            var features = await _seService.GetFeaturesByProductAsync(pid);
+            return Json(features);
         }
 
-        private async Task FillLookups(SAStockCodeGenerateVm vm)
+        private async Task FillLookups(SEStockCodeGenerateVm vm)
         {
-            var products = await _saService.GetSaProductsAsync();
+            var products = await _seService.GetSeProductsAsync();
             vm.Products = products
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToList();
