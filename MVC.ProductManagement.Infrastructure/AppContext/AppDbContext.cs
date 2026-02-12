@@ -13,8 +13,7 @@ using MVC.ProductManagement.Infrastructure.Seeds;
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA;
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SB;
-using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF.Features;
-using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF.SFFeatureSeed;
+
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF;
 using System;
 using System.Collections.Generic;

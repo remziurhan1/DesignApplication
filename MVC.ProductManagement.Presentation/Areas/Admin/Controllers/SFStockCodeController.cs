@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
-using MVC.ProductManagement.Application.Services.StockCodes.SF;
-using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SF;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.ProductManagement.Application.DTOs.StockCodes.S;
+using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
+using MVC.ProductManagement.Application.Services.StockCodes.SF;
+using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Infrastructure.DataAccess;
+using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SF;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -11,10 +13,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
     public class SFStockCodeController : Controller
     {
         private readonly IStockCodeSfService _sfService;
+        private readonly AppDbContext _context;
 
-        public SFStockCodeController(IStockCodeSfService sfService)
+        public SFStockCodeController(IStockCodeSfService sfService, AppDbContext context)
         {
             _sfService = sfService;
+            _context = context;
         }
 
         [HttpGet]
@@ -32,18 +36,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             try
             {
-                if (vm.FluidId == Guid.Empty)
-                    throw new InvalidOperationException("Akışkan seçiniz.");
-
                 if (vm.SProductId == Guid.Empty)
                     throw new InvalidOperationException("Ürün seçiniz.");
 
                 if (vm.SelectedFeatureValues == null || !vm.SelectedFeatureValues.Any())
-                    throw new InvalidOperationException("PN/DN seçimlerini yapınız.");
+                    throw new InvalidOperationException("Tüm özellikleri seçiniz.");
 
                 var result = await _sfService.GenerateSfAsync(new SfStockCodeGenerateRequestDto
                 {
-                    FluidId = vm.FluidId,
                     SProductId = vm.SProductId,
                     SelectedFeatureValues = vm.SelectedFeatureValues
                 });
@@ -64,38 +64,61 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return View(vm);
         }
 
-        // ========== AJAX ENDPOINTS ==========
-
-        [HttpGet]
-        public async Task<IActionResult> ProductsByFluid(string fluidId)
-        {
-            if (!Guid.TryParse(fluidId, out var fid))
-                return BadRequest();
-
-            var products = await _sfService.GetSfProductsAsync(fid);
-            return Json(products.Select(x => new { x.Id, x.Code, x.Name }));
-        }
-
+        // ✅ AJAX ENDPOINT (EKLENMEZSE FEATURE'LAR GELMEZ!)
         [HttpGet]
         public async Task<IActionResult> FeaturesByProduct(string productId)
         {
             if (!Guid.TryParse(productId, out var pid))
-                return BadRequest();
+                return BadRequest(new { error = "Geçersiz ürün ID" });
 
-            var features = await _sfService.GetFeaturesByProductAsync(pid);
-            return Json(features);
+            try
+            {
+                var features = await GetFeaturesByProductIdAsync(pid);
+                return Json(features);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
         }
-
-        // ========== PRIVATE METHODS ==========
 
         private async Task FillLookups(SFStockCodeGenerateVm vm)
         {
-            var fluids = await _sfService.GetFluidsAsync();
-            vm.Fluids = fluids
+            var products = await _sfService.GetSfProductsAsync();
+            vm.Products = products
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToList();
+        }
 
-            vm.Products = new List<SelectListItem>();
+        // ✅ Feature'ları DB'den çek (AJAX için)
+        private async Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductIdAsync(Guid productId)
+        {
+            var features = await _context.Set<Domain.Entities.StockCodes.Features.SProductFeature>()
+                .AsNoTracking()
+                .Include(pf => pf.SFeature)
+                    .ThenInclude(f => f.Values)
+                .Where(pf => pf.SProductId == productId)
+                .OrderBy(pf => pf.SFeature.SortOrder)
+                .Select(pf => new FeatureDto
+                {
+                    Id = pf.SFeatureId,
+                    Code = pf.SFeature.Code,
+                    Name = pf.SFeature.Name,
+                    IsRequired = pf.IsRequired,
+                    SortOrder = pf.SFeature.SortOrder,
+                    Values = pf.SFeature.Values
+                        .OrderBy(v => v.SortOrder)
+                        .Select(v => new FeatureValueDto
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name,
+                            SortOrder = v.SortOrder
+                        }).ToList()
+                })
+                .ToListAsync();
+
+            return features;
         }
     }
 }

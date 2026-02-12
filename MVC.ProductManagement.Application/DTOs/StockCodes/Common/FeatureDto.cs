@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVC.ProductManagement.Application.DTOs.StockCodes.SF
+namespace MVC.ProductManagement.Application.DTOs.StockCodes.Common
 {
     // <summary>
     /// Feature bilgisi (PN, DN, SURFACE)

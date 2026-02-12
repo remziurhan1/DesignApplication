@@ -1,6 +1,5 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SE;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SC
 {
