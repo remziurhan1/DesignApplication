@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVC.ProductManagement.Application.DTOs.StockCodes.SF
+namespace MVC.ProductManagement.Application.DTOs.StockCodes.Common
 { /// <summary>
   /// Feature değeri (PN40, DN50, RF)
   /// </summary>

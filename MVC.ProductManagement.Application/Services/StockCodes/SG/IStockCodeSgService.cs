@@ -1,6 +1,5 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SG;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.SG
 {
