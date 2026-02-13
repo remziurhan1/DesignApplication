@@ -16,6 +16,41 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             _saService = saService;
         }
 
+        /// <summary>
+        /// ✅ Liste sayfası
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Index(SAStockCardFilterDto filter)
+        {
+            var result = await _saService.GetStockCardsAsync(filter, CancellationToken.None);
+
+            // Ürün dropdown için
+            var products = await _saService.GetSaProductsAsync();
+            ViewBag.Products = products
+                .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
+                .ToList();
+
+            return View(result);
+        }
+
+        /// <summary>
+        /// ✅ Detay sayfası
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Detail(Guid id)
+        {
+            try
+            {
+                var detail = await _saService.GetStockCardDetailAsync(id, CancellationToken.None);
+                return View(detail);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> Generate()
         {
@@ -28,12 +63,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Generate(SAStockCodeGenerateVm vm)
         {
             await FillLookups(vm);
-
-            // Feature'ları yükle (POST'ta validation hatası için)
-            if (vm.SProductId != Guid.Empty)
-            {
-                vm.Features = await _saService.GetFeaturesByProductAsync(vm.SProductId);
-            }
 
             try
             {
@@ -65,17 +94,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return View(vm);
         }
 
-        // ✅ AJAX için feature'ları getiren action
+        /// <summary>
+        /// ✅ YENİ: Rule-based form data (sabit değerler + dropdown'lar + bağımlılıklar)
+        /// </summary>
         [HttpGet]
-        public async Task<IActionResult> FeaturesByProduct(string productId)
+        public async Task<IActionResult> GetFormData(Guid productId)
         {
-            if (!Guid.TryParse(productId, out var pid))
-                return BadRequest("Geçersiz ürün ID");
-
             try
             {
-                var features = await _saService.GetFeaturesByProductAsync(pid);
-                return Json(features);
+                var formData = await _saService.GetFormDataAsync(productId, CancellationToken.None);
+                return Json(formData);
             }
             catch (Exception ex)
             {

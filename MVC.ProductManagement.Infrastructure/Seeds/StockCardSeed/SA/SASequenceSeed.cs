@@ -36,7 +36,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA
                 {
                     Id = SeedId.From($"StockSequence:{prefix}"),
                     Prefix4 = prefix,
-                    LastNumber = 999, // 1000'den başlasın
+                    LastNumber = -1, // 0000'den başlasın
                     CreatedBy = "SEED",
                     CreatedDate = now,
                     Status = Domain.Enums.Status.Added

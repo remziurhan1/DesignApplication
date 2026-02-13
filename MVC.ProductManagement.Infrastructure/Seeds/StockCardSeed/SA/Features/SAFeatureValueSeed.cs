@@ -4,12 +4,12 @@ using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
 {
+    /// <summary>
+    /// ✅ ESKİ SİSTEME UYGUN: PRODUCT_TYPE, HEAD_TYPE dahil, METRIC kullanılıyor
+    /// </summary>
     public class SAFeatureValueSeed : IEntityTypeConfiguration<SFeatureValue>
     {
         public void Configure(EntityTypeBuilder<SFeatureValue> builder)
@@ -29,7 +29,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             var values = new List<SFeatureValue>();
 
             // ========== 1. ÜRÜN TİPİ ==========
-            var productTypes = new[] { "Cıvata", "Somun", "Pul", "Rondela", "Perçin" };
+            var productTypes = new[] { "CIVATA", "SOMUN", "PUL", "RONDELA", "PERCIN" };
             for (int i = 0; i < productTypes.Length; i++)
             {
                 values.Add(new SFeatureValue
@@ -46,15 +46,24 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 2. MALZEME ==========
-            var materials = new[] { "Karbon Çelik", "Paslanmaz Çelik", "Pirinç", "Alüminyum", "Titanyum" };
+            var materials = new[]
+            {
+                ("KARBON", "Karbon Çelik"),
+                ("304", "Paslanmaz Çelik 304"),
+                ("316", "Paslanmaz Çelik 316"),
+                ("316L", "Paslanmaz Çelik 316L"),
+                ("ALAŞIMLI", "Alaşımlı Çelik"),
+                ("PIRINÇ", "Pirinç"),
+                ("ALÜMINYUM", "Alüminyum")
+            };
             for (int i = 0; i < materials.Length; i++)
             {
                 values.Add(new SFeatureValue
                 {
-                    Id = SeedId.From($"SFeatureValue:MATERIAL:{materials[i]}"),
+                    Id = SeedId.From($"SFeatureValue:MATERIAL:{materials[i].Item1}"),
                     SFeatureId = materialId,
-                    Code = materials[i],
-                    Name = materials[i],
+                    Code = materials[i].Item1,
+                    Name = materials[i].Item2,
                     SortOrder = i,
                     CreatedBy = "SEED",
                     CreatedDate = now,
@@ -63,15 +72,23 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 3. BAŞ TİPİ ==========
-            var headTypes = new[] { "Altıgen Başlı", "Havşa Başlı", "Yuvarlak Başlı", "Silindirik Başlı", "Buton Başlı" };
+            var headTypes = new[]
+            {
+                ("AKB", "Altıgen Başlı"),
+                ("SB", "Silindirik Başlı"),
+                ("HB", "Havşa Başlı"),
+                ("MB", "Mantar Başlı"),
+                ("KB", "Kelebek Başlı"),
+                ("YB", "Yuvarlak Başlı")
+            };
             for (int i = 0; i < headTypes.Length; i++)
             {
                 values.Add(new SFeatureValue
                 {
-                    Id = SeedId.From($"SFeatureValue:HEAD_TYPE:{headTypes[i]}"),
+                    Id = SeedId.From($"SFeatureValue:HEAD_TYPE:{headTypes[i].Item1}"),
                     SFeatureId = headTypeId,
-                    Code = headTypes[i],
-                    Name = headTypes[i],
+                    Code = headTypes[i].Item1,
+                    Name = headTypes[i].Item2,
                     SortOrder = i,
                     CreatedBy = "SEED",
                     CreatedDate = now,
@@ -80,15 +97,21 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 4. DİŞ SİSTEMİ ==========
-            var threadSystems = new[] { "Metrik Tam Dişli", "Metrik Kısmi Dişli", "UNC", "UNF", "BSW" };
+            var threadSystems = new[]
+            {
+                ("METRIK", "Metrik"),
+                ("UNC", "UNC"),
+                ("UNF", "UNF"),
+                ("BSW", "BSW")
+            };
             for (int i = 0; i < threadSystems.Length; i++)
             {
                 values.Add(new SFeatureValue
                 {
-                    Id = SeedId.From($"SFeatureValue:THREAD_SYSTEM:{threadSystems[i]}"),
+                    Id = SeedId.From($"SFeatureValue:THREAD_SYSTEM:{threadSystems[i].Item1}"),
                     SFeatureId = threadSystemId,
-                    Code = threadSystems[i],
-                    Name = threadSystems[i],
+                    Code = threadSystems[i].Item1,
+                    Name = threadSystems[i].Item2,
                     SortOrder = i,
                     CreatedBy = "SEED",
                     CreatedDate = now,
@@ -97,7 +120,11 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 5. STANDART ==========
-            var standards = new[] { "DIN 933", "DIN 931", "ISO 4017", "ISO 4014", "DIN 912", "DIN 7991" };
+            var standards = new[]
+            {
+                "DIN 931", "DIN 933", "ISO 4014", "ISO 4017",
+                "DIN 912", "DIN 7991", "ASTM A193", "ASTM A320"
+            };
             for (int i = 0; i < standards.Length; i++)
             {
                 values.Add(new SFeatureValue
@@ -113,8 +140,13 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
                 });
             }
 
-            // ========== 6. METRİK ==========
-            var metrics = new[] { "M3", "M4", "M5", "M6", "M8", "M10", "M12", "M14", "M16", "M18", "M20", "M22", "M24", "M27", "M30" };
+            // ========== 6. METRİK (ÇAP) ==========
+            var metrics = new[]
+            {
+                "M3", "M4", "M5", "M6", "M8", "M10", "M12", "M14", "M16", "M18", "M20",
+                "M22", "M24", "M27", "M30", "M33", "M36",
+                "1/4", "5/16", "3/8", "1/2", "5/8", "3/4", "7/8", "1"
+            };
             for (int i = 0; i < metrics.Length; i++)
             {
                 values.Add(new SFeatureValue
@@ -131,14 +163,18 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 7. BOY ==========
-            var lengths = new[] { 10, 12, 16, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 120, 150, 200 };
+            var lengths = new[]
+            {
+                10, 12, 16, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100,
+                120, 150, 200, 250, 300
+            };
             for (int i = 0; i < lengths.Length; i++)
             {
                 values.Add(new SFeatureValue
                 {
                     Id = SeedId.From($"SFeatureValue:LENGTH:{lengths[i]}"),
                     SFeatureId = lengthId,
-                    Code = $"{lengths[i]}mm",
+                    Code = $"{lengths[i]}",
                     Name = $"{lengths[i]} mm",
                     SortOrder = i,
                     CreatedBy = "SEED",
@@ -148,7 +184,11 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 8. MUKAVEMET SINIFI ==========
-            var strengths = new[] { "4.6", "4.8", "5.6", "5.8", "8.8", "10.9", "12.9" };
+            var strengths = new[]
+            {
+                "4.6", "4.8", "5.6", "5.8", "8.8", "10.9", "12.9",
+                "A2-70", "A4-80", "B7", "L7"
+            };
             for (int i = 0; i < strengths.Length; i++)
             {
                 values.Add(new SFeatureValue
@@ -156,7 +196,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
                     Id = SeedId.From($"SFeatureValue:STRENGTH:{strengths[i]}"),
                     SFeatureId = strengthId,
                     Code = strengths[i],
-                    Name = strengths[i] + " kalite",
+                    Name = strengths[i],
                     SortOrder = i,
                     CreatedBy = "SEED",
                     CreatedDate = now,
@@ -165,15 +205,24 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 9. YÜZEY KAPLAMA ==========
-            var coatings = new[] { "Siyah Oksit", "Çinko Kaplama", "Paslanmaz", "Kadmiyum", "Teflon", "Nikel Kaplama" };
+            var coatings = new[]
+            {
+                ("SIYAH OKSIT", "Siyah Oksit"),
+                ("CINKO", "Çinko Kaplama"),
+                ("GEOMET", "Geomet"),
+                ("HDG", "Sıcak Daldırma Galvaniz"),
+                ("PTFE", "PTFE"),
+                ("KADMIYUM", "Kadmiyum"),
+                ("-", "Kaplamasız")
+            };
             for (int i = 0; i < coatings.Length; i++)
             {
                 values.Add(new SFeatureValue
                 {
-                    Id = SeedId.From($"SFeatureValue:COATING:{coatings[i]}"),
+                    Id = SeedId.From($"SFeatureValue:COATING:{coatings[i].Item1}"),
                     SFeatureId = coatingId,
-                    Code = coatings[i],
-                    Name = coatings[i],
+                    Code = coatings[i].Item1,
+                    Name = coatings[i].Item2,
                     SortOrder = i,
                     CreatedBy = "SEED",
                     CreatedDate = now,

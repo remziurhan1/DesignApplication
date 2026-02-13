@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        <!-- ✅ FEATURE DROPDOWNS (Dinamik) -->
+        <!-- ✅ FEATURE DROPDOWNS (Rule-Based) -->
         <div class="card mb-4 shadow-sm" id="featuresCard" style="display:none;">
             <div class="card-header bg-success text-white">
                 <i class="bi bi-sliders"></i> <strong>2. Ürün Özellikleri</strong>
@@ -99,82 +99,36 @@
         const productIdInput = document.getElementById("productId");
         const saForm = document.getElementById("saForm");
 
-        let featureSelects = [];
+        let formData = null;
+        let selectedValues = {}; // { featureId: valueId }
 
-        // ========== Ürün değişince feature'ları yükle ==========
+        // ========== Ürün değişince form data yükle ==========
         productSelect.addEventListener("change", async function () {
             const productId = productSelect.value;
 
             // Temizle
             featuresContainer.innerHTML = "";
-            featureSelects = [];
+            formData = null;
+            selectedValues = {};
             submitBtn.disabled = true;
             featuresCard.style.display = "none";
 
             if (!productId) return;
 
             try {
-                const resp = await fetch(`/Admin/SAStockCode/FeaturesByProduct?productId=${productId}`);
+                const resp = await fetch(`/Admin/SAStockCode/GetFormData?productId=${productId}`);
                 if (!resp.ok) throw new Error("İstek başarısız");
 
-                const features = await resp.json();
+                formData = await resp.json();
 
-                if (!features || features.length === 0) {
+                if (!formData || !formData.features || formData.features.length === 0) {
                     featuresContainer.innerHTML = '<div class="col-12"><div class="alert alert-info"><i class="bi bi-info-circle"></i> Bu ürün için özellik tanımı bulunmuyor.</div></div>';
                     featuresCard.style.display = "block";
                     return;
                 }
 
-                features.sort((a, b) => a.sortOrder - b.sortOrder);
-
                 featuresCard.style.display = "block";
-
-                let stepNumber = 1;
-                features.forEach((feature, index) => {
-                    const colDiv = document.createElement("div");
-                    colDiv.className = "col-md-6 col-lg-4 mb-3";
-
-                    const label = document.createElement("label");
-                    label.className = "form-label fw-bold";
-                    label.innerHTML = `<span class="badge bg-secondary me-1">${stepNumber}</span> ${feature.name}${feature.isRequired ? ' <span class="text-danger">*</span>' : ''}`;
-
-                    const select = document.createElement("select");
-                    select.className = "form-select feature-select";
-                    select.setAttribute("data-feature-id", feature.id);
-                    select.setAttribute("data-feature-code", feature.code);
-                    select.setAttribute("data-step", stepNumber);
-                    select.required = feature.isRequired;
-
-                    // İlk dropdown dışında hepsi disabled
-                    if (index > 0) {
-                        select.disabled = true;
-                    }
-
-                    const defaultOption = document.createElement("option");
-                    defaultOption.value = "";
-                    defaultOption.textContent = index === 0
-                        ? "-- Seçiniz --"
-                        : `-- Önce ${stepNumber - 1}. adımı tamamlayın --`;
-                    select.appendChild(defaultOption);
-
-                    feature.values.forEach(value => {
-                        const option = document.createElement("option");
-                        option.value = value.id;
-                        option.setAttribute("data-value-code", value.code);
-                        option.textContent = value.name;
-                        select.appendChild(option);
-                    });
-
-                    colDiv.appendChild(label);
-                    colDiv.appendChild(select);
-                    featuresContainer.appendChild(colDiv);
-
-                    featureSelects.push(select);
-                    stepNumber++;
-                });
-
-                // Event listener'ları ekle
-                attachFeatureListeners();
+                renderFeatures();
 
             } catch (err) {
                 featuresContainer.innerHTML = `<div class="col-12"><div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Hata: ${err.message}</div></div>`;
@@ -182,55 +136,103 @@
             }
         });
 
-        // ========== Feature seçim event'lerini bağla ==========
-        function attachFeatureListeners() {
-            featureSelects.forEach((select, index) => {
-                select.addEventListener("change", function () {
-                    const selectedValue = this.value;
+        // ========== Feature'ları render et ==========
+        function renderFeatures() {
+            featuresContainer.innerHTML = "";
 
-                    // Sonraki tüm dropdown'ları sıfırla
-                    for (let i = index + 1; i < featureSelects.length; i++) {
-                        featureSelects[i].disabled = true;
-                        featureSelects[i].value = "";
-                        const step = parseInt(featureSelects[i].getAttribute("data-step"));
-                        featureSelects[i].options[0].text = `-- Önce ${step - 1}. adımı tamamlayın --`;
-                        featureSelects[i].classList.remove("is-valid");
-                    }
+            formData.features.forEach((feature, index) => {
+                const colDiv = document.createElement("div");
+                colDiv.className = "col-md-6 col-lg-4 mb-3";
 
-                    submitBtn.disabled = true;
+                const label = document.createElement("label");
+                label.className = "form-label fw-bold";
 
-                    // Eğer seçim yapıldıysa bir sonrakini aktif et
-                    if (selectedValue) {
-                        this.classList.add("is-valid");
-                        const nextFeature = featureSelects[index + 1];
-                        if (nextFeature) {
-                            nextFeature.disabled = false;
-                            nextFeature.options[0].text = "-- Seçiniz --";
-                        } else {
-                            // Son feature seçildiyse submit'i aktif et
-                            checkFormCompletion();
-                        }
-                    } else {
-                        this.classList.remove("is-valid");
-                    }
-                });
+                // ✅ SABİT FEATURE: Yeşil badge + info icon
+                if (feature.isFixed) {
+                    label.innerHTML = `
+                        <span class="badge bg-success me-1">
+                            <i class="bi bi-lock-fill"></i> Sabit
+                        </span>
+                        ${feature.featureName}
+                    `;
+                } else {
+                    label.innerHTML = `
+                        <span class="badge bg-secondary me-1">${index + 1}</span>
+                        ${feature.featureName} <span class="text-danger">*</span>
+                    `;
+                }
+
+                colDiv.appendChild(label);
+
+                // ✅ SABİT FEATURE: Disabled input göster
+                if (feature.isFixed) {
+                    const fixedInput = document.createElement("input");
+                    fixedInput.type = "text";
+                    fixedInput.className = "form-control bg-light";
+                    fixedInput.value = `${feature.fixedValueCode} - ${feature.fixedValueName}`;
+                    fixedInput.disabled = true;
+                    colDiv.appendChild(fixedInput);
+
+                    // Otomatik seç
+                    selectedValues[feature.featureId] = feature.fixedValueId;
+                } else {
+                    // ✅ DROPDOWN: İzinli değerler
+                    const select = document.createElement("select");
+                    select.className = "form-select feature-select";
+                    select.setAttribute("data-feature-id", feature.featureId);
+                    select.setAttribute("data-feature-code", feature.featureCode);
+                    select.required = true;
+
+                    const defaultOption = document.createElement("option");
+                    defaultOption.value = "";
+                    defaultOption.textContent = "-- Seçiniz --";
+                    select.appendChild(defaultOption);
+
+                    feature.availableValues.forEach(value => {
+                        const option = document.createElement("option");
+                        option.value = value.id;
+                        option.setAttribute("data-value-code", value.code);
+                        option.textContent = `${value.code} - ${value.name}`;
+                        select.appendChild(option);
+                    });
+
+                    select.addEventListener("change", onFeatureChange);
+                    colDiv.appendChild(select);
+                }
+
+                featuresContainer.appendChild(colDiv);
             });
+
+            checkFormCompletion();
+        }
+
+        // ========== Feature seçimi değiştiğinde ==========
+        function onFeatureChange(e) {
+            const select = e.target;
+            const featureId = select.getAttribute("data-feature-id");
+            const valueId = select.value;
+
+            if (valueId) {
+                selectedValues[featureId] = valueId;
+                select.classList.add("is-valid");
+            } else {
+                delete selectedValues[featureId];
+                select.classList.remove("is-valid");
+            }
+
+            checkFormCompletion();
         }
 
         // ========== Form tamamlandı mı kontrol et ==========
         function checkFormCompletion() {
-            const productId = productSelect.value;
-            if (!productId) {
+            if (!formData) {
                 submitBtn.disabled = true;
                 return;
             }
 
-            let allSelected = true;
-            featureSelects.forEach(select => {
-                if (select.required && !select.value) {
-                    allSelected = false;
-                }
-            });
+            // Tüm sabit olmayan feature'lar seçilmiş mi?
+            const requiredFeatures = formData.features.filter(f => !f.isFixed);
+            const allSelected = requiredFeatures.every(f => selectedValues[f.featureId]);
 
             submitBtn.disabled = !allSelected;
         }
@@ -251,39 +253,23 @@
             hiddenContainer.innerHTML = "";
 
             let index = 0;
-            let allValid = true;
 
-            featureSelects.forEach(select => {
-                const featureId = select.getAttribute("data-feature-id");
-                const valueId = select.value;
+            Object.entries(selectedValues).forEach(([featureId, valueId]) => {
+                const keyInput = document.createElement("input");
+                keyInput.type = "hidden";
+                keyInput.name = `SelectedFeatureValues[${index}].Key`;
+                keyInput.value = featureId;
+                hiddenContainer.appendChild(keyInput);
 
-                if (select.required && !valueId) {
-                    allValid = false;
-                    return;
-                }
+                const valueInput = document.createElement("input");
+                valueInput.type = "hidden";
+                valueInput.name = `SelectedFeatureValues[${index}].Value`;
+                valueInput.value = valueId;
+                hiddenContainer.appendChild(valueInput);
 
-                if (valueId) {
-                    const keyInput = document.createElement("input");
-                    keyInput.type = "hidden";
-                    keyInput.name = `SelectedFeatureValues[${index}].Key`;
-                    keyInput.value = featureId;
-                    hiddenContainer.appendChild(keyInput);
-
-                    const valueInput = document.createElement("input");
-                    valueInput.type = "hidden";
-                    valueInput.name = `SelectedFeatureValues[${index}].Value`;
-                    valueInput.value = valueId;
-                    hiddenContainer.appendChild(valueInput);
-
-                    console.log(`[SA JS] Added: Key=${featureId}, Value=${valueId}`);
-                    index++;
-                }
+                console.log(`[SA RULE JS] Added: Key=${featureId}, Value=${valueId}`);
+                index++;
             });
-
-            if (!allValid) {
-                alert("⚠️ Tüm zorunlu alanları doldurunuz!");
-                return;
-            }
 
             // ✅ Submit öncesi loading göster
             submitBtn.disabled = true;
@@ -292,7 +278,7 @@
             this.submit();
         });
 
-        // ========== Sayfa yüklendiğinde ürün seçiliyse feature'ları yükle ==========
+        // ========== Sayfa yüklendiğinde ürün seçiliyse form data yükle ==========
         window.addEventListener("DOMContentLoaded", function () {
             const selectedProductId = productSelect.value;
             if (selectedProductId) {
@@ -302,24 +288,16 @@
     </script>
 
     <style>
-        /* ✅ Disabled dropdown'lar gri */
-        .feature-select:disabled {
-            background-color: #f8f9fa;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        /* ✅ Aktif dropdown'lar mavi kenarlık */
-        .feature-select:not(:disabled) {
+        /* ✅ Feature select stil */
+        .feature-select {
             border-color: #0d6efd;
             border-width: 2px;
         }
 
-        /* ✅ Seçilmiş dropdown'lar yeşil kenarlık */
-        .feature-select.is-valid {
-            border-color: #198754 !important;
-            background-color: #d1e7dd;
-        }
+            .feature-select.is-valid {
+                border-color: #198754 !important;
+                background-color: #d1e7dd;
+            }
 
         /* ✅ Buton disabled görünümü */
         #submitBtn:disabled {
@@ -349,18 +327,21 @@
         }
 
         @@keyframes slideDown {
-            from
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
 
-        {
-            opacity: 0;
-            transform: translateY(-20px);
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        /* ✅ Sabit değer input */
+        .bg-light {
+            background-color: #e9ecef !important;
+            font-weight: 500;
         }
     </style>
 }
