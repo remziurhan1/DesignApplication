@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MVC.ProductManagement.Application.Interfaces.Services;
 using MVC.ProductManagement.Application.Services.AllowableStressServices;
+using MVC.ProductManagement.Application.Services.Export;
 using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
@@ -43,6 +44,8 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockCodeLookupService, StockCodeLookupService>();
          
             services.AddScoped<IStockCodeSbService, StockCodeSbService>();
+            services.AddScoped<IExcelExportService, ExcelExportService>();
+
 
             
             services.AddScoped<

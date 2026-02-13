@@ -1,4 +1,4 @@
-﻿@model MVC.ProductManagement.Application.DTOs.Common.PagedResult<MVC.ProductManagement.Application.DTOs.StockCodes.SA.SAStockCardListDto>
+﻿@model MVC.ProductManagement.Application.DTOs.StockCodes.SA.SAStockCardListResultDto
 @using MVC.ProductManagement.Application.DTOs.StockCodes.SA
 
 @{
@@ -13,12 +13,14 @@
                 SA Stok Kodları
             </h2>
             <p class="text-muted">Toplam <strong>@Model.TotalCount</strong> kayıt bulundu</p>
-        </div>
-        <div class="col-md-4 text-end">
-            <a asp-action="Generate" class="btn btn-success btn-lg">
-                <i class="bi bi-plus-circle"></i> Yeni Kod Üret
-            </a>
-        </div>
+            <div class="col-md-4 text-end">
+                <a asp-action="Generate" class="btn btn-success btn-lg me-2">
+                    <i class="bi bi-plus-circle"></i> Yeni Kod Üret
+                </a>
+                <button type="button" class="btn btn-outline-success btn-lg" onclick="exportExcel()">
+                    <i class="bi bi-file-earmark-excel"></i> Excel İndir
+                </button>
+            </div>
     </div>
 
     @if (TempData["ErrorMessage"] != null)
@@ -120,13 +122,25 @@
                                     <td>
                                         <small>@item.CreatedBy</small>
                                     </td>
-                                    <td class="text-center">
-                                        <a asp-action="Detail" asp-route-id="@item.Id"
-                                           class="btn btn-sm btn-outline-primary"
-                                           title="Detay">
-                                            <i class="bi bi-eye-fill"></i>
-                                        </a>
-                                    </td>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="Detail"
+                                                   asp-route-id="@item.Id"
+                                                   class="btn btn-sm btn-info">
+                                                    <i class="bi bi-eye"></i> Detay
+                                                </a>
+                                                <a asp-action="Edit"
+                                                   asp-route-id="@item.Id"
+                                                   class="btn btn-sm btn-warning">
+                                                    <i class="bi bi-pencil"></i> Düzenle
+                                                </a>
+                                                <button type="button"
+                                                        class="btn btn-sm btn-danger"
+                                                        onclick="confirmDelete('@item.Id', '@item.StockCode8')">
+                                                    <i class="bi bi-trash"></i> Sil
+                                                </button>
+                                            </div>
+                                        </td>
                                 </tr>
                             }
                         </tbody>
@@ -203,31 +217,73 @@
         return $"?{string.Join("&", query.Select(x => $"{x.Key}={x.Value}"))}";
     }
 }
+    @section Scripts {
+        <script>
+            // ✅ Enter tuşu ile arama
+            document.getElementById('filterForm').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.submit();
+                }
+            });
 
-@section Scripts {
-    <script>
-        // ✅ Enter tuşu ile arama
-        document.getElementById('filterForm').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                this.submit();
+            // ✅ Excel Export (filtreleri koru)
+            function exportExcel() {
+                const form = document.getElementById('filterForm');
+                const formData = new FormData(form);
+                const params = new URLSearchParams(formData);
+
+                window.location.href = '@Url.Action("ExportExcel")?' + params.toString();
             }
-        });
-    </script>
 
-    <style>
-        .table-hover tbody tr:hover {
-            background-color: #f8f9fa;
-            cursor: pointer;
-        }
+            // ✅ Silme onayı
+            function confirmDelete(id, stockCode) {
+                if (confirm(`${stockCode} kodlu stok kartını silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz!`)) {
+                    // Form oluştur ve gönder
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '@Url.Action("Delete")';
 
-        .pagination .page-link {
-            color: #0d6efd;
-        }
+                    // Anti-forgery token
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]');
+                    if (token) {
+                        const tokenInput = document.createElement('input');
+                        tokenInput.type = 'hidden';
+                        tokenInput.name = '__RequestVerificationToken';
+                        tokenInput.value = token.value;
+                        form.appendChild(tokenInput);
+                    }
 
-        .pagination .page-item.active .page-link {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
-    </style>
-}
+                    // ID
+                    const idInput = document.createElement('input');
+                    idInput.type = 'hidden';
+                    idInput.name = 'id';
+                    idInput.value = id;
+                    form.appendChild(idInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            }
+        </script>
+
+        <style>
+            .table-hover tbody tr:hover {
+                background-color: #f8f9fa;
+                cursor: pointer;
+            }
+
+            .pagination .page-link {
+                color: #0d6efd;
+            }
+
+            .pagination .page-item.active .page-link {
+                background-color: #0d6efd;
+                border-color: #0d6efd;
+            }
+
+            .btn-group .btn {
+                margin: 0 2px;
+            }
+        </style>
+    }

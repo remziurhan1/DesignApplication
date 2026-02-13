@@ -1,4 +1,4 @@
-﻿using MVC.ProductManagement.Application.DTOs.Common;
+﻿using MVC.ProductManagement.Application.DTOs;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
 using System;
@@ -11,55 +11,64 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
     public interface IStockCodeSaService
     {
         /// <summary>
-        /// 1. Prefix listesi getir (SAA0, SAA1, SAB0, vs.)
+        /// 1. SA Ürün listesi
         /// </summary>
         Task<IReadOnlyList<LookupDto>> GetSaProductsAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 2. ✅ YENİ: Prefix seçildiğinde kural bazlı form verilerini getir
-        /// (sabit feature'lar otomatik doldurulmuş + izinli değerler)
+        /// 2. Ürüne göre feature'ları getir
         /// </summary>
-        Task<StockCodeSaFormDto> GetFormDataAsync(
-            Guid productId,
-            CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// 3. ✅ YENİ: Kullanıcı bir feature seçtiğinde, bağımlılıklara göre filtrelenmiş değerleri getir
-        /// (AJAX için)
-        /// </summary>
-        Task<List<FeatureValueDto>> GetFilteredValuesAsync(
-            Guid productId,
-            Guid featureId,
-            Dictionary<Guid, Guid> selectedFeatureValues,
-            CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// 4. ✅ ESKİ METOD - KALDIRILIYOR (artık GetFormDataAsync kullanılıyor)
-        /// </summary>
-        [Obsolete("GetFormDataAsync kullanın")]
         Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductAsync(
             Guid productId,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 5. Stok kodu oluştur (validasyon + kural kontrolü + kayıt)
+        /// 3. Kod üretimi
         /// </summary>
         Task<SaStockCodeGenerateResultDto> GenerateSaAsync(
             SaStockCodeGenerateRequestDto request,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 6. ✅ YENİ: SA Stok Kartlarını listele ve filtrele
+        /// 4. Liste (filtreleme + pagination)
         /// </summary>
-        Task<PagedResult<SAStockCardListDto>> GetStockCardsAsync(
+        Task<SAStockCardListResultDto> GetStockCardsAsync(
             SAStockCardFilterDto filter,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 7. ✅ YENİ: SA Stok Kartı detayını getir
+        /// 5. Detay görüntüleme
         /// </summary>
         Task<SAStockCardDetailDto> GetStockCardDetailAsync(
             Guid stockCardId,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 6. Düzenleme için veri getir
+        /// </summary>
+        Task<SAStockCardUpdateDto> GetStockCardForEditAsync(
+            Guid stockCardId,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 7. Güncelleme
+        /// </summary>
+        Task<bool> UpdateStockCardAsync(
+            SAStockCardUpdateDto updateDto,
+            string userName,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 8. Silme (soft delete)
+        /// </summary>
+        Task<bool> DeleteStockCardAsync(
+            Guid stockCardId,
+            string userName,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 9. Feature değerleri getir
+        /// </summary>
+        Task<List<FeatureValueDto>> GetFeatureValuesAsync(Guid featureId);
     }
 }

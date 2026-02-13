@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
 {
@@ -8,29 +7,11 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
     /// </summary>
     public class SAStockCardFilterDto
     {
-        /// <summary>
-        /// Ürün ID (SAA0, SAB1, vs.)
-        /// </summary>
+        public string? SearchTerm { get; set; }
         public Guid? ProductId { get; set; }
-
-        /// <summary>
-        /// Stok kodu ile arama (kısmi arama)
-        /// </summary>
-        public string? StockCode { get; set; }
-
-        /// <summary>
-        /// Feature filtresi: { FeatureId: ValueId }
-        /// </summary>
-        public Dictionary<Guid, Guid>? FeatureFilters { get; set; }
-
-        /// <summary>
-        /// Sayfa numarası
-        /// </summary>
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int PageNumber { get; set; } = 1;
-
-        /// <summary>
-        /// Sayfa başına kayıt
-        /// </summary>
-        public int PageSize { get; set; } = 50;
+        public int PageSize { get; set; } = 20;
     }
 }
