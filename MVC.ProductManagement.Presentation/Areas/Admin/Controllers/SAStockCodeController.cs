@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.ProductManagement.Application.DTOs;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
 using MVC.ProductManagement.Application.Services.Export;
 using MVC.ProductManagement.Application.Services.StockCodes.SA;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +27,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Liste sayfası (Index)
+        /// ✅ Index - Liste sayfası
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Index(SAStockCardFilterDto filter)
@@ -55,7 +53,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Detay sayfası
+        /// ✅ Detail - Detay sayfası
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Detail(Guid id)
@@ -73,7 +71,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Yeni kod üretimi sayfası (GET)
+        /// ✅ Generate GET - Kod üretme sayfası
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Generate()
@@ -84,7 +82,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Yeni kod üretimi (POST)
+        /// ✅ Generate POST - Kod üretme
         /// </summary>
         [HttpPost]
         public async Task<IActionResult> Generate(SAStockCodeGenerateVm vm)
@@ -128,7 +126,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ AJAX için feature'ları getiren action
+        /// ✅ AJAX - Ürüne göre feature'ları getir
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> FeaturesByProduct(string productId)
@@ -146,18 +144,19 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
         /// <summary>
-        /// ✅ Düzenleme sayfası (GET)
+        /// ✅ Edit GET - Düzenleme sayfası
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
             try
             {
-                // 1. Stok kartı detayını getir
+                // 1. Detay bilgisini getir
                 var detail = await _saService.GetStockCardDetailAsync(id, CancellationToken.None);
 
-                // 2. Düzenleme DTO'sunu oluştur
+                // 2. DTO oluştur
                 var updateDto = new SAStockCardUpdateDto
                 {
                     StockCardId = id,
@@ -166,7 +165,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         fs => fs.ValueId)
                 };
 
-                // 3. Ürüne ait feature'ları getir
+                // 3. Feature'ları getir
                 var features = await _saService.GetFeaturesByProductAsync(detail.ProductId);
 
                 // 4. ViewBag'e yükle
@@ -188,49 +187,23 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Düzenleme işlemi (POST)
+        /// ✅ Edit POST - Güncelleme işlemi
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [FromForm] Dictionary<string, string> featureSelections)
+        public async Task<IActionResult> Edit(Guid id, SAStockCardUpdateDto model)
         {
             try
             {
-                // Null check
-                if (featureSelections == null || !featureSelections.Any())
+                if (model.FeatureSelections == null || !model.FeatureSelections.Any())
                 {
                     TempData["ErrorMessage"] = "Hiçbir özellik seçilmedi!";
                     return RedirectToAction(nameof(Edit), new { id });
                 }
 
-                // Dictionary'i Guid'e çevir
-                var selections = new Dictionary<Guid, Guid>();
+                model.StockCardId = id;
 
-                foreach (var kvp in featureSelections)
-                {
-                    // Key: "featureSelections[guid]" formatında geliyor, sadece guid'i al
-                    var key = kvp.Key.Replace("featureSelections[", "").Replace("]", "");
-
-                    if (Guid.TryParse(key, out var featureId) && Guid.TryParse(kvp.Value, out var valueId))
-                    {
-                        selections[featureId] = valueId;
-                    }
-                }
-
-                if (!selections.Any())
-                {
-                    TempData["ErrorMessage"] = "Geçerli özellik seçimi yapılmadı!";
-                    return RedirectToAction(nameof(Edit), new { id });
-                }
-
-                var updateDto = new SAStockCardUpdateDto
-                {
-                    StockCardId = id,
-                    FeatureSelections = selections
-                };
-
-                // Güncelle
-                await _saService.UpdateStockCardAsync(updateDto, "Admin", CancellationToken.None);
+                await _saService.UpdateStockCardAsync(model, "Admin", CancellationToken.None);
 
                 TempData["SuccessMessage"] = "Stok kodu başarıyla güncellendi!";
                 return RedirectToAction(nameof(Detail), new { id });
@@ -243,7 +216,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Silme işlemi (POST)
+        /// ✅ Delete POST - Silme işlemi
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -264,17 +237,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Excel Export (Liste)
+        /// ✅ Excel Export - Liste
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> ExportExcel(SAStockCardFilterDto filter)
         {
             try
             {
-                filter.PageSize = int.MaxValue; // Tümünü al
+                filter.PageSize = int.MaxValue;
                 var result = await _saService.GetStockCardsAsync(filter, CancellationToken.None);
 
-                // ✅ SAStockCardListItemDto'dan SAStockCardListDto'ya dönüştür
                 var listDtos = result.Items.Select(item => new SAStockCardListDto
                 {
                     Id = item.Id,
@@ -299,7 +271,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Excel Export (Detay)
+        /// ✅ Excel Export - Detay
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> ExportDetailExcel(Guid id)
