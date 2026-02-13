@@ -10,6 +10,20 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Common
 {
     public class StockCard : AuditableEntity
     {
+        /// <summary>
+        /// Silinmiş mi?
+        /// </summary>
+        public bool IsDeleted { get; set; } = false;
+
+        /// <summary>
+        /// Silinme tarihi
+        /// </summary>
+        public DateTime? DeletedDate { get; set; }
+
+        /// <summary>
+        /// Silen kullanıcı
+        /// </summary>
+        public string? DeletedBy { get; set; }
         public string StockCode8 { get; set; } = default!;
         public string Prefix4 { get; set; } = default!;
         public int Serial4 { get; set; }

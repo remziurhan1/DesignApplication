@@ -6,6 +6,7 @@ using MVC.ProductManagement.Domain.Core.BaseEntities;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Domain.Entities.StockCodes.S;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.Configurations;
@@ -51,8 +52,12 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<SAssemblyGroup> SAssemblyGroups { get; set; }
         public DbSet<PrefixRule> PrefixRules { get; set; }
         public DbSet<StockSequence> StockSequences { get; set; }
-      //  public DbSet<StockCard> StockCards { get; set; }
+        //  public DbSet<StockCard> StockCards { get; set; }
+        // ✅ MEVCUT DbSet'lerin yanına EKLE (SFeature, SFeatureValue, SProductFeature'ların altına)
 
+        public DbSet<SProductFeatureRule> SProductFeatureRules { get; set; }
+        public DbSet<SFeatureValueRule> SFeatureValueRules { get; set; }
+        public DbSet<SFeatureValueDependency> SFeatureValueDependencies { get; set; }
         public DbSet<SPrefixRule> SPrefixRules => Set<SPrefixRule>();
 
 
