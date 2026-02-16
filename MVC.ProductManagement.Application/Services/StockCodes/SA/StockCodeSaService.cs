@@ -406,49 +406,130 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             };
         }
 
-        /// <summary>
-        /// ✅ 7. Güncelleme
-        /// </summary>
         public async Task<bool> UpdateStockCardAsync(
-            SAStockCardUpdateDto updateDto,
-            string userName,
-            CancellationToken cancellationToken = default)
+      SAStockCardUpdateDto updateDto,
+      string userName,
+      CancellationToken cancellationToken = default)
         {
-            var card = await _context.Set<StockCard>()
-                .FirstOrDefaultAsync(sc => sc.Id == updateDto.StockCardId && !sc.IsDeleted, cancellationToken);
-
-            if (card == null)
-                throw new InvalidOperationException("Stok kartı bulunamadı.");
-
-            // Eski feature seçimlerini sil
-            var oldSelections = await _context.Set<StockCardFeatureSelection>()
-                .Where(fs => fs.StockCardId == updateDto.StockCardId)
-                .ToListAsync(cancellationToken);
-
-            _context.Set<StockCardFeatureSelection>().RemoveRange(oldSelections);
-
-            // Yeni feature seçimlerini ekle
-            var newSelections = updateDto.FeatureSelections.Select(kvp => new StockCardFeatureSelection
+            try
             {
-                Id = Guid.NewGuid(),
-                StockCardId = card.Id,
-                SFeatureId = kvp.Key,
-                SFeatureValueId = kvp.Value,
-                CreatedBy = userName,
-                CreatedDate = DateTime.Now,
-                Status = Domain.Enums.Status.Added
-            }).ToList();
+                var card = await _context.Set<StockCard>()
+                    .FirstOrDefaultAsync(sc => sc.Id == updateDto.StockCardId && !sc.IsDeleted, cancellationToken);
 
-            _context.Set<StockCardFeatureSelection>().AddRange(newSelections);
+                if (card == null)
+                    throw new InvalidOperationException("Stok kartı bulunamadı.");
 
-            // Description'ı yeniden oluştur
-            card.Description = await BuildFeatureDescriptionAsync(updateDto.FeatureSelections, cancellationToken);
-            card.ModifiedDate = DateTime.Now;
-            card.ModifiedBy = userName;
+                // ✅ Sabit feature'ları ekle
+                var productId = card.SProductId;
+                var fixedRules = await _context.Set<SProductFeatureRule>()
+                    .AsNoTracking()
+                    .Where(r => r.SProductId == productId && r.IsFixed && r.FixedValueId != null)
+                    .ToListAsync(cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
+                // ✅ YENİ: Önce kullanıcı seçimlerini al, sonra sabit değerleri ekle
+                var allSelections = new Dictionary<Guid, Guid>();
 
-            return true;
+                // Kullanıcı seçimlerini ekle
+                if (updateDto.FeatureSelections != null)
+                {
+                    foreach (var kvp in updateDto.FeatureSelections)
+                    {
+                        allSelections[kvp.Key] = kvp.Value;
+                    }
+                }
+
+                // Sabit feature'ları ekle (override edebilir)
+                foreach (var rule in fixedRules)
+                {
+                    allSelections[rule.SFeatureId] = rule.FixedValueId!.Value;
+                }
+
+                // ✅ DEBUG: Seçimleri logla
+                Console.WriteLine($"[UPDATE] StockCardId: {updateDto.StockCardId}");
+                Console.WriteLine($"[UPDATE] Total unique selections: {allSelections.Count}");
+                foreach (var kvp in allSelections)
+                {
+                    Console.WriteLine($"  - FeatureId: {kvp.Key}, ValueId: {kvp.Value}");
+                }
+
+                // ✅ Transaction başlat
+                await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+
+                try
+                {
+                    // ✅ 1. ESKİ KAYITLARI SİL (ExecuteDelete kullan - daha performanslı)
+                    await _context.Set<StockCardFeatureSelection>()
+                        .Where(fs => fs.StockCardId == updateDto.StockCardId)
+                        .ExecuteDeleteAsync(cancellationToken);
+
+                    Console.WriteLine("[UPDATE] Old selections deleted");
+
+                    // ✅ 2. YENİ KAYITLARI EKLE
+                    var newSelections = allSelections
+                        .Select(kvp => new StockCardFeatureSelection
+                        {
+                            Id = Guid.NewGuid(),
+                            StockCardId = card.Id,
+                            SFeatureId = kvp.Key,
+                            SFeatureValueId = kvp.Value,
+                            CreatedBy = userName,
+                            CreatedDate = DateTime.UtcNow,
+                            Status = Domain.Enums.Status.Added
+                        })
+                        .ToList();
+
+                    Console.WriteLine($"[UPDATE] Adding {newSelections.Count} new selections");
+
+                    // ✅ Duplicate kontrolü
+                    var duplicates = newSelections
+                        .GroupBy(x => new { x.StockCardId, x.SFeatureId })
+                        .Where(g => g.Count() > 1)
+                        .ToList();
+
+                    if (duplicates.Any())
+                    {
+                        Console.WriteLine("[UPDATE ERROR] DUPLICATE DETECTED!");
+                        foreach (var dup in duplicates)
+                        {
+                            Console.WriteLine($"  - StockCardId: {dup.Key.StockCardId}, FeatureId: {dup.Key.SFeatureId} (Count: {dup.Count()})");
+                        }
+                        throw new InvalidOperationException("Duplicate feature selection detected!");
+                    }
+
+                    _context.Set<StockCardFeatureSelection>().AddRange(newSelections);
+                    await _context.SaveChangesAsync(cancellationToken);
+
+                    Console.WriteLine("[UPDATE] New selections saved");
+
+                    // ✅ 3. DESCRIPTION GÜNCELLE
+                    var newDescription = await BuildFeatureDescriptionAsync(allSelections, cancellationToken);
+                    Console.WriteLine($"[UPDATE] New description: {newDescription}");
+
+                    card.Description = newDescription;
+                    card.ModifiedDate = DateTime.UtcNow;
+                    card.ModifiedBy = userName;
+
+                    await _context.SaveChangesAsync(cancellationToken);
+
+                    // ✅ 4. TRANSACTION COMMIT
+                    await transaction.CommitAsync(cancellationToken);
+
+                    Console.WriteLine("[UPDATE] Transaction committed successfully");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[UPDATE ERROR] {ex.Message}");
+                    Console.WriteLine($"[UPDATE ERROR] Inner: {ex.InnerException?.Message}");
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[UPDATE OUTER ERROR] {ex.Message}");
+                throw new InvalidOperationException($"Güncelleme hatası: {ex.InnerException?.Message ?? ex.Message}", ex);
+            }
         }
 
         /// <summary>
