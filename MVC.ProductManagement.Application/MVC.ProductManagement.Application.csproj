@@ -20,6 +20,7 @@
     <Folder Include="Services\EN13458CalculationServices\CalculationSteps\" />
     <Folder Include="Services\EN13458CalculationServices\Engines\" />
     <Folder Include="Services\EN13458CalculationServices\Managers\" />
+    <Folder Include="Services\StockCodes\Rules\" />
   </ItemGroup>
 
 </Project>

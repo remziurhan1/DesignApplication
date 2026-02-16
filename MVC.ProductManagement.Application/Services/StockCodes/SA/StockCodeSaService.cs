@@ -40,7 +40,50 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             _groupRepo = groupRepo;
             _context = context;
         }
+        /// <summary>
+        /// ✅ 10. SA grubuna ait feature'ları getir
+        /// </summary>
+        public async Task<IReadOnlyList<FeatureDto>> GetAllFeaturesAsync(CancellationToken cancellationToken = default)
+        {
+            // SA grubuna ait feature'ları filtrele
+            var saFeatureCodes = new[]
+            {
+        "STANDARD",
+        "THREAD_SYSTEM",
+        "METRIC",
+        "LENGTH",
+        "MATERIAL",
+        "STRENGTH",
+        "COATING",
+        "HEAD_TYPE"
+    };
 
+            var features = await _context.Set<SFeature>()
+                .AsNoTracking()
+                .Include(f => f.Values)
+                .Where(f => saFeatureCodes.Contains(f.Code)) // ✅ Sadece SA feature'ları
+                .OrderBy(f => f.SortOrder)
+                .Select(f => new FeatureDto
+                {
+                    Id = f.Id,
+                    Code = f.Code,
+                    Name = f.Name,
+                    IsRequired = true,
+                    SortOrder = f.SortOrder,
+                    Values = f.Values
+                        .OrderBy(v => v.SortOrder)
+                        .Select(v => new FeatureValueDto
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name,
+                            SortOrder = v.SortOrder
+                        }).ToList()
+                })
+                .ToListAsync(cancellationToken);
+
+            return features;
+        }
         /// <summary>
         /// ✅ 1. SA Ürün listesi
         /// </summary>
@@ -59,27 +102,36 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 .ToList();
         }
 
-        /// <summary>
-        /// ✅ 2. Ürüne göre feature'ları getir
-        /// </summary>
         public async Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductAsync(
-            Guid productId,
-            CancellationToken cancellationToken = default)
+     Guid productId,
+     CancellationToken cancellationToken = default)
         {
-            var features = await _context.Set<SProductFeature>()
+            // SA grubuna ait feature'ları getir (ürün fark etmez, hepsi aynı)
+            var saFeatureCodes = new[]
+            {
+        "STANDARD",
+        "THREAD_SYSTEM",
+        "METRIC",
+        "LENGTH",
+        "MATERIAL",
+        "STRENGTH",
+        "COATING",
+        "HEAD_TYPE"
+    };
+
+            var features = await _context.Set<SFeature>()
                 .AsNoTracking()
-                .Include(pf => pf.SFeature)
-                    .ThenInclude(f => f.Values)
-                .Where(pf => pf.SProductId == productId)
-                .OrderBy(pf => pf.SFeature.SortOrder)
-                .Select(pf => new FeatureDto
+                .Include(f => f.Values)
+                .Where(f => saFeatureCodes.Contains(f.Code))
+                .OrderBy(f => f.SortOrder)
+                .Select(f => new FeatureDto
                 {
-                    Id = pf.SFeatureId,
-                    Code = pf.SFeature.Code,
-                    Name = pf.SFeature.Name,
-                    IsRequired = pf.IsRequired,
-                    SortOrder = pf.SFeature.SortOrder,
-                    Values = pf.SFeature.Values
+                    Id = f.Id,
+                    Code = f.Code,
+                    Name = f.Name,
+                    IsRequired = true,
+                    SortOrder = f.SortOrder,
+                    Values = f.Values
                         .OrderBy(v => v.SortOrder)
                         .Select(v => new FeatureValueDto
                         {
@@ -493,23 +545,157 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         }
 
         private async Task<string> BuildFeatureDescriptionAsync(
-            Dictionary<Guid, Guid> selectedFeatureValues,
-            CancellationToken cancellationToken)
+     Dictionary<Guid, Guid> selectedFeatureValues,
+     CancellationToken cancellationToken)
         {
             if (selectedFeatureValues == null || !selectedFeatureValues.Any())
                 return string.Empty;
 
+            var featureIds = selectedFeatureValues.Keys.ToList();
             var valueIds = selectedFeatureValues.Values.ToList();
+
+            var features = await _context.Set<SFeature>()
+                .AsNoTracking()
+                .Where(f => featureIds.Contains(f.Id))
+                .Select(f => new { f.Id, f.Code })
+                .ToListAsync(cancellationToken);
 
             var values = await _context.Set<SFeatureValue>()
                 .AsNoTracking()
-                .Include(fv => fv.SFeature)
-                .Where(fv => valueIds.Contains(fv.Id))
-                .OrderBy(fv => fv.SFeature.SortOrder)
-                .Select(fv => fv.Name)
+                .Where(v => valueIds.Contains(v.Id))
+                .Select(v => new { v.Id, v.Code })
                 .ToListAsync(cancellationToken);
 
-            return string.Join(" | ", values);
+            // Feature code → value code mapping
+            var featureDict = selectedFeatureValues
+                .Select(kvp =>
+                {
+                    var f = features.FirstOrDefault(x => x.Id == kvp.Key);
+                    var v = values.FirstOrDefault(x => x.Id == kvp.Value);
+                    if (f == null || v == null) return null;
+                    return new { FeatureCode = f.Code, ValueCode = v.Code };
+                })
+                .Where(x => x != null)
+                .ToDictionary(x => x.FeatureCode, x => x.ValueCode);
+
+            var parts = new List<string>();
+
+            // ✅ 1. PRODUCT_TYPE (sabit: CIVATA)
+            parts.Add("CIVATA");
+
+            // ✅ 2. STANDARD
+            if (featureDict.ContainsKey("STANDARD"))
+                parts.Add(featureDict["STANDARD"]);
+
+            // ✅ 3. THREAD_SYSTEM
+            if (featureDict.ContainsKey("THREAD_SYSTEM"))
+                parts.Add(featureDict["THREAD_SYSTEM"]);
+
+            // ✅ 4. HEAD_TYPE (varsa)
+            if (featureDict.ContainsKey("HEAD_TYPE"))
+                parts.Add(featureDict["HEAD_TYPE"]);
+
+            // ✅ 5. METRIC x LENGTH (birleşik format)
+            var metric = featureDict.ContainsKey("METRIC") ? featureDict["METRIC"] : "";
+            var length = featureDict.ContainsKey("LENGTH") ? featureDict["LENGTH"] : "";
+
+            if (!string.IsNullOrEmpty(metric) && !string.IsNullOrEmpty(length))
+                parts.Add($"{metric}x{length}");
+            else if (!string.IsNullOrEmpty(metric))
+                parts.Add(metric);
+            else if (!string.IsNullOrEmpty(length))
+                parts.Add(length);
+
+            // ✅ 6. MATERIAL
+            if (featureDict.ContainsKey("MATERIAL"))
+                parts.Add(featureDict["MATERIAL"]);
+
+            // ✅ 7. STRENGTH
+            if (featureDict.ContainsKey("STRENGTH"))
+                parts.Add(featureDict["STRENGTH"]);
+
+            // ✅ 8. COATING
+            if (featureDict.ContainsKey("COATING"))
+                parts.Add(featureDict["COATING"]);
+
+            return string.Join(" | ", parts);
+        }
+
+        /// <summary>
+        /// ✅ 11. YENİ: Rule-based form data
+        /// </summary>
+        public async Task<StockCodeSaFormDto> GetFormDataAsync(
+            Guid productId,
+            CancellationToken cancellationToken = default)
+        {
+            // Ürün bilgisi
+            var product = await _productRepo.GetByIdAsync(productId, tracking: false);
+            if (product == null)
+                throw new InvalidOperationException("Ürün bulunamadı.");
+
+            // Tüm feature'ları getir
+            var features = await _context.Set<SFeature>()
+                .AsNoTracking()
+                .OrderBy(f => f.SortOrder)
+                .ToListAsync(cancellationToken);
+
+            // Bu ürün için feature kurallarını getir
+            var featureRules = await _context.Set<SProductFeatureRule>()
+                .AsNoTracking()
+                .Include(r => r.FixedValue)
+                .Where(r => r.SProductId == productId)
+                .ToListAsync(cancellationToken);
+
+            var formFeatures = new List<StockCodeSaFormFeatureDto>();
+
+            foreach (var feature in features)
+            {
+                var rule = featureRules.FirstOrDefault(r => r.SFeatureId == feature.Id);
+
+                if (rule == null) continue; // Bu feature bu ürün için kullanılmıyor
+
+                var formFeature = new StockCodeSaFormFeatureDto
+                {
+                    FeatureId = feature.Id,
+                    FeatureCode = feature.Code,
+                    FeatureName = feature.Name,
+                    IsFixed = rule.IsFixed,
+                    FixedValueId = rule.FixedValueId,
+                    FixedValueCode = rule.FixedValue?.Code,
+                    FixedValueName = rule.FixedValue?.Name,
+                    AvailableValues = new List<FeatureValueDto>()
+                };
+
+                // Eğer sabit değilse, izinli değerleri getir
+                if (!rule.IsFixed)
+                {
+                    var allowedValues = await _context.Set<SFeatureValueRule>()
+                        .AsNoTracking()
+                        .Include(r => r.SFeatureValue)
+                        .Where(r => r.SProductId == productId && r.SFeatureId == feature.Id)
+                        .OrderBy(r => r.SortOrder)
+                        .Select(r => new FeatureValueDto
+                        {
+                            Id = r.SFeatureValue.Id,
+                            Code = r.SFeatureValue.Code,
+                            Name = r.SFeatureValue.Name,
+                            SortOrder = r.SortOrder
+                        })
+                        .ToListAsync(cancellationToken);
+
+                    formFeature.AvailableValues = allowedValues;
+                }
+
+                formFeatures.Add(formFeature);
+            }
+
+            return new StockCodeSaFormDto
+            {
+                ProductId = productId,
+                ProductCode = product.Code,
+                ProductName = product.Name,
+                Features = formFeatures
+            };
         }
     }
 }
