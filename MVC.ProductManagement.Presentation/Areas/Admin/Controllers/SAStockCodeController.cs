@@ -143,32 +143,40 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         // ========== DÜZENLEME ==========
 
         /// <summary>
-        /// ✅ Edit GET - Düzenleme sayfası
+        /// ✅ Edit GET - Düzenleme sayfası (Rule-based)
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
             try
             {
+                // 1. Stok kartı detayını getir
                 var detail = await _saService.GetStockCardDetailAsync(id, CancellationToken.None);
 
-                var updateDto = new SAStockCardUpdateDto
-                {
-                    StockCardId = id,
-                    FeatureSelections = detail.FeatureSelections.ToDictionary(
-                        fs => fs.FeatureId,
-                        fs => fs.ValueId)
-                };
+                // 2. Rule-based form data getir (sabit + dropdown'lar)
+                var formData = await _saService.GetFormDataAsync(detail.ProductId, CancellationToken.None);
 
-                var features = await _saService.GetFeaturesByProductAsync(detail.ProductId);
+                // 3. Mevcut seçimleri al
+                var currentSelections = detail.FeatureSelections.ToDictionary(
+                    fs => fs.FeatureId,
+                    fs => fs.ValueId);
 
-                ViewBag.Features = features;
+                // 4. ViewBag'e yükle
+                ViewBag.FormData = formData;
                 ViewBag.StockCardId = id;
                 ViewBag.CurrentStockCode = detail.StockCode8;
                 ViewBag.CurrentProductCode = detail.ProductCode;
                 ViewBag.CurrentProductName = detail.ProductName;
-                ViewBag.SelectedProductId = detail.ProductId;
-                ViewBag.SelectedFeatures = updateDto.FeatureSelections;
+                ViewBag.ProductId = detail.ProductId;
+                ViewBag.CurrentSelections = currentSelections;
+
+                var updateDto = new SAStockCardUpdateDto
+                {
+                    StockCardId = id,
+                    FeatureSelections = currentSelections.Where(kvp =>
+                        !formData.Features.Any(f => f.FeatureId == kvp.Key && f.IsFixed)) // Sadece dropdown'ları gönder
+                        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+                };
 
                 return View(updateDto);
             }
@@ -180,7 +188,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// ✅ Düzenleme (POST)
+        /// ✅ Edit POST - Güncelleme işlemi
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -188,35 +196,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             try
             {
-                if (featureSelections == null || !featureSelections.Any())
+                if (model.FeatureSelections == null || !model.FeatureSelections.Any())
                 {
                     TempData["ErrorMessage"] = "Hiçbir özellik seçilmedi!";
                     return RedirectToAction(nameof(Edit), new { id });
                 }
 
-                var selections = new Dictionary<Guid, Guid>();
-                foreach (var kvp in featureSelections)
-                {
-                    var key = kvp.Key.Replace("featureSelections[", "").Replace("]", "");
-                    if (Guid.TryParse(key, out var featureId) && Guid.TryParse(kvp.Value, out var valueId))
-                    {
-                        selections[featureId] = valueId;
-                    }
-                }
+                // ✅ Model binding ile gelen seçimler zaten Dictionary<Guid, Guid> formatında
+                model.StockCardId = id;
 
-                if (!selections.Any())
-                {
-                    TempData["ErrorMessage"] = "Geçerli özellik seçimi yapılmadı!";
-                    return RedirectToAction(nameof(Edit), new { id });
-                }
-
-                var updateDto = new SAStockCardUpdateDto
-                {
-                    StockCardId = id,
-                    FeatureSelections = selections
-                };
-
-                await _saService.UpdateStockCardAsync(updateDto, "Admin", CancellationToken.None);
+                await _saService.UpdateStockCardAsync(model, "Admin", CancellationToken.None);
 
                 TempData["SuccessMessage"] = "Stok kodu başarıyla güncellendi!";
                 return RedirectToAction(nameof(Detail), new { id });
@@ -227,7 +216,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Edit), new { id });
             }
         }
-
         // ========== SİLME ==========
 
         /// <summary>

@@ -1,30 +1,44 @@
 ﻿@model MVC.ProductManagement.Application.DTOs.StockCodes.SA.SAStockCardDetailDto
 
 @{
-    ViewData["Title"] = "SA Stok Kodu Detayı";
+    ViewData["Title"] = "Stok Kodu Detay";
 }
 
 <div class="container mt-4">
-    <div class="row mb-3">
+    <!-- ✅ BAŞLIK -->
+    <div class="row mb-4">
         <div class="col-md-8">
             <h2>
-                <i class="bi bi-file-text text-primary"></i>
-                Stok Kodu Detayı
+                <i class="bi bi-file-earmark-text text-primary"></i>
+                Stok Kodu Detay
             </h2>
         </div>
         <div class="col-md-4 text-end">
-            <a asp-action="ExportDetailExcel"
-               asp-route-id="@Model.Id"
-               class="btn btn-success me-2">
-                <i class="bi bi-file-earmark-excel"></i> Excel İndir
-            </a>
             <a asp-action="Index" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Listeye Dön
             </a>
         </div>
     </div>
 
-    <!-- ✅ STOK KODU BİLGİSİ -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            <strong>Başarılı!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <strong>Hata!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- ✅ GENEL BİLGİLER -->
     <div class="card mb-4 shadow-sm border-primary">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">
@@ -33,82 +47,83 @@
             </h4>
         </div>
         <div class="card-body">
-            <div class="row">
+            <div class="row g-3">
                 <div class="col-md-6">
-                    <table class="table table-sm table-borderless">
-                        <tr>
-                            <th style="width: 150px;">Prefix:</th>
-                            <td><span class="badge bg-info fs-6">@Model.Prefix4</span></td>
-                        </tr>
-                        <tr>
-                            <th>Seri No:</th>
-                            <td><span class="badge bg-secondary fs-6">@Model.Serial4.ToString("0000")</span></td>
-                        </tr>
-                        <tr>
-                            <th>Ürün:</th>
-                            <td>
-                                <strong>@Model.ProductCode</strong> - @Model.ProductName
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Fluid:</th>
-                            <td>
-                                <strong>@Model.FluidCode</strong> - @Model.FluidName
-                            </td>
-                        </tr>
-                    </table>
+                    <div class="info-group">
+                        <label class="text-muted small">Prefix</label>
+                        <p class="fw-bold fs-5">@Model.Prefix4</p>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <table class="table table-sm table-borderless">
-                        <tr>
-                            <th style="width: 150px;">Oluşturulma:</th>
-                            <td>@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
-                        </tr>
-                        <tr>
-                            <th>Oluşturan:</th>
-                            <td><span class="badge bg-dark">@Model.CreatedBy</span></td>
-                        </tr>
-                        <tr>
-                            <th>Option Key:</th>
-                            <td><small class="text-muted font-monospace">@Model.OptionKey</small></td>
-                        </tr>
-                    </table>
+                    <div class="info-group">
+                        <label class="text-muted small">Seri No</label>
+                        <p class="fw-bold fs-5">@Model.Serial4.ToString("0000")</p>
+                    </div>
                 </div>
-            </div>
-
-            <hr />
-
-            <div class="alert alert-light mb-0">
-                <strong><i class="bi bi-info-circle"></i> Açıklama:</strong><br />
-                <span class="fs-5">@Model.Description</span>
+                <div class="col-md-6">
+                    <div class="info-group">
+                        <label class="text-muted small">Ürün Kodu</label>
+                        <p class="fw-bold">@Model.ProductCode</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-group">
+                        <label class="text-muted small">Ürün Adı</label>
+                        <p class="fw-bold">@Model.ProductName</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-group">
+                        <label class="text-muted small">Fluid Kodu</label>
+                        <p class="fw-bold">@Model.FluidCode</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-group">
+                        <label class="text-muted small">Fluid Adı</label>
+                        <p class="fw-bold">@Model.FluidName</p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="info-group">
+                        <label class="text-muted small">Açıklama</label>
+                        <p class="fw-bold text-primary">@Model.Description</p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="info-group">
+                        <label class="text-muted small">Option Key</label>
+                        <p class="font-monospace small text-muted">@Model.OptionKey</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- ✅ FEATURE SEÇİMLERİ -->
-    <div class="card shadow-sm">
+    <div class="card mb-4 shadow-sm">
         <div class="card-header bg-success text-white">
             <i class="bi bi-sliders"></i> <strong>Ürün Özellikleri</strong>
         </div>
         <div class="card-body">
-            @if (Model.FeatureSelections.Any())
+            @if (Model.FeatureSelections != null && Model.FeatureSelections.Any())
             {
                 <div class="row g-3">
-                    @foreach (var selection in Model.FeatureSelections.OrderBy(s => s.SortOrder))
+                    @foreach (var selection in Model.FeatureSelections.OrderBy(f => f.SortOrder))
                     {
                         <div class="col-md-6 col-lg-4">
                             <div class="card h-100 border-success">
                                 <div class="card-body">
-                                    <h6 class="card-subtitle mb-2 text-muted">
-                                        <i class="bi bi-tag"></i>
+                                    <h6 class="text-muted mb-2">
+                                        <i class="bi bi-tag text-success"></i>
                                         @selection.FeatureName
                                     </h6>
-                                    <p class="card-text">
-                                        <strong class="text-success fs-5">@selection.ValueCode</strong>
+                                    <p class="mb-0 fw-bold fs-5">
+                                        @selection.ValueCode
                                         @if (!string.IsNullOrEmpty(selection.ValueName) && selection.ValueCode != selection.ValueName)
                                         {
                                             <br />
-                                            <small class="text-muted">@selection.ValueName</small>
+                                            <small class="text-muted fw-normal">@selection.ValueName</small>
                                         }
                                     </p>
                                 </div>
@@ -119,92 +134,145 @@
             }
             else
             {
-                <div class="text-center py-4">
-                    <i class="bi bi-inbox display-4 text-muted"></i>
-                    <p class="text-muted mt-2">Feature seçimi bulunmuyor.</p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Bu stok kodu için özellik seçimi bulunamadı.
                 </div>
             }
         </div>
     </div>
 
-    <!-- ✅ İŞLEM BUTONLARI -->
-    <div class="row mt-4 mb-5 pb-5">
-        <div class="col-12">
-            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
-                <a asp-action="Index" class="btn btn-secondary btn-lg">
-                    <i class="bi bi-arrow-left"></i> Listeye Dön
-                </a>
-                <div>
-                    <a asp-action="ExportDetailExcel"
-                       asp-route-id="@Model.Id"
-                       class="btn btn-outline-success btn-lg me-2">
-                        <i class="bi bi-file-earmark-excel"></i> Excel İndir
-                    </a>
-                    <button class="btn btn-outline-primary btn-lg me-2" onclick="window.print()">
-                        <i class="bi bi-printer"></i> Yazdır
-                    </button>
-                    <button class="btn btn-outline-info btn-lg" onclick="copyToClipboard('@Model.StockCode8')">
-                        <i class="bi bi-clipboard"></i> Kodu Kopyala
-                    </button>
+    <!-- ✅ KAYIT BİLGİLERİ -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <i class="bi bi-clock-history"></i> <strong>Kayıt Bilgileri</strong>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="info-group">
+                        <label class="text-muted small">Oluşturulma Tarihi</label>
+                        <p class="fw-bold">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm:ss")</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-group">
+                        <label class="text-muted small">Oluşturan</label>
+                        <p class="fw-bold">@Model.CreatedBy</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ✅ Footer için ekstra boşluk -->
+    <!-- ✅ İŞLEM BUTONLARI -->
+    <div class="row mb-5">
+        <div class="col-12 d-flex gap-2 justify-content-center">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-lg">
+                <i class="bi bi-pencil-square"></i> Düzenle
+            </a>
+
+            <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-success btn-lg">
+                <i class="bi bi-file-earmark-excel"></i> Excel İndir
+            </a>
+
+            <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <i class="bi bi-trash"></i> Sil
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary btn-lg">
+                <i class="bi bi-arrow-left"></i> Listeye Dön
+            </a>
+        </div>
+    </div>
+
+    <!-- ✅ Footer için boşluk -->
     <div class="mb-5 pb-5"></div>
 </div>
 
+<!-- ✅ SİLME ONAY MODAL -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    Silme Onayı
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Dikkat!</strong> Bu işlem geri alınamaz.
+                </div>
+                <p class="mb-2"><strong>Silinecek Stok Kodu:</strong></p>
+                <p class="fs-4 text-danger fw-bold">@Model.StockCode8</p>
+                <p class="mb-2"><strong>Açıklama:</strong></p>
+                <p class="text-muted">@Model.Description</p>
+                <hr />
+                <p class="mb-0">Bu stok kodunu silmek istediğinize emin misiniz?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> İptal
+                </button>
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Evet, Sil
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
-    <script>
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(function() {
-                // Bootstrap toast ile bildirim göster
-                const toast = document.createElement('div');
-                toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3';
-                toast.setAttribute('role', 'alert');
-                toast.style.zIndex = '9999';
-                toast.innerHTML = `
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="bi bi-check-circle-fill"></i> Stok kodu kopyalandı: <strong>${text}</strong>
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-                    </div>
-                `;
-                document.body.appendChild(toast);
-                const bsToast = new bootstrap.Toast(toast);
-                bsToast.show();
-                setTimeout(() => toast.remove(), 3000);
-            }).catch(function(err) {
-                alert('Kopyalama başarısız: ' + err);
-            });
-        }
-    </script>
-
     <style>
-        /* Print için stil */
-        @@media print {
-            .btn, nav, .card-header {
-                display: none !important;
-            }
-
-            .card {
-                border: 2px solid #000 !important;
-                page-break-inside: avoid;
-            }
+        .info-group {
+            padding: 0.5rem 0;
         }
 
-        /* Feature kartları hover efekti */
+            .info-group label {
+                display: block;
+                margin-bottom: 0.25rem;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .info-group p {
+                margin-bottom: 0;
+            }
+
         .card.border-success:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0.5rem 1rem rgba(25, 135, 84, 0.3);
-            transition: all 0.3s ease;
+            transform: translateY(-2px);
+            box-shadow: 0 0.3rem 0.8rem rgba(25, 135, 84, 0.2);
+            transition: all 0.2s ease;
         }
 
-        /* Monospace font */
         .font-monospace {
             font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            display: block;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .modal-header.bg-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
         }
     </style>
 }

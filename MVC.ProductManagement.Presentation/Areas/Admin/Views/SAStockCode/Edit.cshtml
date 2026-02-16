@@ -2,8 +2,8 @@
 
 @{
     ViewData["Title"] = "SA Stok Kodu Düzenle";
-    var features = ViewBag.Features as List<MVC.ProductManagement.Application.DTOs.StockCodes.Common.FeatureDto>;
-    var selectedFeatures = ViewBag.SelectedFeatures as Dictionary<Guid, Guid>;
+    var formData = ViewBag.FormData as MVC.ProductManagement.Application.DTOs.StockCodes.SA.StockCodeSaFormDto;
+    var currentSelections = ViewBag.CurrentSelections as Dictionary<Guid, Guid>;
     var stockCode = ViewBag.CurrentStockCode as string;
     var productCode = ViewBag.CurrentProductCode as string;
     var productName = ViewBag.CurrentProductName as string;
@@ -54,11 +54,14 @@
             <p class="mb-0">
                 <strong>Ürün:</strong> @productCode - @productName
             </p>
-            <small class="text-muted">Stok kodu değiştirilemez. Sadece özellikler güncellenebilir.</small>
+            <small class="text-muted">
+                <i class="bi bi-info-circle"></i>
+                Stok kodu değiştirilemez. Sadece özellikler güncellenebilir. Sabit değerler otomatik korunur.
+            </small>
         </div>
     </div>
 
-    <!-- ✅ DÜZENLEME FORMU -->
+    <!-- ✅ DÜZENLEME FORMU (Rule-Based) -->
     <form asp-action="Edit" asp-route-id="@Model.StockCardId" method="post" id="editForm">
         @Html.AntiForgeryToken()
 
@@ -67,40 +70,64 @@
                 <i class="bi bi-sliders"></i> <strong>Ürün Özellikleri</strong>
             </div>
             <div class="card-body">
-                @if (features != null && features.Any())
+                @if (formData != null && formData.Features != null && formData.Features.Any())
                 {
                     <div class="row g-3">
-                        @foreach (var feature in features.OrderBy(f => f.SortOrder))
+                        @foreach (var feature in formData.Features)
                         {
                             <div class="col-md-6">
-                                <div class="card h-100 border-primary">
+                                <div class="card h-100 @(feature.IsFixed ? "border-success" : "border-primary")">
                                     <div class="card-body">
                                         <label class="form-label fw-bold">
-                                            <i class="bi bi-tag text-primary"></i>
-                                            @feature.Name
-                                            @if (feature.IsRequired)
+                                            @if (feature.IsFixed)
+                                            {
+                                                <span class="badge bg-success me-1">
+                                                    <i class="bi bi-lock-fill"></i> Sabit
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-tag text-primary"></i>
+                                            }
+                                            @feature.FeatureName
+                                            @if (!feature.IsFixed)
                                             {
                                                 <span class="text-danger">*</span>
                                             }
                                         </label>
-                                        <select name="featureSelections[@feature.Id]"
-                                                class="form-select form-select-lg"
-                                                required="@feature.IsRequired">
-                                            <option value="">-- Seçiniz --</option>
-                                            @foreach (var value in feature.Values.OrderBy(v => v.SortOrder))
-                                            {
-                                                var isSelected = selectedFeatures != null &&
-                                                selectedFeatures.ContainsKey(feature.Id) &&
-                                                selectedFeatures[feature.Id] == value.Id;
-                                                <option value="@value.Id" selected="@isSelected">
-                                                    @value.Code
-                                                    @if (!string.IsNullOrEmpty(value.Name) && value.Code != value.Name)
-                                                    {
-                                                        @($" - {value.Name}")
-                                                    }
-                                                </option>
-                                            }
-                                        </select>
+
+                                        @if (feature.IsFixed)
+                                        {
+                                            <!-- ✅ SABİT DEĞER: Disabled input -->
+                                            <input type="text"
+                                                   class="form-control bg-light text-muted"
+                                                   value="@feature.FixedValueCode - @feature.FixedValueName"
+                                                   disabled
+                                                   style="font-weight: 500; border: 2px solid #198754;" />
+                                            <small class="text-muted">
+                                                <i class="bi bi-info-circle"></i>
+                                                Bu değer otomatik olarak korunur.
+                                            </small>
+                                        }
+                                        else
+                                        {
+                                            <!-- ✅ DROPDOWN: Kullanıcı seçimi -->
+                                            <select name="FeatureSelections[@feature.FeatureId]"
+                                                    class="form-select form-select-lg feature-select"
+                                                    required>
+                                                <option value="">-- Seçiniz --</option>
+                                                @foreach (var value in feature.AvailableValues)
+                                                {
+                                                    var isSelected = currentSelections != null
+                                                    && currentSelections.ContainsKey(feature.FeatureId)
+                                                    && currentSelections[feature.FeatureId] == value.Id;
+
+                                                    <option value="@value.Id" selected="@isSelected">
+                                                        @value.Code@((!string.IsNullOrEmpty(value.Name) && value.Code != value.Name) ? $" - {value.Name}" : "")
+                                                    </option>
+                                                }
+                                            </select>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -136,22 +163,34 @@
 
 @section Scripts {
     <script>
-        // ✅ Form submit öncesi onay
+        // ✅ Form submit öncesi onay (sadece bu kalacak)
         document.getElementById('editForm').addEventListener('submit', function(e) {
-            if (!confirm('Stok kodunu güncellemek istediğinize emin misiniz?\n\nDescription otomatik olarak yeniden oluşturulacaktır.')) {
+            const confirmResult = confirm('Stok kodunu güncellemek istediğinize emin misiniz?\n\nDescription otomatik olarak yeniden oluşturulacaktır.');
+            if (!confirmResult) {
                 e.preventDefault();
+                return false;
             }
+
+            // ✅ Onayladıysa beforeunload'u kaldır
+            window.onbeforeunload = null;
         });
 
-        // ✅ Değişiklik kontrolü
+        // ✅ Değişiklik kontrolü (sadece dropdown'lar için)
         let initialValues = {};
-        document.querySelectorAll('select[name^="featureSelections"]').forEach(select => {
+        let formSubmitted = false;
+
+        document.querySelectorAll('select.feature-select').forEach(select => {
             initialValues[select.name] = select.value;
         });
 
         window.addEventListener('beforeunload', function(e) {
+            // ✅ Form submit edildiyse uyarma
+            if (formSubmitted) {
+                return undefined;
+            }
+
             let hasChanges = false;
-            document.querySelectorAll('select[name^="featureSelections"]').forEach(select => {
+            document.querySelectorAll('select.feature-select').forEach(select => {
                 if (select.value !== initialValues[select.name]) {
                     hasChanges = true;
                 }
@@ -159,35 +198,32 @@
 
             if (hasChanges) {
                 e.preventDefault();
-                e.returnValue = 'Kaydedilmemiş değişiklikler var. Çıkmak istediğinize emin misiniz?';
+                e.returnValue = 'Kaydedilmemiş değişiklikler var.';
+                return e.returnValue;
             }
         });
 
-        // ✅ Form submit edildiğinde beforeunload'u kaldır
+        // ✅ Form submit başladığında flag set et
         document.getElementById('editForm').addEventListener('submit', function() {
-            window.onbeforeunload = null;
+            formSubmitted = true;
+        });
+
+        // ✅ Dropdown değişince yeşil kenarlık
+        document.querySelectorAll('select.feature-select').forEach(select => {
+            select.addEventListener('change', function() {
+                if (this.value) {
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            });
+
+            // Sayfa yüklendiğinde seçili olanları işaretle
+            if (select.value) {
+                select.classList.add('is-valid');
+            }
         });
     </script>
 
-    <style>
-        .card.border-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0.3rem 0.8rem rgba(13, 110, 253, 0.2);
-            transition: all 0.2s ease;
-        }
-
-        .form-select:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-        }
-
-        .card-header.bg-warning {
-            background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
-        }
-
-        .btn-success:hover {
-            transform: scale(1.05);
-            transition: transform 0.2s ease;
-        }
-    </style>
+    <!-- Stiller aynı kalacak -->
 }
