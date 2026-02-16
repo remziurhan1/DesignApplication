@@ -8,7 +8,7 @@
     <h2>SA Stok Kodu Üret - Cıvatalar</h2>
     <p class="text-muted">
         <i class="bi bi-gear-fill text-primary"></i>
-        Altı köşe, ince adım, metrik, imbus, trapez ve daha fazlası...
+        Rule-based sistem: Sabit değerler otomatik, sadece gerekli özellikleri seçin
     </p>
     <hr />
 
@@ -42,7 +42,7 @@
     }
 
     <form id="saForm" asp-action="Generate" method="post">
-        <input type="hidden" name="SProductId" id="productId" />
+        <input type="hidden" name="SProductId" id="productIdInput" />
 
         <!-- ✅ ÜRÜN SEÇİMİ -->
         <div class="card mb-4 shadow-sm">
@@ -58,14 +58,14 @@
                         </select>
                         <small class="form-text text-muted">
                             <i class="bi bi-info-circle"></i>
-                            Cıvata tipi seçimi
+                            Cıvata tipi seçimi (SAA0, SAB0, SAC0, SAD0, SAE0...)
                         </small>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ✅ FEATURE DROPDOWNS (Rule-Based) -->
+        <!-- ✅ FEATURE CONTAINER (Rule-Based) -->
         <div class="card mb-4 shadow-sm" id="featuresCard" style="display:none;">
             <div class="card-header bg-success text-white">
                 <i class="bi bi-sliders"></i> <strong>2. Ürün Özellikleri</strong>
@@ -96,13 +96,13 @@
         const featuresContainer = document.getElementById("featuresContainer");
         const featuresCard = document.getElementById("featuresCard");
         const submitBtn = document.getElementById("submitBtn");
-        const productIdInput = document.getElementById("productId");
+        const productIdInput = document.getElementById("productIdInput");
         const saForm = document.getElementById("saForm");
 
         let formData = null;
         let selectedValues = {}; // { featureId: valueId }
 
-        // ========== Ürün değişince form data yükle ==========
+        // ========== Ürün değişince rule-based form data yükle ==========
         productSelect.addEventListener("change", async function () {
             const productId = productSelect.value;
 
@@ -147,7 +147,7 @@
                 const label = document.createElement("label");
                 label.className = "form-label fw-bold";
 
-                // ✅ SABİT FEATURE: Yeşil badge + info icon
+                // ✅ SABİT FEATURE: Yeşil badge + disabled input
                 if (feature.isFixed) {
                     label.innerHTML = `
                         <span class="badge bg-success me-1">
@@ -155,28 +155,26 @@
                         </span>
                         ${feature.featureName}
                     `;
-                } else {
-                    label.innerHTML = `
-                        <span class="badge bg-secondary me-1">${index + 1}</span>
-                        ${feature.featureName} <span class="text-danger">*</span>
-                    `;
-                }
 
-                colDiv.appendChild(label);
-
-                // ✅ SABİT FEATURE: Disabled input göster
-                if (feature.isFixed) {
                     const fixedInput = document.createElement("input");
                     fixedInput.type = "text";
-                    fixedInput.className = "form-control bg-light";
+                    fixedInput.className = "form-control bg-light text-muted";
                     fixedInput.value = `${feature.fixedValueCode} - ${feature.fixedValueName}`;
                     fixedInput.disabled = true;
+                    fixedInput.style.fontWeight = "500";
+
+                    colDiv.appendChild(label);
                     colDiv.appendChild(fixedInput);
 
                     // Otomatik seç
                     selectedValues[feature.featureId] = feature.fixedValueId;
                 } else {
                     // ✅ DROPDOWN: İzinli değerler
+                    label.innerHTML = `
+                        <span class="badge bg-primary me-1">${Object.keys(selectedValues).filter(k => !formData.features.find(f => f.featureId === k)?.isFixed).length + 1}</span>
+                        ${feature.featureName} <span class="text-danger">*</span>
+                    `;
+
                     const select = document.createElement("select");
                     select.className = "form-select feature-select";
                     select.setAttribute("data-feature-id", feature.featureId);
@@ -197,6 +195,7 @@
                     });
 
                     select.addEventListener("change", onFeatureChange);
+                    colDiv.appendChild(label);
                     colDiv.appendChild(select);
                 }
 
@@ -267,7 +266,7 @@
                 valueInput.value = valueId;
                 hiddenContainer.appendChild(valueInput);
 
-                console.log(`[SA RULE JS] Added: Key=${featureId}, Value=${valueId}`);
+                console.log(`[SA RULE] Added: Key=${featureId}, Value=${valueId}`);
                 index++;
             });
 
@@ -288,6 +287,12 @@
     </script>
 
     <style>
+        /* ✅ Sabit değer input */
+        .bg-light {
+            background-color: #e9ecef !important;
+            border: 2px solid #198754 !important;
+        }
+
         /* ✅ Feature select stil */
         .feature-select {
             border-color: #0d6efd;
@@ -338,10 +343,9 @@
             }
         }
 
-        /* ✅ Sabit değer input */
-        .bg-light {
-            background-color: #e9ecef !important;
-            font-weight: 500;
+        /* ✅ Badge stil */
+        .badge {
+            font-size: 0.85rem;
         }
     </style>
 }

@@ -70,5 +70,17 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         /// 9. Feature değerleri getir
         /// </summary>
         Task<List<FeatureValueDto>> GetFeatureValuesAsync(Guid featureId);
+
+        /// <summary>
+        /// 10. Tüm feature'ları getir
+        /// </summary>
+        Task<IReadOnlyList<FeatureDto>> GetAllFeaturesAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 11. ✅ YENİ: Rule-based form data (sabit + dropdown değerler)
+        /// </summary>
+        Task<StockCodeSaFormDto> GetFormDataAsync(
+            Guid productId,
+            CancellationToken cancellationToken = default);
     }
 }
