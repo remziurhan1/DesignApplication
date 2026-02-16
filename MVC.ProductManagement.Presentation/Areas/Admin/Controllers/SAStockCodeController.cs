@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.ProductManagement.Application.DTOs;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
 using MVC.ProductManagement.Application.Services.Export;
 using MVC.ProductManagement.Application.Services.StockCodes.SA;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -145,7 +143,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         // ========== DÜZENLEME ==========
 
         /// <summary>
-        /// ✅ Düzenleme sayfası (GET)
+        /// ✅ Edit GET - Düzenleme sayfası
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
@@ -186,7 +184,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [FromForm] Dictionary<string, string> featureSelections)
+        public async Task<IActionResult> Edit(Guid id, SAStockCardUpdateDto model)
         {
             try
             {
