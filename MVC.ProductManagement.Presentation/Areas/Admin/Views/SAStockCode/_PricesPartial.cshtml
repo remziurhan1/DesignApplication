@@ -73,32 +73,35 @@
             </div>
         </div>
 
-        <!-- ========== HIZLI İŞLEMLER ========== -->
-        @if (activePrice != null)
-        {
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h6 class="mb-0">
-                        <i class="bi bi-lightning-fill"></i> Hızlı İşlemler
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <button type="button"
-                            class="btn btn-primary w-100 mb-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#addPriceModal">
-                        <i class="bi bi-plus-circle"></i> Yeni Fiyat Ekle
-                    </button>
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-lightning-fill"></i> Hızlı İşlemler
+                </h6>
+            </div>
+            <div class="card-body">
+
+                <!-- Her zaman -->
+                <button type="button"
+                        class="btn btn-primary w-100 mb-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addPriceModal">
+                    <i class="bi bi-plus-circle"></i> Yeni Fiyat Ekle
+                </button>
+
+                <!-- Sadece aktif fiyat varsa -->
+                @if (activePrice != null)
+                {
                     <button type="button"
                             class="btn btn-outline-warning w-100"
                             onclick="editActivePrice()">
                         <i class="bi bi-pencil"></i> Aktif Fiyatı Düzenle
                     </button>
-                </div>
-            </div>
-        }
-    </div>
+                }
 
+            </div>
+        </div>
+    </div> <!-- ✅ col-md-4 KAPANIŞI BURADA -->
     <!-- ========== FİYAT GEÇMİŞİ ========== -->
     <div class="col-md-8">
         <div class="card shadow-sm">
@@ -217,11 +220,23 @@
                                                             title="Pasifleştir">
                                                         <i class="bi bi-x-circle"></i>
                                                     </button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-danger"
+                                                            onclick="deletePrice('@price.Id')"
+                                                            title="Sil">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
                                                 </div>
                                             }
                                             else
                                             {
-                                                <small class="text-muted">-</small>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button"
+                                                            class="btn btn-success"
+                                                            onclick="reactivatePrice('@price.Id')">
+                                                        <i class="bi bi-arrow-repeat"></i>
+                                                    </button>
+                                                </div>
                                             }
                                         </td>
                                     </tr>
@@ -472,6 +487,18 @@
     <input type="hidden" name="id" id="deactivatePriceId" />
     <input type="hidden" name="stockCardId" value="@stockCardId" />
 </form>
+<form id="deletePriceForm" asp-action="DeletePrice" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="deletePriceId" />
+    <input type="hidden" name="stockCardId" value="@stockCardId" />
+</form>
+<form id="reactivatePriceForm" asp-action="ReactivatePrice" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="reactivatePriceId" />
+    <input type="hidden" name="stockCardId" value="@stockCardId" />
+</form>
+
+
 
 <script>
     function editPrice(id, unitPrice, vatRate, validFrom, validTo, notes) {
@@ -486,20 +513,6 @@
         editModal.show();
     }
 
-    function editActivePrice() {
-    @if (activePrice != null)
-    {
-        <text>
-                editPrice(
-                    '@activePrice.UnitPrice',
-                    '@activePrice.VatRate',
-                    '@activePrice.ValidFrom.ToString("yyyy-MM-dd")',
-                    '@(activePrice.ValidTo?.ToString("yyyy-MM-dd"))',
-                );
-        </text>
-    }
-    }
-
     function deactivatePrice(id) {
         Swal.fire({
             title: 'Fiyatı Pasifleştir?',
@@ -508,8 +521,8 @@
             showCancelButton: true,
             confirmButtonColor: '#dc3545',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: '<i class="bi bi-check"></i> Evet, Pasifleştir',
-            cancelButtonText: '<i class="bi bi-x-circle"></i> İptal'
+            confirmButtonText: 'Evet',
+            cancelButtonText: 'İptal'
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('deactivatePriceId').value = id;
@@ -517,4 +530,15 @@
             }
         });
     }
+
+    function deletePrice(id) {
+        document.getElementById('deletePriceId').value = id;
+        document.getElementById('deletePriceForm').submit();
+    }
+        function reactivatePrice(id) {
+        document.getElementById('reactivatePriceId').value = id;
+        document.getElementById('reactivatePriceForm').submit();
+    }
+
 </script>
+

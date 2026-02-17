@@ -272,5 +272,65 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 })
                 .FirstOrDefaultAsync(cancellationToken);
         }
+
+        public async Task<bool> DeletePriceAsync(
+    Guid id,
+    string userName,
+    CancellationToken cancellationToken = default)
+        {
+            var price = await _context.StockCardPrices
+                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+
+            if (price == null)
+                return false;
+
+            _context.StockCardPrices.Remove(price);
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+
+
+
+        public async Task<bool> ReactivatePriceAsync(
+    Guid id,
+    string userName,
+    CancellationToken cancellationToken = default)
+        {
+            var price = await _context.StockCardPrices
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status != Status.Deleted, cancellationToken);
+
+            if (price == null)
+                return false;
+
+            // Aynı stok ve currency'deki diğer aktifleri pasifleştir
+            var otherActivePrices = await _context.StockCardPrices
+                .Where(p => p.StockCardId == price.StockCardId
+                         && p.Currency == price.Currency
+                         && p.IsActive
+                         && p.Id != price.Id
+                         && p.Status != Status.Deleted)
+                .ToListAsync(cancellationToken);
+
+            foreach (var item in otherActivePrices)
+            {
+                item.IsActive = false;
+                item.ModifiedBy = userName;
+                item.ModifiedDate = DateTime.UtcNow;
+                item.Status = Status.Modified;
+            }
+
+            // Bu kaydı aktif yap
+            price.IsActive = true;
+            price.ModifiedBy = userName;
+            price.ModifiedDate = DateTime.UtcNow;
+            price.Status = Status.Modified;
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
+
     }
+
 }

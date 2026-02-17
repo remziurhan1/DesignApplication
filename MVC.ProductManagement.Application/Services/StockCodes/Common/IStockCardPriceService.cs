@@ -56,5 +56,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
             DateTime date,
             string currency = "TRY",
             CancellationToken cancellationToken = default);
+
+        // ✅ Soft Delete
+        Task<bool> DeletePriceAsync(
+            Guid id,
+            string userName,
+            CancellationToken cancellationToken = default);
+        Task<bool> ReactivatePriceAsync(Guid id, string userName, CancellationToken cancellationToken = default);
+
     }
 }
