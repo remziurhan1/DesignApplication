@@ -38,51 +38,63 @@
             <i class="bi bi-funnel-fill"></i> <strong>Filtrele</strong>
         </div>
         <div class="card-body">
-            <form method="get" asp-action="Index" id="filterForm">
-                <div class="row g-3">
-                    <!-- Ürün Filtresi -->
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Ürün</label>
-                        <select name="ProductId" class="form-select">
-                            <option value="">-- Tümü --</option>
-                            @foreach (var product in ViewBag.Products as List<SelectListItem>)
-                            {
-                                <option value="@product.Value" selected="@(Context.Request.Query["ProductId"] == product.Value)">
-                                    @product.Text
-                                </option>
-                            }
-                        </select>
-                    </div>
+                <form method="get" asp-action="Index" id="filterForm">
+                    <div class="row g-3">
+                        <!-- Genel Arama -->
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-search"></i> Genel Arama
+                            </label>
+                            <input type="text"
+                                   name="SearchTerm"
+                                   class="form-control form-control-lg"
+                                   placeholder="Stok kodu, özellik, malzeme... (örn: M16x20, ASTM A193)"
+                                   value="@Context.Request.Query["SearchTerm"]" />
+                            <small class="text-muted">
+                                <i class="bi bi-lightbulb"></i>
+                                <strong>Örnek:</strong> M16x20, KARBON, CINKO, SAA01234, ASTM A193
+                            </small>
+                        </div>
 
-                    <!-- Stok Kodu Arama -->
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Stok Kodu</label>
-                        <input type="text" name="StockCode" class="form-control"
-                               placeholder="SAA0..."
-                               value="@Context.Request.Query["StockCode"]" />
-                    </div>
+                        <!-- Ürün Filtresi -->
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-box-seam"></i> Ürün
+                            </label>
+                            <select name="ProductId" class="form-select">
+                                <option value="">-- Tüm Ürünler --</option>
+                                @foreach (var product in ViewBag.Products as List<SelectListItem>)
+                                {
+                                    <option value="@product.Value" selected="@(Context.Request.Query["ProductId"] == product.Value)">
+                                        @product.Text
+                                    </option>
+                                }
+                            </select>
+                        </div>
 
-                    <!-- Sayfa Boyutu -->
-                    <div class="col-md-2">
-                        <label class="form-label fw-bold">Göster</label>
-                        <select name="PageSize" class="form-select">
-                            <option value="25" selected="@(Model.PageSize == 25)">25</option>
-                            <option value="50" selected="@(Model.PageSize == 50)">50</option>
-                            <option value="100" selected="@(Model.PageSize == 100)">100</option>
-                        </select>
-                    </div>
+                        <!-- Sayfa Boyutu -->
+                        <div class="col-md-2">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-list-ol"></i> Göster
+                            </label>
+                            <select name="PageSize" class="form-select">
+                                <option value="25" selected="@(Model.PageSize == 25)">25</option>
+                                <option value="50" selected="@(Model.PageSize == 50)">50</option>
+                                <option value="100" selected="@(Model.PageSize == 100)">100</option>
+                            </select>
+                        </div>
 
-                    <!-- Butonlar -->
-                    <div class="col-md-4 d-flex align-items-end gap-2">
-                        <button type="submit" class="btn btn-primary flex-fill">
-                            <i class="bi bi-search"></i> Ara
-                        </button>
-                        <a asp-action="Index" class="btn btn-secondary flex-fill">
-                            <i class="bi bi-x-circle"></i> Temizle
-                        </a>
+                        <!-- Butonlar -->
+                        <div class="col-md-2 d-flex align-items-end gap-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search"></i> Ara
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary w-100">
+                                <i class="bi bi-x-circle"></i> Temizle
+                            </a>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
         </div>
     </div>
 
@@ -134,11 +146,11 @@
                                                    class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil"></i> Düzenle
                                                 </a>
-                                                <button type="button"
+                                              @*   <button type="button"
                                                         class="btn btn-sm btn-danger"
                                                         onclick="confirmDelete('@item.Id', '@item.StockCode8')">
                                                     <i class="bi bi-trash"></i> Sil
-                                                </button>
+                                                </button> *@
                                             </div>
                                         </td>
                                 </tr>
