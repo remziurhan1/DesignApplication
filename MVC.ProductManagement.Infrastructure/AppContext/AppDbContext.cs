@@ -55,6 +55,11 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         //  public DbSet<StockCard> StockCards { get; set; }
         // ✅ MEVCUT DbSet'lerin yanına EKLE (SFeature, SFeatureValue, SProductFeature'ların altına)
 
+        // ========== STOK KART MODÜLLER ==========
+        public DbSet<StockCardDatasheet> StockCardDatasheets { get; set; }
+        public DbSet<StockCardPrice> StockCardPrices { get; set; }
+        public DbSet<StockCardInventory> StockCardInventories { get; set; }
+
         public DbSet<SProductFeatureRule> SProductFeatureRules { get; set; }
         public DbSet<SFeatureValueRule> SFeatureValueRules { get; set; }
         public DbSet<SFeatureValueDependency> SFeatureValueDependencies { get; set; }

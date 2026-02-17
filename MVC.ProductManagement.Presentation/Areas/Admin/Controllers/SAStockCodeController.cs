@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
-using MVC.ProductManagement.Application.Services.Export;
+﻿using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
+using MVC.ProductManagement.Application.Services.StockCodes;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Application.Services.StockCodes.SA;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using MVC.ProductManagement.Application.Services.Export;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -16,17 +14,26 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
     public class SAStockCodeController : Controller
     {
         private readonly IStockCodeSaService _saService;
+        private readonly IStockCardDatasheetService _datasheetService;
+        private readonly IStockCardPriceService _priceService;
+        private readonly IStockCardInventoryService _inventoryService;
         private readonly IExcelExportService _excelService;
 
         public SAStockCodeController(
             IStockCodeSaService saService,
+            IStockCardDatasheetService datasheetService,
+            IStockCardPriceService priceService,
+            IStockCardInventoryService inventoryService,
             IExcelExportService excelService)
         {
             _saService = saService;
+            _datasheetService = datasheetService;
+            _priceService = priceService;
+            _inventoryService = inventoryService;
             _excelService = excelService;
         }
 
-        // ========== KOD ÜRETME ==========
+        #region KOD ÜRETME
 
         /// <summary>
         /// ✅ Kod üretme formu (GET)
@@ -43,6 +50,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         /// ✅ Kod üretme (POST)
         /// </summary>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Generate(SAStockCodeGenerateVm vm)
         {
             await FillLookups(vm);
@@ -65,6 +73,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 vm.Description = result.Description;
                 vm.AlreadyExists = result.AlreadyExists;
                 vm.ErrorMessage = null;
+
+                if (result.AlreadyExists == true)
+                {
+                    TempData["WarningMessage"] = "Bu kod zaten mevcut! Kayıt oluşturulmadı.";
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = $"Stok kodu başarıyla oluşturuldu: {result.StockCode8}";
+                }
             }
             catch (Exception ex)
             {
@@ -72,6 +89,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 vm.Description = null;
                 vm.AlreadyExists = null;
                 vm.ErrorMessage = ex.Message;
+                TempData["ErrorMessage"] = ex.Message;
             }
 
             return View(vm);
@@ -94,7 +112,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
         }
 
-        // ========== LİSTE ==========
+        #endregion
+
+        #region LİSTE
 
         /// <summary>
         /// ✅ Liste sayfası (Index)
@@ -117,30 +137,63 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
+                TempData["ErrorMessage"] = $"Liste yükleme hatası: {ex.Message}";
                 return View(new SAStockCardListResultDto());
             }
         }
 
+        #endregion
+
+        #region DETAY
+
         /// <summary>
-        /// ✅ Detay sayfası
+        /// ✅ Detay sayfası (Tab'lı modüller ile - ViewModel Pattern)
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Detail(Guid id)
         {
             try
             {
+                // 1. Genel bilgileri al
                 var detail = await _saService.GetStockCardDetailAsync(id, CancellationToken.None);
-                return View(detail);
+                if (detail == null)
+                {
+                    TempData["ErrorMessage"] = "Stok kartı bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 2. ViewModel oluştur
+                var viewModel = new SAStockCardDetailViewModel
+                {
+                    StockCard = detail
+                };
+
+                // 3. Modül verilerini paralel yükle
+                await Task.WhenAll(
+                    LoadDatasheetsAsync(id, viewModel),
+                    LoadPricesAsync(id, viewModel),      // ✅ Bu çağrılıyor mu?
+                    LoadInventoryAsync(id, viewModel)
+                );
+
+                // ✅ DEBUG: Console'a yaz
+                Console.WriteLine($"=== DETAIL DEBUG ===");
+                Console.WriteLine($"StockCardId: {id}");
+                Console.WriteLine($"PriceHistory Count: {viewModel.PriceHistory?.Count ?? 0}");
+                Console.WriteLine($"ActivePrice: {viewModel.ActivePrice?.UnitPrice ?? 0} {viewModel.ActivePrice?.Currency}");
+
+                return View(viewModel);
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
+                Console.WriteLine($"Detail ERROR: {ex.Message}");
+                TempData["ErrorMessage"] = $"Detay yükleme hatası: {ex.Message}";
                 return RedirectToAction(nameof(Index));
             }
         }
 
-        // ========== DÜZENLEME ==========
+        #endregion
+
+        #region DÜZENLEME
 
         /// <summary>
         /// ✅ Edit GET - Düzenleme sayfası (Rule-based)
@@ -182,7 +235,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Hata: {ex.Message}";
+                TempData["ErrorMessage"] = $"Düzenleme formu yüklenirken hata: {ex.Message}";
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -216,7 +269,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Edit), new { id });
             }
         }
-        // ========== SİLME ==========
+
+        #endregion
+
+        #region SİLME
 
         /// <summary>
         /// ✅ Silme (POST)
@@ -238,8 +294,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
         }
 
-        // ========== EXCEL EXPORT ==========
+        #endregion
 
+        #region EXCEL EXPORT
+
+        /// <summary>
+        /// ✅ Liste Excel Export
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> ExportExcel(SAStockCardFilterDto filter)
         {
@@ -271,6 +332,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
         }
 
+        /// <summary>
+        /// ✅ Detay Excel Export
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> ExportDetailExcel(Guid id)
         {
@@ -289,8 +353,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
         }
 
-        // ========== HELPER ==========
+        #endregion
 
+        #region HELPER METHODS - Modül Yükleme
+
+        /// <summary>
+        /// Dropdown verileri yükle
+        /// </summary>
         private async Task FillLookups(SAStockCodeGenerateVm vm)
         {
             var products = await _saService.GetSaProductsAsync();
@@ -298,5 +367,290 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToList();
         }
+
+        /// <summary>
+        /// Datasheet verilerini yükle
+        /// </summary>
+        private async Task LoadDatasheetsAsync(Guid stockCardId, SAStockCardDetailViewModel viewModel)
+        {
+            try
+            {
+                viewModel.Datasheets = await _datasheetService.GetDatasheetsByStockCardAsync(
+                    stockCardId,
+                    CancellationToken.None
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Datasheet yükleme hatası: {ex.Message}");
+                viewModel.Datasheets = new List<MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.DatasheetDto>();
+            }
+        }
+
+        /// <summary>
+        /// Fiyat verilerini yükle
+        /// </summary>
+        private async Task LoadPricesAsync(Guid stockCardId, SAStockCardDetailViewModel viewModel)
+        {
+            try
+            {
+                viewModel.PriceHistory = await _priceService.GetPriceHistoryAsync(
+                    stockCardId,
+                    CancellationToken.None
+                );
+
+                viewModel.ActivePrice = await _priceService.GetActivePriceAsync(
+                    stockCardId,
+                    "TRY",
+                    CancellationToken.None
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fiyat yükleme hatası: {ex.Message}");
+                viewModel.PriceHistory = new List<MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.PriceDto>();
+                viewModel.ActivePrice = null;
+            }
+        }
+
+        /// <summary>
+        /// Stok verilerini yükle
+        /// </summary>
+        private async Task LoadInventoryAsync(Guid stockCardId, SAStockCardDetailViewModel viewModel)
+        {
+            try
+            {
+                viewModel.CurrentInventory = await _inventoryService.GetCurrentInventoryAsync(
+                    stockCardId,
+                    CancellationToken.None
+                );
+
+                viewModel.InventoryMovements = await _inventoryService.GetInventoryMovementsAsync(
+                    stockCardId,
+                    null,
+                    null,
+                    CancellationToken.None
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Stok yükleme hatası: {ex.Message}");
+                viewModel.CurrentInventory = null;
+                viewModel.InventoryMovements = new List<MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.InventoryDto>();
+            }
+        }
+
+        #endregion
+
+        #region DATASHEET ACTIONS
+
+        /// <summary>
+        /// ✅ Dosya Yükleme
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadDatasheet(Guid stockCardId, IFormFile file, string description)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    TempData["ErrorMessage"] = "Lütfen bir dosya seçin.";
+                    return RedirectToAction(nameof(Detail), new { id = stockCardId });
+                }
+
+                if (file.Length > 10 * 1024 * 1024)
+                {
+                    TempData["ErrorMessage"] = "Dosya boyutu 10 MB'dan büyük olamaz.";
+                    return RedirectToAction(nameof(Detail), new { id = stockCardId });
+                }
+
+                var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png", ".doc", ".docx", ".xls", ".xlsx" };
+                var extension = Path.GetExtension(file.FileName).ToLower();
+                if (!allowedExtensions.Contains(extension))
+                {
+                    TempData["ErrorMessage"] = "Geçersiz dosya tipi. İzin verilen: PDF, JPG, PNG, DOC, DOCX, XLS, XLSX";
+                    return RedirectToAction(nameof(Detail), new { id = stockCardId });
+                }
+
+                byte[] fileContent;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(memoryStream);
+                    fileContent = memoryStream.ToArray();
+                }
+
+                var uploadDto = new MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.DatasheetUploadDto
+                {
+                    StockCardId = stockCardId,
+                    FileName = file.FileName,
+                    ContentType = file.ContentType,
+                    FileSize = file.Length,
+                    FileContent = fileContent,
+                    Description = description
+                };
+
+                await _datasheetService.UploadDatasheetAsync(uploadDto, "Admin", CancellationToken.None);
+                TempData["SuccessMessage"] = "Dosya başarıyla yüklendi!";
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+                TempData["ErrorMessage"] = $"Dosya yükleme hatası: {ex.Message}\n\nDetay: {innerMessage}";
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = stockCardId });
+        }
+
+        /// <summary>
+        /// ✅ Dosya İndirme
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> DownloadDatasheet(Guid id)
+        {
+            try
+            {
+                var (content, fileName, contentType) = await _datasheetService.DownloadDatasheetAsync(id, CancellationToken.None);
+                return File(content, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Dosya indirme hatası: {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        /// <summary>
+        /// ✅ Dosya Silme
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDatasheet(Guid id, Guid stockCardId)
+        {
+            try
+            {
+                await _datasheetService.DeleteDatasheetAsync(id, "Admin", CancellationToken.None);
+                TempData["SuccessMessage"] = "Dosya başarıyla silindi!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Dosya silme hatası: {ex.Message}";
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = stockCardId });
+        }
+
+        #endregion
+
+        #region PRICE ACTIONS
+
+        /// <summary>
+        /// ✅ Fiyat Ekleme
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePrice(MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.PriceCreateDto createDto)
+        {
+            try
+            {
+                await _priceService.CreatePriceAsync(createDto, "Admin", CancellationToken.None);
+                TempData["SuccessMessage"] = "Fiyat başarıyla eklendi!";
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+                TempData["ErrorMessage"] = $"Fiyat ekleme hatası: {ex.Message}\n\nDetay: {innerMessage}";
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = createDto.StockCardId });
+        }
+
+        /// <summary>
+        /// ✅ Fiyat Güncelleme
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePrice(MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.PriceUpdateDto updateDto, Guid stockCardId)
+        {
+            try
+            {
+                await _priceService.UpdatePriceAsync(updateDto, "Admin", CancellationToken.None);
+                TempData["SuccessMessage"] = "Fiyat başarıyla güncellendi!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Fiyat güncelleme hatası: {ex.Message}";
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = stockCardId });
+        }
+
+        /// <summary>
+        /// ✅ Fiyat Pasifleştirme
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeactivatePrice(Guid id, Guid stockCardId)
+        {
+            try
+            {
+                await _priceService.DeactivatePriceAsync(id, "Admin", CancellationToken.None);
+                TempData["SuccessMessage"] = "Fiyat pasifleştirildi!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Fiyat pasifleştirme hatası: {ex.Message}";
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = stockCardId });
+        }
+
+        #endregion
+
+        #region INVENTORY ACTIONS
+
+        /// <summary>
+        /// ✅ Stok Hareketi Ekleme
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateInventoryMovement(MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.InventoryMovementCreateDto createDto)
+        {
+            try
+            {
+                await _inventoryService.CreateMovementAsync(createDto, "Admin", CancellationToken.None);
+                TempData["SuccessMessage"] = "Stok hareketi başarıyla kaydedildi!";
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+                TempData["ErrorMessage"] = $"Stok hareketi hatası: {ex.Message}\n\nDetay: {innerMessage}";
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = createDto.StockCardId });
+        }
+
+        /// <summary>
+        /// ✅ İlk Stok Girişi
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> InitialStock(Guid stockCardId, int quantity, string location)
+        {
+            try
+            {
+                await _inventoryService.InitialStockAsync(stockCardId, quantity, location, "Admin", CancellationToken.None);
+                TempData["SuccessMessage"] = "İlk stok girişi başarıyla yapıldı!";
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+                TempData["ErrorMessage"] = $"İlk stok girişi hatası: {ex.Message}\n\nDetay: {innerMessage}";
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = stockCardId });
+        }
+
+        #endregion
     }
 }

@@ -1,0 +1,520 @@
+﻿@using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
+
+@{
+    // Anonymous object'ten verileri al
+    var stockCardId = (Guid)ViewData.Model.GetType().GetProperty("StockCardId").GetValue(ViewData.Model, null);
+    var priceHistory = ViewData.Model.GetType().GetProperty("PriceHistory").GetValue(ViewData.Model, null) as IReadOnlyList<PriceDto>;
+    var activePrice = ViewData.Model.GetType().GetProperty("ActivePrice").GetValue(ViewData.Model, null) as ActivePriceDto;
+}
+
+<div class="row">
+
+    <!-- ========== AKTİF FİYAT KARTI ========== -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-success mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-currency-dollar"></i> Aktif Fiyat
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                @if (activePrice != null)
+                {
+                    <!-- Fiyat VAR -->
+                    <h1 class="display-4 text-success fw-bold mb-2">
+                        @activePrice.UnitPrice.ToString("N2")
+                        <small class="text-muted fs-4">@activePrice.Currency</small>
+                    </h1>
+                    <p class="text-muted mb-2">Birim Fiyat (KDV Hariç)</p>
+
+                    <hr />
+
+                    <div class="mb-3">
+                        <p class="mb-1">
+                            <strong>KDV Dahil:</strong>
+                        </p>
+                        <h3 class="text-primary">
+                            @activePrice.PriceWithVat.ToString("N2") @activePrice.Currency
+                        </h3>
+                        <small class="text-muted">
+                            <i class="bi bi-percent"></i> KDV Oranı: %@activePrice.VatRate
+                        </small>
+                    </div>
+
+                    <hr />
+
+                    <small class="text-muted">
+                        <i class="bi bi-calendar-range"></i> Geçerlilik:
+                        <br />
+                        <strong>@activePrice.ValidFrom.ToString("dd.MM.yyyy")</strong>
+                        @if (activePrice.ValidTo.HasValue)
+                        {
+                            <text> - <strong>@activePrice.ValidTo.Value.ToString("dd.MM.yyyy")</strong></text>
+                        }
+                        else
+                        {
+                            <text> - <strong class="text-success">Süresiz</strong></text>
+                        }
+                    </small>
+                }
+                else
+                {
+                    <!-- Fiyat YOK -->
+                    <i class="bi bi-exclamation-circle display-1 text-warning mb-3"></i>
+                    <h5 class="mt-3 text-muted">Aktif fiyat bulunamadı</h5>
+                    <p class="text-muted small">İlk fiyatı ekleyerek başlayın</p>
+                    <button type="button"
+                            class="btn btn-success mt-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addPriceModal">
+                        <i class="bi bi-plus-circle"></i> İlk Fiyatı Ekle
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- ========== HIZLI İŞLEMLER ========== -->
+        @if (activePrice != null)
+        {
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-lightning-fill"></i> Hızlı İşlemler
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <button type="button"
+                            class="btn btn-primary w-100 mb-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addPriceModal">
+                        <i class="bi bi-plus-circle"></i> Yeni Fiyat Ekle
+                    </button>
+                    <button type="button"
+                            class="btn btn-outline-warning w-100"
+                            onclick="editActivePrice()">
+                        <i class="bi bi-pencil"></i> Aktif Fiyatı Düzenle
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- ========== FİYAT GEÇMİŞİ ========== -->
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock-history"></i> Fiyat Geçmişi
+                        </h5>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button type="button"
+                                class="btn btn-light btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#addPriceModal">
+                            <i class="bi bi-plus-circle"></i> Yeni Fiyat Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (priceHistory != null && priceHistory.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 10%;">
+                                        <i class="bi bi-cash"></i> Para
+                                    </th>
+                                    <th style="width: 15%;" class="text-end">
+                                        <i class="bi bi-tag"></i> Birim Fiyat
+                                    </th>
+                                    <th style="width: 10%;" class="text-center">
+                                        <i class="bi bi-percent"></i> KDV
+                                    </th>
+                                    <th style="width: 15%;" class="text-end">
+                                        <i class="bi bi-calculator"></i> KDV Dahil
+                                    </th>
+                                    <th style="width: 20%;">
+                                        <i class="bi bi-calendar-range"></i> Geçerlilik
+                                    </th>
+                                    <th style="width: 15%;" class="text-center">
+                                        <i class="bi bi-toggle-on"></i> Durum
+                                    </th>
+                                    <th style="width: 15%;" class="text-center">
+                                        <i class="bi bi-gear"></i> İşlem
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var price in priceHistory.OrderByDescending(p => p.ValidFrom))
+                                {
+                                    <tr class="@(price.IsActive ? "table-success" : "")">
+                                        <td>
+                                            <strong class="badge @(price.Currency == "TRY" ? "bg-danger" : price.Currency == "USD" ? "bg-success" : "bg-primary")">
+                                                @price.Currency
+                                            </strong>
+                                        </td>
+                                        <td class="text-end">
+                                            <strong>@price.UnitPrice.ToString("N2")</strong>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-light text-dark">%@price.VatRate</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <strong class="text-primary">@price.PriceWithVat.ToString("N2")</strong>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                <i class="bi bi-calendar-check"></i>
+                                                @price.ValidFrom.ToString("dd.MM.yyyy")
+                                            </small>
+                                            <br />
+                                            @if (price.ValidTo.HasValue)
+                                            {
+                                                <small>
+                                                    <i class="bi bi-calendar-x"></i>
+                                                    @price.ValidTo.Value.ToString("dd.MM.yyyy")
+                                                </small>
+                                            }
+                                            else
+                                            {
+                                                <small class="text-success">
+                                                    <i class="bi bi-infinity"></i> Süresiz
+                                                </small>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (price.IsActive)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-check-circle"></i> Aktif
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">
+                                                    <i class="bi bi-x-circle"></i> Pasif
+                                                </span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (price.IsActive)
+                                            {
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <button type="button"
+                                                            class="btn btn-warning"
+                                                            onclick="editPrice('@price.Id', '@price.UnitPrice', '@price.VatRate', '@price.ValidFrom.ToString("yyyy-MM-dd")', '@(price.ValidTo?.ToString("yyyy-MM-dd"))', '@price.Notes')"
+                                                            title="Düzenle">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-danger"
+                                                            onclick="deactivatePrice('@price.Id')"
+                                                            title="Pasifleştir">
+                                                        <i class="bi bi-x-circle"></i>
+                                                    </button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <small class="text-muted">-</small>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Toplam:</strong> @priceHistory.Count fiyat kaydı
+                        @if (priceHistory.Any(p => p.IsActive))
+                        {
+                            var activePrices = priceHistory.Where(p => p.IsActive).ToList();
+                            <span class="ms-3">
+                                <strong>Aktif:</strong> @activePrices.Count
+                            </span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox display-4 text-muted"></i>
+                        <h5 class="mt-3 text-muted">Henüz fiyat kaydı yok</h5>
+                        <p class="text-muted">İlk fiyatı ekleyerek başlayın</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL: YENİ FİYAT EKLE ========== -->
+<div class="modal fade" id="addPriceModal" tabindex="-1" aria-labelledby="addPriceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="CreatePrice" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="StockCardId" value="@stockCardId" />
+
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="addPriceModalLabel">
+                        <i class="bi bi-plus-circle"></i> Yeni Fiyat Ekle
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="newCurrency" class="form-label fw-bold">
+                                <i class="bi bi-cash"></i> Para Birimi
+                            </label>
+                            <select id="newCurrency" name="Currency" class="form-select" required>
+                                <option value="TRY" selected>TRY (₺)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="newUnitPrice" class="form-label fw-bold">
+                                <i class="bi bi-tag"></i> Birim Fiyat
+                            </label>
+                            <input type="number"
+                                   id="newUnitPrice"
+                                   name="UnitPrice"
+                                   class="form-control"
+                                   step="0.01"
+                                   min="0"
+                                   required
+                                   placeholder="0.00" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="newVatRate" class="form-label fw-bold">
+                            <i class="bi bi-percent"></i> KDV Oranı (%)
+                        </label>
+                        <input type="number"
+                               id="newVatRate"
+                               name="VatRate"
+                               class="form-control"
+                               step="0.01"
+                               min="0"
+                               max="100"
+                               value="20"
+                               required />
+                        <div class="form-text">Türkiye için varsayılan: %20</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="newValidFrom" class="form-label fw-bold">
+                                <i class="bi bi-calendar-check"></i> Geçerlilik Başlangıç
+                            </label>
+                            <input type="date"
+                                   id="newValidFrom"
+                                   name="ValidFrom"
+                                   class="form-control"
+                                   value="@DateTime.Now.ToString("yyyy-MM-dd")"
+                                   required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="newValidTo" class="form-label fw-bold">
+                                <i class="bi bi-calendar-x"></i> Geçerlilik Bitiş
+                            </label>
+                            <input type="date"
+                                   id="newValidTo"
+                                   name="ValidTo"
+                                   class="form-control" />
+                            <div class="form-text">Boş bırakılırsa süresiz</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="newNotes" class="form-label fw-bold">
+                            <i class="bi bi-chat-left-text"></i> Notlar
+                        </label>
+                        <textarea id="newNotes"
+                                  name="Notes"
+                                  class="form-control"
+                                  rows="2"
+                                  placeholder="Fiyat hakkında notlar..."></textarea>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Bilgi:</strong> Yeni fiyat otomatik olarak aktif hale gelecektir.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL: FİYAT DÜZENLE ========== -->
+<div class="modal fade" id="editPriceModal" tabindex="-1" aria-labelledby="editPriceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="UpdatePrice" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="stockCardId" value="@stockCardId" />
+                <input type="hidden" name="Id" id="editPriceId" />
+
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="editPriceModalLabel">
+                        <i class="bi bi-pencil"></i> Fiyat Düzenle
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editUnitPrice" class="form-label fw-bold">
+                            <i class="bi bi-tag"></i> Birim Fiyat
+                        </label>
+                        <input type="number"
+                               id="editUnitPrice"
+                               name="UnitPrice"
+                               class="form-control"
+                               step="0.01"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editVatRate" class="form-label fw-bold">
+                            <i class="bi bi-percent"></i> KDV Oranı (%)
+                        </label>
+                        <input type="number"
+                               id="editVatRate"
+                               name="VatRate"
+                               class="form-control"
+                               step="0.01"
+                               required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editValidFrom" class="form-label fw-bold">
+                                <i class="bi bi-calendar-check"></i> Geçerlilik Başlangıç
+                            </label>
+                            <input type="date"
+                                   id="editValidFrom"
+                                   name="ValidFrom"
+                                   class="form-control"
+                                   required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editValidTo" class="form-label fw-bold">
+                                <i class="bi bi-calendar-x"></i> Geçerlilik Bitiş
+                            </label>
+                            <input type="date"
+                                   id="editValidTo"
+                                   name="ValidTo"
+                                   class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editNotes" class="form-label fw-bold">
+                            <i class="bi bi-chat-left-text"></i> Notlar
+                        </label>
+                        <textarea id="editNotes"
+                                  name="Notes"
+                                  class="form-control"
+                                  rows="2"></textarea>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox"
+                               id="editIsActive"
+                               name="IsActive"
+                               class="form-check-input"
+                               value="true"
+                               checked />
+                        <label class="form-check-label" for="editIsActive">
+                            <i class="bi bi-check-circle"></i> Aktif
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-save"></i> Güncelle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== PASİFLEŞTİRME FORM ========== -->
+<form id="deactivatePriceForm" asp-action="DeactivatePrice" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="deactivatePriceId" />
+    <input type="hidden" name="stockCardId" value="@stockCardId" />
+</form>
+
+<script>
+    function editPrice(id, unitPrice, vatRate, validFrom, validTo, notes) {
+        document.getElementById('editPriceId').value = id;
+        document.getElementById('editUnitPrice').value = unitPrice;
+        document.getElementById('editVatRate').value = vatRate;
+        document.getElementById('editValidFrom').value = validFrom;
+        document.getElementById('editValidTo').value = validTo || '';
+        document.getElementById('editNotes').value = notes || '';
+
+        var editModal = new bootstrap.Modal(document.getElementById('editPriceModal'));
+        editModal.show();
+    }
+
+    function editActivePrice() {
+    @if (activePrice != null)
+    {
+        <text>
+                editPrice(
+                    '@activePrice.UnitPrice',
+                    '@activePrice.VatRate',
+                    '@activePrice.ValidFrom.ToString("yyyy-MM-dd")',
+                    '@(activePrice.ValidTo?.ToString("yyyy-MM-dd"))',
+                );
+        </text>
+    }
+    }
+
+    function deactivatePrice(id) {
+        Swal.fire({
+            title: 'Fiyatı Pasifleştir?',
+            text: 'Bu fiyatı pasifleştirmek istediğinize emin misiniz?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="bi bi-check"></i> Evet, Pasifleştir',
+            cancelButtonText: '<i class="bi bi-x-circle"></i> İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('deactivatePriceId').value = id;
+                document.getElementById('deactivatePriceForm').submit();
+            }
+        });
+    }
+</script>
