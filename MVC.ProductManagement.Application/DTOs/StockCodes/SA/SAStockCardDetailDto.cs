@@ -27,6 +27,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; } = string.Empty;
 
+
         /// <summary>
         /// Feature seçimleri
         /// </summary>

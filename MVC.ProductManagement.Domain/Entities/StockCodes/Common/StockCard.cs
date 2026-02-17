@@ -49,5 +49,22 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Common
     = new List<StockCardFeatureSelection>();
 
         public string Description { get; set; } = default!;
+
+        // ========== ORTAK MODÜLLER (Opsiyonel) ==========
+
+        /// <summary>
+        /// Datasheet'ler (opsiyonel)
+        /// </summary>
+        public virtual ICollection<StockCardDatasheet> Datasheets { get; set; } = new List<StockCardDatasheet>();
+
+        /// <summary>
+        /// Fiyat geçmişi (opsiyonel)
+        /// </summary>
+        public virtual ICollection<StockCardPrice> Prices { get; set; } = new List<StockCardPrice>();
+
+        /// <summary>
+        /// Stok hareketleri (opsiyonel)
+        /// </summary>
+        public virtual ICollection<StockCardInventory> InventoryMovements { get; set; } = new List<StockCardInventory>();
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC.ProductManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260213143504_22")]
-    partial class _22
+    [Migration("20260217090003_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -755,7 +755,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1720),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(6994),
                             Density = 7850.0,
                             Group = "Fine grain pressure vessel steel",
                             MaterialNumber = "1.0565",
@@ -832,7 +832,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1754),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7024),
                             FormType = 0,
                             MaterialId = new Guid("11111111-1111-1111-1111-111111111111"),
                             Notes = "Standard plate form for P355NH",
@@ -42882,6 +42882,249 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardDatasheet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StockCardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("StockCardPriceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Version")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("StockCardId");
+
+                    b.HasIndex("StockCardPriceId");
+
+                    b.HasIndex("StockCardId", "Version");
+
+                    b.ToTable("StockCardDatasheets", (string)null);
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardInventory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("MovementDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MovementType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReferenceDocument")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockAfter")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockBefore")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StockCardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("StockCardPriceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovementDate");
+
+                    b.HasIndex("MovementType");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("StockCardId");
+
+                    b.HasIndex("StockCardPriceId");
+
+                    b.HasIndex("StockCardId", "MovementDate");
+
+                    b.ToTable("StockCardInventories", (string)null);
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardPrice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StockCardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("StockCardPriceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("VatRate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(5,2)")
+                        .HasDefaultValue(20m);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("StockCardId");
+
+                    b.HasIndex("StockCardPriceId");
+
+                    b.HasIndex("ValidFrom");
+
+                    b.HasIndex("StockCardId", "IsActive", "ValidFrom");
+
+                    b.ToTable("StockCardPrices", (string)null);
+                });
+
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockSequence", b =>
                 {
                     b.Property<Guid>("Id")
@@ -45470,9 +45713,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("717a51c1-7fb5-4ca9-bd39-93ea26339cc2"),
+                            Id = new Guid("c7a31f3c-de41-47d6-b5f9-3bc619545f62"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1781),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7050),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 355.0,
@@ -45483,9 +45726,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0c602eec-c37d-445b-bd6a-c4a56be6ad57"),
+                            Id = new Guid("7f1d4a3c-e23b-4dd2-bbfd-e1b47c6a4b69"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1814),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7059),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 343.0,
@@ -45496,9 +45739,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ded4fd8b-407d-43d7-90f4-c2616a357605"),
+                            Id = new Guid("bcee99f8-3483-45f2-b801-c7f8388814c6"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1816),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7062),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 323.0,
@@ -45509,9 +45752,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a852666c-e73f-4739-952f-77932d2ebb8a"),
+                            Id = new Guid("1accffc1-9974-4bb3-93ca-6fe6a611c050"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1819),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7064),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 299.0,
@@ -45522,9 +45765,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0ee886a5-c56f-4f6c-9d03-8a29b5e7c7f8"),
+                            Id = new Guid("4f0d0eda-be95-4bb5-bd67-34c5e3aa7a26"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1822),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7066),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 275.0,
@@ -45535,9 +45778,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("62109e3e-227e-4cac-9fc7-dd99f36f08a2"),
+                            Id = new Guid("b49446fd-4fab-4045-b02a-21fe8d75ac4a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1825),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7071),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 252.0,
@@ -45548,9 +45791,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("73bc9197-7b87-4e26-b6b4-0e66eb305700"),
+                            Id = new Guid("f043051a-ab07-4bd4-b75b-54484c7524cd"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1827),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7073),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 232.0,
@@ -45561,9 +45804,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c90e5b33-d145-4d39-9018-ea425fdfbeda"),
+                            Id = new Guid("a8fe666c-cd9b-4c74-b882-477acd98b15f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1829),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7075),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 214.0,
@@ -45574,9 +45817,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7436705f-fd49-4023-a519-d9304e1b4b62"),
+                            Id = new Guid("f292a0bd-cd71-4346-a9d5-532f8c102776"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1833),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7077),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 202.0,
@@ -45587,9 +45830,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8c11017a-85c9-4d1f-9c5c-7f6b1fc38f09"),
+                            Id = new Guid("0b94c92e-e6d4-454c-971c-5a8ea63cce33"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1836),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7081),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 345.0,
@@ -45600,9 +45843,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7503040f-a0e2-4d48-be57-df4a0df0144b"),
+                            Id = new Guid("48b3e9a6-c20f-418c-8f67-60282f55a8ee"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1838),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7083),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 334.0,
@@ -45613,9 +45856,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("efc46f5d-7fa0-484a-b3ef-5807fbe1920f"),
+                            Id = new Guid("39be84d2-bed7-47e1-800b-c43c8b7f5e0a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1840),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7085),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 314.0,
@@ -45626,9 +45869,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0a0f032d-02d1-4dc5-acbf-861ffef293a6"),
+                            Id = new Guid("e6dfe7dc-c019-4268-a223-bb0e4b09a8ca"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1843),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7087),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 291.0,
@@ -45639,9 +45882,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6e0d60fc-7baf-4cd6-ae56-b353e3cad633"),
+                            Id = new Guid("44186a21-0614-45f0-8d2f-b913df9d17b7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1845),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7090),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 267.0,
@@ -45652,9 +45895,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e3dc344a-d74c-42cb-bde7-0c3113c108b0"),
+                            Id = new Guid("a2adb126-70f4-43f0-bd8d-5a52184a175b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1847),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7092),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 245.0,
@@ -45665,9 +45908,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0be9e702-0d99-4952-9cf2-74a9d699f9a6"),
+                            Id = new Guid("088f1953-97a9-4089-8624-ded33b895fee"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1848),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7095),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 225.0,
@@ -45678,9 +45921,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e917a40a-3aae-4f41-880c-31f0b27bcb12"),
+                            Id = new Guid("ae278b59-0916-41c2-a796-685b11b57d4f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1851),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7097),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 208.0,
@@ -45691,9 +45934,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7fa3d097-ddee-41b1-8b82-754b5897b5a7"),
+                            Id = new Guid("fce1f0a8-0d2d-494f-b878-2d4d5503e672"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1855),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7100),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 196.0,
@@ -45704,9 +45947,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e787318a-7dfd-4610-b33a-f90b8cdbbef3"),
+                            Id = new Guid("63647019-1bec-4eb4-9fee-eb03da3ce89a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1858),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7102),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 335.0,
@@ -45717,9 +45960,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("50c39042-9dfc-41a2-adc9-5cc325f1b24e"),
+                            Id = new Guid("b65f7594-52bc-48a5-ae9b-4c11e6b39fc1"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1860),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7104),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 324.0,
@@ -45730,9 +45973,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("04009d2c-2dc3-4320-a809-991ab8fbe14f"),
+                            Id = new Guid("48f5a7c4-c1e9-4c3f-86c8-4d9e5043f365"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1863),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7106),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 305.0,
@@ -45743,9 +45986,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3b343404-53b4-4657-94d7-969a57d2c4fb"),
+                            Id = new Guid("9dd7596f-44f2-481b-b783-4c2ca653c65a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1865),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7109),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 282.0,
@@ -45756,9 +45999,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("cc9178ad-3b6b-4082-8403-f83432c34346"),
+                            Id = new Guid("1c16a5ef-49c7-4bd9-9fb4-5b62ad5f081c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1867),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7111),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 259.0,
@@ -45769,9 +46012,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("473a105b-d8e7-4266-9271-336a0555e373"),
+                            Id = new Guid("79105b97-95d8-4c7c-b780-afd1dde73e39"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1869),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7113),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 238.0,
@@ -45782,9 +46025,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("94584d79-2339-4117-b88a-865291c8aa63"),
+                            Id = new Guid("477a797c-f000-40c7-9f97-7374ec7f4a10"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1872),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7114),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 219.0,
@@ -45795,9 +46038,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("869b108f-1442-4b82-ae9d-147d0d1a8b77"),
+                            Id = new Guid("e1a65b71-a20f-41c1-b0a0-391fbe59f272"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1874),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7118),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 202.0,
@@ -45808,9 +46051,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("05a144b5-d74c-4e61-a9c2-3f97ec742084"),
+                            Id = new Guid("7b881826-c1d1-49a2-a2cc-8de3ec7060f3"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1876),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7120),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 190.0,
@@ -45821,9 +46064,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3f97011c-5afd-4177-9c1c-b379cf3fb770"),
+                            Id = new Guid("ee7ba3a5-1e97-438c-a62b-282040fe93f7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1877),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7122),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 315.0,
@@ -45834,9 +46077,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fef0ea10-311a-4ce6-ba77-ddef788e4852"),
+                            Id = new Guid("f0d16a7d-91c5-46a0-9203-cd702ae8eed7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1880),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7124),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -45847,9 +46090,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6ed09a4b-2132-4e82-b639-5b04184be24c"),
+                            Id = new Guid("6eb9605e-719d-4b6b-ad19-7c8f08be8147"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1882),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7127),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 287.0,
@@ -45860,9 +46103,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a5467341-0218-43a3-8960-3b8ea217e053"),
+                            Id = new Guid("85e853d0-a2c4-49bb-a549-adfc6f9dfaf8"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1884),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7129),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 265.0,
@@ -45873,9 +46116,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("18863127-0f66-43ee-bf8f-c6a70a3a5e60"),
+                            Id = new Guid("1dcc20af-db82-48b7-b66d-b1daffd5bd1b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1887),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7176),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 244.0,
@@ -45886,9 +46129,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("794e8d9f-0d8c-4450-86d3-0a6ff07ce068"),
+                            Id = new Guid("8dcc102f-10bb-47f6-bb7a-b852c9768935"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1890),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7178),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 224.0,
@@ -45899,9 +46142,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("51c53151-7f09-487b-97f5-96fa027d6a70"),
+                            Id = new Guid("5045f58c-4853-49be-8314-ffb8d4d34bd4"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1893),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7182),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 206.0,
@@ -45912,9 +46155,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5853620d-9126-42fe-81aa-33fa0487db05"),
+                            Id = new Guid("2cfac4f2-a57f-4672-9b6d-8bfc63419b4e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1895),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7184),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 190.0,
@@ -45925,9 +46168,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d349e71c-0da9-4912-a0dd-54ccf7128c8c"),
+                            Id = new Guid("fef238bf-483e-4c12-a7fa-5d504a761bd4"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1897),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7186),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 179.0,
@@ -45938,9 +46181,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1eff78fd-c4a8-40cb-bab5-02045a6291bd"),
+                            Id = new Guid("a8f437b6-afbe-4fed-9139-448985684725"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1900),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7188),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -45951,9 +46194,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9061309c-67c6-4655-a7d8-b56a34135d97"),
+                            Id = new Guid("6480af0a-45c7-40f8-9915-4ab73a76ec90"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1902),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7191),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 295.0,
@@ -45964,9 +46207,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("df74fbff-f750-4b1f-930e-0dee794d23d2"),
+                            Id = new Guid("bfa0c785-4a7f-4cf2-9795-7a055fa3c35c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1904),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7194),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 277.0,
@@ -45977,9 +46220,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1dd059d4-2b9a-46af-ad1b-d055eaaf7fdb"),
+                            Id = new Guid("b121b849-97c7-495b-bb39-4aaaed7d98be"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1905),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7196),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 257.0,
@@ -45990,9 +46233,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("78d1283d-905b-4b38-a1de-ee146c8b5fe2"),
+                            Id = new Guid("58f40f41-fdd0-4727-8151-e28ab8d52753"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1908),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7197),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 236.0,
@@ -46003,9 +46246,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("231e751f-9464-49ed-ab16-cfb082da1e20"),
+                            Id = new Guid("0d20ffbe-1dc6-4ee0-8d61-ab1e55330cba"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1910),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7201),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 216.0,
@@ -46016,9 +46259,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6c0cde99-1616-4e9c-ad2b-f35766cadf14"),
+                            Id = new Guid("58f954b9-66e1-488a-998e-a9a48e142249"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1913),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7203),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 199.0,
@@ -46029,9 +46272,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("225cca14-ac13-47dd-8b33-f2a0db7e24dc"),
+                            Id = new Guid("fc771659-4b07-4986-89e8-2131be745bae"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1948),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7204),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 184.0,
@@ -46042,9 +46285,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8e94fa04-9868-4f7c-8fda-58e3dfeedac5"),
+                            Id = new Guid("38de8e62-5309-40e1-acad-eeff92f303df"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1952),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7206),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 173.0,
@@ -46055,9 +46298,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4309c7f2-a6ca-4ccf-9841-94421c589832"),
+                            Id = new Guid("6da8750b-7a68-4e06-933e-73fb780ef69d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1956),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7209),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 295.0,
@@ -46068,9 +46311,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("47ad44a2-1b24-4cde-b07a-03ed2bffdf2d"),
+                            Id = new Guid("a6f2b1bb-acc0-4dc0-b7e3-bdd951fcd77f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1958),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7211),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 285.0,
@@ -46081,9 +46324,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0fc7c504-919a-4afc-a88f-c450c1637ba6"),
+                            Id = new Guid("afc9fd6d-6b0a-480e-88a6-f6cad446ecd7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1960),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7213),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 268.0,
@@ -46094,9 +46337,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5a158ad4-5410-4776-811a-d139286d3d65"),
+                            Id = new Guid("714eef66-8e12-49d7-9d13-b4f084a5ed02"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1963),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7215),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 249.0,
@@ -46107,9 +46350,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f37670dc-f306-4733-b170-44c03147944b"),
+                            Id = new Guid("750f4469-47fd-4a21-81a1-c4bbd7942076"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1965),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7218),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 228.0,
@@ -46120,9 +46363,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c6b7dc66-75ae-45ce-b882-52ddcd0c8a1d"),
+                            Id = new Guid("08259145-8a38-48a7-be57-2c2a30ad3d98"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1967),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7220),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 209.0,
@@ -46133,9 +46376,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c98fccad-8a85-43c0-bc17-def4d03b9922"),
+                            Id = new Guid("62ffbc0b-dbf4-4286-968b-6eb753da9f5b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1969),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7221),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 192.0,
@@ -46146,9 +46389,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d50cc228-b759-4d6e-9b6e-1d237396b230"),
+                            Id = new Guid("437f3edf-be1e-4685-870d-321ef4148f64"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1972),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7223),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 178.0,
@@ -46159,9 +46402,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("107d930e-a4a3-4cfd-a4e8-85295dc81c5e"),
+                            Id = new Guid("7d488a12-03d2-405b-b259-d5b2658fb19c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 13, 14, 35, 4, 129, DateTimeKind.Utc).AddTicks(1974),
+                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7226),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 167.0,
@@ -46804,6 +47047,51 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Navigation("SProductGroup");
                 });
 
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardDatasheet", b =>
+                {
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Common.StockCard", "StockCard")
+                        .WithMany("Datasheets")
+                        .HasForeignKey("StockCardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardPrice", null)
+                        .WithMany("Datasheets")
+                        .HasForeignKey("StockCardPriceId");
+
+                    b.Navigation("StockCard");
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardInventory", b =>
+                {
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Common.StockCard", "StockCard")
+                        .WithMany("InventoryMovements")
+                        .HasForeignKey("StockCardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardPrice", null)
+                        .WithMany("InventoryMovements")
+                        .HasForeignKey("StockCardPriceId");
+
+                    b.Navigation("StockCard");
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardPrice", b =>
+                {
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Common.StockCard", "StockCard")
+                        .WithMany("Prices")
+                        .HasForeignKey("StockCardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardPrice", null)
+                        .WithMany("Prices")
+                        .HasForeignKey("StockCardPriceId");
+
+                    b.Navigation("StockCard");
+                });
+
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StorageTypeProperties", b =>
                 {
                     b.HasOne("MVC.ProductManagement.Domain.Entities.StorageType", "StorageType")
@@ -46921,7 +47209,13 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Common.StockCard", b =>
                 {
+                    b.Navigation("Datasheets");
+
                     b.Navigation("FeatureSelections");
+
+                    b.Navigation("InventoryMovements");
+
+                    b.Navigation("Prices");
                 });
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Features.SFeature", b =>
@@ -46957,6 +47251,15 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("StockCards");
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardPrice", b =>
+                {
+                    b.Navigation("Datasheets");
+
+                    b.Navigation("InventoryMovements");
+
+                    b.Navigation("Prices");
                 });
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockSequence", b =>
