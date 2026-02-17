@@ -273,11 +273,14 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 .Where(sc => !sc.IsDeleted);
 
             // Filtreleme
+            // Filtreleme
             if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
             {
+                var searchLower = filter.SearchTerm.ToLower().Trim();
                 query = query.Where(sc =>
-                    sc.StockCode8.Contains(filter.SearchTerm) ||
-                    sc.Description.Contains(filter.SearchTerm));
+                    sc.StockCode8.ToLower().Contains(searchLower) ||
+                    sc.Description.ToLower().Contains(searchLower) ||
+                    sc.Prefix4.ToLower().Contains(searchLower));
             }
 
             if (filter.ProductId.HasValue)
