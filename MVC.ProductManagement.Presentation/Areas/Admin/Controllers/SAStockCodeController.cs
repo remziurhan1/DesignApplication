@@ -168,14 +168,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     StockCard = detail
                 };
 
-                // 3. Modül verilerini paralel yükle
-                await Task.WhenAll(
-                    LoadDatasheetsAsync(id, viewModel),
-                    LoadPricesAsync(id, viewModel),      // ✅ Bu çağrılıyor mu?
-                    LoadInventoryAsync(id, viewModel)
-                );
+                // 3. Modül verilerini SIRAYLA yükle (paralel değil)
+                await LoadDatasheetsAsync(id, viewModel);
+                await LoadPricesAsync(id, viewModel);
+                await LoadInventoryAsync(id, viewModel);
 
-                // ✅ DEBUG: Console'a yaz
+                // DEBUG
                 Console.WriteLine($"=== DETAIL DEBUG ===");
                 Console.WriteLine($"StockCardId: {id}");
                 Console.WriteLine($"PriceHistory Count: {viewModel.PriceHistory?.Count ?? 0}");
@@ -190,6 +188,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
 
         #endregion
 
@@ -650,6 +649,27 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Detail), new { id = stockCardId });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePrice(Guid id, Guid stockCardId)
+        {
+            await _priceService.DeletePriceAsync(id, "Admin", CancellationToken.None);
+            Console.WriteLine("StockCardId: " + stockCardId);
+
+            return RedirectToAction(nameof(Detail), new { id = stockCardId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReactivatePrice(Guid id, Guid stockCardId)
+        {
+            await _priceService.ReactivatePriceAsync(id, "Admin", CancellationToken.None);
+            return RedirectToAction(nameof(Detail), new { id = stockCardId });
+        }
+
+
+
 
         #endregion
     }
