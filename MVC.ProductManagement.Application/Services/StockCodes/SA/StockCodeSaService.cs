@@ -374,7 +374,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 ProductId = card.SProductId,
                 ProductCode = card.SProduct.Code,
                 ProductName = card.SProduct.Name,
-                FluidId = card.FluidId,
+                FluidId = card.FluidId ?? Guid.Empty,
                 FluidCode = card.Fluid.Code,
                 FluidName = card.Fluid.Name,
                 Description = card.Description,

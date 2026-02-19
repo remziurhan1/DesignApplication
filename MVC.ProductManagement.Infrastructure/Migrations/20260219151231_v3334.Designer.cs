@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC.ProductManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260217090003_v1")]
-    partial class v1
+    [Migration("20260219151231_v3334")]
+    partial class v3334
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -755,7 +755,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(6994),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(1927),
                             Density = 7850.0,
                             Group = "Fine grain pressure vessel steel",
                             MaterialNumber = "1.0565",
@@ -832,7 +832,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7024),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(1959),
                             FormType = 0,
                             MaterialId = new Guid("11111111-1111-1111-1111-111111111111"),
                             Notes = "Standard plate form for P355NH",
@@ -868,7 +868,8 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<Guid>("FluidId")
+                    b.Property<Guid?>("FluidId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -1078,47 +1079,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Somun Tipi",
-                            SortOrder = 1,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            Code = "SB_STRENGTH",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Mukavemet Sınıfı",
-                            SortOrder = 2,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            Code = "SB_STANDARD",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Standart",
-                            SortOrder = 3,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            Code = "SB_METRIC",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ölçü (Metrik)",
-                            SortOrder = 4,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            Code = "SB_COATING",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Yüzey İşlemi",
-                            SortOrder = 5,
+                            SortOrder = 10,
                             Status = 1
                         },
                         new
@@ -2484,339 +2445,185 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Code = "AKB",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "AKB",
+                            Name = "Altıgen Başlı Somun",
                             SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
                             SortOrder = 0,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("04e9c91c-7ac4-45b7-b573-434056c04727"),
-                            Code = "AKB Şapkalı",
+                            Id = new Guid("d8ab538a-4d7f-87df-7a5f-593804d85c99"),
+                            Code = "SAPKALI",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "AKB Şapkalı",
+                            Name = "Şapkalı Somun",
                             SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
                             SortOrder = 1,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("3ccd24d0-b2ab-f3ba-b435-154d5e296a3f"),
-                            Code = "Kontra",
+                            Id = new Guid("2a8b5bf2-4bcd-f87f-4b62-bdb4e2a2250a"),
+                            Code = "FIBERLI",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Kontra",
+                            Name = "Fiberli Somun",
                             SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
                             SortOrder = 2,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("a3f117a2-427c-64ad-9f38-8a1d46313041"),
-                            Code = "Kaynak",
+                            Id = new Guid("1f8467d4-fd11-c972-ee03-0319bb5823d2"),
+                            Code = "KONTRALI",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Kaynak",
+                            Name = "Kontra Somun",
                             SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
                             SortOrder = 3,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("1eb5ea02-cd79-3f69-b4bf-c5f49fd51665"),
-                            Code = "Taçlı",
+                            Id = new Guid("8944249a-cfca-36cd-3777-cda4dda0aab3"),
+                            Code = "KAYNAK",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Taçlı",
+                            Name = "Kaynak Somunu",
                             SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
                             SortOrder = 4,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("00f494eb-cdcf-1d33-ba9d-9bfc5315cfc0"),
-                            Code = "Halkalı",
+                            Id = new Guid("9814c2a0-64de-456e-75d4-3774eb704c63"),
+                            Code = "TACLI",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Halkalı",
+                            Name = "Taçlı Somun",
                             SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
                             SortOrder = 5,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("bf23ce98-8a49-9625-0e34-714e00abdd20"),
-                            Code = "Whitworth/UNC/UNF",
+                            Id = new Guid("ccab4ad8-1ecb-4982-3060-fea490defd25"),
+                            Code = "HALKALI",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Whitworth/UNC/UNF",
+                            Name = "Halkalı Somun",
                             SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
                             SortOrder = 6,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("362bbee5-6f15-92cb-7db2-f3ab07b7fc05"),
-                            Code = "Özel Grup (Uzatmalı)",
+                            Id = new Guid("5b0becc3-356f-fd90-b641-7a29f1d07a49"),
+                            Code = "KELEBEK",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Özel Grup (Uzatmalı)",
+                            Name = "Kelebek Somun",
                             SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
                             SortOrder = 7,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("2d84fbb8-a852-3626-0065-fbbcfa3da91d"),
-                            Code = "8.8",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "8.8",
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SortOrder = 0,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("19e98d7b-9cee-fc7e-05b5-55e5ef31e1d7"),
-                            Code = "10.9",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "10.9",
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SortOrder = 1,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e74ef805-e1b2-3b56-1cbd-430d856b9891"),
-                            Code = "12.9",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "12.9",
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SortOrder = 2,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d7c60bcc-5790-0b5f-d420-791518ab192c"),
+                            Id = new Guid("1acaa264-b1b6-34ea-dcc9-0b474100bc95"),
                             Code = "DIN 934",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "DIN 934",
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SortOrder = 0,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 100,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("40de35d8-6524-267d-3875-b0ed9b77c02b"),
+                            Id = new Guid("16de0567-8aa6-6f51-53c5-55dd64b52c0b"),
                             Code = "DIN 985",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "DIN 985",
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SortOrder = 1,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 101,
                             Status = 1
                         },
                         new
                         {
-                            Id = new Guid("9ece16cf-6872-2652-897e-27f1027a7677"),
+                            Id = new Guid("94eda1f2-7a92-3027-b818-9a5948b37b5d"),
+                            Code = "DIN 439",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DIN 439",
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 102,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1c39024c-de22-15e8-56f5-f8b26d9a707f"),
+                            Code = "DIN 929",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DIN 929",
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 103,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("39084d44-ec24-ce2a-f2cf-a4fa84f655f3"),
+                            Code = "DIN 935",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DIN 935",
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 104,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("155c699d-7d8d-bc9d-d070-61755e9e444a"),
+                            Code = "DIN 1587",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DIN 1587",
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 105,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4cb8734e-de51-aff3-346b-9b976662eec4"),
+                            Code = "DIN 582",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DIN 582",
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 106,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("47ca929c-c293-5a42-941e-a882036eaa65"),
+                            Code = "DIN 315",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "DIN 315",
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 107,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9103d40e-b03a-f451-b414-49275b06e11c"),
                             Code = "ISO 4032",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "ISO 4032",
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SortOrder = 2,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7d9570e5-e3a1-de37-4d05-7dd28379f93a"),
-                            Code = "ASTM A194-2H",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "ASTM A194-2H",
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SortOrder = 3,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b1c9e5b3-45b4-d170-837f-d6830a60307a"),
-                            Code = "ASTM A194-7",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "ASTM A194-7",
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SortOrder = 4,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("79a031e9-f197-1780-897e-026f666299d8"),
-                            Code = "M6",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M6",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 0,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a5648160-9881-2ef6-65cb-23f1579e5e19"),
-                            Code = "M8",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M8",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 1,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("627fddcf-3d78-b62a-b9ec-bb45b9c736bb"),
-                            Code = "M10",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M10",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 2,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a0a93d36-d559-5045-7a07-69d9be0fe08b"),
-                            Code = "M12",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M12",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 3,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("647edef8-b537-5500-e504-285fcc8bbf8b"),
-                            Code = "M16",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M16",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 4,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("59b632fb-dae6-1e92-a857-62b0af5e16d9"),
-                            Code = "M20",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M20",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 5,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f8d567f4-b437-912a-2cc3-c912924187a3"),
-                            Code = "M24",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M24",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 6,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1abadabf-03c6-1969-bd99-e12b5553ab74"),
-                            Code = "M27",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M27",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 7,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5b9e601a-60a1-102f-a0ab-041fa01be2a9"),
-                            Code = "M30",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M30",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 8,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("676678de-6013-61ed-5276-024a0047deaf"),
-                            Code = "M36",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "M36",
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SortOrder = 9,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7261c6d5-2b31-2b95-2613-76d10484b9ff"),
-                            Code = "Doğal",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Doğal",
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SortOrder = 0,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("ffee07c8-630b-eddc-4b21-f0b7a4f49b03"),
-                            Code = "Krom",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Krom",
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SortOrder = 1,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c91b9559-8be1-c51b-1330-d50afff648aa"),
-                            Code = "Fiberli",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Fiberli",
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SortOrder = 2,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a5557ceb-0f1b-4964-d4ae-726902b5859e"),
-                            Code = "Elektro Galvaniz",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Elektro Galvaniz",
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SortOrder = 3,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("81add8b2-d088-c2aa-ef20-56ce30066595"),
-                            Code = "Sıcak Galvaniz",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Sıcak Galvaniz",
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SortOrder = 4,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SortOrder = 108,
                             Status = 1
                         },
                         new
@@ -24944,6 +24751,7453 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
                             SortOrder = 1564,
                             Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("baf8e6c4-5255-1e73-2e90-8843bf122765"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 0,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b3ec79d6-21d4-e36c-0832-f6a0e67f5503"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 1,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7ce60801-c82c-bcfd-eef2-0948f9c0e8af"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("11e5080f-4567-f57e-d365-2d100be7963b"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 2,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d765a7b7-863f-e15d-2dfe-dfc4e1fa74bc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 3,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c7bbd415-7481-0e44-5135-d9bb690f9171"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("1acaa264-b1b6-34ea-dcc9-0b474100bc95"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 4,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f440bfce-8efc-c939-a6da-bbf96ee70b46"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("9103d40e-b03a-f451-b414-49275b06e11c"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 5,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bed5885f-d21c-90a1-e1bd-89723842fc40"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 6,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ea52c795-1187-3d79-30d5-32c806230900"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 7,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("743350a5-d11f-4017-bf0c-c4c51888d31a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 8,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("da253fc2-1937-7619-06a7-b876673ed172"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 9,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3d7e433f-fafe-189b-af9d-6d4bd21d73fa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 10,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b465954c-2f47-59b4-4bef-7a2dcbe096a0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 11,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("188c3f90-e5a3-8ddf-2954-cdc66bcb08d6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 12,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("70f1f8bb-455b-411f-f120-a5b646f7b97c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 13,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2ab7cd47-97cc-0dd4-6eda-f07022d39a56"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 14,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d7d549cd-79ec-cd5f-2b20-4d889e5f66ed"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 15,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4096e492-6072-a421-8839-ce41b9c1ec03"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 16,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d4a7b52b-d24b-b20b-f64c-e781639ddd47"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 17,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7b974b7c-945d-bf64-8eea-d89c3c6f4d04"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 18,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d784d1d6-f03c-d0f5-5af9-48535a243942"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 19,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ba033020-21a9-99b5-1b12-cbfb24300bda"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 20,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ebfacf55-65ae-18ce-9b1c-c6daa42f0c73"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 21,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2a8dfe1f-8a4a-bd36-4fb2-0085d614a1c6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            SortOrder = 22,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7ba09128-52b7-7967-eac8-e1dccbab518d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 23,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5c690dfb-e687-9c01-129f-e93bf4fbe177"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 24,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("59e10a76-4710-861b-3d90-56efd31623eb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("1acaa264-b1b6-34ea-dcc9-0b474100bc95"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 25,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("404f8ce8-ccf2-f048-2685-cfef1da2711c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("9103d40e-b03a-f451-b414-49275b06e11c"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 26,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("10808700-a073-a9e6-1cc8-74c4892fa52c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 27,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ba557e2f-d27b-ec39-6182-aa16e0a72773"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 28,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("266a3a1a-3f2e-7796-004d-469c2d321b95"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 29,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d72cddf7-c9ae-a1cb-ce35-bc71ac764662"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 30,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6f043ab5-f39b-9869-977e-47d95ae060ae"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 31,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("88044cd5-33ba-285a-3327-c7d40ac24b85"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 32,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("01bde467-ae35-0a37-082c-e02e0f4cb860"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 33,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1eb9f0cf-c67c-3393-050a-f1f010f4d4ef"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 34,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("de0e4fac-7bfb-2702-3dd5-a427e71faf9c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 35,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7a7b27ad-9ac0-b3ba-962a-c5dba4d8773e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 36,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3a3431fd-ef65-07c8-3c37-a6124269de06"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 37,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8adde73e-ede5-85a0-8ce2-a306c3ed26e3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 38,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ce65cb5f-0b1d-e355-7e6d-1bbc1534fda3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 39,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("81195e20-1b0c-f77d-9f7f-910a1eca9cb2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 40,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4a8c7e8a-cf28-3f85-1c45-9877ea3d0209"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 41,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1efd4d79-725f-24b0-e364-b8bb5b50122e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 42,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bbf28db9-690b-eabe-f180-40c2fd42d49b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            SortOrder = 43,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b29e6122-d1fc-7776-3388-dd8b9d048bd1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 44,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ecd46763-59a5-3378-4d96-97f0d20a77d1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 45,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0092d74e-fa18-b905-75ee-55d3c8f7781e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("1acaa264-b1b6-34ea-dcc9-0b474100bc95"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 46,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0f030ad4-dadc-1690-8c9f-09ac27c7e69f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("9103d40e-b03a-f451-b414-49275b06e11c"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 47,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8ff71f48-0f05-d050-d8e7-8919bcd3fb04"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 48,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1e0e43d0-057c-9058-0d08-16d19ac0217f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 49,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b7fbadd9-4aa1-488c-b8cb-655567f8d916"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 50,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("71fc881e-5476-7be2-35bb-13577c4a83af"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 51,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e617403c-7778-6087-d052-a9a66c208023"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 52,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9693ef3b-b010-e5fd-ae33-042b24f508dc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 53,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("83eebf12-9b79-46ce-8aa6-318d72361628"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 54,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b221c18a-25dc-ba59-b6bb-220bfa31dca3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 55,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4aff253f-7eab-ceb5-5b75-68e727ac3fff"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 56,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b5a24f29-16b2-1605-009f-110757655a76"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 57,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2280c62b-db89-af05-af77-a1be6799cc78"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 58,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d418bf51-e07a-c9bc-fc9c-8f331334997e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 59,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("75866333-292a-2f13-e358-ba142f5b458d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 60,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b07c1a6c-df51-0a0c-1928-f7a12445ab20"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 61,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a8c5b105-9142-79b9-40f6-04c88ef4c2db"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 62,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("31072d3c-0b98-20e5-1e6d-79e376db078b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 63,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6b943c6a-ee0d-948e-a5f0-b2e083d34cae"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            SortOrder = 64,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("adfc5f2d-0826-fb07-c91a-d9850d3bd1c8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("11e5080f-4567-f57e-d365-2d100be7963b"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 65,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("392d2ac8-2c4a-1e54-0ddb-986d8d1e57aa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 66,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e6c21698-2f95-d73d-abb7-aa5efae0783e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("155c699d-7d8d-bc9d-d070-61755e9e444a"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 67,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9a7d6418-5384-dae6-3218-9ceb60b50759"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 68,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d90440f6-e2f5-78e6-ae11-65f2e4fea088"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 69,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("08bc0a8e-a592-06d8-6734-e7b720d5f53e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 70,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ad1d6c60-0c0c-0bff-84e5-e0e7113b12c9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 71,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ef3a554b-8a54-b059-b91b-4177095b7b86"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 72,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fcbce241-a200-093c-d10c-6159daae1dc5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 73,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("62a55861-1d50-a395-d916-5b7decf18962"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 74,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bd037c07-f8c2-50ae-39e7-1fd1b586b985"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 75,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d6722787-6a35-e240-1625-b34b8ef24bea"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 76,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e9640fb9-ac18-b85c-19c9-293215aaa4a4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 77,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ce5a3036-b764-4854-6d5b-b34645efedf2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 78,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f497d11f-2d07-b6d9-d5fe-1ec315b6c0b9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 79,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f7b4dece-542c-5b16-8814-85339ba4ace1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 80,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2872cd20-c4f2-f0ac-a440-36ece6b2116b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 81,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("49bf7734-503b-2300-5361-440972196619"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 82,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("12f82b97-7c52-fb10-9932-8287e5ead503"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 83,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("faf0839b-16ca-6fe1-b174-70b44fa39ce6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            SortOrder = 84,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("49545d49-c624-3b97-07ad-d0c5a3b56f6f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("155c699d-7d8d-bc9d-d070-61755e9e444a"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 85,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a313b971-d148-4c2f-8ba4-253edc687df9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 86,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a7b63058-b1df-ce76-4b61-a9c40a74d82a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 87,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ef937fa7-fd63-4f8b-7569-359b49ab73aa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 88,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4f2ab452-8814-8ba1-f019-0e9e360534e3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 89,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fa0a9f83-43ec-88d0-38c7-4b543e1c318c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 90,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ab097c90-e020-25df-5217-3618fa2cf9f4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 91,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8709dcdd-40cc-4f35-284c-9e0a825c5578"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 92,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9133ef5d-03ba-5b14-d46c-e2fc3f5c17d6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 93,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("12aafecd-a774-19a7-7843-cc45b8197d2e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 94,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f78570e7-2a2f-3dbb-1ee8-95df7dd65ce2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 95,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a570a4de-4d21-ebb9-be1e-a30730bbb8ff"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 96,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ed94774a-1a4d-9658-10f3-8bfeb3740950"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 97,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fc83033d-3c0a-b645-be51-23e936f6887c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 98,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2183f6b0-12fb-dbab-6e43-eae9c9198319"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 99,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("74ca6844-7db9-c778-3bb9-61fb4abc150f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 100,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("25aa454c-426b-a5f4-44d1-5be365208b3f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 101,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2d9b989f-5048-aecd-b230-0495f5963a4b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            SortOrder = 102,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d057c56a-21cf-14d1-19f6-09baacfdb455"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("155c699d-7d8d-bc9d-d070-61755e9e444a"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 103,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("712ce6f4-2e1c-45a4-204e-b12f2eae13db"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 104,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5c698120-c524-188e-afc4-87eb0cf7ff5a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 105,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bd52feed-1e88-380d-1758-88e66c4f0cf0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 106,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ce344e54-6386-f4c7-be46-0d88165327be"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 107,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f43bd6be-ca69-450b-dd95-7005870ed841"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 108,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("39af050f-7c5c-1c08-3cc6-cfd70cd8f75b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 109,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("07561f70-6cca-fa2c-f8a3-e80a9a681b82"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 110,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("58ee5be8-e579-86b9-5b3f-4ee1e6e546b9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 111,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("91c5225e-df17-622b-59cf-ca58ce935172"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 112,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("08d7021d-bf42-2ac3-0cdd-e22ca74657d3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 113,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c89a7781-a9f6-7d11-cf4b-22c8538b80fa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 114,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("947fe814-2bcc-ed9e-248a-4da351bb14d8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 115,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1e95205a-e521-307f-4561-f3e189be576a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 116,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("aeb7c168-2991-0b66-4a1e-829af552b95c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 117,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("79e50f3e-fcb8-cbb0-1480-009e0205326d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 118,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("602a4462-9e65-9c24-147a-89788ec2d597"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 119,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9339a50b-6c92-0f39-7777-2662b4a81612"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            SortOrder = 120,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fdef2d6d-e411-4760-1ba0-8326e78f6a75"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 121,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bc750454-1ee5-3dd3-feab-4242bf1a23d9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 122,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a0087b19-2b8e-01c5-9628-b60a4d64d4b2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 123,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3f197eb2-87dc-9ed6-7ce8-c4d7e4449104"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 124,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ff544b4c-6422-cb9b-d459-9fa7782bb05b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 125,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("07bcf11e-0b58-d72d-069d-a522701fdd1e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("1acaa264-b1b6-34ea-dcc9-0b474100bc95"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 126,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6210f540-b1de-5596-cd81-90002d742b5a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("9103d40e-b03a-f451-b414-49275b06e11c"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 127,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("52a5b472-e076-5a66-2667-8dcdf1980015"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 128,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5ca05af4-af83-b6f4-3e0c-a5a04e46b52a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 129,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2487e514-849f-bc31-9229-4e7b1fdc946d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 130,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e0f44677-d5a6-e966-fe78-620018fe2a17"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 131,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b935eab2-469e-70b3-578d-a753bd00db1c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 132,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6faadde5-9762-fde5-b230-28a31ad57b7a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 133,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6e49670a-bbb8-be9e-4411-4ea4159fd3ff"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 134,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("624ce1e4-26d5-994a-a6ed-ad413272bad6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 135,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("10be0203-a99b-59a1-8239-81a99276609a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 136,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3013f510-d2d2-3fa3-ea2f-2efb99621e89"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 137,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("57614976-17d6-8cc9-9fe3-9219a966d8a2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 138,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("54cac762-30a3-7298-3ebc-e0b1120dbb34"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 139,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b8603c98-d4d1-eb00-9377-036ad9d4c1a3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 140,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cff331c0-006d-c1e2-745d-867060f450d3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 141,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4d424055-b29e-2f28-778b-7a2cb83695d8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 142,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e9d6c9e8-bba2-6a01-9621-fba810518761"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 143,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("abdfcee0-4676-ed9c-8839-54fb06e1df69"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            SortOrder = 144,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("008f3df3-9c68-f729-7b21-72fb94dda6f5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 145,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d7d4df48-48a4-173d-8fe7-0762b077a441"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 146,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a8cbe1cf-2766-5589-68fc-acf4ac9581dc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 147,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("82719071-dacd-ea02-076e-c090638e0f04"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 148,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9330d9ed-19a8-f001-0a65-7044d0008222"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 149,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("627a29af-0d37-c9cf-efa0-ea0ca75d7039"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("155c699d-7d8d-bc9d-d070-61755e9e444a"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 150,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("eaed0a63-115d-a1c8-4b83-d915899659ea"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 151,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2f62bdb9-802a-b1c1-da1a-72e020eca812"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 152,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bf79b2a6-686e-a40b-e74e-aada922396bb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 153,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("305675c9-62e7-fe61-6817-3ad382a77ba5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 154,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2444bb59-6cc8-d228-8636-95f994246016"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 155,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4e099a38-bb6f-3445-86b2-938a8a46f0ff"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 156,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("72859e25-6b10-6fcf-febc-2d5d02631201"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 157,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a905b774-3f44-6799-0f8f-0e002f22b614"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 158,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("626ea71b-a57c-9078-021b-ecc19046c154"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 159,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c989343f-3c06-1203-ce10-1a2316561b36"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 160,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1c0dbb8f-05fb-8811-e863-f35c2c8ebbbf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 161,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0b3e49b7-85ae-5c47-9783-cf95444b4f47"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 162,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b8d6204b-d338-f7bb-7136-4d622e528a06"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 163,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("75810f12-85f4-506b-2011-d72ce3efc978"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 164,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("486f2253-999d-2c27-5d8e-118fd721515a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 165,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c2331f77-9c32-de3b-914f-c65221ee7626"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 166,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b0329d59-62ce-82d4-9fee-2344bbcd4657"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            SortOrder = 167,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("514314b5-95bb-d637-cca8-a7669509326f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 168,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("04b8eb40-5db4-5a95-d462-e02716b13eed"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 169,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4ca8fbdf-5c89-00fa-7174-57e8858d2bd3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("11e5080f-4567-f57e-d365-2d100be7963b"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 170,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("70af4b63-1017-764e-fb2b-4922addf77ac"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 171,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("13988a34-d89b-34af-84f6-e187895251c6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("16de0567-8aa6-6f51-53c5-55dd64b52c0b"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 172,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7b0a3933-3cae-549d-6251-762fd1c6276a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 173,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("43383ae4-5420-3e25-ec42-6c7f27512058"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 174,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2c3dc8f7-a83a-8b9e-69fc-de4f29afa388"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 175,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d7f9ec49-77d6-1075-bafc-1b2aa9bba1e4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 176,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d0272c43-7f3a-b46f-d2c6-97884839ba73"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 177,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("75f1634b-a58e-eb7a-3a28-2983641c814c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 178,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4a80539b-3049-12e5-59ca-ba12fb3cf3f8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 179,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b554b881-0806-1015-6260-bd279d3bffbd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 180,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3036f81d-57f5-0fc1-b0bf-34341db49302"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 181,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("21c0f1b6-9677-6ad9-7393-328aec62b72d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 182,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("dc9fc2ec-9ee6-3c62-8101-72ed79955ac5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 183,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c06dcfd9-88eb-ef12-5f66-954cfdec6232"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 184,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4e22e577-e16d-49b0-3735-70d74b1b6b55"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 185,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("709a7e85-4031-7f85-a0df-683291b7d705"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 186,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("09c568dc-fd7d-5fe3-4e79-d9ecc1e4f6c1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 187,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("861321c6-0afa-80e8-9166-cd9decf1050d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 188,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7fbb5a7e-df69-cc90-0d1b-718d8b0ae64a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            SortOrder = 189,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1cdafbb8-ed42-5f41-624a-f8a62158b64c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 190,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("87bfd7d8-a748-3db5-5163-8a01bd623c44"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 191,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("65cbb037-19c0-d716-8f6b-ce450338b82f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("16de0567-8aa6-6f51-53c5-55dd64b52c0b"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 192,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5d85cca3-7336-0312-8b94-91712ff79fec"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 193,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1037b3e4-e7e6-234f-caa2-156e4b13a0df"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 194,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d5b040ce-20d8-a032-aa91-a878d992719b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 195,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("68491908-1138-5f7f-d504-8472ebb4a802"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 196,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f7219eb2-19de-3c87-cd54-3690e1314734"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 197,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("adabc168-168f-59fc-8beb-9b87b5c31452"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 198,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("12eb7eb3-1f53-bd9f-2034-1f59cb80cf6e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 199,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9dd6be36-ef0e-4feb-15d0-78ecd383183a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 200,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("05104428-97dc-ea76-98aa-e0b9f550917f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 201,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("52807cf5-2e2a-7831-fe2a-551cf138d7a8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 202,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("48b6891c-b358-b6cd-8c2a-c0369e6117aa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 203,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("00aa97b6-b66c-7243-2e5e-9b0b7d92a4e4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 204,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0b903933-f6f9-4b75-b2c7-6ad9bfc6c35e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 205,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a5dbf097-abef-5556-d6a9-8ec55cbca099"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 206,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3023784b-2ff0-3685-7c22-a91007dad4e2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 207,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2713beda-fe7a-e6ff-c3d6-152db019ff1b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 208,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1281d54f-b1d2-7907-f8b4-b30e6dfcb389"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            SortOrder = 209,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1db597ef-4bcd-87a8-5595-e9deca54d812"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 210,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ca1790d8-6a22-579f-7eb3-579c46292bbc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 211,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a376393f-8084-d23c-8849-f8fd50aa7590"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("16de0567-8aa6-6f51-53c5-55dd64b52c0b"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 212,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("011eec2a-42c7-4f9d-e778-299a84bbd124"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 213,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d75a7a63-bab8-9780-0930-2838988127cd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 214,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("db62e223-b1ca-878b-da69-94dc11bc23e8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 215,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d7afb89b-92c5-3cbd-2940-1e1ef0941286"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 216,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ab43157a-83ea-a1d7-952e-038ea2933c1c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 217,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7cd74dce-4569-5e76-b537-aa65b60e8153"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 218,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4a168982-d29f-f6bf-3c2a-436120725543"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 219,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("79272272-3379-3545-2734-0b38fe3d3cba"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 220,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9a90967c-0698-d788-8c23-567d7e890e00"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 221,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("06a5c8ff-d776-1774-68b5-ca2f36156514"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 222,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7f730a80-4ed1-d2f9-b881-a551474cfd37"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 223,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("341d6281-54ec-6371-64c5-9d8e39d8d4ac"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 224,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b19c6b26-e78d-8cc3-91ac-857f408d0581"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 225,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f02d2d96-61cc-0efc-9cc2-e61548f4f5ef"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 226,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("887406dc-1c38-ac8f-0ad1-132cdd790e3f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 227,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5554c282-879b-048a-fc45-c3291ca518c1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 228,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("60aabf30-081b-52f9-6ad1-7a8f8c0dbe49"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            SortOrder = 229,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("30bf8000-da4c-d697-011d-3416402fc2de"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 230,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b237ac94-9259-6c70-1f85-b98b7aba206a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 231,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c744d9e4-9011-1db3-a380-4a5152a131f3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 232,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5557d625-c191-1c6d-0fb1-7b511d88292c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 233,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0620c7c4-66cf-9c3c-1bce-da38e05d76b3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 234,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fed7279c-f6a2-a97d-e5c8-e312485294fc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("16de0567-8aa6-6f51-53c5-55dd64b52c0b"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 235,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("81a3ed09-74da-cd19-a518-348db8f1f1d1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 236,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2be2fac2-d2d5-0239-d927-53fccf5111b8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 237,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("49e0e03f-3230-98ee-2e49-36bf3f6f5e1d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 238,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("622d50d5-4205-22eb-4582-fdc92dbab11d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 239,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("322eb254-2e61-0854-70a2-94c10edc237d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 240,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2e731b82-207a-bde9-b930-97ebe3818cc5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 241,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0b42093a-eb7a-9769-5586-469bf2b09d02"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 242,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("822f5a96-2c93-59bb-b591-5fd7c0fd07b2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 243,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3ceda9a7-45d6-4f8e-707e-7748ca775121"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 244,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8a320c7c-495d-c85d-11bd-b76109b8c9df"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 245,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("45f6134c-76c0-37c2-8891-e72f0e2ee419"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 246,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d5364f38-12f3-2aa2-4192-76f88c3eba0b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 247,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3a8f8835-6595-69f3-2271-88ac0ab679e8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 248,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("957194ff-ba70-e431-08f4-1d8eba4b7b71"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 249,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9bf45ab8-f49b-fa6d-4d1a-243e42df4528"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 250,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("41568354-3f99-2a20-1a49-de552b72043d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 251,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c2d0a9a9-928c-5738-197e-1d5545880a88"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            SortOrder = 252,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("482f82c7-d1fa-a901-5089-86ac08909b0c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("11e5080f-4567-f57e-d365-2d100be7963b"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 253,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fbc4a64c-4c44-f063-a9ec-c9f7a472dc86"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 254,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a95d7ae9-0535-f50f-a523-856424a0de4c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("94eda1f2-7a92-3027-b818-9a5948b37b5d"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 255,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("142a45c1-ce05-2ee1-1522-5a9886a1f017"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 256,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fc82a2ac-dd6b-15ed-e72a-ad543f8fcbd1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 257,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("61f172d2-a4f3-fa91-c56a-35785044e647"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 258,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("33feff70-1c18-90f2-2dcd-87d077140dc8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 259,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a8c207b6-b2cc-8326-9bb0-21c0bde51ae8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 260,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("39dddcd0-efb2-75d3-775b-4a6cd7dc9832"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 261,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a53d4e0a-4f17-3b59-ade2-3542ef1ede84"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 262,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cefc7ae6-e38e-238a-79fb-0e10771ba443"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 263,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c948d1d4-4d1f-4ef1-8e1a-133c003ee9f9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 264,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9aacbc2e-87f6-b7fd-4f95-a3d92013b250"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 265,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9a89cafd-af2b-a26d-dd23-17798b21c1b1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 266,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("530b1673-1242-8723-8be3-fecef73ab6e9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 267,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a0ac84f9-dced-9bf7-2021-d70d485682c9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 268,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f1013d7f-86a4-7c9c-0b8f-2cd03f401c0c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 269,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("949fc72d-3817-c250-78bf-9ef9c9ad6857"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 270,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cf5059cf-2aff-57ec-d48f-48268ba826e9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 271,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("689df024-3d65-94d0-c7c1-ae6988e76513"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            SortOrder = 272,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3b9a600a-24f9-d090-7140-e55a0127fc3c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("94eda1f2-7a92-3027-b818-9a5948b37b5d"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 273,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2a4776e5-9577-f9fa-4326-805fd73f3591"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 274,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("956dbff0-20c2-c244-2577-5c0fd33b3d56"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 275,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f2a4227f-60bf-4edc-6a75-2ab7006cb574"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 276,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e3abb1ac-f4aa-e2b6-4eaa-11ac150b1b0f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 277,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e8aee8ea-de6e-42a7-cd41-286fc386585d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 278,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6b85db05-9408-8c4e-0203-2e374262437a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 279,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("448ebd8e-d4bd-65b5-0c58-060427eba8e2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 280,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8e3335bd-e022-bc07-fdf1-10b25b3d02b9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 281,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a7dc794c-35b2-8a62-28af-ed991f54e657"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 282,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6e80c657-da95-dc47-a1ab-7df7c1a5d288"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 283,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5f15947d-9127-f05f-b9c8-769dc1f3744f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 284,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c7ce6b03-d4d9-4c93-409e-235fa4719de7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 285,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("043cf390-eb45-856c-dcba-461d2b5f78e5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 286,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a784eca3-d7f2-f37e-d171-2b24f2670968"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 287,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ff102e0d-7df0-245d-8702-ac89c51ba228"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 288,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e3cf53be-140e-f8ba-c91a-8adc23b1a65e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 289,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2b2f40e1-1ca9-e1df-b50d-f54866362181"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            SortOrder = 290,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ad3607c2-bf55-c429-0b6c-ef47eaae119a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("94eda1f2-7a92-3027-b818-9a5948b37b5d"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 291,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3f24920c-4a22-6e1b-adb5-aa28236f7c30"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 292,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("613c7aed-5058-c8d2-5cb0-4b831794106e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 293,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("20a692b8-e8bf-7aa4-4488-3c5ee6ce20c6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 294,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("eda5d645-59f0-f70f-71cd-bf291698c0a8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 295,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a0eb3269-aa48-6ff4-ce14-ec01326bcf75"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 296,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("744e7b25-4895-f720-31fd-0742d8584826"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 297,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bf3d2ef9-5e37-2d58-4267-906f1c4e8c40"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 298,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("45551ad4-dd54-de2f-0a96-da25cfbfc982"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 299,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("89e3fd59-5586-eea5-d930-967b9111e4fd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 300,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("846ab3a7-87a0-93f1-7b9f-d489a896542b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 301,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e38702ff-e91a-9e14-16c1-5441c614101b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 302,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("622e4a74-f171-9bf2-34cc-edbe9dc01adf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 303,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cf631e5e-975c-33ff-cab2-4a29541df60d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 304,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d226e7d9-dc53-d1e1-ba05-8575f7457c4e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 305,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1147c1e2-b472-4667-9ef4-ed564f65b88b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 306,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("09638309-a90b-3f02-31f0-af6c5ea179b7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 307,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("abb1d785-f664-ea91-4d61-1335a1c099d6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            SortOrder = 308,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("467cf0cd-578e-b5e7-27cb-41a50a6bef4b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 309,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ce5fc552-0bce-a0ff-dc02-99e06265e6d1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 310,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("306c0484-6bb3-a579-5a15-cf6cbcf92e84"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 311,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("eb1e650b-33a8-703e-5d35-6919da251fca"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 312,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a59085ab-2f3a-61d0-0d4b-f5f9dc775b49"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 313,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2e92a3b9-1628-0a78-824a-9f6eb5fb78b9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("94eda1f2-7a92-3027-b818-9a5948b37b5d"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 314,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6a2fb162-491c-41d1-2f84-5288077f3232"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 315,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b56a84e3-c4d8-0c24-25da-7590c9774c79"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 316,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0d77dcd7-8802-cff3-ab41-c125e01d4821"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 317,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("96c0e37b-954a-919a-aff8-2b99271eaaba"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 318,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4485c290-d7aa-126e-cf5f-57e5273f42e5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 319,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cd6acc5c-c36a-e15d-9337-5e2609bd766d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 320,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b64b3777-c1b2-b140-5fe8-ffaa3f5374b8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 321,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("731cd902-101c-7900-83c7-e8dccf11113c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 322,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f29436ee-d22b-1611-2dac-785038c90446"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 323,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("25209d12-b1f5-94df-aa22-4269d4f1d6a5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 324,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4d682ac6-29a0-89f5-19ce-fbe03cab8b3d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 325,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ef3b78b0-1e71-d123-fedf-f9087ef9e512"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 326,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f2cd5ee4-f4b3-9182-8c57-4c9a151f5b56"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 327,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e264979b-3768-2bc1-0da9-b154175c559a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 328,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("37717edc-77dd-feb1-c734-a4bb3a2e816c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 329,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f8f6d17e-bfaa-3d7a-fcf3-50c545ef548c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 330,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("72680003-b659-f1a6-d70c-fd1040945708"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            SortOrder = 331,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3cd04301-b8d1-4829-c3b5-d199a3cc3046"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("1c39024c-de22-15e8-56f5-f8b26d9a707f"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 332,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("58631e96-c1f7-5c08-efc5-16b6923eef39"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 333,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d2bd9fdc-a169-43e2-30f7-4513a91b596f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 334,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("95c3adb8-e8bb-2a8c-9ee0-02b286418fa5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 335,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fa306d37-5831-bf69-594b-daab06e24438"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 336,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9f94e6fb-199c-208f-8ae9-d34482ccb283"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 337,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("34dd30ed-4e6e-3f47-8a0b-5d20f0e532f7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 338,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1191accf-08f0-1b0f-ad10-9eafe3660b17"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 339,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b7fc0b77-f85f-25fc-43d7-11fadbb4f412"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 340,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("06429296-cae8-525c-ea9c-a37ca2e1c6dc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 341,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fcf05ce6-32de-9601-5873-9427a0756686"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 342,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1ca10dd4-3f37-a895-e3c7-57db7007b811"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 343,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("04d179c5-a64d-ca24-72d1-056139df2036"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 344,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4959e516-affe-2e4b-84d3-e82c44b348fc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 345,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("de7e0663-4ca2-b7b6-d086-3f27fd6816b3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 346,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2dc58967-c1a8-33c0-41ad-617e4996f004"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 347,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("015de3ec-4ecf-e607-82a5-3ad7dbbd007e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 348,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ddbb2a0d-b2a3-e869-0f0c-b1fef421f9e4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            SortOrder = 349,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2c9770c7-b1cc-dc52-d743-e22dd5757c2d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("1c39024c-de22-15e8-56f5-f8b26d9a707f"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 350,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("073bb4ed-6ae5-7ced-ff4b-a441678e267c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 351,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d02d0d9c-b12b-0769-a127-f07cd074724e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 352,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("86181212-5a6a-8ac9-acf0-630280d9dcf7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 353,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("560a25de-6761-6116-ca3e-b2596f7d75ad"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 354,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("66dd5715-4c36-fac7-f051-60bc284b893c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 355,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bf36caf6-cc5c-f6f9-ae21-ac61ed0495ee"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 356,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("991d9652-2668-939a-6324-8e7620c8cd62"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 357,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("efdb6214-8307-df57-37e7-849534677d9b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 358,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("34555f8e-c58f-2156-17e9-aafa17391218"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 359,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ee56a939-ecbd-4303-97cd-a909bc921e10"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 360,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7bb0b35f-ac29-13a6-98d6-1c7a317f9e51"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 361,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9ed421b2-6705-acca-97e6-0433bf3407bc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 362,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f69f2e2c-3710-3ecf-a10e-8e8d6cb26e11"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 363,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b8ef7038-7f45-0d67-8a1d-ab85ab66c7e1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 364,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d8ac968d-ee57-d850-53d3-4f029271cf06"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 365,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("243793cb-fc48-5b90-3656-80773d8a5b91"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 366,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bc4a044b-4b3b-9acf-2677-81561fb2db61"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            SortOrder = 367,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d67e6690-3ae1-df3a-a0d1-3499be6f32be"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 368,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("dc30f317-2003-38fb-2847-63f5335cd166"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 369,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2cca9010-dcbe-11c7-fe5e-16fc50c4f6e8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 370,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c6f659f7-99dd-2b4d-fba0-1adee7d0ee27"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 371,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e965994a-2e5c-5833-c6e5-0945a25cd216"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 372,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("32b9cf2f-58a7-24a6-7df7-40ef8f7eabb3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("1c39024c-de22-15e8-56f5-f8b26d9a707f"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 373,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("617ee271-a21b-c432-c78a-597632dbdd59"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 374,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d392f3f3-a914-d319-72a7-15abfc6bc5c4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 375,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("87bb0a73-c4ed-9abc-c8ef-0173b9ad1f31"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 376,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2f7a7755-b11d-ea55-5246-8eb76aba574f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 377,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9e030b3d-06ed-8742-e7b9-7c8b40c6c8fb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 378,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f3080cfd-89dd-4212-b951-517b9ce5be8f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 379,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("edf356b2-4b33-e087-1721-831e826e41fd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 380,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("12667711-4be7-cdae-17b6-6d12a2b71ca6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 381,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5e33e696-13f9-503c-e891-e9c700876665"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 382,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0822b050-f1d0-42e1-c99c-f178371e5e20"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 383,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f4ffd00c-9a32-53e7-a319-f673f86fd964"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 384,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c8255f0f-dd21-26af-edef-1219c68c1909"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 385,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("30adc607-9503-0715-1d14-6829d1eb8775"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 386,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("75b35172-bc9e-bac4-6b25-9ab83a1e978e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 387,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("535b0801-5a8f-bfda-4d88-96e2845716df"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 388,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5571b826-7d6e-574a-cc00-b165fec52931"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 389,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3c26cf5a-cea9-70e9-cff8-32fb720ea2dc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            SortOrder = 390,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4a601bbd-f6f3-c9a6-b140-f37e70593610"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("11e5080f-4567-f57e-d365-2d100be7963b"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 391,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7af1c0cf-7197-8be6-21da-8d72a9064e78"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 392,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("55451b8c-346d-095b-8cad-6cf0b2d3a6f0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("39084d44-ec24-ce2a-f2cf-a4fa84f655f3"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 393,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("938e0edc-eb2c-5df1-d42a-74e441ab3253"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 394,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("627bd6db-0076-6c61-b0a8-7fe18f82efe9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 395,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7ed1eab4-7a93-7351-4373-282c33ad0337"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 396,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4b67031c-ee11-2a3e-1b65-fb554502ad20"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 397,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("57c1a6d1-4db6-58c5-9e6b-7ca9a6c7546e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 398,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a51dc897-6b9a-8c74-7db1-6f128a31fbd4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 399,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("29f5ae49-f2c5-49d2-b7ca-c565e1e2136a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 400,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1916c16f-2b3d-cb68-a954-42b9d688914f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 401,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("88d633d2-fc16-474b-3427-4f06f8593812"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 402,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("662685a6-5432-aa0c-1e40-3aa45365aadc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 403,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("186a35bd-4593-25cc-0aed-bb146c96df1c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 404,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0d71a2fa-f198-34da-a66f-895ae6de3ce3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 405,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c0e4e912-3bc1-4a83-c42b-fc72c538af5a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 406,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4768ddb3-08f9-d3bb-015d-46637dee27d1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 407,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("29c993ff-9090-b8af-f631-d00c44c4e285"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 408,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f68d9a4c-c941-4e6c-5792-097a50ead6b5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 409,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d98dded4-a101-2c2a-8ee5-21cd2db6d12a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            SortOrder = 410,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3f9e1468-48c2-69ce-84cf-7241bdd30583"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("39084d44-ec24-ce2a-f2cf-a4fa84f655f3"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 411,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("43ecbb6d-fa6a-9e77-9025-69e6bb600078"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 412,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6ff4de30-c38c-6b06-e613-b10a50af4c47"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 413,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1c02f4a8-c3c4-8954-b9a9-55e27c9f4b01"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 414,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("86315c5d-5957-317a-a692-0046bf75da3e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 415,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("626ef235-b55e-1a13-bd35-50c2d7de8595"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 416,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("21463e04-57c8-0e28-5532-7d9061d90347"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 417,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4d284121-d00c-ea03-ac82-fe606473d6bd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 418,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a546539e-a85a-2e1a-0202-faea47f19fe5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 419,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d2ab20a2-170e-0fc2-0751-b144141c2e48"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 420,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7ebff54d-c3b3-bb25-e312-de1ef8118c21"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 421,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3642593a-2bd4-1ed9-b34a-478c15caeddb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 422,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("205ed703-ff5f-2aeb-40e6-ecf2505f361d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 423,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("14d94a04-daf2-7111-dcec-88772756326e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 424,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("347b8ea4-a9b5-6081-59e5-2bb0ec363a45"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 425,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6c737e9a-357b-498d-f793-331cf45b2eee"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 426,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c1c842e9-a604-9877-5e0c-e58f4e7b61de"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 427,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c5d088aa-9a2b-e85f-0f63-ad9758e8a373"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            SortOrder = 428,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ebf8a9c3-5aef-799f-4363-67c8217950d8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 429,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f296cfb7-f64a-4877-68e9-a0056c7d6c7d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 430,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("55ad296b-6935-b9ba-292c-2f25b7ab404a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 431,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8d3137d2-5d3a-ba8e-ae2f-ab25af2aec61"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 432,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3ef4389f-b34d-58f9-b561-d946d6c11f2c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 433,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("240544f2-061a-71e6-5290-2039f9090767"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("39084d44-ec24-ce2a-f2cf-a4fa84f655f3"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 434,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0796e884-bbac-49e2-f414-de71fba90bda"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 435,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("95c50a33-d2dd-1566-a518-2d591933e9f6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 436,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0dbbb181-6c15-c6bf-19cf-5a52b4576e0d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 437,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("27123e33-ede7-90fd-841a-2ef08084cfac"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 438,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d037bea9-4e79-2ef4-a998-cbffae3febb7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 439,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("00a959eb-f3a2-c829-9c1f-bc42d5d450ad"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 440,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4d56d5dd-04c7-bf6e-adde-ec47171313a5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 441,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("101c1d4c-9a36-065e-d50f-ccf19e49b2f7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 442,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("eaf205bf-aee3-5aa3-aded-23cea0df2abc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 443,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f0a49960-f34d-ad58-70f5-9e1c74922215"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 444,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f12d5f3d-4081-6468-926e-555ee639a9c2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 445,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5566cd4b-f99f-8fa0-ff89-4773692722f3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 446,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5f8ddab2-abe8-894f-b258-e88d1cc5aaae"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 447,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3a36f1b7-2b28-765e-9b07-31c0f78be5eb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 448,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("80ca8ac8-2c7a-0119-9558-bdd043338696"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 449,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("401b9ec8-abe8-3a7f-f026-d5b786cedf71"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 450,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c1ae8d5e-b99a-7f89-514e-4163565973f4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            SortOrder = 451,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6ad18a3c-d160-6b6f-9693-f54cda8837e7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("4cb8734e-de51-aff3-346b-9b976662eec4"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 452,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("32863294-0b28-0376-f0db-2553288de12b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 453,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cae40bc7-d087-b22c-5a8e-7bb30cb5eaa8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 454,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("56c006d5-8796-5f30-ad9d-c80598627069"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 455,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8ddd71da-8d7e-245d-c119-8093b467e669"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 456,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1c876e99-ca4d-7001-6f37-85b73fd8997f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 457,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f08b52bb-349d-be0e-5f64-3912982b20db"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 458,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("812ca812-67b2-a81d-2765-ab9d35305bf5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 459,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("76a44390-6ade-cad7-2c0b-beeadf1cd48f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 460,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e94b9619-4e56-3711-8e23-920e574f941c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 461,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bedf2724-59f3-0e96-b192-580cf231be15"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 462,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9ecaac9e-c99f-c794-0040-02b5bcceea7a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 463,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6ded2705-1605-88c7-35de-e8e349bd6409"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 464,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0e7f5187-5449-413b-1c35-4b8bbb90a5a1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 465,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("56f99dae-435e-1906-b7c4-e052f2859e22"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 466,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9449ced8-1df3-545d-c427-fcb122aebb61"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 467,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9e78877b-ccb8-ddc1-f9e6-0caba814f55e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 468,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("316be0f2-2802-661d-2957-9929aed1bf37"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            SortOrder = 469,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("910aadcf-1a5e-984b-129c-5245fee8e23a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SFeatureValueId = new Guid("47ca929c-c293-5a42-941e-a882036eaa65"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 470,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0cb19268-e7ac-8df2-9b84-5246fcc71e7b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 471,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("240ead6a-94ea-4fe5-7474-f10ee02a104c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 472,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8638435b-8763-335f-ab6e-8635d1446419"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 473,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("28336fc2-7825-25d9-6820-cba2505757fe"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 474,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("266fefc4-8a4b-99f1-320e-141b776aca23"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 475,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5072497c-7e7f-b1e3-4f35-f7713cef880b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 476,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c069a3dc-05f0-61b2-1667-e0999df98c51"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 477,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("925938af-d243-eb95-708d-1c9437c413cd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 478,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7261d450-a0f1-7bb0-0ec6-f6933ae38145"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 479,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4b41bca4-c464-425f-16fc-6890fc4fbe97"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 480,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f487dcdb-104c-2704-539f-763b09821e83"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 481,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5f62fd53-35d0-c046-952a-a95cad6a8eec"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 482,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9bd92b3e-0433-0cb6-b930-a6047b689adf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 483,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("785e51c5-2ecb-a16b-f26f-abb185db5ee9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 484,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4d2d9729-95c2-bd97-b749-54c828a427ad"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 485,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ba2b9bb9-b51d-8523-52d7-7b42fa3a62de"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 486,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b696185b-b7f4-99a6-eb99-191eea807dfb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            SortOrder = 487,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e167ec89-65bb-d31f-d398-dc645cc1b90f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 0,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9215d9b7-6d69-8580-2740-900b61b27b2e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("e16ca69a-c343-dd68-ece7-0ec13f261987"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 1,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("598aacaf-a94f-c1c8-25bf-b341defac03d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("f699f410-e99f-2d1d-236f-4c43604a0b93"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 2,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1f503f68-ca1e-b7d0-c643-72b0c1bbf1e8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 3,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1967ad02-3165-d097-70bf-459be2fdbe76"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("81f563ca-cfdb-2e23-62e5-0361c4b0ba2c"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 4,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d3531e3f-f2a8-8a04-26d5-496c203be662"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("cf037e3b-f82e-6955-d20c-0be456fcac0a"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 5,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cbf28e96-c3b4-2562-ce7a-b4702484e810"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 6,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("97793a8c-aa7f-bb3b-588d-8598a702b92e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 7,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c36b957f-6d4f-5d66-3cc6-401426b376bd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 8,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("85b1cddb-47a8-c492-05db-f064c0fc5625"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 9,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("634169b4-72a7-1153-7e6c-075c5a9c1d6e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 10,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7df6bf41-8ec6-a3e4-7dbd-e114dd3b2d0c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 11,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c65feecd-b9c6-6185-e5c1-bd0184b81ace"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 12,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("850278a0-b5cc-3228-60ba-b2779aa262d2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 13,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d2bd83a6-4826-5455-a8e4-d9b8757d6718"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 14,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("92568dd5-6873-3a30-8f98-edf08bfcd0a0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            SortOrder = 15,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7418ea03-0aee-e5e7-d5d1-9e15f2fbbc04"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 16,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("282255d0-10e6-3a99-dbe5-f5fcb4dea6cc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("81f563ca-cfdb-2e23-62e5-0361c4b0ba2c"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 17,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1f1044c6-e5d2-da0f-f2f2-457e853c8a6b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 18,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("087bee5c-a6a2-e98e-ae3e-99c85fbc6733"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 19,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6b7c8ccc-ea45-9832-6e16-3d61ff73443a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 20,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7a7ff30a-b554-0bed-6e61-30859cf7ea00"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 21,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fbf715cd-86ff-72c4-4ab3-2ca0bbe9827b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 22,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("73836fdb-73a1-e435-e88c-85ab70e67724"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 23,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5fd20731-de33-787a-4e4d-ac09e20b5e38"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 24,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("89cfc787-312b-70e6-e32e-1e508513d3b0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 25,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4a3376cb-35a5-4567-7ea1-d15ca4bd783f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 26,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("61b711d2-9230-4641-c293-cdacd8b4d5a3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            SortOrder = 27,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8bf8cfc6-2f58-e8ae-f6ae-007463b8c535"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 28,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("aaaf8bc9-e27e-ad8e-69ff-46a942324b90"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("81f563ca-cfdb-2e23-62e5-0361c4b0ba2c"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 29,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("66fc4627-f165-6c2d-bae5-aee4faf4be08"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 30,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d99ce987-f0e6-22bb-ea3c-75ac736b1425"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 31,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("89930375-aff5-87fb-d859-caa25511c0eb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 32,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9af60f1d-1a19-9cb7-7657-66009419d98c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 33,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7670e228-532e-691b-dbee-cae7b50df4d2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 34,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("122e9fff-8cbb-dfe1-75df-90939cdda695"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 35,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d1ffda4f-405b-1dfb-2ad9-913021d9ab41"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 36,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c1d51311-86e7-1d26-9697-0b86e7ab3ee2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 37,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5caf0cf7-bae8-2e54-b7c5-83e7cba50108"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 38,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5ec211fd-50ed-8874-30a9-0787f56a82d5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            SortOrder = 39,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d686cf60-c146-e84d-1d2d-ffa057f011cf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("84c6fa65-262f-2d67-1e5e-3805080e4b8b"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 40,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f4969bea-0ec0-96e1-c65b-06e42a8f7bbb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("c8f8e11c-ab85-5323-b1d1-7f275bbbe0f8"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 41,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("579f4f8f-ce9a-d30f-104a-ab114975f796"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 42,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("eac34781-5c81-271c-e539-f25cbafbb700"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("81f563ca-cfdb-2e23-62e5-0361c4b0ba2c"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 43,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fe8602c9-250e-59c3-5723-f115e61fae4d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("cf037e3b-f82e-6955-d20c-0be456fcac0a"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 44,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6586b737-6775-b19f-d3be-c315271cce16"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 45,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6427fd5b-cb74-94d5-7c56-85e0371ce22e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 46,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a8e13e2b-1336-dfad-aaac-7a78ac5d19e7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 47,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4b421152-dfca-392a-711f-46ae8dfb7199"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 48,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a36124aa-ed48-2a26-bb48-30248755b47a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 49,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("65f28352-3fe1-d627-6730-558b409ea748"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 50,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b8ecb42c-7b56-9efc-2544-adf5193aea34"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 51,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("80832d84-8562-b367-6274-5baa025027ba"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 52,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("634ccd1f-3d0a-170b-cb39-700a0126d5e0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 53,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("aab95adb-6636-c324-a542-ae8c881aedc1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            SortOrder = 54,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bc576594-62ce-bcd3-3df2-9d695df3c825"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 55,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2779fabc-1304-e575-fac0-72bc288523df"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("e16ca69a-c343-dd68-ece7-0ec13f261987"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 56,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("18070e2d-fe03-9892-9421-6b6292bd3578"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("f699f410-e99f-2d1d-236f-4c43604a0b93"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 57,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f1f04317-3d15-ba7f-e2c1-e45e75292729"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 58,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6ea61e01-2eea-db06-c369-fe6ec9f544db"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 59,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("df6607a2-7065-0762-ab15-42fc11a68d75"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 60,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6b8c3cfe-2ff0-673d-1d12-263f6a0cb424"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 61,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3735320e-4a54-a068-fe43-c90af684eea1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 62,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fc390735-183a-c439-a5d6-b256eba00dc9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 63,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4bc87e3e-4d0d-c9bf-3135-ec9bb1bb84a1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 64,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("10ab1427-09d8-37b8-0b22-383a48a713c6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 65,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a02e5c7d-58f6-deed-3c26-b0f05fe0882c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 66,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b0317e0c-4407-ecab-dce3-aaddd21f2793"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            SortOrder = 67,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fb1a4142-d6f9-6878-ece6-45c8279dc61b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("84c6fa65-262f-2d67-1e5e-3805080e4b8b"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 68,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("93533af3-23f9-ad9e-b732-87b921aba575"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("c8f8e11c-ab85-5323-b1d1-7f275bbbe0f8"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 69,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cc6d8b05-60a3-a61a-f32c-6018b449a681"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 70,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9686d3c3-2eaa-df53-4e2f-69c3d1088c92"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 71,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bd008b2b-0e74-91b3-1c25-4e7dd21066ac"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 72,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bbec5beb-e843-bc3d-0abd-616658a3c12a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 73,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4f99bf26-f3dc-fdf1-1874-a90829468574"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 74,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a7bdd0bb-6ad0-e1aa-8974-510dc8a36cb7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 75,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("50630712-c453-d730-d785-195c3c256c5b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 76,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5915ee47-5b7d-5ea6-e058-4abcd127b65f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 77,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("806e253c-4a98-f05c-d34a-8be940814329"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 78,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9f58fd55-9bd3-c3f5-9ee0-3704eb4e100f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            SortOrder = 79,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2a2f90f5-0646-8e6f-384f-e2383dd98e2f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 80,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cb4cd0ed-0a0a-e96f-d621-76859f383040"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("e16ca69a-c343-dd68-ece7-0ec13f261987"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 81,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("16afe717-29e1-0425-71f0-4e2bce3c8dc0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("f699f410-e99f-2d1d-236f-4c43604a0b93"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 82,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cc379169-165e-3d52-cbdd-27c4a2fc217a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 83,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("503b1ab0-988a-dd71-64b6-3bd8e9865547"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("81f563ca-cfdb-2e23-62e5-0361c4b0ba2c"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 84,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d7aac02b-7721-3067-d5e0-03dfb60a853f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 85,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f4ead669-735e-6b39-560b-d4a3737f5383"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 86,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7450b606-fcb0-277d-df15-4f6c389e3f05"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 87,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("303449da-c218-5a66-eb1d-1d3f282897e2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 88,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ce429054-806b-f1e5-c1bd-0d7bafaf3ba8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 89,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f3dc1a54-85fe-87c5-f028-458b09881641"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 90,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1d2cae7d-eb84-285d-1b84-cf36345fb9c4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 91,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c524f8da-02c5-a1f1-3136-0f314461e35f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 92,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2f183aa0-3b6e-63e6-de3f-78c7d3e952fa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 93,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9a6b8894-f40b-2154-3754-db2024005ba4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            SortOrder = 94,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("262d4f04-f076-d65a-97e6-92c1f498b216"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 95,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f3c6a98d-86a1-2d30-bf05-16d7f4a0806c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("e16ca69a-c343-dd68-ece7-0ec13f261987"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 96,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2d2d1dcd-1aa7-b21b-1379-928a95bff252"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 97,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("97814a23-2877-d9af-222b-47cc53d56d64"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("81f563ca-cfdb-2e23-62e5-0361c4b0ba2c"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 98,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("78f5386d-a5e6-7cd5-33d8-777d29fdd6ae"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 99,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("51534135-bae2-2fbe-090e-a3948b5c9ee2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 100,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b25c8872-2a1f-c93d-5b48-3cd5c0d6f447"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 101,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2ca9a7c2-e60d-b0cc-b29d-475ac56fd519"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 102,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("059845c4-d681-445f-e893-f1432b92b817"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 103,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a24ed33f-28eb-641e-4390-8ea031f983a4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 104,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("91d91b88-1745-a973-3796-de7f2f5a9382"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 105,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c624a460-ad4e-874c-0107-a8d89bc08ad5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 106,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7d56f34c-cf62-463f-2f91-374e3767bfc1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 107,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3ad1dd82-9e8d-0933-c977-5a141975a3a0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            SortOrder = 108,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cc9b7e0a-e783-3d53-6bf2-34bb2fb1a529"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 109,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("753d236d-2929-9d70-77fe-e838603a5f46"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("e16ca69a-c343-dd68-ece7-0ec13f261987"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 110,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("99dddf2f-1d60-8be0-8d06-e29e3cd8c4ce"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("f699f410-e99f-2d1d-236f-4c43604a0b93"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 111,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d03dc489-8dbc-994d-8b1b-7bc88148ac7c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 112,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("707f0ad6-efa6-0a51-647f-b502276569bc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 113,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5802f57d-e2e2-6b81-5306-b4a7aaaa2832"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 114,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("26d062ee-7260-8681-ae99-f0ddefba3959"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 115,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8b6a1da4-4cf9-8058-d422-e2ed589509b2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 116,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f7bd4e1c-2007-47ce-13b8-943667fc04ba"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 117,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c4e5a864-6c88-a473-a855-a61db90975c9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 118,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("782c6671-9b29-57d4-e96d-986ceac68815"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 119,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2116b12b-5d49-b9f2-cb35-63ef2091b654"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 120,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d30ffca4-60b5-6576-e9d5-778831c65c2c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            SortOrder = 121,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("486c37a9-c89e-6e67-5c31-f00c3c8329ed"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 122,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("01164edd-4ea2-463d-2c13-de1500a3ec6d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("e16ca69a-c343-dd68-ece7-0ec13f261987"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 123,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("49c4e8e8-02a7-3fc5-dec7-e823647014fe"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 124,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cde3848b-1cf3-d6a9-53ba-74256f07d228"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("6e66981a-2d46-d04e-117b-e21f4003ab60"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 125,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2032c2fb-e3f4-7d42-61af-40a2e8cb8c63"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 126,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5cba6d70-70ad-8cc0-ddfa-cb743c008a3a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 127,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ad5b7cc1-5b64-432a-41fe-d5d577b9f244"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 128,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("66954475-7c73-c166-51a2-0dbfd962ac09"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 129,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0c7ee273-c3fc-3aa7-dc6f-aad82fddc916"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 130,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d2293529-e625-7053-7b08-932e3b159789"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 131,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c1de7b47-d296-1895-85d9-b4b625a1c1d6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 132,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b2ed48df-ada6-7e23-1d26-e48cf7cab45f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 133,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cab7c9a3-80a7-e66d-c940-df84b3f8cf6f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 134,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3afb276e-382e-68b2-c8d0-ccf5939a0d98"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            SortOrder = 135,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("679a5530-ef75-5d2f-ac8f-f6174e46b8e6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("84c6fa65-262f-2d67-1e5e-3805080e4b8b"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 136,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("70a98351-8a00-43b2-f526-74729a5faf80"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("c8f8e11c-ab85-5323-b1d1-7f275bbbe0f8"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 137,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f9d68b1c-693f-2f41-ae63-74bed595cff8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 138,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("192dbf34-bb32-8be1-4deb-6e5321c417e5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("81f563ca-cfdb-2e23-62e5-0361c4b0ba2c"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 139,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("83ab82aa-52b0-5258-f042-fc96a1c7244b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 140,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d9b64fd9-7843-03a1-e5bb-6c0e45236c6b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 141,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e52d6180-28e1-0078-d2e2-a8a7700ffd70"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 142,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d3120d3d-5b86-217a-b5ae-bd1bb3c308fd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 143,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0b05a251-40db-70f4-8137-5ab5e81e1e48"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 144,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f8c6b08e-422b-ffd2-b073-34ee88ffc8fd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 145,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bd774a7c-795b-7a7c-ad4f-133b23d269c7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 146,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("380219d1-486d-b5a2-b348-ae316637230f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 147,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("20552f5a-2d58-3e61-5c2b-f066a2a128c2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 148,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8dd2d729-44c6-e1e9-0dcc-6ffeeb2d8616"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            SortOrder = 149,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b20c9736-a6cf-f299-b40c-f556a6d7e430"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("6ca63e7d-5d68-659e-5393-4b321e387cc6"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 150,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a6e2dded-2e43-ad1e-c712-9088358c05bc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("298b85b0-e9d1-cfb1-3e4a-b62e1ec6ed6c"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 151,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("31c12745-0d26-0250-8444-bda6d57faf7c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("917d25f6-d8bf-b940-9d26-23f36f997dbc"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 152,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b21cee90-3665-3a67-e770-8d2455967b3f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("4beee406-3e04-7a76-3ce7-4d310b2d7d95"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 153,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f8d8b08c-d6d2-9005-06f7-f7ebe5f7eb6e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("68a424f2-44d9-7679-4901-828846d517ad"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 154,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("874e47a7-f40b-9574-e405-24686b751109"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("a6ee6466-aef8-30d1-95c0-07e7c4e9782b"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 155,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f586455b-92db-c868-6a5e-f2003763dd48"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("80a30016-970f-0c32-388a-3baa09893046"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 156,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5f5acf86-4bf5-6f13-8629-36d2333a6ccf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("8de30b81-9665-0f00-8d9c-95f55302f196"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 157,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e89d0e0b-0593-dde3-5783-d2296b140caa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("90e082b7-1c51-7813-ca18-2390518413a5"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 158,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f7a359e8-223b-232b-aeb9-08f4bc6c22f2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("81919965-bc85-7542-6de1-c6ad1ce31a53"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 159,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("77694b67-7051-0364-39bb-de8929da73cb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("3111e6ed-962f-d27d-16a7-8192fccd3c3c"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 160,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2ca39880-535a-d244-62fd-03f5ed5196c4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SFeatureValueId = new Guid("8d46af9b-1d0f-3f72-a9a2-f2feba090beb"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 161,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("76c21d65-fe17-8cf1-7e89-deaeefc30bae"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("ceae6831-a7ba-974c-c8f8-0c53ac585bbe"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 162,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c0576e93-f311-dc2c-14f2-c0aee375789c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("1acfc59c-7bc8-b523-ba59-c2090a3119e8"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 163,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fbb27872-8c38-235f-87c3-480678a7ed29"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("8fc909b1-c6ef-f1aa-0dfe-95353a4cc3d9"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 164,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4c7a0c71-d9b5-2ad1-6e78-da232270c257"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("84c6fa65-262f-2d67-1e5e-3805080e4b8b"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 165,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b8bc6837-15c2-0a64-81a1-8b331b009e98"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("c8f8e11c-ab85-5323-b1d1-7f275bbbe0f8"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 166,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d1cba025-4a04-6ffa-912b-e2c20891faf5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SFeatureValueId = new Guid("c02c0fb8-6cb8-74c1-939b-ab04599f717b"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 167,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("82cb33a7-83b7-17d8-e881-3e67526a5b91"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 168,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5d801d74-6709-f9b7-ace7-e758f3fff8fb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("e16ca69a-c343-dd68-ece7-0ec13f261987"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 169,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("73cfa895-aad8-a2b0-676c-9123135f5539"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("c55cb504-14e4-5c76-0955-1a1b57003f1f"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 170,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("69df59dd-d3bd-8850-3304-0396b6b89c97"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("18d29cca-78d9-046c-c92c-f1a3f1d0478e"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 171,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("dae94a32-2aac-ca2b-4b04-210ec257be54"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SFeatureValueId = new Guid("f699f410-e99f-2d1d-236f-4c43604a0b93"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 172,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bb9396d3-34d7-00b6-fef4-bf5e970d8845"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("fa3432d5-b731-0c37-d1f8-60905d3e0780"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 173,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5af12204-d56e-5ba6-566f-359271c8a83d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("739b4a34-00f0-e002-3b51-edf96c370b91"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 174,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b9536619-c079-576c-ff38-85b1229675ec"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("99efe1a4-08cc-06df-5536-db9dd4627d28"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 175,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("46c55ae1-dc1c-5b7d-e18c-94cecae80cf7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("81f563ca-cfdb-2e23-62e5-0361c4b0ba2c"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 176,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e93f2d96-2b92-398f-9fda-52485cb7f652"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("cf037e3b-f82e-6955-d20c-0be456fcac0a"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 177,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ac78c091-69c0-beef-28b3-eddaec2ac098"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SFeatureValueId = new Guid("6e66981a-2d46-d04e-117b-e21f4003ab60"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 178,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("25f7b2c3-0147-c120-5793-1831d8ca8601"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("502e9dd8-8205-5a47-0e32-d3ea2c83b5e1"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 179,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cc07e34d-c5d2-e92d-4977-e5cf6507097a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("5ea1df51-05f9-541d-5560-f0bccaf65752"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 180,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("150d330d-f7e7-f3ad-63c9-997dc6f30b69"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("8607dccc-8e33-fce2-5f77-5c1446154f61"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 181,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2df7eb6b-3b7f-47b9-bb42-206904a9d9d8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("96b9ebde-e976-eb0c-cbdf-538ec1bbfdb5"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 182,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("916fc16d-541d-6b71-b589-5ae77155740e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("c5e330f2-14b3-4970-91ea-19d8bc499926"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 183,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("31e65e12-7ebb-65d6-b985-9edd40d5bc81"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("03b5964f-e34c-60b9-f78d-b0519cd0ef33"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 184,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0dd95f2b-64f3-0427-df35-940c8bc8a171"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("1479fef9-3f13-bc75-2e69-73fbb2156a9f"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 185,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("444d855f-f80c-bf8e-4a33-1af00437058d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("905f629c-7da5-9eac-170c-6f5cfe329fdb"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 186,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0b63bca1-4c5e-a265-dd3c-0949a47c52b5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("a3f78c46-b0c0-ca9b-e7f4-ca6fcafafd45"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 187,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7b11848b-67ca-c444-2c98-de3021729404"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SFeatureValueId = new Guid("43359f5d-52e0-19b5-9812-c8887267a9dd"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            SortOrder = 188,
+                            Status = 1
                         });
                 });
 
@@ -24997,2006 +32251,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.ToTable("SProductFeatures", (string)null);
 
                     b.HasData(
-                        new
-                        {
-                            Id = new Guid("c8c8cc52-61c0-a61a-b2f8-17cc9ef1d6d0"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("965a3d33-51a1-bf87-3a4f-60b6db3d73de"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c22b4791-580d-748e-7db8-abaf6b80fdc6"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2850ae7e-b785-b134-9d24-dda3821c5828"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1a66bd36-684a-2565-b0d0-7411adff2c2d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2e397494-3db1-86d0-2d40-a005aaa829b0"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("acb4d6ea-c303-9906-59d5-62c9b50f8136"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f70e9564-66aa-6919-b74e-82e53ce5374f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a0dff7c2-6e5b-71a7-65ce-6700f412892f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f02d62a8-56d7-fefa-7c6a-c4073cbfee30"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("fe54dff8-89d9-ca4a-fe63-34649eb0771d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("636cdf93-f769-7e4c-6529-eff73cf2f005"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e46c1180-6565-1190-6063-a405a3675ffd"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7af4bbf9-e070-b411-867f-e00ec4d5e8bd"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("125ccbbc-68e8-b941-82f1-91d33c44e0b8"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("9117dd22-3275-36ab-a40a-e1d41e95de2d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e6ce2b2a-ce1e-2ef7-a554-c342ab9bace5"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("866b7ec8-3f00-1dd8-cfa1-22a5fbf7c6ac"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7c4293e3-43c3-fb75-25d6-92b9c2eb3c2f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2c89e19f-b4e6-d14a-dce8-2774819a3273"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("ea9bfae4-6b03-22f5-4a54-1b47c4f4b006"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("ddf95abe-fee0-7803-146d-2c9c88484d6b"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("ad4cc794-1e9f-06f7-e334-6513ecef2b92"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("153e1335-212e-77e2-c813-b0352fdd02ad"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("bb74eb2a-1917-a4c5-5265-5ec464178410"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("267d75cf-99c4-e14b-8612-368dd1360831"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("9f38e5b9-12ae-7b64-e77b-56fec6dfb448"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("46c8444b-3421-a98e-1ba8-3bb91de65aaf"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("42456b9e-dbe7-fd3d-e260-c714a03e6b15"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0f18e23e-2621-8c36-e900-6272e111d68d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("364c6db1-6fa0-4dfd-cf41-20c581939bbc"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("65483c91-6bcb-fbe8-ade3-7c035da22f5c"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d5ada2c5-911a-8474-28c2-ac0282e64e01"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("9c882858-d5ae-d3a2-c072-ecfb37252be5"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0859b2cc-697f-ab97-a382-0421adf0c31d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("68ae13a0-549b-d35c-aa07-091f4b254c2f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("519eb03d-a165-9fa3-af9c-a4aba3356664"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a7a31b53-dd1a-97e5-241a-ffbc7a39892b"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d52710ed-6c35-69e6-4b9e-486cc8d2df27"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("3def8fc6-3a82-4d39-f013-02e8edea2ae4"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0ddfef19-3ce8-dd05-3fab-f7c697aa3c1d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0b384a77-f4cf-df7f-4752-44fb192ab330"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("65de38eb-9414-cc07-1caa-03839aab8d77"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("604a25bf-bd94-bd4e-f109-21ee12f6e51e"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a53ce826-6a55-6a39-bc97-c1f4d07f9056"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b5d910ba-b8b5-392b-5174-abd9a5c19f44"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d4169803-2345-a444-2ce1-f31cf5c14730"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2c38b046-59d2-82eb-600b-7017a365d3c0"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d0b29eb0-7842-843b-7a6a-7c292c3e08d4"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("44d70851-9c60-538e-4139-5329e2d14f38"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1aa9b8b3-3dfb-0b2b-fc5e-ba94d8618bf3"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("00c706e0-631c-dbea-dddf-ee903386639c"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6865c38a-a6f5-5fd7-84ce-841db375d924"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d2cdcb04-616b-e6a7-6e7e-30f915c7f6de"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("cd71779a-2af4-6009-6e22-2f81238c4978"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("afb52d57-0d28-c266-3522-c30f9dd19449"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("93b6081e-764d-3491-a146-9123505d3138"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("8b375109-adae-9f71-ba7e-c9c4b80bb898"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4ab4eed9-408b-bbd1-0ac1-21072750d0eb"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b77a1e1c-e937-ff95-f64e-0a4634ee972b"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b5ab9098-59bf-8bc9-caa7-9f3c1e951935"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d9bc4e88-fb92-e9d7-9843-ec8821ae6b23"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c76f960f-5635-eb80-d351-67c3e5bc1c37"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c1a03d7c-8726-1135-5d5e-6fe258b151d5"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e977168f-d562-7f63-7e92-d610103af1b8"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("12393a04-9e47-501c-48dc-cda83c291f30"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1d4fbd97-b206-a9cc-756f-99f44eebb6d5"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("206bb7f5-658b-d8a8-22c7-1568b0e379c5"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e2027001-fb6d-5269-1aa6-e70d8e31d487"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("ac3a440f-8a76-c5f5-7b0a-6432e5efc85f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("26ea6182-d621-1fc1-eae8-b9bd08c65666"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("33a2e3e1-c4e8-4e12-dd5b-54415f2dff7b"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("39ca828b-6d99-e728-eeb0-f06a3d5506d0"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("825003ef-0862-5b1a-3a4c-2d884912d3c2"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d1f7e867-74d4-e23e-05fd-d2193585b15e"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("dbdd4541-50cf-79c5-282b-6651ead5702b"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("83fe309f-2900-ca99-8639-4c3432dffd6d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e98b112f-f671-06b4-dc51-e406db359781"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a803710e-0cff-c60b-2443-e69942ece2e8"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("38281207-e4e1-9e87-0c0a-abca1450b84e"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b5db712e-b6fe-0ba3-ea61-aab31a78ad24"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("911459c8-6f2b-236e-c8db-d430b98bf4ef"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2c8234fe-5991-969e-37cb-b18ff79807f5"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1452e0c8-5fcc-b987-451d-4e305fea5136"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("afc2a411-3791-c52d-5998-442903c2415f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("32f656f6-31fb-96a8-21eb-c0f674112460"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e996131c-a071-8dec-8703-69ae2aa3d156"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5a85a4f9-a908-7d5c-71f2-119de71a0b9b"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b05f3790-e921-65d2-10ec-41e6aba71963"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e36c8245-5ef4-670c-dd9c-193e5f29ae30"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("deb6f74a-8752-bd28-1bcb-26b5ea3d047b"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("3537bb50-7119-ad99-491f-e613286040b3"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5f535620-c3b6-971b-2b28-630d37c38df0"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("db78c91e-9b26-ab57-782c-4aac19ba5305"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7a221466-186e-79b2-775d-cdc27e869a04"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("063e9069-1cb8-22fc-efe8-9c27ec38713f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("20e92c9c-8cce-6356-d0c9-aedc558b7321"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7930890c-5442-237f-afef-3ff535ca9c5d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7d3adf7b-471e-fb2e-3c81-82e6c1d5f50e"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("8c921343-0b88-b694-0e52-9dd8db35d46c"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c438ffd4-4caa-9c57-a465-dd8e37816b87"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("73420c22-4f74-eb5d-0787-9d3cc562a86a"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0f336aaf-9172-4995-c04e-0fb8913a87e3"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("feca020d-30af-a284-fe88-9d8f0b05d8b3"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1159501e-a69e-2653-1810-515bf9d314e2"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("658ee46c-a741-1daf-b2a4-0e51c34dfffa"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("deecbe2d-ae4b-4370-a564-705aa889e8ab"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c038c293-1d32-ebb1-1cba-c67b7a1c4a0e"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6918bf2b-2ab9-66d1-f054-810585b9a54c"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d65f7669-e911-a975-1021-86cf10c399ba"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("cf9452db-ae24-f384-ba30-58c4d3c36d69"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c3b5e6c9-7072-af4c-4992-d81d6b27c963"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("92051e14-491d-8a68-1c9b-d78e9fe7b101"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2b8eb8a7-102b-5bc8-f933-4665856efaeb"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("746e9336-0ba2-29ba-5fed-45b3ab60295c"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("67e90a55-72f0-e27d-6dba-4b4e5f4f8c07"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("05f99f22-e01f-dfdf-7008-6dd9ec1716a8"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("41d9810e-af9e-284e-073e-a026e2235e43"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("3edc0b20-5c90-ba72-a388-fb7ae0704a7d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c74e562f-1ac5-9ec8-da0b-f546f63e8c0f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("96236cbf-194e-5c53-36be-ae7fa6107222"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5ac11e72-80ac-875d-c3de-c3e3c8c5e0eb"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5bb825dd-d835-0eeb-21e7-56436367dc91"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("cf610d08-71da-4d4a-c7ae-cee82d8c0580"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2d922c36-6ec0-d2e1-3cc0-11ee5eb2daad"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4ddde420-b6c7-0af2-c5f2-481b32d7c3b2"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4b7d061d-60fb-8108-31a7-53504b4f083d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("93822e68-896a-ca76-0444-fb34d8dd1bac"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("dfc8d6c8-904a-51ab-3410-bf68118838a4"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("44f1f745-aa22-a6bc-e679-0e17a07028bf"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2d79de3e-f9f3-c77b-a6bc-0d482b96b210"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("58822dbf-1995-6ec4-53d8-a3da883e5bd6"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("8ab06586-4b03-d72b-22c8-5067da3e89d4"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("32156f9e-5d75-b78b-793c-512799d6a7d2"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d5380752-283a-8b07-ab22-4a11076ac334"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("bbe168f7-4c61-cec7-38e9-bd08501d6490"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
-                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b4ea620d-ea72-71b5-f1ce-5fc1135cf9a7"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("9bdbad19-cd0b-861b-4c0a-3f954fc9b545"),
-                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("5b08ff94-dc02-01f4-f0aa-546989d0c1d8"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("8c60f436-be96-1642-5ddc-bc2ed254502c"),
-                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c166318d-e9d9-cedc-7075-42559f4243e8"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("298d93b1-8f50-cb64-aeef-51ec555aa5fd"),
-                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d6b4ec70-9abf-b443-1827-a0b5bd528c33"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("4a8a1c92-da7f-6fed-fb31-b978cc7ba6f8"),
-                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a1011b86-5ef3-4fbc-6219-d836580a61f7"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("08d6317d-4c28-e6c6-14ef-1ceb50596c2a"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f23a8614-83c4-8cf4-0753-36fd24cb9690"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6a160f6a-dfd8-2650-af0f-f80140fa290d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("3982175d-908b-7fdf-7895-62e7c1bedd73"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c92bac86-5b2d-5bfa-57f8-47f2309b6884"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("1b3d7fbd-b5b0-ac9c-c0c4-1a341a89d643"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d5fe569f-7e28-f794-106f-013e76ee6acb"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("13a608b9-7966-d2c8-d3d4-4b4f1e167c2d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b2d7394f-ed7d-7236-e587-678f1bf05e8f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("99a26d90-b2e4-d472-4e26-fb648ac37390"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("215dd792-86d1-0d2d-3031-bce190fdb78f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6639ce63-7a3b-6c40-b726-ccd0d1a0f1c1"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("47912d6d-82b9-aa69-3e75-0d7f71bfceb8"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("ffff467b-8f8c-4959-f4f2-19d7b16f79dc"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("81b516b8-6f67-99f9-32ac-cbc962718866"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d329c47f-ad4d-b3a2-dc46-f047f1c47779"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("82fa5eaf-11ac-b795-4a21-f8c7119f27db"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f3c1e13a-e8db-adfd-4a4e-83f7937a9759"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("934337a3-7998-c7d3-57fa-b77f1e9936e6"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("45144903-7f78-02ce-75a8-0229d42aa9ca"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("18334b1e-76e7-635e-c33b-aaf76f684e93"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2b502417-dfb3-d1a4-64e3-43de2c940e45"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4a14e2f4-99c0-c31c-514f-a2d4cc92ec7d"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2a51aa48-9bf9-74e4-d113-51284c330514"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("74766d2d-a504-492f-e2c1-ca48d369c70b"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("0467f9bc-1c90-8c69-3e98-7b062a1766a8"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7651a2c9-26b1-08a4-e2f8-43ee5348988a"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("9081dfdf-026d-7393-49ae-af1502ff62b0"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("30c1968a-796f-092f-9dc8-369ee52b68e7"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("197c6dda-dd86-f432-9f20-65cd9d7431dd"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a6c9496c-8188-e9a2-28e4-47ad2e125465"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4b66cf65-9ea9-1b1c-c7e0-13931f677acf"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6c9f1a27-9a8e-734d-7740-40c93d650633"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("bd3fd7d7-86ec-fd78-dc70-2a060a10adb2"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("36448cab-5ca7-0c2e-8a83-4ed4e80323fb"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2ac33116-a117-89ed-52e1-ce87ebebb901"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("780ff149-76dc-ef94-20bb-c3060540304e"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a72e6731-4b0d-abfc-66ee-8c9cc62f3fb9"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6ccf0207-46a1-8366-c949-e3c91c000588"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("57aafc8b-5232-3be8-341f-97f62fea3d5e"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("24192b4e-1569-f7af-ddc7-036eaad08753"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2845cca4-d32e-f11a-49d8-caa07a24a204"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7be520f7-e54d-b527-fe8a-23be2d9dc449"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("a305755b-559d-0ec3-5438-747e7c7f8f99"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("16f9a4e1-8620-e29d-eaa7-0644e6febfef"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("d2a26669-3789-f5c6-c6dc-6c8e298e5e60"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("4c0d56b9-3cc8-14d9-28e0-5d1b01697361"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("22f2dfc6-aee0-9e3d-2f30-d7a902088a73"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b6db6bbc-1698-7747-1171-f0f3a1f544c9"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b5a681cf-de47-d993-9609-377a0dc71d69"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("382c8ced-8d4d-5af4-4d9a-b8acf34479d0"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("94ce83b4-673f-5f0d-5ba7-dd91f82104e1"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("bd888222-152d-013a-ce83-12fdb31a9962"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c9bcb2a4-0fa0-c9e5-1306-ffe52719687a"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("28ca2c1b-e6d2-2974-5412-e61f55fd5f40"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
-                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("7f912c8c-745c-9939-75da-8ff952b4d8d3"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
-                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("c2dbe585-d6e4-a440-2c70-b6c7604d331f"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
-                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("78c97da6-da9c-fa08-ee5e-2392bbd41c43"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
-                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("460925a5-0661-a762-75d6-16c6af18af99"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsRequired = true,
-                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
-                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
-                            Status = 1
-                        },
                         new
                         {
                             Id = new Guid("141f9af5-e6ca-bda3-c90a-947fad153954"),
@@ -39724,6 +44978,2687 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
                             Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("afd510bd-9ae7-5368-095c-c98e4c334ef0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("bbf85110-13e8-0722-f3fc-b680fd6b3166"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7189b486-e2d3-12ca-b3cb-26277cc53047"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("89b970b1-2321-caff-4655-d0baef70ca8e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b6818821-7248-c3de-958a-13a9bc1016c6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("743aa11a-3cd1-ff8d-c065-d715e1ecda11"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("342beb13-4106-1f2c-fb0c-3473a963107b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("10a3eedc-78fc-80f8-bb6e-404bb5157e9c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("5d0d7291-a24f-b4f1-c366-22a7e8623c7f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d44e3506-751b-c023-2da2-c49c7ecf9443"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("bbf85110-13e8-0722-f3fc-b680fd6b3166"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9cb54d0f-b383-1c8b-4bca-8570d8f347ab"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("fcfc4066-e3b9-64ef-962a-924bb91827ea"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1c2f8e77-a250-536d-81c7-568c94198804"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f358fb08-cc02-f45c-b4e4-94554b366660"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a76d11fa-0dab-4e1c-a3be-d8a4fbd28d81"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0c296aa4-181f-51b7-35fd-0c4438b5b1da"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f402751b-0a05-7015-e137-86406c2cea31"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("a4ca7f90-ef6d-8d86-aff9-e0661e946004"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2f13dd72-2ba6-3644-ea81-04d8c53e204b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("bbf85110-13e8-0722-f3fc-b680fd6b3166"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8e8f3b91-45d7-9fac-64e7-28e8a32c088d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("9fa04707-f2d2-9a1a-739f-24d3212957cd"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("79ee97c7-7da7-1762-f2f5-c765eedda47a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("797e6868-76d7-dd93-7955-c0c25d5bd4bc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b79ab145-dd60-9dd3-295d-76ccba2a543f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0df95419-1ede-ea6c-16db-e3396611a1cf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6b7dd980-1b18-28c7-0226-fb2932180b57"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("18548253-e7e5-4de4-faf6-42ab5581d5c7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("97219a95-93c4-1d95-7cf7-de0ade470313"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("d8ab538a-4d7f-87df-7a5f-593804d85c99"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("38cbc00a-f03b-7e44-367f-9d315015b7bc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3f5db19d-0e2b-6cbc-5dda-305e1a4a5b8e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f6c670ab-bde4-ef7d-83a3-b01d05b38d80"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9aeaa6b5-0640-d90b-0962-270c057a135b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("dc6afd72-1ad2-5f06-f6d2-dd756f6650a3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7e96cd42-79c6-3952-d2fa-cbd145860aae"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("dfb59c7b-8c5a-29f3-37bc-b6000e5f6a46"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("63347a35-4fb1-84a1-f165-9aa098317568"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("d8ab538a-4d7f-87df-7a5f-593804d85c99"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c0777c3b-ed1c-733d-b83f-0e7dc3a19293"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("fcfc4066-e3b9-64ef-962a-924bb91827ea"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e17a02d7-ee3b-ea1a-7a11-92749623674e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a347e55f-c7ad-6a08-f391-c63cfa623dbf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("72c69466-31ee-f869-aaf5-43982b273c59"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8ca48dcc-e16c-4a23-851a-8c02b08c697d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("513233d9-730e-a678-6c0c-527d35282ad7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("b7bf1991-b276-c27f-4244-99f3a2826703"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a19e10cd-f91d-b777-db07-18034b44980c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("d8ab538a-4d7f-87df-7a5f-593804d85c99"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0bedab42-a4e1-e521-7ef8-09830c50faf2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("9fa04707-f2d2-9a1a-739f-24d3212957cd"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ddd1c0fe-bf4e-e777-9734-24036ce9cae8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c0a27c85-7ada-e6fd-c0f0-9319b0bb465f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e4acc394-7874-c89e-8dc6-1a1a942c5127"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3131fa97-45b1-105d-0179-b59c9bc34f27"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("36688f06-5e02-ee2a-b99f-e0e925037e58"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("8858e63d-9211-be74-e473-32ad6ff53f0d"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5ac3a879-18c8-575b-a14e-515e7a4fda05"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("bbf85110-13e8-0722-f3fc-b680fd6b3166"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0de296ab-95a7-04b9-7fbe-5ec395c0b266"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("dd390579-dda4-a618-3600-f3b5fb3f885e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c0cd51d8-41c7-27e4-0be5-397e12fea33c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d21e1493-b0dc-00d3-4990-6b4da2a7f498"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bf01edc0-8b93-372a-5010-03c40dd71e54"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("705cf493-81b6-5af7-a8a8-67dd74f69d86"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("05b988fa-656a-06bc-8a99-fbe158fdcde8"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ddf5eb9d-6600-d45f-4907-ed7812502aad"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("d8ab538a-4d7f-87df-7a5f-593804d85c99"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1bd46ce3-8500-d33b-b324-c2bfbdf595b6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ea5c7f93-5953-84a2-0ee2-1130a1619ebf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("467ae99e-b784-039d-f37f-8e3429ce29c0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ba03b2ac-cced-9d11-f15f-da2681f78555"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a8355073-38be-c7ba-6d26-30595ecbd8d3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8c34e09c-3fd5-af02-f75f-875159b71548"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("284f6dda-4d89-e333-e873-c565b0b9ae6f"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8bf6136e-3bce-80df-2bab-50fac84c945d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("2a8b5bf2-4bcd-f87f-4b62-bdb4e2a2250a"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3aa1bf64-9552-e6a1-1f98-474c42fb63f4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cc59b0ba-e9d1-123f-d34a-bc1041291ac8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("08e66f93-27ba-9f66-b803-8e05a47e700c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0b8244c9-90fe-6c79-3d44-896149e0fbd5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("506fdd7d-c5e0-e806-a328-cf1353172696"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("93ef16ca-08de-8c35-2491-60d8f3c9fdf9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("4070835b-ad06-2f77-5510-9b6e45ed99f2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c8b595a3-f863-0fc4-6d11-486ae4f99d5a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("2a8b5bf2-4bcd-f87f-4b62-bdb4e2a2250a"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4a1e4ea2-0719-79c8-1b21-7edb30a1bc6a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("fcfc4066-e3b9-64ef-962a-924bb91827ea"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4765e88d-ebec-a37c-2980-8c9901acdc11"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("02741eac-221e-4d1b-5f05-1582b2b35e9c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c31010b9-8e70-b349-640d-eb198b8676bc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d58bb510-e1a3-88c3-ed00-d0eb8563f6cc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("45ccfa8b-9c2b-69c5-ace1-c16cf917adf1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("acdf41e6-ea36-8bfa-5367-8301ce32c1aa"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("434ddd4d-6aa2-afb7-d66c-4aeb87a64705"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("2a8b5bf2-4bcd-f87f-4b62-bdb4e2a2250a"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("643c4c83-ed52-f774-b7de-b129e9a58925"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("9fa04707-f2d2-9a1a-739f-24d3212957cd"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a8eea33a-9878-e3f9-b8d8-281ed22b8968"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3c7d67d4-5dfd-21bc-f1d6-65d3b12972c6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("aab47763-7477-e43f-3bc4-da9d313e4f88"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1c2667e6-5f2c-3ba4-9fd6-dafb7a4f3d5e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("32211c98-9b62-5571-120e-de69de131984"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("affe908e-e2c7-2cdf-60e9-cc3856709f3b"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("93aefcd7-6fc0-5bad-afc0-87903e98d927"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("2a8b5bf2-4bcd-f87f-4b62-bdb4e2a2250a"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("063fe694-120a-5236-a71f-9dbaf6fa03cc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("34cd4d57-4ffc-ad83-2b88-fa60b20772cf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("94df8da6-a983-8d83-6f00-b812b54e9969"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("55734e91-3e45-9f38-37ad-ea7f23b9bcde"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a15b835e-74e5-2112-ae57-3cb1834cf90f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("682db5d3-ed04-355d-3485-310f729b50a4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("1eef413a-fce9-fba8-9389-d384e4f146d2"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("73b284e9-a4b2-257d-afd7-58073e439d2e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("1f8467d4-fd11-c972-ee03-0319bb5823d2"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7188d0c6-c6f7-3119-fa42-2b488a47e827"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("80947304-350f-ab08-ef04-d032514eb576"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0070b006-757d-a0fc-765b-fd593441c03e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("64dc3797-d519-938e-bd04-34e2ac68a73c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1d89dbff-c578-7172-d5f0-1504d80414a8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e4979837-5543-5373-27f0-734e7c9f6913"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("729f57fb-657e-45c7-20ce-78bcb7bb85c3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fd75c276-f0f1-0f19-874b-aab8af12ea64"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("1f8467d4-fd11-c972-ee03-0319bb5823d2"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2ae1b566-0fd4-7f2a-34fa-174a68ed9c30"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("fcfc4066-e3b9-64ef-962a-924bb91827ea"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("343abb8d-7e44-cc2d-40e7-6e6aef50e384"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("199df696-ec0b-f996-ae4d-162bb4c37e37"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7239316b-49ca-ed2a-f1b7-6c2e78b16efc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1526a424-893f-2960-5c5d-4e56cb497b16"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d4e77aa1-f3df-8f2f-8c08-7b6f8ebc517a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("b800a5f5-362a-c710-aa82-da715ad7d5d4"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7d919184-3c01-fce8-0ef4-c244f6c5f3b9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("1f8467d4-fd11-c972-ee03-0319bb5823d2"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("59843253-00ea-ab16-234e-7c2e18da83ad"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("9fa04707-f2d2-9a1a-739f-24d3212957cd"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("276586df-42d6-b15f-9e26-056b1253e4fe"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9975de45-c669-87a1-f027-670dae5990a7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c2921050-2c5f-76ee-c17d-103edf57dead"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("641657be-37a2-9135-4f6c-7cdc371cfaff"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("44a122b4-d3dd-55cb-e1e8-7fcd1d518c40"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("0d7d3b17-6447-ea5a-5ae4-eee7a76fae73"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("db8ecb43-3aa9-aba8-16fb-facf0899e7b0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("1f8467d4-fd11-c972-ee03-0319bb5823d2"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3eb943f7-160b-551c-94e4-862897171dd5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4876d948-1e13-a1b2-313d-416e1da16420"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("73389082-e78a-3baa-cdcf-12e67a97b105"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("71aaae06-b868-7d50-f86c-4efe51199923"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f7ea07bf-816c-b7e7-e24c-fbd8b65fa9cc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a75aa181-c045-1676-adb3-0890e86f245a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("0462a3bc-a438-2fef-b18c-be23febc6bc3"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9656a516-51c1-2fb3-98fc-693c28e9fb50"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("8944249a-cfca-36cd-3777-cda4dda0aab3"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("811fb453-6ae3-ae13-ef37-fe7bf5e26881"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("86f41db6-c4f0-9524-fe34-cc09fc37366c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b2c965d6-6df3-4ab1-b7bf-da879bfbe9bc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f20e8f93-c732-b313-999a-5ff191040876"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("11e5080f-4567-f57e-d365-2d100be7963b"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6077009a-457f-9b51-206f-4839e06ff7fb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b4d20ef5-2c63-02ed-3386-0765c262aaa5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("87eab0d7-5f92-a4af-a785-42136e4cfa58"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b99828b3-aaf0-3514-2385-58b4f5eb034c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("8944249a-cfca-36cd-3777-cda4dda0aab3"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("97a75477-bbc0-8e9d-23cd-795938873bf0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("fcfc4066-e3b9-64ef-962a-924bb91827ea"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("647cc4b7-f4a6-ce68-cc02-99de2c1e65ce"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c970f555-c0c4-745f-b980-bb39ceb9d582"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e837159e-cc87-a8eb-dbb8-92f5b1d46b77"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c8f9f034-61d7-99d0-6516-880f12fbbccd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a6e64fef-9a6b-d0fd-aae6-62cf86ccf365"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("7f44fc84-a197-c869-7b9d-2932b43a15be"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("55da71a1-5b66-fb97-587c-e2504e9d3c18"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("8944249a-cfca-36cd-3777-cda4dda0aab3"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("931342cb-033f-cc28-7448-3c1a02b2ee07"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("86eea6c7-ac32-7724-0270-667398660b44"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3c2f1705-26d2-67eb-7e1e-e7709bf1b615"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4322961b-39da-83a7-d4a7-2d1b977cab9d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("96b7c3ea-1c77-0dbb-9ad3-9f3e1d5c8abe"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b520051f-1a5f-61a5-4fb7-4fd747c57879"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("fe01fa8c-ed1d-0897-e220-3e3745e170ec"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("941a1b3a-6e76-bda3-5d05-336a78019e99"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("9814c2a0-64de-456e-75d4-3774eb704c63"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7a02a27b-95a9-cda6-311b-c8f8bca6669d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d9b83789-4223-4c47-6052-7c37916a53af"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a4058cbb-ab5c-ed30-e273-d04722b5ce7d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("270183be-a2fa-9610-f903-94f08edbde7b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("85b17599-327a-634d-3e5f-9005e3bae74a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a564dd62-d28f-e0ac-582d-baebea057dbd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("b8e45ddd-1a77-ea7e-3ad8-bf86317641e7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("108e8ffc-ba62-1e00-ce18-503465ff763c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("9814c2a0-64de-456e-75d4-3774eb704c63"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7de98b20-a632-32e0-7696-cf9b3cfce74c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("fcfc4066-e3b9-64ef-962a-924bb91827ea"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6178d3d9-4c1f-d992-737a-21723112958a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d15d9aea-7c87-2a03-ab95-37833fb29fc3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9238c00c-6c2a-29e5-e6c8-0c6ef1ea3f05"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c9077811-8cdb-b892-13e0-f6a6e51876ee"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("80ef31bf-f080-937e-68d9-636452ced6ef"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("3821c474-ad90-1b5f-fd01-ab0112963f48"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3d970788-4e42-449a-59b6-8d186b9f7b39"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("9814c2a0-64de-456e-75d4-3774eb704c63"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("284cdc4d-bd07-8642-2d49-1d7cdf093be4"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("45b21af2-d357-47e3-04f6-8ece52328857"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ce1cdc0d-27b3-9e87-efea-3239f25aab03"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("093e27cc-c3d0-19d2-d575-f31b52aed46b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("256a32e4-c096-ec8c-c6ac-05370d9cd306"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("57c433fd-261e-a7b5-8321-09a33620b0c8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("99a6ff87-5c33-22a2-ba56-eb8a0bff5e11"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4188cc60-1471-2e4f-8035-fd41c5a6925d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("ccab4ad8-1ecb-4982-3060-fea490defd25"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a2774bc1-8263-88cf-1e31-5d2895818994"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("638d8e6c-6fcf-8e1c-6723-8686f93c4a9e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1d46527c-7e0c-5a1a-741b-f3b56ff1b462"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("03a25d34-a57e-d8ba-163c-03bb0d4a9340"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("56a3302a-d9db-a543-55ba-39ed2db400f7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cde27ed7-b56c-8c2b-c8f1-1b45c143f1f1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("5ac9ead7-3586-1db0-dda3-4d2a8aa656ac"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("7261d16a-b22c-a3e3-4b56-a6a28bc20792"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("5b0becc3-356f-fd90-b641-7a29f1d07a49"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("25ba3ad4-7dc1-8f74-8685-da774001dbe1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d0e50c4e-920b-f47b-3759-6899742b65aa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bcceb4e0-9679-3439-8219-67893040e656"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0c09f0e9-9c6f-df15-47bd-2de855a4bd03"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e3fd4f20-4e8b-99a8-cfc0-5648ce89b9e8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a00be522-8236-59fa-6405-99ef4f4c8428"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("b8a893bb-ce55-7f55-a518-4fbdd1d376db"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e526a8a1-1bc6-0e64-5c12-27d5ba7e5729"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("bbf85110-13e8-0722-f3fc-b680fd6b3166"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bf02ae3a-c6ac-3383-bdd1-fa4386cc718b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("35d3b106-92a6-d287-184b-0997ef7af28a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("569f8e0b-7a2b-f76a-2f99-6ba6d0801e19"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f0be3048-d82b-b431-d2d4-1c0e6d84a172"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f5099c3f-4161-e4ae-46bb-18c5e2d89462"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("18072457-814e-3ff1-528b-c79f2d6a47e3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("d4bff7a5-30ed-27d0-602b-271c548ba686"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("13ab92a9-6119-f663-420e-5822c46fc9e3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("bbf85110-13e8-0722-f3fc-b680fd6b3166"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("49b93482-662b-d302-7270-25b6d581512c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("e1c267df-886a-0fad-b80e-2a36246ee1f9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("674cc089-2508-c1dc-37ca-0ab65e980833"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0cc25c21-2c9e-df08-36e2-9c0da8d922fa"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c8143295-fad4-ac74-5c66-faf00085625f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bca9faa9-221f-1bc5-078c-3a62d2f0d238"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("531e3d58-0625-5b43-9b1f-81ab028c187f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("6b97dfc7-d01b-2142-790e-c370172aa226"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("32b00ee1-c500-6e58-27c3-526160382b07"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("bbf85110-13e8-0722-f3fc-b680fd6b3166"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("bb62c30a-8b10-440d-e535-55acede5123d"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b6ee5dd6-ddbe-292b-e65d-9533e75c0899"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b0adb980-08f4-633c-6a49-28362d6831a2"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("51aa1fc5-3e7c-2d59-7af0-56d61db6e720"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c9660c06-12a3-6795-9b51-3c41e110d0bf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("00c5b228-3f84-2986-079c-2cf32c431e48"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("1cd64e8b-d446-4dd8-9c7a-3129a0dd6e4c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8d3983ae-b925-136b-3577-521237e7712b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("aa2ad24a-67b3-a77d-78e6-04d983abfbc9"),
+                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("03a288e6-0bbf-1421-24ac-3f0605976a00"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("f7aa34e9-0125-90f5-ace5-a3bf9198dbd4"),
+                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("629fdbc4-094b-48b6-e289-db49543a10db"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
+                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fb1e46f9-859e-3b75-a6d3-b1ec4ad28763"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
+                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("416ae115-d044-8970-a2a8-ce7a85332d6e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6e1e202a-ec88-e72c-5736-5d188beee3fe"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
+                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e01267e4-f787-9c3b-9d05-93a115560166"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
+                            SProductId = new Guid("6eda53c9-788e-60ea-eb60-428b7bafbed7"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b166ecde-9331-85ef-2b4c-0d723dd5be92"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("6ca63e7d-5d68-659e-5393-4b321e387cc6"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("57677efb-89de-f328-6cfd-04b38603bf5c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("ceae6831-a7ba-974c-c8f8-0c53ac585bbe"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5bd6725b-196b-3c10-da31-6861c6097d3b"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("dc6e80ff-a460-4211-0510-356272b4e025"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1917fd67-684e-c8ec-a765-29a84aeb7ac9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("c164b597-1578-9c79-4d5a-0b8586c242f1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("50880236-5479-efe5-0435-0711007a7b00"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("298b85b0-e9d1-cfb1-3e4a-b62e1ec6ed6c"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8fbf6185-980d-e8a0-1a7c-16e4c6bcab5a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("1acfc59c-7bc8-b523-ba59-c2090a3119e8"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("91b35df5-cb59-83e3-2a74-c179f52f8d22"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("703c65a1-a629-4cdb-5336-3bb393d09a80"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("915ccfae-fb68-26dd-c94a-889bd39ac2c3"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("ec3512d9-c64f-183f-3e7e-afc6bbcd5314"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5dd183d8-e3a7-c29e-c163-61d7d15f8d63"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("917d25f6-d8bf-b940-9d26-23f36f997dbc"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d59fb770-1338-87ad-79d9-8f3c8b15bb32"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("8fc909b1-c6ef-f1aa-0dfe-95353a4cc3d9"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("29a3a39e-d2af-8e1a-f2c2-736ba6d6d385"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("24049a63-eaf9-6c42-d256-4b9c609db082"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9d5288a8-363d-a603-a375-cccb29243f7e"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8b61936e-3f29-865e-a29a-e38e9ec81404"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("73d0a7de-bb3f-af32-53ca-0d6e22526683"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("eba1aea5-71c3-efac-20c3-6ba57386be69"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("4beee406-3e04-7a76-3ce7-4d310b2d7d95"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("708e298f-cfc5-9890-d3d9-0f86e2981363"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("250ec9a7-3462-e399-7ed6-ad17cfa4aa12"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("18d29cca-78d9-046c-c92c-f1a3f1d0478e"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("0464d335-ecad-a9bb-1e74-6fbe9bbc2b00"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("32d7c5b3-e69d-f4ba-37a2-2cf4098c2c62"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("7071bf9e-3c85-d8e1-ecae-283165d3aa4a"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("52064421-eca6-128b-d586-f4344e7264e9"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("68a424f2-44d9-7679-4901-828846d517ad"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("20ff05d0-5f56-c94c-de66-032be80c8d96"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("ceae6831-a7ba-974c-c8f8-0c53ac585bbe"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2fed9f6f-6e59-6a3d-cd96-f950a752170a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9d38fde3-0ff6-ee2b-97b7-a717f57b3418"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("739b4a34-00f0-e002-3b51-edf96c370b91"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("dc232f55-347c-3f37-aa72-ee37182bd2da"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("05444d2d-b737-78c2-e3b2-e6b5bcaf3979"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("d89c223a-7168-0166-b673-57f18597b3fd"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("a6ee6466-aef8-30d1-95c0-07e7c4e9782b"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4624fec5-53e2-7539-18dd-ee2116d30ffb"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("768e23ce-8252-1682-a924-b5a7f8da33b1"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("18d29cca-78d9-046c-c92c-f1a3f1d0478e"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c4096f0c-82e6-38d6-73bb-7b60be2dd49a"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("739b4a34-00f0-e002-3b51-edf96c370b91"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b60903d4-ffb1-9271-171e-e22b48273211"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("58d3fb19-554c-688d-a424-9e2722726772"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("b2dc9ad5-55e4-d581-3bdf-3f504ddf3fe8"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("80a30016-970f-0c32-388a-3baa09893046"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4fa52514-2c43-cbaa-4081-ffeb3168b263"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("ceae6831-a7ba-974c-c8f8-0c53ac585bbe"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2b17f589-0dbc-f9c1-abe3-c80fac8af4e6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("3e869b33-e70d-038e-f86f-d0b0fc9cafbc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5e43b934-7960-ddf9-d426-2a5524a10d89"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("92bafc00-2cf5-ce12-5d0d-5c804032bfab"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cd019162-c318-bb51-bd23-f7cf6a7945ba"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("8de30b81-9665-0f00-8d9c-95f55302f196"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("844a6838-2838-cd50-8841-2c114139fe80"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("ceae6831-a7ba-974c-c8f8-0c53ac585bbe"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6c15d935-d986-fcd9-d65d-a532aa1590cc"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("22379229-d1d7-0d2e-54dd-9a1e3e07bdd7"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8e2fc09b-0771-d4da-3c86-4bb47b7fcd45"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("6fab699e-d944-ce75-db4e-5432cb0d17b1"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ffb9c2ef-d589-6f9f-d40a-2493936b4a5c"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("90e082b7-1c51-7813-ca18-2390518413a5"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ce47030c-6bc3-f480-b533-454a357c330f"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("ceae6831-a7ba-974c-c8f8-0c53ac585bbe"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("1654947e-d815-2733-90f5-d622af686796"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("2c681454-742d-4bc6-b9eb-7d65b7282dd0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("99efe1a4-08cc-06df-5536-db9dd4627d28"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a0761356-f2d0-c9c7-eb3f-3e70612ffd29"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("91cd2606-874a-0ef8-89b2-9a0d1dbb350e"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("ef9954cc-225f-b8f1-067c-36e7154b8caf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("3111e6ed-962f-d27d-16a7-8192fccd3c3c"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("9c9ac97c-d5bb-034a-0085-c5b8f0b9bb13"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("ceae6831-a7ba-974c-c8f8-0c53ac585bbe"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("4582260e-7352-8867-a6f6-52bbef2fa441"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("8229d026-1419-f9a3-54a7-6b068ea22a89"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("cc6cee82-6317-ec2e-cf10-91e8d1c3fcaf"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("6df58786-f51d-ce92-7037-207868fcbd68"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("574ef3df-ecb3-a02f-3bfa-0a6b57505616"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("8d46af9b-1d0f-3f72-a9a2-f2feba090beb"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c8ec0a94-4844-32e3-364a-682369fb0589"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("82aca816-a726-1ab4-36c6-09a1b0888970"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FixedValueId = new Guid("18d29cca-78d9-046c-c92c-f1a3f1d0478e"),
+                            IsFixed = true,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("a2d7377e-af56-0aa9-11ba-96bbabf8c1c5"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("e52e63a4-451d-b156-e30c-ed2dad3ea4d0"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("cbee2854-2108-aabb-08f5-d61ad336f965"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("15f57237-db47-46dd-7c44-1b7bfc9afc62"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("d6b681b4-4972-abd6-9f90-bdb3ef70f0fb"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("40127127-369c-a982-1739-3a133739f339"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("131e2891-26a7-948d-b9f1-8e17da20d2db"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("674640d5-d5f8-b2b6-afc0-5b1d39b1a603"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("fa217c06-74f3-bc47-2794-15609b7e92f0"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("c161bbd9-e8a7-5da2-b23b-4811e32cbea6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("74708664-794d-9dea-796f-719c7b164797"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("fff8cbf8-854d-fec9-1458-d0e3476e5165"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFixed = false,
+                            SFeatureId = new Guid("2efab749-d4d6-fed7-fe2d-edcdeec438f0"),
+                            SProductId = new Guid("4343f1c4-787c-3361-af5f-db96cd36ca5c"),
+                            Status = 1
                         });
                 });
 
@@ -43557,7 +51492,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("1692528e-624a-89c7-65a3-be284d6a673d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA0",
                             StartNumber = 0,
                             Status = 1
@@ -43567,7 +51502,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2947ec74-c544-cbb4-dc6f-ab077e6c9b1e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA1",
                             StartNumber = 0,
                             Status = 1
@@ -43577,7 +51512,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a2eb0676-290d-f924-452e-d49d9a9b1006"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA2",
                             StartNumber = 0,
                             Status = 1
@@ -43587,7 +51522,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2b42df79-8ebd-4d8f-a582-b09b22da3451"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA3",
                             StartNumber = 0,
                             Status = 1
@@ -43597,7 +51532,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("40933366-a230-60ef-ed1b-8dfe6bb95cdc"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA4",
                             StartNumber = 0,
                             Status = 1
@@ -43607,7 +51542,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("24647e99-46dc-6a79-e589-0bd97659aea4"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA5",
                             StartNumber = 0,
                             Status = 1
@@ -43617,7 +51552,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e925807e-38b2-20cc-2171-1aeb1c7a1624"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA6",
                             StartNumber = 0,
                             Status = 1
@@ -43627,7 +51562,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e699ca25-e08c-ecf0-5ee2-cfde3649093b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA7",
                             StartNumber = 0,
                             Status = 1
@@ -43637,7 +51572,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("a91c7959-db11-10f5-bd76-0280bde2e27e"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA8",
                             StartNumber = 0,
                             Status = 1
@@ -43647,7 +51582,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("da9e8ef3-83ad-985a-bf4a-0636c1d49e6b"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBA9",
                             StartNumber = 0,
                             Status = 1
@@ -43657,7 +51592,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("168a8095-3cc6-c69c-a0bd-ebb53caeafa7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB0",
                             StartNumber = 0,
                             Status = 1
@@ -43667,7 +51602,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("5971ee4a-2baa-aa54-b533-d9fcec909249"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB1",
                             StartNumber = 0,
                             Status = 1
@@ -43677,7 +51612,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4c2d1dae-aea9-f36f-01df-0c3d29e18136"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB2",
                             StartNumber = 0,
                             Status = 1
@@ -43687,7 +51622,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("8cb063c8-b5d7-1667-4b4e-6b0dc8bc8ed3"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB3",
                             StartNumber = 0,
                             Status = 1
@@ -43697,7 +51632,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("25bed300-11ac-8798-e35b-99ff8a9cc130"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB4",
                             StartNumber = 0,
                             Status = 1
@@ -43707,7 +51642,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("9ea57885-a3d7-87e3-0188-e5721d680e38"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB5",
                             StartNumber = 0,
                             Status = 1
@@ -43717,7 +51652,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("6e9184c7-db20-fb4b-1fb6-0c494b13a7f2"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB6",
                             StartNumber = 0,
                             Status = 1
@@ -43727,7 +51662,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("7b28731a-c4c5-e59d-1e8a-825237ab36fc"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB7",
                             StartNumber = 0,
                             Status = 1
@@ -43737,7 +51672,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("eea332da-4c6c-0e1d-cccf-608e79670f40"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB8",
                             StartNumber = 0,
                             Status = 1
@@ -43747,7 +51682,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2ad2b3c7-d999-080b-c743-e66c58458a46"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBB9",
                             StartNumber = 0,
                             Status = 1
@@ -43757,7 +51692,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4382d52a-173e-a191-81c2-5ced16b2407c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBC0",
                             StartNumber = 0,
                             Status = 1
@@ -43767,7 +51702,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("ac9ea1f0-238d-0be4-3b45-f4933a8d300c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBC1",
                             StartNumber = 0,
                             Status = 1
@@ -43777,7 +51712,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("be8207cf-2545-1c28-b048-e21a3f19c5c7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBC2",
                             StartNumber = 0,
                             Status = 1
@@ -43787,7 +51722,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bdd0c721-a225-bc8f-a811-0e3aeb17c79c"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBC3",
                             StartNumber = 0,
                             Status = 1
@@ -43797,7 +51732,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("2f6dfa2b-8f7f-7e4e-b0d6-8fd5c39cc3b8"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBD0",
                             StartNumber = 0,
                             Status = 1
@@ -43807,7 +51742,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("5fc1f762-9b00-aa70-021e-200ecfb9362d"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBD1",
                             StartNumber = 0,
                             Status = 1
@@ -43817,7 +51752,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("e82626da-cb3e-58c5-e940-95ddd2a8c5f0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBE0",
                             StartNumber = 0,
                             Status = 1
@@ -43827,7 +51762,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("93047b51-4c62-fecb-0295-194fdbe9e9d7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 999,
+                            LastNumber = -1,
                             Prefix4 = "SBE1",
                             StartNumber = 0,
                             Status = 1
@@ -43837,7 +51772,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("d685a442-7ad5-25fc-d906-d4432cb0cf6a"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA0",
                             StartNumber = 0,
                             Status = 1
@@ -43847,7 +51782,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("41a4f38a-3c2e-f05a-304a-0fc3b14e2b09"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA1",
                             StartNumber = 0,
                             Status = 1
@@ -43857,7 +51792,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("89c00860-6b37-aa9e-b1cf-cd7dca094cf7"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA2",
                             StartNumber = 0,
                             Status = 1
@@ -43867,7 +51802,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("f8347ba4-dede-4271-c5e0-f1d7dc323f83"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA3",
                             StartNumber = 0,
                             Status = 1
@@ -43877,7 +51812,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("4aa75aba-ea91-14ea-2139-5992dbc367e4"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA4",
                             StartNumber = 0,
                             Status = 1
@@ -43887,7 +51822,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("ea8443d3-005a-dd34-006d-26e743dc92d0"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA5",
                             StartNumber = 0,
                             Status = 1
@@ -43897,7 +51832,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("98267808-32bb-684e-9e23-4e1af135b155"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA6",
                             StartNumber = 0,
                             Status = 1
@@ -43907,7 +51842,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bf50ae35-7ae6-48ba-d91a-7a86c20da203"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA7",
                             StartNumber = 0,
                             Status = 1
@@ -43917,18 +51852,8 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("be609388-2af8-5387-4c8c-9f4a750284df"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA8",
-                            StartNumber = 0,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f70dcab0-81cc-a0ce-374f-0111822d91db"),
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
-                            Prefix4 = "SCE1",
                             StartNumber = 0,
                             Status = 1
                         },
@@ -43937,7 +51862,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("9f76636d-46fd-baed-ba76-d95b34fe2562"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCA9",
                             StartNumber = 0,
                             Status = 1
@@ -43947,8 +51872,18 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("bd2ec289-7bc5-432d-7eb5-547436c0b8e9"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastNumber = 0,
+                            LastNumber = -1,
                             Prefix4 = "SCB0",
+                            StartNumber = 0,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("f70dcab0-81cc-a0ce-374f-0111822d91db"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastNumber = -1,
+                            Prefix4 = "SCE1",
                             StartNumber = 0,
                             Status = 1
                         },
@@ -45713,9 +53648,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c7a31f3c-de41-47d6-b5f9-3bc619545f62"),
+                            Id = new Guid("f83e747a-cff0-4569-95cb-b4175d27aa87"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7050),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(1985),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 355.0,
@@ -45726,9 +53661,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7f1d4a3c-e23b-4dd2-bbfd-e1b47c6a4b69"),
+                            Id = new Guid("fcf3c81d-61c6-403d-824a-f61855b4c198"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7059),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(1996),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 343.0,
@@ -45739,9 +53674,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bcee99f8-3483-45f2-b801-c7f8388814c6"),
+                            Id = new Guid("091931a0-ae36-4871-8d15-d0ac6cf1e6df"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7062),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(1998),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 323.0,
@@ -45752,9 +53687,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1accffc1-9974-4bb3-93ca-6fe6a611c050"),
+                            Id = new Guid("a2d2e273-122a-4f4d-9a0f-2a0ee6aea072"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7064),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2001),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 299.0,
@@ -45765,9 +53700,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4f0d0eda-be95-4bb5-bd67-34c5e3aa7a26"),
+                            Id = new Guid("f3405cbf-ab0d-4114-bea7-e137079b6435"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7066),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2003),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 275.0,
@@ -45778,9 +53713,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b49446fd-4fab-4045-b02a-21fe8d75ac4a"),
+                            Id = new Guid("76c3656c-59c7-42f2-8921-835957ad0267"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7071),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2008),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 252.0,
@@ -45791,9 +53726,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f043051a-ab07-4bd4-b75b-54484c7524cd"),
+                            Id = new Guid("02fd06b1-2c46-4ece-b07c-09bf1c48be30"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7073),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2011),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 232.0,
@@ -45804,9 +53739,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a8fe666c-cd9b-4c74-b882-477acd98b15f"),
+                            Id = new Guid("635310aa-1206-4243-8f18-2fa64da88911"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7075),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2013),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 214.0,
@@ -45817,9 +53752,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f292a0bd-cd71-4346-a9d5-532f8c102776"),
+                            Id = new Guid("78bc3dfd-322d-48ea-ac58-1b2892f5b09a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7077),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2015),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 202.0,
@@ -45830,9 +53765,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0b94c92e-e6d4-454c-971c-5a8ea63cce33"),
+                            Id = new Guid("3a45ec63-86f7-4b47-b2b7-f09ec5427255"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7081),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2019),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 345.0,
@@ -45843,9 +53778,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("48b3e9a6-c20f-418c-8f67-60282f55a8ee"),
+                            Id = new Guid("2104f785-50f7-449c-b235-96e6e4653a5e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7083),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2021),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 334.0,
@@ -45856,9 +53791,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("39be84d2-bed7-47e1-800b-c43c8b7f5e0a"),
+                            Id = new Guid("b8cda30a-6e89-42fb-b539-3924929e82ce"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7085),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2023),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 314.0,
@@ -45869,9 +53804,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e6dfe7dc-c019-4268-a223-bb0e4b09a8ca"),
+                            Id = new Guid("13d5c88a-3434-470a-b597-6925ca132ab1"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7087),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2025),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 291.0,
@@ -45882,9 +53817,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("44186a21-0614-45f0-8d2f-b913df9d17b7"),
+                            Id = new Guid("6c1f0b13-0003-4cbd-a3c8-6ecea8e0952f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7090),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2029),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 267.0,
@@ -45895,9 +53830,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a2adb126-70f4-43f0-bd8d-5a52184a175b"),
+                            Id = new Guid("3f2b4bdd-65f7-4f20-b2d9-a81fbb553b05"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7092),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2031),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 245.0,
@@ -45908,9 +53843,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("088f1953-97a9-4089-8624-ded33b895fee"),
+                            Id = new Guid("59e433f3-a760-4f38-aa7b-44bbc95dbc4c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7095),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2033),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 225.0,
@@ -45921,9 +53856,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ae278b59-0916-41c2-a796-685b11b57d4f"),
+                            Id = new Guid("e56c7b99-d640-447c-9e66-fa2d59914ab0"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7097),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2035),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 208.0,
@@ -45934,9 +53869,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fce1f0a8-0d2d-494f-b878-2d4d5503e672"),
+                            Id = new Guid("d52ed153-229e-4727-b48d-3bbe49a7d106"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7100),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2054),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 196.0,
@@ -45947,9 +53882,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("63647019-1bec-4eb4-9fee-eb03da3ce89a"),
+                            Id = new Guid("f38890fc-ae6b-48af-9a71-96d87ea82a5c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7102),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2057),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 335.0,
@@ -45960,9 +53895,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b65f7594-52bc-48a5-ae9b-4c11e6b39fc1"),
+                            Id = new Guid("979be839-9036-4de5-9897-fd1acea78718"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7104),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2059),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 324.0,
@@ -45973,9 +53908,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("48f5a7c4-c1e9-4c3f-86c8-4d9e5043f365"),
+                            Id = new Guid("64308717-3c96-4323-96b5-edffede68116"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7106),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2061),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 305.0,
@@ -45986,9 +53921,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9dd7596f-44f2-481b-b783-4c2ca653c65a"),
+                            Id = new Guid("d8426b28-ef0f-44c8-ad42-c585180ed32a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7109),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2064),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 282.0,
@@ -45999,9 +53934,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1c16a5ef-49c7-4bd9-9fb4-5b62ad5f081c"),
+                            Id = new Guid("52c6fbcb-c45a-421d-84c5-16241e5bf18f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7111),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2067),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 259.0,
@@ -46012,9 +53947,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("79105b97-95d8-4c7c-b780-afd1dde73e39"),
+                            Id = new Guid("35e60ac9-d2f2-4c80-8b69-9c71da506543"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7113),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2069),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 238.0,
@@ -46025,9 +53960,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("477a797c-f000-40c7-9f97-7374ec7f4a10"),
+                            Id = new Guid("3d75c43e-44bb-42d1-a4c6-bd722cf8c42b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7114),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2071),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 219.0,
@@ -46038,9 +53973,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e1a65b71-a20f-41c1-b0a0-391fbe59f272"),
+                            Id = new Guid("5aea30d5-e959-4cb8-99dc-4ce02ded760d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7118),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2074),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 202.0,
@@ -46051,9 +53986,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7b881826-c1d1-49a2-a2cc-8de3ec7060f3"),
+                            Id = new Guid("e4ba1091-cbdf-4cc2-a72d-6d3f1abfe986"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7120),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2076),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 190.0,
@@ -46064,9 +53999,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ee7ba3a5-1e97-438c-a62b-282040fe93f7"),
+                            Id = new Guid("2d93a440-cbf4-4a60-998f-8e37f50f3f67"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7122),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2078),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 315.0,
@@ -46077,9 +54012,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f0d16a7d-91c5-46a0-9203-cd702ae8eed7"),
+                            Id = new Guid("7aae5939-d154-4e2a-9963-66e4083bcdf5"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7124),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2080),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -46090,9 +54025,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6eb9605e-719d-4b6b-ad19-7c8f08be8147"),
+                            Id = new Guid("e82ef3b3-80d3-4e7a-a6a9-934d62985924"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7127),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2084),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 287.0,
@@ -46103,9 +54038,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("85e853d0-a2c4-49bb-a549-adfc6f9dfaf8"),
+                            Id = new Guid("27c86add-f883-4ea2-bd0a-1eaf6f4fa285"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7129),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2086),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 265.0,
@@ -46116,9 +54051,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1dcc20af-db82-48b7-b66d-b1daffd5bd1b"),
+                            Id = new Guid("39995407-c408-42da-a82d-75aad654872a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7176),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2088),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 244.0,
@@ -46129,9 +54064,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8dcc102f-10bb-47f6-bb7a-b852c9768935"),
+                            Id = new Guid("9bac844d-1456-44de-a75c-9542b1d13a9f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7178),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2090),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 224.0,
@@ -46142,9 +54077,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5045f58c-4853-49be-8314-ffb8d4d34bd4"),
+                            Id = new Guid("49b3f8d5-db20-4ec8-ae3b-02bbd12a4766"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7182),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2094),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 206.0,
@@ -46155,9 +54090,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2cfac4f2-a57f-4672-9b6d-8bfc63419b4e"),
+                            Id = new Guid("4eae8a83-277a-4d7f-8080-baafde61719b"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7184),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2096),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 190.0,
@@ -46168,9 +54103,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fef238bf-483e-4c12-a7fa-5d504a761bd4"),
+                            Id = new Guid("6835bd06-ec79-4bc6-b308-c891fb997ab7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7186),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2098),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 179.0,
@@ -46181,9 +54116,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a8f437b6-afbe-4fed-9139-448985684725"),
+                            Id = new Guid("f5bf2605-f2cf-4057-bdd9-5ac5745a415c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7188),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2100),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -46194,9 +54129,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6480af0a-45c7-40f8-9915-4ab73a76ec90"),
+                            Id = new Guid("1033f7a2-7846-4a4b-8d78-4c6db6b781d4"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7191),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2103),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 295.0,
@@ -46207,9 +54142,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bfa0c785-4a7f-4cf2-9795-7a055fa3c35c"),
+                            Id = new Guid("4f18ada7-8182-494d-a86b-e01d38b55c9d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7194),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2186),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 277.0,
@@ -46220,9 +54155,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b121b849-97c7-495b-bb39-4aaaed7d98be"),
+                            Id = new Guid("e1ecbe40-0642-4823-8105-3dcc8af54480"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7196),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2188),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 257.0,
@@ -46233,9 +54168,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("58f40f41-fdd0-4727-8151-e28ab8d52753"),
+                            Id = new Guid("67321831-7e84-4fc7-9906-2c9c1bb53889"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7197),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2190),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 236.0,
@@ -46246,9 +54181,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0d20ffbe-1dc6-4ee0-8d61-ab1e55330cba"),
+                            Id = new Guid("6f93a8fc-8541-4799-8881-87cddf9dadd6"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7201),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2194),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 216.0,
@@ -46259,9 +54194,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("58f954b9-66e1-488a-998e-a9a48e142249"),
+                            Id = new Guid("a9022779-e310-470e-95a6-b23cbe4b3b32"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7203),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2196),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 199.0,
@@ -46272,9 +54207,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fc771659-4b07-4986-89e8-2131be745bae"),
+                            Id = new Guid("ac59ac86-f25f-4db1-b367-d497e8ddad07"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7204),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2199),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 184.0,
@@ -46285,9 +54220,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("38de8e62-5309-40e1-acad-eeff92f303df"),
+                            Id = new Guid("667873b2-b7bb-499a-b1cb-cb7df43d6492"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7206),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2201),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 173.0,
@@ -46298,9 +54233,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6da8750b-7a68-4e06-933e-73fb780ef69d"),
+                            Id = new Guid("c2509d88-6558-4c06-98b1-9a92ae3e1365"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7209),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2204),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 295.0,
@@ -46311,9 +54246,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a6f2b1bb-acc0-4dc0-b7e3-bdd951fcd77f"),
+                            Id = new Guid("14396040-27e4-437b-abee-09b4d6a06015"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7211),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2206),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 285.0,
@@ -46324,9 +54259,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("afc9fd6d-6b0a-480e-88a6-f6cad446ecd7"),
+                            Id = new Guid("741b8ccf-5108-4634-b3dd-5755a08a6cc5"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7213),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2208),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 268.0,
@@ -46337,9 +54272,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("714eef66-8e12-49d7-9d13-b4f084a5ed02"),
+                            Id = new Guid("bb1fa32e-87a5-413e-aafa-8d84bf85306a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7215),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2210),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 249.0,
@@ -46350,9 +54285,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("750f4469-47fd-4a21-81a1-c4bbd7942076"),
+                            Id = new Guid("a6da85ef-84e4-406b-bdf2-4d93b1b6bbfe"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7218),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2213),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 228.0,
@@ -46363,9 +54298,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("08259145-8a38-48a7-be57-2c2a30ad3d98"),
+                            Id = new Guid("ac10924b-fbba-461b-bc6a-289f616f5c7a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7220),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2215),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 209.0,
@@ -46376,9 +54311,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("62ffbc0b-dbf4-4286-968b-6eb753da9f5b"),
+                            Id = new Guid("9c14afef-6f9d-4830-9fe4-9767d7e2cbb2"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7221),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2217),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 192.0,
@@ -46389,9 +54324,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("437f3edf-be1e-4685-870d-321ef4148f64"),
+                            Id = new Guid("63691073-3390-4a8c-8f27-e5ffd79bc7e0"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7223),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2219),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 178.0,
@@ -46402,9 +54337,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7d488a12-03d2-405b-b259-d5b2658fb19c"),
+                            Id = new Guid("cdfc8908-720a-478a-9934-be3dbc75d325"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 17, 9, 0, 2, 899, DateTimeKind.Utc).AddTicks(7226),
+                            CreatedDate = new DateTime(2026, 2, 19, 15, 12, 30, 903, DateTimeKind.Utc).AddTicks(2222),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 167.0,

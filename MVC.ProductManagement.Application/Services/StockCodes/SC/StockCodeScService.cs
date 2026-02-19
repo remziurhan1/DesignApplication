@@ -1,288 +1,473 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SC;
+using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
-using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
-using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.SC
 {
     public class StockCodeScService : IStockCodeScService
     {
-        private readonly ISProductRepositories _productRepo;
-        private readonly IStockSequenceRepositories _sequenceRepo;
-        private readonly IStockCardRepositories _stockCardRepo;
-        private readonly IFluidRepositories _fluidRepo;
-        private readonly ISProductGroupRepositories _groupRepo;
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _db;
 
-        public StockCodeScService(
-            ISProductRepositories productRepo,
-            IStockSequenceRepositories sequenceRepo,
-            IStockCardRepositories stockCardRepo,
-            IFluidRepositories fluidRepo,
-            ISProductGroupRepositories groupRepo,
-            AppDbContext context)
+        // SC grubuna özgü sabitler
+        private const string SC_GROUP_ID_KEY = "SProductGroup:C";
+        private const string FEATURE_WASHER_TYPE = "WASHER_TYPE";
+        private const string FEATURE_MATERIAL = "SC_MATERIAL";
+        private const string FEATURE_STANDARD = "SC_STANDARD";
+        private const string FEATURE_METRIC = "SC_METRIC";
+        private const string FEATURE_COATING = "SC_COATING";
+
+        public StockCodeScService(AppDbContext db)
         {
-            _productRepo = productRepo;
-            _sequenceRepo = sequenceRepo;
-            _stockCardRepo = stockCardRepo;
-            _fluidRepo = fluidRepo;
-            _groupRepo = groupRepo;
-            _context = context;
+            _db = db;
         }
 
-        public async Task<IReadOnlyList<LookupDto>> GetScProductsAsync(CancellationToken cancellationToken = default)
+        // ========== ÜRÜN LİSTESİ ==========
+        public async Task<List<ScProductDto>> GetScProductsAsync(CancellationToken ct = default)
         {
-            var scGroupId = await GetScGroupIdAsync();
-
-            var products = await _productRepo.GetAllAsync(
-                x => x.SProductGroupId == scGroupId,
-                tracking: false);
-
-            return products
-                .OrderBy(x => x.PrefixIndex)
-                .ThenBy(x => x.Code)
-                .Select(x => new LookupDto { Id = x.Id, Code = x.Code, Name = x.Name })
-                .ToList();
-        }
-
-        public async Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductAsync(
-            Guid productId,
-            CancellationToken cancellationToken = default)
-        {
-            var features = await _context.Set<SProductFeature>()
-                .AsNoTracking()
-                .Include(pf => pf.SFeature)
-                    .ThenInclude(f => f.Values)
-                .Where(pf => pf.SProductId == productId)
-                .OrderBy(pf => pf.SFeature.SortOrder)
-                .Select(pf => new FeatureDto
+            return await _db.SProducts
+                .Where(p => p.SProductGroup.Code == "C" && p.Status != Domain.Enums.Status.Deleted)
+                .OrderBy(p => p.PrefixIndex)
+                .Select(p => new ScProductDto
                 {
-                    Id = pf.SFeatureId,
-                    Code = pf.SFeature.Code,
-                    Name = pf.SFeature.Name,
-                    IsRequired = pf.IsRequired,
-                    SortOrder = pf.SFeature.SortOrder,
-                    Values = pf.SFeature.Values
-                        .OrderBy(v => v.SortOrder)
-                        .Select(v => new FeatureValueDto
-                        {
-                            Id = v.Id,
-                            Code = v.Code,
-                            Name = v.Name,
-                            SortOrder = v.SortOrder
-                        }).ToList()
+                    Id = p.Id,
+                    Code = p.Code,
+                    Name = p.Name
                 })
-                .ToListAsync(cancellationToken);
-
-            return features;
+                .ToListAsync(ct);
         }
 
-        public async Task<ScStockCodeGenerateResultDto> GenerateScAsync(
-            ScStockCodeGenerateRequestDto request,
-            CancellationToken cancellationToken = default)
+        // ========== FORM DATA (Rule-Based) ==========
+        public async Task<StockCodeScFormDto> GetFormDataAsync(Guid productId, CancellationToken ct = default)
         {
-            var scGroupId = await GetScGroupIdAsync();
+            var product = await _db.SProducts
+                .FirstOrDefaultAsync(p => p.Id == productId, ct)
+                ?? throw new InvalidOperationException("Ürün bulunamadı.");
 
-            var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
-            if (product == null)
-                throw new InvalidOperationException("SC ürünü bulunamadı.");
+            // Bu ürün için kuralları çek
+            var productRules = await _db.SProductFeatureRules
+                .Include(r => r.SFeature)
+                .Include(r => r.FixedValue)
+                .Where(r => r.SProductId == productId)
+                .OrderBy(r => r.SFeature.SortOrder)
+                .ToListAsync(ct);
 
-            var prefix4 = product.Code;
+            // Bu ürün için izinli değerleri çek
+            var valueRules = await _db.SFeatureValueRules
+                .Include(r => r.SFeatureValue)
+                .Where(r => r.SProductId == productId)
+                .OrderBy(r => r.SortOrder)
+                .ToListAsync(ct);
 
-            // Akışkan yok - Default kullan
-            var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
-            var defaultFluid = allFluids.FirstOrDefault(x => x.Code == "NONE")
-                                ?? allFluids.FirstOrDefault(x => x.Code == "A")
-                                ?? allFluids.First();
+            var features = new List<StockCodeScFormFeatureDto>();
 
-            var optionKey = await BuildOptionKeyAsync(request.SelectedFeatureValues, cancellationToken);
+            foreach (var rule in productRules)
+            {
+                var feature = new StockCodeScFormFeatureDto
+                {
+                    FeatureId = rule.SFeatureId,
+                    FeatureCode = rule.SFeature.Code,
+                    FeatureName = rule.SFeature.Name,
+                    IsFixed = rule.IsFixed
+                };
 
-            var existing = await _stockCardRepo.GetAsync(x =>
-                    x.FluidId == defaultFluid.Id &&
-                    x.SProductGroupId == scGroupId &&
-                    x.SProductId == request.SProductId &&
-                    x.OptionKey == optionKey,
-                tracking: false);
+                if (rule.IsFixed && rule.FixedValue != null)
+                {
+                    feature.FixedValueId = rule.FixedValueId;
+                    feature.FixedValueCode = rule.FixedValue.Code;
+                    feature.FixedValueName = rule.FixedValue.Name;
+                }
+                else
+                {
+                    feature.AvailableValues = valueRules
+                        .Where(v => v.SFeatureId == rule.SFeatureId)
+                        .Select(v => new ScFeatureValueOptionDto
+                        {
+                            Id = v.SFeatureValueId,
+                            Code = v.SFeatureValue.Code,
+                            Name = v.SFeatureValue.Name
+                        })
+                        .ToList();
+                }
+
+                features.Add(feature);
+            }
+
+            return new StockCodeScFormDto
+            {
+                ProductId = product.Id,
+                ProductCode = product.Code,
+                ProductName = product.Name,
+                Features = features
+            };
+        }
+
+        // ========== KOD ÜRETME ==========
+        public async Task<ScStockCodeGenerateResultDto> GenerateScAsync(
+     ScStockCodeGenerateRequestDto request,
+     CancellationToken ct = default)
+        {
+            // 1️⃣ Product
+            var product = await _db.SProducts
+                .FirstOrDefaultAsync(p => p.Id == request.SProductId, ct)
+                ?? throw new InvalidOperationException("Ürün bulunamadı.");
+
+            // 2️⃣ Default Fluid (SC = C)
+            var fluid = await _db.Set<Fluid>()
+                .FirstOrDefaultAsync(f => f.Code == "C", ct);
+
+            if (fluid == null)
+                throw new InvalidOperationException("C fluid tanımlı değil.");
+
+            // 3️⃣ Selected values
+            var selectedValueIds = request.SelectedFeatureValues.Values.ToList();
+
+            var selectedValues = await _db.Set<SFeatureValue>()
+                .Include(v => v.SFeature)
+                .Where(v => selectedValueIds.Contains(v.Id))
+                .ToListAsync(ct);
+
+            // 4️⃣ Fixed rules
+            var productRules = await _db.SProductFeatureRules
+                .Include(r => r.SFeature)
+                .Include(r => r.FixedValue)
+                .Where(r => r.SProductId == request.SProductId
+                         && r.IsFixed
+                         && r.FixedValueId != null)
+                .ToListAsync(ct);
+
+            var allSelections = new Dictionary<string, (string Code, string Name)>();
+
+            foreach (var rule in productRules)
+            {
+                if (rule.FixedValue != null)
+                    allSelections[rule.SFeature.Code] =
+                        (rule.FixedValue.Code, rule.FixedValue.Name);
+            }
+
+            foreach (var kvp in request.SelectedFeatureValues)
+            {
+                var val = selectedValues.FirstOrDefault(v => v.Id == kvp.Value);
+                if (val != null)
+                    allSelections[val.SFeature.Code] = (val.Code, val.Name);
+            }
+
+            // 5️⃣ Description
+            var description = BuildDescription(product.Code, allSelections);
+
+            // 6️⃣ OPTION KEY (deterministic)
+            var optionKey = string.Join("|",
+                allSelections
+                    .OrderBy(x => x.Key)
+                    .Select(x => $"{x.Key}:{x.Value.Code}")
+            );
+
+            // 7️⃣ Duplicate kontrol
+            var existing = await _db.Set<StockCard>()
+                .FirstOrDefaultAsync(s =>
+                    s.SProductId == product.Id &&
+                    s.OptionKey == optionKey,
+                    ct);
 
             if (existing != null)
             {
                 return new ScStockCodeGenerateResultDto
                 {
-                    AlreadyExists = true,
-                    StockCardId = existing.Id,
                     StockCode8 = existing.StockCode8,
-                    Prefix4 = existing.Prefix4,
-                    Serial4 = existing.Serial4,
-                    Description = existing.Description
+                    Description = existing.Description,
+                    AlreadyExists = true
                 };
             }
 
-            var group = await _groupRepo.GetByIdAsync(scGroupId, tracking: false);
-            if (group == null)
-                throw new InvalidOperationException("SC grubu bulunamadı.");
+            // 8️⃣ Sequence
+            var sequence = await _db.StockSequences
+                .FirstOrDefaultAsync(s => s.Prefix4 == product.Code, ct)
+                ?? throw new InvalidOperationException($"Sequence bulunamadı: {product.Code}");
 
-            var featureDescription = await BuildFeatureDescriptionAsync(request.SelectedFeatureValues, cancellationToken);
+            sequence.LastNumber++;
+            var serial = sequence.LastNumber;
 
-            var description = string.IsNullOrWhiteSpace(featureDescription)
-                ? $"{group.Name} | {product.Name}"
-                : $"{group.Name} | {product.Name} | {featureDescription}";
-
-            await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
-
-            var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
-            if (seq == null)
-                throw new InvalidOperationException($"StockSequence yok: {prefix4}");
-
-            var nextSerial = seq.LastNumber + 1;
-            if (nextSerial > 9999)
-                throw new InvalidOperationException($"Seri no limiti aşıldı: {prefix4}");
-
-            seq.LastNumber = nextSerial;
-            await _sequenceRepo.UpdateAsync(seq);
-            await _sequenceRepo.SaveChangeAsync();
-
-            var card = new StockCard
+            // 9️⃣ StockCard
+            var stockCard = new StockCard
             {
                 Id = Guid.NewGuid(),
-                FluidId = defaultFluid.Id,
-                SProductGroupId = scGroupId,
-                SProductId = request.SProductId,
-                Prefix4 = prefix4,
-                Serial4 = nextSerial,
-                StockCode8 = $"{prefix4}{nextSerial:0000}",
+
+                FluidId = fluid.Id,
+                SProductGroupId = product.SProductGroupId,
+                SProductId = product.Id,
+                StockSequenceId = sequence.Id,
+
+                StockCode8 = $"{product.Code}{serial:D4}",
+                Prefix4 = product.Code,
+                Serial4 = serial,
+
                 Description = description,
-                StockSequenceId = seq.Id,
                 OptionKey = optionKey,
-                CreatedBy = "SYSTEM",
-                CreatedDate = DateTime.UtcNow,
+
+                CreatedBy = "Admin",
+                CreatedDate = DateTime.Now,
                 Status = Domain.Enums.Status.Added
             };
 
-            await _stockCardRepo.AddAsync(card);
-            await _stockCardRepo.SaveChangeAsync();
+            _db.Set<StockCard>().Add(stockCard);
 
-            if (request.SelectedFeatureValues != null && request.SelectedFeatureValues.Any())
+            // 🔟 FeatureSelections
+            foreach (var kvp in allSelections)
             {
-                var selections = request.SelectedFeatureValues.Select(kvp => new StockCardFeatureSelection
-                {
-                    Id = Guid.NewGuid(),
-                    StockCardId = card.Id,
-                    SFeatureId = kvp.Key,
-                    SFeatureValueId = kvp.Value,
-                    CreatedBy = "SYSTEM",
-                    CreatedDate = DateTime.UtcNow,
-                    Status = Domain.Enums.Status.Added
-                }).ToList();
+                var feature = await _db.Set<SFeature>()
+                    .FirstOrDefaultAsync(f => f.Code == kvp.Key, ct);
 
-                _context.Set<StockCardFeatureSelection>().AddRange(selections);
-                await _context.SaveChangesAsync(cancellationToken);
+                if (feature == null) continue;
+
+                var value = await _db.Set<SFeatureValue>()
+                    .FirstOrDefaultAsync(v =>
+                        v.SFeatureId == feature.Id &&
+                        v.Code == kvp.Value.Code,
+                        ct);
+
+                if (value == null) continue;
+
+                _db.Set<StockCardFeatureSelection>().Add(
+                    new StockCardFeatureSelection
+                    {
+                        Id = Guid.NewGuid(),
+                        StockCardId = stockCard.Id,
+                        SFeatureId = feature.Id,
+                        SFeatureValueId = value.Id,
+                        CreatedBy = "Admin",
+                        CreatedDate = DateTime.Now,
+                        Status = Domain.Enums.Status.Added
+                    });
             }
 
-            await tx.CommitAsync(cancellationToken);
+            await _db.SaveChangesAsync(ct);
 
             return new ScStockCodeGenerateResultDto
             {
-                AlreadyExists = false,
-                StockCardId = card.Id,
-                StockCode8 = card.StockCode8,
-                Prefix4 = card.Prefix4,
-                Serial4 = card.Serial4,
-                Description = card.Description
+                StockCode8 = stockCard.StockCode8,
+                Description = stockCard.Description,
+                AlreadyExists = false
             };
         }
 
-        private async Task<Guid> GetScGroupIdAsync()
+
+        // ========== LİSTE ==========
+        public async Task<SCStockCardListResultDto> GetStockCardsAsync(
+            SCStockCardFilterDto filter,
+            CancellationToken ct = default)
         {
-            var groups = await _groupRepo.GetAllAsync(tracking: false);
-            var scGroup = groups.FirstOrDefault(x => x.Code == "C");
-            if (scGroup == null)
-                throw new InvalidOperationException("SC (C) grubu tanımlı değil.");
-            return scGroup.Id;
+            var query = _db.Set<StockCard>()
+                .Include(s => s.SProduct)
+                .Where(s => s.SProduct.SProductGroup.Code == "C"
+                         && s.Status != Domain.Enums.Status.Deleted);
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+                query = query.Where(s =>
+                    s.StockCode8.Contains(filter.SearchTerm) ||
+                    s.Description.Contains(filter.SearchTerm) ||
+                    s.SProduct.Code.Contains(filter.SearchTerm));
+
+            if (filter.ProductId.HasValue)
+                query = query.Where(s => s.SProductId == filter.ProductId.Value);
+
+            var totalCount = await query.CountAsync(ct);
+
+            var items = await query
+                .OrderByDescending(s => s.CreatedDate)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .Select(s => new SCStockCardListItemDto
+                {
+                    Id = s.Id,
+                    StockCode8 = s.StockCode8,
+                    ProductCode = s.SProduct.Code,
+                    ProductName = s.SProduct.Name,
+                    Description = s.Description,
+                    CreatedDate = s.CreatedDate,
+                    CreatedBy = s.CreatedBy
+                })
+                .ToListAsync(ct);
+
+            return new SCStockCardListResultDto
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize
+            };
         }
 
-        private async Task<string> BuildOptionKeyAsync(
-            Dictionary<Guid, Guid> selectedFeatureValues,
-            CancellationToken cancellationToken)
+        // ========== DETAY ==========
+        public async Task<SCStockCardDetailDto> GetStockCardDetailAsync(
+            Guid stockCardId,
+            CancellationToken ct = default)
         {
-            if (selectedFeatureValues == null || !selectedFeatureValues.Any())
-                return string.Empty;
+            var stockCard = await _db.Set<StockCard>()
+                .Include(s => s.SProduct)
+                .FirstOrDefaultAsync(s => s.Id == stockCardId, ct)
+                ?? throw new InvalidOperationException("Stok kartı bulunamadı.");
 
-            var featureIds = selectedFeatureValues.Keys.ToList();
-            var valueIds = selectedFeatureValues.Values.ToList();
+            var selections = await _db.Set<Domain.Entities.StockCodes.Features.StockCardFeatureSelection>()
+                .Include(s => s.SFeature)
+                .Include(s => s.SFeatureValue)
+                .Where(s => s.StockCardId == stockCardId)
+                .OrderBy(s => s.SFeature.SortOrder)
+                .ToListAsync(ct);
 
-            var features = await _context.Set<SFeature>()
-                .AsNoTracking()
-                .Where(f => featureIds.Contains(f.Id))
-                .Select(f => new { f.Id, f.Code, f.SortOrder })
-                .ToListAsync(cancellationToken);
-
-            var values = await _context.Set<SFeatureValue>()
-                .AsNoTracking()
-                .Where(v => valueIds.Contains(v.Id))
-                .Select(v => new { v.Id, v.Code })
-                .ToListAsync(cancellationToken);
-
-            var parts = selectedFeatureValues
-                .Select(kvp =>
+            return new SCStockCardDetailDto
+            {
+                Id = stockCard.Id,
+                StockCode8 = stockCard.StockCode8,
+                Prefix4 = stockCard.Prefix4,
+                Serial4 = stockCard.Serial4,
+                ProductId = stockCard.SProductId,
+                ProductCode = stockCard.SProduct.Code,
+                ProductName = stockCard.SProduct.Name,
+                Description = stockCard.Description,
+                CreatedDate = stockCard.CreatedDate,
+                CreatedBy = stockCard.CreatedBy,
+                FeatureSelections = selections.Select((s, i) => new SCFeatureSelectionDto
                 {
-                    var f = features.FirstOrDefault(x => x.Id == kvp.Key);
-                    var v = values.FirstOrDefault(x => x.Id == kvp.Value);
-                    if (f == null || v == null) return null;
-                    return new { f.SortOrder, f.Code, ValueCode = v.Code };
-                })
-                .Where(x => x != null)
-                .OrderBy(x => x.SortOrder)
-                .Select(x => $"{x.Code}={x.ValueCode}")
-                .ToList();
-
-            return string.Join("|", parts);
+                    FeatureId = s.SFeatureId,
+                    FeatureCode = s.SFeature.Code,
+                    FeatureName = s.SFeature.Name,
+                    ValueId = s.SFeatureValueId,
+                    ValueCode = s.SFeatureValue.Code,
+                    ValueName = s.SFeatureValue.Name,
+                    SortOrder = i
+                }).ToList()
+            };
         }
 
-        private async Task<string> BuildFeatureDescriptionAsync(
-            Dictionary<Guid, Guid> selectedFeatureValues,
-            CancellationToken cancellationToken)
+        // ========== GÜNCELLEME ==========
+        public async Task UpdateStockCardAsync(
+            SCStockCardUpdateDto dto,
+            string updatedBy,
+            CancellationToken ct = default)
         {
-            if (selectedFeatureValues == null || !selectedFeatureValues.Any())
-                return string.Empty;
+            var stockCard = await _db.Set<StockCard>()
+                .Include(s => s.SProduct)
+                .FirstOrDefaultAsync(s => s.Id == dto.StockCardId, ct)
+                ?? throw new InvalidOperationException("Stok kartı bulunamadı.");
 
-            var featureIds = selectedFeatureValues.Keys.ToList();
-            var valueIds = selectedFeatureValues.Values.ToList();
+            // Mevcut seçimleri sil
+            var existingSelections = await _db.Set<Domain.Entities.StockCodes.Features.StockCardFeatureSelection>()
+                .Where(s => s.StockCardId == dto.StockCardId)
+                .ToListAsync(ct);
+            _db.Set<Domain.Entities.StockCodes.Features.StockCardFeatureSelection>().RemoveRange(existingSelections);
 
-            var features = await _context.Set<SFeature>()
-                .AsNoTracking()
-                .Where(f => featureIds.Contains(f.Id))
-                .Select(f => new { f.Id, f.SortOrder })
-                .ToListAsync(cancellationToken);
+            // Sabit değerleri ekle
+            var productRules = await _db.SProductFeatureRules
+                .Include(r => r.SFeature)
+                .Include(r => r.FixedValue)
+                .Where(r => r.SProductId == stockCard.SProductId && r.IsFixed && r.FixedValueId != null)
+                .ToListAsync(ct);
 
-            var values = await _context.Set<SFeatureValue>()
-                .AsNoTracking()
-                .Where(v => valueIds.Contains(v.Id))
-                .Select(v => new { v.Id, v.Name })
-                .ToListAsync(cancellationToken);
+            var allSelections = new Dictionary<string, (string Code, string Name)>();
 
-            var parts = selectedFeatureValues
-                .Select(kvp =>
+            foreach (var rule in productRules)
+            {
+                if (rule.FixedValue != null)
+                    allSelections[rule.SFeature.Code] = (rule.FixedValue.Code, rule.FixedValue.Name);
+            }
+
+            // Dinamik seçimleri ekle
+            var selectedValueIds = dto.FeatureSelections.Values.ToList();
+            var selectedValues = await _db.Set<Domain.Entities.StockCodes.Features.SFeatureValue>()
+                .Include(v => v.SFeature)
+                .Where(v => selectedValueIds.Contains(v.Id))
+                .ToListAsync(ct);
+
+            foreach (var kvp in dto.FeatureSelections)
+            {
+                var val = selectedValues.FirstOrDefault(v => v.Id == kvp.Value);
+                if (val != null)
+                    allSelections[val.SFeature.Code] = (val.Code, val.Name);
+            }
+
+            // Yeni description
+            stockCard.Description = BuildDescription(stockCard.SProduct.Code, allSelections);
+            stockCard.ModifiedBy = updatedBy;
+            stockCard.ModifiedDate = DateTime.Now;
+
+            // Yeni seçimleri kaydet
+            foreach (var kvp in allSelections)
+            {
+                var feature = await _db.Set<Domain.Entities.StockCodes.Features.SFeature>()
+                    .FirstOrDefaultAsync(f => f.Code == kvp.Key, ct);
+                var value = await _db.Set<Domain.Entities.StockCodes.Features.SFeatureValue>()
+                    .FirstOrDefaultAsync(v => v.SFeatureId == feature!.Id && v.Code == kvp.Value.Code, ct);
+
+                if (feature != null && value != null)
                 {
-                    var f = features.FirstOrDefault(x => x.Id == kvp.Key);
-                    var v = values.FirstOrDefault(x => x.Id == kvp.Value);
-                    if (f == null || v == null) return null;
-                    return new { f.SortOrder, Text = v.Name };
-                })
-                .Where(x => x != null)
-                .OrderBy(x => x.SortOrder)
-                .Select(x => x.Text)
-                .ToList();
+                    _db.Set<Domain.Entities.StockCodes.Features.StockCardFeatureSelection>().Add(
+                        new Domain.Entities.StockCodes.Features.StockCardFeatureSelection
+                        {
+                            Id = Guid.NewGuid(),
+                            StockCardId = stockCard.Id,
+                            SFeatureId = feature.Id,
+                            SFeatureValueId = value.Id,
+                            CreatedBy = updatedBy,
+                            CreatedDate = DateTime.Now,
+                            Status = Domain.Enums.Status.Added
+                        });
+                }
+            }
 
-            return string.Join(" | ", parts);
+            await _db.SaveChangesAsync(ct);
+        }
+
+        // ========== SİLME ==========
+        public async Task DeleteStockCardAsync(
+            Guid stockCardId,
+            string deletedBy,
+            CancellationToken ct = default)
+        {
+            var stockCard = await _db.Set<StockCard>()
+                .FirstOrDefaultAsync(s => s.Id == stockCardId, ct)
+                ?? throw new InvalidOperationException("Stok kartı bulunamadı.");
+
+            stockCard.Status = Domain.Enums.Status.Deleted;
+            stockCard.DeletedBy = deletedBy;
+            stockCard.DeletedDate = DateTime.Now;
+
+            await _db.SaveChangesAsync(ct);
+        }
+
+        // ========== DESCRIPTION BUILDER ==========
+        private string BuildDescription(
+            string productCode,
+            Dictionary<string, (string Code, string Name)> selections)
+        {
+            // SC Description formatı:
+            // RONDELA | WASHER_TYPE | MATERIAL | STANDARD | METRIC | COATING
+            var parts = new List<string>();
+
+            parts.Add("RONDELA");
+
+            if (selections.TryGetValue(FEATURE_WASHER_TYPE, out var washerType))
+                parts.Add(washerType.Code);
+
+            if (selections.TryGetValue(FEATURE_MATERIAL, out var material))
+                parts.Add(material.Code);
+
+            if (selections.TryGetValue(FEATURE_STANDARD, out var standard))
+                parts.Add(standard.Code);
+
+            if (selections.TryGetValue(FEATURE_METRIC, out var metric))
+                parts.Add(metric.Code);
+
+            if (selections.TryGetValue(FEATURE_COATING, out var coating))
+                parts.Add(coating.Code);
+
+            return string.Join(" | ", parts.Where(p => !string.IsNullOrWhiteSpace(p)));
         }
     }
 }

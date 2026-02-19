@@ -1,0 +1,258 @@
+﻿@using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
+
+@{
+    // Anonymous object'ten verileri al
+    var stockCardId = (Guid)ViewData.Model.GetType().GetProperty("StockCardId").GetValue(ViewData.Model, null);
+    var datasheets = ViewData.Model.GetType().GetProperty("Datasheets").GetValue(ViewData.Model, null) as IReadOnlyList<DatasheetDto>;
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="mb-0">
+                    <i class="bi bi-file-earmark-pdf"></i> Teknik Dökümanlar (Datasheets)
+                </h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <button type="button"
+                        class="btn btn-light btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#uploadDatasheetModal">
+                    <i class="bi bi-upload"></i> Dosya Yükle
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        @if (datasheets != null && datasheets.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 5%;">
+                                <i class="bi bi-star-fill"></i> Ver.
+                            </th>
+                            <th style="width: 30%;">
+                                <i class="bi bi-file-earmark"></i> Dosya Adı
+                            </th>
+                            <th style="width: 10%;">
+                                <i class="bi bi-hdd"></i> Boyut
+                            </th>
+                            <th style="width: 25%;">
+                                <i class="bi bi-chat-left-text"></i> Açıklama
+                            </th>
+                            <th style="width: 15%;">
+                                <i class="bi bi-clock"></i> Yüklenme
+                            </th>
+                            <th style="width: 15%;" class="text-center">
+                                <i class="bi bi-gear"></i> İşlemler
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var datasheet in datasheets.OrderByDescending(d => d.Version))
+                        {
+                            <tr class="@(datasheet.IsActive ? "table-success" : "")">
+                                <td>
+                                    <span class="badge @(datasheet.IsActive ? "bg-success" : "bg-secondary")">
+                                        v@datasheet.Version
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        var extension = System.IO.Path.GetExtension(datasheet.FileName).ToLower();
+                                        var iconClass = extension switch
+                                        {
+                                            ".pdf" => "bi-file-earmark-pdf text-danger",
+                                            ".doc" or ".docx" => "bi-file-earmark-word text-primary",
+                                            ".xls" or ".xlsx" => "bi-file-earmark-excel text-success",
+                                            ".jpg" or ".jpeg" or ".png" => "bi-file-earmark-image text-info",
+                                            _ => "bi-file-earmark"
+                                        };
+                                    }
+                                    <i class="bi @iconClass me-2"></i>
+                                    <strong>@datasheet.FileName</strong>
+                                    @if (datasheet.IsActive)
+                                    {
+                                        <span class="badge bg-success ms-2">
+                                            <i class="bi bi-check-circle"></i> Aktif
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">
+                                        @datasheet.FileSizeFormatted
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(datasheet.Description))
+                                    {
+                                        <small class="text-muted">@datasheet.Description</small>
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted fst-italic">-</small>
+                                    }
+                                </td>
+                                <td>
+                                    <small>
+                                        <i class="bi bi-calendar-event"></i>
+                                        @datasheet.CreatedDate.ToString("dd.MM.yyyy")
+                                    </small>
+                                    <br />
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock"></i>
+                                        @datasheet.CreatedDate.ToString("HH:mm")
+                                    </small>
+                                    <br />
+                                    <small class="text-muted">
+                                        <i class="bi bi-person"></i>
+                                        @datasheet.CreatedBy
+                                    </small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-action="DownloadDatasheet"
+                                           asp-route-id="@datasheet.Id"
+                                           class="btn btn-success"
+                                           title="İndir"
+                                           target="_blank">
+                                            <i class="bi bi-download"></i>
+                                        </a>
+                                        <button type="button"
+                                                class="btn btn-danger"
+                                                onclick="deleteDatasheet('@datasheet.Id', '@datasheet.FileName')"
+                                                title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-info mt-3">
+                <i class="bi bi-info-circle"></i>
+                <strong>Toplam:</strong> @datasheets.Count dosya yüklü
+                @if (datasheets.Any(d => d.IsActive))
+                {
+                    <span class="ms-3">
+                        <strong>Aktif Versiyon:</strong> v@datasheets.Where(d => d.IsActive).Max(d => d.Version)
+                    </span>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-inbox display-1 text-muted"></i>
+                <h5 class="mt-3 text-muted">Henüz dosya yüklenmemiş</h5>
+                <p class="text-muted">Teknik döküman, katalog veya datasheet yükleyebilirsiniz</p>
+                <button type="button"
+                        class="btn btn-primary mt-3"
+                        data-bs-toggle="modal"
+                        data-bs-target="#uploadDatasheetModal">
+                    <i class="bi bi-upload"></i> İlk Dosyayı Yükle
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- ========== MODAL: DOSYA YÜKLEME ========== -->
+<div class="modal fade" id="uploadDatasheetModal" tabindex="-1" aria-labelledby="uploadDatasheetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="UploadDatasheet" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="stockCardId" value="@stockCardId" />
+
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="uploadDatasheetModalLabel">
+                        <i class="bi bi-upload"></i> Dosya Yükle
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="datasheetFile" class="form-label fw-bold">
+                            <i class="bi bi-file-earmark-arrow-up"></i> Dosya Seç
+                        </label>
+                        <input type="file"
+                               id="datasheetFile"
+                               name="file"
+                               class="form-control"
+                               required
+                               accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" />
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i>
+                            İzin verilen formatlar: PDF, JPG, PNG, DOC, DOCX, XLS, XLSX
+                            <br />
+                            <i class="bi bi-hdd"></i>
+                            Maksimum dosya boyutu: 10 MB
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="datasheetDescription" class="form-label fw-bold">
+                            <i class="bi bi-chat-left-text"></i> Açıklama
+                        </label>
+                        <textarea id="datasheetDescription"
+                                  name="description"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Dosya hakkında kısa açıklama yazın..."></textarea>
+                        <div class="form-text">Opsiyonel: Dosyanın içeriği hakkında bilgi</div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Uyarı:</strong> Aynı isimde dosya varsa versiyon numarası otomatik artırılacaktır.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-upload"></i> Yükle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== DELETE FORM ========== -->
+<form id="deleteDatasheetForm" asp-action="DeleteDatasheet" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="deleteDatasheetId" />
+    <input type="hidden" name="stockCardId" value="@stockCardId" />
+</form>
+
+<script>
+    function deleteDatasheet(id, fileName) {
+        Swal.fire({
+            title: 'Dosyayı Sil?',
+            html: `<strong>${fileName}</strong> dosyasını silmek istediğinize emin misiniz?<br/><br/><span class="text-danger">Bu işlem geri alınamaz!</span>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="bi bi-trash"></i> Evet, Sil',
+            cancelButtonText: '<i class="bi bi-x-circle"></i> İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('deleteDatasheetId').value = id;
+                document.getElementById('deleteDatasheetForm').submit();
+            }
+        });
+    }
+</script>
