@@ -1,74 +1,65 @@
 ﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SF.SFStockCodeGenerateVm
 
 @{
-    ViewData["Title"] = "SF Stok Kodu Üret (Vanalar, Valfler, Pompalar)";
+    ViewData["Title"] = "SF Stok Kodu Üret";
 }
 
 <div class="container mt-4">
-    <h2>SF Stok Kodu Üret - Vanalar, Valfler, Pompalar</h2>
+    <h2>SF Stok Kodu Üret</h2>
     <p class="text-muted">
-        <i class="bi bi-valve text-primary"></i>
-        LPG, Cryogenic, Akaryakıt, Doğal Gaz, Kimyasal, Su, Hidrolik ve daha fazlası...
+        <i class="bi bi-tools text-info"></i>
+        Rule-based sistem: Sabit değerler otomatik, sadece gerekli özellikleri seçin
     </p>
     <hr />
 
     @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
     {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle-fill"></i>
+        <div class="alert alert-danger alert-dismissible fade show">
             <strong>Hata!</strong> @Model.ErrorMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
 
     @if (!string.IsNullOrWhiteSpace(Model.StockCode8))
     {
-        <div class="alert @(Model.AlreadyExists == true ? "alert-warning" : "alert-success") alert-dismissible fade show" role="alert">
-            <h5 class="alert-heading">
-                <i class="bi bi-@(Model.AlreadyExists == true ? "info-circle-fill" : "check-circle-fill")"></i>
+        <div class="alert @(Model.AlreadyExists == true ? "alert-warning" : "alert-success") alert-dismissible fade show">
+            <h5>
                 @(Model.AlreadyExists == true ? "Mevcut Kod Getirildi" : "Yeni Kod Oluşturuldu!")
             </h5>
             <hr />
-            <p class="mb-2">
+            <p>
                 <strong>Stok Kodu:</strong>
-                <span class="badge bg-primary fs-4">@Model.StockCode8</span>
+                <span class="badge bg-success fs-4">@Model.StockCode8</span>
             </p>
-            <p class="mb-0">
+            <p>
                 <strong>Açıklama:</strong><br />
-                <span class="text-dark">@Model.Description</span>
+                @Model.Description
             </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
 
     <form id="sfForm" asp-action="Generate" method="post">
-        <input type="hidden" name="SProductId" id="productId" />
+        <input type="hidden" name="SProductId" id="productIdInput" />
 
-        <!-- ✅ ÜRÜN SEÇİMİ -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-primary text-white">
-                <i class="bi bi-box-seam"></i> <strong>1. Ürün Seçimi</strong>
+                <strong>1. Ürün Seçimi</strong>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <label class="form-label fw-bold">Ürün Seçiniz *</label>
-                        <select asp-for="SProductId" asp-items="Model.Products" id="productSelect" class="form-select form-select-lg" required>
-                            <option value="">-- Ürün Seçiniz --</option>
-                        </select>
-                        <small class="form-text text-muted">
-                            <i class="bi bi-info-circle"></i>
-                            63 farklı vana, valf, pompa ve ekipman türü mevcuttur
-                        </small>
-                    </div>
-                </div>
+                <select asp-for="SProductId"
+                        asp-items="Model.Products"
+                        id="productSelect"
+                        class="form-select form-select-lg"
+                        required>
+                    <option value="">-- Ürün Seçiniz --</option>
+                </select>
             </div>
         </div>
 
-        <!-- ✅ FEATURE DROPDOWNS (Dinamik - AJAX) -->
         <div class="card mb-4 shadow-sm" id="featuresCard" style="display:none;">
-            <div class="card-header bg-success text-white">
-                <i class="bi bi-sliders"></i> <strong>2. Ürün Özellikleri</strong>
+            <div class="card-header bg-info text-white">
+                <strong>2. Ürün Özellikleri</strong>
             </div>
             <div class="card-body">
                 <div id="featuresContainer" class="row"></div>
@@ -77,16 +68,12 @@
 
         <div id="hiddenInputs"></div>
 
-        <hr />
-
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn" disabled>
-                <i class="bi bi-gear-fill"></i> Kod Üret
-            </button>
-            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg px-4">
-                <i class="bi bi-arrow-left"></i> Geri
-            </a>
-        </div>
+        <button type="submit"
+                class="btn btn-primary btn-lg"
+                id="submitBtn"
+                disabled>
+            Kod Üret
+        </button>
     </form>
 </div>
 
@@ -96,271 +83,146 @@
         const featuresContainer = document.getElementById("featuresContainer");
         const featuresCard = document.getElementById("featuresCard");
         const submitBtn = document.getElementById("submitBtn");
-        const productIdInput = document.getElementById("productId");
+        const productIdInput = document.getElementById("productIdInput");
         const sfForm = document.getElementById("sfForm");
 
-        let featureSelects = [];
+        let formData = null;
+        let selectedValues = {};
 
-        // ========== Ürün değişince feature'ları AJAX ile yükle ==========
         productSelect.addEventListener("change", async function () {
             const productId = productSelect.value;
 
-            // Temizle
             featuresContainer.innerHTML = "";
-            featureSelects = [];
+            formData = null;
+            selectedValues = {};
             submitBtn.disabled = true;
             featuresCard.style.display = "none";
 
             if (!productId) return;
 
             try {
-                const resp = await fetch(`/Admin/SFStockCode/FeaturesByProduct?productId=${productId}`);
-                if (!resp.ok) throw new Error("İstek başarısız");
+                const resp = await fetch(`/Admin/SFStockCode/GetFormData?productId=${productId}`);
+                formData = await resp.json();
 
-                const features = await resp.json();
-
-                if (!features || features.length === 0) {
-                    featuresContainer.innerHTML = '<div class="col-12"><div class="alert alert-info"><i class="bi bi-info-circle"></i> Bu ürün için özellik tanımı bulunmuyor.</div></div>';
+                if (!formData || !formData.features || formData.features.length === 0) {
+                    featuresContainer.innerHTML = '<div class="alert alert-info">Bu ürün için özellik tanımı yok.</div>';
                     featuresCard.style.display = "block";
                     return;
                 }
 
-                features.sort((a, b) => a.sortOrder - b.sortOrder);
-
                 featuresCard.style.display = "block";
-
-                let stepNumber = 1;
-                features.forEach((feature, index) => {
-                    const colDiv = document.createElement("div");
-                    colDiv.className = "col-md-6 col-lg-4 mb-3";
-
-                    const label = document.createElement("label");
-                    label.className = "form-label fw-bold";
-                    label.innerHTML = `<span class="badge bg-secondary me-1">${stepNumber}</span> ${feature.name}${feature.isRequired ? ' <span class="text-danger">*</span>' : ''}`;
-
-                    const select = document.createElement("select");
-                    select.className = "form-select feature-select";
-                    select.setAttribute("data-feature-id", feature.id);
-                    select.setAttribute("data-feature-code", feature.code);
-                    select.setAttribute("data-step", stepNumber);
-                    select.required = feature.isRequired;
-
-                    // İlk dropdown dışında hepsi disabled
-                    if (index > 0) {
-                        select.disabled = true;
-                    }
-
-                    const defaultOption = document.createElement("option");
-                    defaultOption.value = "";
-                    defaultOption.textContent = index === 0
-                        ? "-- Seçiniz --"
-                        : `-- Önce ${stepNumber - 1}. adımı tamamlayın --`;
-                    select.appendChild(defaultOption);
-
-                    feature.values.forEach(value => {
-                        const option = document.createElement("option");
-                        option.value = value.id;
-                        option.setAttribute("data-value-code", value.code);
-                        option.textContent = value.name;
-                        select.appendChild(option);
-                    });
-
-                    colDiv.appendChild(label);
-                    colDiv.appendChild(select);
-                    featuresContainer.appendChild(colDiv);
-
-                    featureSelects.push(select);
-                    stepNumber++;
-                });
-
-                // Event listener'ları ekle
-                attachFeatureListeners();
+                renderFeatures();
 
             } catch (err) {
-                featuresContainer.innerHTML = `<div class="col-12"><div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Hata: ${err.message}</div></div>`;
+                featuresContainer.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
                 featuresCard.style.display = "block";
             }
         });
 
-        // ========== Feature seçim event'lerini bağla ==========
-        function attachFeatureListeners() {
-            featureSelects.forEach((select, index) => {
-                select.addEventListener("change", function () {
-                    const selectedValue = this.value;
+        function renderFeatures() {
+            featuresContainer.innerHTML = "";
 
-                    // Sonraki tüm dropdown'ları sıfırla
-                    for (let i = index + 1; i < featureSelects.length; i++) {
-                        featureSelects[i].disabled = true;
-                        featureSelects[i].value = "";
-                        const step = parseInt(featureSelects[i].getAttribute("data-step"));
-                        featureSelects[i].options[0].text = `-- Önce ${step - 1}. adımı tamamlayın --`;
-                        featureSelects[i].classList.remove("is-valid");
-                    }
+            formData.features.forEach(feature => {
 
-                    submitBtn.disabled = true;
+                const colDiv = document.createElement("div");
+                colDiv.className = "col-md-6 mb-3";
 
-                    // Eğer seçim yapıldıysa bir sonrakini aktif et
-                    if (selectedValue) {
-                        this.classList.add("is-valid");
-                        const nextFeature = featureSelects[index + 1];
-                        if (nextFeature) {
-                            nextFeature.disabled = false;
-                            nextFeature.options[0].text = "-- Seçiniz --";
-                        } else {
-                            // Son feature seçildiyse submit'i aktif et
-                            checkFormCompletion();
-                        }
-                    } else {
-                        this.classList.remove("is-valid");
-                    }
-                });
+                const label = document.createElement("label");
+                label.className = "form-label fw-bold";
+                label.innerText = feature.featureName;
+
+                if (feature.isFixed) {
+
+                    const fixedInput = document.createElement("input");
+                    fixedInput.type = "text";
+                    fixedInput.className = "form-control";
+                    fixedInput.value = `${feature.fixedValueCode} - ${feature.fixedValueName}`;
+                    fixedInput.disabled = true;
+
+                    selectedValues[feature.featureId] = feature.fixedValueId;
+
+                    colDiv.appendChild(label);
+                    colDiv.appendChild(fixedInput);
+
+                } else {
+
+                    const select = document.createElement("select");
+                    select.className = "form-select";
+                    select.setAttribute("data-feature-id", feature.featureId);
+                    select.required = true;
+
+                    const defaultOption = document.createElement("option");
+                    defaultOption.value = "";
+                    defaultOption.textContent = "-- Seçiniz --";
+                    select.appendChild(defaultOption);
+
+                    feature.availableValues.forEach(value => {
+                        const option = document.createElement("option");
+                        option.value = value.id;
+                        option.textContent = `${value.code} - ${value.name}`;
+                        select.appendChild(option);
+                    });
+
+                    select.addEventListener("change", function (e) {
+                        const featureId = e.target.getAttribute("data-feature-id");
+                        const valueId = e.target.value;
+
+                        if (valueId)
+                            selectedValues[featureId] = valueId;
+                        else
+                            delete selectedValues[featureId];
+
+                        checkFormCompletion();
+                    });
+
+                    colDiv.appendChild(label);
+                    colDiv.appendChild(select);
+                }
+
+                featuresContainer.appendChild(colDiv);
             });
+
+            checkFormCompletion();
         }
 
-        // ========== Form tamamlandı mı kontrol et ==========
         function checkFormCompletion() {
-            const productId = productSelect.value;
-            if (!productId) {
+            if (!formData) {
                 submitBtn.disabled = true;
                 return;
             }
 
-            let allSelected = true;
-            featureSelects.forEach(select => {
-                if (select.required && !select.value) {
-                    allSelected = false;
-                }
-            });
+            const requiredFeatures = formData.features.filter(f => !f.isFixed);
+            const allSelected = requiredFeatures.every(f => selectedValues[f.featureId]);
 
             submitBtn.disabled = !allSelected;
         }
 
-        // ========== Form submit ==========
         sfForm.addEventListener("submit", function (e) {
-            e.preventDefault();
 
             const productId = productSelect.value;
-            if (!productId) {
-                alert("⚠️ Ürün seçiniz!");
-                return;
-            }
-
             productIdInput.value = productId;
 
             const hiddenContainer = document.getElementById("hiddenInputs");
             hiddenContainer.innerHTML = "";
 
             let index = 0;
-            let allValid = true;
 
-            featureSelects.forEach(select => {
-                const featureId = select.getAttribute("data-feature-id");
-                const valueId = select.value;
+            Object.entries(selectedValues).forEach(([featureId, valueId]) => {
 
-                if (select.required && !valueId) {
-                    allValid = false;
-                    return;
-                }
+                const keyInput = document.createElement("input");
+                keyInput.type = "hidden";
+                keyInput.name = `SelectedFeatureValues[${index}].Key`;
+                keyInput.value = featureId;
+                hiddenContainer.appendChild(keyInput);
 
-                if (valueId) {
-                    const keyInput = document.createElement("input");
-                    keyInput.type = "hidden";
-                    keyInput.name = `SelectedFeatureValues[${index}].Key`;
-                    keyInput.value = featureId;
-                    hiddenContainer.appendChild(keyInput);
+                const valueInput = document.createElement("input");
+                valueInput.type = "hidden";
+                valueInput.name = `SelectedFeatureValues[${index}].Value`;
+                valueInput.value = valueId;
+                hiddenContainer.appendChild(valueInput);
 
-                    const valueInput = document.createElement("input");
-                    valueInput.type = "hidden";
-                    valueInput.name = `SelectedFeatureValues[${index}].Value`;
-                    valueInput.value = valueId;
-                    hiddenContainer.appendChild(valueInput);
-
-                    console.log(`[SF JS] Added: Key=${featureId}, Value=${valueId}`);
-                    index++;
-                }
+                index++;
             });
-
-            if (!allValid) {
-                alert("⚠️ Tüm zorunlu alanları doldurunuz!");
-                return;
-            }
-
-            // ✅ Submit öncesi loading göster
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Kod Üretiliyor...';
-
-            this.submit();
-        });
-
-        // ========== Sayfa yüklendiğinde ürün seçiliyse feature'ları yükle ==========
-        window.addEventListener("DOMContentLoaded", function () {
-            const selectedProductId = productSelect.value;
-            if (selectedProductId) {
-                productSelect.dispatchEvent(new Event("change"));
-            }
         });
     </script>
-
-    <style>
-        /* ✅ Disabled dropdown'lar gri */
-        .feature-select:disabled {
-            background-color: #f8f9fa;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        /* ✅ Aktif dropdown'lar mavi kenarlık */
-        .feature-select:not(:disabled) {
-            border-color: #0d6efd;
-            border-width: 2px;
-        }
-
-        /* ✅ Seçilmiş dropdown'lar yeşil kenarlık */
-        .feature-select.is-valid {
-            border-color: #198754 !important;
-            background-color: #d1e7dd;
-        }
-
-        /* ✅ Buton disabled görünümü */
-        #submitBtn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ✅ Ürün dropdown daha büyük */
-        #productSelect {
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        /* ✅ Card animasyonu */
-        .card {
-            transition: all 0.3s ease;
-        }
-
-            .card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-            }
-
-        /* ✅ Alert animasyonu */
-        .alert {
-            animation: slideDown 0.5s ease;
-        }
-
-        @@keyframes slideDown {
-            from
-
-        {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        }
-    </style>
 }

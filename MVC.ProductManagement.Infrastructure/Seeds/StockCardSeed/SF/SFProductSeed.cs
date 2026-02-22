@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
+using System;
+using System.Collections.Generic;
 
 namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF
 {
@@ -12,104 +14,106 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF
             var now = new DateTime(2026, 02, 05);
             var sfGroupId = SeedId.From("SProductGroup:F");
 
-            var items = new (string Code, string Name)[]
-            {
-                // ==================== SFA SERİSİ: LPG (10 adet) ====================
-                ("SFA0", "LPG VANALARI/VALFLERİ"),
-                ("SFA1", "LPG EMNİYET/RELIEF VALFLERİ"),
-                ("SFA2", "LPG REGÜLATÖRLERİ"),
-                ("SFA3", "LPG SEVİYE/ÖLÇÜM GÖSTERGELERİ"),
-                ("SFA4", "LPG AŞIRI AKIŞ/CHECK/DENGELEME VALFLERİ"),
-                ("SFA5", "LPG SAYAÇLARI VE PRINTER"),
-                ("SFA6", "LPG FİLTRELERİ"),
-                ("SFA7", "LPG POMPALARI VE KOMPRESÖRLERİ"),
-                ("SFA8", "LPG ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI"),
-                ("SFA9", "LPG AKSESUARLARI DİĞER"),
-
-                // ==================== SFC SERİSİ: CRYOGENIC (9 adet) ====================
-                ("SFC0", "CRYOGENIC VANALARI/VALFLERİ"),
-                ("SFC1", "CRYOGENIC EMNİYET/RELIEF VALFLERİ"),
-                ("SFC2", "CRYOGENIC REGÜLATÖRLERİ"),
-                ("SFC3", "CRYOGENIC SEVİYE/ÖLÇÜM GÖSTERGELERİ"),
-                ("SFC4", "CRYOGENIC CHECK/DENGELEME VALFLERİ"),
-                ("SFC5", "CRYOGENIC SAYAÇLARI VE PRINTER"),
-                ("SFC6", "CRYOGENIC FİLTRELERİ"),
-                ("SFC7", "CRYOGENIC POMPALARI VE KOMPRESÖRLERİ"),
-                ("SFC8", "CRYOGENIC ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI"),
-
-                // ==================== SFF SERİSİ: AKARYAKIT (10 adet) ====================
-                ("SFF0", "AKARYAKIT VANALARI/VALFLERİ"),
-                ("SFF1", "AKARYAKIT EMNİYET/RELIEF VALFLERİ"),
-                ("SFF2", "AKARYAKIT REGÜLATÖRLERİ"),
-                ("SFF3", "AKARYAKIT SEVİYE/ÖLÇÜM GÖSTERGELERİ"),
-                ("SFF4", "AKARYAKIT CHECK/DENGELEME VALFLERİ"),
-                ("SFF5", "AKARYAKIT SAYAÇLARI VE PRINTER"),
-                ("SFF6", "AKARYAKIT FİLTRELERİ"),
-                ("SFF7", "AKARYAKIT POMPALARI VE KOMPRESÖRLERİ"),
-                ("SFF8", "AKARYAKIT ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI"),
-                ("SFF9", "AKARYAKIT MENHOL KAPAKLARI"),
-
-                // ==================== SFG SERİSİ: SU, HİDROLİK, PNÖMATİK (10 adet) ====================
-                ("SFG0", "SU VANALARI"),
-                ("SFG1", "HİDROLİK SİSTEM VANALAR/VALFLER"),
-                ("SFG2", "TOPRAKLAMA VE MAKARALARI"),
-                ("SFG3", "HORTUM MAKARALARI"),
-                ("SFG4", "MANOMETRELER / BASINÇ ÖLÇÜM ALETLERİ"),
-                ("SFG5", "TERMOMETRELER / SICAKLIK ÖLÇÜM ALETLERİ"),
-                ("SFG6", "CONTALAR"),
-                ("SFG7", "PNÖMATİK SİSTEM VANALAR/VALFLER"),
-                ("SFG8", "SU HATTI POMPALARI"),
-                ("SFG9", "SU HATTI SAYAÇLARI"),
-
-                // ==================== SFH SERİSİ: DİĞER EKİPMANLAR (7 adet) ====================
-                ("SFH0", "CYLINDER UNITS"),
-                ("SFH1", "GAZ VE YANGIN DEDEKTÖRLERI"),
-                ("SFH2", "TARTI VE KANTARLAR"),
-                ("SFH3", "HAVA KOMPRESÖRLERİ"),
-                ("SFH4", "FANLAR"),
-                ("SFH5", "DİĞER POMPALAR VE KOMPRESÖRLER"),
-                ("SFH6", "DİĞER SENSÖRLER"),
-
-                // ==================== SFJ SERİSİ: DOĞAL GAZ (9 adet) ====================
-                ("SFJ0", "DOĞAL GAZ VANALARI/VALFLERİ"),
-                ("SFJ1", "DOĞAL GAZ EMNİYET/RELIEF VALFLERİ"),
-                ("SFJ2", "DOĞAL GAZ REGÜLATÖRLERİ"),
-                ("SFJ3", "DOĞAL GAZ SEVİYE/ÖLÇÜM GÖSTERGELERİ"),
-                ("SFJ4", "DOĞAL GAZ CHECK/DENGELEME VALFLERİ"),
-                ("SFJ5", "DOĞAL GAZ SAYAÇLARI VE PRINTER"),
-                ("SFJ6", "DOĞAL GAZ FİLTRELERİ"),
-                ("SFJ7", "DOĞAL GAZ POMPALARI VE KOMPRESÖRLERİ"),
-                ("SFJ8", "DOĞAL GAZ ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI"),
-
-                // ==================== SFK SERİSİ: KİMYASAL (5 adet) ====================
-                ("SFK0", "KİMYASAL VANALARI/VALFLERİ"),
-                ("SFK1", "KİMYASAL EMNİYET/RELIEF VALFLERİ"),
-                ("SFK2", "KİMYASAL REGÜLATÖRLERİ"),
-                ("SFK3", "KİMYASAL FİLTRELERİ"),
-                ("SFK4", "KİMYASAL POMPALARI VE KOMPRESÖRLERİ"),
-
-                // ==================== SFL SERİSİ: PROSES GAZ/DİĞER (3 adet) ====================
-                ("SFL0", "PROSES GAZ VANALARI/VALFLERİ"),
-                ("SFL1", "PROSES GAZ EMNİYET/RELIEF VALFLERİ"),
-                ("SFL2", "PROSES GAZ REGÜLATÖRLERİ")
-            };
-            // Toplam: 10+9+10+10+7+9+5+3 = 63 ürün ✅
-
+            var products = new List<SProduct>();
             int index = 0;
-            foreach (var (code, name) in items)
+
+            void Add(string code, string name) => products.Add(new SProduct
             {
-                builder.HasData(new SProduct
-                {
-                    Id = SeedId.From($"SProduct:SF:{code}"),
-                    SProductGroupId = sfGroupId,
-                    Code = code,
-                    Name = name,
-                    PrefixIndex = index++,
-                    CreatedBy = "SEED",
-                    CreatedDate = now,
-                    Status = Domain.Enums.Status.Added
-                });
-            }
+                Id = SeedId.From($"SProduct:SF:{code}"),
+                SProductGroupId = sfGroupId,
+                Code = code,
+                Name = name,
+                PrefixIndex = index++,
+                CreatedBy = "SEED",
+                CreatedDate = now,
+                Status = Domain.Enums.Status.Added
+            });
+
+            // ===== LPG (SFA) =====
+            Add("SFA0", "LPG VANALARI/VALFLERİ");
+            Add("SFA1", "LPG EMNİYET/RELIEF VALFLERİ");
+            Add("SFA2", "LPG REGÜLATÖRLERİ");
+            Add("SFA3", "LPG SEVİYE/ÖLÇÜM GÖSTERGELERİ");
+            Add("SFA4", "LPG AŞIRI AKIŞ/CHECK/DENGELEME/BP-PASS VALFLERİ");
+            Add("SFA5", "LPG SAYAÇLARI VE PRINTER");
+            Add("SFA6", "LPG FİLTRELERİ");
+            Add("SFA7", "LPG POMPALARI VE KOMPRESÖRLERİ");
+            Add("SFA8", "LPG ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI");
+            Add("SFA9", "LPG AKSESUARLARI DİĞER");
+
+            // ===== CRYOGENIC (SFC) =====
+            Add("SFC0", "CRYOGENIC VANALARI/VALFLERİ");
+            Add("SFC1", "CRYOGENIC EMNİYET/RELIEF VALFLERİ");
+            Add("SFC2", "CRYOGENIC REGÜLATÖRLERİ");
+            Add("SFC3", "CRYOGENIC SEVİYE/ÖLÇÜM GÖSTERGELERİ");
+            Add("SFC4", "CRYOGENIC AŞIRI AKIŞ/CHECK/DENGELEME/BP-PASS VALFLERİ");
+            Add("SFC5", "CRYOGENIC SAYAÇLARI VE PRINTER");
+            Add("SFC6", "CRYOGENIC FİLTRELERİ");
+            Add("SFC7", "CRYOGENIC POMPALARI VE KOMPRESÖRLERİ");
+            Add("SFC8", "CRYOGENIC ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI");
+
+            // ===== AKARYAKIT (SFF) =====
+            Add("SFF0", "AKARYAKIT VANALARI/VALFLERİ");
+            Add("SFF1", "AKARYAKIT EMNİYET/RELIEF VALFLERİ");
+            Add("SFF2", "AKARYAKIT REGÜLATÖRLERİ");
+            Add("SFF3", "AKARYAKIT SEVİYE/ÖLÇÜM GÖSTERGELERİ");
+            Add("SFF4", "AKARYAKIT AŞIRI AKIŞ/CHECK/DENGELEME/BP-PASS VALFLERİ");
+            Add("SFF5", "AKARYAKIT SAYAÇLARI VE PRINTER");
+            Add("SFF6", "AKARYAKIT FİLTRELERİ");
+            Add("SFF7", "AKARYAKIT POMPALARI VE KOMPRESÖRLERİ");
+            Add("SFF8", "AKARYAKIT ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI");
+            Add("SFF9", "AKARYAKIT MENHOL KAPAKLARI");
+
+            // ===== SU / HİDROLİK / PNÖMATİK (SFG) =====
+            Add("SFG0", "SU VANALARI");
+            Add("SFG1", "HİDROLİK SİSTEM VANALAR/VALFLER");
+            Add("SFG2", "TOPRAKLAMA VE MAKARALARI");
+            Add("SFG3", "HORTUM MAKARALARI");
+            Add("SFG4", "MANOMETRELER / BASINÇ ÖLÇÜM ALETLERİ");
+            Add("SFG5", "TERMOMETRELER / SICAKLIK ÖLÇÜM ALETLERİ");
+            Add("SFG6", "CONTALAR");
+            Add("SFG7", "PNÖMATİK SİSTEM VANALAR/VALFLER");
+            Add("SFG8", "SU HATTI POMPALARI");
+            Add("SFG9", "SU HATTI SAYAÇLARI");
+
+            // ===== ÖZEL (SFH) =====
+            Add("SFH0", "LPG CYLINDER UNITS");
+            Add("SFH1", "LPG GAS AND FIRE DETECTORS");
+            Add("SFH2", "LPG REFILLING SCALES AND WEIGHING");
+            Add("SFH3", "AIR COMPRESSORS");
+            Add("SFH4", "FANLAR");
+            Add("SFH5", "DİĞER POMPALAR VE KOMPRESÖRLER");
+            Add("SFH6", "DİĞER SENSÖRLER");
+
+            // ===== DOĞAL GAZ (SFJ) =====
+            Add("SFJ0", "DOĞAL GAZ VANALARI/VALFLERİ");
+            Add("SFJ1", "DOĞAL GAZ EMNİYET/RELIEF VALFLERİ");
+            Add("SFJ2", "DOĞAL GAZ REGÜLATÖRLERİ");
+            Add("SFJ3", "DOĞAL GAZ SEVİYE/ÖLÇÜM GÖSTERGELERİ");
+            Add("SFJ4", "DOĞAL GAZ CHECK/DENGELEME/BP-PASS VALFLERİ");
+            Add("SFJ5", "DOĞAL GAZ SAYAÇLARI VE PRINTER");
+            Add("SFJ6", "DOĞAL GAZ FİLTRELERİ");
+            Add("SFJ7", "DOĞAL GAZ POMPALARI VE KOMPRESÖRLERİ");
+            Add("SFJ8", "DOĞAL GAZ ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI");
+
+            // ===== KİMYASAL (SFK) =====
+            Add("SFK0", "KİMYASAL VANALARI/VALFLERİ");
+            Add("SFK1", "KİMYASAL EMNİYET/RELIEF VALFLERİ");
+            Add("SFK2", "KİMYASAL REGÜLATÖRLERİ");
+            Add("SFK3", "KİMYASAL SEVİYE/ÖLÇÜM GÖSTERGELERİ");
+            Add("SFK4", "KİMYASAL AŞIRI AKIŞ/CHECK/DENGELEME/BP-PASS VALFLERİ");
+            Add("SFK5", "KİMYASAL SAYAÇLARI VE PRINTER");
+            Add("SFK6", "KİMYASAL FİLTRELERİ");
+            Add("SFK7", "KİMYASAL POMPALARI VE KOMPRESÖRLERİ");
+            Add("SFK8", "KİMYASAL ADAPTÖR/KONNEKTÖR/BAĞLANTI PARÇALARI");
+            Add("SFK9", "KİMYASAL AKSESUARLARI DİĞER");
+
+            // ===== PROSES GAZ/DİĞER (SFL) =====
+            Add("SFL0", "PROSES GAZ/DİĞER VANALARI/VALFLERİ");
+            Add("SFL1", "PROSES GAZ/DİĞER EMNİYET/RELIEF VALFLERİ");
+            Add("SFL2", "PROSES GAZ/DİĞER REGÜLATÖRLERİ");
+
+            builder.HasData(products);
         }
     }
 }
