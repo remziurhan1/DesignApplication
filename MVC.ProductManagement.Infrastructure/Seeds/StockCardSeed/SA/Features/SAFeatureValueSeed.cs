@@ -209,6 +209,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             {
                 ("SIYAH OKSIT", "Siyah Oksit"),
                 ("CINKO", "Çinko Kaplama"),
+                ("GALVANIZ", "Galvaniz"),
                 ("GEOMET", "Geomet"),
                 ("HDG", "Sıcak Daldırma Galvaniz"),
                 ("PTFE", "PTFE"),

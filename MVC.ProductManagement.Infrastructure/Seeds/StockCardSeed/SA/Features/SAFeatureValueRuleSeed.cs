@@ -38,6 +38,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             AddAllowedValue(rules, "SAA0", materialId, "MATERIAL", "ALAŞIMLI", ref sortOrder, now);
 
             AddAllowedValue(rules, "SAA0", coatingId, "COATING", "CINKO", ref sortOrder, now);
+            AddAllowedValue(rules, "SAA0", coatingId, "COATING", "GALVANIZ", ref sortOrder, now);
             AddAllowedValue(rules, "SAA0", coatingId, "COATING", "SIYAH OKSIT", ref sortOrder, now);
             AddAllowedValue(rules, "SAA0", coatingId, "COATING", "-", ref sortOrder, now);
 
