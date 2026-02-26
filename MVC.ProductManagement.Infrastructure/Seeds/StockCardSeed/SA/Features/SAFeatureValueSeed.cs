@@ -4,6 +4,7 @@ using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
 {
@@ -141,12 +142,9 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 6. METRİK (ÇAP) ==========
-            var metrics = new[]
-            {
-                "M3", "M4", "M5", "M6", "M8", "M10", "M12", "M14", "M16", "M18", "M20",
-                "M22", "M24", "M27", "M30", "M33", "M36",
-                "1/4", "5/16", "3/8", "1/2", "5/8", "3/4", "7/8", "1"
-            };
+            var metrics = new List<string> { "M1.6", "M2", "M2.5" };
+            metrics.AddRange(Enumerable.Range(3, 62).Select(x => $"M{x}")); // M3..M64
+            metrics.AddRange(new[] { "1/4", "5/16", "3/8", "1/2", "5/8", "3/4", "7/8", "1" });
             for (int i = 0; i < metrics.Length; i++)
             {
                 values.Add(new SFeatureValue
@@ -163,11 +161,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 7. BOY ==========
-            var lengths = new[]
-            {
-                10, 12, 16, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100,
-                120, 150, 200, 250, 300
-            };
+            var lengths = Enumerable.Range(1, 42).Select(x => x * 5).ToArray(); // 5..210 (5'er artış)
             for (int i = 0; i < lengths.Length; i++)
             {
                 values.Add(new SFeatureValue
