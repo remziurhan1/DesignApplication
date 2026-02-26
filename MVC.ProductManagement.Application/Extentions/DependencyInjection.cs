@@ -15,6 +15,7 @@ using MVC.ProductManagement.Application.Services.StockCodes.SD;
 using MVC.ProductManagement.Application.Services.StockCodes.SE;
 using MVC.ProductManagement.Application.Services.StockCodes.SF;
 using MVC.ProductManagement.Application.Services.StockCodes.SG;
+using MVC.ProductManagement.Application.Services.StockCodes.Rules;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
 using MVC.ProductManagement.Infrastructure.Services.StockCards;
 using System;
@@ -43,6 +44,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockCodeSgService, StockCodeSgService>();
             services.AddScoped<ISFeatureQueryService, SFeatureQueryService>();
             services.AddScoped<IStockCodeLookupService, StockCodeLookupService>();// ========== STOK KART MODÜL SERVİSLERİ ==========
+            services.AddScoped<IStockRuleProfileService, StockRuleProfileService>();
             services.AddScoped<IStockCardDatasheetService, StockCardDatasheetService>();
             services.AddScoped<IStockCardPriceService, StockCardPriceService>();
             services.AddScoped<IStockCardInventoryService, StockCardInventoryService>();
