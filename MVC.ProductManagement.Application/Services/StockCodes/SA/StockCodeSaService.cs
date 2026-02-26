@@ -166,10 +166,16 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
             var defaultFluid = allFluids.FirstOrDefault(x => x.Code == "A") ?? allFluids.First();
 
-            // 3) OptionKey oluştur
-            var optionKey = await BuildOptionKeyAsync(request.SelectedFeatureValues, cancellationToken);
+            // 3) Kural tabanlı seçimleri doğrula + sabit değerlerle birleştir
+            var allSelections = await BuildValidatedSelectionsForProductAsync(
+                request.SProductId,
+                request.SelectedFeatureValues,
+                cancellationToken);
 
-            // 4) Duplicate kontrol
+            // 4) OptionKey oluştur
+            var optionKey = await BuildOptionKeyAsync(allSelections, cancellationToken);
+
+            // 5) Duplicate kontrol
             var existing = await _stockCardRepo.GetAsync(x =>
                     x.FluidId == defaultFluid.Id &&
                     x.SProductGroupId == saGroupId &&
@@ -190,10 +196,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 };
             }
 
-            // 5) Description
-            var description = await BuildFeatureDescriptionAsync(request.SelectedFeatureValues, cancellationToken);
+            // 6) Description
+            var description = await BuildFeatureDescriptionAsync(allSelections, cancellationToken);
 
-            // 6) Transaction
+            // 7) Transaction
             await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
 
             var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
@@ -228,10 +234,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             await _stockCardRepo.AddAsync(card);
             await _stockCardRepo.SaveChangeAsync();
 
-            // 7) Feature seçimlerini kaydet
-            if (request.SelectedFeatureValues != null && request.SelectedFeatureValues.Any())
+            // 8) Feature seçimlerini kaydet
+            if (allSelections.Any())
             {
-                var selections = request.SelectedFeatureValues.Select(kvp => new StockCardFeatureSelection
+                var selections = allSelections.Select(kvp => new StockCardFeatureSelection
                 {
                     Id = Guid.NewGuid(),
                     StockCardId = card.Id,
@@ -257,6 +263,62 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 Serial4 = card.Serial4,
                 Description = card.Description
             };
+        }
+
+        private async Task<Dictionary<Guid, Guid>> BuildValidatedSelectionsForProductAsync(
+            Guid productId,
+            Dictionary<Guid, Guid> requestSelections,
+            CancellationToken cancellationToken)
+        {
+            requestSelections ??= new Dictionary<Guid, Guid>();
+
+            var rules = await _context.Set<SProductFeatureRule>()
+                .AsNoTracking()
+                .Where(r => r.SProductId == productId)
+                .ToListAsync(cancellationToken);
+
+            if (!rules.Any())
+                throw new InvalidOperationException("Bu ürün için feature kuralı bulunamadı.");
+
+            var valueRules = await _context.Set<SFeatureValueRule>()
+                .AsNoTracking()
+                .Where(r => r.SProductId == productId)
+                .ToListAsync(cancellationToken);
+
+            var result = new Dictionary<Guid, Guid>();
+
+            // sabit değerleri otomatik ekle
+            foreach (var rule in rules.Where(r => r.IsFixed))
+            {
+                if (!rule.FixedValueId.HasValue)
+                    throw new InvalidOperationException("Sabit kuralda FixedValueId boş olamaz.");
+
+                result[rule.SFeatureId] = rule.FixedValueId.Value;
+            }
+
+            // dinamik seçimleri doğrula
+            foreach (var rule in rules.Where(r => !r.IsFixed))
+            {
+                if (!requestSelections.TryGetValue(rule.SFeatureId, out var selectedValueId))
+                    throw new InvalidOperationException($"Zorunlu özellik seçilmedi. FeatureId: {rule.SFeatureId}");
+
+                var isAllowed = valueRules.Any(v =>
+                    v.SFeatureId == rule.SFeatureId &&
+                    v.SFeatureValueId == selectedValueId);
+
+                if (!isAllowed)
+                    throw new InvalidOperationException($"Seçilen değer bu ürün için izinli değil. FeatureId: {rule.SFeatureId}");
+
+                result[rule.SFeatureId] = selectedValueId;
+            }
+
+            // kural dışında feature gönderildiyse reddet
+            var allowedFeatureIds = rules.Select(r => r.SFeatureId).ToHashSet();
+            var unexpectedFeature = requestSelections.Keys.FirstOrDefault(f => !allowedFeatureIds.Contains(f));
+            if (unexpectedFeature != Guid.Empty)
+                throw new InvalidOperationException($"Bu ürün için tanımsız feature gönderildi. FeatureId: {unexpectedFeature}");
+
+            return result;
         }
 
         /// <summary>
