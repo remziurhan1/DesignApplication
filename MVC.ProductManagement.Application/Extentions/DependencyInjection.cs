@@ -45,6 +45,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<ISFeatureQueryService, SFeatureQueryService>();
             services.AddScoped<IStockCodeLookupService, StockCodeLookupService>();// ========== STOK KART MODÜL SERVİSLERİ ==========
             services.AddScoped<IStockRuleProfileService, StockRuleProfileService>();
+            services.AddScoped<ISaRuleCatalogSyncService, SaRuleCatalogSyncService>();
             services.AddScoped<IStockCardDatasheetService, StockCardDatasheetService>();
             services.AddScoped<IStockCardPriceService, StockCardPriceService>();
             services.AddScoped<IStockCardInventoryService, StockCardInventoryService>();
