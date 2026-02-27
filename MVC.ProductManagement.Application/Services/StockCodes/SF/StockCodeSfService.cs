@@ -162,6 +162,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
             var allSelections = validatedSelections
                 .ToDictionary(x => x.FeatureCode, x => x.ValueCode);
 
+            var fluid = await ResolveFluidForSfAsync(allSelections, ct);
+
             // ===============================
             // 4️⃣ OPTION KEY üret (kritik)
             // ===============================
@@ -208,7 +210,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
 
                 SProductId = product.Id,
                 SProductGroupId = product.SProductGroupId,
-                FluidId = null,
+                FluidId = fluid.Id,
                 StockSequenceId = sequence.Id,
 
                 StockCode8 = $"{product.Code}{sequence.LastNumber:D4}",
@@ -237,6 +239,48 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 Description = stockCard.Description,
                 AlreadyExists = false
             };
+        }
+
+        private async Task<Fluid> ResolveFluidForSfAsync(
+            Dictionary<string, string> selections,
+            CancellationToken ct)
+        {
+            var fluids = await _db.Set<Fluid>()
+                .AsNoTracking()
+                .ToListAsync(ct);
+
+            if (!fluids.Any())
+                throw new InvalidOperationException("Fluid tanımları bulunamadı.");
+
+            var mediumToFluidCode = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["LPG"] = "A",
+                ["DOĞAL GAZ"] = "H",
+                ["AKARYAKIT"] = "F"
+            };
+
+            if (selections.TryGetValue(F_AKIS_MEDYUMU, out var mediumCode) &&
+                !string.IsNullOrWhiteSpace(mediumCode))
+            {
+                var normalizedMedium = mediumCode.Trim();
+
+                if (mediumToFluidCode.TryGetValue(normalizedMedium, out var mappedCode))
+                {
+                    var mappedFluid = fluids.FirstOrDefault(f =>
+                        string.Equals(f.Code, mappedCode, StringComparison.OrdinalIgnoreCase));
+
+                    if (mappedFluid != null)
+                        return mappedFluid;
+                }
+
+                var byName = fluids.FirstOrDefault(f =>
+                    string.Equals(f.Name, normalizedMedium, StringComparison.OrdinalIgnoreCase));
+
+                if (byName != null)
+                    return byName;
+            }
+
+            return fluids.FirstOrDefault(f => f.Code == "F") ?? fluids.First();
         }
 
         private async Task<List<(Guid FeatureId, string FeatureCode, Guid ValueId, string ValueCode)>> BuildValidatedSelectionsForProductAsync(
