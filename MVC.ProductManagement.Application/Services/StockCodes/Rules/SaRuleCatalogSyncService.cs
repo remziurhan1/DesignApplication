@@ -45,6 +45,42 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
                 .Select(p => p.Id)
                 .ToListAsync(cancellationToken);
 
+            // Value rule olup product feature rule olmayan feature'ları otomatik ekle (dropdown görünürlük için)
+            var existingProductFeaturePairs = await _db.SProductFeatureRules
+                .AsNoTracking()
+                .Where(r => standardProductIds.Contains(r.SProductId))
+                .Select(r => new { r.SProductId, r.SFeatureId })
+                .ToListAsync(cancellationToken);
+
+            var valueRuleFeaturePairs = await _db.SFeatureValueRules
+                .AsNoTracking()
+                .Where(v => standardProductIds.Contains(v.SProductId))
+                .Select(v => new { v.SProductId, v.SFeatureId })
+                .Distinct()
+                .ToListAsync(cancellationToken);
+
+            var missingFeatureRules = valueRuleFeaturePairs
+                .Where(v => !existingProductFeaturePairs.Any(e => e.SProductId == v.SProductId && e.SFeatureId == v.SFeatureId))
+                .ToList();
+
+            if (missingFeatureRules.Count > 0)
+            {
+                var ruleInserts = missingFeatureRules.Select(x => new SProductFeatureRule
+                {
+                    Id = SeedId.From($"Runtime:SProductFeatureRule:{x.SProductId}:{x.SFeatureId}"),
+                    SProductId = x.SProductId,
+                    SFeatureId = x.SFeatureId,
+                    IsFixed = false,
+                    FixedValueId = null,
+                    CreatedBy = "RUNTIME_SYNC",
+                    CreatedDate = DateTime.UtcNow,
+                    Status = Domain.Enums.Status.Added
+                });
+
+                _db.SProductFeatureRules.AddRange(ruleInserts);
+                await _db.SaveChangesAsync(cancellationToken);
+            }
+
             var dynamicRules = await _db.SProductFeatureRules
                 .AsNoTracking()
                 .Where(r => standardProductIds.Contains(r.SProductId) && !r.IsFixed &&
