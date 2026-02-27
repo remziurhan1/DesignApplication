@@ -38,6 +38,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             AddAllowedValue(rules, "SAA0", materialId, "MATERIAL", "ALAŞIMLI", ref sortOrder, now);
 
             AddAllowedValue(rules, "SAA0", coatingId, "COATING", "CINKO", ref sortOrder, now);
+            AddAllowedValue(rules, "SAA0", coatingId, "COATING", "GALVANIZ", ref sortOrder, now);
             AddAllowedValue(rules, "SAA0", coatingId, "COATING", "SIYAH OKSIT", ref sortOrder, now);
             AddAllowedValue(rules, "SAA0", coatingId, "COATING", "-", ref sortOrder, now);
 
@@ -338,6 +339,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             ref int sortOrder,
             DateTime now)
         {
+            // Not: Geniş metrik listesi runtime sync servisinde rule tablosuna yazılır.
             var metrics = new[] { "M3", "M4", "M5", "M6", "M8", "M10", "M12", "M14", "M16", "M18", "M20", "M22", "M24", "M27", "M30", "M33", "M36" };
             foreach (var metric in metrics)
             {
@@ -366,6 +368,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             ref int sortOrder,
             DateTime now)
         {
+            // Not: Geniş length listesi runtime sync servisinde rule tablosuna yazılır.
             var lengths = new[] { 10, 12, 16, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 120, 150, 200, 250, 300 };
             foreach (var length in lengths)
             {
