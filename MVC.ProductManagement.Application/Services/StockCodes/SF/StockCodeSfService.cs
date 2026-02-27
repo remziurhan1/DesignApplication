@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,13 +109,22 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 }
                 else
                 {
-                    feature.AvailableValues = valueRules
+                    var sorted = FeatureValueSortHelper.SortForUi(valueRules
                         .Where(v => v.SFeatureId == rule.SFeatureId)
-                        .Select(v => new SfFeatureValueOptionDto
+                        .Select(v => new FeatureValueDto
                         {
                             Id = v.SFeatureValueId,
                             Code = v.SFeatureValue.Code,
-                            Name = v.SFeatureValue.Name
+                            Name = v.SFeatureValue.Name,
+                            SortOrder = v.SortOrder
+                        }));
+
+                    feature.AvailableValues = sorted
+                        .Select(v => new SfFeatureValueOptionDto
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name
                         })
                         .ToList();
                 }
@@ -141,41 +152,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 ?? throw new InvalidOperationException("Ürün bulunamadı.");
 
             // ===============================
-            // 1️⃣ Dinamik seçimleri çek
+            // 1️⃣ Kural tabanlı seçimleri doğrula + sabitleri uygula
             // ===============================
-            var selectedValueIds = request.SelectedFeatureValues.Values.ToList();
+            var validatedSelections = await BuildValidatedSelectionsForProductAsync(
+                request.SProductId,
+                request.SelectedFeatureValues,
+                ct);
 
-            var selectedValues = await _db.Set<SFeatureValue>()
-                .Include(v => v.SFeature)
-                .Where(v => selectedValueIds.Contains(v.Id))
-                .ToListAsync(ct);
-
-            // ===============================
-            // 2️⃣ Sabit değerleri çek
-            // ===============================
-            var productRules = await _db.SProductFeatureRules
-                .Include(r => r.SFeature)
-                .Include(r => r.FixedValue)
-                .Where(r => r.SProductId == request.SProductId &&
-                            r.IsFixed &&
-                            r.FixedValueId != null)
-                .ToListAsync(ct);
-
-            // ===============================
-            // 3️⃣ Tüm seçimleri birleştir
-            // ===============================
-            var allSelections = new Dictionary<string, string>();
-
-            foreach (var rule in productRules)
-                if (rule.FixedValue != null)
-                    allSelections[rule.SFeature.Code] = rule.FixedValue.Code;
-
-            foreach (var kvp in request.SelectedFeatureValues)
-            {
-                var val = selectedValues.FirstOrDefault(v => v.Id == kvp.Value);
-                if (val != null)
-                    allSelections[val.SFeature.Code] = val.Code;
-            }
+            var allSelections = validatedSelections
+                .ToDictionary(x => x.FeatureCode, x => x.ValueCode);
 
             // ===============================
             // 4️⃣ OPTION KEY üret (kritik)
@@ -254,6 +239,62 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
             };
         }
 
+        private async Task<List<(Guid FeatureId, string FeatureCode, Guid ValueId, string ValueCode)>> BuildValidatedSelectionsForProductAsync(
+            Guid productId,
+            Dictionary<Guid, Guid> requestSelections,
+            CancellationToken ct)
+        {
+            requestSelections ??= new Dictionary<Guid, Guid>();
+
+            var rules = await _db.SProductFeatureRules
+                .AsNoTracking()
+                .Include(r => r.SFeature)
+                .Include(r => r.FixedValue)
+                .Where(r => r.SProductId == productId)
+                .ToListAsync(ct);
+
+            if (!rules.Any())
+                throw new InvalidOperationException("Bu ürün için feature kuralı bulunamadı.");
+
+            var valueRules = await _db.SFeatureValueRules
+                .AsNoTracking()
+                .Include(r => r.SFeatureValue)
+                .Where(r => r.SProductId == productId)
+                .ToListAsync(ct);
+
+            var result = new List<(Guid FeatureId, string FeatureCode, Guid ValueId, string ValueCode)>();
+
+            foreach (var rule in rules.Where(r => r.IsFixed))
+            {
+                if (!rule.FixedValueId.HasValue || rule.FixedValue == null)
+                    throw new InvalidOperationException("Sabit kuralda FixedValue zorunludur.");
+
+                result.Add((rule.SFeatureId, rule.SFeature.Code, rule.FixedValueId.Value, rule.FixedValue.Code));
+            }
+
+            foreach (var rule in rules.Where(r => !r.IsFixed))
+            {
+                if (!requestSelections.TryGetValue(rule.SFeatureId, out var selectedValueId))
+                    throw new InvalidOperationException($"Zorunlu özellik seçilmedi. Feature: {rule.SFeature.Code}");
+
+                var selectedRule = valueRules.FirstOrDefault(v =>
+                    v.SFeatureId == rule.SFeatureId &&
+                    v.SFeatureValueId == selectedValueId);
+
+                if (selectedRule == null)
+                    throw new InvalidOperationException($"Seçilen değer izinli değil. Feature: {rule.SFeature.Code}");
+
+                result.Add((rule.SFeatureId, rule.SFeature.Code, selectedValueId, selectedRule.SFeatureValue.Code));
+            }
+
+            var allowedFeatureIds = rules.Select(r => r.SFeatureId).ToHashSet();
+            var unexpectedFeature = requestSelections.Keys.FirstOrDefault(f => !allowedFeatureIds.Contains(f));
+            if (unexpectedFeature != Guid.Empty)
+                throw new InvalidOperationException($"Tanımsız feature gönderildi. FeatureId: {unexpectedFeature}");
+
+            return result;
+        }
+
         // ========== LİSTE ==========
         public async Task<SFStockCardListResultDto> GetStockCardsAsync(
             SFStockCardFilterDto filter,
@@ -307,11 +348,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
             CancellationToken ct = default)
         {
             var stockCard = await _db.Set<StockCard>()
+                .AsNoTracking()
                 .Include(s => s.SProduct)
-                .FirstOrDefaultAsync(s => s.Id == stockCardId, ct)
+                .FirstOrDefaultAsync(s => s.Id == stockCardId && !s.IsDeleted, ct)
                 ?? throw new InvalidOperationException("Stok kartı bulunamadı.");
 
             var selections = await _db.Set<StockCardFeatureSelection>()
+                .AsNoTracking()
                 .Include(s => s.SFeature)
                 .Include(s => s.SFeatureValue)
                 .Where(s => s.StockCardId == stockCardId)

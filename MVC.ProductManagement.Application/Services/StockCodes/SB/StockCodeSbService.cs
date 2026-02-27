@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SB;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Infrastructure.AppContext;
@@ -83,13 +85,22 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
                 }
                 else
                 {
-                    feature.AvailableValues = valueRules
+                    var sorted = FeatureValueSortHelper.SortForUi(valueRules
                         .Where(v => v.SFeatureId == rule.SFeatureId)
-                        .Select(v => new SbFeatureValueOptionDto
+                        .Select(v => new FeatureValueDto
                         {
                             Id = v.SFeatureValueId,
                             Code = v.SFeatureValue.Code,
-                            Name = v.SFeatureValue.Name
+                            Name = v.SFeatureValue.Name,
+                            SortOrder = v.SortOrder
+                        }));
+
+                    feature.AvailableValues = sorted
+                        .Select(v => new SbFeatureValueOptionDto
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name
                         })
                         .ToList();
                 }
