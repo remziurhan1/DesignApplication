@@ -1,0 +1,102 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.FeatureAdmin.FeatureAdminVm
+
+@{
+    ViewData["Title"] = "Feature Yönetimi";
+}
+
+<div class="container-fluid mt-3">
+    <h3>Feature Yönetimi (@Model.GroupCode)</h3>
+
+    <form method="get" class="mb-3">
+        <label>Grup:</label>
+        <select name="groupCode" onchange="this.form.submit()" class="form-select" style="max-width:200px;display:inline-block;">
+            @foreach (var g in new[] { "SA", "SB", "SC", "SF" })
+            {
+                <option value="@g" selected="@(Model.GroupCode == g)">@g</option>
+            }
+        </select>
+    </form>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="card mb-3">
+        <div class="card-header">Yeni Feature Ekle</div>
+        <div class="card-body">
+            <form asp-action="CreateFeature" method="post" class="row g-2">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="GroupCode" value="@Model.GroupCode" />
+                <div class="col-md-3"><input name="Code" class="form-control" placeholder="Code" /></div>
+                <div class="col-md-4"><input name="Name" class="form-control" placeholder="Name" /></div>
+                <div class="col-md-2"><input name="SortOrder" class="form-control" placeholder="SortOrder" value="0" /></div>
+                <div class="col-md-2"><button class="btn btn-primary">Ekle</button></div>
+            </form>
+        </div>
+    </div>
+
+    @foreach (var feature in Model.Features)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                <strong>@feature.Code</strong> - @feature.Name (Sort: @feature.SortOrder)
+            </div>
+            <div class="card-body">
+                <form asp-action="UpdateFeature" method="post" class="row g-2 mb-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="featureId" value="@feature.Id" />
+                    <input type="hidden" name="groupCode" value="@Model.GroupCode" />
+                    <div class="col-md-3"><input class="form-control" value="@feature.Code" readonly /></div>
+                    <div class="col-md-4"><input name="name" class="form-control" value="@feature.Name" /></div>
+                    <div class="col-md-2"><input name="sortOrder" class="form-control" value="@feature.SortOrder" /></div>
+                    <div class="col-md-2"><button class="btn btn-outline-secondary">Feature Güncelle</button></div>
+                </form>
+
+                <form asp-action="CreateValue" method="post" class="row g-2 mb-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="FeatureId" value="@feature.Id" />
+                    <input type="hidden" name="GroupCode" value="@Model.GroupCode" />
+                    <div class="col-md-3"><input name="Code" class="form-control" placeholder="Value Code" /></div>
+                    <div class="col-md-4"><input name="Name" class="form-control" placeholder="Value Name" /></div>
+                    <div class="col-md-2"><input name="SortOrder" class="form-control" placeholder="Sort" value="0" /></div>
+                    <div class="col-md-2"><button class="btn btn-outline-primary">Değer Ekle</button></div>
+                </form>
+
+                <table class="table table-sm table-striped">
+                    <thead><tr><th>Code</th><th>Name</th><th>Sort</th><th></th></tr></thead>
+                    <tbody>
+                    @foreach (var val in feature.Values)
+                    {
+                        <tr>
+                            <td>@val.Code</td>
+                            <td>@val.Name</td>
+                            <td>@val.SortOrder</td>
+                            <td>
+                                <form asp-action="UpdateValue" method="post" class="d-inline-block me-2">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="valueId" value="@val.Id" />
+                                    <input type="hidden" name="groupCode" value="@Model.GroupCode" />
+                                    <input type="hidden" name="name" value="@val.Name" />
+                                    <input type="hidden" name="sortOrder" value="@val.SortOrder" />
+                                    <button class="btn btn-sm btn-outline-secondary">Güncelle</button>
+                                </form>
+                                <form asp-action="DeleteValue" method="post" onsubmit="return confirm('Silinsin mi?')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="valueId" value="@val.Id" />
+                                    <input type="hidden" name="groupCode" value="@Model.GroupCode" />
+                                    <button class="btn btn-sm btn-danger">Sil</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
