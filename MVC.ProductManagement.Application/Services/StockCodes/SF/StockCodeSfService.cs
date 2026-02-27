@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,13 +109,22 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 }
                 else
                 {
-                    feature.AvailableValues = valueRules
+                    var sorted = FeatureValueSortHelper.SortForUi(valueRules
                         .Where(v => v.SFeatureId == rule.SFeatureId)
-                        .Select(v => new SfFeatureValueOptionDto
+                        .Select(v => new FeatureValueDto
                         {
                             Id = v.SFeatureValueId,
                             Code = v.SFeatureValue.Code,
-                            Name = v.SFeatureValue.Name
+                            Name = v.SFeatureValue.Name,
+                            SortOrder = v.SortOrder
+                        }));
+
+                    feature.AvailableValues = sorted
+                        .Select(v => new SfFeatureValueOptionDto
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name
                         })
                         .ToList();
                 }
@@ -337,11 +348,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
             CancellationToken ct = default)
         {
             var stockCard = await _db.Set<StockCard>()
+                .AsNoTracking()
                 .Include(s => s.SProduct)
-                .FirstOrDefaultAsync(s => s.Id == stockCardId, ct)
+                .FirstOrDefaultAsync(s => s.Id == stockCardId && !s.IsDeleted, ct)
                 ?? throw new InvalidOperationException("Stok kartı bulunamadı.");
 
             var selections = await _db.Set<StockCardFeatureSelection>()
+                .AsNoTracking()
                 .Include(s => s.SFeature)
                 .Include(s => s.SFeatureValue)
                 .Where(s => s.StockCardId == stockCardId)

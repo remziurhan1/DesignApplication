@@ -8,6 +8,7 @@ using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -829,7 +830,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                         })
                         .ToListAsync(cancellationToken);
 
-                    formFeature.AvailableValues = allowedValues;
+                    formFeature.AvailableValues = FeatureValueSortHelper.SortForUi(allowedValues);
                 }
 
                 formFeatures.Add(formFeature);
