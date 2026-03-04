@@ -98,6 +98,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                     FeatureId = rule.SFeatureId,
                     FeatureCode = rule.SFeature.Code,
                     FeatureName = rule.SFeature.Name,
+                    FeatureGroup = ResolveFeatureGroup(rule.SFeature.Code),
                     IsFixed = rule.IsFixed
                 };
 
@@ -132,11 +133,16 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 features.Add(feature);
             }
 
+            var segment = ResolveProductSegment(product.Code);
+
             return new StockCodeSfFormDto
             {
                 ProductId = product.Id,
                 ProductCode = product.Code,
                 ProductName = product.Name,
+                ProductSegment = segment,
+                SegmentFeatureSummary = BuildSegmentFeatureSummary(segment),
+                FilterHints = BuildFilterHints(segment),
                 Features = features
             };
         }
@@ -161,6 +167,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
 
             var allSelections = validatedSelections
                 .ToDictionary(x => x.FeatureCode, x => x.ValueCode);
+
+            ValidateSfSelectionDependencies(allSelections);
 
             var fluid = await ResolveFluidForSfAsync(allSelections, ct);
 
@@ -281,6 +289,109 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
             }
 
             return fluids.FirstOrDefault(f => f.Code == "F") ?? fluids.First();
+        }
+
+        private static void ValidateSfSelectionDependencies(Dictionary<string, string> selections)
+        {
+            if (!selections.TryGetValue(F_BASINC_SINIFI, out var pressureClass) || string.IsNullOrWhiteSpace(pressureClass))
+                return;
+
+            var isPn = pressureClass.StartsWith("PN", StringComparison.OrdinalIgnoreCase);
+            var isClass = pressureClass.StartsWith("Class", StringComparison.OrdinalIgnoreCase);
+
+            if (!isPn && !isClass)
+                return;
+
+            if (isPn && selections.TryGetValue(F_BAGLANTI_CAPI, out var inchConnection) && !string.IsNullOrWhiteSpace(inchConnection))
+            {
+                if (inchConnection.Contains("\"", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("PN sınıfı seçildiğinde inch bağlantı çapı yerine DN bazlı seçim yapılmalıdır.");
+            }
+
+            if (isPn)
+            {
+                if (!selections.TryGetValue(F_DN, out var dnCode) || string.IsNullOrWhiteSpace(dnCode))
+                    throw new InvalidOperationException("PN sınıfı için DN seçimi zorunludur.");
+            }
+
+            if (isClass)
+            {
+                if (selections.TryGetValue(F_DN, out var dnValue) && !string.IsNullOrWhiteSpace(dnValue))
+                    throw new InvalidOperationException("Class basınç sınıfında DN yerine inch bazlı bağlantı çapı seçilmelidir.");
+
+                if (!selections.TryGetValue(F_BAGLANTI_CAPI, out var classConn) || string.IsNullOrWhiteSpace(classConn))
+                    throw new InvalidOperationException("Class basınç sınıfı için inch bağlantı çapı seçimi zorunludur.");
+            }
+        }
+
+        private static string ResolveFeatureGroup(string featureCode)
+        {
+            if (featureCode.Contains("DN") || featureCode.Contains("CAPI") || featureCode.Contains("BAGLANTI"))
+                return "Bağlantı ve Ölçüler";
+
+            if (featureCode.Contains("BASINC") || featureCode.Contains("OLCUM_ARALIGI"))
+                return "Basınç / Ölçüm";
+
+            if (featureCode.Contains("VANA") || featureCode.Contains("VALF") || featureCode.Contains("POMPA") || featureCode.Contains("SAYAC") || featureCode.Contains("MANOMETRE") || featureCode.Contains("TIP"))
+                return "Ekipman Tipi";
+
+            if (featureCode.Contains("MALZEME") || featureCode.Contains("AKIS") || featureCode.Contains("MARKA"))
+                return "Akışkan / Malzeme";
+
+            return "Diğer";
+        }
+
+        private static string ResolveProductSegment(string productCode)
+        {
+            if (productCode.StartsWith("SFA") || productCode.StartsWith("SFC") || productCode.StartsWith("SFF") || productCode.StartsWith("SFJ") || productCode.StartsWith("SFK") || productCode.StartsWith("SFL"))
+                return "Vana ve Regülasyon Grubu";
+
+            if (productCode.StartsWith("SFG4") || productCode.StartsWith("SFG5") || productCode.StartsWith("SFG8") || productCode.StartsWith("SFH1") || productCode.StartsWith("SFH6"))
+                return "Ölçüm / Enstrümantasyon Grubu";
+
+            if (productCode.StartsWith("SFH3") || productCode.StartsWith("SFH4"))
+                return "Pompa Grubu";
+
+            return "Genel SF Grubu";
+        }
+
+        private static List<string> BuildSegmentFeatureSummary(string segment)
+        {
+            return segment switch
+            {
+                "Vana ve Regülasyon Grubu" => new List<string>
+                {
+                    "Temel: Vana/Valf tipi, DN veya bağlantı çapı, basınç sınıfı, bağlantı tipi, malzeme, marka",
+                    "Filtre: DN seçimi varsa PN sınıfı; inch bağlantı varsa Class sınıfı"
+                },
+                "Ölçüm / Enstrümantasyon Grubu" => new List<string>
+                {
+                    "Temel: Ölçüm tipi/manometre tipi, ölçüm aralığı, çıkış sinyali, bağlantı çapı, marka",
+                    "Filtre: Class seçimi ASME yaklaşımıyla inch bağlantı ister"
+                },
+                "Pompa Grubu" => new List<string>
+                {
+                    "Temel: Pompa tipi, güç, kapasite/çıkış basıncı, bağlantı bilgisi, marka"
+                },
+                _ => new List<string>
+                {
+                    "Temel: Ürüne tanımlı sabit ve dinamik feature kuralları"
+                }
+            };
+        }
+
+        private static List<string> BuildFilterHints(string segment)
+        {
+            var hints = new List<string>
+            {
+                "PN seçimi -> DN tabanlı kombinasyon",
+                "Class seçimi -> ASME/inch tabanlı kombinasyon"
+            };
+
+            if (segment == "Ölçüm / Enstrümantasyon Grubu")
+                hints.Add("Ölçüm grubunda bağlantı çapı ve sinyal tipi birlikte değerlendirilmelidir.");
+
+            return hints;
         }
 
         private async Task<List<(Guid FeatureId, string FeatureCode, Guid ValueId, string ValueCode)>> BuildValidatedSelectionsForProductAsync(
