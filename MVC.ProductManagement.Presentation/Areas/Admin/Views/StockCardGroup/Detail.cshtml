@@ -1,0 +1,64 @@
+@model MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.StockCardGroupDetailDto
+
+@{
+    ViewData["Title"] = "Grup Detayı";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>@Model.GroupCode - @Model.Name</h2>
+        <a class="btn btn-secondary" asp-action="Index">Listeye Dön</a>
+    </div>
+    <p class="text-muted">Para Birimi: @Model.CurrencyCode | Toplam: <strong>@Model.TotalAmount.ToString("N2")</strong></p>
+
+    <div class="card mb-4">
+        <div class="card-header">Satır Ekle</div>
+        <div class="card-body">
+            <form asp-action="AddItem" method="post" class="row g-2">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="groupId" value="@Model.Id" />
+                <div class="col-md-8">
+                    <select class="form-select" name="stockCardId" asp-items="ViewBag.StockCards"></select>
+                </div>
+                <div class="col-md-2">
+                    <input class="form-control" type="number" name="quantity" min="1" value="1" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" type="submit">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-sm table-bordered align-middle">
+        <thead><tr><th>Stok Kodu</th><th>Açıklama</th><th>Adet</th><th>Birim Fiyat</th><th>Satır Toplam</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.StockCode8</td>
+                <td>@item.Description</td>
+                <td style="width:180px;">
+                    <form asp-action="UpdateQty" method="post" class="d-flex gap-2">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="groupId" value="@Model.Id" />
+                        <input type="hidden" name="itemId" value="@item.ItemId" />
+                        <input class="form-control form-control-sm" type="number" min="1" name="quantity" value="@item.Quantity" />
+                        <button class="btn btn-sm btn-outline-primary" type="submit">Kaydet</button>
+                    </form>
+                </td>
+                <td>@item.UnitPrice.ToString("N2")</td>
+                <td>@item.LineTotal.ToString("N2")</td>
+                <td style="width:90px;">
+                    <form asp-action="RemoveItem" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="groupId" value="@Model.Id" />
+                        <input type="hidden" name="itemId" value="@item.ItemId" />
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Sil</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

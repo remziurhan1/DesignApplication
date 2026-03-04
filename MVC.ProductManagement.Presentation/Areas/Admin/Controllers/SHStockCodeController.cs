@@ -1,38 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SG;
-using MVC.ProductManagement.Application.Services.StockCodes.SG;
-using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SG;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SH;
+using MVC.ProductManagement.Application.Services.StockCodes.SH;
+using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SH;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class SGStockCodeController : Controller
+    public class SHStockCodeController : Controller
     {
-        private readonly IStockCodeSgService _sgService;
+        private readonly IStockCodeShService _shService;
 
-        public SGStockCodeController(IStockCodeSgService sgService)
+        public SHStockCodeController(IStockCodeShService shService)
         {
-            _sgService = sgService;
+            _shService = shService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Generate()
         {
-            var vm = new SGStockCodeGenerateVm();
+            var vm = new SHStockCodeGenerateVm();
             await FillLookups(vm);
             return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Generate(SGStockCodeGenerateVm vm)
+        public async Task<IActionResult> Generate(SHStockCodeGenerateVm vm)
         {
             await FillLookups(vm);
 
             // Feature'ları yükle (POST'ta validation hatası için)
             if (vm.SProductId != Guid.Empty)
             {
-                vm.Features = await _sgService.GetFeaturesByProductAsync(vm.SProductId);
+                vm.Features = await _shService.GetFeaturesByProductAsync(vm.SProductId);
             }
 
             try
@@ -42,7 +42,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
                 vm.SelectedFeatureValues ??= new Dictionary<Guid, Guid>();
 
-                var result = await _sgService.GenerateSgAsync(new SgStockCodeGenerateRequestDto
+                var result = await _shService.GenerateShAsync(new ShStockCodeGenerateRequestDto
                 {
                     SProductId = vm.SProductId,
                     SelectedFeatureValues = vm.SelectedFeatureValues
@@ -72,7 +72,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             try
             {
-                var features = await _sgService.GetFeaturesByProductAsync(pid);
+                var features = await _shService.GetFeaturesByProductAsync(pid);
                 return Json(features);
             }
             catch (Exception ex)
@@ -81,9 +81,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
         }
 
-        private async Task FillLookups(SGStockCodeGenerateVm vm)
+        private async Task FillLookups(SHStockCodeGenerateVm vm)
         {
-            var products = await _sgService.GetSgProductsAsync();
+            var products = await _shService.GetShProductsAsync();
             vm.Products = products
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToList();

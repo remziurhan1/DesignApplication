@@ -1,4 +1,4 @@
-﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SF.SFStockCodeGenerateVm
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SF.SFStockCodeGenerateVm
 
 @{
     ViewData["Title"] = "SF Stok Kodu Üret";
@@ -7,8 +7,8 @@
 <div class="container mt-4">
     <h2>SF Stok Kodu Üret</h2>
     <p class="text-muted">
-        <i class="bi bi-tools text-info"></i>
-        Rule-based sistem: Sabit değerler otomatik, sadece gerekli özellikleri seçin
+        <i class="bi bi-diagram-3 text-info"></i>
+        SF grup/filtre yaklaşımı: ürün segmentine göre özellik kümeleri ve bağımlı seçimler
     </p>
     <hr />
 
@@ -23,18 +23,10 @@
     @if (!string.IsNullOrWhiteSpace(Model.StockCode8))
     {
         <div class="alert @(Model.AlreadyExists == true ? "alert-warning" : "alert-success") alert-dismissible fade show">
-            <h5>
-                @(Model.AlreadyExists == true ? "Mevcut Kod Getirildi" : "Yeni Kod Oluşturuldu!")
-            </h5>
+            <h5>@(Model.AlreadyExists == true ? "Mevcut Kod Getirildi" : "Yeni Kod Oluşturuldu!")</h5>
             <hr />
-            <p>
-                <strong>Stok Kodu:</strong>
-                <span class="badge bg-success fs-4">@Model.StockCode8</span>
-            </p>
-            <p>
-                <strong>Açıklama:</strong><br />
-                @Model.Description
-            </p>
+            <p><strong>Stok Kodu:</strong> <span class="badge bg-success fs-4">@Model.StockCode8</span></p>
+            <p><strong>Açıklama:</strong><br />@Model.Description</p>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
@@ -43,60 +35,69 @@
         <input type="hidden" name="SProductId" id="productIdInput" />
 
         <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <strong>1. Ürün Seçimi</strong>
-            </div>
+            <div class="card-header bg-primary text-white"><strong>1. Ürün Seçimi</strong></div>
             <div class="card-body">
-                <select asp-for="SProductId"
-                        asp-items="Model.Products"
-                        id="productSelect"
-                        class="form-select form-select-lg"
-                        required>
+                <select asp-for="SProductId" asp-items="Model.Products" id="productSelect" class="form-select form-select-lg" required>
                     <option value="">-- Ürün Seçiniz --</option>
                 </select>
             </div>
         </div>
 
-        <div class="card mb-4 shadow-sm" id="featuresCard" style="display:none;">
-            <div class="card-header bg-info text-white">
-                <strong>2. Ürün Özellikleri</strong>
-            </div>
+        <div class="card mb-3 shadow-sm" id="segmentCard" style="display:none;">
+            <div class="card-header bg-secondary text-white"><strong>2. SF Grup Özeti</strong></div>
             <div class="card-body">
-                <div id="featuresContainer" class="row"></div>
+                <p class="mb-2"><strong>Segment:</strong> <span id="segmentText"></span></p>
+                <ul id="summaryList" class="mb-2"></ul>
+                <div class="alert alert-info mb-0">
+                    <strong>Filtre Notları</strong>
+                    <ul id="hintList" class="mb-0 mt-2"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm" id="featuresCard" style="display:none;">
+            <div class="card-header bg-info text-white"><strong>3. Ürün Özellikleri</strong></div>
+            <div class="card-body">
+                <div id="featuresContainer"></div>
             </div>
         </div>
 
         <div id="hiddenInputs"></div>
 
-        <button type="submit"
-                class="btn btn-primary btn-lg"
-                id="submitBtn"
-                disabled>
-            Kod Üret
-        </button>
+        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>Kod Üret</button>
     </form>
 </div>
 
 @section Scripts {
     <script>
         const productSelect = document.getElementById("productSelect");
-        const featuresContainer = document.getElementById("featuresContainer");
-        const featuresCard = document.getElementById("featuresCard");
-        const submitBtn = document.getElementById("submitBtn");
         const productIdInput = document.getElementById("productIdInput");
+        const featuresCard = document.getElementById("featuresCard");
+        const featuresContainer = document.getElementById("featuresContainer");
+        const segmentCard = document.getElementById("segmentCard");
+        const segmentText = document.getElementById("segmentText");
+        const summaryList = document.getElementById("summaryList");
+        const hintList = document.getElementById("hintList");
+        const submitBtn = document.getElementById("submitBtn");
         const sfForm = document.getElementById("sfForm");
 
         let formData = null;
         let selectedValues = {};
+        const featureOptionsCache = {};
 
         productSelect.addEventListener("change", async function () {
             const productId = productSelect.value;
 
             featuresContainer.innerHTML = "";
+            summaryList.innerHTML = "";
+            hintList.innerHTML = "";
+            segmentText.textContent = "";
             formData = null;
             selectedValues = {};
+            Object.keys(featureOptionsCache).forEach(k => delete featureOptionsCache[k]);
             submitBtn.disabled = true;
             featuresCard.style.display = "none";
+            segmentCard.style.display = "none";
 
             if (!productId) return;
 
@@ -110,79 +111,190 @@
                     return;
                 }
 
-                featuresCard.style.display = "block";
+                renderSegmentInfo();
                 renderFeatures();
-
+                applyDependencyFilters();
             } catch (err) {
                 featuresContainer.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
                 featuresCard.style.display = "block";
             }
         });
 
+        function renderSegmentInfo() {
+            segmentText.textContent = formData.productSegment || "Genel SF Grubu";
+            (formData.segmentFeatureSummary || []).forEach(x => {
+                const li = document.createElement("li");
+                li.textContent = x;
+                summaryList.appendChild(li);
+            });
+            (formData.filterHints || []).forEach(x => {
+                const li = document.createElement("li");
+                li.textContent = x;
+                hintList.appendChild(li);
+            });
+            segmentCard.style.display = "block";
+        }
+
         function renderFeatures() {
             featuresContainer.innerHTML = "";
 
-            formData.features.forEach(feature => {
-
-                const colDiv = document.createElement("div");
-                colDiv.className = "col-md-6 mb-3";
-
-                const label = document.createElement("label");
-                label.className = "form-label fw-bold";
-                label.innerText = feature.featureName;
-
-                if (feature.isFixed) {
-
-                    const fixedInput = document.createElement("input");
-                    fixedInput.type = "text";
-                    fixedInput.className = "form-control";
-                    fixedInput.value = `${feature.fixedValueCode} - ${feature.fixedValueName}`;
-                    fixedInput.disabled = true;
-
-                    selectedValues[feature.featureId] = feature.fixedValueId;
-
-                    colDiv.appendChild(label);
-                    colDiv.appendChild(fixedInput);
-
-                } else {
-
-                    const select = document.createElement("select");
-                    select.className = "form-select";
-                    select.setAttribute("data-feature-id", feature.featureId);
-                    select.required = true;
-
-                    const defaultOption = document.createElement("option");
-                    defaultOption.value = "";
-                    defaultOption.textContent = "-- Seçiniz --";
-                    select.appendChild(defaultOption);
-
-                    feature.availableValues.forEach(value => {
-                        const option = document.createElement("option");
-                        option.value = value.id;
-                        option.textContent = `${value.code} - ${value.name}`;
-                        select.appendChild(option);
-                    });
-
-                    select.addEventListener("change", function (e) {
-                        const featureId = e.target.getAttribute("data-feature-id");
-                        const valueId = e.target.value;
-
-                        if (valueId)
-                            selectedValues[featureId] = valueId;
-                        else
-                            delete selectedValues[featureId];
-
-                        checkFormCompletion();
-                    });
-
-                    colDiv.appendChild(label);
-                    colDiv.appendChild(select);
-                }
-
-                featuresContainer.appendChild(colDiv);
+            const groups = {};
+            formData.features.forEach(f => {
+                const key = f.featureGroup || "Diğer";
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(f);
             });
 
+            Object.entries(groups).forEach(([groupName, features]) => {
+                const groupTitle = document.createElement("h6");
+                groupTitle.className = "mt-3 mb-2 text-primary border-bottom pb-1";
+                groupTitle.textContent = groupName;
+                featuresContainer.appendChild(groupTitle);
+
+                const row = document.createElement("div");
+                row.className = "row";
+
+                features.forEach(feature => {
+                    const col = document.createElement("div");
+                    col.className = "col-md-6 mb-3";
+
+                    const label = document.createElement("label");
+                    label.className = "form-label fw-bold";
+                    label.textContent = feature.featureName;
+
+                    if (feature.isFixed) {
+                        const fixedInput = document.createElement("input");
+                        fixedInput.type = "text";
+                        fixedInput.className = "form-control";
+                        fixedInput.value = `${feature.fixedValueCode} - ${feature.fixedValueName}`;
+                        fixedInput.disabled = true;
+
+                        selectedValues[feature.featureId] = feature.fixedValueId;
+                        col.appendChild(label);
+                        col.appendChild(fixedInput);
+                    } else {
+                        const select = document.createElement("select");
+                        select.className = "form-select";
+                        select.dataset.featureId = feature.featureId;
+                        select.dataset.featureCode = feature.featureCode;
+                        select.required = true;
+
+                        const defaultOption = document.createElement("option");
+                        defaultOption.value = "";
+                        defaultOption.textContent = "-- Seçiniz --";
+                        select.appendChild(defaultOption);
+
+                        feature.availableValues.forEach(value => {
+                            const option = document.createElement("option");
+                            option.value = value.id;
+                            option.dataset.code = value.code;
+                            option.textContent = `${value.code} - ${value.name}`;
+                            select.appendChild(option);
+                        });
+
+                        featureOptionsCache[feature.featureId] = feature.availableValues.map(v => ({ id: v.id, code: v.code, name: v.name }));
+
+                        select.addEventListener("change", function (e) {
+                            const featureId = e.target.dataset.featureId;
+                            const valueId = e.target.value;
+
+                            if (valueId) selectedValues[featureId] = valueId;
+                            else delete selectedValues[featureId];
+
+                            applyDependencyFilters(e.target.dataset.featureCode);
+                            checkFormCompletion();
+                        });
+
+                        col.appendChild(label);
+                        col.appendChild(select);
+                    }
+
+                    row.appendChild(col);
+                });
+
+                featuresContainer.appendChild(row);
+            });
+
+            featuresCard.style.display = "block";
             checkFormCompletion();
+        }
+
+        function findFeature(featureCode) {
+            return (formData.features || []).find(f => f.featureCode === featureCode);
+        }
+
+        function getSelectedCode(featureCode) {
+            const feature = findFeature(featureCode);
+            if (!feature) return null;
+            const selectedId = selectedValues[feature.featureId];
+            if (!selectedId) return null;
+            const all = featureOptionsCache[feature.featureId] || [];
+            const hit = all.find(x => x.id === selectedId);
+            return hit ? hit.code : null;
+        }
+
+        function repopulateSelect(featureCode, predicate) {
+            const feature = findFeature(featureCode);
+            if (!feature || feature.isFixed) return;
+
+            const select = document.querySelector(`select[data-feature-id='${feature.featureId}']`);
+            if (!select) return;
+
+            const previous = select.value;
+            const allOptions = featureOptionsCache[feature.featureId] || [];
+            const filtered = allOptions.filter(predicate);
+
+            select.innerHTML = "";
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "-- Seçiniz --";
+            select.appendChild(defaultOption);
+
+            filtered.forEach(value => {
+                const option = document.createElement("option");
+                option.value = value.id;
+                option.dataset.code = value.code;
+                option.textContent = `${value.code} - ${value.name}`;
+                select.appendChild(option);
+            });
+
+            if (filtered.some(x => x.id === previous)) {
+                select.value = previous;
+            } else {
+                select.value = "";
+                delete selectedValues[feature.featureId];
+            }
+        }
+
+        function applyDependencyFilters() {
+            const dnCode = getSelectedCode("SF_DN");
+            const connectionCode = getSelectedCode("SF_BAGLANTI_CAPI");
+            const pressureCode = getSelectedCode("SF_BASINC_SINIFI");
+
+            let mode = null;
+
+            if (dnCode && dnCode.startsWith("DN")) mode = "PN";
+            if (!mode && connectionCode && connectionCode.includes('"')) mode = "CLASS";
+            if (!mode && pressureCode && pressureCode.startsWith("PN")) mode = "PN";
+            if (!mode && pressureCode && pressureCode.startsWith("Class")) mode = "CLASS";
+
+            repopulateSelect("SF_BASINC_SINIFI", value => {
+                if (!mode) return true;
+                return mode === "PN"
+                    ? value.code.startsWith("PN")
+                    : value.code.startsWith("Class");
+            });
+
+            repopulateSelect("SF_DN", value => {
+                if (mode === "CLASS") return false;
+                return value.code.startsWith("DN");
+            });
+
+            repopulateSelect("SF_BAGLANTI_CAPI", value => {
+                if (mode === "PN") return !value.code.includes('"');
+                if (mode === "CLASS") return value.code.includes('"');
+                return true;
+            });
         }
 
         function checkFormCompletion() {
@@ -193,22 +305,17 @@
 
             const requiredFeatures = formData.features.filter(f => !f.isFixed);
             const allSelected = requiredFeatures.every(f => selectedValues[f.featureId]);
-
             submitBtn.disabled = !allSelected;
         }
 
-        sfForm.addEventListener("submit", function (e) {
-
-            const productId = productSelect.value;
-            productIdInput.value = productId;
+        sfForm.addEventListener("submit", function () {
+            productIdInput.value = productSelect.value;
 
             const hiddenContainer = document.getElementById("hiddenInputs");
             hiddenContainer.innerHTML = "";
 
             let index = 0;
-
             Object.entries(selectedValues).forEach(([featureId, valueId]) => {
-
                 const keyInput = document.createElement("input");
                 keyInput.type = "hidden";
                 keyInput.name = `SelectedFeatureValues[${index}].Key`;
@@ -220,7 +327,6 @@
                 valueInput.name = `SelectedFeatureValues[${index}].Value`;
                 valueInput.value = valueId;
                 hiddenContainer.appendChild(valueInput);
-
                 index++;
             });
         });

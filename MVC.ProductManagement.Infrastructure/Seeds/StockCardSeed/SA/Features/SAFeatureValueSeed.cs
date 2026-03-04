@@ -141,6 +141,8 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 6. METRİK (ÇAP) ==========
+            // Not: Büyük metrik kataloğu runtime sync servisinde yönetiliyor (SaRuleCatalogSyncService).
+            // HasData migration şişmesini azaltmak için seedte çekirdek set tutulur.
             var metrics = new[]
             {
                 "M3", "M4", "M5", "M6", "M8", "M10", "M12", "M14", "M16", "M18", "M20",
@@ -163,6 +165,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 7. BOY ==========
+            // Not: Geniş length kataloğu runtime sync servisinde yönetiliyor.
             var lengths = new[]
             {
                 10, 12, 16, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100,
@@ -209,6 +212,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             {
                 ("SIYAH OKSIT", "Siyah Oksit"),
                 ("CINKO", "Çinko Kaplama"),
+                ("GALVANIZ", "Galvaniz"),
                 ("GEOMET", "Geomet"),
                 ("HDG", "Sıcak Daldırma Galvaniz"),
                 ("PTFE", "PTFE"),

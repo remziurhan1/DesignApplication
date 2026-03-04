@@ -1,4 +1,5 @@
 ﻿using MVC.ProductManagement.Domain.Core.BaseEntities;
+using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using System;
 using System.Collections.Generic;
@@ -66,5 +67,7 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Common
         /// Stok hareketleri (opsiyonel)
         /// </summary>
         public virtual ICollection<StockCardInventory> InventoryMovements { get; set; } = new List<StockCardInventory>();
+
+        public virtual ICollection<StockCardGroupItem> GroupItems { get; set; } = new List<StockCardGroupItem>();
     }
 }
