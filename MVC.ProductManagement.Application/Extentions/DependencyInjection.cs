@@ -51,6 +51,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockCardDatasheetService, StockCardDatasheetService>();
             services.AddScoped<IStockCardPriceService, StockCardPriceService>();
             services.AddScoped<IStockCardInventoryService, StockCardInventoryService>();
+            services.AddScoped<IStockCardGroupService, StockCardGroupService>();
 
             services.AddScoped<IStockCodeSbService, StockCodeSbService>();
             services.AddScoped<IExcelExportService, ExcelExportService>();
