@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,6 +98,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                     FeatureId = rule.SFeatureId,
                     FeatureCode = rule.SFeature.Code,
                     FeatureName = rule.SFeature.Name,
+                    FeatureGroup = ResolveFeatureGroup(rule.SFeature.Code),
                     IsFixed = rule.IsFixed
                 };
 
@@ -107,13 +110,22 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 }
                 else
                 {
-                    feature.AvailableValues = valueRules
+                    var sorted = FeatureValueSortHelper.SortForUi(valueRules
                         .Where(v => v.SFeatureId == rule.SFeatureId)
-                        .Select(v => new SfFeatureValueOptionDto
+                        .Select(v => new FeatureValueDto
                         {
                             Id = v.SFeatureValueId,
                             Code = v.SFeatureValue.Code,
-                            Name = v.SFeatureValue.Name
+                            Name = v.SFeatureValue.Name,
+                            SortOrder = v.SortOrder
+                        }));
+
+                    feature.AvailableValues = sorted
+                        .Select(v => new SfFeatureValueOptionDto
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name
                         })
                         .ToList();
                 }
@@ -121,11 +133,16 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 features.Add(feature);
             }
 
+            var segment = ResolveProductSegment(product.Code);
+
             return new StockCodeSfFormDto
             {
                 ProductId = product.Id,
                 ProductCode = product.Code,
                 ProductName = product.Name,
+                ProductSegment = segment,
+                SegmentFeatureSummary = BuildSegmentFeatureSummary(segment),
+                FilterHints = BuildFilterHints(segment),
                 Features = features
             };
         }
@@ -141,41 +158,19 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 ?? throw new InvalidOperationException("Ürün bulunamadı.");
 
             // ===============================
-            // 1️⃣ Dinamik seçimleri çek
+            // 1️⃣ Kural tabanlı seçimleri doğrula + sabitleri uygula
             // ===============================
-            var selectedValueIds = request.SelectedFeatureValues.Values.ToList();
+            var validatedSelections = await BuildValidatedSelectionsForProductAsync(
+                request.SProductId,
+                request.SelectedFeatureValues,
+                ct);
 
-            var selectedValues = await _db.Set<SFeatureValue>()
-                .Include(v => v.SFeature)
-                .Where(v => selectedValueIds.Contains(v.Id))
-                .ToListAsync(ct);
+            var allSelections = validatedSelections
+                .ToDictionary(x => x.FeatureCode, x => x.ValueCode);
 
-            // ===============================
-            // 2️⃣ Sabit değerleri çek
-            // ===============================
-            var productRules = await _db.SProductFeatureRules
-                .Include(r => r.SFeature)
-                .Include(r => r.FixedValue)
-                .Where(r => r.SProductId == request.SProductId &&
-                            r.IsFixed &&
-                            r.FixedValueId != null)
-                .ToListAsync(ct);
+            ValidateSfSelectionDependencies(allSelections);
 
-            // ===============================
-            // 3️⃣ Tüm seçimleri birleştir
-            // ===============================
-            var allSelections = new Dictionary<string, string>();
-
-            foreach (var rule in productRules)
-                if (rule.FixedValue != null)
-                    allSelections[rule.SFeature.Code] = rule.FixedValue.Code;
-
-            foreach (var kvp in request.SelectedFeatureValues)
-            {
-                var val = selectedValues.FirstOrDefault(v => v.Id == kvp.Value);
-                if (val != null)
-                    allSelections[val.SFeature.Code] = val.Code;
-            }
+            var fluid = await ResolveFluidForSfAsync(allSelections, ct);
 
             // ===============================
             // 4️⃣ OPTION KEY üret (kritik)
@@ -223,7 +218,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
 
                 SProductId = product.Id,
                 SProductGroupId = product.SProductGroupId,
-                FluidId = null,
+                FluidId = fluid.Id,
                 StockSequenceId = sequence.Id,
 
                 StockCode8 = $"{product.Code}{sequence.LastNumber:D4}",
@@ -252,6 +247,207 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
                 Description = stockCard.Description,
                 AlreadyExists = false
             };
+        }
+
+        private async Task<Fluid> ResolveFluidForSfAsync(
+            Dictionary<string, string> selections,
+            CancellationToken ct)
+        {
+            var fluids = await _db.Set<Fluid>()
+                .AsNoTracking()
+                .ToListAsync(ct);
+
+            if (!fluids.Any())
+                throw new InvalidOperationException("Fluid tanımları bulunamadı.");
+
+            var mediumToFluidCode = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["LPG"] = "A",
+                ["DOĞAL GAZ"] = "H",
+                ["AKARYAKIT"] = "F"
+            };
+
+            if (selections.TryGetValue(F_AKIS_MEDYUMU, out var mediumCode) &&
+                !string.IsNullOrWhiteSpace(mediumCode))
+            {
+                var normalizedMedium = mediumCode.Trim();
+
+                if (mediumToFluidCode.TryGetValue(normalizedMedium, out var mappedCode))
+                {
+                    var mappedFluid = fluids.FirstOrDefault(f =>
+                        string.Equals(f.Code, mappedCode, StringComparison.OrdinalIgnoreCase));
+
+                    if (mappedFluid != null)
+                        return mappedFluid;
+                }
+
+                var byName = fluids.FirstOrDefault(f =>
+                    string.Equals(f.Name, normalizedMedium, StringComparison.OrdinalIgnoreCase));
+
+                if (byName != null)
+                    return byName;
+            }
+
+            return fluids.FirstOrDefault(f => f.Code == "F") ?? fluids.First();
+        }
+
+        private static void ValidateSfSelectionDependencies(Dictionary<string, string> selections)
+        {
+            if (!selections.TryGetValue(F_BASINC_SINIFI, out var pressureClass) || string.IsNullOrWhiteSpace(pressureClass))
+                return;
+
+            var isPn = pressureClass.StartsWith("PN", StringComparison.OrdinalIgnoreCase);
+            var isClass = pressureClass.StartsWith("Class", StringComparison.OrdinalIgnoreCase);
+
+            if (!isPn && !isClass)
+                return;
+
+            if (isPn && selections.TryGetValue(F_BAGLANTI_CAPI, out var inchConnection) && !string.IsNullOrWhiteSpace(inchConnection))
+            {
+                if (inchConnection.Contains("\"", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("PN sınıfı seçildiğinde inch bağlantı çapı yerine DN bazlı seçim yapılmalıdır.");
+            }
+
+            if (isPn)
+            {
+                if (!selections.TryGetValue(F_DN, out var dnCode) || string.IsNullOrWhiteSpace(dnCode))
+                    throw new InvalidOperationException("PN sınıfı için DN seçimi zorunludur.");
+            }
+
+            if (isClass)
+            {
+                if (selections.TryGetValue(F_DN, out var dnValue) && !string.IsNullOrWhiteSpace(dnValue))
+                    throw new InvalidOperationException("Class basınç sınıfında DN yerine inch bazlı bağlantı çapı seçilmelidir.");
+
+                if (!selections.TryGetValue(F_BAGLANTI_CAPI, out var classConn) || string.IsNullOrWhiteSpace(classConn))
+                    throw new InvalidOperationException("Class basınç sınıfı için inch bağlantı çapı seçimi zorunludur.");
+            }
+        }
+
+        private static string ResolveFeatureGroup(string featureCode)
+        {
+            if (featureCode.Contains("DN") || featureCode.Contains("CAPI") || featureCode.Contains("BAGLANTI"))
+                return "Bağlantı ve Ölçüler";
+
+            if (featureCode.Contains("BASINC") || featureCode.Contains("OLCUM_ARALIGI"))
+                return "Basınç / Ölçüm";
+
+            if (featureCode.Contains("VANA") || featureCode.Contains("VALF") || featureCode.Contains("POMPA") || featureCode.Contains("SAYAC") || featureCode.Contains("MANOMETRE") || featureCode.Contains("TIP"))
+                return "Ekipman Tipi";
+
+            if (featureCode.Contains("MALZEME") || featureCode.Contains("AKIS") || featureCode.Contains("MARKA"))
+                return "Akışkan / Malzeme";
+
+            return "Diğer";
+        }
+
+        private static string ResolveProductSegment(string productCode)
+        {
+            if (productCode.StartsWith("SFA") || productCode.StartsWith("SFC") || productCode.StartsWith("SFF") || productCode.StartsWith("SFJ") || productCode.StartsWith("SFK") || productCode.StartsWith("SFL"))
+                return "Vana ve Regülasyon Grubu";
+
+            if (productCode.StartsWith("SFG4") || productCode.StartsWith("SFG5") || productCode.StartsWith("SFG8") || productCode.StartsWith("SFH1") || productCode.StartsWith("SFH6"))
+                return "Ölçüm / Enstrümantasyon Grubu";
+
+            if (productCode.StartsWith("SFH3") || productCode.StartsWith("SFH4"))
+                return "Pompa Grubu";
+
+            return "Genel SF Grubu";
+        }
+
+        private static List<string> BuildSegmentFeatureSummary(string segment)
+        {
+            return segment switch
+            {
+                "Vana ve Regülasyon Grubu" => new List<string>
+                {
+                    "Temel: Vana/Valf tipi, DN veya bağlantı çapı, basınç sınıfı, bağlantı tipi, malzeme, marka",
+                    "Filtre: DN seçimi varsa PN sınıfı; inch bağlantı varsa Class sınıfı"
+                },
+                "Ölçüm / Enstrümantasyon Grubu" => new List<string>
+                {
+                    "Temel: Ölçüm tipi/manometre tipi, ölçüm aralığı, çıkış sinyali, bağlantı çapı, marka",
+                    "Filtre: Class seçimi ASME yaklaşımıyla inch bağlantı ister"
+                },
+                "Pompa Grubu" => new List<string>
+                {
+                    "Temel: Pompa tipi, güç, kapasite/çıkış basıncı, bağlantı bilgisi, marka"
+                },
+                _ => new List<string>
+                {
+                    "Temel: Ürüne tanımlı sabit ve dinamik feature kuralları"
+                }
+            };
+        }
+
+        private static List<string> BuildFilterHints(string segment)
+        {
+            var hints = new List<string>
+            {
+                "PN seçimi -> DN tabanlı kombinasyon",
+                "Class seçimi -> ASME/inch tabanlı kombinasyon"
+            };
+
+            if (segment == "Ölçüm / Enstrümantasyon Grubu")
+                hints.Add("Ölçüm grubunda bağlantı çapı ve sinyal tipi birlikte değerlendirilmelidir.");
+
+            return hints;
+        }
+
+        private async Task<List<(Guid FeatureId, string FeatureCode, Guid ValueId, string ValueCode)>> BuildValidatedSelectionsForProductAsync(
+            Guid productId,
+            Dictionary<Guid, Guid> requestSelections,
+            CancellationToken ct)
+        {
+            requestSelections ??= new Dictionary<Guid, Guid>();
+
+            var rules = await _db.SProductFeatureRules
+                .AsNoTracking()
+                .Include(r => r.SFeature)
+                .Include(r => r.FixedValue)
+                .Where(r => r.SProductId == productId)
+                .ToListAsync(ct);
+
+            if (!rules.Any())
+                throw new InvalidOperationException("Bu ürün için feature kuralı bulunamadı.");
+
+            var valueRules = await _db.SFeatureValueRules
+                .AsNoTracking()
+                .Include(r => r.SFeatureValue)
+                .Where(r => r.SProductId == productId)
+                .ToListAsync(ct);
+
+            var result = new List<(Guid FeatureId, string FeatureCode, Guid ValueId, string ValueCode)>();
+
+            foreach (var rule in rules.Where(r => r.IsFixed))
+            {
+                if (!rule.FixedValueId.HasValue || rule.FixedValue == null)
+                    throw new InvalidOperationException("Sabit kuralda FixedValue zorunludur.");
+
+                result.Add((rule.SFeatureId, rule.SFeature.Code, rule.FixedValueId.Value, rule.FixedValue.Code));
+            }
+
+            foreach (var rule in rules.Where(r => !r.IsFixed))
+            {
+                if (!requestSelections.TryGetValue(rule.SFeatureId, out var selectedValueId))
+                    throw new InvalidOperationException($"Zorunlu özellik seçilmedi. Feature: {rule.SFeature.Code}");
+
+                var selectedRule = valueRules.FirstOrDefault(v =>
+                    v.SFeatureId == rule.SFeatureId &&
+                    v.SFeatureValueId == selectedValueId);
+
+                if (selectedRule == null)
+                    throw new InvalidOperationException($"Seçilen değer izinli değil. Feature: {rule.SFeature.Code}");
+
+                result.Add((rule.SFeatureId, rule.SFeature.Code, selectedValueId, selectedRule.SFeatureValue.Code));
+            }
+
+            var allowedFeatureIds = rules.Select(r => r.SFeatureId).ToHashSet();
+            var unexpectedFeature = requestSelections.Keys.FirstOrDefault(f => !allowedFeatureIds.Contains(f));
+            if (unexpectedFeature != Guid.Empty)
+                throw new InvalidOperationException($"Tanımsız feature gönderildi. FeatureId: {unexpectedFeature}");
+
+            return result;
         }
 
         // ========== LİSTE ==========
@@ -307,11 +503,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
             CancellationToken ct = default)
         {
             var stockCard = await _db.Set<StockCard>()
+                .AsNoTracking()
                 .Include(s => s.SProduct)
-                .FirstOrDefaultAsync(s => s.Id == stockCardId, ct)
+                .FirstOrDefaultAsync(s => s.Id == stockCardId && !s.IsDeleted, ct)
                 ?? throw new InvalidOperationException("Stok kartı bulunamadı.");
 
             var selections = await _db.Set<StockCardFeatureSelection>()
+                .AsNoTracking()
                 .Include(s => s.SFeature)
                 .Include(s => s.SFeatureValue)
                 .Where(s => s.StockCardId == stockCardId)

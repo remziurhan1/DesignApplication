@@ -1,12 +1,12 @@
-@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SG.SGStockCodeGenerateVm
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SH.SHStockCodeGenerateVm
 
 @{
-    ViewData["Title"] = "SG Stok Kodu Üret";
+    ViewData["Title"] = "SH Stok Kodu Üret";
 }
 
 <div class="container mt-4">
-    <h2>SG Stok Kodu Üret</h2>
-    <p class="text-muted"><i class="bi bi-diagram-3 text-info"></i> SG grup özeti + rule tabanlı özellik seçimi</p>
+    <h2>SH Stok Kodu Üret</h2>
+    <p class="text-muted"><i class="bi bi-diagram-3 text-info"></i> SH hortum grubu özeti + rule tabanlı özellik seçimi</p>
     <hr />
 
     @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
@@ -24,7 +24,7 @@
         </div>
     }
 
-    <form id="sgForm" asp-action="Generate" method="post">
+    <form id="shForm" asp-action="Generate" method="post">
         <input type="hidden" name="SProductId" id="productIdInput" />
 
         <div class="card mb-4 shadow-sm"><div class="card-header bg-primary text-white"><strong>1. Ürün Seçimi</strong></div><div class="card-body">
@@ -32,7 +32,7 @@
         </div></div>
 
         <div class="card mb-3 shadow-sm" id="segmentCard" style="display:none;">
-            <div class="card-header bg-secondary text-white"><strong>2. SG Grup Özeti</strong></div>
+            <div class="card-header bg-secondary text-white"><strong>2. SH Grup Özeti</strong></div>
             <div class="card-body"><p class="mb-2"><strong>Grup:</strong> <span id="segmentText"></span></p><ul id="summaryList" class="mb-0"></ul></div>
         </div>
 
@@ -45,17 +45,17 @@
 
 @section Scripts {
 <script>
-const productSelect=document.getElementById("productSelect"), productIdInput=document.getElementById("productIdInput"), featuresCard=document.getElementById("featuresCard"), featuresContainer=document.getElementById("featuresContainer"), submitBtn=document.getElementById("submitBtn"), sgForm=document.getElementById("sgForm"), segmentCard=document.getElementById("segmentCard"), segmentText=document.getElementById("segmentText"), summaryList=document.getElementById("summaryList");
+const productSelect=document.getElementById("productSelect"), productIdInput=document.getElementById("productIdInput"), featuresCard=document.getElementById("featuresCard"), featuresContainer=document.getElementById("featuresContainer"), submitBtn=document.getElementById("submitBtn"), shForm=document.getElementById("shForm"), segmentCard=document.getElementById("segmentCard"), segmentText=document.getElementById("segmentText"), summaryList=document.getElementById("summaryList");
 let features=[]; let selectedValues={};
-const sgGroups={"SGA0":"GRESÖRLÜK","SGA1":"GUPİLYA / KOPİLYA","SGA2":"PİM SİLİNDİRİK","SGA3":"PİM KONİK","SGA4":"PİM SIKMA KOVANI","SGA5":"PİM ÇENTİKLİ","SGA6":"PİM YAYLI","SGA7":"SEGMANLAR","SGA8":"YARIKLI PİM","SGA9":"PERÇİN"};
+const shGroups={"SHA0":"HORTUM POLYAMID","SHA1":"HORTUM HİDROLİK","SHA2":"HORTUM AKARYAKIT","SHA3":"HORTUM PVC/ŞEFFAF","SHA4":"HORTUM YÜKSEK BASINÇ SU","SHA5":"HORTUM ALÇAK BASINÇ SU","SHA6":"HORTUM GAZ HATLARI","SHA7":"HORTUM LPG","SHA8":"HORTUM LNG VE CRYOGENIC HORTUM VAKUM","SHC0":"KLİPS/KABLO BAĞI","SHC1":"KELEPÇELER","SHC5":"KLİPS/KABLO BAĞI","SHA9":"HORTUM YANGIN HATLARI"};
 
 productSelect.addEventListener("change", async ()=>{ const productId=productSelect.value; features=[]; selectedValues={}; featuresContainer.innerHTML=""; summaryList.innerHTML=""; submitBtn.disabled=true; featuresCard.style.display="none"; segmentCard.style.display="none"; if(!productId) return; const code=(productSelect.selectedOptions[0]?.text||"").split(" - ")[0]; renderSegment(code);
-try{ const resp=await fetch(`/Admin/SGStockCode/FeaturesByProduct?productId=${productId}`); features=await resp.json(); if(!features?.length){featuresContainer.innerHTML='<div class="alert alert-info">Bu ürün için özellik bulunamadı.</div>'; featuresCard.style.display="block"; return;} renderFeatures(); } catch(err){ featuresContainer.innerHTML=`<div class="alert alert-danger">${err.message}</div>`; featuresCard.style.display="block"; }});
+try{ const resp=await fetch(`/Admin/SHStockCode/FeaturesByProduct?productId=${productId}`); features=await resp.json(); if(!features?.length){featuresContainer.innerHTML='<div class="alert alert-info">Bu ürün için özellik bulunamadı.</div>'; featuresCard.style.display="block"; return;} renderFeatures(); } catch(err){ featuresContainer.innerHTML=`<div class="alert alert-danger">${err.message}</div>`; featuresCard.style.display="block"; }});
 
-function renderSegment(code){ const name=sgGroups[code]||"SG Ürün Grubu"; segmentText.textContent=`${code} - ${name}`; ["Pim/perçin ürünlerinde çap-boy-geometri birlikte değerlendirilmelidir","Standart/malzeme seçimlerini ürün koduna göre eşleştirin"].forEach(x=>{const li=document.createElement("li"); li.textContent=x; summaryList.appendChild(li);}); segmentCard.style.display="block"; }
-function groupOfFeature(code){ if(code.includes("MALZEME")||code.includes("KAPLAMA")) return "Malzeme"; if(code.includes("CAP")||code.includes("DIAM")||code.includes("BOY")||code.includes("LENGTH")) return "Ölçü"; if(code.includes("TIP")||code.includes("GEOMETRI")||code.includes("STANDART")) return "Geometri / Standart"; return "Genel"; }
+function renderSegment(code){ const name=shGroups[code]||"SH Ürün Grubu"; segmentText.textContent=`${code} - ${name}`; ["Hortum tipine göre basınç/çap ve bağlantı türleri birlikte seçilmelidir","Gaz ve kriyojenik gruplarda malzeme/standart eşleşmesine dikkat edin"].forEach(x=>{const li=document.createElement("li"); li.textContent=x; summaryList.appendChild(li);}); segmentCard.style.display="block"; }
+function groupOfFeature(code){ if(code.includes("MALZEME")||code.includes("KAPLAMA")) return "Malzeme"; if(code.includes("DN")||code.includes("CAPI")||code.includes("OLCU")||code.includes("SIZE")) return "Ölçü"; if(code.includes("BASINC")||code.includes("PN")||code.includes("CLASS")||code.includes("STANDART")) return "Basınç / Standart"; if(code.includes("BAGLANTI")||code.includes("KELEPCE")||code.includes("KLIPS")) return "Bağlantı"; return "Genel"; }
 function renderFeatures(){ const groups={}; features.forEach(f=>{const g=groupOfFeature((f.code||"").toUpperCase()); (groups[g]??=[]).push(f);}); featuresContainer.innerHTML=""; Object.entries(groups).forEach(([name,items])=>{ const h=document.createElement("h6"); h.className="mt-3 mb-2 text-primary border-bottom pb-1"; h.textContent=name; featuresContainer.appendChild(h); const row=document.createElement("div"); row.className="row"; items.forEach(feature=>{ const col=document.createElement("div"); col.className="col-md-6 mb-3"; const label=document.createElement("label"); label.className="form-label fw-bold"; label.textContent=feature.name; const select=document.createElement("select"); select.className="form-select"; select.dataset.featureId=feature.id; select.required=feature.isRequired; select.innerHTML='<option value="">-- Seçiniz --</option>'; (feature.values||[]).forEach(v=>{const o=document.createElement("option"); o.value=v.id; o.textContent=`${v.code} - ${v.name}`; select.appendChild(o);}); select.addEventListener("change", e=>{const id=e.target.dataset.featureId; if(e.target.value) selectedValues[id]=e.target.value; else delete selectedValues[id]; checkForm();}); col.appendChild(label); col.appendChild(select); row.appendChild(col);}); featuresContainer.appendChild(row);}); featuresCard.style.display="block"; checkForm(); }
 function checkForm(){ const required=(features||[]).filter(f=>f.isRequired); submitBtn.disabled=!required.every(f=>selectedValues[f.id]); }
-sgForm.addEventListener("submit", ()=>{ productIdInput.value=productSelect.value; const c=document.getElementById("hiddenInputs"); c.innerHTML=""; let i=0; Object.entries(selectedValues).forEach(([k,v])=>{const ki=document.createElement("input"); ki.type="hidden"; ki.name=`SelectedFeatureValues[${i}].Key`; ki.value=k; c.appendChild(ki); const vi=document.createElement("input"); vi.type="hidden"; vi.name=`SelectedFeatureValues[${i}].Value`; vi.value=v; c.appendChild(vi); i++;}); });
+shForm.addEventListener("submit", ()=>{ productIdInput.value=productSelect.value; const c=document.getElementById("hiddenInputs"); c.innerHTML=""; let i=0; Object.entries(selectedValues).forEach(([k,v])=>{const ki=document.createElement("input"); ki.type="hidden"; ki.name=`SelectedFeatureValues[${i}].Key`; ki.value=k; c.appendChild(ki); const vi=document.createElement("input"); vi.type="hidden"; vi.name=`SelectedFeatureValues[${i}].Value`; vi.value=v; c.appendChild(vi); i++;}); });
 </script>
 }
