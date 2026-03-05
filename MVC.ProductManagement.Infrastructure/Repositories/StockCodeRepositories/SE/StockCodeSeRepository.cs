@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.Services.StockCodes.SE;
+using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SE;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
@@ -8,9 +9,9 @@ using MVC.ProductManagement.Infrastructure.DataAccess;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.SE
+namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SE
 {
-    public class StockCodeSeService : IStockCodeSeService
+    public class StockCodeSeRepository : IStockCodeSeService
     {
         private readonly ISProductRepositories _productRepo;
         private readonly IStockSequenceRepositories _sequenceRepo;
@@ -19,7 +20,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SE
         private readonly ISProductGroupRepositories _groupRepo;
         private readonly AppDbContext _context;
 
-        public StockCodeSeService(
+        public StockCodeSeRepository(
             ISProductRepositories productRepo,
             IStockSequenceRepositories sequenceRepo,
             IStockCardRepositories stockCardRepo,
