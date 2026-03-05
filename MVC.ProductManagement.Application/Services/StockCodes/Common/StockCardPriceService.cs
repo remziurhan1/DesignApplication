@@ -45,8 +45,6 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                     StockCode = p.StockCard.StockCode8,
                     Currency = p.Currency,
                     UnitPrice = p.UnitPrice,
-                    VatRate = p.VatRate,
-                    PriceWithVat = p.UnitPrice * (1 + p.VatRate / 100),
                     ValidFrom = p.ValidFrom,
                     ValidTo = p.ValidTo,
                     Notes = p.Notes // ✅ Notes ekle
@@ -69,8 +67,6 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                     StockCode = p.StockCard.StockCode8,
                     Currency = p.Currency,
                     UnitPrice = p.UnitPrice,
-                    VatRate = p.VatRate,
-                    PriceWithVat = p.UnitPrice * (1 + p.VatRate / 100),
                     ValidFrom = p.ValidFrom,
                     ValidTo = p.ValidTo,
                     IsActive = p.IsActive,
@@ -127,7 +123,6 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 StockCardId = createDto.StockCardId,
                 Currency = createDto.Currency.ToUpper(),
                 UnitPrice = createDto.UnitPrice,
-                VatRate = createDto.VatRate,
                 ValidFrom = createDto.ValidFrom,
                 ValidTo = createDto.ValidTo,
                 IsActive = true, // ✅ Yeni fiyat aktif
@@ -147,8 +142,6 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 StockCode = stockCard.StockCode8,
                 Currency = price.Currency,
                 UnitPrice = price.UnitPrice,
-                VatRate = price.VatRate,
-                PriceWithVat = price.UnitPrice * (1 + price.VatRate / 100),
                 ValidFrom = price.ValidFrom,
                 ValidTo = price.ValidTo,
                 IsActive = price.IsActive,
@@ -191,7 +184,6 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             }
 
             price.UnitPrice = updateDto.UnitPrice;
-            price.VatRate = updateDto.VatRate;
             price.ValidFrom = updateDto.ValidFrom;
             price.ValidTo = updateDto.ValidTo;
             price.IsActive = updateDto.IsActive;
@@ -209,8 +201,6 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 StockCode = price.StockCard.StockCode8,
                 Currency = price.Currency,
                 UnitPrice = price.UnitPrice,
-                VatRate = price.VatRate,
-                PriceWithVat = price.UnitPrice * (1 + price.VatRate / 100),
                 ValidFrom = price.ValidFrom,
                 ValidTo = price.ValidTo,
                 IsActive = price.IsActive,
@@ -261,8 +251,6 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                     StockCode = p.StockCard.StockCode8,
                     Currency = p.Currency,
                     UnitPrice = p.UnitPrice,
-                    VatRate = p.VatRate,
-                    PriceWithVat = p.UnitPrice * (1 + p.VatRate / 100),
                     ValidFrom = p.ValidFrom,
                     ValidTo = p.ValidTo,
                     IsActive = p.IsActive,
