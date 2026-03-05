@@ -6,6 +6,8 @@ using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StockCodes.Common;
+using MVC.ProductManagement.Application.Services.StockCodes.SA;
+using MVC.ProductManagement.Application.Services.StockCodes.SA.Properties;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
 
 namespace MVC.ProductManagement.Application.Extentions
@@ -20,6 +22,8 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IAllowableStressService, AllowableStressService>();
             services.AddScoped<IStorageTypeService, StorageTypeService>();
             services.AddScoped<IStockCardGroupService, StockCardGroupService>();
+            services.AddScoped<IStockCodeSaAppService, StockCodeSaAppService>();
+            services.AddScoped<IStockCodeSaPropertyAppService, StockCodeSaPropertyAppService>();
 
             services.AddScoped<IExcelExportService, ExcelExportService>();
 

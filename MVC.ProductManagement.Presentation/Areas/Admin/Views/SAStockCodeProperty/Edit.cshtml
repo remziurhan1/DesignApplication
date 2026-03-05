@@ -1,0 +1,23 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA.Properties.SaStockCodePropertyVm
+
+<h2>SA Property Kuralı Düzenle</h2>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-2">
+        <label>Ürün</label>
+        <select asp-for="ProductId" asp-items="Model.Products" class="form-control"></select>
+    </div>
+    <div class="mb-2">
+        <label>Feature</label>
+        <select asp-for="FeatureId" asp-items="Model.Features" class="form-control"></select>
+    </div>
+    <div class="form-check mb-2">
+        <input asp-for="IsFixed" class="form-check-input" />
+        <label asp-for="IsFixed" class="form-check-label">Sabit Değer</label>
+    </div>
+    <div class="mb-2">
+        <label>Feature Değeri</label>
+        <select asp-for="FixedValueId" asp-items="Model.FeatureValues" class="form-control"></select>
+    </div>
+    <button class="btn btn-primary" type="submit">Güncelle</button>
+</form>

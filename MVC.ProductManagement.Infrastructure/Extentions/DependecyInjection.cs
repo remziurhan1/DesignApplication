@@ -11,6 +11,7 @@ using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using MVC.ProductManagement.Application.Services.StockCodes.SA;
+using MVC.ProductManagement.Application.Services.StockCodes.SA.Properties;
 using MVC.ProductManagement.Application.Services.StockCodes.SB;
 using MVC.ProductManagement.Application.Services.StockCodes.SC;
 using MVC.ProductManagement.Application.Services.StockCodes.SD;
@@ -19,6 +20,7 @@ using MVC.ProductManagement.Application.Services.StockCodes.SF;
 using MVC.ProductManagement.Application.Services.StockCodes.SG;
 using MVC.ProductManagement.Application.Services.StockCodes.SH;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SA;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SA.Properties;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SB;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SC;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SD;
@@ -68,6 +70,8 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IStockSequenceRepositories, StockSequenceRepository>();
             services.AddScoped<IStockCardRepositories, StockCardRepository>();
             services.AddScoped<IStockCardGroupRepository, StockCardGroupRepository>();
+            services.AddScoped<IStockCodeSaRepository, StockCodeSaRepository>();
+            services.AddScoped<IStockCodeSaPropertyRepository, StockCodeSaPropertyRepository>();
 
 
 
