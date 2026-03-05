@@ -53,10 +53,32 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             if (detail == null)
                 return NotFound();
 
-            var cards = await _groupService.SearchStockCardsAsync(q, 100);
-            ViewBag.StockCards = cards.Select(x => new SelectListItem($"{x.StockCode8} - {x.Description}", x.StockCardId.ToString())).ToList();
+            var cards = await _groupService.SearchStockCardsAsync(q, 500);
+            ViewBag.StockCards = BuildGroupedStockCardSelectList(cards);
             ViewBag.SearchTerm = q;
             return View(detail);
+        }
+
+        private static List<SelectListItem> BuildGroupedStockCardSelectList(IReadOnlyList<StockCardLookupDto> cards)
+        {
+            var orderedPrefixes = new[] { "SA", "SB", "SC", "SD", "SE", "SF", "SG" };
+            var groups = orderedPrefixes.ToDictionary(prefix => prefix, prefix => new SelectListGroup { Name = $"{prefix} Grubu" });
+            var otherGroup = new SelectListGroup { Name = "Diğer" };
+
+            return cards
+                .OrderBy(x => x.StockCode8)
+                .Select(x =>
+                {
+                    var prefix = (x.StockCode8 ?? string.Empty).Trim().ToUpperInvariant();
+                    prefix = prefix.Length >= 2 ? prefix[..2] : prefix;
+                    var targetGroup = groups.TryGetValue(prefix, out var grouped) ? grouped : otherGroup;
+
+                    return new SelectListItem($"{x.StockCode8} - {x.Description}", x.StockCardId.ToString())
+                    {
+                        Group = targetGroup
+                    };
+                })
+                .ToList();
         }
 
         [HttpPost]
