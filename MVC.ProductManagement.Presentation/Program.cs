@@ -1,5 +1,6 @@
 using MVC.ProductManagement.Infrastructure.Extentions;
 using MVC.ProductManagement.Application.Extentions;
+using MVC.ProductManagement.Application.Services.StockCodes.Rules;
 using MVC.ProductManagement.Presentation.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,13 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices();
 var app = builder.Build();
+
+// SA kural kataloğunu runtime'da senkronize et (HasData migration şişmesini azaltmak için)
+using (var scope = app.Services.CreateScope())
+{
+    var saCatalogSync = scope.ServiceProvider.GetRequiredService<ISaRuleCatalogSyncService>();
+    await saCatalogSync.SyncAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

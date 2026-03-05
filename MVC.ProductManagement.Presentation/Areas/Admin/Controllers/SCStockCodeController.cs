@@ -53,8 +53,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 if (vm.SProductId == Guid.Empty)
                     throw new InvalidOperationException("Ürün seçiniz.");
 
-                if (vm.SelectedFeatureValues == null || !vm.SelectedFeatureValues.Any())
-                    throw new InvalidOperationException("Tüm özellikleri seçiniz.");
+                // Tüm ürünlerde dinamik özellik olmayabilir (sadece sabit kurallar olabilir)
+                vm.SelectedFeatureValues ??= new Dictionary<Guid, Guid>();
 
                 var result = await _scService.GenerateScAsync(new ScStockCodeGenerateRequestDto
                 {

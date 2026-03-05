@@ -20,11 +20,6 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockCodes
                 .IsRequired()
                 .HasColumnType("decimal(18,4)");
 
-            builder.Property(x => x.VatRate)
-                .IsRequired()
-                .HasColumnType("decimal(5,2)")
-                .HasDefaultValue(20);
-
             builder.Property(x => x.ValidFrom)
                 .IsRequired();
 
@@ -36,9 +31,6 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockCodes
 
             builder.Property(x => x.Notes)
                 .HasMaxLength(500);
-
-            // ✅ Computed column ignore
-            builder.Ignore(x => x.PriceWithVat);
 
             // ✅ StockCard ilişkisi
             builder.HasOne(x => x.StockCard)

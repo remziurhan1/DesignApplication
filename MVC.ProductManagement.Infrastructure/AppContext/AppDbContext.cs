@@ -59,6 +59,8 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<StockCardDatasheet> StockCardDatasheets { get; set; }
         public DbSet<StockCardPrice> StockCardPrices { get; set; }
         public DbSet<StockCardInventory> StockCardInventories { get; set; }
+        public DbSet<StockCardGroup> StockCardGroups { get; set; }
+        public DbSet<StockCardGroupItem> StockCardGroupItems { get; set; }
 
         public DbSet<SProductFeatureRule> SProductFeatureRules { get; set; }
         public DbSet<SFeatureValueRule> SFeatureValueRules { get; set; }
