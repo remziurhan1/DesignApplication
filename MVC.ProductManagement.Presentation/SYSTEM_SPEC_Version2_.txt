@@ -25,7 +25,7 @@ CRYO-06-STR-20-V-26-A-1675
   │    │   │   │  │  │  │   └── 1675:  İç tank çapı (mm)
   │    │   │   │  │  │  └────── A: Aboveground / U: Underground
   │    │   │   │  │  └───────── 26: Basınç (bar)
-  │    │   │   │  └──────────── V: Vertical / H: Horizontal
+  │    │   │   │  └──────────── V: Vertical / H: Horizontalsss
   │    │   │   └─────────────── 20: Hacim (m³)
   │    │   └──────���──────────── STR: Storage / TRN: Transport
   │    └─────────────────────── 06: Gaz tipi kodu
