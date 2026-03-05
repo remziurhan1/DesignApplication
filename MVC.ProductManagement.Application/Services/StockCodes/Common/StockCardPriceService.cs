@@ -28,6 +28,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             CancellationToken cancellationToken = default)
         {
             var now = DateTime.UtcNow;
+            var today = now.Date;
 
             return await _context.StockCardPrices
                 .AsNoTracking()
@@ -35,8 +36,8 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                     && p.Currency == currency
                     && p.IsActive
                     && p.Status != Status.Deleted
-                    && p.ValidFrom <= now
-                    && (p.ValidTo == null || p.ValidTo >= now))
+                    && p.ValidFrom.Date <= today
+                    && (p.ValidTo == null || p.ValidTo.Value.Date >= today))
                 .OrderByDescending(p => p.ValidFrom)
                 .Select(p => new ActivePriceDto
                 {
@@ -123,8 +124,8 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 StockCardId = createDto.StockCardId,
                 Currency = createDto.Currency.ToUpper(),
                 UnitPrice = createDto.UnitPrice,
-                ValidFrom = createDto.ValidFrom,
-                ValidTo = createDto.ValidTo,
+                ValidFrom = createDto.ValidFrom.Date,
+                ValidTo = createDto.ValidTo?.Date,
                 IsActive = true, // ✅ Yeni fiyat aktif
                 Notes = createDto.Notes ?? string.Empty, // ✅ Null kontrolü
                 CreatedBy = userName,
@@ -184,8 +185,8 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             }
 
             price.UnitPrice = updateDto.UnitPrice;
-            price.ValidFrom = updateDto.ValidFrom;
-            price.ValidTo = updateDto.ValidTo;
+            price.ValidFrom = updateDto.ValidFrom.Date;
+            price.ValidTo = updateDto.ValidTo?.Date;
             price.IsActive = updateDto.IsActive;
             price.Notes = updateDto.Notes ?? string.Empty; // ✅ Null kontrolü
             price.ModifiedBy = userName;
@@ -236,13 +237,15 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             string currency = "TRY",
             CancellationToken cancellationToken = default)
         {
+            var atDate = date.Date;
+
             return await _context.StockCardPrices
                 .AsNoTracking()
                 .Where(p => p.StockCardId == stockCardId
                     && p.Currency == currency
                     && p.Status != Status.Deleted
-                    && p.ValidFrom <= date
-                    && (p.ValidTo == null || p.ValidTo >= date))
+                    && p.ValidFrom.Date <= atDate
+                    && (p.ValidTo == null || p.ValidTo.Value.Date >= atDate))
                 .OrderByDescending(p => p.ValidFrom)
                 .Select(p => new PriceDto
                 {

@@ -204,14 +204,15 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
         private async Task<decimal> ResolveUnitPriceAsync(Guid stockCardId, string currency, CancellationToken cancellationToken)
         {
             var now = DateTime.UtcNow;
+            var today = now.Date;
             var active = await _context.StockCardPrices
                 .AsNoTracking()
                 .Where(p => p.StockCardId == stockCardId
                     && p.Currency == currency
                     && p.IsActive
                     && p.Status != Status.Deleted
-                    && p.ValidFrom <= now
-                    && (p.ValidTo == null || p.ValidTo >= now))
+                    && p.ValidFrom.Date <= today
+                    && (p.ValidTo == null || p.ValidTo.Value.Date >= today))
                 .OrderByDescending(p => p.ValidFrom)
                 .Select(p => p.UnitPrice)
                 .FirstOrDefaultAsync(cancellationToken);
