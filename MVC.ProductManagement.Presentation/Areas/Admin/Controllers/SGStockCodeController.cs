@@ -40,8 +40,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 if (vm.SProductId == Guid.Empty)
                     throw new InvalidOperationException("Ürün seçiniz.");
 
-                if (vm.SelectedFeatureValues == null || !vm.SelectedFeatureValues.Any())
-                    throw new InvalidOperationException("Tüm özellikleri seçiniz.");
+                vm.SelectedFeatureValues ??= new Dictionary<Guid, Guid>();
 
                 var result = await _sgService.GenerateSgAsync(new SgStockCodeGenerateRequestDto
                 {

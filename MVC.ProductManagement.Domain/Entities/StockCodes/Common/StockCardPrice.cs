@@ -24,16 +24,6 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes
         public decimal UnitPrice { get; set; }
 
         /// <summary>
-        /// KDV oranı (%)
-        /// </summary>
-        public decimal VatRate { get; set; } = 20;
-
-        /// <summary>
-        /// KDV dahil fiyat
-        /// </summary>
-        public decimal PriceWithVat => UnitPrice * (1 + VatRate / 100);
-
-        /// <summary>
         /// Geçerlilik başlangıç tarihi
         /// </summary>
         public DateTime ValidFrom { get; set; }

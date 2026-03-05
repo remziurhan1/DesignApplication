@@ -1,362 +1,61 @@
-﻿@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SG.SGStockCodeGenerateVm
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SG.SGStockCodeGenerateVm
 
 @{
-    ViewData["Title"] = "SG Stok Kodu Üret (Gresorlar ve Pimler)";
+    ViewData["Title"] = "SG Stok Kodu Üret";
 }
 
 <div class="container mt-4">
-    <h2>SG Stok Kodu Üret - Gresorlar ve Pimler</h2>
-    <p class="text-muted">
-        <i class="bi bi-circle-fill text-info"></i>
-        Gresorluk, Gupilya/Kopilya, Pim Silindirik, Pim Konik, Segmanlar, Perçin ve daha fazlası...
-    </p>
+    <h2>SG Stok Kodu Üret</h2>
+    <p class="text-muted"><i class="bi bi-diagram-3 text-info"></i> SG grup özeti + rule tabanlı özellik seçimi</p>
     <hr />
 
     @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
     {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            <strong>Hata!</strong> @Model.ErrorMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <div class="alert alert-danger alert-dismissible fade show"><strong>Hata!</strong> @Model.ErrorMessage<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
     }
 
     @if (!string.IsNullOrWhiteSpace(Model.StockCode8))
     {
-        <div class="alert @(Model.AlreadyExists == true ? "alert-warning" : "alert-success") alert-dismissible fade show" role="alert">
-            <h5 class="alert-heading">
-                <i class="bi bi-@(Model.AlreadyExists == true ? "info-circle-fill" : "check-circle-fill")"></i>
-                @(Model.AlreadyExists == true ? "Mevcut Kod Getirildi" : "Yeni Kod Oluşturuldu!")
-            </h5>
-            <hr />
-            <p class="mb-2">
-                <strong>Stok Kodu:</strong>
-                <span class="badge bg-primary fs-4">@Model.StockCode8</span>
-            </p>
-            <p class="mb-0">
-                <strong>Açıklama:</strong><br />
-                <span class="text-dark">@Model.Description</span>
-            </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert @(Model.AlreadyExists == true ? "alert-warning" : "alert-success") alert-dismissible fade show">
+            <h5>@(Model.AlreadyExists == true ? "Mevcut Kod Getirildi" : "Yeni Kod Oluşturuldu!")</h5><hr />
+            <p><strong>Stok Kodu:</strong> <span class="badge bg-primary fs-4">@Model.StockCode8</span></p>
+            <p><strong>Açıklama:</strong><br />@Model.Description</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
 
     <form id="sgForm" asp-action="Generate" method="post">
-        <input type="hidden" name="SProductId" id="productId" />
+        <input type="hidden" name="SProductId" id="productIdInput" />
 
-        <!-- ✅ ÜRÜN SEÇİMİ -->
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <i class="bi bi-box-seam"></i> <strong>1. Ürün Seçimi</strong>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <label class="form-label fw-bold">Ürün Seçiniz *</label>
-                        <select asp-for="SProductId" asp-items="Model.Products" id="productSelect" class="form-select form-select-lg" required>
-                            <option value="">-- Ürün Seçiniz --</option>
-                        </select>
-                        <small class="form-text text-muted">
-                            <i class="bi bi-info-circle"></i>
-                            10 farklı gresor ve pim türü mevcuttur
-                        </small>
-                    </div>
-                </div>
-            </div>
+        <div class="card mb-4 shadow-sm"><div class="card-header bg-primary text-white"><strong>1. Ürün Seçimi</strong></div><div class="card-body">
+            <select asp-for="SProductId" asp-items="Model.Products" id="productSelect" class="form-select form-select-lg" required><option value="">-- Ürün Seçiniz --</option></select>
+        </div></div>
+
+        <div class="card mb-3 shadow-sm" id="segmentCard" style="display:none;">
+            <div class="card-header bg-secondary text-white"><strong>2. SG Grup Özeti</strong></div>
+            <div class="card-body"><p class="mb-2"><strong>Grup:</strong> <span id="segmentText"></span></p><ul id="summaryList" class="mb-0"></ul></div>
         </div>
 
-        <!-- ✅ FEATURE DROPDOWNS (Dinamik) -->
-        <div class="card mb-4 shadow-sm" id="featuresCard" style="display:none;">
-            <div class="card-header bg-success text-white">
-                <i class="bi bi-sliders"></i> <strong>2. Ürün Özellikleri</strong>
-            </div>
-            <div class="card-body">
-                <div id="featuresContainer" class="row"></div>
-            </div>
-        </div>
+        <div class="card mb-4 shadow-sm" id="featuresCard" style="display:none;"><div class="card-header bg-info text-white"><strong>3. Ürün Özellikleri</strong></div><div class="card-body"><div id="featuresContainer"></div></div></div>
 
         <div id="hiddenInputs"></div>
-
-        <hr />
-
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn" disabled>
-                <i class="bi bi-gear-fill"></i> Kod Üret
-            </button>
-            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg px-4">
-                <i class="bi bi-arrow-left"></i> Geri
-            </a>
-        </div>
+        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>Kod Üret</button>
     </form>
 </div>
 
 @section Scripts {
-    <script>
-        const productSelect = document.getElementById("productSelect");
-        const featuresContainer = document.getElementById("featuresContainer");
-        const featuresCard = document.getElementById("featuresCard");
-        const submitBtn = document.getElementById("submitBtn");
-        const productIdInput = document.getElementById("productId");
-        const sgForm = document.getElementById("sgForm");
+<script>
+const productSelect=document.getElementById("productSelect"), productIdInput=document.getElementById("productIdInput"), featuresCard=document.getElementById("featuresCard"), featuresContainer=document.getElementById("featuresContainer"), submitBtn=document.getElementById("submitBtn"), sgForm=document.getElementById("sgForm"), segmentCard=document.getElementById("segmentCard"), segmentText=document.getElementById("segmentText"), summaryList=document.getElementById("summaryList");
+let features=[]; let selectedValues={};
+const sgGroups={"SGA0":"GRESÖRLÜK","SGA1":"GUPİLYA / KOPİLYA","SGA2":"PİM SİLİNDİRİK","SGA3":"PİM KONİK","SGA4":"PİM SIKMA KOVANI","SGA5":"PİM ÇENTİKLİ","SGA6":"PİM YAYLI","SGA7":"SEGMANLAR","SGA8":"YARIKLI PİM","SGA9":"PERÇİN"};
 
-        let featureSelects = [];
+productSelect.addEventListener("change", async ()=>{ const productId=productSelect.value; features=[]; selectedValues={}; featuresContainer.innerHTML=""; summaryList.innerHTML=""; submitBtn.disabled=true; featuresCard.style.display="none"; segmentCard.style.display="none"; if(!productId) return; const code=(productSelect.selectedOptions[0]?.text||"").split(" - ")[0]; renderSegment(code);
+try{ const resp=await fetch(`/Admin/SGStockCode/FeaturesByProduct?productId=${productId}`); features=await resp.json(); if(!features?.length){featuresContainer.innerHTML='<div class="alert alert-info">Bu ürün için özellik bulunamadı.</div>'; featuresCard.style.display="block"; return;} renderFeatures(); } catch(err){ featuresContainer.innerHTML=`<div class="alert alert-danger">${err.message}</div>`; featuresCard.style.display="block"; }});
 
-        // ========== Ürün değişince feature'ları yükle ==========
-        productSelect.addEventListener("change", async function () {
-            const productId = productSelect.value;
-
-            // Temizle
-            featuresContainer.innerHTML = "";
-            featureSelects = [];
-            submitBtn.disabled = true;
-            featuresCard.style.display = "none";
-
-            if (!productId) return;
-
-            try {
-                const resp = await fetch(`/Admin/SGStockCode/FeaturesByProduct?productId=${productId}`);
-                if (!resp.ok) throw new Error("İstek başarısız");
-
-                const features = await resp.json();
-
-                if (!features || features.length === 0) {
-                    featuresContainer.innerHTML = '<div class="col-12"><div class="alert alert-info"><i class="bi bi-info-circle"></i> Bu ürün için özellik tanımı bulunmuyor.</div></div>';
-                    featuresCard.style.display = "block";
-                    return;
-                }
-
-                features.sort((a, b) => a.sortOrder - b.sortOrder);
-
-                featuresCard.style.display = "block";
-
-                let stepNumber = 1;
-                features.forEach((feature, index) => {
-                    const colDiv = document.createElement("div");
-                    colDiv.className = "col-md-6 col-lg-4 mb-3";
-
-                    const label = document.createElement("label");
-                    label.className = "form-label fw-bold";
-                    label.innerHTML = `<span class="badge bg-secondary me-1">${stepNumber}</span> ${feature.name}${feature.isRequired ? ' <span class="text-danger">*</span>' : ''}`;
-
-                    const select = document.createElement("select");
-                    select.className = "form-select feature-select";
-                    select.setAttribute("data-feature-id", feature.id);
-                    select.setAttribute("data-feature-code", feature.code);
-                    select.setAttribute("data-step", stepNumber);
-                    select.required = feature.isRequired;
-
-                    // İlk dropdown dışında hepsi disabled
-                    if (index > 0) {
-                        select.disabled = true;
-                    }
-
-                    const defaultOption = document.createElement("option");
-                    defaultOption.value = "";
-                    defaultOption.textContent = index === 0
-                        ? "-- Seçiniz --"
-                        : `-- Önce ${stepNumber - 1}. adımı tamamlayın --`;
-                    select.appendChild(defaultOption);
-
-                    feature.values.forEach(value => {
-                        const option = document.createElement("option");
-                        option.value = value.id;
-                        option.setAttribute("data-value-code", value.code);
-                        option.textContent = value.name;
-                        select.appendChild(option);
-                    });
-
-                    colDiv.appendChild(label);
-                    colDiv.appendChild(select);
-                    featuresContainer.appendChild(colDiv);
-
-                    featureSelects.push(select);
-                    stepNumber++;
-                });
-
-                // Event listener'ları ekle
-                attachFeatureListeners();
-
-            } catch (err) {
-                featuresContainer.innerHTML = `<div class="col-12"><div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Hata: ${err.message}</div></div>`;
-                featuresCard.style.display = "block";
-            }
-        });
-
-        // ========== Feature seçim event'lerini bağla ==========
-        function attachFeatureListeners() {
-            featureSelects.forEach((select, index) => {
-                select.addEventListener("change", function () {
-                    const selectedValue = this.value;
-
-                    // Sonraki tüm dropdown'ları sıfırla
-                    for (let i = index + 1; i < featureSelects.length; i++) {
-                        featureSelects[i].disabled = true;
-                        featureSelects[i].value = "";
-                        const step = parseInt(featureSelects[i].getAttribute("data-step"));
-                        featureSelects[i].options[0].text = `-- Önce ${step - 1}. adımı tamamlayın --`;
-                        featureSelects[i].classList.remove("is-valid");
-                    }
-
-                    submitBtn.disabled = true;
-
-                    // Eğer seçim yapıldıysa bir sonrakini aktif et
-                    if (selectedValue) {
-                        this.classList.add("is-valid");
-                        const nextFeature = featureSelects[index + 1];
-                        if (nextFeature) {
-                            nextFeature.disabled = false;
-                            nextFeature.options[0].text = "-- Seçiniz --";
-                        } else {
-                            // Son feature seçildiyse submit'i aktif et
-                            checkFormCompletion();
-                        }
-                    } else {
-                        this.classList.remove("is-valid");
-                    }
-                });
-            });
-        }
-
-        // ========== Form tamamlandı mı kontrol et ==========
-        function checkFormCompletion() {
-            const productId = productSelect.value;
-            if (!productId) {
-                submitBtn.disabled = true;
-                return;
-            }
-
-            let allSelected = true;
-            featureSelects.forEach(select => {
-                if (select.required && !select.value) {
-                    allSelected = false;
-                }
-            });
-
-            submitBtn.disabled = !allSelected;
-        }
-
-        // ========== Form submit ==========
-        sgForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const productId = productSelect.value;
-            if (!productId) {
-                alert("⚠️ Ürün seçiniz!");
-                return;
-            }
-
-            productIdInput.value = productId;
-
-            const hiddenContainer = document.getElementById("hiddenInputs");
-            hiddenContainer.innerHTML = "";
-
-            let index = 0;
-            let allValid = true;
-
-            featureSelects.forEach(select => {
-                const featureId = select.getAttribute("data-feature-id");
-                const valueId = select.value;
-
-                if (select.required && !valueId) {
-                    allValid = false;
-                    return;
-                }
-
-                if (valueId) {
-                    const keyInput = document.createElement("input");
-                    keyInput.type = "hidden";
-                    keyInput.name = `SelectedFeatureValues[${index}].Key`;
-                    keyInput.value = featureId;
-                    hiddenContainer.appendChild(keyInput);
-
-                    const valueInput = document.createElement("input");
-                    valueInput.type = "hidden";
-                    valueInput.name = `SelectedFeatureValues[${index}].Value`;
-                    valueInput.value = valueId;
-                    hiddenContainer.appendChild(valueInput);
-
-                    console.log(`[SG JS] Added: Key=${featureId}, Value=${valueId}`);
-                    index++;
-                }
-            });
-
-            if (!allValid) {
-                alert("⚠️ Tüm zorunlu alanları doldurunuz!");
-                return;
-            }
-
-            // ✅ Submit öncesi loading göster
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Kod Üretiliyor...';
-
-            this.submit();
-        });
-
-        // ========== Sayfa yüklendiğinde ürün seçiliyse feature'ları yükle ==========
-        window.addEventListener("DOMContentLoaded", function () {
-            const selectedProductId = productSelect.value;
-            if (selectedProductId) {
-                productSelect.dispatchEvent(new Event("change"));
-            }
-        });
-    </script>
-
-    <style>
-        /* ✅ Disabled dropdown'lar gri */
-        .feature-select:disabled {
-            background-color: #f8f9fa;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        /* ✅ Aktif dropdown'lar mavi kenarlık */
-        .feature-select:not(:disabled) {
-            border-color: #0d6efd;
-            border-width: 2px;
-        }
-
-        /* ✅ Seçilmiş dropdown'lar yeşil kenarlık */
-        .feature-select.is-valid {
-            border-color: #198754 !important;
-            background-color: #d1e7dd;
-        }
-
-        /* ✅ Buton disabled görünümü */
-        #submitBtn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ✅ Ürün dropdown daha büyük */
-        #productSelect {
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        /* ✅ Card animasyonu */
-        .card {
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-        }
-
-        /* ✅ Alert animasyonu */
-        .alert {
-            animation: slideDown 0.5s ease;
-        }
-
-        @@keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+function renderSegment(code){ const name=sgGroups[code]||"SG Ürün Grubu"; segmentText.textContent=`${code} - ${name}`; ["Pim/perçin ürünlerinde çap-boy-geometri birlikte değerlendirilmelidir","Standart/malzeme seçimlerini ürün koduna göre eşleştirin"].forEach(x=>{const li=document.createElement("li"); li.textContent=x; summaryList.appendChild(li);}); segmentCard.style.display="block"; }
+function groupOfFeature(code){ if(code.includes("MALZEME")||code.includes("KAPLAMA")) return "Malzeme"; if(code.includes("CAP")||code.includes("DIAM")||code.includes("BOY")||code.includes("LENGTH")) return "Ölçü"; if(code.includes("TIP")||code.includes("GEOMETRI")||code.includes("STANDART")) return "Geometri / Standart"; return "Genel"; }
+function renderFeatures(){ const groups={}; features.forEach(f=>{const g=groupOfFeature((f.code||"").toUpperCase()); (groups[g]??=[]).push(f);}); featuresContainer.innerHTML=""; Object.entries(groups).forEach(([name,items])=>{ const h=document.createElement("h6"); h.className="mt-3 mb-2 text-primary border-bottom pb-1"; h.textContent=name; featuresContainer.appendChild(h); const row=document.createElement("div"); row.className="row"; items.forEach(feature=>{ const col=document.createElement("div"); col.className="col-md-6 mb-3"; const label=document.createElement("label"); label.className="form-label fw-bold"; label.textContent=feature.name; const select=document.createElement("select"); select.className="form-select"; select.dataset.featureId=feature.id; select.required=feature.isRequired; select.innerHTML='<option value="">-- Seçiniz --</option>'; (feature.values||[]).forEach(v=>{const o=document.createElement("option"); o.value=v.id; o.textContent=`${v.code} - ${v.name}`; select.appendChild(o);}); select.addEventListener("change", e=>{const id=e.target.dataset.featureId; if(e.target.value) selectedValues[id]=e.target.value; else delete selectedValues[id]; checkForm();}); col.appendChild(label); col.appendChild(select); row.appendChild(col);}); featuresContainer.appendChild(row);}); featuresCard.style.display="block"; checkForm(); }
+function checkForm(){ const required=(features||[]).filter(f=>f.isRequired); submitBtn.disabled=!required.every(f=>selectedValues[f.id]); }
+sgForm.addEventListener("submit", ()=>{ productIdInput.value=productSelect.value; const c=document.getElementById("hiddenInputs"); c.innerHTML=""; let i=0; Object.entries(selectedValues).forEach(([k,v])=>{const ki=document.createElement("input"); ki.type="hidden"; ki.name=`SelectedFeatureValues[${i}].Key`; ki.value=k; c.appendChild(ki); const vi=document.createElement("input"); vi.type="hidden"; vi.name=`SelectedFeatureValues[${i}].Value`; vi.value=v; c.appendChild(vi); i++;}); });
+</script>
 }
