@@ -204,17 +204,37 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
 
         private async Task<decimal> ResolveUnitPriceAsync(Guid stockCardId, CancellationToken cancellationToken)
         {
-            var latestPrice = await _context.StockCardPrices
+            var today = DateTime.UtcNow.Date;
+
+            var latestEurPrice = await _context.StockCardPrices
                 .AsNoTracking()
                 .Where(p => p.StockCardId == stockCardId
                     && p.Status != Status.Deleted
+                    && p.IsActive
+                    && p.ValidFrom.Date <= today
+                    && (p.ValidTo == null || p.ValidTo.Value.Date >= today)
                     && (p.Currency ?? string.Empty).Trim().ToUpper() == GroupCurrencyCode)
-                .OrderByDescending(p => p.CreatedDate)
-                .ThenByDescending(p => p.ValidFrom)
-                .Select(p => p.UnitPrice)
+                .OrderByDescending(p => p.ValidFrom)
+                .ThenByDescending(p => p.CreatedDate)
+                .Select(p => (decimal?)p.UnitPrice)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return latestPrice;
+            if (latestEurPrice.HasValue)
+                return latestEurPrice.Value;
+
+            var latestAnyCurrencyPrice = await _context.StockCardPrices
+                .AsNoTracking()
+                .Where(p => p.StockCardId == stockCardId
+                    && p.Status != Status.Deleted
+                    && p.IsActive
+                    && p.ValidFrom.Date <= today
+                    && (p.ValidTo == null || p.ValidTo.Value.Date >= today))
+                .OrderByDescending(p => p.ValidFrom)
+                .ThenByDescending(p => p.CreatedDate)
+                .Select(p => (decimal?)p.UnitPrice)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return latestAnyCurrencyPrice ?? 0m;
         }
 
         private async Task RecalculateGroupTotalAsync(Guid groupId, string userName, CancellationToken cancellationToken)
