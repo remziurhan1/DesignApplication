@@ -68,21 +68,6 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IStockSequenceRepositories, StockSequenceRepository>();
             services.AddScoped<IStockCardRepositories, StockCardRepository>();
             services.AddScoped<IStockCardGroupRepository, StockCardGroupRepository>();
-            services.AddScoped<IStockCodeSaService, StockCodeSaRepository>();
-            services.AddScoped<IStockCodeSbService, StockCodeSbRepository>();
-            services.AddScoped<IStockCodeScService, StockCodeScRepository>();
-            services.AddScoped<IStockCodeSdService, StockCodeSdRepository>();
-            services.AddScoped<IStockCodeSeService, StockCodeSeRepository>();
-            services.AddScoped<IStockCodeSfService, StockCodeSfRepository>();
-            services.AddScoped<IStockCodeSgService, StockCodeSgRepository>();
-            services.AddScoped<IStockCodeShService, StockCodeShRepository>();
-            services.AddScoped<IStockCardDatasheetService, StockCardDatasheetService>();
-            services.AddScoped<IStockCardPriceService, StockCardPriceService>();
-            services.AddScoped<IStockCardInventoryService, StockCardInventoryService>();
-            services.AddScoped<IStockRuleProfileService, StockRuleProfileService>();
-            services.AddScoped<ISaRuleCatalogSyncService, SaRuleCatalogSyncService>();
-            services.AddScoped<ISFeatureQueryService, SFeatureQueryService>();
-            services.AddScoped<IStockCodeLookupService, StockCodeLookupService>();
 
 
 
