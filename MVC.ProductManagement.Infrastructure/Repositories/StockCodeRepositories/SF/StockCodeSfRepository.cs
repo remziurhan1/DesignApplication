@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.Services.StockCodes.SF;
+using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
@@ -12,9 +13,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.SF
+namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SF
 {
-    public class StockCodeSfService : IStockCodeSfService
+    public class StockCodeSfRepository : IStockCodeSfService
     {
         private readonly AppDbContext _db;
 
@@ -49,7 +50,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SF
         private const string F_TIP = "SF_TIP";
         private const string F_KAPASITE = "SF_KAPASITE";
 
-        public StockCodeSfService(AppDbContext db)
+        public StockCodeSfRepository(AppDbContext db)
         {
             _db = db;
         }

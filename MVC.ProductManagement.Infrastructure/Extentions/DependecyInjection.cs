@@ -10,6 +10,18 @@ using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
+using MVC.ProductManagement.Application.Services.StockCodes.SA;
+using MVC.ProductManagement.Application.Services.StockCodes.SB;
+using MVC.ProductManagement.Application.Services.StockCodes.SC;
+using MVC.ProductManagement.Application.Services.StockCodes.SD;
+using MVC.ProductManagement.Application.Services.StockCodes.SE;
+using MVC.ProductManagement.Application.Services.StockCodes.SF;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SA;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SB;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SC;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SD;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SE;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SF;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypeRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.YieldStrengthRepositories;
 using MVC.ProductManagement.Infrastructure.Seeds;
@@ -46,6 +58,12 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IStockSequenceRepositories, StockSequenceRepository>();
             services.AddScoped<IStockCardRepositories, StockCardRepository>();
             services.AddScoped<IStockCardGroupRepository, StockCardGroupRepository>();
+            services.AddScoped<IStockCodeSaService, StockCodeSaRepository>();
+            services.AddScoped<IStockCodeSbService, StockCodeSbRepository>();
+            services.AddScoped<IStockCodeScService, StockCodeScRepository>();
+            services.AddScoped<IStockCodeSdService, StockCodeSdRepository>();
+            services.AddScoped<IStockCodeSeService, StockCodeSeRepository>();
+            services.AddScoped<IStockCodeSfService, StockCodeSfRepository>();
 
 
 
