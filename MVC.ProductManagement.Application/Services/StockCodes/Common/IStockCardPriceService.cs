@@ -14,7 +14,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
         /// </summary>
         Task<ActivePriceDto> GetActivePriceAsync(
             Guid stockCardId,
-            string currency = "TRY",
+            string currency = "EUR",
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
         Task<PriceDto> GetPriceAtDateAsync(
             Guid stockCardId,
             DateTime date,
-            string currency = "TRY",
+            string currency = "EUR",
             CancellationToken cancellationToken = default);
 
         // ✅ Soft Delete

@@ -6,7 +6,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
     public class StockCardGroupCreateDto
     {
         public string Name { get; set; } = string.Empty;
-        public string CurrencyCode { get; set; } = "TRY";
+        public string CurrencyCode { get; set; } = "EUR";
         public List<StockCardGroupCreateItemDto> Items { get; set; } = new();
     }
 
