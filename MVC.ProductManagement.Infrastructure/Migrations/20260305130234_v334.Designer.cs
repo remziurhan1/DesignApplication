@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC.ProductManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260222171605_v358")]
-    partial class v358
+    [Migration("20260305130234_v334")]
+    partial class v334
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -755,7 +755,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2428),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1263),
                             Density = 7850.0,
                             Group = "Fine grain pressure vessel steel",
                             MaterialNumber = "1.0565",
@@ -832,7 +832,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2467),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1296),
                             FormType = 0,
                             MaterialId = new Guid("11111111-1111-1111-1111-111111111111"),
                             Notes = "Standard plate form for P355NH",
@@ -2616,13 +2616,24 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
+                            Id = new Guid("7c4f604c-0e49-13d4-e89f-13c5d2fdcda1"),
+                            Code = "GALVANIZ",
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Galvaniz",
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SortOrder = 2,
+                            Status = 1
+                        },
+                        new
+                        {
                             Id = new Guid("6fabe109-7655-0c39-155e-5eab0ff04407"),
                             Code = "GEOMET",
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Geomet",
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
-                            SortOrder = 2,
+                            SortOrder = 3,
                             Status = 1
                         },
                         new
@@ -2633,7 +2644,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Sıcak Daldırma Galvaniz",
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
-                            SortOrder = 3,
+                            SortOrder = 4,
                             Status = 1
                         },
                         new
@@ -2644,7 +2655,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "PTFE",
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
-                            SortOrder = 4,
+                            SortOrder = 5,
                             Status = 1
                         },
                         new
@@ -2655,7 +2666,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Kadmiyum",
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
-                            SortOrder = 5,
+                            SortOrder = 6,
                             Status = 1
                         },
                         new
@@ -2666,7 +2677,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Kaplamasız",
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
-                            SortOrder = 6,
+                            SortOrder = 7,
                             Status = 1
                         },
                         new
@@ -10629,13 +10640,24 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
+                            Id = new Guid("b8c417d6-01c2-b117-b267-fdc353e156b6"),
+                            CreatedBy = "SEED",
+                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
+                            SFeatureValueId = new Guid("7c4f604c-0e49-13d4-e89f-13c5d2fdcda1"),
+                            SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
+                            SortOrder = 3,
+                            Status = 1
+                        },
+                        new
+                        {
                             Id = new Guid("a1b9d3f0-08ba-4e6b-abff-ff0a719f3701"),
                             CreatedBy = "SEED",
                             CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 3,
+                            SortOrder = 4,
                             Status = 1
                         },
                         new
@@ -10646,7 +10668,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 4,
+                            SortOrder = 5,
                             Status = 1
                         },
                         new
@@ -10657,7 +10679,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 5,
+                            SortOrder = 6,
                             Status = 1
                         },
                         new
@@ -10668,7 +10690,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 6,
+                            SortOrder = 7,
                             Status = 1
                         },
                         new
@@ -10679,7 +10701,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 7,
+                            SortOrder = 8,
                             Status = 1
                         },
                         new
@@ -10690,7 +10712,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 8,
+                            SortOrder = 9,
                             Status = 1
                         },
                         new
@@ -10701,7 +10723,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 9,
+                            SortOrder = 10,
                             Status = 1
                         },
                         new
@@ -10712,7 +10734,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 10,
+                            SortOrder = 11,
                             Status = 1
                         },
                         new
@@ -10723,7 +10745,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 11,
+                            SortOrder = 12,
                             Status = 1
                         },
                         new
@@ -10734,7 +10756,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 12,
+                            SortOrder = 13,
                             Status = 1
                         },
                         new
@@ -10745,7 +10767,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 13,
+                            SortOrder = 14,
                             Status = 1
                         },
                         new
@@ -10756,7 +10778,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 14,
+                            SortOrder = 15,
                             Status = 1
                         },
                         new
@@ -10767,7 +10789,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 15,
+                            SortOrder = 16,
                             Status = 1
                         },
                         new
@@ -10778,7 +10800,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 16,
+                            SortOrder = 17,
                             Status = 1
                         },
                         new
@@ -10789,7 +10811,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 17,
+                            SortOrder = 18,
                             Status = 1
                         },
                         new
@@ -10800,7 +10822,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 18,
+                            SortOrder = 19,
                             Status = 1
                         },
                         new
@@ -10811,7 +10833,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 19,
+                            SortOrder = 20,
                             Status = 1
                         },
                         new
@@ -10822,7 +10844,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 20,
+                            SortOrder = 21,
                             Status = 1
                         },
                         new
@@ -10833,7 +10855,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 21,
+                            SortOrder = 22,
                             Status = 1
                         },
                         new
@@ -10844,7 +10866,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 22,
+                            SortOrder = 23,
                             Status = 1
                         },
                         new
@@ -10855,7 +10877,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 23,
+                            SortOrder = 24,
                             Status = 1
                         },
                         new
@@ -10866,7 +10888,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 24,
+                            SortOrder = 25,
                             Status = 1
                         },
                         new
@@ -10877,7 +10899,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 25,
+                            SortOrder = 26,
                             Status = 1
                         },
                         new
@@ -10888,7 +10910,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 26,
+                            SortOrder = 27,
                             Status = 1
                         },
                         new
@@ -10899,7 +10921,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 27,
+                            SortOrder = 28,
                             Status = 1
                         },
                         new
@@ -10910,7 +10932,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 28,
+                            SortOrder = 29,
                             Status = 1
                         },
                         new
@@ -10921,7 +10943,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 29,
+                            SortOrder = 30,
                             Status = 1
                         },
                         new
@@ -10932,7 +10954,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 30,
+                            SortOrder = 31,
                             Status = 1
                         },
                         new
@@ -10943,7 +10965,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 31,
+                            SortOrder = 32,
                             Status = 1
                         },
                         new
@@ -10954,7 +10976,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 32,
+                            SortOrder = 33,
                             Status = 1
                         },
                         new
@@ -10965,7 +10987,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 33,
+                            SortOrder = 34,
                             Status = 1
                         },
                         new
@@ -10976,7 +10998,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 34,
+                            SortOrder = 35,
                             Status = 1
                         },
                         new
@@ -10987,7 +11009,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 35,
+                            SortOrder = 36,
                             Status = 1
                         },
                         new
@@ -10998,7 +11020,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 36,
+                            SortOrder = 37,
                             Status = 1
                         },
                         new
@@ -11009,7 +11031,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 37,
+                            SortOrder = 38,
                             Status = 1
                         },
                         new
@@ -11020,7 +11042,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 38,
+                            SortOrder = 39,
                             Status = 1
                         },
                         new
@@ -11031,7 +11053,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 39,
+                            SortOrder = 40,
                             Status = 1
                         },
                         new
@@ -11042,7 +11064,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 40,
+                            SortOrder = 41,
                             Status = 1
                         },
                         new
@@ -11053,7 +11075,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 41,
+                            SortOrder = 42,
                             Status = 1
                         },
                         new
@@ -11064,7 +11086,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 42,
+                            SortOrder = 43,
                             Status = 1
                         },
                         new
@@ -11075,7 +11097,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("856ffc31-6f9f-ece8-ae42-2bf1b9a93e7e"),
-                            SortOrder = 43,
+                            SortOrder = 44,
                             Status = 1
                         },
                         new
@@ -11086,7 +11108,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7bbf2e19-e159-43e5-07e4-686acd72c3da"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 44,
+                            SortOrder = 45,
                             Status = 1
                         },
                         new
@@ -11097,7 +11119,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 45,
+                            SortOrder = 46,
                             Status = 1
                         },
                         new
@@ -11108,7 +11130,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 46,
+                            SortOrder = 47,
                             Status = 1
                         },
                         new
@@ -11119,7 +11141,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 47,
+                            SortOrder = 48,
                             Status = 1
                         },
                         new
@@ -11130,7 +11152,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 48,
+                            SortOrder = 49,
                             Status = 1
                         },
                         new
@@ -11141,7 +11163,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 49,
+                            SortOrder = 50,
                             Status = 1
                         },
                         new
@@ -11152,7 +11174,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 50,
+                            SortOrder = 51,
                             Status = 1
                         },
                         new
@@ -11163,7 +11185,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 51,
+                            SortOrder = 52,
                             Status = 1
                         },
                         new
@@ -11174,7 +11196,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 52,
+                            SortOrder = 53,
                             Status = 1
                         },
                         new
@@ -11185,7 +11207,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 53,
+                            SortOrder = 54,
                             Status = 1
                         },
                         new
@@ -11196,7 +11218,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 54,
+                            SortOrder = 55,
                             Status = 1
                         },
                         new
@@ -11207,7 +11229,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 55,
+                            SortOrder = 56,
                             Status = 1
                         },
                         new
@@ -11218,7 +11240,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 56,
+                            SortOrder = 57,
                             Status = 1
                         },
                         new
@@ -11229,7 +11251,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 57,
+                            SortOrder = 58,
                             Status = 1
                         },
                         new
@@ -11240,7 +11262,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 58,
+                            SortOrder = 59,
                             Status = 1
                         },
                         new
@@ -11251,7 +11273,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 59,
+                            SortOrder = 60,
                             Status = 1
                         },
                         new
@@ -11262,7 +11284,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 60,
+                            SortOrder = 61,
                             Status = 1
                         },
                         new
@@ -11273,7 +11295,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 61,
+                            SortOrder = 62,
                             Status = 1
                         },
                         new
@@ -11284,7 +11306,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 62,
+                            SortOrder = 63,
                             Status = 1
                         },
                         new
@@ -11295,7 +11317,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 63,
+                            SortOrder = 64,
                             Status = 1
                         },
                         new
@@ -11306,7 +11328,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 64,
+                            SortOrder = 65,
                             Status = 1
                         },
                         new
@@ -11317,7 +11339,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 65,
+                            SortOrder = 66,
                             Status = 1
                         },
                         new
@@ -11328,7 +11350,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 66,
+                            SortOrder = 67,
                             Status = 1
                         },
                         new
@@ -11339,7 +11361,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 67,
+                            SortOrder = 68,
                             Status = 1
                         },
                         new
@@ -11350,7 +11372,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 68,
+                            SortOrder = 69,
                             Status = 1
                         },
                         new
@@ -11361,7 +11383,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 69,
+                            SortOrder = 70,
                             Status = 1
                         },
                         new
@@ -11372,7 +11394,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 70,
+                            SortOrder = 71,
                             Status = 1
                         },
                         new
@@ -11383,7 +11405,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 71,
+                            SortOrder = 72,
                             Status = 1
                         },
                         new
@@ -11394,7 +11416,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 72,
+                            SortOrder = 73,
                             Status = 1
                         },
                         new
@@ -11405,7 +11427,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 73,
+                            SortOrder = 74,
                             Status = 1
                         },
                         new
@@ -11416,7 +11438,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 74,
+                            SortOrder = 75,
                             Status = 1
                         },
                         new
@@ -11427,7 +11449,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 75,
+                            SortOrder = 76,
                             Status = 1
                         },
                         new
@@ -11438,7 +11460,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 76,
+                            SortOrder = 77,
                             Status = 1
                         },
                         new
@@ -11449,7 +11471,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 77,
+                            SortOrder = 78,
                             Status = 1
                         },
                         new
@@ -11460,7 +11482,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 78,
+                            SortOrder = 79,
                             Status = 1
                         },
                         new
@@ -11471,7 +11493,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 79,
+                            SortOrder = 80,
                             Status = 1
                         },
                         new
@@ -11482,7 +11504,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 80,
+                            SortOrder = 81,
                             Status = 1
                         },
                         new
@@ -11493,7 +11515,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 81,
+                            SortOrder = 82,
                             Status = 1
                         },
                         new
@@ -11504,7 +11526,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 82,
+                            SortOrder = 83,
                             Status = 1
                         },
                         new
@@ -11515,7 +11537,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 83,
+                            SortOrder = 84,
                             Status = 1
                         },
                         new
@@ -11526,7 +11548,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 84,
+                            SortOrder = 85,
                             Status = 1
                         },
                         new
@@ -11537,7 +11559,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("92a91336-5ca3-a674-8a59-31ab6f0bbac2"),
-                            SortOrder = 85,
+                            SortOrder = 86,
                             Status = 1
                         },
                         new
@@ -11548,7 +11570,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 86,
+                            SortOrder = 87,
                             Status = 1
                         },
                         new
@@ -11559,7 +11581,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 87,
+                            SortOrder = 88,
                             Status = 1
                         },
                         new
@@ -11570,7 +11592,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 88,
+                            SortOrder = 89,
                             Status = 1
                         },
                         new
@@ -11581,7 +11603,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 89,
+                            SortOrder = 90,
                             Status = 1
                         },
                         new
@@ -11592,7 +11614,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 90,
+                            SortOrder = 91,
                             Status = 1
                         },
                         new
@@ -11603,7 +11625,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 91,
+                            SortOrder = 92,
                             Status = 1
                         },
                         new
@@ -11614,7 +11636,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 92,
+                            SortOrder = 93,
                             Status = 1
                         },
                         new
@@ -11625,7 +11647,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 93,
+                            SortOrder = 94,
                             Status = 1
                         },
                         new
@@ -11636,7 +11658,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 94,
+                            SortOrder = 95,
                             Status = 1
                         },
                         new
@@ -11647,7 +11669,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 95,
+                            SortOrder = 96,
                             Status = 1
                         },
                         new
@@ -11658,7 +11680,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 96,
+                            SortOrder = 97,
                             Status = 1
                         },
                         new
@@ -11669,7 +11691,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 97,
+                            SortOrder = 98,
                             Status = 1
                         },
                         new
@@ -11680,7 +11702,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 98,
+                            SortOrder = 99,
                             Status = 1
                         },
                         new
@@ -11691,7 +11713,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 99,
+                            SortOrder = 100,
                             Status = 1
                         },
                         new
@@ -11702,7 +11724,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 100,
+                            SortOrder = 101,
                             Status = 1
                         },
                         new
@@ -11713,7 +11735,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 101,
+                            SortOrder = 102,
                             Status = 1
                         },
                         new
@@ -11724,7 +11746,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 102,
+                            SortOrder = 103,
                             Status = 1
                         },
                         new
@@ -11735,7 +11757,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 103,
+                            SortOrder = 104,
                             Status = 1
                         },
                         new
@@ -11746,7 +11768,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 104,
+                            SortOrder = 105,
                             Status = 1
                         },
                         new
@@ -11757,7 +11779,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 105,
+                            SortOrder = 106,
                             Status = 1
                         },
                         new
@@ -11768,7 +11790,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 106,
+                            SortOrder = 107,
                             Status = 1
                         },
                         new
@@ -11779,7 +11801,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 107,
+                            SortOrder = 108,
                             Status = 1
                         },
                         new
@@ -11790,7 +11812,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 108,
+                            SortOrder = 109,
                             Status = 1
                         },
                         new
@@ -11801,7 +11823,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 109,
+                            SortOrder = 110,
                             Status = 1
                         },
                         new
@@ -11812,7 +11834,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 110,
+                            SortOrder = 111,
                             Status = 1
                         },
                         new
@@ -11823,7 +11845,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 111,
+                            SortOrder = 112,
                             Status = 1
                         },
                         new
@@ -11834,7 +11856,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 112,
+                            SortOrder = 113,
                             Status = 1
                         },
                         new
@@ -11845,7 +11867,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 113,
+                            SortOrder = 114,
                             Status = 1
                         },
                         new
@@ -11856,7 +11878,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 114,
+                            SortOrder = 115,
                             Status = 1
                         },
                         new
@@ -11867,7 +11889,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 115,
+                            SortOrder = 116,
                             Status = 1
                         },
                         new
@@ -11878,7 +11900,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 116,
+                            SortOrder = 117,
                             Status = 1
                         },
                         new
@@ -11889,7 +11911,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 117,
+                            SortOrder = 118,
                             Status = 1
                         },
                         new
@@ -11900,7 +11922,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 118,
+                            SortOrder = 119,
                             Status = 1
                         },
                         new
@@ -11911,7 +11933,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 119,
+                            SortOrder = 120,
                             Status = 1
                         },
                         new
@@ -11922,7 +11944,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 120,
+                            SortOrder = 121,
                             Status = 1
                         },
                         new
@@ -11933,7 +11955,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 121,
+                            SortOrder = 122,
                             Status = 1
                         },
                         new
@@ -11944,7 +11966,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 122,
+                            SortOrder = 123,
                             Status = 1
                         },
                         new
@@ -11955,7 +11977,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 123,
+                            SortOrder = 124,
                             Status = 1
                         },
                         new
@@ -11966,7 +11988,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("8a02f26f-7460-f446-a17a-cb3e6285d379"),
-                            SortOrder = 124,
+                            SortOrder = 125,
                             Status = 1
                         },
                         new
@@ -11977,7 +11999,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("11e5080f-4567-f57e-d365-2d100be7963b"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 125,
+                            SortOrder = 126,
                             Status = 1
                         },
                         new
@@ -11988,7 +12010,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 126,
+                            SortOrder = 127,
                             Status = 1
                         },
                         new
@@ -11999,7 +12021,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("eea52a53-2ca0-edb8-0eb7-94cdefefd66d"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 127,
+                            SortOrder = 128,
                             Status = 1
                         },
                         new
@@ -12010,7 +12032,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("5278756b-d53a-7349-0537-23bfc79c618e"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 128,
+                            SortOrder = 129,
                             Status = 1
                         },
                         new
@@ -12021,7 +12043,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 129,
+                            SortOrder = 130,
                             Status = 1
                         },
                         new
@@ -12032,7 +12054,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 130,
+                            SortOrder = 131,
                             Status = 1
                         },
                         new
@@ -12043,7 +12065,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 131,
+                            SortOrder = 132,
                             Status = 1
                         },
                         new
@@ -12054,7 +12076,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 132,
+                            SortOrder = 133,
                             Status = 1
                         },
                         new
@@ -12065,7 +12087,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 133,
+                            SortOrder = 134,
                             Status = 1
                         },
                         new
@@ -12076,7 +12098,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 134,
+                            SortOrder = 135,
                             Status = 1
                         },
                         new
@@ -12087,7 +12109,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 135,
+                            SortOrder = 136,
                             Status = 1
                         },
                         new
@@ -12098,7 +12120,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 136,
+                            SortOrder = 137,
                             Status = 1
                         },
                         new
@@ -12109,7 +12131,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 137,
+                            SortOrder = 138,
                             Status = 1
                         },
                         new
@@ -12120,7 +12142,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 138,
+                            SortOrder = 139,
                             Status = 1
                         },
                         new
@@ -12131,7 +12153,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 139,
+                            SortOrder = 140,
                             Status = 1
                         },
                         new
@@ -12142,7 +12164,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 140,
+                            SortOrder = 141,
                             Status = 1
                         },
                         new
@@ -12153,7 +12175,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 141,
+                            SortOrder = 142,
                             Status = 1
                         },
                         new
@@ -12164,7 +12186,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 142,
+                            SortOrder = 143,
                             Status = 1
                         },
                         new
@@ -12175,7 +12197,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 143,
+                            SortOrder = 144,
                             Status = 1
                         },
                         new
@@ -12186,7 +12208,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 144,
+                            SortOrder = 145,
                             Status = 1
                         },
                         new
@@ -12197,7 +12219,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 145,
+                            SortOrder = 146,
                             Status = 1
                         },
                         new
@@ -12208,7 +12230,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 146,
+                            SortOrder = 147,
                             Status = 1
                         },
                         new
@@ -12219,7 +12241,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 147,
+                            SortOrder = 148,
                             Status = 1
                         },
                         new
@@ -12230,7 +12252,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 148,
+                            SortOrder = 149,
                             Status = 1
                         },
                         new
@@ -12241,7 +12263,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 149,
+                            SortOrder = 150,
                             Status = 1
                         },
                         new
@@ -12252,7 +12274,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 150,
+                            SortOrder = 151,
                             Status = 1
                         },
                         new
@@ -12263,7 +12285,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 151,
+                            SortOrder = 152,
                             Status = 1
                         },
                         new
@@ -12274,7 +12296,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 152,
+                            SortOrder = 153,
                             Status = 1
                         },
                         new
@@ -12285,7 +12307,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 153,
+                            SortOrder = 154,
                             Status = 1
                         },
                         new
@@ -12296,7 +12318,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 154,
+                            SortOrder = 155,
                             Status = 1
                         },
                         new
@@ -12307,7 +12329,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 155,
+                            SortOrder = 156,
                             Status = 1
                         },
                         new
@@ -12318,7 +12340,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 156,
+                            SortOrder = 157,
                             Status = 1
                         },
                         new
@@ -12329,7 +12351,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 157,
+                            SortOrder = 158,
                             Status = 1
                         },
                         new
@@ -12340,7 +12362,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 158,
+                            SortOrder = 159,
                             Status = 1
                         },
                         new
@@ -12351,7 +12373,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 159,
+                            SortOrder = 160,
                             Status = 1
                         },
                         new
@@ -12362,7 +12384,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 160,
+                            SortOrder = 161,
                             Status = 1
                         },
                         new
@@ -12373,7 +12395,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 161,
+                            SortOrder = 162,
                             Status = 1
                         },
                         new
@@ -12384,7 +12406,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 162,
+                            SortOrder = 163,
                             Status = 1
                         },
                         new
@@ -12395,7 +12417,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 163,
+                            SortOrder = 164,
                             Status = 1
                         },
                         new
@@ -12406,7 +12428,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 164,
+                            SortOrder = 165,
                             Status = 1
                         },
                         new
@@ -12417,7 +12439,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("a4a84dbb-ea54-9677-1d4c-25a90d6514cd"),
-                            SortOrder = 165,
+                            SortOrder = 166,
                             Status = 1
                         },
                         new
@@ -12428,7 +12450,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("eea52a53-2ca0-edb8-0eb7-94cdefefd66d"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 166,
+                            SortOrder = 167,
                             Status = 1
                         },
                         new
@@ -12439,7 +12461,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("5278756b-d53a-7349-0537-23bfc79c618e"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 167,
+                            SortOrder = 168,
                             Status = 1
                         },
                         new
@@ -12450,7 +12472,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 168,
+                            SortOrder = 169,
                             Status = 1
                         },
                         new
@@ -12461,7 +12483,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 169,
+                            SortOrder = 170,
                             Status = 1
                         },
                         new
@@ -12472,7 +12494,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 170,
+                            SortOrder = 171,
                             Status = 1
                         },
                         new
@@ -12483,7 +12505,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 171,
+                            SortOrder = 172,
                             Status = 1
                         },
                         new
@@ -12494,7 +12516,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 172,
+                            SortOrder = 173,
                             Status = 1
                         },
                         new
@@ -12505,7 +12527,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 173,
+                            SortOrder = 174,
                             Status = 1
                         },
                         new
@@ -12516,7 +12538,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 174,
+                            SortOrder = 175,
                             Status = 1
                         },
                         new
@@ -12527,7 +12549,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 175,
+                            SortOrder = 176,
                             Status = 1
                         },
                         new
@@ -12538,7 +12560,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 176,
+                            SortOrder = 177,
                             Status = 1
                         },
                         new
@@ -12549,7 +12571,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 177,
+                            SortOrder = 178,
                             Status = 1
                         },
                         new
@@ -12560,7 +12582,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 178,
+                            SortOrder = 179,
                             Status = 1
                         },
                         new
@@ -12571,7 +12593,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 179,
+                            SortOrder = 180,
                             Status = 1
                         },
                         new
@@ -12582,7 +12604,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 180,
+                            SortOrder = 181,
                             Status = 1
                         },
                         new
@@ -12593,7 +12615,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 181,
+                            SortOrder = 182,
                             Status = 1
                         },
                         new
@@ -12604,7 +12626,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 182,
+                            SortOrder = 183,
                             Status = 1
                         },
                         new
@@ -12615,7 +12637,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 183,
+                            SortOrder = 184,
                             Status = 1
                         },
                         new
@@ -12626,7 +12648,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 184,
+                            SortOrder = 185,
                             Status = 1
                         },
                         new
@@ -12637,7 +12659,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 185,
+                            SortOrder = 186,
                             Status = 1
                         },
                         new
@@ -12648,7 +12670,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 186,
+                            SortOrder = 187,
                             Status = 1
                         },
                         new
@@ -12659,7 +12681,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 187,
+                            SortOrder = 188,
                             Status = 1
                         },
                         new
@@ -12670,7 +12692,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 188,
+                            SortOrder = 189,
                             Status = 1
                         },
                         new
@@ -12681,7 +12703,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 189,
+                            SortOrder = 190,
                             Status = 1
                         },
                         new
@@ -12692,7 +12714,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 190,
+                            SortOrder = 191,
                             Status = 1
                         },
                         new
@@ -12703,7 +12725,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 191,
+                            SortOrder = 192,
                             Status = 1
                         },
                         new
@@ -12714,7 +12736,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 192,
+                            SortOrder = 193,
                             Status = 1
                         },
                         new
@@ -12725,7 +12747,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 193,
+                            SortOrder = 194,
                             Status = 1
                         },
                         new
@@ -12736,7 +12758,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 194,
+                            SortOrder = 195,
                             Status = 1
                         },
                         new
@@ -12747,7 +12769,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 195,
+                            SortOrder = 196,
                             Status = 1
                         },
                         new
@@ -12758,7 +12780,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 196,
+                            SortOrder = 197,
                             Status = 1
                         },
                         new
@@ -12769,7 +12791,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 197,
+                            SortOrder = 198,
                             Status = 1
                         },
                         new
@@ -12780,7 +12802,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 198,
+                            SortOrder = 199,
                             Status = 1
                         },
                         new
@@ -12791,7 +12813,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 199,
+                            SortOrder = 200,
                             Status = 1
                         },
                         new
@@ -12802,7 +12824,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 200,
+                            SortOrder = 201,
                             Status = 1
                         },
                         new
@@ -12813,7 +12835,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 201,
+                            SortOrder = 202,
                             Status = 1
                         },
                         new
@@ -12824,7 +12846,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 202,
+                            SortOrder = 203,
                             Status = 1
                         },
                         new
@@ -12835,7 +12857,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 203,
+                            SortOrder = 204,
                             Status = 1
                         },
                         new
@@ -12846,7 +12868,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("3083c108-41b0-aecf-5ff5-3e97d2056deb"),
-                            SortOrder = 204,
+                            SortOrder = 205,
                             Status = 1
                         },
                         new
@@ -12857,7 +12879,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("eea52a53-2ca0-edb8-0eb7-94cdefefd66d"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 205,
+                            SortOrder = 206,
                             Status = 1
                         },
                         new
@@ -12868,7 +12890,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("5278756b-d53a-7349-0537-23bfc79c618e"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 206,
+                            SortOrder = 207,
                             Status = 1
                         },
                         new
@@ -12879,7 +12901,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 207,
+                            SortOrder = 208,
                             Status = 1
                         },
                         new
@@ -12890,7 +12912,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 208,
+                            SortOrder = 209,
                             Status = 1
                         },
                         new
@@ -12901,7 +12923,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 209,
+                            SortOrder = 210,
                             Status = 1
                         },
                         new
@@ -12912,7 +12934,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 210,
+                            SortOrder = 211,
                             Status = 1
                         },
                         new
@@ -12923,7 +12945,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 211,
+                            SortOrder = 212,
                             Status = 1
                         },
                         new
@@ -12934,7 +12956,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 212,
+                            SortOrder = 213,
                             Status = 1
                         },
                         new
@@ -12945,7 +12967,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 213,
+                            SortOrder = 214,
                             Status = 1
                         },
                         new
@@ -12956,7 +12978,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 214,
+                            SortOrder = 215,
                             Status = 1
                         },
                         new
@@ -12967,7 +12989,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 215,
+                            SortOrder = 216,
                             Status = 1
                         },
                         new
@@ -12978,7 +13000,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 216,
+                            SortOrder = 217,
                             Status = 1
                         },
                         new
@@ -12989,7 +13011,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 217,
+                            SortOrder = 218,
                             Status = 1
                         },
                         new
@@ -13000,7 +13022,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 218,
+                            SortOrder = 219,
                             Status = 1
                         },
                         new
@@ -13011,7 +13033,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 219,
+                            SortOrder = 220,
                             Status = 1
                         },
                         new
@@ -13022,7 +13044,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 220,
+                            SortOrder = 221,
                             Status = 1
                         },
                         new
@@ -13033,7 +13055,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 221,
+                            SortOrder = 222,
                             Status = 1
                         },
                         new
@@ -13044,7 +13066,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 222,
+                            SortOrder = 223,
                             Status = 1
                         },
                         new
@@ -13055,7 +13077,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 223,
+                            SortOrder = 224,
                             Status = 1
                         },
                         new
@@ -13066,7 +13088,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 224,
+                            SortOrder = 225,
                             Status = 1
                         },
                         new
@@ -13077,7 +13099,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 225,
+                            SortOrder = 226,
                             Status = 1
                         },
                         new
@@ -13088,7 +13110,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 226,
+                            SortOrder = 227,
                             Status = 1
                         },
                         new
@@ -13099,7 +13121,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 227,
+                            SortOrder = 228,
                             Status = 1
                         },
                         new
@@ -13110,7 +13132,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 228,
+                            SortOrder = 229,
                             Status = 1
                         },
                         new
@@ -13121,7 +13143,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 229,
+                            SortOrder = 230,
                             Status = 1
                         },
                         new
@@ -13132,7 +13154,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 230,
+                            SortOrder = 231,
                             Status = 1
                         },
                         new
@@ -13143,7 +13165,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 231,
+                            SortOrder = 232,
                             Status = 1
                         },
                         new
@@ -13154,7 +13176,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 232,
+                            SortOrder = 233,
                             Status = 1
                         },
                         new
@@ -13165,7 +13187,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 233,
+                            SortOrder = 234,
                             Status = 1
                         },
                         new
@@ -13176,7 +13198,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 234,
+                            SortOrder = 235,
                             Status = 1
                         },
                         new
@@ -13187,7 +13209,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 235,
+                            SortOrder = 236,
                             Status = 1
                         },
                         new
@@ -13198,7 +13220,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 236,
+                            SortOrder = 237,
                             Status = 1
                         },
                         new
@@ -13209,7 +13231,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 237,
+                            SortOrder = 238,
                             Status = 1
                         },
                         new
@@ -13220,7 +13242,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 238,
+                            SortOrder = 239,
                             Status = 1
                         },
                         new
@@ -13231,7 +13253,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 239,
+                            SortOrder = 240,
                             Status = 1
                         },
                         new
@@ -13242,7 +13264,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 240,
+                            SortOrder = 241,
                             Status = 1
                         },
                         new
@@ -13253,7 +13275,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 241,
+                            SortOrder = 242,
                             Status = 1
                         },
                         new
@@ -13264,7 +13286,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 242,
+                            SortOrder = 243,
                             Status = 1
                         },
                         new
@@ -13275,7 +13297,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("f8d918c8-a3d4-4b81-1f91-b05421b36549"),
-                            SortOrder = 243,
+                            SortOrder = 244,
                             Status = 1
                         },
                         new
@@ -13286,7 +13308,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 244,
+                            SortOrder = 245,
                             Status = 1
                         },
                         new
@@ -13297,7 +13319,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 245,
+                            SortOrder = 246,
                             Status = 1
                         },
                         new
@@ -13308,7 +13330,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 246,
+                            SortOrder = 247,
                             Status = 1
                         },
                         new
@@ -13319,7 +13341,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 247,
+                            SortOrder = 248,
                             Status = 1
                         },
                         new
@@ -13330,7 +13352,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 248,
+                            SortOrder = 249,
                             Status = 1
                         },
                         new
@@ -13341,7 +13363,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 249,
+                            SortOrder = 250,
                             Status = 1
                         },
                         new
@@ -13352,7 +13374,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 250,
+                            SortOrder = 251,
                             Status = 1
                         },
                         new
@@ -13363,7 +13385,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 251,
+                            SortOrder = 252,
                             Status = 1
                         },
                         new
@@ -13374,7 +13396,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 252,
+                            SortOrder = 253,
                             Status = 1
                         },
                         new
@@ -13385,7 +13407,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 253,
+                            SortOrder = 254,
                             Status = 1
                         },
                         new
@@ -13396,7 +13418,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 254,
+                            SortOrder = 255,
                             Status = 1
                         },
                         new
@@ -13407,7 +13429,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 255,
+                            SortOrder = 256,
                             Status = 1
                         },
                         new
@@ -13418,7 +13440,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 256,
+                            SortOrder = 257,
                             Status = 1
                         },
                         new
@@ -13429,7 +13451,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 257,
+                            SortOrder = 258,
                             Status = 1
                         },
                         new
@@ -13440,7 +13462,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 258,
+                            SortOrder = 259,
                             Status = 1
                         },
                         new
@@ -13451,7 +13473,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 259,
+                            SortOrder = 260,
                             Status = 1
                         },
                         new
@@ -13462,7 +13484,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 260,
+                            SortOrder = 261,
                             Status = 1
                         },
                         new
@@ -13473,7 +13495,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 261,
+                            SortOrder = 262,
                             Status = 1
                         },
                         new
@@ -13484,7 +13506,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 262,
+                            SortOrder = 263,
                             Status = 1
                         },
                         new
@@ -13495,7 +13517,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 263,
+                            SortOrder = 264,
                             Status = 1
                         },
                         new
@@ -13506,7 +13528,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 264,
+                            SortOrder = 265,
                             Status = 1
                         },
                         new
@@ -13517,7 +13539,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 265,
+                            SortOrder = 266,
                             Status = 1
                         },
                         new
@@ -13528,7 +13550,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 266,
+                            SortOrder = 267,
                             Status = 1
                         },
                         new
@@ -13539,7 +13561,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 267,
+                            SortOrder = 268,
                             Status = 1
                         },
                         new
@@ -13550,7 +13572,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 268,
+                            SortOrder = 269,
                             Status = 1
                         },
                         new
@@ -13561,7 +13583,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 269,
+                            SortOrder = 270,
                             Status = 1
                         },
                         new
@@ -13572,7 +13594,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 270,
+                            SortOrder = 271,
                             Status = 1
                         },
                         new
@@ -13583,7 +13605,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 271,
+                            SortOrder = 272,
                             Status = 1
                         },
                         new
@@ -13594,7 +13616,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 272,
+                            SortOrder = 273,
                             Status = 1
                         },
                         new
@@ -13605,7 +13627,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 273,
+                            SortOrder = 274,
                             Status = 1
                         },
                         new
@@ -13616,7 +13638,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 274,
+                            SortOrder = 275,
                             Status = 1
                         },
                         new
@@ -13627,7 +13649,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 275,
+                            SortOrder = 276,
                             Status = 1
                         },
                         new
@@ -13638,7 +13660,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 276,
+                            SortOrder = 277,
                             Status = 1
                         },
                         new
@@ -13649,7 +13671,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 277,
+                            SortOrder = 278,
                             Status = 1
                         },
                         new
@@ -13660,7 +13682,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 278,
+                            SortOrder = 279,
                             Status = 1
                         },
                         new
@@ -13671,7 +13693,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 279,
+                            SortOrder = 280,
                             Status = 1
                         },
                         new
@@ -13682,7 +13704,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 280,
+                            SortOrder = 281,
                             Status = 1
                         },
                         new
@@ -13693,7 +13715,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 281,
+                            SortOrder = 282,
                             Status = 1
                         },
                         new
@@ -13704,7 +13726,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 282,
+                            SortOrder = 283,
                             Status = 1
                         },
                         new
@@ -13715,7 +13737,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 283,
+                            SortOrder = 284,
                             Status = 1
                         },
                         new
@@ -13726,7 +13748,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 284,
+                            SortOrder = 285,
                             Status = 1
                         },
                         new
@@ -13737,7 +13759,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 285,
+                            SortOrder = 286,
                             Status = 1
                         },
                         new
@@ -13748,7 +13770,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 286,
+                            SortOrder = 287,
                             Status = 1
                         },
                         new
@@ -13759,7 +13781,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("28d60d93-b395-168f-48b6-bbfc748ef89d"),
-                            SortOrder = 287,
+                            SortOrder = 288,
                             Status = 1
                         },
                         new
@@ -13770,7 +13792,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 288,
+                            SortOrder = 289,
                             Status = 1
                         },
                         new
@@ -13781,7 +13803,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 289,
+                            SortOrder = 290,
                             Status = 1
                         },
                         new
@@ -13792,7 +13814,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("1cca1fc1-5d6c-64a2-a92f-98aa7c4b3973"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 290,
+                            SortOrder = 291,
                             Status = 1
                         },
                         new
@@ -13803,7 +13825,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 291,
+                            SortOrder = 292,
                             Status = 1
                         },
                         new
@@ -13814,7 +13836,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 292,
+                            SortOrder = 293,
                             Status = 1
                         },
                         new
@@ -13825,7 +13847,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 293,
+                            SortOrder = 294,
                             Status = 1
                         },
                         new
@@ -13836,7 +13858,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 294,
+                            SortOrder = 295,
                             Status = 1
                         },
                         new
@@ -13847,7 +13869,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 295,
+                            SortOrder = 296,
                             Status = 1
                         },
                         new
@@ -13858,7 +13880,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 296,
+                            SortOrder = 297,
                             Status = 1
                         },
                         new
@@ -13869,7 +13891,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 297,
+                            SortOrder = 298,
                             Status = 1
                         },
                         new
@@ -13880,7 +13902,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 298,
+                            SortOrder = 299,
                             Status = 1
                         },
                         new
@@ -13891,7 +13913,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 299,
+                            SortOrder = 300,
                             Status = 1
                         },
                         new
@@ -13902,7 +13924,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 300,
+                            SortOrder = 301,
                             Status = 1
                         },
                         new
@@ -13913,7 +13935,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 301,
+                            SortOrder = 302,
                             Status = 1
                         },
                         new
@@ -13924,7 +13946,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 302,
+                            SortOrder = 303,
                             Status = 1
                         },
                         new
@@ -13935,7 +13957,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 303,
+                            SortOrder = 304,
                             Status = 1
                         },
                         new
@@ -13946,7 +13968,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 304,
+                            SortOrder = 305,
                             Status = 1
                         },
                         new
@@ -13957,7 +13979,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 305,
+                            SortOrder = 306,
                             Status = 1
                         },
                         new
@@ -13968,7 +13990,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 306,
+                            SortOrder = 307,
                             Status = 1
                         },
                         new
@@ -13979,7 +14001,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 307,
+                            SortOrder = 308,
                             Status = 1
                         },
                         new
@@ -13990,7 +14012,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 308,
+                            SortOrder = 309,
                             Status = 1
                         },
                         new
@@ -14001,7 +14023,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 309,
+                            SortOrder = 310,
                             Status = 1
                         },
                         new
@@ -14012,7 +14034,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 310,
+                            SortOrder = 311,
                             Status = 1
                         },
                         new
@@ -14023,7 +14045,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 311,
+                            SortOrder = 312,
                             Status = 1
                         },
                         new
@@ -14034,7 +14056,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 312,
+                            SortOrder = 313,
                             Status = 1
                         },
                         new
@@ -14045,7 +14067,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 313,
+                            SortOrder = 314,
                             Status = 1
                         },
                         new
@@ -14056,7 +14078,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 314,
+                            SortOrder = 315,
                             Status = 1
                         },
                         new
@@ -14067,7 +14089,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 315,
+                            SortOrder = 316,
                             Status = 1
                         },
                         new
@@ -14078,7 +14100,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 316,
+                            SortOrder = 317,
                             Status = 1
                         },
                         new
@@ -14089,7 +14111,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 317,
+                            SortOrder = 318,
                             Status = 1
                         },
                         new
@@ -14100,7 +14122,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 318,
+                            SortOrder = 319,
                             Status = 1
                         },
                         new
@@ -14111,7 +14133,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 319,
+                            SortOrder = 320,
                             Status = 1
                         },
                         new
@@ -14122,7 +14144,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 320,
+                            SortOrder = 321,
                             Status = 1
                         },
                         new
@@ -14133,7 +14155,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 321,
+                            SortOrder = 322,
                             Status = 1
                         },
                         new
@@ -14144,7 +14166,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 322,
+                            SortOrder = 323,
                             Status = 1
                         },
                         new
@@ -14155,7 +14177,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 323,
+                            SortOrder = 324,
                             Status = 1
                         },
                         new
@@ -14166,7 +14188,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 324,
+                            SortOrder = 325,
                             Status = 1
                         },
                         new
@@ -14177,7 +14199,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 325,
+                            SortOrder = 326,
                             Status = 1
                         },
                         new
@@ -14188,7 +14210,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 326,
+                            SortOrder = 327,
                             Status = 1
                         },
                         new
@@ -14199,7 +14221,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("50ccb61f-6b77-e87e-0deb-920cb2bd7f1f"),
-                            SortOrder = 327,
+                            SortOrder = 328,
                             Status = 1
                         },
                         new
@@ -14210,7 +14232,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("1cca1fc1-5d6c-64a2-a92f-98aa7c4b3973"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 328,
+                            SortOrder = 329,
                             Status = 1
                         },
                         new
@@ -14221,7 +14243,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 329,
+                            SortOrder = 330,
                             Status = 1
                         },
                         new
@@ -14232,7 +14254,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 330,
+                            SortOrder = 331,
                             Status = 1
                         },
                         new
@@ -14243,7 +14265,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 331,
+                            SortOrder = 332,
                             Status = 1
                         },
                         new
@@ -14254,7 +14276,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 332,
+                            SortOrder = 333,
                             Status = 1
                         },
                         new
@@ -14265,7 +14287,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 333,
+                            SortOrder = 334,
                             Status = 1
                         },
                         new
@@ -14276,7 +14298,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 334,
+                            SortOrder = 335,
                             Status = 1
                         },
                         new
@@ -14287,7 +14309,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 335,
+                            SortOrder = 336,
                             Status = 1
                         },
                         new
@@ -14298,7 +14320,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 336,
+                            SortOrder = 337,
                             Status = 1
                         },
                         new
@@ -14309,7 +14331,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 337,
+                            SortOrder = 338,
                             Status = 1
                         },
                         new
@@ -14320,7 +14342,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 338,
+                            SortOrder = 339,
                             Status = 1
                         },
                         new
@@ -14331,7 +14353,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 339,
+                            SortOrder = 340,
                             Status = 1
                         },
                         new
@@ -14342,7 +14364,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 340,
+                            SortOrder = 341,
                             Status = 1
                         },
                         new
@@ -14353,7 +14375,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 341,
+                            SortOrder = 342,
                             Status = 1
                         },
                         new
@@ -14364,7 +14386,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 342,
+                            SortOrder = 343,
                             Status = 1
                         },
                         new
@@ -14375,7 +14397,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 343,
+                            SortOrder = 344,
                             Status = 1
                         },
                         new
@@ -14386,7 +14408,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 344,
+                            SortOrder = 345,
                             Status = 1
                         },
                         new
@@ -14397,7 +14419,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 345,
+                            SortOrder = 346,
                             Status = 1
                         },
                         new
@@ -14408,7 +14430,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 346,
+                            SortOrder = 347,
                             Status = 1
                         },
                         new
@@ -14419,7 +14441,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 347,
+                            SortOrder = 348,
                             Status = 1
                         },
                         new
@@ -14430,7 +14452,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 348,
+                            SortOrder = 349,
                             Status = 1
                         },
                         new
@@ -14441,7 +14463,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 349,
+                            SortOrder = 350,
                             Status = 1
                         },
                         new
@@ -14452,7 +14474,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 350,
+                            SortOrder = 351,
                             Status = 1
                         },
                         new
@@ -14463,7 +14485,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 351,
+                            SortOrder = 352,
                             Status = 1
                         },
                         new
@@ -14474,7 +14496,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 352,
+                            SortOrder = 353,
                             Status = 1
                         },
                         new
@@ -14485,7 +14507,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 353,
+                            SortOrder = 354,
                             Status = 1
                         },
                         new
@@ -14496,7 +14518,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 354,
+                            SortOrder = 355,
                             Status = 1
                         },
                         new
@@ -14507,7 +14529,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 355,
+                            SortOrder = 356,
                             Status = 1
                         },
                         new
@@ -14518,7 +14540,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 356,
+                            SortOrder = 357,
                             Status = 1
                         },
                         new
@@ -14529,7 +14551,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 357,
+                            SortOrder = 358,
                             Status = 1
                         },
                         new
@@ -14540,7 +14562,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 358,
+                            SortOrder = 359,
                             Status = 1
                         },
                         new
@@ -14551,7 +14573,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 359,
+                            SortOrder = 360,
                             Status = 1
                         },
                         new
@@ -14562,7 +14584,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 360,
+                            SortOrder = 361,
                             Status = 1
                         },
                         new
@@ -14573,7 +14595,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 361,
+                            SortOrder = 362,
                             Status = 1
                         },
                         new
@@ -14584,7 +14606,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 362,
+                            SortOrder = 363,
                             Status = 1
                         },
                         new
@@ -14595,7 +14617,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 363,
+                            SortOrder = 364,
                             Status = 1
                         },
                         new
@@ -14606,7 +14628,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 364,
+                            SortOrder = 365,
                             Status = 1
                         },
                         new
@@ -14617,7 +14639,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("3951dc3c-3a60-e9f5-ec9d-a5e9afbf4c34"),
-                            SortOrder = 365,
+                            SortOrder = 366,
                             Status = 1
                         },
                         new
@@ -14628,7 +14650,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("1cca1fc1-5d6c-64a2-a92f-98aa7c4b3973"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 366,
+                            SortOrder = 367,
                             Status = 1
                         },
                         new
@@ -14639,7 +14661,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 367,
+                            SortOrder = 368,
                             Status = 1
                         },
                         new
@@ -14650,7 +14672,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 368,
+                            SortOrder = 369,
                             Status = 1
                         },
                         new
@@ -14661,7 +14683,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 369,
+                            SortOrder = 370,
                             Status = 1
                         },
                         new
@@ -14672,7 +14694,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 370,
+                            SortOrder = 371,
                             Status = 1
                         },
                         new
@@ -14683,7 +14705,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 371,
+                            SortOrder = 372,
                             Status = 1
                         },
                         new
@@ -14694,7 +14716,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 372,
+                            SortOrder = 373,
                             Status = 1
                         },
                         new
@@ -14705,7 +14727,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 373,
+                            SortOrder = 374,
                             Status = 1
                         },
                         new
@@ -14716,7 +14738,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 374,
+                            SortOrder = 375,
                             Status = 1
                         },
                         new
@@ -14727,7 +14749,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 375,
+                            SortOrder = 376,
                             Status = 1
                         },
                         new
@@ -14738,7 +14760,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 376,
+                            SortOrder = 377,
                             Status = 1
                         },
                         new
@@ -14749,7 +14771,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 377,
+                            SortOrder = 378,
                             Status = 1
                         },
                         new
@@ -14760,7 +14782,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 378,
+                            SortOrder = 379,
                             Status = 1
                         },
                         new
@@ -14771,7 +14793,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 379,
+                            SortOrder = 380,
                             Status = 1
                         },
                         new
@@ -14782,7 +14804,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 380,
+                            SortOrder = 381,
                             Status = 1
                         },
                         new
@@ -14793,7 +14815,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 381,
+                            SortOrder = 382,
                             Status = 1
                         },
                         new
@@ -14804,7 +14826,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 382,
+                            SortOrder = 383,
                             Status = 1
                         },
                         new
@@ -14815,7 +14837,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 383,
+                            SortOrder = 384,
                             Status = 1
                         },
                         new
@@ -14826,7 +14848,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 384,
+                            SortOrder = 385,
                             Status = 1
                         },
                         new
@@ -14837,7 +14859,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 385,
+                            SortOrder = 386,
                             Status = 1
                         },
                         new
@@ -14848,7 +14870,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 386,
+                            SortOrder = 387,
                             Status = 1
                         },
                         new
@@ -14859,7 +14881,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 387,
+                            SortOrder = 388,
                             Status = 1
                         },
                         new
@@ -14870,7 +14892,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 388,
+                            SortOrder = 389,
                             Status = 1
                         },
                         new
@@ -14881,7 +14903,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 389,
+                            SortOrder = 390,
                             Status = 1
                         },
                         new
@@ -14892,7 +14914,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 390,
+                            SortOrder = 391,
                             Status = 1
                         },
                         new
@@ -14903,7 +14925,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 391,
+                            SortOrder = 392,
                             Status = 1
                         },
                         new
@@ -14914,7 +14936,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 392,
+                            SortOrder = 393,
                             Status = 1
                         },
                         new
@@ -14925,7 +14947,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 393,
+                            SortOrder = 394,
                             Status = 1
                         },
                         new
@@ -14936,7 +14958,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 394,
+                            SortOrder = 395,
                             Status = 1
                         },
                         new
@@ -14947,7 +14969,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 395,
+                            SortOrder = 396,
                             Status = 1
                         },
                         new
@@ -14958,7 +14980,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 396,
+                            SortOrder = 397,
                             Status = 1
                         },
                         new
@@ -14969,7 +14991,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 397,
+                            SortOrder = 398,
                             Status = 1
                         },
                         new
@@ -14980,7 +15002,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 398,
+                            SortOrder = 399,
                             Status = 1
                         },
                         new
@@ -14991,7 +15013,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 399,
+                            SortOrder = 400,
                             Status = 1
                         },
                         new
@@ -15002,7 +15024,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 400,
+                            SortOrder = 401,
                             Status = 1
                         },
                         new
@@ -15013,7 +15035,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 401,
+                            SortOrder = 402,
                             Status = 1
                         },
                         new
@@ -15024,7 +15046,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 402,
+                            SortOrder = 403,
                             Status = 1
                         },
                         new
@@ -15035,7 +15057,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("2dd76916-aed5-0935-52f5-bd62b0be2147"),
-                            SortOrder = 403,
+                            SortOrder = 404,
                             Status = 1
                         },
                         new
@@ -15046,7 +15068,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("1cca1fc1-5d6c-64a2-a92f-98aa7c4b3973"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 404,
+                            SortOrder = 405,
                             Status = 1
                         },
                         new
@@ -15057,7 +15079,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 405,
+                            SortOrder = 406,
                             Status = 1
                         },
                         new
@@ -15068,7 +15090,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 406,
+                            SortOrder = 407,
                             Status = 1
                         },
                         new
@@ -15079,7 +15101,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 407,
+                            SortOrder = 408,
                             Status = 1
                         },
                         new
@@ -15090,7 +15112,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 408,
+                            SortOrder = 409,
                             Status = 1
                         },
                         new
@@ -15101,7 +15123,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 409,
+                            SortOrder = 410,
                             Status = 1
                         },
                         new
@@ -15112,7 +15134,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 410,
+                            SortOrder = 411,
                             Status = 1
                         },
                         new
@@ -15123,7 +15145,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 411,
+                            SortOrder = 412,
                             Status = 1
                         },
                         new
@@ -15134,7 +15156,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 412,
+                            SortOrder = 413,
                             Status = 1
                         },
                         new
@@ -15145,7 +15167,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 413,
+                            SortOrder = 414,
                             Status = 1
                         },
                         new
@@ -15156,7 +15178,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 414,
+                            SortOrder = 415,
                             Status = 1
                         },
                         new
@@ -15167,7 +15189,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 415,
+                            SortOrder = 416,
                             Status = 1
                         },
                         new
@@ -15178,7 +15200,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 416,
+                            SortOrder = 417,
                             Status = 1
                         },
                         new
@@ -15189,7 +15211,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 417,
+                            SortOrder = 418,
                             Status = 1
                         },
                         new
@@ -15200,7 +15222,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 418,
+                            SortOrder = 419,
                             Status = 1
                         },
                         new
@@ -15211,7 +15233,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 419,
+                            SortOrder = 420,
                             Status = 1
                         },
                         new
@@ -15222,7 +15244,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 420,
+                            SortOrder = 421,
                             Status = 1
                         },
                         new
@@ -15233,7 +15255,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 421,
+                            SortOrder = 422,
                             Status = 1
                         },
                         new
@@ -15244,7 +15266,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 422,
+                            SortOrder = 423,
                             Status = 1
                         },
                         new
@@ -15255,7 +15277,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 423,
+                            SortOrder = 424,
                             Status = 1
                         },
                         new
@@ -15266,7 +15288,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 424,
+                            SortOrder = 425,
                             Status = 1
                         },
                         new
@@ -15277,7 +15299,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 425,
+                            SortOrder = 426,
                             Status = 1
                         },
                         new
@@ -15288,7 +15310,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 426,
+                            SortOrder = 427,
                             Status = 1
                         },
                         new
@@ -15299,7 +15321,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 427,
+                            SortOrder = 428,
                             Status = 1
                         },
                         new
@@ -15310,7 +15332,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 428,
+                            SortOrder = 429,
                             Status = 1
                         },
                         new
@@ -15321,7 +15343,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 429,
+                            SortOrder = 430,
                             Status = 1
                         },
                         new
@@ -15332,7 +15354,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 430,
+                            SortOrder = 431,
                             Status = 1
                         },
                         new
@@ -15343,7 +15365,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 431,
+                            SortOrder = 432,
                             Status = 1
                         },
                         new
@@ -15354,7 +15376,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 432,
+                            SortOrder = 433,
                             Status = 1
                         },
                         new
@@ -15365,7 +15387,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 433,
+                            SortOrder = 434,
                             Status = 1
                         },
                         new
@@ -15376,7 +15398,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 434,
+                            SortOrder = 435,
                             Status = 1
                         },
                         new
@@ -15387,7 +15409,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 435,
+                            SortOrder = 436,
                             Status = 1
                         },
                         new
@@ -15398,7 +15420,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 436,
+                            SortOrder = 437,
                             Status = 1
                         },
                         new
@@ -15409,7 +15431,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 437,
+                            SortOrder = 438,
                             Status = 1
                         },
                         new
@@ -15420,7 +15442,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 438,
+                            SortOrder = 439,
                             Status = 1
                         },
                         new
@@ -15431,7 +15453,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 439,
+                            SortOrder = 440,
                             Status = 1
                         },
                         new
@@ -15442,7 +15464,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 440,
+                            SortOrder = 441,
                             Status = 1
                         },
                         new
@@ -15453,7 +15475,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("77235293-bbbc-a110-3a8b-a4493005367a"),
-                            SortOrder = 441,
+                            SortOrder = 442,
                             Status = 1
                         },
                         new
@@ -15464,7 +15486,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("1cca1fc1-5d6c-64a2-a92f-98aa7c4b3973"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 442,
+                            SortOrder = 443,
                             Status = 1
                         },
                         new
@@ -15475,7 +15497,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 443,
+                            SortOrder = 444,
                             Status = 1
                         },
                         new
@@ -15486,7 +15508,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 444,
+                            SortOrder = 445,
                             Status = 1
                         },
                         new
@@ -15497,7 +15519,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 445,
+                            SortOrder = 446,
                             Status = 1
                         },
                         new
@@ -15508,7 +15530,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 446,
+                            SortOrder = 447,
                             Status = 1
                         },
                         new
@@ -15519,7 +15541,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 447,
+                            SortOrder = 448,
                             Status = 1
                         },
                         new
@@ -15530,7 +15552,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 448,
+                            SortOrder = 449,
                             Status = 1
                         },
                         new
@@ -15541,7 +15563,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 449,
+                            SortOrder = 450,
                             Status = 1
                         },
                         new
@@ -15552,7 +15574,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 450,
+                            SortOrder = 451,
                             Status = 1
                         },
                         new
@@ -15563,7 +15585,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 451,
+                            SortOrder = 452,
                             Status = 1
                         },
                         new
@@ -15574,7 +15596,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 452,
+                            SortOrder = 453,
                             Status = 1
                         },
                         new
@@ -15585,7 +15607,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 453,
+                            SortOrder = 454,
                             Status = 1
                         },
                         new
@@ -15596,7 +15618,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 454,
+                            SortOrder = 455,
                             Status = 1
                         },
                         new
@@ -15607,7 +15629,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 455,
+                            SortOrder = 456,
                             Status = 1
                         },
                         new
@@ -15618,7 +15640,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 456,
+                            SortOrder = 457,
                             Status = 1
                         },
                         new
@@ -15629,7 +15651,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 457,
+                            SortOrder = 458,
                             Status = 1
                         },
                         new
@@ -15640,7 +15662,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 458,
+                            SortOrder = 459,
                             Status = 1
                         },
                         new
@@ -15651,7 +15673,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 459,
+                            SortOrder = 460,
                             Status = 1
                         },
                         new
@@ -15662,7 +15684,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 460,
+                            SortOrder = 461,
                             Status = 1
                         },
                         new
@@ -15673,7 +15695,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 461,
+                            SortOrder = 462,
                             Status = 1
                         },
                         new
@@ -15684,7 +15706,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 462,
+                            SortOrder = 463,
                             Status = 1
                         },
                         new
@@ -15695,7 +15717,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 463,
+                            SortOrder = 464,
                             Status = 1
                         },
                         new
@@ -15706,7 +15728,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 464,
+                            SortOrder = 465,
                             Status = 1
                         },
                         new
@@ -15717,7 +15739,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 465,
+                            SortOrder = 466,
                             Status = 1
                         },
                         new
@@ -15728,7 +15750,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 466,
+                            SortOrder = 467,
                             Status = 1
                         },
                         new
@@ -15739,7 +15761,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 467,
+                            SortOrder = 468,
                             Status = 1
                         },
                         new
@@ -15750,7 +15772,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 468,
+                            SortOrder = 469,
                             Status = 1
                         },
                         new
@@ -15761,7 +15783,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 469,
+                            SortOrder = 470,
                             Status = 1
                         },
                         new
@@ -15772,7 +15794,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 470,
+                            SortOrder = 471,
                             Status = 1
                         },
                         new
@@ -15783,7 +15805,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 471,
+                            SortOrder = 472,
                             Status = 1
                         },
                         new
@@ -15794,7 +15816,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 472,
+                            SortOrder = 473,
                             Status = 1
                         },
                         new
@@ -15805,7 +15827,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 473,
+                            SortOrder = 474,
                             Status = 1
                         },
                         new
@@ -15816,7 +15838,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 474,
+                            SortOrder = 475,
                             Status = 1
                         },
                         new
@@ -15827,7 +15849,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 475,
+                            SortOrder = 476,
                             Status = 1
                         },
                         new
@@ -15838,7 +15860,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 476,
+                            SortOrder = 477,
                             Status = 1
                         },
                         new
@@ -15849,7 +15871,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 477,
+                            SortOrder = 478,
                             Status = 1
                         },
                         new
@@ -15860,7 +15882,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 478,
+                            SortOrder = 479,
                             Status = 1
                         },
                         new
@@ -15871,7 +15893,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("6fc1b422-84af-a0fc-166f-24d7b39a7261"),
-                            SortOrder = 479,
+                            SortOrder = 480,
                             Status = 1
                         },
                         new
@@ -15882,7 +15904,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 480,
+                            SortOrder = 481,
                             Status = 1
                         },
                         new
@@ -15893,7 +15915,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 481,
+                            SortOrder = 482,
                             Status = 1
                         },
                         new
@@ -15904,7 +15926,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 482,
+                            SortOrder = 483,
                             Status = 1
                         },
                         new
@@ -15915,7 +15937,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 483,
+                            SortOrder = 484,
                             Status = 1
                         },
                         new
@@ -15926,7 +15948,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 484,
+                            SortOrder = 485,
                             Status = 1
                         },
                         new
@@ -15937,7 +15959,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("1cca1fc1-5d6c-64a2-a92f-98aa7c4b3973"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 485,
+                            SortOrder = 486,
                             Status = 1
                         },
                         new
@@ -15948,7 +15970,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 486,
+                            SortOrder = 487,
                             Status = 1
                         },
                         new
@@ -15959,7 +15981,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 487,
+                            SortOrder = 488,
                             Status = 1
                         },
                         new
@@ -15970,7 +15992,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 488,
+                            SortOrder = 489,
                             Status = 1
                         },
                         new
@@ -15981,7 +16003,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 489,
+                            SortOrder = 490,
                             Status = 1
                         },
                         new
@@ -15992,7 +16014,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 490,
+                            SortOrder = 491,
                             Status = 1
                         },
                         new
@@ -16003,7 +16025,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 491,
+                            SortOrder = 492,
                             Status = 1
                         },
                         new
@@ -16014,7 +16036,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 492,
+                            SortOrder = 493,
                             Status = 1
                         },
                         new
@@ -16025,7 +16047,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 493,
+                            SortOrder = 494,
                             Status = 1
                         },
                         new
@@ -16036,7 +16058,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 494,
+                            SortOrder = 495,
                             Status = 1
                         },
                         new
@@ -16047,7 +16069,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 495,
+                            SortOrder = 496,
                             Status = 1
                         },
                         new
@@ -16058,7 +16080,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 496,
+                            SortOrder = 497,
                             Status = 1
                         },
                         new
@@ -16069,7 +16091,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 497,
+                            SortOrder = 498,
                             Status = 1
                         },
                         new
@@ -16080,7 +16102,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 498,
+                            SortOrder = 499,
                             Status = 1
                         },
                         new
@@ -16091,7 +16113,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 499,
+                            SortOrder = 500,
                             Status = 1
                         },
                         new
@@ -16102,7 +16124,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 500,
+                            SortOrder = 501,
                             Status = 1
                         },
                         new
@@ -16113,7 +16135,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 501,
+                            SortOrder = 502,
                             Status = 1
                         },
                         new
@@ -16124,7 +16146,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 502,
+                            SortOrder = 503,
                             Status = 1
                         },
                         new
@@ -16135,7 +16157,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 503,
+                            SortOrder = 504,
                             Status = 1
                         },
                         new
@@ -16146,7 +16168,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 504,
+                            SortOrder = 505,
                             Status = 1
                         },
                         new
@@ -16157,7 +16179,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 505,
+                            SortOrder = 506,
                             Status = 1
                         },
                         new
@@ -16168,7 +16190,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 506,
+                            SortOrder = 507,
                             Status = 1
                         },
                         new
@@ -16179,7 +16201,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 507,
+                            SortOrder = 508,
                             Status = 1
                         },
                         new
@@ -16190,7 +16212,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 508,
+                            SortOrder = 509,
                             Status = 1
                         },
                         new
@@ -16201,7 +16223,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 509,
+                            SortOrder = 510,
                             Status = 1
                         },
                         new
@@ -16212,7 +16234,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 510,
+                            SortOrder = 511,
                             Status = 1
                         },
                         new
@@ -16223,7 +16245,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 511,
+                            SortOrder = 512,
                             Status = 1
                         },
                         new
@@ -16234,7 +16256,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 512,
+                            SortOrder = 513,
                             Status = 1
                         },
                         new
@@ -16245,7 +16267,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 513,
+                            SortOrder = 514,
                             Status = 1
                         },
                         new
@@ -16256,7 +16278,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 514,
+                            SortOrder = 515,
                             Status = 1
                         },
                         new
@@ -16267,7 +16289,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 515,
+                            SortOrder = 516,
                             Status = 1
                         },
                         new
@@ -16278,7 +16300,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 516,
+                            SortOrder = 517,
                             Status = 1
                         },
                         new
@@ -16289,7 +16311,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 517,
+                            SortOrder = 518,
                             Status = 1
                         },
                         new
@@ -16300,7 +16322,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 518,
+                            SortOrder = 519,
                             Status = 1
                         },
                         new
@@ -16311,7 +16333,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 519,
+                            SortOrder = 520,
                             Status = 1
                         },
                         new
@@ -16322,7 +16344,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 520,
+                            SortOrder = 521,
                             Status = 1
                         },
                         new
@@ -16333,7 +16355,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 521,
+                            SortOrder = 522,
                             Status = 1
                         },
                         new
@@ -16344,7 +16366,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("fc08ede4-ed91-beed-a2cb-90c511feb49d"),
-                            SortOrder = 522,
+                            SortOrder = 523,
                             Status = 1
                         },
                         new
@@ -16355,7 +16377,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 523,
+                            SortOrder = 524,
                             Status = 1
                         },
                         new
@@ -16366,7 +16388,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 524,
+                            SortOrder = 525,
                             Status = 1
                         },
                         new
@@ -16377,7 +16399,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 525,
+                            SortOrder = 526,
                             Status = 1
                         },
                         new
@@ -16388,7 +16410,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 526,
+                            SortOrder = 527,
                             Status = 1
                         },
                         new
@@ -16399,7 +16421,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 527,
+                            SortOrder = 528,
                             Status = 1
                         },
                         new
@@ -16410,7 +16432,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 528,
+                            SortOrder = 529,
                             Status = 1
                         },
                         new
@@ -16421,7 +16443,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 529,
+                            SortOrder = 530,
                             Status = 1
                         },
                         new
@@ -16432,7 +16454,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 530,
+                            SortOrder = 531,
                             Status = 1
                         },
                         new
@@ -16443,7 +16465,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 531,
+                            SortOrder = 532,
                             Status = 1
                         },
                         new
@@ -16454,7 +16476,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 532,
+                            SortOrder = 533,
                             Status = 1
                         },
                         new
@@ -16465,7 +16487,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 533,
+                            SortOrder = 534,
                             Status = 1
                         },
                         new
@@ -16476,7 +16498,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 534,
+                            SortOrder = 535,
                             Status = 1
                         },
                         new
@@ -16487,7 +16509,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 535,
+                            SortOrder = 536,
                             Status = 1
                         },
                         new
@@ -16498,7 +16520,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 536,
+                            SortOrder = 537,
                             Status = 1
                         },
                         new
@@ -16509,7 +16531,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 537,
+                            SortOrder = 538,
                             Status = 1
                         },
                         new
@@ -16520,7 +16542,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 538,
+                            SortOrder = 539,
                             Status = 1
                         },
                         new
@@ -16531,7 +16553,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 539,
+                            SortOrder = 540,
                             Status = 1
                         },
                         new
@@ -16542,7 +16564,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 540,
+                            SortOrder = 541,
                             Status = 1
                         },
                         new
@@ -16553,7 +16575,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 541,
+                            SortOrder = 542,
                             Status = 1
                         },
                         new
@@ -16564,7 +16586,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 542,
+                            SortOrder = 543,
                             Status = 1
                         },
                         new
@@ -16575,7 +16597,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 543,
+                            SortOrder = 544,
                             Status = 1
                         },
                         new
@@ -16586,7 +16608,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 544,
+                            SortOrder = 545,
                             Status = 1
                         },
                         new
@@ -16597,7 +16619,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 545,
+                            SortOrder = 546,
                             Status = 1
                         },
                         new
@@ -16608,7 +16630,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 546,
+                            SortOrder = 547,
                             Status = 1
                         },
                         new
@@ -16619,7 +16641,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 547,
+                            SortOrder = 548,
                             Status = 1
                         },
                         new
@@ -16630,7 +16652,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 548,
+                            SortOrder = 549,
                             Status = 1
                         },
                         new
@@ -16641,7 +16663,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 549,
+                            SortOrder = 550,
                             Status = 1
                         },
                         new
@@ -16652,7 +16674,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 550,
+                            SortOrder = 551,
                             Status = 1
                         },
                         new
@@ -16663,7 +16685,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 551,
+                            SortOrder = 552,
                             Status = 1
                         },
                         new
@@ -16674,7 +16696,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 552,
+                            SortOrder = 553,
                             Status = 1
                         },
                         new
@@ -16685,7 +16707,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 553,
+                            SortOrder = 554,
                             Status = 1
                         },
                         new
@@ -16696,7 +16718,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 554,
+                            SortOrder = 555,
                             Status = 1
                         },
                         new
@@ -16707,7 +16729,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 555,
+                            SortOrder = 556,
                             Status = 1
                         },
                         new
@@ -16718,7 +16740,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 556,
+                            SortOrder = 557,
                             Status = 1
                         },
                         new
@@ -16729,7 +16751,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 557,
+                            SortOrder = 558,
                             Status = 1
                         },
                         new
@@ -16740,7 +16762,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 558,
+                            SortOrder = 559,
                             Status = 1
                         },
                         new
@@ -16751,7 +16773,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 559,
+                            SortOrder = 560,
                             Status = 1
                         },
                         new
@@ -16762,7 +16784,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("d57d6dff-53f9-1de5-52af-b873dcb90a20"),
-                            SortOrder = 560,
+                            SortOrder = 561,
                             Status = 1
                         },
                         new
@@ -16773,7 +16795,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 561,
+                            SortOrder = 562,
                             Status = 1
                         },
                         new
@@ -16784,7 +16806,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 562,
+                            SortOrder = 563,
                             Status = 1
                         },
                         new
@@ -16795,7 +16817,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 563,
+                            SortOrder = 564,
                             Status = 1
                         },
                         new
@@ -16806,7 +16828,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 564,
+                            SortOrder = 565,
                             Status = 1
                         },
                         new
@@ -16817,7 +16839,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 565,
+                            SortOrder = 566,
                             Status = 1
                         },
                         new
@@ -16828,7 +16850,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 566,
+                            SortOrder = 567,
                             Status = 1
                         },
                         new
@@ -16839,7 +16861,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 567,
+                            SortOrder = 568,
                             Status = 1
                         },
                         new
@@ -16850,7 +16872,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 568,
+                            SortOrder = 569,
                             Status = 1
                         },
                         new
@@ -16861,7 +16883,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 569,
+                            SortOrder = 570,
                             Status = 1
                         },
                         new
@@ -16872,7 +16894,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 570,
+                            SortOrder = 571,
                             Status = 1
                         },
                         new
@@ -16883,7 +16905,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 571,
+                            SortOrder = 572,
                             Status = 1
                         },
                         new
@@ -16894,7 +16916,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 572,
+                            SortOrder = 573,
                             Status = 1
                         },
                         new
@@ -16905,7 +16927,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 573,
+                            SortOrder = 574,
                             Status = 1
                         },
                         new
@@ -16916,7 +16938,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 574,
+                            SortOrder = 575,
                             Status = 1
                         },
                         new
@@ -16927,7 +16949,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 575,
+                            SortOrder = 576,
                             Status = 1
                         },
                         new
@@ -16938,7 +16960,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 576,
+                            SortOrder = 577,
                             Status = 1
                         },
                         new
@@ -16949,7 +16971,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 577,
+                            SortOrder = 578,
                             Status = 1
                         },
                         new
@@ -16960,7 +16982,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 578,
+                            SortOrder = 579,
                             Status = 1
                         },
                         new
@@ -16971,7 +16993,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 579,
+                            SortOrder = 580,
                             Status = 1
                         },
                         new
@@ -16982,7 +17004,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 580,
+                            SortOrder = 581,
                             Status = 1
                         },
                         new
@@ -16993,7 +17015,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 581,
+                            SortOrder = 582,
                             Status = 1
                         },
                         new
@@ -17004,7 +17026,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 582,
+                            SortOrder = 583,
                             Status = 1
                         },
                         new
@@ -17015,7 +17037,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 583,
+                            SortOrder = 584,
                             Status = 1
                         },
                         new
@@ -17026,7 +17048,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 584,
+                            SortOrder = 585,
                             Status = 1
                         },
                         new
@@ -17037,7 +17059,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 585,
+                            SortOrder = 586,
                             Status = 1
                         },
                         new
@@ -17048,7 +17070,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 586,
+                            SortOrder = 587,
                             Status = 1
                         },
                         new
@@ -17059,7 +17081,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 587,
+                            SortOrder = 588,
                             Status = 1
                         },
                         new
@@ -17070,7 +17092,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 588,
+                            SortOrder = 589,
                             Status = 1
                         },
                         new
@@ -17081,7 +17103,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 589,
+                            SortOrder = 590,
                             Status = 1
                         },
                         new
@@ -17092,7 +17114,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 590,
+                            SortOrder = 591,
                             Status = 1
                         },
                         new
@@ -17103,7 +17125,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 591,
+                            SortOrder = 592,
                             Status = 1
                         },
                         new
@@ -17114,7 +17136,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 592,
+                            SortOrder = 593,
                             Status = 1
                         },
                         new
@@ -17125,7 +17147,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 593,
+                            SortOrder = 594,
                             Status = 1
                         },
                         new
@@ -17136,7 +17158,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 594,
+                            SortOrder = 595,
                             Status = 1
                         },
                         new
@@ -17147,7 +17169,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 595,
+                            SortOrder = 596,
                             Status = 1
                         },
                         new
@@ -17158,7 +17180,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 596,
+                            SortOrder = 597,
                             Status = 1
                         },
                         new
@@ -17169,7 +17191,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 597,
+                            SortOrder = 598,
                             Status = 1
                         },
                         new
@@ -17180,7 +17202,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("e4b1e0d5-fd23-8951-3e07-518b8d557c49"),
-                            SortOrder = 598,
+                            SortOrder = 599,
                             Status = 1
                         },
                         new
@@ -17191,7 +17213,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 599,
+                            SortOrder = 600,
                             Status = 1
                         },
                         new
@@ -17202,7 +17224,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 600,
+                            SortOrder = 601,
                             Status = 1
                         },
                         new
@@ -17213,7 +17235,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 601,
+                            SortOrder = 602,
                             Status = 1
                         },
                         new
@@ -17224,7 +17246,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 602,
+                            SortOrder = 603,
                             Status = 1
                         },
                         new
@@ -17235,7 +17257,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 603,
+                            SortOrder = 604,
                             Status = 1
                         },
                         new
@@ -17246,7 +17268,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 604,
+                            SortOrder = 605,
                             Status = 1
                         },
                         new
@@ -17257,7 +17279,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 605,
+                            SortOrder = 606,
                             Status = 1
                         },
                         new
@@ -17268,7 +17290,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 606,
+                            SortOrder = 607,
                             Status = 1
                         },
                         new
@@ -17279,7 +17301,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 607,
+                            SortOrder = 608,
                             Status = 1
                         },
                         new
@@ -17290,7 +17312,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 608,
+                            SortOrder = 609,
                             Status = 1
                         },
                         new
@@ -17301,7 +17323,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 609,
+                            SortOrder = 610,
                             Status = 1
                         },
                         new
@@ -17312,7 +17334,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 610,
+                            SortOrder = 611,
                             Status = 1
                         },
                         new
@@ -17323,7 +17345,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 611,
+                            SortOrder = 612,
                             Status = 1
                         },
                         new
@@ -17334,7 +17356,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 612,
+                            SortOrder = 613,
                             Status = 1
                         },
                         new
@@ -17345,7 +17367,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 613,
+                            SortOrder = 614,
                             Status = 1
                         },
                         new
@@ -17356,7 +17378,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 614,
+                            SortOrder = 615,
                             Status = 1
                         },
                         new
@@ -17367,7 +17389,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 615,
+                            SortOrder = 616,
                             Status = 1
                         },
                         new
@@ -17378,7 +17400,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 616,
+                            SortOrder = 617,
                             Status = 1
                         },
                         new
@@ -17389,7 +17411,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 617,
+                            SortOrder = 618,
                             Status = 1
                         },
                         new
@@ -17400,7 +17422,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 618,
+                            SortOrder = 619,
                             Status = 1
                         },
                         new
@@ -17411,7 +17433,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 619,
+                            SortOrder = 620,
                             Status = 1
                         },
                         new
@@ -17422,7 +17444,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 620,
+                            SortOrder = 621,
                             Status = 1
                         },
                         new
@@ -17433,7 +17455,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 621,
+                            SortOrder = 622,
                             Status = 1
                         },
                         new
@@ -17444,7 +17466,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 622,
+                            SortOrder = 623,
                             Status = 1
                         },
                         new
@@ -17455,7 +17477,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 623,
+                            SortOrder = 624,
                             Status = 1
                         },
                         new
@@ -17466,7 +17488,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 624,
+                            SortOrder = 625,
                             Status = 1
                         },
                         new
@@ -17477,7 +17499,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 625,
+                            SortOrder = 626,
                             Status = 1
                         },
                         new
@@ -17488,7 +17510,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 626,
+                            SortOrder = 627,
                             Status = 1
                         },
                         new
@@ -17499,7 +17521,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 627,
+                            SortOrder = 628,
                             Status = 1
                         },
                         new
@@ -17510,7 +17532,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 628,
+                            SortOrder = 629,
                             Status = 1
                         },
                         new
@@ -17521,7 +17543,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 629,
+                            SortOrder = 630,
                             Status = 1
                         },
                         new
@@ -17532,7 +17554,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 630,
+                            SortOrder = 631,
                             Status = 1
                         },
                         new
@@ -17543,7 +17565,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 631,
+                            SortOrder = 632,
                             Status = 1
                         },
                         new
@@ -17554,7 +17576,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 632,
+                            SortOrder = 633,
                             Status = 1
                         },
                         new
@@ -17565,7 +17587,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 633,
+                            SortOrder = 634,
                             Status = 1
                         },
                         new
@@ -17576,7 +17598,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 634,
+                            SortOrder = 635,
                             Status = 1
                         },
                         new
@@ -17587,7 +17609,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 635,
+                            SortOrder = 636,
                             Status = 1
                         },
                         new
@@ -17598,7 +17620,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("4b1a1070-465b-f0dd-0351-96cc0cd3115a"),
-                            SortOrder = 636,
+                            SortOrder = 637,
                             Status = 1
                         },
                         new
@@ -17609,7 +17631,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("11e5080f-4567-f57e-d365-2d100be7963b"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 637,
+                            SortOrder = 638,
                             Status = 1
                         },
                         new
@@ -17620,7 +17642,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 638,
+                            SortOrder = 639,
                             Status = 1
                         },
                         new
@@ -17631,7 +17653,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 639,
+                            SortOrder = 640,
                             Status = 1
                         },
                         new
@@ -17642,7 +17664,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 640,
+                            SortOrder = 641,
                             Status = 1
                         },
                         new
@@ -17653,7 +17675,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 641,
+                            SortOrder = 642,
                             Status = 1
                         },
                         new
@@ -17664,7 +17686,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 642,
+                            SortOrder = 643,
                             Status = 1
                         },
                         new
@@ -17675,7 +17697,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 643,
+                            SortOrder = 644,
                             Status = 1
                         },
                         new
@@ -17686,7 +17708,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 644,
+                            SortOrder = 645,
                             Status = 1
                         },
                         new
@@ -17697,7 +17719,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 645,
+                            SortOrder = 646,
                             Status = 1
                         },
                         new
@@ -17708,7 +17730,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 646,
+                            SortOrder = 647,
                             Status = 1
                         },
                         new
@@ -17719,7 +17741,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 647,
+                            SortOrder = 648,
                             Status = 1
                         },
                         new
@@ -17730,7 +17752,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 648,
+                            SortOrder = 649,
                             Status = 1
                         },
                         new
@@ -17741,7 +17763,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 649,
+                            SortOrder = 650,
                             Status = 1
                         },
                         new
@@ -17752,7 +17774,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 650,
+                            SortOrder = 651,
                             Status = 1
                         },
                         new
@@ -17763,7 +17785,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 651,
+                            SortOrder = 652,
                             Status = 1
                         },
                         new
@@ -17774,7 +17796,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 652,
+                            SortOrder = 653,
                             Status = 1
                         },
                         new
@@ -17785,7 +17807,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 653,
+                            SortOrder = 654,
                             Status = 1
                         },
                         new
@@ -17796,7 +17818,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 654,
+                            SortOrder = 655,
                             Status = 1
                         },
                         new
@@ -17807,7 +17829,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 655,
+                            SortOrder = 656,
                             Status = 1
                         },
                         new
@@ -17818,7 +17840,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 656,
+                            SortOrder = 657,
                             Status = 1
                         },
                         new
@@ -17829,7 +17851,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 657,
+                            SortOrder = 658,
                             Status = 1
                         },
                         new
@@ -17840,7 +17862,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 658,
+                            SortOrder = 659,
                             Status = 1
                         },
                         new
@@ -17851,7 +17873,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 659,
+                            SortOrder = 660,
                             Status = 1
                         },
                         new
@@ -17862,7 +17884,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 660,
+                            SortOrder = 661,
                             Status = 1
                         },
                         new
@@ -17873,7 +17895,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 661,
+                            SortOrder = 662,
                             Status = 1
                         },
                         new
@@ -17884,7 +17906,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 662,
+                            SortOrder = 663,
                             Status = 1
                         },
                         new
@@ -17895,7 +17917,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 663,
+                            SortOrder = 664,
                             Status = 1
                         },
                         new
@@ -17906,7 +17928,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 664,
+                            SortOrder = 665,
                             Status = 1
                         },
                         new
@@ -17917,7 +17939,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 665,
+                            SortOrder = 666,
                             Status = 1
                         },
                         new
@@ -17928,7 +17950,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 666,
+                            SortOrder = 667,
                             Status = 1
                         },
                         new
@@ -17939,7 +17961,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 667,
+                            SortOrder = 668,
                             Status = 1
                         },
                         new
@@ -17950,7 +17972,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 668,
+                            SortOrder = 669,
                             Status = 1
                         },
                         new
@@ -17961,7 +17983,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 669,
+                            SortOrder = 670,
                             Status = 1
                         },
                         new
@@ -17972,7 +17994,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 670,
+                            SortOrder = 671,
                             Status = 1
                         },
                         new
@@ -17983,7 +18005,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 671,
+                            SortOrder = 672,
                             Status = 1
                         },
                         new
@@ -17994,7 +18016,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 672,
+                            SortOrder = 673,
                             Status = 1
                         },
                         new
@@ -18005,7 +18027,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 673,
+                            SortOrder = 674,
                             Status = 1
                         },
                         new
@@ -18016,7 +18038,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 674,
+                            SortOrder = 675,
                             Status = 1
                         },
                         new
@@ -18027,7 +18049,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 675,
+                            SortOrder = 676,
                             Status = 1
                         },
                         new
@@ -18038,7 +18060,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("47ecdf57-58f5-7fa5-f77b-943dfe59a4bc"),
-                            SortOrder = 676,
+                            SortOrder = 677,
                             Status = 1
                         },
                         new
@@ -18049,7 +18071,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("965f0a6d-115e-89ab-4a31-b546ad41c8db"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 677,
+                            SortOrder = 678,
                             Status = 1
                         },
                         new
@@ -18060,7 +18082,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 678,
+                            SortOrder = 679,
                             Status = 1
                         },
                         new
@@ -18071,7 +18093,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 679,
+                            SortOrder = 680,
                             Status = 1
                         },
                         new
@@ -18082,7 +18104,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 680,
+                            SortOrder = 681,
                             Status = 1
                         },
                         new
@@ -18093,7 +18115,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 681,
+                            SortOrder = 682,
                             Status = 1
                         },
                         new
@@ -18104,7 +18126,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 682,
+                            SortOrder = 683,
                             Status = 1
                         },
                         new
@@ -18115,7 +18137,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 683,
+                            SortOrder = 684,
                             Status = 1
                         },
                         new
@@ -18126,7 +18148,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 684,
+                            SortOrder = 685,
                             Status = 1
                         },
                         new
@@ -18137,7 +18159,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 685,
+                            SortOrder = 686,
                             Status = 1
                         },
                         new
@@ -18148,7 +18170,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 686,
+                            SortOrder = 687,
                             Status = 1
                         },
                         new
@@ -18159,7 +18181,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 687,
+                            SortOrder = 688,
                             Status = 1
                         },
                         new
@@ -18170,7 +18192,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 688,
+                            SortOrder = 689,
                             Status = 1
                         },
                         new
@@ -18181,7 +18203,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 689,
+                            SortOrder = 690,
                             Status = 1
                         },
                         new
@@ -18192,7 +18214,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 690,
+                            SortOrder = 691,
                             Status = 1
                         },
                         new
@@ -18203,7 +18225,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 691,
+                            SortOrder = 692,
                             Status = 1
                         },
                         new
@@ -18214,7 +18236,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 692,
+                            SortOrder = 693,
                             Status = 1
                         },
                         new
@@ -18225,7 +18247,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 693,
+                            SortOrder = 694,
                             Status = 1
                         },
                         new
@@ -18236,7 +18258,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 694,
+                            SortOrder = 695,
                             Status = 1
                         },
                         new
@@ -18247,7 +18269,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 695,
+                            SortOrder = 696,
                             Status = 1
                         },
                         new
@@ -18258,7 +18280,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 696,
+                            SortOrder = 697,
                             Status = 1
                         },
                         new
@@ -18269,7 +18291,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 697,
+                            SortOrder = 698,
                             Status = 1
                         },
                         new
@@ -18280,7 +18302,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 698,
+                            SortOrder = 699,
                             Status = 1
                         },
                         new
@@ -18291,7 +18313,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 699,
+                            SortOrder = 700,
                             Status = 1
                         },
                         new
@@ -18302,7 +18324,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 700,
+                            SortOrder = 701,
                             Status = 1
                         },
                         new
@@ -18313,7 +18335,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 701,
+                            SortOrder = 702,
                             Status = 1
                         },
                         new
@@ -18324,7 +18346,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 702,
+                            SortOrder = 703,
                             Status = 1
                         },
                         new
@@ -18335,7 +18357,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 703,
+                            SortOrder = 704,
                             Status = 1
                         },
                         new
@@ -18346,7 +18368,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 704,
+                            SortOrder = 705,
                             Status = 1
                         },
                         new
@@ -18357,7 +18379,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 705,
+                            SortOrder = 706,
                             Status = 1
                         },
                         new
@@ -18368,7 +18390,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 706,
+                            SortOrder = 707,
                             Status = 1
                         },
                         new
@@ -18379,7 +18401,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 707,
+                            SortOrder = 708,
                             Status = 1
                         },
                         new
@@ -18390,7 +18412,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 708,
+                            SortOrder = 709,
                             Status = 1
                         },
                         new
@@ -18401,7 +18423,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 709,
+                            SortOrder = 710,
                             Status = 1
                         },
                         new
@@ -18412,7 +18434,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 710,
+                            SortOrder = 711,
                             Status = 1
                         },
                         new
@@ -18423,7 +18445,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 711,
+                            SortOrder = 712,
                             Status = 1
                         },
                         new
@@ -18434,7 +18456,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 712,
+                            SortOrder = 713,
                             Status = 1
                         },
                         new
@@ -18445,7 +18467,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 713,
+                            SortOrder = 714,
                             Status = 1
                         },
                         new
@@ -18456,7 +18478,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 714,
+                            SortOrder = 715,
                             Status = 1
                         },
                         new
@@ -18467,7 +18489,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 715,
+                            SortOrder = 716,
                             Status = 1
                         },
                         new
@@ -18478,7 +18500,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("aaf798ec-cda6-db11-3c2a-4f7372eae8e5"),
-                            SortOrder = 716,
+                            SortOrder = 717,
                             Status = 1
                         },
                         new
@@ -18489,7 +18511,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 717,
+                            SortOrder = 718,
                             Status = 1
                         },
                         new
@@ -18500,7 +18522,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 718,
+                            SortOrder = 719,
                             Status = 1
                         },
                         new
@@ -18511,7 +18533,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 719,
+                            SortOrder = 720,
                             Status = 1
                         },
                         new
@@ -18522,7 +18544,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 720,
+                            SortOrder = 721,
                             Status = 1
                         },
                         new
@@ -18533,7 +18555,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 721,
+                            SortOrder = 722,
                             Status = 1
                         },
                         new
@@ -18544,7 +18566,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 722,
+                            SortOrder = 723,
                             Status = 1
                         },
                         new
@@ -18555,7 +18577,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 723,
+                            SortOrder = 724,
                             Status = 1
                         },
                         new
@@ -18566,7 +18588,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 724,
+                            SortOrder = 725,
                             Status = 1
                         },
                         new
@@ -18577,7 +18599,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 725,
+                            SortOrder = 726,
                             Status = 1
                         },
                         new
@@ -18588,7 +18610,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 726,
+                            SortOrder = 727,
                             Status = 1
                         },
                         new
@@ -18599,7 +18621,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 727,
+                            SortOrder = 728,
                             Status = 1
                         },
                         new
@@ -18610,7 +18632,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 728,
+                            SortOrder = 729,
                             Status = 1
                         },
                         new
@@ -18621,7 +18643,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 729,
+                            SortOrder = 730,
                             Status = 1
                         },
                         new
@@ -18632,7 +18654,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 730,
+                            SortOrder = 731,
                             Status = 1
                         },
                         new
@@ -18643,7 +18665,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 731,
+                            SortOrder = 732,
                             Status = 1
                         },
                         new
@@ -18654,7 +18676,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 732,
+                            SortOrder = 733,
                             Status = 1
                         },
                         new
@@ -18665,7 +18687,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 733,
+                            SortOrder = 734,
                             Status = 1
                         },
                         new
@@ -18676,7 +18698,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 734,
+                            SortOrder = 735,
                             Status = 1
                         },
                         new
@@ -18687,7 +18709,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 735,
+                            SortOrder = 736,
                             Status = 1
                         },
                         new
@@ -18698,7 +18720,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 736,
+                            SortOrder = 737,
                             Status = 1
                         },
                         new
@@ -18709,7 +18731,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 737,
+                            SortOrder = 738,
                             Status = 1
                         },
                         new
@@ -18720,7 +18742,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 738,
+                            SortOrder = 739,
                             Status = 1
                         },
                         new
@@ -18731,7 +18753,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 739,
+                            SortOrder = 740,
                             Status = 1
                         },
                         new
@@ -18742,7 +18764,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 740,
+                            SortOrder = 741,
                             Status = 1
                         },
                         new
@@ -18753,7 +18775,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 741,
+                            SortOrder = 742,
                             Status = 1
                         },
                         new
@@ -18764,7 +18786,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 742,
+                            SortOrder = 743,
                             Status = 1
                         },
                         new
@@ -18775,7 +18797,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 743,
+                            SortOrder = 744,
                             Status = 1
                         },
                         new
@@ -18786,7 +18808,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 744,
+                            SortOrder = 745,
                             Status = 1
                         },
                         new
@@ -18797,7 +18819,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 745,
+                            SortOrder = 746,
                             Status = 1
                         },
                         new
@@ -18808,7 +18830,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 746,
+                            SortOrder = 747,
                             Status = 1
                         },
                         new
@@ -18819,7 +18841,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 747,
+                            SortOrder = 748,
                             Status = 1
                         },
                         new
@@ -18830,7 +18852,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 748,
+                            SortOrder = 749,
                             Status = 1
                         },
                         new
@@ -18841,7 +18863,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 749,
+                            SortOrder = 750,
                             Status = 1
                         },
                         new
@@ -18852,7 +18874,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 750,
+                            SortOrder = 751,
                             Status = 1
                         },
                         new
@@ -18863,7 +18885,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 751,
+                            SortOrder = 752,
                             Status = 1
                         },
                         new
@@ -18874,7 +18896,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 752,
+                            SortOrder = 753,
                             Status = 1
                         },
                         new
@@ -18885,7 +18907,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 753,
+                            SortOrder = 754,
                             Status = 1
                         },
                         new
@@ -18896,7 +18918,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 754,
+                            SortOrder = 755,
                             Status = 1
                         },
                         new
@@ -18907,7 +18929,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("3eb064c7-8061-fc09-f665-74dbb592c9aa"),
-                            SortOrder = 755,
+                            SortOrder = 756,
                             Status = 1
                         },
                         new
@@ -18918,7 +18940,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 756,
+                            SortOrder = 757,
                             Status = 1
                         },
                         new
@@ -18929,7 +18951,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 757,
+                            SortOrder = 758,
                             Status = 1
                         },
                         new
@@ -18940,7 +18962,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 758,
+                            SortOrder = 759,
                             Status = 1
                         },
                         new
@@ -18951,7 +18973,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 759,
+                            SortOrder = 760,
                             Status = 1
                         },
                         new
@@ -18962,7 +18984,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 760,
+                            SortOrder = 761,
                             Status = 1
                         },
                         new
@@ -18973,7 +18995,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 761,
+                            SortOrder = 762,
                             Status = 1
                         },
                         new
@@ -18984,7 +19006,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 762,
+                            SortOrder = 763,
                             Status = 1
                         },
                         new
@@ -18995,7 +19017,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 763,
+                            SortOrder = 764,
                             Status = 1
                         },
                         new
@@ -19006,7 +19028,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 764,
+                            SortOrder = 765,
                             Status = 1
                         },
                         new
@@ -19017,7 +19039,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 765,
+                            SortOrder = 766,
                             Status = 1
                         },
                         new
@@ -19028,7 +19050,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 766,
+                            SortOrder = 767,
                             Status = 1
                         },
                         new
@@ -19039,7 +19061,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 767,
+                            SortOrder = 768,
                             Status = 1
                         },
                         new
@@ -19050,7 +19072,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 768,
+                            SortOrder = 769,
                             Status = 1
                         },
                         new
@@ -19061,7 +19083,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 769,
+                            SortOrder = 770,
                             Status = 1
                         },
                         new
@@ -19072,7 +19094,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 770,
+                            SortOrder = 771,
                             Status = 1
                         },
                         new
@@ -19083,7 +19105,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 771,
+                            SortOrder = 772,
                             Status = 1
                         },
                         new
@@ -19094,7 +19116,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 772,
+                            SortOrder = 773,
                             Status = 1
                         },
                         new
@@ -19105,7 +19127,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 773,
+                            SortOrder = 774,
                             Status = 1
                         },
                         new
@@ -19116,7 +19138,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 774,
+                            SortOrder = 775,
                             Status = 1
                         },
                         new
@@ -19127,7 +19149,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 775,
+                            SortOrder = 776,
                             Status = 1
                         },
                         new
@@ -19138,7 +19160,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 776,
+                            SortOrder = 777,
                             Status = 1
                         },
                         new
@@ -19149,7 +19171,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 777,
+                            SortOrder = 778,
                             Status = 1
                         },
                         new
@@ -19160,7 +19182,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 778,
+                            SortOrder = 779,
                             Status = 1
                         },
                         new
@@ -19171,7 +19193,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 779,
+                            SortOrder = 780,
                             Status = 1
                         },
                         new
@@ -19182,7 +19204,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 780,
+                            SortOrder = 781,
                             Status = 1
                         },
                         new
@@ -19193,7 +19215,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 781,
+                            SortOrder = 782,
                             Status = 1
                         },
                         new
@@ -19204,7 +19226,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 782,
+                            SortOrder = 783,
                             Status = 1
                         },
                         new
@@ -19215,7 +19237,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 783,
+                            SortOrder = 784,
                             Status = 1
                         },
                         new
@@ -19226,7 +19248,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 784,
+                            SortOrder = 785,
                             Status = 1
                         },
                         new
@@ -19237,7 +19259,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 785,
+                            SortOrder = 786,
                             Status = 1
                         },
                         new
@@ -19248,7 +19270,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 786,
+                            SortOrder = 787,
                             Status = 1
                         },
                         new
@@ -19259,7 +19281,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 787,
+                            SortOrder = 788,
                             Status = 1
                         },
                         new
@@ -19270,7 +19292,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 788,
+                            SortOrder = 789,
                             Status = 1
                         },
                         new
@@ -19281,7 +19303,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 789,
+                            SortOrder = 790,
                             Status = 1
                         },
                         new
@@ -19292,7 +19314,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 790,
+                            SortOrder = 791,
                             Status = 1
                         },
                         new
@@ -19303,7 +19325,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 791,
+                            SortOrder = 792,
                             Status = 1
                         },
                         new
@@ -19314,7 +19336,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 792,
+                            SortOrder = 793,
                             Status = 1
                         },
                         new
@@ -19325,7 +19347,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 793,
+                            SortOrder = 794,
                             Status = 1
                         },
                         new
@@ -19336,7 +19358,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 794,
+                            SortOrder = 795,
                             Status = 1
                         },
                         new
@@ -19347,7 +19369,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 795,
+                            SortOrder = 796,
                             Status = 1
                         },
                         new
@@ -19358,7 +19380,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 796,
+                            SortOrder = 797,
                             Status = 1
                         },
                         new
@@ -19369,7 +19391,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 797,
+                            SortOrder = 798,
                             Status = 1
                         },
                         new
@@ -19380,7 +19402,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("b65964ab-6e0e-7c23-6be6-73530b58a023"),
-                            SortOrder = 798,
+                            SortOrder = 799,
                             Status = 1
                         },
                         new
@@ -19391,7 +19413,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 799,
+                            SortOrder = 800,
                             Status = 1
                         },
                         new
@@ -19402,7 +19424,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 800,
+                            SortOrder = 801,
                             Status = 1
                         },
                         new
@@ -19413,7 +19435,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 801,
+                            SortOrder = 802,
                             Status = 1
                         },
                         new
@@ -19424,7 +19446,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 802,
+                            SortOrder = 803,
                             Status = 1
                         },
                         new
@@ -19435,7 +19457,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 803,
+                            SortOrder = 804,
                             Status = 1
                         },
                         new
@@ -19446,7 +19468,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 804,
+                            SortOrder = 805,
                             Status = 1
                         },
                         new
@@ -19457,7 +19479,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 805,
+                            SortOrder = 806,
                             Status = 1
                         },
                         new
@@ -19468,7 +19490,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 806,
+                            SortOrder = 807,
                             Status = 1
                         },
                         new
@@ -19479,7 +19501,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 807,
+                            SortOrder = 808,
                             Status = 1
                         },
                         new
@@ -19490,7 +19512,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 808,
+                            SortOrder = 809,
                             Status = 1
                         },
                         new
@@ -19501,7 +19523,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 809,
+                            SortOrder = 810,
                             Status = 1
                         },
                         new
@@ -19512,7 +19534,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 810,
+                            SortOrder = 811,
                             Status = 1
                         },
                         new
@@ -19523,7 +19545,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 811,
+                            SortOrder = 812,
                             Status = 1
                         },
                         new
@@ -19534,7 +19556,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 812,
+                            SortOrder = 813,
                             Status = 1
                         },
                         new
@@ -19545,7 +19567,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 813,
+                            SortOrder = 814,
                             Status = 1
                         },
                         new
@@ -19556,7 +19578,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 814,
+                            SortOrder = 815,
                             Status = 1
                         },
                         new
@@ -19567,7 +19589,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 815,
+                            SortOrder = 816,
                             Status = 1
                         },
                         new
@@ -19578,7 +19600,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 816,
+                            SortOrder = 817,
                             Status = 1
                         },
                         new
@@ -19589,7 +19611,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 817,
+                            SortOrder = 818,
                             Status = 1
                         },
                         new
@@ -19600,7 +19622,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 818,
+                            SortOrder = 819,
                             Status = 1
                         },
                         new
@@ -19611,7 +19633,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 819,
+                            SortOrder = 820,
                             Status = 1
                         },
                         new
@@ -19622,7 +19644,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 820,
+                            SortOrder = 821,
                             Status = 1
                         },
                         new
@@ -19633,7 +19655,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 821,
+                            SortOrder = 822,
                             Status = 1
                         },
                         new
@@ -19644,7 +19666,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 822,
+                            SortOrder = 823,
                             Status = 1
                         },
                         new
@@ -19655,7 +19677,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 823,
+                            SortOrder = 824,
                             Status = 1
                         },
                         new
@@ -19666,7 +19688,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 824,
+                            SortOrder = 825,
                             Status = 1
                         },
                         new
@@ -19677,7 +19699,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 825,
+                            SortOrder = 826,
                             Status = 1
                         },
                         new
@@ -19688,7 +19710,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 826,
+                            SortOrder = 827,
                             Status = 1
                         },
                         new
@@ -19699,7 +19721,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 827,
+                            SortOrder = 828,
                             Status = 1
                         },
                         new
@@ -19710,7 +19732,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 828,
+                            SortOrder = 829,
                             Status = 1
                         },
                         new
@@ -19721,7 +19743,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 829,
+                            SortOrder = 830,
                             Status = 1
                         },
                         new
@@ -19732,7 +19754,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 830,
+                            SortOrder = 831,
                             Status = 1
                         },
                         new
@@ -19743,7 +19765,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 831,
+                            SortOrder = 832,
                             Status = 1
                         },
                         new
@@ -19754,7 +19776,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 832,
+                            SortOrder = 833,
                             Status = 1
                         },
                         new
@@ -19765,7 +19787,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 833,
+                            SortOrder = 834,
                             Status = 1
                         },
                         new
@@ -19776,7 +19798,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 834,
+                            SortOrder = 835,
                             Status = 1
                         },
                         new
@@ -19787,7 +19809,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 835,
+                            SortOrder = 836,
                             Status = 1
                         },
                         new
@@ -19798,7 +19820,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 836,
+                            SortOrder = 837,
                             Status = 1
                         },
                         new
@@ -19809,7 +19831,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 837,
+                            SortOrder = 838,
                             Status = 1
                         },
                         new
@@ -19820,7 +19842,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("6aa83af1-74ba-dc59-a1b2-57c284d36c85"),
-                            SortOrder = 838,
+                            SortOrder = 839,
                             Status = 1
                         },
                         new
@@ -19831,7 +19853,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 839,
+                            SortOrder = 840,
                             Status = 1
                         },
                         new
@@ -19842,7 +19864,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 840,
+                            SortOrder = 841,
                             Status = 1
                         },
                         new
@@ -19853,7 +19875,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 841,
+                            SortOrder = 842,
                             Status = 1
                         },
                         new
@@ -19864,7 +19886,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 842,
+                            SortOrder = 843,
                             Status = 1
                         },
                         new
@@ -19875,7 +19897,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 843,
+                            SortOrder = 844,
                             Status = 1
                         },
                         new
@@ -19886,7 +19908,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 844,
+                            SortOrder = 845,
                             Status = 1
                         },
                         new
@@ -19897,7 +19919,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 845,
+                            SortOrder = 846,
                             Status = 1
                         },
                         new
@@ -19908,7 +19930,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 846,
+                            SortOrder = 847,
                             Status = 1
                         },
                         new
@@ -19919,7 +19941,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 847,
+                            SortOrder = 848,
                             Status = 1
                         },
                         new
@@ -19930,7 +19952,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 848,
+                            SortOrder = 849,
                             Status = 1
                         },
                         new
@@ -19941,7 +19963,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 849,
+                            SortOrder = 850,
                             Status = 1
                         },
                         new
@@ -19952,7 +19974,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 850,
+                            SortOrder = 851,
                             Status = 1
                         },
                         new
@@ -19963,7 +19985,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 851,
+                            SortOrder = 852,
                             Status = 1
                         },
                         new
@@ -19974,7 +19996,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 852,
+                            SortOrder = 853,
                             Status = 1
                         },
                         new
@@ -19985,7 +20007,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 853,
+                            SortOrder = 854,
                             Status = 1
                         },
                         new
@@ -19996,7 +20018,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 854,
+                            SortOrder = 855,
                             Status = 1
                         },
                         new
@@ -20007,7 +20029,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 855,
+                            SortOrder = 856,
                             Status = 1
                         },
                         new
@@ -20018,7 +20040,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 856,
+                            SortOrder = 857,
                             Status = 1
                         },
                         new
@@ -20029,7 +20051,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 857,
+                            SortOrder = 858,
                             Status = 1
                         },
                         new
@@ -20040,7 +20062,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 858,
+                            SortOrder = 859,
                             Status = 1
                         },
                         new
@@ -20051,7 +20073,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 859,
+                            SortOrder = 860,
                             Status = 1
                         },
                         new
@@ -20062,7 +20084,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 860,
+                            SortOrder = 861,
                             Status = 1
                         },
                         new
@@ -20073,7 +20095,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 861,
+                            SortOrder = 862,
                             Status = 1
                         },
                         new
@@ -20084,7 +20106,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 862,
+                            SortOrder = 863,
                             Status = 1
                         },
                         new
@@ -20095,7 +20117,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 863,
+                            SortOrder = 864,
                             Status = 1
                         },
                         new
@@ -20106,7 +20128,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 864,
+                            SortOrder = 865,
                             Status = 1
                         },
                         new
@@ -20117,7 +20139,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 865,
+                            SortOrder = 866,
                             Status = 1
                         },
                         new
@@ -20128,7 +20150,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 866,
+                            SortOrder = 867,
                             Status = 1
                         },
                         new
@@ -20139,7 +20161,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 867,
+                            SortOrder = 868,
                             Status = 1
                         },
                         new
@@ -20150,7 +20172,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 868,
+                            SortOrder = 869,
                             Status = 1
                         },
                         new
@@ -20161,7 +20183,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 869,
+                            SortOrder = 870,
                             Status = 1
                         },
                         new
@@ -20172,7 +20194,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 870,
+                            SortOrder = 871,
                             Status = 1
                         },
                         new
@@ -20183,7 +20205,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 871,
+                            SortOrder = 872,
                             Status = 1
                         },
                         new
@@ -20194,7 +20216,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 872,
+                            SortOrder = 873,
                             Status = 1
                         },
                         new
@@ -20205,7 +20227,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 873,
+                            SortOrder = 874,
                             Status = 1
                         },
                         new
@@ -20216,7 +20238,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 874,
+                            SortOrder = 875,
                             Status = 1
                         },
                         new
@@ -20227,7 +20249,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 875,
+                            SortOrder = 876,
                             Status = 1
                         },
                         new
@@ -20238,7 +20260,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("d16fe8db-fceb-e90c-3700-5257f0e18dfd"),
-                            SortOrder = 876,
+                            SortOrder = 877,
                             Status = 1
                         },
                         new
@@ -20249,7 +20271,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 877,
+                            SortOrder = 878,
                             Status = 1
                         },
                         new
@@ -20260,7 +20282,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 878,
+                            SortOrder = 879,
                             Status = 1
                         },
                         new
@@ -20271,7 +20293,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 879,
+                            SortOrder = 880,
                             Status = 1
                         },
                         new
@@ -20282,7 +20304,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 880,
+                            SortOrder = 881,
                             Status = 1
                         },
                         new
@@ -20293,7 +20315,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 881,
+                            SortOrder = 882,
                             Status = 1
                         },
                         new
@@ -20304,7 +20326,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 882,
+                            SortOrder = 883,
                             Status = 1
                         },
                         new
@@ -20315,7 +20337,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 883,
+                            SortOrder = 884,
                             Status = 1
                         },
                         new
@@ -20326,7 +20348,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 884,
+                            SortOrder = 885,
                             Status = 1
                         },
                         new
@@ -20337,7 +20359,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 885,
+                            SortOrder = 886,
                             Status = 1
                         },
                         new
@@ -20348,7 +20370,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 886,
+                            SortOrder = 887,
                             Status = 1
                         },
                         new
@@ -20359,7 +20381,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 887,
+                            SortOrder = 888,
                             Status = 1
                         },
                         new
@@ -20370,7 +20392,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 888,
+                            SortOrder = 889,
                             Status = 1
                         },
                         new
@@ -20381,7 +20403,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 889,
+                            SortOrder = 890,
                             Status = 1
                         },
                         new
@@ -20392,7 +20414,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 890,
+                            SortOrder = 891,
                             Status = 1
                         },
                         new
@@ -20403,7 +20425,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 891,
+                            SortOrder = 892,
                             Status = 1
                         },
                         new
@@ -20414,7 +20436,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 892,
+                            SortOrder = 893,
                             Status = 1
                         },
                         new
@@ -20425,7 +20447,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 893,
+                            SortOrder = 894,
                             Status = 1
                         },
                         new
@@ -20436,7 +20458,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 894,
+                            SortOrder = 895,
                             Status = 1
                         },
                         new
@@ -20447,7 +20469,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 895,
+                            SortOrder = 896,
                             Status = 1
                         },
                         new
@@ -20458,7 +20480,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 896,
+                            SortOrder = 897,
                             Status = 1
                         },
                         new
@@ -20469,7 +20491,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 897,
+                            SortOrder = 898,
                             Status = 1
                         },
                         new
@@ -20480,7 +20502,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 898,
+                            SortOrder = 899,
                             Status = 1
                         },
                         new
@@ -20491,7 +20513,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 899,
+                            SortOrder = 900,
                             Status = 1
                         },
                         new
@@ -20502,7 +20524,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 900,
+                            SortOrder = 901,
                             Status = 1
                         },
                         new
@@ -20513,7 +20535,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 901,
+                            SortOrder = 902,
                             Status = 1
                         },
                         new
@@ -20524,7 +20546,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 902,
+                            SortOrder = 903,
                             Status = 1
                         },
                         new
@@ -20535,7 +20557,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 903,
+                            SortOrder = 904,
                             Status = 1
                         },
                         new
@@ -20546,7 +20568,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 904,
+                            SortOrder = 905,
                             Status = 1
                         },
                         new
@@ -20557,7 +20579,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 905,
+                            SortOrder = 906,
                             Status = 1
                         },
                         new
@@ -20568,7 +20590,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 906,
+                            SortOrder = 907,
                             Status = 1
                         },
                         new
@@ -20579,7 +20601,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 907,
+                            SortOrder = 908,
                             Status = 1
                         },
                         new
@@ -20590,7 +20612,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 908,
+                            SortOrder = 909,
                             Status = 1
                         },
                         new
@@ -20601,7 +20623,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 909,
+                            SortOrder = 910,
                             Status = 1
                         },
                         new
@@ -20612,7 +20634,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 910,
+                            SortOrder = 911,
                             Status = 1
                         },
                         new
@@ -20623,7 +20645,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 911,
+                            SortOrder = 912,
                             Status = 1
                         },
                         new
@@ -20634,7 +20656,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 912,
+                            SortOrder = 913,
                             Status = 1
                         },
                         new
@@ -20645,7 +20667,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 913,
+                            SortOrder = 914,
                             Status = 1
                         },
                         new
@@ -20656,7 +20678,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("3b8cda4b-3b56-fc8d-79f0-0dde2123f203"),
-                            SortOrder = 914,
+                            SortOrder = 915,
                             Status = 1
                         },
                         new
@@ -20667,7 +20689,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 915,
+                            SortOrder = 916,
                             Status = 1
                         },
                         new
@@ -20678,7 +20700,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 916,
+                            SortOrder = 917,
                             Status = 1
                         },
                         new
@@ -20689,7 +20711,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 917,
+                            SortOrder = 918,
                             Status = 1
                         },
                         new
@@ -20700,7 +20722,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 918,
+                            SortOrder = 919,
                             Status = 1
                         },
                         new
@@ -20711,7 +20733,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 919,
+                            SortOrder = 920,
                             Status = 1
                         },
                         new
@@ -20722,7 +20744,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 920,
+                            SortOrder = 921,
                             Status = 1
                         },
                         new
@@ -20733,7 +20755,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 921,
+                            SortOrder = 922,
                             Status = 1
                         },
                         new
@@ -20744,7 +20766,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 922,
+                            SortOrder = 923,
                             Status = 1
                         },
                         new
@@ -20755,7 +20777,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 923,
+                            SortOrder = 924,
                             Status = 1
                         },
                         new
@@ -20766,7 +20788,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 924,
+                            SortOrder = 925,
                             Status = 1
                         },
                         new
@@ -20777,7 +20799,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 925,
+                            SortOrder = 926,
                             Status = 1
                         },
                         new
@@ -20788,7 +20810,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 926,
+                            SortOrder = 927,
                             Status = 1
                         },
                         new
@@ -20799,7 +20821,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 927,
+                            SortOrder = 928,
                             Status = 1
                         },
                         new
@@ -20810,7 +20832,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 928,
+                            SortOrder = 929,
                             Status = 1
                         },
                         new
@@ -20821,7 +20843,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 929,
+                            SortOrder = 930,
                             Status = 1
                         },
                         new
@@ -20832,7 +20854,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 930,
+                            SortOrder = 931,
                             Status = 1
                         },
                         new
@@ -20843,7 +20865,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 931,
+                            SortOrder = 932,
                             Status = 1
                         },
                         new
@@ -20854,7 +20876,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 932,
+                            SortOrder = 933,
                             Status = 1
                         },
                         new
@@ -20865,7 +20887,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 933,
+                            SortOrder = 934,
                             Status = 1
                         },
                         new
@@ -20876,7 +20898,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 934,
+                            SortOrder = 935,
                             Status = 1
                         },
                         new
@@ -20887,7 +20909,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 935,
+                            SortOrder = 936,
                             Status = 1
                         },
                         new
@@ -20898,7 +20920,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 936,
+                            SortOrder = 937,
                             Status = 1
                         },
                         new
@@ -20909,7 +20931,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 937,
+                            SortOrder = 938,
                             Status = 1
                         },
                         new
@@ -20920,7 +20942,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 938,
+                            SortOrder = 939,
                             Status = 1
                         },
                         new
@@ -20931,7 +20953,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 939,
+                            SortOrder = 940,
                             Status = 1
                         },
                         new
@@ -20942,7 +20964,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 940,
+                            SortOrder = 941,
                             Status = 1
                         },
                         new
@@ -20953,7 +20975,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 941,
+                            SortOrder = 942,
                             Status = 1
                         },
                         new
@@ -20964,7 +20986,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 942,
+                            SortOrder = 943,
                             Status = 1
                         },
                         new
@@ -20975,7 +20997,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 943,
+                            SortOrder = 944,
                             Status = 1
                         },
                         new
@@ -20986,7 +21008,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 944,
+                            SortOrder = 945,
                             Status = 1
                         },
                         new
@@ -20997,7 +21019,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 945,
+                            SortOrder = 946,
                             Status = 1
                         },
                         new
@@ -21008,7 +21030,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 946,
+                            SortOrder = 947,
                             Status = 1
                         },
                         new
@@ -21019,7 +21041,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 947,
+                            SortOrder = 948,
                             Status = 1
                         },
                         new
@@ -21030,7 +21052,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 948,
+                            SortOrder = 949,
                             Status = 1
                         },
                         new
@@ -21041,7 +21063,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 949,
+                            SortOrder = 950,
                             Status = 1
                         },
                         new
@@ -21052,7 +21074,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 950,
+                            SortOrder = 951,
                             Status = 1
                         },
                         new
@@ -21063,7 +21085,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 951,
+                            SortOrder = 952,
                             Status = 1
                         },
                         new
@@ -21074,7 +21096,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("dde579cc-607d-888f-f0aa-cc14cd739478"),
-                            SortOrder = 952,
+                            SortOrder = 953,
                             Status = 1
                         },
                         new
@@ -21085,7 +21107,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 953,
+                            SortOrder = 954,
                             Status = 1
                         },
                         new
@@ -21096,7 +21118,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("3cac2abe-ed04-4f30-61ea-513bbe20bee7"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 954,
+                            SortOrder = 955,
                             Status = 1
                         },
                         new
@@ -21107,7 +21129,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 955,
+                            SortOrder = 956,
                             Status = 1
                         },
                         new
@@ -21118,7 +21140,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 956,
+                            SortOrder = 957,
                             Status = 1
                         },
                         new
@@ -21129,7 +21151,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("c0811b33-fdc0-189d-b103-2bb15a39b358"),
                             SFeatureValueId = new Guid("efbd93af-5c40-51d5-5783-dc01b7a71897"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 957,
+                            SortOrder = 958,
                             Status = 1
                         },
                         new
@@ -21140,7 +21162,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("1cca1fc1-5d6c-64a2-a92f-98aa7c4b3973"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 958,
+                            SortOrder = 959,
                             Status = 1
                         },
                         new
@@ -21151,7 +21173,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 959,
+                            SortOrder = 960,
                             Status = 1
                         },
                         new
@@ -21162,7 +21184,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 960,
+                            SortOrder = 961,
                             Status = 1
                         },
                         new
@@ -21173,7 +21195,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 961,
+                            SortOrder = 962,
                             Status = 1
                         },
                         new
@@ -21184,7 +21206,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 962,
+                            SortOrder = 963,
                             Status = 1
                         },
                         new
@@ -21195,7 +21217,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 963,
+                            SortOrder = 964,
                             Status = 1
                         },
                         new
@@ -21206,7 +21228,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 964,
+                            SortOrder = 965,
                             Status = 1
                         },
                         new
@@ -21217,7 +21239,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 965,
+                            SortOrder = 966,
                             Status = 1
                         },
                         new
@@ -21228,7 +21250,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 966,
+                            SortOrder = 967,
                             Status = 1
                         },
                         new
@@ -21239,7 +21261,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 967,
+                            SortOrder = 968,
                             Status = 1
                         },
                         new
@@ -21250,7 +21272,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 968,
+                            SortOrder = 969,
                             Status = 1
                         },
                         new
@@ -21261,7 +21283,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 969,
+                            SortOrder = 970,
                             Status = 1
                         },
                         new
@@ -21272,7 +21294,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 970,
+                            SortOrder = 971,
                             Status = 1
                         },
                         new
@@ -21283,7 +21305,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 971,
+                            SortOrder = 972,
                             Status = 1
                         },
                         new
@@ -21294,7 +21316,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 972,
+                            SortOrder = 973,
                             Status = 1
                         },
                         new
@@ -21305,7 +21327,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 973,
+                            SortOrder = 974,
                             Status = 1
                         },
                         new
@@ -21316,7 +21338,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 974,
+                            SortOrder = 975,
                             Status = 1
                         },
                         new
@@ -21327,7 +21349,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 975,
+                            SortOrder = 976,
                             Status = 1
                         },
                         new
@@ -21338,7 +21360,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 976,
+                            SortOrder = 977,
                             Status = 1
                         },
                         new
@@ -21349,7 +21371,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 977,
+                            SortOrder = 978,
                             Status = 1
                         },
                         new
@@ -21360,7 +21382,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 978,
+                            SortOrder = 979,
                             Status = 1
                         },
                         new
@@ -21371,7 +21393,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 979,
+                            SortOrder = 980,
                             Status = 1
                         },
                         new
@@ -21382,7 +21404,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 980,
+                            SortOrder = 981,
                             Status = 1
                         },
                         new
@@ -21393,7 +21415,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 981,
+                            SortOrder = 982,
                             Status = 1
                         },
                         new
@@ -21404,7 +21426,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 982,
+                            SortOrder = 983,
                             Status = 1
                         },
                         new
@@ -21415,7 +21437,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 983,
+                            SortOrder = 984,
                             Status = 1
                         },
                         new
@@ -21426,7 +21448,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 984,
+                            SortOrder = 985,
                             Status = 1
                         },
                         new
@@ -21437,7 +21459,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 985,
+                            SortOrder = 986,
                             Status = 1
                         },
                         new
@@ -21448,7 +21470,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 986,
+                            SortOrder = 987,
                             Status = 1
                         },
                         new
@@ -21459,7 +21481,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 987,
+                            SortOrder = 988,
                             Status = 1
                         },
                         new
@@ -21470,7 +21492,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 988,
+                            SortOrder = 989,
                             Status = 1
                         },
                         new
@@ -21481,7 +21503,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 989,
+                            SortOrder = 990,
                             Status = 1
                         },
                         new
@@ -21492,7 +21514,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 990,
+                            SortOrder = 991,
                             Status = 1
                         },
                         new
@@ -21503,7 +21525,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 991,
+                            SortOrder = 992,
                             Status = 1
                         },
                         new
@@ -21514,7 +21536,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 992,
+                            SortOrder = 993,
                             Status = 1
                         },
                         new
@@ -21525,7 +21547,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 993,
+                            SortOrder = 994,
                             Status = 1
                         },
                         new
@@ -21536,7 +21558,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 994,
+                            SortOrder = 995,
                             Status = 1
                         },
                         new
@@ -21547,7 +21569,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("b7cac5df-bce8-f552-886b-8319c75c0103"),
-                            SortOrder = 995,
+                            SortOrder = 996,
                             Status = 1
                         },
                         new
@@ -21558,7 +21580,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 996,
+                            SortOrder = 997,
                             Status = 1
                         },
                         new
@@ -21569,7 +21591,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("fbd01a2c-2d67-3acf-0fa8-78cb6f2736b6"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 997,
+                            SortOrder = 998,
                             Status = 1
                         },
                         new
@@ -21580,7 +21602,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("c8bd0bd8-017c-8fb4-d277-e5763414a965"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 998,
+                            SortOrder = 999,
                             Status = 1
                         },
                         new
@@ -21591,7 +21613,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 999,
+                            SortOrder = 1000,
                             Status = 1
                         },
                         new
@@ -21602,7 +21624,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1000,
+                            SortOrder = 1001,
                             Status = 1
                         },
                         new
@@ -21613,7 +21635,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1001,
+                            SortOrder = 1002,
                             Status = 1
                         },
                         new
@@ -21624,7 +21646,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1002,
+                            SortOrder = 1003,
                             Status = 1
                         },
                         new
@@ -21635,7 +21657,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1003,
+                            SortOrder = 1004,
                             Status = 1
                         },
                         new
@@ -21646,7 +21668,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1004,
+                            SortOrder = 1005,
                             Status = 1
                         },
                         new
@@ -21657,7 +21679,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1005,
+                            SortOrder = 1006,
                             Status = 1
                         },
                         new
@@ -21668,7 +21690,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1006,
+                            SortOrder = 1007,
                             Status = 1
                         },
                         new
@@ -21679,7 +21701,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1007,
+                            SortOrder = 1008,
                             Status = 1
                         },
                         new
@@ -21690,7 +21712,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1008,
+                            SortOrder = 1009,
                             Status = 1
                         },
                         new
@@ -21701,7 +21723,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1009,
+                            SortOrder = 1010,
                             Status = 1
                         },
                         new
@@ -21712,7 +21734,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1010,
+                            SortOrder = 1011,
                             Status = 1
                         },
                         new
@@ -21723,7 +21745,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1011,
+                            SortOrder = 1012,
                             Status = 1
                         },
                         new
@@ -21734,7 +21756,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1012,
+                            SortOrder = 1013,
                             Status = 1
                         },
                         new
@@ -21745,7 +21767,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1013,
+                            SortOrder = 1014,
                             Status = 1
                         },
                         new
@@ -21756,7 +21778,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1014,
+                            SortOrder = 1015,
                             Status = 1
                         },
                         new
@@ -21767,7 +21789,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1015,
+                            SortOrder = 1016,
                             Status = 1
                         },
                         new
@@ -21778,7 +21800,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1016,
+                            SortOrder = 1017,
                             Status = 1
                         },
                         new
@@ -21789,7 +21811,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1017,
+                            SortOrder = 1018,
                             Status = 1
                         },
                         new
@@ -21800,7 +21822,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1018,
+                            SortOrder = 1019,
                             Status = 1
                         },
                         new
@@ -21811,7 +21833,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1019,
+                            SortOrder = 1020,
                             Status = 1
                         },
                         new
@@ -21822,7 +21844,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1020,
+                            SortOrder = 1021,
                             Status = 1
                         },
                         new
@@ -21833,7 +21855,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1021,
+                            SortOrder = 1022,
                             Status = 1
                         },
                         new
@@ -21844,7 +21866,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1022,
+                            SortOrder = 1023,
                             Status = 1
                         },
                         new
@@ -21855,7 +21877,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1023,
+                            SortOrder = 1024,
                             Status = 1
                         },
                         new
@@ -21866,7 +21888,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1024,
+                            SortOrder = 1025,
                             Status = 1
                         },
                         new
@@ -21877,7 +21899,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1025,
+                            SortOrder = 1026,
                             Status = 1
                         },
                         new
@@ -21888,7 +21910,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1026,
+                            SortOrder = 1027,
                             Status = 1
                         },
                         new
@@ -21899,7 +21921,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1027,
+                            SortOrder = 1028,
                             Status = 1
                         },
                         new
@@ -21910,7 +21932,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1028,
+                            SortOrder = 1029,
                             Status = 1
                         },
                         new
@@ -21921,7 +21943,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1029,
+                            SortOrder = 1030,
                             Status = 1
                         },
                         new
@@ -21932,7 +21954,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1030,
+                            SortOrder = 1031,
                             Status = 1
                         },
                         new
@@ -21943,7 +21965,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1031,
+                            SortOrder = 1032,
                             Status = 1
                         },
                         new
@@ -21954,7 +21976,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1032,
+                            SortOrder = 1033,
                             Status = 1
                         },
                         new
@@ -21965,7 +21987,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1033,
+                            SortOrder = 1034,
                             Status = 1
                         },
                         new
@@ -21976,7 +21998,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1034,
+                            SortOrder = 1035,
                             Status = 1
                         },
                         new
@@ -21987,7 +22009,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("1b90fd9a-100f-ad31-1829-bc28efd9f540"),
-                            SortOrder = 1035,
+                            SortOrder = 1036,
                             Status = 1
                         },
                         new
@@ -21998,7 +22020,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1036,
+                            SortOrder = 1037,
                             Status = 1
                         },
                         new
@@ -22009,7 +22031,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1037,
+                            SortOrder = 1038,
                             Status = 1
                         },
                         new
@@ -22020,7 +22042,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1038,
+                            SortOrder = 1039,
                             Status = 1
                         },
                         new
@@ -22031,7 +22053,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1039,
+                            SortOrder = 1040,
                             Status = 1
                         },
                         new
@@ -22042,7 +22064,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1040,
+                            SortOrder = 1041,
                             Status = 1
                         },
                         new
@@ -22053,7 +22075,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1041,
+                            SortOrder = 1042,
                             Status = 1
                         },
                         new
@@ -22064,7 +22086,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1042,
+                            SortOrder = 1043,
                             Status = 1
                         },
                         new
@@ -22075,7 +22097,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1043,
+                            SortOrder = 1044,
                             Status = 1
                         },
                         new
@@ -22086,7 +22108,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1044,
+                            SortOrder = 1045,
                             Status = 1
                         },
                         new
@@ -22097,7 +22119,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1045,
+                            SortOrder = 1046,
                             Status = 1
                         },
                         new
@@ -22108,7 +22130,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1046,
+                            SortOrder = 1047,
                             Status = 1
                         },
                         new
@@ -22119,7 +22141,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1047,
+                            SortOrder = 1048,
                             Status = 1
                         },
                         new
@@ -22130,7 +22152,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1048,
+                            SortOrder = 1049,
                             Status = 1
                         },
                         new
@@ -22141,7 +22163,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1049,
+                            SortOrder = 1050,
                             Status = 1
                         },
                         new
@@ -22152,7 +22174,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1050,
+                            SortOrder = 1051,
                             Status = 1
                         },
                         new
@@ -22163,7 +22185,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1051,
+                            SortOrder = 1052,
                             Status = 1
                         },
                         new
@@ -22174,7 +22196,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1052,
+                            SortOrder = 1053,
                             Status = 1
                         },
                         new
@@ -22185,7 +22207,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1053,
+                            SortOrder = 1054,
                             Status = 1
                         },
                         new
@@ -22196,7 +22218,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1054,
+                            SortOrder = 1055,
                             Status = 1
                         },
                         new
@@ -22207,7 +22229,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1055,
+                            SortOrder = 1056,
                             Status = 1
                         },
                         new
@@ -22218,7 +22240,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1056,
+                            SortOrder = 1057,
                             Status = 1
                         },
                         new
@@ -22229,7 +22251,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1057,
+                            SortOrder = 1058,
                             Status = 1
                         },
                         new
@@ -22240,7 +22262,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1058,
+                            SortOrder = 1059,
                             Status = 1
                         },
                         new
@@ -22251,7 +22273,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1059,
+                            SortOrder = 1060,
                             Status = 1
                         },
                         new
@@ -22262,7 +22284,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1060,
+                            SortOrder = 1061,
                             Status = 1
                         },
                         new
@@ -22273,7 +22295,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1061,
+                            SortOrder = 1062,
                             Status = 1
                         },
                         new
@@ -22284,7 +22306,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1062,
+                            SortOrder = 1063,
                             Status = 1
                         },
                         new
@@ -22295,7 +22317,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1063,
+                            SortOrder = 1064,
                             Status = 1
                         },
                         new
@@ -22306,7 +22328,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1064,
+                            SortOrder = 1065,
                             Status = 1
                         },
                         new
@@ -22317,7 +22339,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1065,
+                            SortOrder = 1066,
                             Status = 1
                         },
                         new
@@ -22328,7 +22350,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1066,
+                            SortOrder = 1067,
                             Status = 1
                         },
                         new
@@ -22339,7 +22361,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1067,
+                            SortOrder = 1068,
                             Status = 1
                         },
                         new
@@ -22350,7 +22372,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1068,
+                            SortOrder = 1069,
                             Status = 1
                         },
                         new
@@ -22361,7 +22383,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1069,
+                            SortOrder = 1070,
                             Status = 1
                         },
                         new
@@ -22372,7 +22394,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1070,
+                            SortOrder = 1071,
                             Status = 1
                         },
                         new
@@ -22383,7 +22405,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1071,
+                            SortOrder = 1072,
                             Status = 1
                         },
                         new
@@ -22394,7 +22416,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1072,
+                            SortOrder = 1073,
                             Status = 1
                         },
                         new
@@ -22405,7 +22427,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1073,
+                            SortOrder = 1074,
                             Status = 1
                         },
                         new
@@ -22416,7 +22438,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1074,
+                            SortOrder = 1075,
                             Status = 1
                         },
                         new
@@ -22427,7 +22449,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1075,
+                            SortOrder = 1076,
                             Status = 1
                         },
                         new
@@ -22438,7 +22460,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1076,
+                            SortOrder = 1077,
                             Status = 1
                         },
                         new
@@ -22449,7 +22471,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("a9d81d48-0ee9-04a0-26ce-5ccf128f79d0"),
-                            SortOrder = 1077,
+                            SortOrder = 1078,
                             Status = 1
                         },
                         new
@@ -22460,7 +22482,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1078,
+                            SortOrder = 1079,
                             Status = 1
                         },
                         new
@@ -22471,7 +22493,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1079,
+                            SortOrder = 1080,
                             Status = 1
                         },
                         new
@@ -22482,7 +22504,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1080,
+                            SortOrder = 1081,
                             Status = 1
                         },
                         new
@@ -22493,7 +22515,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("dd89d122-1319-9906-24fe-e99b7b77311b"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1081,
+                            SortOrder = 1082,
                             Status = 1
                         },
                         new
@@ -22504,7 +22526,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("41a25b97-128c-257e-3d07-81ab5486d14c"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1082,
+                            SortOrder = 1083,
                             Status = 1
                         },
                         new
@@ -22515,7 +22537,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08140d18-33eb-2abb-c2f7-ad843b398697"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1083,
+                            SortOrder = 1084,
                             Status = 1
                         },
                         new
@@ -22526,7 +22548,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("34b34491-d542-1cdd-16e8-598c59eec76b"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1084,
+                            SortOrder = 1085,
                             Status = 1
                         },
                         new
@@ -22537,7 +22559,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f4ad397b-d75f-3f42-cde3-34c9d70d12f8"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1085,
+                            SortOrder = 1086,
                             Status = 1
                         },
                         new
@@ -22548,7 +22570,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("ea5eb919-a2db-df42-045e-85ee33457227"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1086,
+                            SortOrder = 1087,
                             Status = 1
                         },
                         new
@@ -22559,7 +22581,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("ba049289-5509-41a2-c5e7-12252482b4fc"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1087,
+                            SortOrder = 1088,
                             Status = 1
                         },
                         new
@@ -22570,7 +22592,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("56c80549-d9f3-ade0-cd04-d13b44c54389"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1088,
+                            SortOrder = 1089,
                             Status = 1
                         },
                         new
@@ -22581,7 +22603,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("d9aef4e9-223d-f33e-95d3-8c5e49882017"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1089,
+                            SortOrder = 1090,
                             Status = 1
                         },
                         new
@@ -22592,7 +22614,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1090,
+                            SortOrder = 1091,
                             Status = 1
                         },
                         new
@@ -22603,7 +22625,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1091,
+                            SortOrder = 1092,
                             Status = 1
                         },
                         new
@@ -22614,7 +22636,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1092,
+                            SortOrder = 1093,
                             Status = 1
                         },
                         new
@@ -22625,7 +22647,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1093,
+                            SortOrder = 1094,
                             Status = 1
                         },
                         new
@@ -22636,7 +22658,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1094,
+                            SortOrder = 1095,
                             Status = 1
                         },
                         new
@@ -22647,7 +22669,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1095,
+                            SortOrder = 1096,
                             Status = 1
                         },
                         new
@@ -22658,7 +22680,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1096,
+                            SortOrder = 1097,
                             Status = 1
                         },
                         new
@@ -22669,7 +22691,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1097,
+                            SortOrder = 1098,
                             Status = 1
                         },
                         new
@@ -22680,7 +22702,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1098,
+                            SortOrder = 1099,
                             Status = 1
                         },
                         new
@@ -22691,7 +22713,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1099,
+                            SortOrder = 1100,
                             Status = 1
                         },
                         new
@@ -22702,7 +22724,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1100,
+                            SortOrder = 1101,
                             Status = 1
                         },
                         new
@@ -22713,7 +22735,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1101,
+                            SortOrder = 1102,
                             Status = 1
                         },
                         new
@@ -22724,7 +22746,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1102,
+                            SortOrder = 1103,
                             Status = 1
                         },
                         new
@@ -22735,7 +22757,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1103,
+                            SortOrder = 1104,
                             Status = 1
                         },
                         new
@@ -22746,7 +22768,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1104,
+                            SortOrder = 1105,
                             Status = 1
                         },
                         new
@@ -22757,7 +22779,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1105,
+                            SortOrder = 1106,
                             Status = 1
                         },
                         new
@@ -22768,7 +22790,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1106,
+                            SortOrder = 1107,
                             Status = 1
                         },
                         new
@@ -22779,7 +22801,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1107,
+                            SortOrder = 1108,
                             Status = 1
                         },
                         new
@@ -22790,7 +22812,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1108,
+                            SortOrder = 1109,
                             Status = 1
                         },
                         new
@@ -22801,7 +22823,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("36ece74e-5125-517e-2ae7-aaae96008755"),
-                            SortOrder = 1109,
+                            SortOrder = 1110,
                             Status = 1
                         },
                         new
@@ -22812,7 +22834,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1110,
+                            SortOrder = 1111,
                             Status = 1
                         },
                         new
@@ -22823,7 +22845,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1111,
+                            SortOrder = 1112,
                             Status = 1
                         },
                         new
@@ -22834,7 +22856,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1112,
+                            SortOrder = 1113,
                             Status = 1
                         },
                         new
@@ -22845,7 +22867,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("8664b6ef-8331-a090-375f-584f1d0b9ca0"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1113,
+                            SortOrder = 1114,
                             Status = 1
                         },
                         new
@@ -22856,7 +22878,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("41a25b97-128c-257e-3d07-81ab5486d14c"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1114,
+                            SortOrder = 1115,
                             Status = 1
                         },
                         new
@@ -22867,7 +22889,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08140d18-33eb-2abb-c2f7-ad843b398697"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1115,
+                            SortOrder = 1116,
                             Status = 1
                         },
                         new
@@ -22878,7 +22900,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("34b34491-d542-1cdd-16e8-598c59eec76b"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1116,
+                            SortOrder = 1117,
                             Status = 1
                         },
                         new
@@ -22889,7 +22911,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f4ad397b-d75f-3f42-cde3-34c9d70d12f8"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1117,
+                            SortOrder = 1118,
                             Status = 1
                         },
                         new
@@ -22900,7 +22922,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("ea5eb919-a2db-df42-045e-85ee33457227"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1118,
+                            SortOrder = 1119,
                             Status = 1
                         },
                         new
@@ -22911,7 +22933,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("ba049289-5509-41a2-c5e7-12252482b4fc"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1119,
+                            SortOrder = 1120,
                             Status = 1
                         },
                         new
@@ -22922,7 +22944,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("56c80549-d9f3-ade0-cd04-d13b44c54389"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1120,
+                            SortOrder = 1121,
                             Status = 1
                         },
                         new
@@ -22933,7 +22955,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("d9aef4e9-223d-f33e-95d3-8c5e49882017"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1121,
+                            SortOrder = 1122,
                             Status = 1
                         },
                         new
@@ -22944,7 +22966,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1122,
+                            SortOrder = 1123,
                             Status = 1
                         },
                         new
@@ -22955,7 +22977,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1123,
+                            SortOrder = 1124,
                             Status = 1
                         },
                         new
@@ -22966,7 +22988,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1124,
+                            SortOrder = 1125,
                             Status = 1
                         },
                         new
@@ -22977,7 +22999,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1125,
+                            SortOrder = 1126,
                             Status = 1
                         },
                         new
@@ -22988,7 +23010,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1126,
+                            SortOrder = 1127,
                             Status = 1
                         },
                         new
@@ -22999,7 +23021,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1127,
+                            SortOrder = 1128,
                             Status = 1
                         },
                         new
@@ -23010,7 +23032,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1128,
+                            SortOrder = 1129,
                             Status = 1
                         },
                         new
@@ -23021,7 +23043,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1129,
+                            SortOrder = 1130,
                             Status = 1
                         },
                         new
@@ -23032,7 +23054,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1130,
+                            SortOrder = 1131,
                             Status = 1
                         },
                         new
@@ -23043,7 +23065,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1131,
+                            SortOrder = 1132,
                             Status = 1
                         },
                         new
@@ -23054,7 +23076,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1132,
+                            SortOrder = 1133,
                             Status = 1
                         },
                         new
@@ -23065,7 +23087,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1133,
+                            SortOrder = 1134,
                             Status = 1
                         },
                         new
@@ -23076,7 +23098,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1134,
+                            SortOrder = 1135,
                             Status = 1
                         },
                         new
@@ -23087,7 +23109,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1135,
+                            SortOrder = 1136,
                             Status = 1
                         },
                         new
@@ -23098,7 +23120,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1136,
+                            SortOrder = 1137,
                             Status = 1
                         },
                         new
@@ -23109,7 +23131,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1137,
+                            SortOrder = 1138,
                             Status = 1
                         },
                         new
@@ -23120,7 +23142,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1138,
+                            SortOrder = 1139,
                             Status = 1
                         },
                         new
@@ -23131,7 +23153,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1139,
+                            SortOrder = 1140,
                             Status = 1
                         },
                         new
@@ -23142,7 +23164,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1140,
+                            SortOrder = 1141,
                             Status = 1
                         },
                         new
@@ -23153,7 +23175,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("838f56ea-2c61-d464-455d-e57e784bc4c8"),
-                            SortOrder = 1141,
+                            SortOrder = 1142,
                             Status = 1
                         },
                         new
@@ -23164,7 +23186,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1142,
+                            SortOrder = 1143,
                             Status = 1
                         },
                         new
@@ -23175,7 +23197,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1143,
+                            SortOrder = 1144,
                             Status = 1
                         },
                         new
@@ -23186,7 +23208,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1144,
+                            SortOrder = 1145,
                             Status = 1
                         },
                         new
@@ -23197,7 +23219,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1145,
+                            SortOrder = 1146,
                             Status = 1
                         },
                         new
@@ -23208,7 +23230,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1146,
+                            SortOrder = 1147,
                             Status = 1
                         },
                         new
@@ -23219,7 +23241,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1147,
+                            SortOrder = 1148,
                             Status = 1
                         },
                         new
@@ -23230,7 +23252,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1148,
+                            SortOrder = 1149,
                             Status = 1
                         },
                         new
@@ -23241,7 +23263,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1149,
+                            SortOrder = 1150,
                             Status = 1
                         },
                         new
@@ -23252,7 +23274,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1150,
+                            SortOrder = 1151,
                             Status = 1
                         },
                         new
@@ -23263,7 +23285,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1151,
+                            SortOrder = 1152,
                             Status = 1
                         },
                         new
@@ -23274,7 +23296,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1152,
+                            SortOrder = 1153,
                             Status = 1
                         },
                         new
@@ -23285,7 +23307,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1153,
+                            SortOrder = 1154,
                             Status = 1
                         },
                         new
@@ -23296,7 +23318,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1154,
+                            SortOrder = 1155,
                             Status = 1
                         },
                         new
@@ -23307,7 +23329,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1155,
+                            SortOrder = 1156,
                             Status = 1
                         },
                         new
@@ -23318,7 +23340,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1156,
+                            SortOrder = 1157,
                             Status = 1
                         },
                         new
@@ -23329,7 +23351,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1157,
+                            SortOrder = 1158,
                             Status = 1
                         },
                         new
@@ -23340,7 +23362,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1158,
+                            SortOrder = 1159,
                             Status = 1
                         },
                         new
@@ -23351,7 +23373,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1159,
+                            SortOrder = 1160,
                             Status = 1
                         },
                         new
@@ -23362,7 +23384,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1160,
+                            SortOrder = 1161,
                             Status = 1
                         },
                         new
@@ -23373,7 +23395,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1161,
+                            SortOrder = 1162,
                             Status = 1
                         },
                         new
@@ -23384,7 +23406,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1162,
+                            SortOrder = 1163,
                             Status = 1
                         },
                         new
@@ -23395,7 +23417,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1163,
+                            SortOrder = 1164,
                             Status = 1
                         },
                         new
@@ -23406,7 +23428,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1164,
+                            SortOrder = 1165,
                             Status = 1
                         },
                         new
@@ -23417,7 +23439,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1165,
+                            SortOrder = 1166,
                             Status = 1
                         },
                         new
@@ -23428,7 +23450,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1166,
+                            SortOrder = 1167,
                             Status = 1
                         },
                         new
@@ -23439,7 +23461,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1167,
+                            SortOrder = 1168,
                             Status = 1
                         },
                         new
@@ -23450,7 +23472,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1168,
+                            SortOrder = 1169,
                             Status = 1
                         },
                         new
@@ -23461,7 +23483,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1169,
+                            SortOrder = 1170,
                             Status = 1
                         },
                         new
@@ -23472,7 +23494,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1170,
+                            SortOrder = 1171,
                             Status = 1
                         },
                         new
@@ -23483,7 +23505,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1171,
+                            SortOrder = 1172,
                             Status = 1
                         },
                         new
@@ -23494,7 +23516,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1172,
+                            SortOrder = 1173,
                             Status = 1
                         },
                         new
@@ -23505,7 +23527,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1173,
+                            SortOrder = 1174,
                             Status = 1
                         },
                         new
@@ -23516,7 +23538,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1174,
+                            SortOrder = 1175,
                             Status = 1
                         },
                         new
@@ -23527,7 +23549,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1175,
+                            SortOrder = 1176,
                             Status = 1
                         },
                         new
@@ -23538,7 +23560,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1176,
+                            SortOrder = 1177,
                             Status = 1
                         },
                         new
@@ -23549,7 +23571,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1177,
+                            SortOrder = 1178,
                             Status = 1
                         },
                         new
@@ -23560,7 +23582,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1178,
+                            SortOrder = 1179,
                             Status = 1
                         },
                         new
@@ -23571,7 +23593,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1179,
+                            SortOrder = 1180,
                             Status = 1
                         },
                         new
@@ -23582,7 +23604,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1180,
+                            SortOrder = 1181,
                             Status = 1
                         },
                         new
@@ -23593,7 +23615,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1181,
+                            SortOrder = 1182,
                             Status = 1
                         },
                         new
@@ -23604,7 +23626,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1182,
+                            SortOrder = 1183,
                             Status = 1
                         },
                         new
@@ -23615,7 +23637,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1183,
+                            SortOrder = 1184,
                             Status = 1
                         },
                         new
@@ -23626,7 +23648,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1184,
+                            SortOrder = 1185,
                             Status = 1
                         },
                         new
@@ -23637,7 +23659,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1185,
+                            SortOrder = 1186,
                             Status = 1
                         },
                         new
@@ -23648,7 +23670,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1186,
+                            SortOrder = 1187,
                             Status = 1
                         },
                         new
@@ -23659,7 +23681,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1187,
+                            SortOrder = 1188,
                             Status = 1
                         },
                         new
@@ -23670,7 +23692,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("99de9f4d-9b3d-4995-7ef9-9f83518c232a"),
-                            SortOrder = 1188,
+                            SortOrder = 1189,
                             Status = 1
                         },
                         new
@@ -23681,7 +23703,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1189,
+                            SortOrder = 1190,
                             Status = 1
                         },
                         new
@@ -23692,7 +23714,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1190,
+                            SortOrder = 1191,
                             Status = 1
                         },
                         new
@@ -23703,7 +23725,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1191,
+                            SortOrder = 1192,
                             Status = 1
                         },
                         new
@@ -23714,7 +23736,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1192,
+                            SortOrder = 1193,
                             Status = 1
                         },
                         new
@@ -23725,7 +23747,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1193,
+                            SortOrder = 1194,
                             Status = 1
                         },
                         new
@@ -23736,7 +23758,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1194,
+                            SortOrder = 1195,
                             Status = 1
                         },
                         new
@@ -23747,7 +23769,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1195,
+                            SortOrder = 1196,
                             Status = 1
                         },
                         new
@@ -23758,7 +23780,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1196,
+                            SortOrder = 1197,
                             Status = 1
                         },
                         new
@@ -23769,7 +23791,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1197,
+                            SortOrder = 1198,
                             Status = 1
                         },
                         new
@@ -23780,7 +23802,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1198,
+                            SortOrder = 1199,
                             Status = 1
                         },
                         new
@@ -23791,7 +23813,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1199,
+                            SortOrder = 1200,
                             Status = 1
                         },
                         new
@@ -23802,7 +23824,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1200,
+                            SortOrder = 1201,
                             Status = 1
                         },
                         new
@@ -23813,7 +23835,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1201,
+                            SortOrder = 1202,
                             Status = 1
                         },
                         new
@@ -23824,7 +23846,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1202,
+                            SortOrder = 1203,
                             Status = 1
                         },
                         new
@@ -23835,7 +23857,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1203,
+                            SortOrder = 1204,
                             Status = 1
                         },
                         new
@@ -23846,7 +23868,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1204,
+                            SortOrder = 1205,
                             Status = 1
                         },
                         new
@@ -23857,7 +23879,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1205,
+                            SortOrder = 1206,
                             Status = 1
                         },
                         new
@@ -23868,7 +23890,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1206,
+                            SortOrder = 1207,
                             Status = 1
                         },
                         new
@@ -23879,7 +23901,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1207,
+                            SortOrder = 1208,
                             Status = 1
                         },
                         new
@@ -23890,7 +23912,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1208,
+                            SortOrder = 1209,
                             Status = 1
                         },
                         new
@@ -23901,7 +23923,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1209,
+                            SortOrder = 1210,
                             Status = 1
                         },
                         new
@@ -23912,7 +23934,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1210,
+                            SortOrder = 1211,
                             Status = 1
                         },
                         new
@@ -23923,7 +23945,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1211,
+                            SortOrder = 1212,
                             Status = 1
                         },
                         new
@@ -23934,7 +23956,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1212,
+                            SortOrder = 1213,
                             Status = 1
                         },
                         new
@@ -23945,7 +23967,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1213,
+                            SortOrder = 1214,
                             Status = 1
                         },
                         new
@@ -23956,7 +23978,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1214,
+                            SortOrder = 1215,
                             Status = 1
                         },
                         new
@@ -23967,7 +23989,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1215,
+                            SortOrder = 1216,
                             Status = 1
                         },
                         new
@@ -23978,7 +24000,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1216,
+                            SortOrder = 1217,
                             Status = 1
                         },
                         new
@@ -23989,7 +24011,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1217,
+                            SortOrder = 1218,
                             Status = 1
                         },
                         new
@@ -24000,7 +24022,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1218,
+                            SortOrder = 1219,
                             Status = 1
                         },
                         new
@@ -24011,7 +24033,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1219,
+                            SortOrder = 1220,
                             Status = 1
                         },
                         new
@@ -24022,7 +24044,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1220,
+                            SortOrder = 1221,
                             Status = 1
                         },
                         new
@@ -24033,7 +24055,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1221,
+                            SortOrder = 1222,
                             Status = 1
                         },
                         new
@@ -24044,7 +24066,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1222,
+                            SortOrder = 1223,
                             Status = 1
                         },
                         new
@@ -24055,7 +24077,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1223,
+                            SortOrder = 1224,
                             Status = 1
                         },
                         new
@@ -24066,7 +24088,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1224,
+                            SortOrder = 1225,
                             Status = 1
                         },
                         new
@@ -24077,7 +24099,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1225,
+                            SortOrder = 1226,
                             Status = 1
                         },
                         new
@@ -24088,7 +24110,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1226,
+                            SortOrder = 1227,
                             Status = 1
                         },
                         new
@@ -24099,7 +24121,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1227,
+                            SortOrder = 1228,
                             Status = 1
                         },
                         new
@@ -24110,7 +24132,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1228,
+                            SortOrder = 1229,
                             Status = 1
                         },
                         new
@@ -24121,7 +24143,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1229,
+                            SortOrder = 1230,
                             Status = 1
                         },
                         new
@@ -24132,7 +24154,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1230,
+                            SortOrder = 1231,
                             Status = 1
                         },
                         new
@@ -24143,7 +24165,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1231,
+                            SortOrder = 1232,
                             Status = 1
                         },
                         new
@@ -24154,7 +24176,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1232,
+                            SortOrder = 1233,
                             Status = 1
                         },
                         new
@@ -24165,7 +24187,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1233,
+                            SortOrder = 1234,
                             Status = 1
                         },
                         new
@@ -24176,7 +24198,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1234,
+                            SortOrder = 1235,
                             Status = 1
                         },
                         new
@@ -24187,7 +24209,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("b12dc428-e762-37da-5d9a-97184cf016a0"),
-                            SortOrder = 1235,
+                            SortOrder = 1236,
                             Status = 1
                         },
                         new
@@ -24198,7 +24220,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1236,
+                            SortOrder = 1237,
                             Status = 1
                         },
                         new
@@ -24209,7 +24231,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1237,
+                            SortOrder = 1238,
                             Status = 1
                         },
                         new
@@ -24220,7 +24242,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1238,
+                            SortOrder = 1239,
                             Status = 1
                         },
                         new
@@ -24231,7 +24253,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1239,
+                            SortOrder = 1240,
                             Status = 1
                         },
                         new
@@ -24242,7 +24264,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1240,
+                            SortOrder = 1241,
                             Status = 1
                         },
                         new
@@ -24253,7 +24275,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1241,
+                            SortOrder = 1242,
                             Status = 1
                         },
                         new
@@ -24264,7 +24286,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1242,
+                            SortOrder = 1243,
                             Status = 1
                         },
                         new
@@ -24275,7 +24297,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1243,
+                            SortOrder = 1244,
                             Status = 1
                         },
                         new
@@ -24286,7 +24308,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1244,
+                            SortOrder = 1245,
                             Status = 1
                         },
                         new
@@ -24297,7 +24319,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1245,
+                            SortOrder = 1246,
                             Status = 1
                         },
                         new
@@ -24308,7 +24330,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1246,
+                            SortOrder = 1247,
                             Status = 1
                         },
                         new
@@ -24319,7 +24341,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1247,
+                            SortOrder = 1248,
                             Status = 1
                         },
                         new
@@ -24330,7 +24352,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1248,
+                            SortOrder = 1249,
                             Status = 1
                         },
                         new
@@ -24341,7 +24363,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1249,
+                            SortOrder = 1250,
                             Status = 1
                         },
                         new
@@ -24352,7 +24374,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1250,
+                            SortOrder = 1251,
                             Status = 1
                         },
                         new
@@ -24363,7 +24385,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1251,
+                            SortOrder = 1252,
                             Status = 1
                         },
                         new
@@ -24374,7 +24396,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1252,
+                            SortOrder = 1253,
                             Status = 1
                         },
                         new
@@ -24385,7 +24407,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1253,
+                            SortOrder = 1254,
                             Status = 1
                         },
                         new
@@ -24396,7 +24418,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1254,
+                            SortOrder = 1255,
                             Status = 1
                         },
                         new
@@ -24407,7 +24429,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1255,
+                            SortOrder = 1256,
                             Status = 1
                         },
                         new
@@ -24418,7 +24440,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1256,
+                            SortOrder = 1257,
                             Status = 1
                         },
                         new
@@ -24429,7 +24451,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1257,
+                            SortOrder = 1258,
                             Status = 1
                         },
                         new
@@ -24440,7 +24462,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1258,
+                            SortOrder = 1259,
                             Status = 1
                         },
                         new
@@ -24451,7 +24473,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1259,
+                            SortOrder = 1260,
                             Status = 1
                         },
                         new
@@ -24462,7 +24484,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1260,
+                            SortOrder = 1261,
                             Status = 1
                         },
                         new
@@ -24473,7 +24495,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1261,
+                            SortOrder = 1262,
                             Status = 1
                         },
                         new
@@ -24484,7 +24506,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1262,
+                            SortOrder = 1263,
                             Status = 1
                         },
                         new
@@ -24495,7 +24517,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1263,
+                            SortOrder = 1264,
                             Status = 1
                         },
                         new
@@ -24506,7 +24528,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1264,
+                            SortOrder = 1265,
                             Status = 1
                         },
                         new
@@ -24517,7 +24539,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1265,
+                            SortOrder = 1266,
                             Status = 1
                         },
                         new
@@ -24528,7 +24550,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1266,
+                            SortOrder = 1267,
                             Status = 1
                         },
                         new
@@ -24539,7 +24561,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1267,
+                            SortOrder = 1268,
                             Status = 1
                         },
                         new
@@ -24550,7 +24572,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1268,
+                            SortOrder = 1269,
                             Status = 1
                         },
                         new
@@ -24561,7 +24583,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1269,
+                            SortOrder = 1270,
                             Status = 1
                         },
                         new
@@ -24572,7 +24594,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1270,
+                            SortOrder = 1271,
                             Status = 1
                         },
                         new
@@ -24583,7 +24605,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1271,
+                            SortOrder = 1272,
                             Status = 1
                         },
                         new
@@ -24594,7 +24616,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1272,
+                            SortOrder = 1273,
                             Status = 1
                         },
                         new
@@ -24605,7 +24627,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1273,
+                            SortOrder = 1274,
                             Status = 1
                         },
                         new
@@ -24616,7 +24638,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1274,
+                            SortOrder = 1275,
                             Status = 1
                         },
                         new
@@ -24627,7 +24649,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1275,
+                            SortOrder = 1276,
                             Status = 1
                         },
                         new
@@ -24638,7 +24660,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1276,
+                            SortOrder = 1277,
                             Status = 1
                         },
                         new
@@ -24649,7 +24671,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1277,
+                            SortOrder = 1278,
                             Status = 1
                         },
                         new
@@ -24660,7 +24682,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1278,
+                            SortOrder = 1279,
                             Status = 1
                         },
                         new
@@ -24671,7 +24693,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1279,
+                            SortOrder = 1280,
                             Status = 1
                         },
                         new
@@ -24682,7 +24704,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1280,
+                            SortOrder = 1281,
                             Status = 1
                         },
                         new
@@ -24693,7 +24715,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1281,
+                            SortOrder = 1282,
                             Status = 1
                         },
                         new
@@ -24704,7 +24726,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("0c3654f0-c4b9-49f9-d441-e1da245dabc4"),
-                            SortOrder = 1282,
+                            SortOrder = 1283,
                             Status = 1
                         },
                         new
@@ -24715,7 +24737,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1283,
+                            SortOrder = 1284,
                             Status = 1
                         },
                         new
@@ -24726,7 +24748,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1284,
+                            SortOrder = 1285,
                             Status = 1
                         },
                         new
@@ -24737,7 +24759,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1285,
+                            SortOrder = 1286,
                             Status = 1
                         },
                         new
@@ -24748,7 +24770,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1286,
+                            SortOrder = 1287,
                             Status = 1
                         },
                         new
@@ -24759,7 +24781,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1287,
+                            SortOrder = 1288,
                             Status = 1
                         },
                         new
@@ -24770,7 +24792,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1288,
+                            SortOrder = 1289,
                             Status = 1
                         },
                         new
@@ -24781,7 +24803,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1289,
+                            SortOrder = 1290,
                             Status = 1
                         },
                         new
@@ -24792,7 +24814,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1290,
+                            SortOrder = 1291,
                             Status = 1
                         },
                         new
@@ -24803,7 +24825,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1291,
+                            SortOrder = 1292,
                             Status = 1
                         },
                         new
@@ -24814,7 +24836,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1292,
+                            SortOrder = 1293,
                             Status = 1
                         },
                         new
@@ -24825,7 +24847,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1293,
+                            SortOrder = 1294,
                             Status = 1
                         },
                         new
@@ -24836,7 +24858,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1294,
+                            SortOrder = 1295,
                             Status = 1
                         },
                         new
@@ -24847,7 +24869,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1295,
+                            SortOrder = 1296,
                             Status = 1
                         },
                         new
@@ -24858,7 +24880,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1296,
+                            SortOrder = 1297,
                             Status = 1
                         },
                         new
@@ -24869,7 +24891,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1297,
+                            SortOrder = 1298,
                             Status = 1
                         },
                         new
@@ -24880,7 +24902,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1298,
+                            SortOrder = 1299,
                             Status = 1
                         },
                         new
@@ -24891,7 +24913,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1299,
+                            SortOrder = 1300,
                             Status = 1
                         },
                         new
@@ -24902,7 +24924,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1300,
+                            SortOrder = 1301,
                             Status = 1
                         },
                         new
@@ -24913,7 +24935,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1301,
+                            SortOrder = 1302,
                             Status = 1
                         },
                         new
@@ -24924,7 +24946,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1302,
+                            SortOrder = 1303,
                             Status = 1
                         },
                         new
@@ -24935,7 +24957,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1303,
+                            SortOrder = 1304,
                             Status = 1
                         },
                         new
@@ -24946,7 +24968,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1304,
+                            SortOrder = 1305,
                             Status = 1
                         },
                         new
@@ -24957,7 +24979,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1305,
+                            SortOrder = 1306,
                             Status = 1
                         },
                         new
@@ -24968,7 +24990,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1306,
+                            SortOrder = 1307,
                             Status = 1
                         },
                         new
@@ -24979,7 +25001,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1307,
+                            SortOrder = 1308,
                             Status = 1
                         },
                         new
@@ -24990,7 +25012,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1308,
+                            SortOrder = 1309,
                             Status = 1
                         },
                         new
@@ -25001,7 +25023,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1309,
+                            SortOrder = 1310,
                             Status = 1
                         },
                         new
@@ -25012,7 +25034,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1310,
+                            SortOrder = 1311,
                             Status = 1
                         },
                         new
@@ -25023,7 +25045,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1311,
+                            SortOrder = 1312,
                             Status = 1
                         },
                         new
@@ -25034,7 +25056,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1312,
+                            SortOrder = 1313,
                             Status = 1
                         },
                         new
@@ -25045,7 +25067,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1313,
+                            SortOrder = 1314,
                             Status = 1
                         },
                         new
@@ -25056,7 +25078,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1314,
+                            SortOrder = 1315,
                             Status = 1
                         },
                         new
@@ -25067,7 +25089,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1315,
+                            SortOrder = 1316,
                             Status = 1
                         },
                         new
@@ -25078,7 +25100,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1316,
+                            SortOrder = 1317,
                             Status = 1
                         },
                         new
@@ -25089,7 +25111,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1317,
+                            SortOrder = 1318,
                             Status = 1
                         },
                         new
@@ -25100,7 +25122,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1318,
+                            SortOrder = 1319,
                             Status = 1
                         },
                         new
@@ -25111,7 +25133,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1319,
+                            SortOrder = 1320,
                             Status = 1
                         },
                         new
@@ -25122,7 +25144,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1320,
+                            SortOrder = 1321,
                             Status = 1
                         },
                         new
@@ -25133,7 +25155,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1321,
+                            SortOrder = 1322,
                             Status = 1
                         },
                         new
@@ -25144,7 +25166,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1322,
+                            SortOrder = 1323,
                             Status = 1
                         },
                         new
@@ -25155,7 +25177,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1323,
+                            SortOrder = 1324,
                             Status = 1
                         },
                         new
@@ -25166,7 +25188,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1324,
+                            SortOrder = 1325,
                             Status = 1
                         },
                         new
@@ -25177,7 +25199,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1325,
+                            SortOrder = 1326,
                             Status = 1
                         },
                         new
@@ -25188,7 +25210,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1326,
+                            SortOrder = 1327,
                             Status = 1
                         },
                         new
@@ -25199,7 +25221,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1327,
+                            SortOrder = 1328,
                             Status = 1
                         },
                         new
@@ -25210,7 +25232,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1328,
+                            SortOrder = 1329,
                             Status = 1
                         },
                         new
@@ -25221,7 +25243,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("fb6d743f-dd05-dac8-1cfd-d0d06d1ad727"),
-                            SortOrder = 1329,
+                            SortOrder = 1330,
                             Status = 1
                         },
                         new
@@ -25232,7 +25254,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1330,
+                            SortOrder = 1331,
                             Status = 1
                         },
                         new
@@ -25243,7 +25265,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1331,
+                            SortOrder = 1332,
                             Status = 1
                         },
                         new
@@ -25254,7 +25276,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1332,
+                            SortOrder = 1333,
                             Status = 1
                         },
                         new
@@ -25265,7 +25287,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1333,
+                            SortOrder = 1334,
                             Status = 1
                         },
                         new
@@ -25276,7 +25298,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1334,
+                            SortOrder = 1335,
                             Status = 1
                         },
                         new
@@ -25287,7 +25309,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1335,
+                            SortOrder = 1336,
                             Status = 1
                         },
                         new
@@ -25298,7 +25320,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1336,
+                            SortOrder = 1337,
                             Status = 1
                         },
                         new
@@ -25309,7 +25331,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1337,
+                            SortOrder = 1338,
                             Status = 1
                         },
                         new
@@ -25320,7 +25342,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1338,
+                            SortOrder = 1339,
                             Status = 1
                         },
                         new
@@ -25331,7 +25353,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1339,
+                            SortOrder = 1340,
                             Status = 1
                         },
                         new
@@ -25342,7 +25364,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1340,
+                            SortOrder = 1341,
                             Status = 1
                         },
                         new
@@ -25353,7 +25375,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1341,
+                            SortOrder = 1342,
                             Status = 1
                         },
                         new
@@ -25364,7 +25386,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1342,
+                            SortOrder = 1343,
                             Status = 1
                         },
                         new
@@ -25375,7 +25397,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1343,
+                            SortOrder = 1344,
                             Status = 1
                         },
                         new
@@ -25386,7 +25408,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1344,
+                            SortOrder = 1345,
                             Status = 1
                         },
                         new
@@ -25397,7 +25419,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1345,
+                            SortOrder = 1346,
                             Status = 1
                         },
                         new
@@ -25408,7 +25430,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1346,
+                            SortOrder = 1347,
                             Status = 1
                         },
                         new
@@ -25419,7 +25441,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1347,
+                            SortOrder = 1348,
                             Status = 1
                         },
                         new
@@ -25430,7 +25452,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1348,
+                            SortOrder = 1349,
                             Status = 1
                         },
                         new
@@ -25441,7 +25463,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1349,
+                            SortOrder = 1350,
                             Status = 1
                         },
                         new
@@ -25452,7 +25474,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1350,
+                            SortOrder = 1351,
                             Status = 1
                         },
                         new
@@ -25463,7 +25485,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1351,
+                            SortOrder = 1352,
                             Status = 1
                         },
                         new
@@ -25474,7 +25496,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1352,
+                            SortOrder = 1353,
                             Status = 1
                         },
                         new
@@ -25485,7 +25507,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1353,
+                            SortOrder = 1354,
                             Status = 1
                         },
                         new
@@ -25496,7 +25518,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1354,
+                            SortOrder = 1355,
                             Status = 1
                         },
                         new
@@ -25507,7 +25529,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1355,
+                            SortOrder = 1356,
                             Status = 1
                         },
                         new
@@ -25518,7 +25540,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1356,
+                            SortOrder = 1357,
                             Status = 1
                         },
                         new
@@ -25529,7 +25551,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1357,
+                            SortOrder = 1358,
                             Status = 1
                         },
                         new
@@ -25540,7 +25562,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1358,
+                            SortOrder = 1359,
                             Status = 1
                         },
                         new
@@ -25551,7 +25573,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1359,
+                            SortOrder = 1360,
                             Status = 1
                         },
                         new
@@ -25562,7 +25584,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1360,
+                            SortOrder = 1361,
                             Status = 1
                         },
                         new
@@ -25573,7 +25595,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1361,
+                            SortOrder = 1362,
                             Status = 1
                         },
                         new
@@ -25584,7 +25606,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1362,
+                            SortOrder = 1363,
                             Status = 1
                         },
                         new
@@ -25595,7 +25617,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1363,
+                            SortOrder = 1364,
                             Status = 1
                         },
                         new
@@ -25606,7 +25628,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1364,
+                            SortOrder = 1365,
                             Status = 1
                         },
                         new
@@ -25617,7 +25639,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1365,
+                            SortOrder = 1366,
                             Status = 1
                         },
                         new
@@ -25628,7 +25650,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1366,
+                            SortOrder = 1367,
                             Status = 1
                         },
                         new
@@ -25639,7 +25661,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1367,
+                            SortOrder = 1368,
                             Status = 1
                         },
                         new
@@ -25650,7 +25672,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1368,
+                            SortOrder = 1369,
                             Status = 1
                         },
                         new
@@ -25661,7 +25683,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1369,
+                            SortOrder = 1370,
                             Status = 1
                         },
                         new
@@ -25672,7 +25694,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1370,
+                            SortOrder = 1371,
                             Status = 1
                         },
                         new
@@ -25683,7 +25705,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1371,
+                            SortOrder = 1372,
                             Status = 1
                         },
                         new
@@ -25694,7 +25716,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1372,
+                            SortOrder = 1373,
                             Status = 1
                         },
                         new
@@ -25705,7 +25727,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1373,
+                            SortOrder = 1374,
                             Status = 1
                         },
                         new
@@ -25716,7 +25738,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1374,
+                            SortOrder = 1375,
                             Status = 1
                         },
                         new
@@ -25727,7 +25749,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1375,
+                            SortOrder = 1376,
                             Status = 1
                         },
                         new
@@ -25738,7 +25760,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("763a3af6-4649-a154-723b-605e3f0c5b45"),
-                            SortOrder = 1376,
+                            SortOrder = 1377,
                             Status = 1
                         },
                         new
@@ -25749,7 +25771,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1377,
+                            SortOrder = 1378,
                             Status = 1
                         },
                         new
@@ -25760,7 +25782,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1378,
+                            SortOrder = 1379,
                             Status = 1
                         },
                         new
@@ -25771,7 +25793,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1379,
+                            SortOrder = 1380,
                             Status = 1
                         },
                         new
@@ -25782,7 +25804,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1380,
+                            SortOrder = 1381,
                             Status = 1
                         },
                         new
@@ -25793,7 +25815,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1381,
+                            SortOrder = 1382,
                             Status = 1
                         },
                         new
@@ -25804,7 +25826,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1382,
+                            SortOrder = 1383,
                             Status = 1
                         },
                         new
@@ -25815,7 +25837,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1383,
+                            SortOrder = 1384,
                             Status = 1
                         },
                         new
@@ -25826,7 +25848,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1384,
+                            SortOrder = 1385,
                             Status = 1
                         },
                         new
@@ -25837,7 +25859,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1385,
+                            SortOrder = 1386,
                             Status = 1
                         },
                         new
@@ -25848,7 +25870,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1386,
+                            SortOrder = 1387,
                             Status = 1
                         },
                         new
@@ -25859,7 +25881,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1387,
+                            SortOrder = 1388,
                             Status = 1
                         },
                         new
@@ -25870,7 +25892,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1388,
+                            SortOrder = 1389,
                             Status = 1
                         },
                         new
@@ -25881,7 +25903,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1389,
+                            SortOrder = 1390,
                             Status = 1
                         },
                         new
@@ -25892,7 +25914,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1390,
+                            SortOrder = 1391,
                             Status = 1
                         },
                         new
@@ -25903,7 +25925,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1391,
+                            SortOrder = 1392,
                             Status = 1
                         },
                         new
@@ -25914,7 +25936,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1392,
+                            SortOrder = 1393,
                             Status = 1
                         },
                         new
@@ -25925,7 +25947,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1393,
+                            SortOrder = 1394,
                             Status = 1
                         },
                         new
@@ -25936,7 +25958,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1394,
+                            SortOrder = 1395,
                             Status = 1
                         },
                         new
@@ -25947,7 +25969,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1395,
+                            SortOrder = 1396,
                             Status = 1
                         },
                         new
@@ -25958,7 +25980,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1396,
+                            SortOrder = 1397,
                             Status = 1
                         },
                         new
@@ -25969,7 +25991,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1397,
+                            SortOrder = 1398,
                             Status = 1
                         },
                         new
@@ -25980,7 +26002,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1398,
+                            SortOrder = 1399,
                             Status = 1
                         },
                         new
@@ -25991,7 +26013,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1399,
+                            SortOrder = 1400,
                             Status = 1
                         },
                         new
@@ -26002,7 +26024,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1400,
+                            SortOrder = 1401,
                             Status = 1
                         },
                         new
@@ -26013,7 +26035,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1401,
+                            SortOrder = 1402,
                             Status = 1
                         },
                         new
@@ -26024,7 +26046,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1402,
+                            SortOrder = 1403,
                             Status = 1
                         },
                         new
@@ -26035,7 +26057,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1403,
+                            SortOrder = 1404,
                             Status = 1
                         },
                         new
@@ -26046,7 +26068,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1404,
+                            SortOrder = 1405,
                             Status = 1
                         },
                         new
@@ -26057,7 +26079,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1405,
+                            SortOrder = 1406,
                             Status = 1
                         },
                         new
@@ -26068,7 +26090,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1406,
+                            SortOrder = 1407,
                             Status = 1
                         },
                         new
@@ -26079,7 +26101,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1407,
+                            SortOrder = 1408,
                             Status = 1
                         },
                         new
@@ -26090,7 +26112,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1408,
+                            SortOrder = 1409,
                             Status = 1
                         },
                         new
@@ -26101,7 +26123,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1409,
+                            SortOrder = 1410,
                             Status = 1
                         },
                         new
@@ -26112,7 +26134,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1410,
+                            SortOrder = 1411,
                             Status = 1
                         },
                         new
@@ -26123,7 +26145,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1411,
+                            SortOrder = 1412,
                             Status = 1
                         },
                         new
@@ -26134,7 +26156,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1412,
+                            SortOrder = 1413,
                             Status = 1
                         },
                         new
@@ -26145,7 +26167,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1413,
+                            SortOrder = 1414,
                             Status = 1
                         },
                         new
@@ -26156,7 +26178,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1414,
+                            SortOrder = 1415,
                             Status = 1
                         },
                         new
@@ -26167,7 +26189,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1415,
+                            SortOrder = 1416,
                             Status = 1
                         },
                         new
@@ -26178,7 +26200,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1416,
+                            SortOrder = 1417,
                             Status = 1
                         },
                         new
@@ -26189,7 +26211,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1417,
+                            SortOrder = 1418,
                             Status = 1
                         },
                         new
@@ -26200,7 +26222,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1418,
+                            SortOrder = 1419,
                             Status = 1
                         },
                         new
@@ -26211,7 +26233,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1419,
+                            SortOrder = 1420,
                             Status = 1
                         },
                         new
@@ -26222,7 +26244,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1420,
+                            SortOrder = 1421,
                             Status = 1
                         },
                         new
@@ -26233,7 +26255,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1421,
+                            SortOrder = 1422,
                             Status = 1
                         },
                         new
@@ -26244,7 +26266,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1422,
+                            SortOrder = 1423,
                             Status = 1
                         },
                         new
@@ -26255,7 +26277,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("15c35f60-e441-d1a1-adaa-e02759694488"),
-                            SortOrder = 1423,
+                            SortOrder = 1424,
                             Status = 1
                         },
                         new
@@ -26266,7 +26288,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1424,
+                            SortOrder = 1425,
                             Status = 1
                         },
                         new
@@ -26277,7 +26299,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1425,
+                            SortOrder = 1426,
                             Status = 1
                         },
                         new
@@ -26288,7 +26310,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1426,
+                            SortOrder = 1427,
                             Status = 1
                         },
                         new
@@ -26299,7 +26321,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1427,
+                            SortOrder = 1428,
                             Status = 1
                         },
                         new
@@ -26310,7 +26332,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1428,
+                            SortOrder = 1429,
                             Status = 1
                         },
                         new
@@ -26321,7 +26343,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1429,
+                            SortOrder = 1430,
                             Status = 1
                         },
                         new
@@ -26332,7 +26354,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1430,
+                            SortOrder = 1431,
                             Status = 1
                         },
                         new
@@ -26343,7 +26365,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1431,
+                            SortOrder = 1432,
                             Status = 1
                         },
                         new
@@ -26354,7 +26376,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1432,
+                            SortOrder = 1433,
                             Status = 1
                         },
                         new
@@ -26365,7 +26387,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1433,
+                            SortOrder = 1434,
                             Status = 1
                         },
                         new
@@ -26376,7 +26398,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1434,
+                            SortOrder = 1435,
                             Status = 1
                         },
                         new
@@ -26387,7 +26409,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1435,
+                            SortOrder = 1436,
                             Status = 1
                         },
                         new
@@ -26398,7 +26420,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1436,
+                            SortOrder = 1437,
                             Status = 1
                         },
                         new
@@ -26409,7 +26431,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1437,
+                            SortOrder = 1438,
                             Status = 1
                         },
                         new
@@ -26420,7 +26442,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1438,
+                            SortOrder = 1439,
                             Status = 1
                         },
                         new
@@ -26431,7 +26453,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1439,
+                            SortOrder = 1440,
                             Status = 1
                         },
                         new
@@ -26442,7 +26464,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1440,
+                            SortOrder = 1441,
                             Status = 1
                         },
                         new
@@ -26453,7 +26475,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1441,
+                            SortOrder = 1442,
                             Status = 1
                         },
                         new
@@ -26464,7 +26486,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1442,
+                            SortOrder = 1443,
                             Status = 1
                         },
                         new
@@ -26475,7 +26497,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1443,
+                            SortOrder = 1444,
                             Status = 1
                         },
                         new
@@ -26486,7 +26508,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1444,
+                            SortOrder = 1445,
                             Status = 1
                         },
                         new
@@ -26497,7 +26519,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1445,
+                            SortOrder = 1446,
                             Status = 1
                         },
                         new
@@ -26508,7 +26530,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1446,
+                            SortOrder = 1447,
                             Status = 1
                         },
                         new
@@ -26519,7 +26541,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1447,
+                            SortOrder = 1448,
                             Status = 1
                         },
                         new
@@ -26530,7 +26552,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1448,
+                            SortOrder = 1449,
                             Status = 1
                         },
                         new
@@ -26541,7 +26563,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1449,
+                            SortOrder = 1450,
                             Status = 1
                         },
                         new
@@ -26552,7 +26574,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1450,
+                            SortOrder = 1451,
                             Status = 1
                         },
                         new
@@ -26563,7 +26585,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1451,
+                            SortOrder = 1452,
                             Status = 1
                         },
                         new
@@ -26574,7 +26596,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1452,
+                            SortOrder = 1453,
                             Status = 1
                         },
                         new
@@ -26585,7 +26607,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1453,
+                            SortOrder = 1454,
                             Status = 1
                         },
                         new
@@ -26596,7 +26618,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1454,
+                            SortOrder = 1455,
                             Status = 1
                         },
                         new
@@ -26607,7 +26629,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1455,
+                            SortOrder = 1456,
                             Status = 1
                         },
                         new
@@ -26618,7 +26640,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1456,
+                            SortOrder = 1457,
                             Status = 1
                         },
                         new
@@ -26629,7 +26651,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1457,
+                            SortOrder = 1458,
                             Status = 1
                         },
                         new
@@ -26640,7 +26662,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1458,
+                            SortOrder = 1459,
                             Status = 1
                         },
                         new
@@ -26651,7 +26673,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1459,
+                            SortOrder = 1460,
                             Status = 1
                         },
                         new
@@ -26662,7 +26684,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1460,
+                            SortOrder = 1461,
                             Status = 1
                         },
                         new
@@ -26673,7 +26695,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1461,
+                            SortOrder = 1462,
                             Status = 1
                         },
                         new
@@ -26684,7 +26706,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1462,
+                            SortOrder = 1463,
                             Status = 1
                         },
                         new
@@ -26695,7 +26717,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1463,
+                            SortOrder = 1464,
                             Status = 1
                         },
                         new
@@ -26706,7 +26728,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1464,
+                            SortOrder = 1465,
                             Status = 1
                         },
                         new
@@ -26717,7 +26739,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1465,
+                            SortOrder = 1466,
                             Status = 1
                         },
                         new
@@ -26728,7 +26750,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1466,
+                            SortOrder = 1467,
                             Status = 1
                         },
                         new
@@ -26739,7 +26761,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1467,
+                            SortOrder = 1468,
                             Status = 1
                         },
                         new
@@ -26750,7 +26772,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1468,
+                            SortOrder = 1469,
                             Status = 1
                         },
                         new
@@ -26761,7 +26783,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1469,
+                            SortOrder = 1470,
                             Status = 1
                         },
                         new
@@ -26772,7 +26794,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("a033a342-78af-0366-033e-23bb97e86d8f"),
-                            SortOrder = 1470,
+                            SortOrder = 1471,
                             Status = 1
                         },
                         new
@@ -26783,7 +26805,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1471,
+                            SortOrder = 1472,
                             Status = 1
                         },
                         new
@@ -26794,7 +26816,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1472,
+                            SortOrder = 1473,
                             Status = 1
                         },
                         new
@@ -26805,7 +26827,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1473,
+                            SortOrder = 1474,
                             Status = 1
                         },
                         new
@@ -26816,7 +26838,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1474,
+                            SortOrder = 1475,
                             Status = 1
                         },
                         new
@@ -26827,7 +26849,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1475,
+                            SortOrder = 1476,
                             Status = 1
                         },
                         new
@@ -26838,7 +26860,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1476,
+                            SortOrder = 1477,
                             Status = 1
                         },
                         new
@@ -26849,7 +26871,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1477,
+                            SortOrder = 1478,
                             Status = 1
                         },
                         new
@@ -26860,7 +26882,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1478,
+                            SortOrder = 1479,
                             Status = 1
                         },
                         new
@@ -26871,7 +26893,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1479,
+                            SortOrder = 1480,
                             Status = 1
                         },
                         new
@@ -26882,7 +26904,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1480,
+                            SortOrder = 1481,
                             Status = 1
                         },
                         new
@@ -26893,7 +26915,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1481,
+                            SortOrder = 1482,
                             Status = 1
                         },
                         new
@@ -26904,7 +26926,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1482,
+                            SortOrder = 1483,
                             Status = 1
                         },
                         new
@@ -26915,7 +26937,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1483,
+                            SortOrder = 1484,
                             Status = 1
                         },
                         new
@@ -26926,7 +26948,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1484,
+                            SortOrder = 1485,
                             Status = 1
                         },
                         new
@@ -26937,7 +26959,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1485,
+                            SortOrder = 1486,
                             Status = 1
                         },
                         new
@@ -26948,7 +26970,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1486,
+                            SortOrder = 1487,
                             Status = 1
                         },
                         new
@@ -26959,7 +26981,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1487,
+                            SortOrder = 1488,
                             Status = 1
                         },
                         new
@@ -26970,7 +26992,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1488,
+                            SortOrder = 1489,
                             Status = 1
                         },
                         new
@@ -26981,7 +27003,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1489,
+                            SortOrder = 1490,
                             Status = 1
                         },
                         new
@@ -26992,7 +27014,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1490,
+                            SortOrder = 1491,
                             Status = 1
                         },
                         new
@@ -27003,7 +27025,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1491,
+                            SortOrder = 1492,
                             Status = 1
                         },
                         new
@@ -27014,7 +27036,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1492,
+                            SortOrder = 1493,
                             Status = 1
                         },
                         new
@@ -27025,7 +27047,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1493,
+                            SortOrder = 1494,
                             Status = 1
                         },
                         new
@@ -27036,7 +27058,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1494,
+                            SortOrder = 1495,
                             Status = 1
                         },
                         new
@@ -27047,7 +27069,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1495,
+                            SortOrder = 1496,
                             Status = 1
                         },
                         new
@@ -27058,7 +27080,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1496,
+                            SortOrder = 1497,
                             Status = 1
                         },
                         new
@@ -27069,7 +27091,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1497,
+                            SortOrder = 1498,
                             Status = 1
                         },
                         new
@@ -27080,7 +27102,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1498,
+                            SortOrder = 1499,
                             Status = 1
                         },
                         new
@@ -27091,7 +27113,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1499,
+                            SortOrder = 1500,
                             Status = 1
                         },
                         new
@@ -27102,7 +27124,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1500,
+                            SortOrder = 1501,
                             Status = 1
                         },
                         new
@@ -27113,7 +27135,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1501,
+                            SortOrder = 1502,
                             Status = 1
                         },
                         new
@@ -27124,7 +27146,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1502,
+                            SortOrder = 1503,
                             Status = 1
                         },
                         new
@@ -27135,7 +27157,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1503,
+                            SortOrder = 1504,
                             Status = 1
                         },
                         new
@@ -27146,7 +27168,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1504,
+                            SortOrder = 1505,
                             Status = 1
                         },
                         new
@@ -27157,7 +27179,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1505,
+                            SortOrder = 1506,
                             Status = 1
                         },
                         new
@@ -27168,7 +27190,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1506,
+                            SortOrder = 1507,
                             Status = 1
                         },
                         new
@@ -27179,7 +27201,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1507,
+                            SortOrder = 1508,
                             Status = 1
                         },
                         new
@@ -27190,7 +27212,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1508,
+                            SortOrder = 1509,
                             Status = 1
                         },
                         new
@@ -27201,7 +27223,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1509,
+                            SortOrder = 1510,
                             Status = 1
                         },
                         new
@@ -27212,7 +27234,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1510,
+                            SortOrder = 1511,
                             Status = 1
                         },
                         new
@@ -27223,7 +27245,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1511,
+                            SortOrder = 1512,
                             Status = 1
                         },
                         new
@@ -27234,7 +27256,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1512,
+                            SortOrder = 1513,
                             Status = 1
                         },
                         new
@@ -27245,7 +27267,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1513,
+                            SortOrder = 1514,
                             Status = 1
                         },
                         new
@@ -27256,7 +27278,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1514,
+                            SortOrder = 1515,
                             Status = 1
                         },
                         new
@@ -27267,7 +27289,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1515,
+                            SortOrder = 1516,
                             Status = 1
                         },
                         new
@@ -27278,7 +27300,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1516,
+                            SortOrder = 1517,
                             Status = 1
                         },
                         new
@@ -27289,7 +27311,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("81cba0fb-da60-2444-d3b6-bef9c6600721"),
-                            SortOrder = 1517,
+                            SortOrder = 1518,
                             Status = 1
                         },
                         new
@@ -27300,7 +27322,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7e619f6a-de75-aa81-9fe3-6941e3039b8c"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1518,
+                            SortOrder = 1519,
                             Status = 1
                         },
                         new
@@ -27311,7 +27333,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("68bc0c5b-6b33-ee6e-4e96-8eb50f3cd8ae"),
                             SFeatureValueId = new Guid("7776792e-3245-5754-aecf-797d3d0095dc"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1519,
+                            SortOrder = 1520,
                             Status = 1
                         },
                         new
@@ -27322,7 +27344,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("89204d5e-7673-040e-a326-0dccaae2ada6"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1520,
+                            SortOrder = 1521,
                             Status = 1
                         },
                         new
@@ -27333,7 +27355,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("992a9500-64ee-4790-d2c8-7a1c3c6faeec"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1521,
+                            SortOrder = 1522,
                             Status = 1
                         },
                         new
@@ -27344,7 +27366,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("78c15be1-bc5a-e3b6-aced-ec1765b3749d"),
                             SFeatureValueId = new Guid("da231e00-793a-c4a3-ec0a-a7356f6ab4ab"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1522,
+                            SortOrder = 1523,
                             Status = 1
                         },
                         new
@@ -27355,7 +27377,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("b1bd00dc-14aa-3ba7-1187-6524bd1d54bd"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1523,
+                            SortOrder = 1524,
                             Status = 1
                         },
                         new
@@ -27366,7 +27388,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("4aefafa5-6d45-af90-d90e-0a7d1a6f2eaf"),
                             SFeatureValueId = new Guid("24d04ace-80d7-581c-e51d-92a8f4439fff"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1524,
+                            SortOrder = 1525,
                             Status = 1
                         },
                         new
@@ -27377,7 +27399,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("82aff849-61a0-8282-704f-b915b3613c99"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1525,
+                            SortOrder = 1526,
                             Status = 1
                         },
                         new
@@ -27388,7 +27410,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("00a2063f-7297-2b86-fef9-5eb3a8a62b34"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1526,
+                            SortOrder = 1527,
                             Status = 1
                         },
                         new
@@ -27399,7 +27421,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("2021c9ce-87bc-403f-1cf3-66235c705332"),
                             SFeatureValueId = new Guid("7e24cc6a-1dfd-e929-83e5-7c26c941837a"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1527,
+                            SortOrder = 1528,
                             Status = 1
                         },
                         new
@@ -27410,7 +27432,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("c8c5d3c3-21b1-4a63-f1de-72df63d496f5"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1528,
+                            SortOrder = 1529,
                             Status = 1
                         },
                         new
@@ -27421,7 +27443,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("665ac3ae-896f-a48a-4d79-5e22d7cd77a5"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1529,
+                            SortOrder = 1530,
                             Status = 1
                         },
                         new
@@ -27432,7 +27454,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("6ce08250-71e7-d3bc-5ba9-0295be39afb7"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1530,
+                            SortOrder = 1531,
                             Status = 1
                         },
                         new
@@ -27443,7 +27465,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("2ec8ef4d-4252-6dee-8b6a-8efad7f258d6"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1531,
+                            SortOrder = 1532,
                             Status = 1
                         },
                         new
@@ -27454,7 +27476,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("19186f36-9102-28ae-5a8f-af9516b6214a"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1532,
+                            SortOrder = 1533,
                             Status = 1
                         },
                         new
@@ -27465,7 +27487,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("69112c9b-4606-3048-547e-85e91d4ac315"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1533,
+                            SortOrder = 1534,
                             Status = 1
                         },
                         new
@@ -27476,7 +27498,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("4d143434-333f-d50a-afbb-7a799e74b8c5"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1534,
+                            SortOrder = 1535,
                             Status = 1
                         },
                         new
@@ -27487,7 +27509,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("45381550-72ba-19d8-b15c-d9bb360d0e1d"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1535,
+                            SortOrder = 1536,
                             Status = 1
                         },
                         new
@@ -27498,7 +27520,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("81453916-b85a-c46b-9ff9-2273d085b611"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1536,
+                            SortOrder = 1537,
                             Status = 1
                         },
                         new
@@ -27509,7 +27531,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("b2eef77e-cb0b-6b30-d812-f57a4cb70f75"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1537,
+                            SortOrder = 1538,
                             Status = 1
                         },
                         new
@@ -27520,7 +27542,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("efd09bb7-53d3-a71a-6b94-15f1928c3043"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1538,
+                            SortOrder = 1539,
                             Status = 1
                         },
                         new
@@ -27531,7 +27553,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("a6914879-4bcc-dec2-1ccb-b3b01748e2cb"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1539,
+                            SortOrder = 1540,
                             Status = 1
                         },
                         new
@@ -27542,7 +27564,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("8b6958d9-b0d5-76a5-4f51-9c7359184eeb"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1540,
+                            SortOrder = 1541,
                             Status = 1
                         },
                         new
@@ -27553,7 +27575,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("71e2913b-0867-ee08-185a-baead9712552"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1541,
+                            SortOrder = 1542,
                             Status = 1
                         },
                         new
@@ -27564,7 +27586,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("688306de-82e0-d9a7-026e-bc60d35938b2"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1542,
+                            SortOrder = 1543,
                             Status = 1
                         },
                         new
@@ -27575,7 +27597,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("08ada2cc-ae11-cdaf-cc2a-ad77f2f0d922"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1543,
+                            SortOrder = 1544,
                             Status = 1
                         },
                         new
@@ -27586,7 +27608,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("38ab23f7-f606-67da-ffb9-af7e5872b7b8"),
                             SFeatureValueId = new Guid("f7204f12-0a13-8688-c41f-d9eb01d2d8ba"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1544,
+                            SortOrder = 1545,
                             Status = 1
                         },
                         new
@@ -27597,7 +27619,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("13f56aa1-ed4c-11f1-4205-5ae0c8449520"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1545,
+                            SortOrder = 1546,
                             Status = 1
                         },
                         new
@@ -27608,7 +27630,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("9b21f038-2be2-1425-c25c-279a92d56e31"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1546,
+                            SortOrder = 1547,
                             Status = 1
                         },
                         new
@@ -27619,7 +27641,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("f594d397-02d2-2aac-2ec6-8e0b25dd00d0"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1547,
+                            SortOrder = 1548,
                             Status = 1
                         },
                         new
@@ -27630,7 +27652,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("db4be0c3-eae1-6fc8-d393-8ada14310ab6"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1548,
+                            SortOrder = 1549,
                             Status = 1
                         },
                         new
@@ -27641,7 +27663,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("96919bc6-06ac-365a-2e72-27b9fd5523c2"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1549,
+                            SortOrder = 1550,
                             Status = 1
                         },
                         new
@@ -27652,7 +27674,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8ccef3a1-a885-6b43-ee66-903ff68c40fd"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1550,
+                            SortOrder = 1551,
                             Status = 1
                         },
                         new
@@ -27663,7 +27685,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("4b369823-6c66-0324-90b0-589548969e60"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1551,
+                            SortOrder = 1552,
                             Status = 1
                         },
                         new
@@ -27674,7 +27696,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("1530668d-bd6c-48a9-96e6-a3f4348da822"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1552,
+                            SortOrder = 1553,
                             Status = 1
                         },
                         new
@@ -27685,7 +27707,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("08be781f-a378-f4ef-05aa-a2b103571b7d"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1553,
+                            SortOrder = 1554,
                             Status = 1
                         },
                         new
@@ -27696,7 +27718,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("a419177b-89b9-b3b9-be96-b0ed5765c7c7"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1554,
+                            SortOrder = 1555,
                             Status = 1
                         },
                         new
@@ -27707,7 +27729,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("cafc5bca-8f5f-9aa7-3186-6a659eb2b212"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1555,
+                            SortOrder = 1556,
                             Status = 1
                         },
                         new
@@ -27718,7 +27740,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("8c16162b-61ca-5374-b718-6067fc286f95"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1556,
+                            SortOrder = 1557,
                             Status = 1
                         },
                         new
@@ -27729,7 +27751,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("fa39714f-2fa5-c816-4380-363e136fd1f9"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1557,
+                            SortOrder = 1558,
                             Status = 1
                         },
                         new
@@ -27740,7 +27762,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("55acca10-09f4-d0c7-7fd7-2a53cebe03ae"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1558,
+                            SortOrder = 1559,
                             Status = 1
                         },
                         new
@@ -27751,7 +27773,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("ed1a998a-8f0d-d7dc-917b-5836ea554a46"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1559,
+                            SortOrder = 1560,
                             Status = 1
                         },
                         new
@@ -27762,7 +27784,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("6f80eef6-e8c5-6f47-da8c-2f66c29a72f4"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1560,
+                            SortOrder = 1561,
                             Status = 1
                         },
                         new
@@ -27773,7 +27795,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("e7c16eed-34d6-abc0-2e50-c659ca4ddea8"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1561,
+                            SortOrder = 1562,
                             Status = 1
                         },
                         new
@@ -27784,7 +27806,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("2bbe22b1-69c7-a2cf-89d3-d8f77b24cc1e"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1562,
+                            SortOrder = 1563,
                             Status = 1
                         },
                         new
@@ -27795,7 +27817,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("d01a2b61-ec51-1eac-2424-d87f7ca987ce"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1563,
+                            SortOrder = 1564,
                             Status = 1
                         },
                         new
@@ -27806,7 +27828,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SFeatureId = new Guid("48598452-73dc-3333-521a-0ed1d63ffb00"),
                             SFeatureValueId = new Guid("339a2bcc-06b4-04e9-568c-339e7d8890a6"),
                             SProductId = new Guid("faff482e-42c1-5455-7604-d43c99ff1b03"),
-                            SortOrder = 1564,
+                            SortOrder = 1565,
                             Status = 1
                         },
                         new
@@ -124209,6 +124231,117 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.ToTable("StockCardDatasheets", (string)null);
                 });
 
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GroupCode")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedDate");
+
+                    b.HasIndex("GroupCode")
+                        .IsUnique();
+
+                    b.ToTable("StockCardGroups", (string)null);
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardGroupItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("LineTotal")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StockCardGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StockCardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StockCardId");
+
+                    b.HasIndex("StockCardGroupId", "StockCardId");
+
+                    b.ToTable("StockCardGroupItems", (string)null);
+                });
+
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardInventory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -124347,11 +124480,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.Property<DateTime?>("ValidTo")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("VatRate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(5,2)")
-                        .HasDefaultValue(20m);
 
                     b.HasKey("Id");
 
@@ -127008,9 +127136,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1f730d38-a6fc-4295-aee4-8625baabbd0d"),
+                            Id = new Guid("6485c18f-3323-4d6c-894d-0b8efc1190fc"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2496),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1318),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 355.0,
@@ -127021,9 +127149,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8376d127-712a-4ece-af5a-fcd76a215813"),
+                            Id = new Guid("9ce87b08-e5a4-4ba1-8905-1afa2dc28ad6"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2500),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1323),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 343.0,
@@ -127034,9 +127162,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("092b7fff-d3c0-4399-86c7-0a7e67704ebc"),
+                            Id = new Guid("e7603472-45ad-45d5-9f01-5446e72347e2"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2561),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1330),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 323.0,
@@ -127047,9 +127175,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("79a2cd82-d065-4da7-b565-69c0409ece83"),
+                            Id = new Guid("71e70cd0-a163-432b-859c-57caaeb36217"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2566),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1332),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 299.0,
@@ -127060,9 +127188,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("47b71a51-ca80-47fa-a5c5-44f6687c148a"),
+                            Id = new Guid("a6536820-4c24-472d-be74-acba5d17c41e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2569),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1334),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 275.0,
@@ -127073,9 +127201,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bf441318-ab39-41f1-8c08-bb36c077c4dd"),
+                            Id = new Guid("66ed14d9-89ee-4210-b0ec-21a1e3a7797e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2574),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1362),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 252.0,
@@ -127086,9 +127214,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("31b03d29-1778-4504-ac72-3bd89dc4e2cc"),
+                            Id = new Guid("6f01e733-eae3-4964-b11f-b3905cfb1199"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2576),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1366),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 232.0,
@@ -127099,9 +127227,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("cc514e24-b634-4c9f-9314-3b4fb127db25"),
+                            Id = new Guid("52713b11-dc01-443a-8948-201db184ad38"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2578),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1368),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 214.0,
@@ -127112,9 +127240,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1d380e62-4016-4fb3-b66e-fd95e44ec7b8"),
+                            Id = new Guid("7ded517c-50a5-4ccc-b109-78e5858d9fe7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2581),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1371),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 202.0,
@@ -127125,9 +127253,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f6246213-52b5-450b-8ec6-176f220fa0e5"),
+                            Id = new Guid("6a412f33-f9f5-4303-8c85-b77a2b4f97dc"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2584),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1374),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 345.0,
@@ -127138,9 +127266,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b8c23bba-9fe3-4796-943b-672477f279f1"),
+                            Id = new Guid("eab54e3f-144e-489e-b0f2-571efa7d865a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2585),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1378),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 334.0,
@@ -127151,9 +127279,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f469b744-9cc8-413a-83d4-25b492c6d1b5"),
+                            Id = new Guid("792f677b-b144-4fd8-9269-ced06d26caf5"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2587),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1380),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 314.0,
@@ -127164,9 +127292,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("501b1ebd-7f98-4ced-a3cc-6d3e35576337"),
+                            Id = new Guid("e925617a-83df-4f74-8224-c37e96b26f74"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2590),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1382),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 291.0,
@@ -127177,9 +127305,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b3c5688b-3581-491d-bf2b-dc1c1e8060e2"),
+                            Id = new Guid("3de6809e-352a-4746-be18-e8b6646707c5"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2620),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1383),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 267.0,
@@ -127190,9 +127318,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6c694029-546f-43e0-8d89-209a915c50cb"),
+                            Id = new Guid("6c122b5d-d6bf-4ca1-9cfa-732eb5878732"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2624),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1387),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 245.0,
@@ -127203,9 +127331,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c7d069ac-2a17-4668-805e-e3cee085c503"),
+                            Id = new Guid("91763608-9759-4bcf-a5f0-a30ee48eeebc"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2626),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1389),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 225.0,
@@ -127216,9 +127344,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bd7e6b15-598e-45de-a4c8-70a7014c8e75"),
+                            Id = new Guid("90200f84-01e3-4b07-8252-cddb2d399e44"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2628),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1391),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 208.0,
@@ -127229,9 +127357,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c3c20630-4184-4037-9711-f158052749c5"),
+                            Id = new Guid("1df32aa5-053b-44e4-bc4a-4f54d558fb0d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2631),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1394),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 490.0,
                             Rp02 = 196.0,
@@ -127242,9 +127370,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6941fc71-c1ce-4d5b-900e-5525f914979f"),
+                            Id = new Guid("9b7ba3bb-fa45-4d97-bc60-5539d0069a4a"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2633),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1397),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 335.0,
@@ -127255,9 +127383,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ec56ff66-c025-4f9f-8c6e-82b0aa9969c9"),
+                            Id = new Guid("5276bcf5-af6b-425b-9a97-a7d4cb0a1c00"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2635),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1399),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 324.0,
@@ -127268,9 +127396,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fe6e9915-f957-4090-8de0-9a141006594f"),
+                            Id = new Guid("57b05a92-59f5-4c27-8393-97f9113d3aa0"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2638),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1401),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 305.0,
@@ -127281,9 +127409,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4e0d776d-b658-45d6-a3c1-9ad30a36d36e"),
+                            Id = new Guid("fc2349e0-5b6d-4da1-abd1-d7231bccc6a9"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2640),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1403),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 282.0,
@@ -127294,9 +127422,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("cb915f54-e06c-4f2e-9f3f-22878c22874b"),
+                            Id = new Guid("6f33217f-031b-4e8c-8247-545e342c9a07"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2641),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1407),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 259.0,
@@ -127307,9 +127435,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8e8d99d8-9470-4670-b0b0-3df2ceb26a33"),
+                            Id = new Guid("8cc79c3e-0e80-4582-8b66-652f173b5a92"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2643),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1409),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 238.0,
@@ -127320,9 +127448,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8b451941-355e-4df8-a411-5e76ce35341c"),
+                            Id = new Guid("72a762b2-147e-4c07-9ce0-32463bbcc16e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2650),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1411),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 219.0,
@@ -127333,9 +127461,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("aa10b703-b123-4751-b8ce-36c6d79d4889"),
+                            Id = new Guid("61e88469-4213-4f71-b089-fff3fb996e52"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2652),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1413),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 202.0,
@@ -127346,9 +127474,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("55190706-2ffe-4bca-9ebf-aa0030915659"),
+                            Id = new Guid("f27b1f18-6736-4dad-b0fc-6a4294929021"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2654),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1416),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 470.0,
                             Rp02 = 190.0,
@@ -127359,9 +127487,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7118fc36-43cd-411d-b9c2-ff5e8a3d46b5"),
+                            Id = new Guid("12e86d3c-e109-4d8b-a912-1f5990be612e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2655),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1418),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 315.0,
@@ -127372,9 +127500,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6725c682-668e-4c52-b22d-bc7e34b5274d"),
+                            Id = new Guid("a53aaeee-a730-46ad-9ced-05fb76dcbace"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2658),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1420),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -127385,9 +127513,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("df782c6c-5a78-4777-aeea-4f4b0c1622f6"),
+                            Id = new Guid("12642d0a-5301-4bd1-9d0d-e54adba56371"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2660),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1422),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 287.0,
@@ -127398,9 +127526,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2f541a2c-4a4b-4201-a6b2-1aaf81645b57"),
+                            Id = new Guid("44ed5c88-999f-4c93-84fd-44e2e65f1d31"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2662),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1425),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 265.0,
@@ -127411,9 +127539,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("cc29efb4-c41c-45ae-b018-a2595959ac47"),
+                            Id = new Guid("a6773dee-646c-4b68-899b-47f739a268aa"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2664),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1427),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 244.0,
@@ -127424,9 +127552,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("50523fa5-8cc0-4c4a-afc8-e9363d0e49ea"),
+                            Id = new Guid("2b768b95-6a9d-4cee-96c7-baa43bd7e62e"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2666),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1430),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 224.0,
@@ -127437,9 +127565,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("cd953e1a-ece3-4c66-9e3c-10950dd7c4cc"),
+                            Id = new Guid("cbf9b32e-1db6-477a-a36e-264577ca4eb1"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2669),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1433),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 206.0,
@@ -127450,9 +127578,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9d66e8d4-c2e1-4d55-b4ce-9d2b21e074a1"),
+                            Id = new Guid("85119205-bee8-4b8b-bea8-8249a05c1d62"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2671),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1436),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 190.0,
@@ -127463,9 +127591,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9ba2bbe0-e218-48de-a998-5658b2ac4209"),
+                            Id = new Guid("731b7ec6-a491-4924-894c-5103b67a93df"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2672),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1437),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 179.0,
@@ -127476,9 +127604,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f1c17a9b-ddd3-4333-ba91-d6015210021c"),
+                            Id = new Guid("3cd212b5-6dca-467e-9efe-016ff4a3c2f7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2675),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1439),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 305.0,
@@ -127489,9 +127617,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("16f54858-bd72-41aa-b236-a40739bbffdd"),
+                            Id = new Guid("25a63e9a-9dfd-4b31-997f-9e2ce65a1bb9"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2678),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1441),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 295.0,
@@ -127502,9 +127630,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a60e9da3-2b2c-4cb5-ba99-8498adc0a9b8"),
+                            Id = new Guid("e02fe21a-84d0-4d25-aaff-3be082982464"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2680),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1444),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 277.0,
@@ -127515,9 +127643,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("815d7954-8fa1-490a-ac9b-10f7b1d5fd02"),
+                            Id = new Guid("0c161515-e355-4dda-86dc-2f9e59e75cc2"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2682),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1446),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 257.0,
@@ -127528,9 +127656,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c759fbe0-d3c6-458c-b317-f173676d6e47"),
+                            Id = new Guid("43f3bcbd-9b9c-4b43-b037-d785405de23f"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2685),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1448),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 236.0,
@@ -127541,9 +127669,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a66e3969-2aeb-4df6-be9c-a93dae46c77a"),
+                            Id = new Guid("d2e046bb-5b50-49e9-8bad-e8cedf39132c"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2687),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1450),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 216.0,
@@ -127554,9 +127682,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("210f6f4f-2701-402b-a628-eb03c77b91db"),
+                            Id = new Guid("b5ec5146-0f52-4c1a-92d4-0faab3080fc4"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2688),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1453),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 199.0,
@@ -127567,9 +127695,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fe63300c-2283-4b18-ac80-24def35e3090"),
+                            Id = new Guid("bd160b97-bcb2-4582-97b1-13d759a47c15"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2690),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1456),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 184.0,
@@ -127580,9 +127708,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1e71bd62-0dc6-4f2c-80b6-2f7413518cf6"),
+                            Id = new Guid("85ba4b89-fe14-4694-a03f-3ba749abd7b8"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2693),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1458),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 460.0,
                             Rp02 = 173.0,
@@ -127593,9 +127721,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fa703f67-f2fe-4f1d-b98f-20bcc7468545"),
+                            Id = new Guid("670a6723-9fd0-43a7-b163-454020cb978d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2695),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1460),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 295.0,
@@ -127606,9 +127734,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ca0059b3-bea3-4ec9-beab-6a5aae75ffb5"),
+                            Id = new Guid("8003ac6e-2eb3-45e1-98ac-2f6598b00954"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2696),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1463),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 285.0,
@@ -127619,9 +127747,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("36d6bb7e-77ca-47d2-a1dd-a276dfaa7d83"),
+                            Id = new Guid("23fec293-9690-463f-9dbe-f419c740c7a7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2698),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1465),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 268.0,
@@ -127632,9 +127760,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("672d8fa6-0cdb-4fd5-bd4d-2f54692f88cd"),
+                            Id = new Guid("a642fea5-ac5d-4ac7-a141-e2fe2df78647"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2701),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1490),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 249.0,
@@ -127645,9 +127773,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("62b3f881-ba0e-4337-82b0-258063fe9513"),
+                            Id = new Guid("ccc893b4-e638-4ea6-bf3f-10b8c462f563"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2703),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1492),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 228.0,
@@ -127658,9 +127786,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("26c9032c-3a88-4a3f-8554-c680d341d758"),
+                            Id = new Guid("be6e4b06-9923-4fa8-b8e5-497e30398bbe"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2705),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1495),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 209.0,
@@ -127671,9 +127799,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("92de9158-de31-4b36-a555-5f0fdba52b5b"),
+                            Id = new Guid("c55964b7-7c83-4ae7-afd9-a1210bf7d92d"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2706),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1497),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 192.0,
@@ -127684,9 +127812,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("97996353-4da4-4078-a933-1d40d3e7023e"),
+                            Id = new Guid("6bee659e-f7b3-4021-857b-9935753291f2"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2709),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1499),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 178.0,
@@ -127697,9 +127825,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e5a976f0-a2a3-4a47-97c4-deab8f6f5611"),
+                            Id = new Guid("69ab5764-8025-47c9-9327-af7e169d04e7"),
                             CreatedBy = "SeedData",
-                            CreatedDate = new DateTime(2026, 2, 22, 17, 16, 3, 754, DateTimeKind.Utc).AddTicks(2711),
+                            CreatedDate = new DateTime(2026, 3, 5, 13, 2, 32, 528, DateTimeKind.Utc).AddTicks(1501),
                             MaterialFormId = new Guid("22222222-2222-2222-2222-222222222222"),
                             Rm = 450.0,
                             Rp02 = 167.0,
@@ -128357,6 +128485,25 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Navigation("StockCard");
                 });
 
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardGroupItem", b =>
+                {
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardGroup", "StockCardGroup")
+                        .WithMany("Items")
+                        .HasForeignKey("StockCardGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Common.StockCard", "StockCard")
+                        .WithMany("GroupItems")
+                        .HasForeignKey("StockCardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("StockCard");
+
+                    b.Navigation("StockCardGroup");
+                });
+
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardInventory", b =>
                 {
                     b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Common.StockCard", "StockCard")
@@ -128508,6 +128655,8 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.Navigation("FeatureSelections");
 
+                    b.Navigation("GroupItems");
+
                     b.Navigation("InventoryMovements");
 
                     b.Navigation("Prices");
@@ -128546,6 +128695,11 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("StockCards");
+                });
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardGroup", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.StockCardPrice", b =>

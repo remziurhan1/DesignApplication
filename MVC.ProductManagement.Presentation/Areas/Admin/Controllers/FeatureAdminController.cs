@@ -22,11 +22,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             groupCode = groupCode.ToUpperInvariant();
             var featurePrefix = GetFeaturePrefix(groupCode);
-
             var features = await _db.Set<SFeature>()
                 .AsNoTracking()
                 .Include(f => f.Values)
-                .Where(f => f.Code.StartsWith(featurePrefix) || (groupCode is "SA" or "SB" && BasicStandardCodes.Contains(f.Code)))
+                .Where(f => f.Code.StartsWith(featurePrefix)
+                    || ((groupCode == "SA" || groupCode == "SB") && BasicStandardCodes.Contains(f.Code)))
                 .OrderBy(f => f.SortOrder)
                 .Select(f => new FeatureItemVm
                 {
@@ -34,13 +34,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     Code = f.Code,
                     Name = f.Name,
                     SortOrder = f.SortOrder,
-                    Values = f.Values.OrderBy(v => v.SortOrder).Select(v => new FeatureValueItemVm
-                    {
-                        Id = v.Id,
-                        Code = v.Code,
-                        Name = v.Name,
-                        SortOrder = v.SortOrder
-                    }).ToList()
+                    Values = f.Values
+                        .OrderBy(v => v.SortOrder)
+                        .Select(v => new FeatureValueItemVm
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name,
+                            SortOrder = v.SortOrder
+                        }).ToList()
                 })
                 .ToListAsync();
 
