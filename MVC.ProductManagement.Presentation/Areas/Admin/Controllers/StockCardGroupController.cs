@@ -25,7 +25,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new StockCardGroupCreateDto { CurrencyCode = "TRY" });
+            return View(new StockCardGroupCreateDto { CurrencyCode = "EUR" });
         }
 
         [HttpPost]
@@ -34,6 +34,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             try
             {
+                dto.CurrencyCode = "EUR";
                 var id = await _groupService.CreateGroupAsync(dto, "Admin");
                 TempData["SuccessMessage"] = "Grup oluşturuldu.";
                 return RedirectToAction(nameof(Detail), new { id });
