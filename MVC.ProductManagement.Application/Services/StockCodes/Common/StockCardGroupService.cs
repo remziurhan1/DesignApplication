@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör;
 using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
 
