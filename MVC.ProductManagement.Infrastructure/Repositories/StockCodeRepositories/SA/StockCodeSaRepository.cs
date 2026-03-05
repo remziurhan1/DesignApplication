@@ -20,6 +20,18 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositorie
 {
     public class StockCodeSaRepository : IStockCodeSaService
     {
+        private static readonly string[] SaFeatureCodes =
+        {
+            "STANDARD",
+            "THREAD_SYSTEM",
+            "METRIC",
+            "LENGTH",
+            "MATERIAL",
+            "STRENGTH",
+            "COATING",
+            "HEAD_TYPE"
+        };
+
         private readonly ISProductRepositories _productRepo;
         private readonly IStockSequenceRepositories _sequenceRepo;
         private readonly IStockCardRepositories _stockCardRepo;
@@ -47,44 +59,8 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositorie
         /// </summary>
         public async Task<IReadOnlyList<FeatureDto>> GetAllFeaturesAsync(CancellationToken cancellationToken = default)
         {
-            // SA grubuna ait feature'ları filtrele
-            var saFeatureCodes = new[]
-            {
-        "STANDARD",
-        "THREAD_SYSTEM",
-        "METRIC",
-        "LENGTH",
-        "MATERIAL",
-        "STRENGTH",
-        "COATING",
-        "HEAD_TYPE"
-    };
-
-            var features = await _context.Set<SFeature>()
-                .AsNoTracking()
-                .Include(f => f.Values)
-                .Where(f => saFeatureCodes.Contains(f.Code)) // ✅ Sadece SA feature'ları
-                .OrderBy(f => f.SortOrder)
-                .Select(f => new FeatureDto
-                {
-                    Id = f.Id,
-                    Code = f.Code,
-                    Name = f.Name,
-                    IsRequired = true,
-                    SortOrder = f.SortOrder,
-                    Values = f.Values
-                        .OrderBy(v => v.SortOrder)
-                        .Select(v => new FeatureValueDto
-                        {
-                            Id = v.Id,
-                            Code = v.Code,
-                            Name = v.Name,
-                            SortOrder = v.SortOrder
-                        }).ToList()
-                })
+            return await BuildSaFeatureQuery()
                 .ToListAsync(cancellationToken);
-
-            return features;
         }
         /// <summary>
         /// ✅ 1. SA Ürün listesi
@@ -108,23 +84,15 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositorie
      Guid productId,
      CancellationToken cancellationToken = default)
         {
-            // SA grubuna ait feature'ları getir (ürün fark etmez, hepsi aynı)
-            var saFeatureCodes = new[]
-            {
-        "STANDARD",
-        "THREAD_SYSTEM",
-        "METRIC",
-        "LENGTH",
-        "MATERIAL",
-        "STRENGTH",
-        "COATING",
-        "HEAD_TYPE"
-    };
+            return await BuildSaFeatureQuery()
+                .ToListAsync(cancellationToken);
+        }
 
-            var features = await _context.Set<SFeature>()
+        private IQueryable<FeatureDto> BuildSaFeatureQuery()
+        {
+            return _context.Set<SFeature>()
                 .AsNoTracking()
-                .Include(f => f.Values)
-                .Where(f => saFeatureCodes.Contains(f.Code))
+                .Where(f => SaFeatureCodes.Contains(f.Code))
                 .OrderBy(f => f.SortOrder)
                 .Select(f => new FeatureDto
                 {
@@ -142,10 +110,7 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositorie
                             Name = v.Name,
                             SortOrder = v.SortOrder
                         }).ToList()
-                })
-                .ToListAsync(cancellationToken);
-
-            return features;
+                });
         }
 
         /// <summary>
