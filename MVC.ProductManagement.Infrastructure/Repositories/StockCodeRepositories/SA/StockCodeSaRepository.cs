@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SA
 {
-    public class StockCodeSaRepository : IStockCodeSaService
+    public class StockCodeSaRepository : IStockCodeSaRepository
     {
         private static readonly string[] SaFeatureCodes =
         {
