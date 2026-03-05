@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MVC.ProductManagement.Application.Services.StockCodes.Rules;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
+namespace MVC.ProductManagement.Infrastructure.Services.StockCodes.Rules
 {
     /// <summary>
     /// SA / SF gibi ürün grupları için seed tabanlı kuralları tek bir profile dönüştürür.

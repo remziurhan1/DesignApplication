@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.Services.StockCodes.S.Features;
+using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.S.Features
+namespace MVC.ProductManagement.Infrastructure.Services.StockCodes.S.Features
 {
     public class SFeatureQueryService : ISFeatureQueryService
     {
