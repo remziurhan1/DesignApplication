@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.Services.StockCodes.SH;
+using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SG;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SH;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.DataAccess;
@@ -8,9 +9,9 @@ using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Co
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using MVC.ProductManagement.Infrastructure.AppContext;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.SG
+namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SH
 {
-    public class StockCodeSgService : IStockCodeSgService
+    public class StockCodeShRepository : IStockCodeShService
     {
         private readonly ISProductRepositories _productRepo;
         private readonly IStockSequenceRepositories _sequenceRepo;
@@ -19,7 +20,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
         private readonly ISProductGroupRepositories _groupRepo;
         private readonly AppDbContext _context;
 
-        public StockCodeSgService(
+        public StockCodeShRepository(
             ISProductRepositories productRepo,
             IStockSequenceRepositories sequenceRepo,
             IStockCardRepositories stockCardRepo,
@@ -36,14 +37,14 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
         }
 
         /// <summary>
-        /// Tüm SG ürünlerini getirir (SGA0, SGA1, SGA2...)
+        /// Tüm SH ürünlerini getirir (SHA0, SHA1, SHA2...)
         /// </summary>
-        public async Task<IReadOnlyList<LookupDto>> GetSgProductsAsync(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<LookupDto>> GetShProductsAsync(CancellationToken cancellationToken = default)
         {
-            var sgGroupId = await GetSgGroupIdAsync();
+            var shGroupId = await GetShGroupIdAsync();
 
             var products = await _productRepo.GetAllAsync(
-                x => x.SProductGroupId == sgGroupId,
+                x => x.SProductGroupId == shGroupId,
                 tracking: false);
 
             return products
@@ -89,20 +90,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
         }
 
         /// <summary>
-        /// SG stok kodu üretir (akışkan yok, feature'larla)
+        /// SH stok kodu üretir (akışkan yok, feature'larla)
         /// </summary>
-        public async Task<SgStockCodeGenerateResultDto> GenerateSgAsync(
-            SgStockCodeGenerateRequestDto request,
+        public async Task<ShStockCodeGenerateResultDto> GenerateShAsync(
+            ShStockCodeGenerateRequestDto request,
             CancellationToken cancellationToken = default)
         {
-            var sgGroupId = await GetSgGroupIdAsync();
+            var shGroupId = await GetShGroupIdAsync();
 
             // 1) Ürün kontrolü
             var product = await _productRepo.GetByIdAsync(request.SProductId, tracking: false);
             if (product == null)
-                throw new InvalidOperationException("SG ürünü bulunamadı.");
+                throw new InvalidOperationException("SH ürünü bulunamadı.");
 
-            var prefix4 = product.Code; // SGA0, SGA1...
+            var prefix4 = product.Code; // SHA0, SHA1...
 
             // 2) ✅ Akışkan yok - Default kullan
             var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
@@ -114,20 +115,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
             var optionKey = await BuildOptionKeyAsync(request.SelectedFeatureValues, cancellationToken);
 
             // ✅ DEBUG
-            Console.WriteLine($"[SG DEBUG] OptionKey: '{optionKey}'");
-            Console.WriteLine($"[SG DEBUG] Feature Count: {request.SelectedFeatureValues?.Count ?? 0}");
+            Console.WriteLine($"[SH DEBUG] OptionKey: '{optionKey}'");
+            Console.WriteLine($"[SH DEBUG] Feature Count: {request.SelectedFeatureValues?.Count ?? 0}");
 
             // 4) ✅ Duplicate kontrol (ürün + optionKey)
             var existing = await _stockCardRepo.GetAsync(x =>
                     x.FluidId == defaultFluid.Id &&
-                    x.SProductGroupId == sgGroupId &&
+                    x.SProductGroupId == shGroupId &&
                     x.SProductId == request.SProductId &&
                     x.OptionKey == optionKey,
                 tracking: false);
 
             if (existing != null)
             {
-                return new SgStockCodeGenerateResultDto
+                return new ShStockCodeGenerateResultDto
                 {
                     AlreadyExists = true,
                     StockCardId = existing.Id,
@@ -139,9 +140,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
             }
 
             // 5) Lookup
-            var group = await _groupRepo.GetByIdAsync(sgGroupId, tracking: false);
+            var group = await _groupRepo.GetByIdAsync(shGroupId, tracking: false);
             if (group == null)
-                throw new InvalidOperationException("SG grubu bulunamadı.");
+                throw new InvalidOperationException("SH grubu bulunamadı.");
 
             // 6) ✅ Feature açıklaması
             var featureDescription = await BuildFeatureDescriptionAsync(request.SelectedFeatureValues, cancellationToken);
@@ -169,7 +170,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
             {
                 Id = Guid.NewGuid(),
                 FluidId = defaultFluid.Id,
-                SProductGroupId = sgGroupId,
+                SProductGroupId = shGroupId,
                 SProductId = request.SProductId,
                 Prefix4 = prefix4,
                 Serial4 = nextSerial,
@@ -205,7 +206,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
 
             await tx.CommitAsync(cancellationToken);
 
-            return new SgStockCodeGenerateResultDto
+            return new ShStockCodeGenerateResultDto
             {
                 AlreadyExists = false,
                 StockCardId = card.Id,
@@ -218,13 +219,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
 
         // ========== HELPER METHODS ==========
 
-        private async Task<Guid> GetSgGroupIdAsync()
+        private async Task<Guid> GetShGroupIdAsync()
         {
             var groups = await _groupRepo.GetAllAsync(tracking: false);
-            var sgGroup = groups.FirstOrDefault(x => x.Code == "G");
-            if (sgGroup == null)
-                throw new InvalidOperationException("SG (G) grubu tanımlı değil.");
-            return sgGroup.Id;
+            var shGroup = groups.FirstOrDefault(x => x.Code == "H");
+            if (shGroup == null)
+                throw new InvalidOperationException("SH (H) grubu tanımlı değil.");
+            return shGroup.Id;
         }
 
         private async Task<string> BuildOptionKeyAsync(

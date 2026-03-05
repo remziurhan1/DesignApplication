@@ -1,4 +1,5 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Infrastructure.AppContext;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Enums;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.Common
+namespace MVC.ProductManagement.Infrastructure.Services.StockCards
 {
     public class StockCardDatasheetService : IStockCardDatasheetService
     {

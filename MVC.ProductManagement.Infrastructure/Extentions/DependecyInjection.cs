@@ -16,15 +16,25 @@ using MVC.ProductManagement.Application.Services.StockCodes.SC;
 using MVC.ProductManagement.Application.Services.StockCodes.SD;
 using MVC.ProductManagement.Application.Services.StockCodes.SE;
 using MVC.ProductManagement.Application.Services.StockCodes.SF;
+using MVC.ProductManagement.Application.Services.StockCodes.SG;
+using MVC.ProductManagement.Application.Services.StockCodes.SH;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SA;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SB;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SC;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SD;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SE;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SF;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SG;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SH;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypeRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.YieldStrengthRepositories;
 using MVC.ProductManagement.Infrastructure.Seeds;
+using MVC.ProductManagement.Infrastructure.Services.StockCards;
+using MVC.ProductManagement.Infrastructure.Services.StockCodes.S.Features;
+using MVC.ProductManagement.Infrastructure.Services.StockCodes.Rules;
+using MVC.ProductManagement.Infrastructure.Services.StockCodes.Common;
+using MVC.ProductManagement.Application.Services.StockCodes.S.Features;
+using MVC.ProductManagement.Application.Services.StockCodes.Rules;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -64,6 +74,15 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IStockCodeSdService, StockCodeSdRepository>();
             services.AddScoped<IStockCodeSeService, StockCodeSeRepository>();
             services.AddScoped<IStockCodeSfService, StockCodeSfRepository>();
+            services.AddScoped<IStockCodeSgService, StockCodeSgRepository>();
+            services.AddScoped<IStockCodeShService, StockCodeShRepository>();
+            services.AddScoped<IStockCardDatasheetService, StockCardDatasheetService>();
+            services.AddScoped<IStockCardPriceService, StockCardPriceService>();
+            services.AddScoped<IStockCardInventoryService, StockCardInventoryService>();
+            services.AddScoped<IStockRuleProfileService, StockRuleProfileService>();
+            services.AddScoped<ISaRuleCatalogSyncService, SaRuleCatalogSyncService>();
+            services.AddScoped<ISFeatureQueryService, SFeatureQueryService>();
+            services.AddScoped<IStockCodeLookupService, StockCodeLookupService>();
 
 
 
