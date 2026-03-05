@@ -18,12 +18,6 @@ using MVC.ProductManagement.Application.Services.StockCodes.SG;
 using MVC.ProductManagement.Application.Services.StockCodes.SH;
 using MVC.ProductManagement.Application.Services.StockCodes.Rules;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
-using MVC.ProductManagement.Infrastructure.Services.StockCards;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Extentions
 {
@@ -53,15 +47,11 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockCardInventoryService, StockCardInventoryService>();
             services.AddScoped<IStockCardGroupService, StockCardGroupService>();
 
-            services.AddScoped<IStockCodeSbService, StockCodeSbService>();
             services.AddScoped<IExcelExportService, ExcelExportService>();
 
 
 
             
-            services.AddScoped<
-    MVC.ProductManagement.Application.Services.StockCodes.S.Features.ISFeatureQueryService,
-    MVC.ProductManagement.Application.Services.StockCodes.S.Features.SFeatureQueryService>();
 
 
             return services;

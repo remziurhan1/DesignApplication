@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.EN13458Repositories;
@@ -44,6 +45,7 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IPrefixRuleRepositories, PrefixRuleRepository>();
             services.AddScoped<IStockSequenceRepositories, StockSequenceRepository>();
             services.AddScoped<IStockCardRepositories, StockCardRepository>();
+            services.AddScoped<IStockCardGroupRepository, StockCardGroupRepository>();
 
 
 
