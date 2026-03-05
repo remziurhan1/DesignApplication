@@ -1,4 +1,5 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.Common
+namespace MVC.ProductManagement.Infrastructure.Services.StockCodes.Common
 {
     public class StockCodeLookupService : IStockCodeLookupService
     {

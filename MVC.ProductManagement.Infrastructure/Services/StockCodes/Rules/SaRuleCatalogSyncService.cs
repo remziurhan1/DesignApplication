@@ -7,8 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MVC.ProductManagement.Application.Services.StockCodes.Rules;
 
-namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
+namespace MVC.ProductManagement.Infrastructure.Services.StockCodes.Rules
 {
     /// <summary>
     /// SA/SB/SC için yüksek değişkenlik gösteren metrik/boy kataloglarını runtime'da senkronize eder.
