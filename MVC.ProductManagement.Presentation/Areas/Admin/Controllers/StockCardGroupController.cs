@@ -25,7 +25,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new StockCardGroupCreateDto { CurrencyCode = "TRY" });
+            return View(new StockCardGroupCreateDto { CurrencyCode = "EUR" });
         }
 
         [HttpPost]
@@ -34,6 +34,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             try
             {
+                dto.CurrencyCode = "EUR";
                 var id = await _groupService.CreateGroupAsync(dto, "Admin");
                 TempData["SuccessMessage"] = "Grup oluşturuldu.";
                 return RedirectToAction(nameof(Detail), new { id });
@@ -52,10 +53,36 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             if (detail == null)
                 return NotFound();
 
-            var cards = await _groupService.SearchStockCardsAsync(q, 100);
-            ViewBag.StockCards = cards.Select(x => new SelectListItem($"{x.StockCode8} - {x.Description}", x.StockCardId.ToString())).ToList();
+            var cards = await _groupService.SearchStockCardsAsync(q, 500);
+            ViewBag.StockCardsByGroup = BuildGroupedStockCardSelectList(cards);
             ViewBag.SearchTerm = q;
             return View(detail);
+        }
+
+        private static Dictionary<string, List<SelectListItem>> BuildGroupedStockCardSelectList(IReadOnlyList<StockCardLookupDto> cards)
+        {
+            var orderedPrefixes = new[] { "SA", "SB", "SC", "SD", "SE", "SF", "SG" };
+
+            var grouped = cards
+                .OrderBy(x => x.StockCode8)
+                .GroupBy(x =>
+                {
+                    var prefix = (x.StockCode8 ?? string.Empty).Trim().ToUpperInvariant();
+                    prefix = prefix.Length >= 2 ? prefix[..2] : prefix;
+                    return orderedPrefixes.Contains(prefix) ? prefix : "Diger";
+                })
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(x => new SelectListItem($"{x.StockCode8} - {x.Description}", x.StockCardId.ToString())).ToList());
+
+            var result = new Dictionary<string, List<SelectListItem>>();
+            foreach (var prefix in orderedPrefixes)
+            {
+                result[prefix] = grouped.TryGetValue(prefix, out var items) ? items : new List<SelectListItem>();
+            }
+
+            result["Diger"] = grouped.TryGetValue("Diger", out var otherItems) ? otherItems : new List<SelectListItem>();
+            return result;
         }
 
         [HttpPost]
