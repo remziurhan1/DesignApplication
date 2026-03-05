@@ -68,6 +68,8 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
 
         public async Task<StockCardGroupDetailDto?> GetGroupDetailAsync(Guid groupId, CancellationToken cancellationToken = default)
         {
+            await RefreshMissingItemPricesAsync(groupId, cancellationToken);
+
             return await _context.StockCardGroups
                 .AsNoTracking()
                 .Where(g => g.Id == groupId && g.Status != Status.Deleted)
@@ -235,6 +237,39 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 .FirstOrDefaultAsync(cancellationToken);
 
             return latestAnyCurrencyPrice ?? 0m;
+        }
+
+        private async Task RefreshMissingItemPricesAsync(Guid groupId, CancellationToken cancellationToken)
+        {
+            var itemsWithoutPrice = await _context.StockCardGroupItems
+                .Where(i => i.StockCardGroupId == groupId
+                    && i.Status != Status.Deleted
+                    && i.UnitPrice <= 0)
+                .ToListAsync(cancellationToken);
+
+            if (!itemsWithoutPrice.Any())
+                return;
+
+            var changed = false;
+            foreach (var item in itemsWithoutPrice)
+            {
+                var resolvedPrice = await ResolveUnitPriceAsync(item.StockCardId, cancellationToken);
+                if (resolvedPrice <= 0)
+                    continue;
+
+                item.UnitPrice = resolvedPrice;
+                item.LineTotal = resolvedPrice * item.Quantity;
+                item.ModifiedBy = "System";
+                item.ModifiedDate = DateTime.UtcNow;
+                item.Status = Status.Modified;
+                changed = true;
+            }
+
+            if (!changed)
+                return;
+
+            await _context.SaveChangesAsync(cancellationToken);
+            await RecalculateGroupTotalAsync(groupId, "System", cancellationToken);
         }
 
         private async Task RecalculateGroupTotalAsync(Guid groupId, string userName, CancellationToken cancellationToken)
