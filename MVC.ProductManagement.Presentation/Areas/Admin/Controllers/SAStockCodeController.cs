@@ -13,14 +13,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
     [Area("Admin")]
     public class SAStockCodeController : Controller
     {
-        private readonly IStockCodeSaService _saService;
+        private readonly IStockCodeSaAppService _saService;
         private readonly IStockCardDatasheetService _datasheetService;
         private readonly IStockCardPriceService _priceService;
         private readonly IStockCardInventoryService _inventoryService;
         private readonly IExcelExportService _excelService;
 
         public SAStockCodeController(
-            IStockCodeSaService saService,
+            IStockCodeSaAppService saService,
             IStockCardDatasheetService datasheetService,
             IStockCardPriceService priceService,
             IStockCardInventoryService inventoryService,
