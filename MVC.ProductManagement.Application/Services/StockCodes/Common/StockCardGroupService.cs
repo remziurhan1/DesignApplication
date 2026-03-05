@@ -10,6 +10,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
     public class StockCardGroupService : IStockCardGroupService
     {
         private readonly AppDbContext _context;
+        private const string GroupCurrencyCode = "EUR";
 
         public StockCardGroupService(AppDbContext context)
         {
@@ -26,7 +27,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 Id = Guid.NewGuid(),
                 GroupCode = await GenerateGroupCodeAsync(cancellationToken),
                 Name = dto.Name.Trim(),
-                CurrencyCode = (dto.CurrencyCode ?? "TRY").Trim().ToUpperInvariant(),
+                CurrencyCode = GroupCurrencyCode,
                 TotalAmount = 0,
                 CreatedBy = userName,
                 CreatedDate = DateTime.UtcNow,
@@ -39,7 +40,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             foreach (var item in dto.Items ?? new List<StockCardGroupCreateItemDto>())
             {
                 if (item.StockCardId == Guid.Empty || item.Quantity <= 0) continue;
-                await AddItemInternalAsync(group.Id, item.StockCardId, item.Quantity, userName, group.CurrencyCode, cancellationToken);
+                await AddItemInternalAsync(group.Id, item.StockCardId, item.Quantity, userName, cancellationToken);
             }
 
             await RecalculateGroupTotalAsync(group.Id, userName, cancellationToken);
@@ -99,7 +100,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             var group = await _context.StockCardGroups.FirstOrDefaultAsync(g => g.Id == groupId && g.Status != Status.Deleted, cancellationToken)
                 ?? throw new InvalidOperationException("Grup bulunamadı.");
 
-            await AddItemInternalAsync(groupId, stockCardId, quantity, userName, group.CurrencyCode, cancellationToken);
+            await AddItemInternalAsync(groupId, stockCardId, quantity, userName, cancellationToken);
             await RecalculateGroupTotalAsync(groupId, userName, cancellationToken);
         }
 
@@ -158,7 +159,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 .ToListAsync(cancellationToken);
         }
 
-        private async Task AddItemInternalAsync(Guid groupId, Guid stockCardId, int quantity, string userName, string currency, CancellationToken cancellationToken)
+        private async Task AddItemInternalAsync(Guid groupId, Guid stockCardId, int quantity, string userName, CancellationToken cancellationToken)
         {
             if (quantity <= 0)
                 throw new InvalidOperationException("Adet 1 veya daha büyük olmalıdır.");
@@ -181,7 +182,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 return;
             }
 
-            var unitPrice = await ResolveUnitPriceAsync(stockCardId, currency, cancellationToken);
+            var unitPrice = await ResolveUnitPriceAsync(stockCardId, cancellationToken);
             var sortOrder = await _context.StockCardGroupItems.Where(i => i.StockCardGroupId == groupId && i.Status != Status.Deleted).CountAsync(cancellationToken);
 
             _context.StockCardGroupItems.Add(new StockCardGroupItem
@@ -201,23 +202,39 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task<decimal> ResolveUnitPriceAsync(Guid stockCardId, string currency, CancellationToken cancellationToken)
+        private async Task<decimal> ResolveUnitPriceAsync(Guid stockCardId, CancellationToken cancellationToken)
         {
-            var now = DateTime.UtcNow;
-            var today = now.Date;
-            var active = await _context.StockCardPrices
+            var today = DateTime.UtcNow.Date;
+
+            var latestEurPrice = await _context.StockCardPrices
                 .AsNoTracking()
                 .Where(p => p.StockCardId == stockCardId
-                    && p.Currency == currency
-                    && p.IsActive
                     && p.Status != Status.Deleted
+                    && p.IsActive
+                    && p.ValidFrom.Date <= today
+                    && (p.ValidTo == null || p.ValidTo.Value.Date >= today)
+                    && (p.Currency ?? string.Empty).Trim().ToUpper() == GroupCurrencyCode)
+                .OrderByDescending(p => p.ValidFrom)
+                .ThenByDescending(p => p.CreatedDate)
+                .Select(p => (decimal?)p.UnitPrice)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (latestEurPrice.HasValue)
+                return latestEurPrice.Value;
+
+            var latestAnyCurrencyPrice = await _context.StockCardPrices
+                .AsNoTracking()
+                .Where(p => p.StockCardId == stockCardId
+                    && p.Status != Status.Deleted
+                    && p.IsActive
                     && p.ValidFrom.Date <= today
                     && (p.ValidTo == null || p.ValidTo.Value.Date >= today))
                 .OrderByDescending(p => p.ValidFrom)
-                .Select(p => p.UnitPrice)
+                .ThenByDescending(p => p.CreatedDate)
+                .Select(p => (decimal?)p.UnitPrice)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return active;
+            return latestAnyCurrencyPrice ?? 0m;
         }
 
         private async Task RecalculateGroupTotalAsync(Guid groupId, string userName, CancellationToken cancellationToken)
