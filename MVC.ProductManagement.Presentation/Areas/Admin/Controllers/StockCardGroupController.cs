@@ -54,31 +54,35 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return NotFound();
 
             var cards = await _groupService.SearchStockCardsAsync(q, 500);
-            ViewBag.StockCards = BuildGroupedStockCardSelectList(cards);
+            ViewBag.StockCardsByGroup = BuildGroupedStockCardSelectList(cards);
             ViewBag.SearchTerm = q;
             return View(detail);
         }
 
-        private static List<SelectListItem> BuildGroupedStockCardSelectList(IReadOnlyList<StockCardLookupDto> cards)
+        private static Dictionary<string, List<SelectListItem>> BuildGroupedStockCardSelectList(IReadOnlyList<StockCardLookupDto> cards)
         {
             var orderedPrefixes = new[] { "SA", "SB", "SC", "SD", "SE", "SF", "SG" };
-            var groups = orderedPrefixes.ToDictionary(prefix => prefix, prefix => new SelectListGroup { Name = $"{prefix} Grubu" });
-            var otherGroup = new SelectListGroup { Name = "Diğer" };
 
-            return cards
+            var grouped = cards
                 .OrderBy(x => x.StockCode8)
-                .Select(x =>
+                .GroupBy(x =>
                 {
                     var prefix = (x.StockCode8 ?? string.Empty).Trim().ToUpperInvariant();
                     prefix = prefix.Length >= 2 ? prefix[..2] : prefix;
-                    var targetGroup = groups.TryGetValue(prefix, out var grouped) ? grouped : otherGroup;
-
-                    return new SelectListItem($"{x.StockCode8} - {x.Description}", x.StockCardId.ToString())
-                    {
-                        Group = targetGroup
-                    };
+                    return orderedPrefixes.Contains(prefix) ? prefix : "Diger";
                 })
-                .ToList();
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(x => new SelectListItem($"{x.StockCode8} - {x.Description}", x.StockCardId.ToString())).ToList());
+
+            var result = new Dictionary<string, List<SelectListItem>>();
+            foreach (var prefix in orderedPrefixes)
+            {
+                result[prefix] = grouped.TryGetValue(prefix, out var items) ? items : new List<SelectListItem>();
+            }
+
+            result["Diger"] = grouped.TryGetValue("Diger", out var otherItems) ? otherItems : new List<SelectListItem>();
+            return result;
         }
 
         [HttpPost]

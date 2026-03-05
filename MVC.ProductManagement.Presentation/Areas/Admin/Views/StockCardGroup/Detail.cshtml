@@ -4,6 +4,22 @@
     ViewData["Title"] = "Grup Detayı";
 }
 
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    var groupedCards = ViewBag.StockCardsByGroup as Dictionary<string, List<SelectListItem>> ?? new();
+    var groupLabels = new Dictionary<string, string>
+    {
+        ["SA"] = "SA Grubu (Cıvatalar)",
+        ["SB"] = "SB Grubu (Somunlar)",
+        ["SC"] = "SC Grubu (Rondelalar)",
+        ["SD"] = "SD Grubu (Bağlantı Elemanları)",
+        ["SE"] = "SE Grubu (Elektrik Malzemeleri)",
+        ["SF"] = "SF Grubu (Aksesuarlar)",
+        ["SG"] = "SG Grubu (Pim/Gupilya/Perçin)",
+        ["Diger"] = "Diğer"
+    };
+}
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <h2>@Model.GroupCode - @Model.Name</h2>
@@ -14,12 +30,32 @@
     <div class="card mb-4">
         <div class="card-header">Satır Ekle</div>
         <div class="card-body">
-            <form asp-action="AddItem" method="post" class="row g-2">
+            <form asp-action="AddItem" method="post" class="row g-2" id="group-item-add-form">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="groupId" value="@Model.Id" />
-                <div class="col-md-8">
-                    <select class="form-select" name="stockCardId" asp-items="ViewBag.StockCards"></select>
+                <input type="hidden" id="selectedStockCardId" name="stockCardId" />
+
+                <div class="col-12">
+                    <div class="row g-2">
+                        @foreach (var groupKey in new[] { "SA", "SB", "SC", "SD", "SE", "SF", "SG", "Diger" })
+                        {
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">@groupLabels[groupKey]</label>
+                                <select class="form-select stock-group-select" data-group="@groupKey">
+                                    <option value="">Seçiniz...</option>
+                                    @if (groupedCards.TryGetValue(groupKey, out var options) && options.Any())
+                                    {
+                                        foreach (var option in options)
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        }
+                    </div>
                 </div>
+
                 <div class="col-md-2">
                     <input class="form-control" type="number" name="quantity" min="1" value="1" />
                 </div>
@@ -62,3 +98,32 @@
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const selects = Array.from(document.querySelectorAll('.stock-group-select'));
+            const hiddenInput = document.getElementById('selectedStockCardId');
+            const form = document.getElementById('group-item-add-form');
+
+            selects.forEach(current => {
+                current.addEventListener('change', () => {
+                    if (!current.value) {
+                        hiddenInput.value = '';
+                        return;
+                    }
+
+                    hiddenInput.value = current.value;
+                    selects.filter(s => s !== current).forEach(other => other.value = '');
+                });
+            });
+
+            form?.addEventListener('submit', (event) => {
+                if (!hiddenInput.value) {
+                    event.preventDefault();
+                    alert('Lütfen SA/SB/SC ... dropdownlarından bir stok kodu seçiniz.');
+                }
+            });
+        })();
+    </script>
+}

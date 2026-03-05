@@ -196,176 +196,37 @@
             <li class="nav-heading">Stok Kodları</li>
 
             <li class="nav-item">
-                <a asp-area="Admin" asp-controller="StockCardGroup" asp-action="Create" class="nav-link collapsed">
-                    <i class="bi bi-collection-fill"></i>
-                    <span>Stok Kodu Grubu Oluştur</span>
-                </a>
-            </li>
-
-            <!-- ✅ SA - CIVATA (ALT MENÜ) -->
-            <li class="nav-item">
                 <a class="nav-link collapsed"
-                   data-bs-target="#sa-nav"
+                   data-bs-target="#stock-management-nav"
                    data-bs-toggle="collapse"
                    href="#">
-                    <i class="bi bi-gear-fill text-primary"></i>
-                    <span>SA - Cıvatalar</span>
+                    <i class="bi bi-diagram-3-fill"></i>
+                    <span>Stok Kodu Yönetimi</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul id="sa-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <ul id="stock-management-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                        <a asp-area="Admin" asp-controller="SAStockCode" asp-action="Index">
-                            <i class="bi bi-list-ul"></i><span>Listele</span>
+                        <a data-bs-target="#stock-codes-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-list-ul"></i><span>Stok Kodları</span><i class="bi bi-chevron-down ms-auto"></i>
                         </a>
+                        <ul id="stock-codes-nav" class="nav-content collapse">
+                            <li><a asp-area="Admin" asp-controller="SAStockCode" asp-action="Index"><i class="bi bi-circle"></i><span>SA</span></a></li>
+                            <li><a asp-area="Admin" asp-controller="SBStockCode" asp-action="Index"><i class="bi bi-circle"></i><span>SB</span></a></li>
+                            <li><a asp-area="Admin" asp-controller="SCStockCode" asp-action="Index"><i class="bi bi-circle"></i><span>SC</span></a></li>
+                            <li><a asp-area="Admin" asp-controller="SDStockCode" asp-action="Index"><i class="bi bi-circle"></i><span>SD</span></a></li>
+                            <li><a asp-area="Admin" asp-controller="SEStockCode" asp-action="Index"><i class="bi bi-circle"></i><span>SE</span></a></li>
+                            <li><a asp-area="Admin" asp-controller="SFStockCode" asp-action="Index"><i class="bi bi-circle"></i><span>SF</span></a></li>
+                            <li><a asp-area="Admin" asp-controller="SGStockCode" asp-action="Index"><i class="bi bi-circle"></i><span>SG</span></a></li>
+                        </ul>
                     </li>
                     <li>
-                        <a asp-area="Admin" asp-controller="SAStockCode" asp-action="Generate">
-                            <i class="bi bi-plus-circle"></i><span>Yeni Kod Üret</span>
+                        <a data-bs-target="#group-codes-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-collection"></i><span>Grup Kodları</span><i class="bi bi-chevron-down ms-auto"></i>
                         </a>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- ✅ SB - SOMUN -->
-            <li class="nav-item">
-                <a class="nav-link collapsed"
-                   data-bs-target="#sb-nav"
-                   data-bs-toggle="collapse"
-                   href="#">
-                    <i class="bi bi-hexagon text-success"></i>
-                    <span>SB - Somunlar</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="sb-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a asp-area="Admin" asp-controller="SBStockCode" asp-action="Index">
-                            <i class="bi bi-list-ul"></i><span>Listele</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Admin" asp-controller="SBStockCode" asp-action="Generate">
-                            <i class="bi bi-plus-circle"></i><span>Yeni Kod Üret</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- ✅ SC - RONDELA -->
-            <li class="nav-item">
-                <a class="nav-link collapsed"
-                   data-bs-target="#sc-nav"
-                   data-bs-toggle="collapse"
-                   href="#">
-                    <i class="bi bi-circle text-warning"></i>
-                    <span>SC - Rondelalar</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="sc-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a asp-area="Admin" asp-controller="SCStockCode" asp-action="Index">
-                            <i class="bi bi-list-ul"></i><span>Listele</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Admin" asp-controller="SCStockCode" asp-action="Generate">
-                            <i class="bi bi-plus-circle"></i><span>Yeni Kod Üret</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- ✅ SD - BAĞLANTI ELEMANLARI -->
-            <li class="nav-item">
-                <a class="nav-link collapsed"
-                   data-bs-target="#sd-nav"
-                   data-bs-toggle="collapse"
-                   href="#">
-                    <i class="bi bi-link-45deg text-danger"></i>
-                    <span>SD - Bağlantı Elemanları</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="sd-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a asp-area="Admin" asp-controller="SDStockCode" asp-action="Index">
-                            <i class="bi bi-list-ul"></i><span>Listele</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Admin" asp-controller="SDStockCode" asp-action="Generate">
-                            <i class="bi bi-plus-circle"></i><span>Yeni Kod Üret</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- ✅ SE - ELEKTRİK MALZEMELERİ -->
-            <li class="nav-item">
-                <a class="nav-link collapsed"
-                   data-bs-target="#se-nav"
-                   data-bs-toggle="collapse"
-                   href="#">
-                    <i class="bi bi-lightning-charge text-warning"></i>
-                    <span>SE - Elektrik Malzemeleri</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="se-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a asp-area="Admin" asp-controller="SEStockCode" asp-action="Index">
-                            <i class="bi bi-list-ul"></i><span>Listele</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Admin" asp-controller="SEStockCode" asp-action="Generate">
-                            <i class="bi bi-plus-circle"></i><span>Yeni Kod Üret</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- ✅ SF - AKSESUARLAR -->
-            <li class="nav-item">
-                <a class="nav-link collapsed"
-                   data-bs-target="#sf-nav"
-                   data-bs-toggle="collapse"
-                   href="#">
-                    <i class="bi bi-tools text-info"></i>
-                    <span>SF - Aksesuarlar</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="sf-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a asp-area="Admin" asp-controller="SFStockCode" asp-action="Index">
-                            <i class="bi bi-list-ul"></i><span>Listele</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Admin" asp-controller="SFStockCode" asp-action="Generate">
-                            <i class="bi bi-plus-circle"></i><span>Yeni Kod Üret</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- ✅ SG - PİM/GUPİLYA/PERÇİN -->
-            <li class="nav-item">
-                <a class="nav-link collapsed"
-                   data-bs-target="#sg-nav"
-                   data-bs-toggle="collapse"
-                   href="#">
-                    <i class="bi bi-pin-angle text-secondary"></i>
-                    <span>SG - Pim/Gupilya/Perçin</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="sg-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a asp-area="Admin" asp-controller="SGStockCode" asp-action="Index">
-                            <i class="bi bi-list-ul"></i><span>Listele</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-area="Admin" asp-controller="SGStockCode" asp-action="Generate">
-                            <i class="bi bi-plus-circle"></i><span>Yeni Kod Üret</span>
-                        </a>
+                        <ul id="group-codes-nav" class="nav-content collapse">
+                            <li><a asp-area="Admin" asp-controller="StockCardGroup" asp-action="Index"><i class="bi bi-circle"></i><span>Gruplar Listesi</span></a></li>
+                            <li><a asp-area="Admin" asp-controller="StockCardGroup" asp-action="Create"><i class="bi bi-plus-circle"></i><span>Grup Oluştur</span></a></li>
+                        </ul>
                     </li>
                 </ul>
             </li>
