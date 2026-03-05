@@ -16,6 +16,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
     public class StockCardPriceService : IStockCardPriceService
     {
         private readonly AppDbContext _context;
+        private const string PriceCurrency = "EUR";
 
         public StockCardPriceService(AppDbContext context)
         {
@@ -24,7 +25,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
 
         public async Task<ActivePriceDto> GetActivePriceAsync(
             Guid stockCardId,
-            string currency = "TRY",
+            string currency = "EUR",
             CancellationToken cancellationToken = default)
         {
             var now = DateTime.UtcNow;
@@ -33,7 +34,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             return await _context.StockCardPrices
                 .AsNoTracking()
                 .Where(p => p.StockCardId == stockCardId
-                    && p.Currency == currency
+                    && (p.Currency ?? string.Empty).Trim().ToUpper() == PriceCurrency
                     && p.IsActive
                     && p.Status != Status.Deleted
                     && p.ValidFrom.Date <= today
@@ -59,7 +60,8 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
         {
             var prices = await _context.StockCardPrices
                 .AsNoTracking()
-                .Where(p => p.StockCardId == stockCardId && p.Status != Status.Deleted)
+                 .Where(p => p.StockCardId == stockCardId && p.Status != Status.Deleted
+                    && (p.Currency ?? string.Empty).Trim().ToUpper() == PriceCurrency)
                 .OrderByDescending(p => p.CreatedDate) // ✅ Oluşturulma tarihine göre sırala
                 .Select(p => new PriceDto
                 {
@@ -104,7 +106,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             // ✅ 2. Aynı currency için eski aktif fiyatları pasifleştir
             var existingActivePrices = await _context.StockCardPrices
                 .Where(p => p.StockCardId == createDto.StockCardId
-                         && p.Currency == createDto.Currency.ToUpper()
+                         && (p.Currency ?? string.Empty).Trim().ToUpper() == PriceCurrency
                          && p.IsActive
                          && p.Status != Status.Deleted)
                 .ToListAsync(cancellationToken);
@@ -122,7 +124,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             {
                 Id = Guid.NewGuid(),
                 StockCardId = createDto.StockCardId,
-                Currency = createDto.Currency.ToUpper(),
+                Currency = PriceCurrency,
                 UnitPrice = createDto.UnitPrice,
                 ValidFrom = createDto.ValidFrom.Date,
                 ValidTo = createDto.ValidTo?.Date,
@@ -234,7 +236,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
         public async Task<PriceDto> GetPriceAtDateAsync(
             Guid stockCardId,
             DateTime date,
-            string currency = "TRY",
+            string currency = "EUR",
             CancellationToken cancellationToken = default)
         {
             var atDate = date.Date;
@@ -242,7 +244,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             return await _context.StockCardPrices
                 .AsNoTracking()
                 .Where(p => p.StockCardId == stockCardId
-                    && p.Currency == currency
+                    && (p.Currency ?? string.Empty).Trim().ToUpper() == PriceCurrency
                     && p.Status != Status.Deleted
                     && p.ValidFrom.Date <= atDate
                     && (p.ValidTo == null || p.ValidTo.Value.Date >= atDate))
