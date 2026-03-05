@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
 {
     /// <summary>
-    /// SA Stok Kartı Detay DTO
+    /// SA Stok Kartı Detay DTOss
     /// </summary>
     public class SAStockCardDetailDto
     {
