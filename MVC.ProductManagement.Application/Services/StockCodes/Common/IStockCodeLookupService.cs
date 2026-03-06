@@ -12,7 +12,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
     /// </summary>
     public interface IStockCodeLookupService
     {
-        Task<IReadOnlyList<LookupDto>> GetAllFluidsAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyList<LookupDto>> GetSProductGroupsAsync(CancellationToken cancellationToken = default);
     }
 }

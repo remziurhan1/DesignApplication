@@ -55,7 +55,7 @@ namespace MVC.ProductManagement.Application.Services.Export
 
                 WriteDetailHeader(ws, ref row, ColorSA);
                 WriteDetailInfo(ws, ref row, detail.StockCode8, detail.Prefix4, detail.Serial4,
-                    detail.ProductCode, detail.ProductName, detail.FluidCode, detail.FluidName,
+                    detail.ProductCode, detail.ProductName,
                     detail.Description, detail.CreatedDate, detail.CreatedBy);
 
                 WriteFeatures(ws, ref row, detail.FeatureSelections
@@ -98,7 +98,7 @@ namespace MVC.ProductManagement.Application.Services.Export
 
                 WriteDetailHeader(ws, ref row, ColorSB);
                 WriteDetailInfo(ws, ref row, detail.StockCode8, detail.Prefix4, detail.Serial4,
-                    detail.ProductCode, detail.ProductName, detail.FluidCode, detail.FluidName,
+                    detail.ProductCode, detail.ProductName,
                     detail.Description, detail.CreatedDate, detail.CreatedBy);
 
                 WriteFeatures(ws, ref row, detail.FeatureSelections
@@ -141,7 +141,7 @@ namespace MVC.ProductManagement.Application.Services.Export
 
                 WriteDetailHeader(ws, ref row, ColorSC);
                 WriteDetailInfo(ws, ref row, detail.StockCode8, detail.Prefix4, detail.Serial4,
-                    detail.ProductCode, detail.ProductName, detail.FluidCode, detail.FluidName,
+                    detail.ProductCode, detail.ProductName,
                     detail.Description, detail.CreatedDate, detail.CreatedBy);
 
                 WriteFeatures(ws, ref row, detail.FeatureSelections
@@ -184,7 +184,7 @@ namespace MVC.ProductManagement.Application.Services.Export
 
                 WriteDetailHeader(ws, ref row, ColorSF);
                 WriteDetailInfo(ws, ref row, detail.StockCode8, detail.Prefix4, detail.Serial4,
-                    detail.ProductCode, detail.ProductName, detail.FluidCode, detail.FluidName,
+                    detail.ProductCode, detail.ProductName,
                     detail.Description, detail.CreatedDate, detail.CreatedBy);
 
                 WriteFeatures(ws, ref row, detail.FeatureSelections
@@ -260,17 +260,12 @@ namespace MVC.ProductManagement.Application.Services.Export
         private void WriteDetailInfo(ExcelWorksheet ws, ref int row,
             string stockCode, string prefix, int serial,
             string productCode, string productName,
-            string? fluidCode, string? fluidName,
             string description, DateTime createdDate, string createdBy)
         {
             AddRow(ws, ref row, "Stok Kodu", stockCode, isBold: true);
             AddRow(ws, ref row, "Prefix", prefix);
             AddRow(ws, ref row, "Seri No", serial.ToString("0000"));
             AddRow(ws, ref row, "Ürün", $"{productCode} - {productName}");
-
-            if (!string.IsNullOrWhiteSpace(fluidCode))
-                AddRow(ws, ref row, "Fluid", $"{fluidCode} - {fluidName}");
-
             AddRow(ws, ref row, "Açıklama", description);
             AddRow(ws, ref row, "Oluşturulma", createdDate.ToString("dd.MM.yyyy HH:mm:ss"));
             AddRow(ws, ref row, "Oluşturan", createdBy);

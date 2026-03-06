@@ -15,7 +15,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SH
         private readonly ISProductRepositories _productRepo;
         private readonly IStockSequenceRepositories _sequenceRepo;
         private readonly IStockCardRepositories _stockCardRepo;
-        private readonly IFluidRepositories _fluidRepo;
         private readonly ISProductGroupRepositories _groupRepo;
         private readonly AppDbContext _context;
 
@@ -23,14 +22,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SH
             ISProductRepositories productRepo,
             IStockSequenceRepositories sequenceRepo,
             IStockCardRepositories stockCardRepo,
-            IFluidRepositories fluidRepo,
             ISProductGroupRepositories groupRepo,
             AppDbContext context)
         {
             _productRepo = productRepo;
             _sequenceRepo = sequenceRepo;
             _stockCardRepo = stockCardRepo;
-            _fluidRepo = fluidRepo;
             _groupRepo = groupRepo;
             _context = context;
         }
@@ -104,12 +101,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SH
 
             var prefix4 = product.Code; // SHA0, SHA1...
 
-            // 2) ✅ Akışkan yok - Default kullan
-            var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
-            var defaultFluid = allFluids.FirstOrDefault(x => x.Code == "NONE")
-                                ?? allFluids.FirstOrDefault(x => x.Code == "A")
-                                ?? allFluids.First();
-
             // 3) ✅ OptionKey oluştur (feature seçimlerinden)
             var optionKey = await BuildOptionKeyAsync(request.SelectedFeatureValues, cancellationToken);
 
@@ -119,7 +110,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SH
 
             // 4) ✅ Duplicate kontrol (ürün + optionKey)
             var existing = await _stockCardRepo.GetAsync(x =>
-                    x.FluidId == defaultFluid.Id &&
                     x.SProductGroupId == shGroupId &&
                     x.SProductId == request.SProductId &&
                     x.OptionKey == optionKey,
@@ -168,7 +158,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SH
             var card = new StockCard
             {
                 Id = Guid.NewGuid(),
-                FluidId = defaultFluid.Id,
                 SProductGroupId = shGroupId,
                 SProductId = request.SProductId,
                 Prefix4 = prefix4,

@@ -8,7 +8,6 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.S
 {
     public class SfStockCodeGenerateRequestDto
     {
-        public Guid FluidId { get; set; }
         public Guid SProductId { get; set; } // F0, F1, F2...
         public Dictionary<Guid, Guid> SelectedFeatureValues { get; set; } = new();
         // Key: FeatureId (PN, DN, SURFACE)

@@ -12,8 +12,6 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.SB
         public Guid ProductId { get; set; }
         public string ProductCode { get; set; } = string.Empty;
         public string ProductName { get; set; } = string.Empty;
-        public string? FluidCode { get; set; }
-        public string? FluidName { get; set; }
         public string Description { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; } = string.Empty;

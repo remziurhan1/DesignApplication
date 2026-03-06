@@ -14,7 +14,6 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.S
         public string Prefix4 { get; set; } = default!;
         public int Serial4 { get; set; }
 
-        public string FluidCode { get; set; } = default!;
         public string GroupCode { get; set; } = default!; // A..H
         public string ProductCode { get; set; } = default!;
     }

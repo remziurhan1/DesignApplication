@@ -107,7 +107,6 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositorie
             return await _context.Set<StockCard>()
                 .AsNoTracking()
                 .Include(sc => sc.SProduct)
-                .Include(sc => sc.Fluid)
                 .FirstOrDefaultAsync(sc => sc.Id == stockCardId && !sc.IsDeleted, cancellationToken);
         }
 
@@ -118,7 +117,6 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositorie
             var query = _context.Set<StockCard>()
                 .AsNoTracking()
                 .Include(sc => sc.SProduct)
-                .Include(sc => sc.Fluid)
                 .Where(sc => !sc.IsDeleted);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))

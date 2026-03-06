@@ -21,7 +21,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         private readonly ISProductRepositories _productRepo;
         private readonly IStockSequenceRepositories _sequenceRepo;
         private readonly IStockCardRepositories _stockCardRepo;
-        private readonly IFluidRepositories _fluidRepo;
         private readonly ISProductGroupRepositories _groupRepo;
         private readonly ISAStockCardRepository _saRepo;
 
@@ -29,14 +28,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             ISProductRepositories productRepo,
             IStockSequenceRepositories sequenceRepo,
             IStockCardRepositories stockCardRepo,
-            IFluidRepositories fluidRepo,
             ISProductGroupRepositories groupRepo,
             ISAStockCardRepository saRepo)
         {
             _productRepo = productRepo;
             _sequenceRepo = sequenceRepo;
             _stockCardRepo = stockCardRepo;
-            _fluidRepo = fluidRepo;
             _groupRepo = groupRepo;
             _saRepo = saRepo;
         }
@@ -119,10 +116,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
 
             var prefix4 = product.Code;
 
-            // 2) Default fluid
-            var allFluids = await _fluidRepo.GetAllAsync(tracking: false);
-            var defaultFluid = allFluids.FirstOrDefault(x => x.Code == "A") ?? allFluids.First();
-
             // 3) Kural tabanlı seçimleri doğrula + sabit değerlerle birleştir
             var allSelections = await BuildValidatedSelectionsForProductAsync(
                 request.SProductId,
@@ -134,7 +127,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
 
             // 5) Duplicate kontrol
             var existing = await _stockCardRepo.GetAsync(x =>
-                    x.FluidId == defaultFluid.Id &&
                     x.SProductGroupId == saGroupId &&
                     x.SProductId == request.SProductId &&
                     x.OptionKey == optionKey,
@@ -175,7 +167,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 var card = new StockCard
                 {
                     Id = Guid.NewGuid(),
-                    FluidId = defaultFluid.Id,
                     SProductGroupId = saGroupId,
                     SProductId = request.SProductId,
                     Prefix4 = prefix4,
@@ -306,8 +297,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 Serial4 = sc.Serial4,
                 ProductCode = sc.SProduct.Code,
                 ProductName = sc.SProduct.Name,
-                FluidCode = sc.Fluid.Code,
-                FluidName = sc.Fluid.Name,
                 Description = sc.Description,
                 CreatedDate = sc.CreatedDate,
                 CreatedBy = sc.CreatedBy
@@ -346,9 +335,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 ProductId = card.SProductId,
                 ProductCode = card.SProduct.Code,
                 ProductName = card.SProduct.Name,
-                FluidId = card.FluidId ?? Guid.Empty,
-                FluidCode = card.Fluid.Code,
-                FluidName = card.Fluid.Name,
                 Description = card.Description,
                 OptionKey = card.OptionKey,
                 CreatedDate = card.CreatedDate,

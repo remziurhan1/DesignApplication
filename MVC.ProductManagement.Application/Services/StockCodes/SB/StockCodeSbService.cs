@@ -2,7 +2,6 @@
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SB;
 using MVC.ProductManagement.Application.Services.StockCodes.Common;
-using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using System;
@@ -195,20 +194,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SB
 
             sequence.LastNumber++;
             var serial = sequence.LastNumber;
-            // DEFAULT FLUID (B için)
-            var defaultFluid = await _db.Set<Fluid>()
-                .FirstOrDefaultAsync(x => x.Code == "B", ct);
 
-            if (defaultFluid == null)
-                throw new InvalidOperationException("B fluid tanımlı değil.");
-
-
-            // 9️⃣ StockCard oluştur (FluidId artık NULL olabilir)
+            // 9️⃣ StockCard oluştur
             var stockCard = new StockCard
             {
                 Id = Guid.NewGuid(),
 
-                FluidId = defaultFluid.Id,          // 🔥 EKLENDİ
                 SProductGroupId = product.SProductGroupId,
                 SProductId = product.Id,
                 StockSequenceId = sequence.Id,
