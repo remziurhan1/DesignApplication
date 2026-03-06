@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
-using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SA;
 using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using System;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         private readonly IStockCardRepositories _stockCardRepo;
         private readonly IFluidRepositories _fluidRepo;
         private readonly ISProductGroupRepositories _groupRepo;
-        private readonly AppDbContext _context;
+        private readonly ISAStockCardRepository _saRepo;
 
         public StockCodeSaService(
             ISProductRepositories productRepo,
@@ -32,58 +31,51 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             IStockCardRepositories stockCardRepo,
             IFluidRepositories fluidRepo,
             ISProductGroupRepositories groupRepo,
-            AppDbContext context)
+            ISAStockCardRepository saRepo)
         {
             _productRepo = productRepo;
             _sequenceRepo = sequenceRepo;
             _stockCardRepo = stockCardRepo;
             _fluidRepo = fluidRepo;
             _groupRepo = groupRepo;
-            _context = context;
+            _saRepo = saRepo;
         }
         /// <summary>
         /// ✅ 10. SA grubuna ait feature'ları getir
         /// </summary>
         public async Task<IReadOnlyList<FeatureDto>> GetAllFeaturesAsync(CancellationToken cancellationToken = default)
         {
-            // SA grubuna ait feature'ları filtrele
             var saFeatureCodes = new[]
             {
-        "STANDARD",
-        "THREAD_SYSTEM",
-        "METRIC",
-        "LENGTH",
-        "MATERIAL",
-        "STRENGTH",
-        "COATING",
-        "HEAD_TYPE"
-    };
+                "STANDARD",
+                "THREAD_SYSTEM",
+                "METRIC",
+                "LENGTH",
+                "MATERIAL",
+                "STRENGTH",
+                "COATING",
+                "HEAD_TYPE"
+            };
 
-            var features = await _context.Set<SFeature>()
-                .AsNoTracking()
-                .Include(f => f.Values)
-                .Where(f => saFeatureCodes.Contains(f.Code)) // ✅ Sadece SA feature'ları
-                .OrderBy(f => f.SortOrder)
-                .Select(f => new FeatureDto
-                {
-                    Id = f.Id,
-                    Code = f.Code,
-                    Name = f.Name,
-                    IsRequired = true,
-                    SortOrder = f.SortOrder,
-                    Values = f.Values
-                        .OrderBy(v => v.SortOrder)
-                        .Select(v => new FeatureValueDto
-                        {
-                            Id = v.Id,
-                            Code = v.Code,
-                            Name = v.Name,
-                            SortOrder = v.SortOrder
-                        }).ToList()
-                })
-                .ToListAsync(cancellationToken);
+            var features = await _saRepo.GetFeaturesByCodesAsync(saFeatureCodes, cancellationToken);
 
-            return features;
+            return features.Select(f => new FeatureDto
+            {
+                Id = f.Id,
+                Code = f.Code,
+                Name = f.Name,
+                IsRequired = true,
+                SortOrder = f.SortOrder,
+                Values = f.Values
+                    .OrderBy(v => v.SortOrder)
+                    .Select(v => new FeatureValueDto
+                    {
+                        Id = v.Id,
+                        Code = v.Code,
+                        Name = v.Name,
+                        SortOrder = v.SortOrder
+                    }).ToList()
+            }).ToList();
         }
         /// <summary>
         /// ✅ 1. SA Ürün listesi
@@ -104,47 +96,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         }
 
         public async Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductAsync(
-     Guid productId,
-     CancellationToken cancellationToken = default)
+            Guid productId,
+            CancellationToken cancellationToken = default)
         {
-            // SA grubuna ait feature'ları getir (ürün fark etmez, hepsi aynı)
-            var saFeatureCodes = new[]
-            {
-        "STANDARD",
-        "THREAD_SYSTEM",
-        "METRIC",
-        "LENGTH",
-        "MATERIAL",
-        "STRENGTH",
-        "COATING",
-        "HEAD_TYPE"
-    };
-
-            var features = await _context.Set<SFeature>()
-                .AsNoTracking()
-                .Include(f => f.Values)
-                .Where(f => saFeatureCodes.Contains(f.Code))
-                .OrderBy(f => f.SortOrder)
-                .Select(f => new FeatureDto
-                {
-                    Id = f.Id,
-                    Code = f.Code,
-                    Name = f.Name,
-                    IsRequired = true,
-                    SortOrder = f.SortOrder,
-                    Values = f.Values
-                        .OrderBy(v => v.SortOrder)
-                        .Select(v => new FeatureValueDto
-                        {
-                            Id = v.Id,
-                            Code = v.Code,
-                            Name = v.Name,
-                            SortOrder = v.SortOrder
-                        }).ToList()
-                })
-                .ToListAsync(cancellationToken);
-
-            return features;
+            // SA grubuna ait feature'lar ürün fark etmeksizin aynıdır — GetAllFeaturesAsync'i yeniden kullan
+            return await GetAllFeaturesAsync(cancellationToken);
         }
 
         /// <summary>
@@ -201,69 +157,79 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             var description = await BuildFeatureDescriptionAsync(allSelections, cancellationToken);
 
             // 7) Transaction
-            await using var tx = await _context.Database.BeginTransactionAsync(cancellationToken);
-
-            var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
-            if (seq == null)
-                throw new InvalidOperationException($"StockSequence yok: {prefix4}");
-
-            var nextSerial = seq.LastNumber + 1;
-            if (nextSerial > 9999)
-                throw new InvalidOperationException($"Seri no limiti aşıldı: {prefix4}");
-
-            seq.LastNumber = nextSerial;
-            await _sequenceRepo.UpdateAsync(seq);
-            await _sequenceRepo.SaveChangeAsync();
-
-            var card = new StockCard
+            var tx = await _saRepo.BeginTransactionAsync(cancellationToken);
+            try
             {
-                Id = Guid.NewGuid(),
-                FluidId = defaultFluid.Id,
-                SProductGroupId = saGroupId,
-                SProductId = request.SProductId,
-                Prefix4 = prefix4,
-                Serial4 = nextSerial,
-                StockCode8 = $"{prefix4}{nextSerial:0000}",
-                Description = description,
-                StockSequenceId = seq.Id,
-                OptionKey = optionKey,
-                CreatedBy = "SYSTEM",
-                CreatedDate = DateTime.UtcNow,
-                Status = Domain.Enums.Status.Added
-            };
+                var seq = await _sequenceRepo.GetAsync(x => x.Prefix4 == prefix4, tracking: true);
+                if (seq == null)
+                    throw new InvalidOperationException($"StockSequence yok: {prefix4}");
 
-            await _stockCardRepo.AddAsync(card);
-            await _stockCardRepo.SaveChangeAsync();
+                var nextSerial = seq.LastNumber + 1;
+                if (nextSerial > 9999)
+                    throw new InvalidOperationException($"Seri no limiti aşıldı: {prefix4}");
 
-            // 8) Feature seçimlerini kaydet
-            if (allSelections.Any())
-            {
-                var selections = allSelections.Select(kvp => new StockCardFeatureSelection
+                seq.LastNumber = nextSerial;
+                await _sequenceRepo.UpdateAsync(seq);
+                await _sequenceRepo.SaveChangeAsync();
+
+                var card = new StockCard
                 {
                     Id = Guid.NewGuid(),
-                    StockCardId = card.Id,
-                    SFeatureId = kvp.Key,
-                    SFeatureValueId = kvp.Value,
+                    FluidId = defaultFluid.Id,
+                    SProductGroupId = saGroupId,
+                    SProductId = request.SProductId,
+                    Prefix4 = prefix4,
+                    Serial4 = nextSerial,
+                    StockCode8 = $"{prefix4}{nextSerial:0000}",
+                    Description = description,
+                    StockSequenceId = seq.Id,
+                    OptionKey = optionKey,
                     CreatedBy = "SYSTEM",
                     CreatedDate = DateTime.UtcNow,
                     Status = Domain.Enums.Status.Added
-                }).ToList();
+                };
 
-                _context.Set<StockCardFeatureSelection>().AddRange(selections);
-                await _context.SaveChangesAsync(cancellationToken);
+                await _stockCardRepo.AddAsync(card);
+                await _stockCardRepo.SaveChangeAsync();
+
+                // 8) Feature seçimlerini kaydet
+                if (allSelections.Any())
+                {
+                    var selections = allSelections.Select(kvp => new StockCardFeatureSelection
+                    {
+                        Id = Guid.NewGuid(),
+                        StockCardId = card.Id,
+                        SFeatureId = kvp.Key,
+                        SFeatureValueId = kvp.Value,
+                        CreatedBy = "SYSTEM",
+                        CreatedDate = DateTime.UtcNow,
+                        Status = Domain.Enums.Status.Added
+                    }).ToList();
+
+                    await _saRepo.AddFeatureSelectionsAsync(selections, cancellationToken);
+                }
+
+                await _saRepo.CommitTransactionAsync(tx, cancellationToken);
+
+                return new SaStockCodeGenerateResultDto
+                {
+                    AlreadyExists = false,
+                    StockCardId = card.Id,
+                    StockCode8 = card.StockCode8,
+                    Prefix4 = card.Prefix4,
+                    Serial4 = card.Serial4,
+                    Description = card.Description
+                };
             }
-
-            await tx.CommitAsync(cancellationToken);
-
-            return new SaStockCodeGenerateResultDto
+            catch
             {
-                AlreadyExists = false,
-                StockCardId = card.Id,
-                StockCode8 = card.StockCode8,
-                Prefix4 = card.Prefix4,
-                Serial4 = card.Serial4,
-                Description = card.Description
-            };
+                await _saRepo.RollbackTransactionAsync(tx, cancellationToken);
+                throw;
+            }
+            finally
+            {
+                tx.Dispose();
+            }
         }
 
         private async Task<Dictionary<Guid, Guid>> BuildValidatedSelectionsForProductAsync(
@@ -273,18 +239,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         {
             requestSelections ??= new Dictionary<Guid, Guid>();
 
-            var rules = await _context.Set<SProductFeatureRule>()
-                .AsNoTracking()
-                .Where(r => r.SProductId == productId)
-                .ToListAsync(cancellationToken);
+            var rules = await _saRepo.GetProductFeatureRulesAsync(productId, cancellationToken);
 
             if (!rules.Any())
                 throw new InvalidOperationException("Bu ürün için feature kuralı bulunamadı.");
 
-            var valueRules = await _context.Set<SFeatureValueRule>()
-                .AsNoTracking()
-                .Where(r => r.SProductId == productId)
-                .ToListAsync(cancellationToken);
+            var valueRules = await _saRepo.GetFeatureValueRulesAsync(productId, cancellationToken);
 
             var result = new Dictionary<Guid, Guid>();
 
@@ -329,61 +289,29 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             SAStockCardFilterDto filter,
             CancellationToken cancellationToken = default)
         {
-            var query = _context.Set<StockCard>()
-                .AsNoTracking()
-                .Include(sc => sc.SProduct)
-                .Include(sc => sc.Fluid)
-                .Where(sc => !sc.IsDeleted);
+            var (stockCards, totalCount) = await _saRepo.GetFilteredStockCardsAsync(
+                filter.SearchTerm,
+                filter.ProductId,
+                filter.StartDate,
+                filter.EndDate,
+                filter.PageNumber,
+                filter.PageSize,
+                cancellationToken);
 
-            // Filtreleme
-            // Filtreleme
-            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+            var items = stockCards.Select(sc => new SAStockCardListItemDto
             {
-                var searchLower = filter.SearchTerm.ToLower().Trim();
-                query = query.Where(sc =>
-                    sc.StockCode8.ToLower().Contains(searchLower) ||
-                    sc.Description.ToLower().Contains(searchLower) ||
-                    sc.Prefix4.ToLower().Contains(searchLower));
-            }
-
-            if (filter.ProductId.HasValue)
-            {
-                query = query.Where(sc => sc.SProductId == filter.ProductId.Value);
-            }
-
-            if (filter.StartDate.HasValue)
-            {
-                query = query.Where(sc => sc.CreatedDate >= filter.StartDate.Value);
-            }
-
-            if (filter.EndDate.HasValue)
-            {
-                query = query.Where(sc => sc.CreatedDate <= filter.EndDate.Value);
-            }
-
-            // Toplam sayı
-            var totalCount = await query.CountAsync(cancellationToken);
-
-            // Pagination
-            var items = await query
-                .OrderByDescending(sc => sc.CreatedDate)
-                .Skip((filter.PageNumber - 1) * filter.PageSize)
-                .Take(filter.PageSize)
-                .Select(sc => new SAStockCardListItemDto
-                {
-                    Id = sc.Id,
-                    StockCode8 = sc.StockCode8,
-                    Prefix4 = sc.Prefix4,
-                    Serial4 = sc.Serial4,
-                    ProductCode = sc.SProduct.Code,
-                    ProductName = sc.SProduct.Name,
-                    FluidCode = sc.Fluid.Code,
-                    FluidName = sc.Fluid.Name,
-                    Description = sc.Description,
-                    CreatedDate = sc.CreatedDate,
-                    CreatedBy = sc.CreatedBy
-                })
-                .ToListAsync(cancellationToken);
+                Id = sc.Id,
+                StockCode8 = sc.StockCode8,
+                Prefix4 = sc.Prefix4,
+                Serial4 = sc.Serial4,
+                ProductCode = sc.SProduct.Code,
+                ProductName = sc.SProduct.Name,
+                FluidCode = sc.Fluid.Code,
+                FluidName = sc.Fluid.Name,
+                Description = sc.Description,
+                CreatedDate = sc.CreatedDate,
+                CreatedBy = sc.CreatedBy
+            }).ToList();
 
             return new SAStockCardListResultDto
             {
@@ -401,32 +329,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             Guid stockCardId,
             CancellationToken cancellationToken = default)
         {
-            var card = await _context.Set<StockCard>()
-                .AsNoTracking()
-                .Include(sc => sc.SProduct)
-                .Include(sc => sc.Fluid)
-                .FirstOrDefaultAsync(sc => sc.Id == stockCardId && !sc.IsDeleted, cancellationToken);
+            var card = await _saRepo.GetStockCardWithDetailsAsync(stockCardId, cancellationToken);
 
             if (card == null)
                 throw new InvalidOperationException("Stok kartı bulunamadı.");
 
             // Feature seçimlerini getir
-            var selections = await _context.Set<StockCardFeatureSelection>()
-                .AsNoTracking()
-                .Include(s => s.SFeature)
-                .Include(s => s.SFeatureValue)
-                .Where(s => s.StockCardId == stockCardId)
-                .OrderBy(s => s.SFeature.SortOrder)
-                .Select(s => new FeatureSelectionDto
-                {
-                    FeatureId = s.SFeatureId,
-                    FeatureName = s.SFeature.Name,
-                    ValueId = s.SFeatureValueId,
-                    ValueCode = s.SFeatureValue.Code,
-                    ValueName = s.SFeatureValue.Name,
-                    SortOrder = s.SFeature.SortOrder
-                })
-                .ToListAsync(cancellationToken);
+            var selections = await _saRepo.GetFeatureSelectionsWithDetailsAsync(stockCardId, cancellationToken);
 
             return new SAStockCardDetailDto
             {
@@ -445,6 +354,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 CreatedDate = card.CreatedDate,
                 CreatedBy = card.CreatedBy,
                 FeatureSelections = selections
+                    .Select(s => new FeatureSelectionDto
+                    {
+                        FeatureId = s.SFeatureId,
+                        FeatureName = s.SFeature.Name,
+                        ValueId = s.SFeatureValueId,
+                        ValueCode = s.SFeatureValue.Code,
+                        ValueName = s.SFeatureValue.Name,
+                        SortOrder = s.SFeature.SortOrder
+                    }).ToList()
             };
         }
 
@@ -455,10 +373,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             Guid stockCardId,
             CancellationToken cancellationToken = default)
         {
-            var selections = await _context.Set<StockCardFeatureSelection>()
-                .AsNoTracking()
-                .Where(sc => sc.StockCardId == stockCardId)
-                .ToListAsync(cancellationToken);
+            var selections = await _saRepo.GetFeatureSelectionsAsync(stockCardId, cancellationToken);
 
             if (!selections.Any())
                 throw new InvalidOperationException("Stok kartı bulunamadı.");
@@ -473,24 +388,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         }
 
         public async Task<bool> UpdateStockCardAsync(
-      SAStockCardUpdateDto updateDto,
-      string userName,
-      CancellationToken cancellationToken = default)
+            SAStockCardUpdateDto updateDto,
+            string userName,
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                var card = await _context.Set<StockCard>()
-                    .FirstOrDefaultAsync(sc => sc.Id == updateDto.StockCardId && !sc.IsDeleted, cancellationToken);
+                var card = await _stockCardRepo.GetAsync(sc => sc.Id == updateDto.StockCardId && !sc.IsDeleted, tracking: true);
 
                 if (card == null)
                     throw new InvalidOperationException("Stok kartı bulunamadı.");
 
                 // ✅ Sabit feature'ları ekle
                 var productId = card.SProductId;
-                var fixedRules = await _context.Set<SProductFeatureRule>()
-                    .AsNoTracking()
-                    .Where(r => r.SProductId == productId && r.IsFixed && r.FixedValueId != null)
-                    .ToListAsync(cancellationToken);
+                var fixedRules = await _saRepo.GetFixedProductFeatureRulesAsync(productId, cancellationToken);
 
                 // ✅ YENİ: Önce kullanıcı seçimlerini al, sonra sabit değerleri ekle
                 var allSelections = new Dictionary<Guid, Guid>();
@@ -519,14 +430,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 }
 
                 // ✅ Transaction başlat
-                await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+                var transaction = await _saRepo.BeginTransactionAsync(cancellationToken);
 
                 try
                 {
                     // ✅ 1. ESKİ KAYITLARI SİL (ExecuteDelete kullan - daha performanslı)
-                    await _context.Set<StockCardFeatureSelection>()
-                        .Where(fs => fs.StockCardId == updateDto.StockCardId)
-                        .ExecuteDeleteAsync(cancellationToken);
+                    await _saRepo.DeleteFeatureSelectionsAsync(updateDto.StockCardId, cancellationToken);
 
                     Console.WriteLine("[UPDATE] Old selections deleted");
 
@@ -562,8 +471,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                         throw new InvalidOperationException("Duplicate feature selection detected!");
                     }
 
-                    _context.Set<StockCardFeatureSelection>().AddRange(newSelections);
-                    await _context.SaveChangesAsync(cancellationToken);
+                    await _saRepo.AddFeatureSelectionsAsync(newSelections, cancellationToken);
 
                     Console.WriteLine("[UPDATE] New selections saved");
 
@@ -575,10 +483,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                     card.ModifiedDate = DateTime.UtcNow;
                     card.ModifiedBy = userName;
 
-                    await _context.SaveChangesAsync(cancellationToken);
+                    await _stockCardRepo.UpdateAsync(card);
+                    await _saRepo.SaveChangesAsync(cancellationToken);
 
                     // ✅ 4. TRANSACTION COMMIT
-                    await transaction.CommitAsync(cancellationToken);
+                    await _saRepo.CommitTransactionAsync(transaction, cancellationToken);
 
                     Console.WriteLine("[UPDATE] Transaction committed successfully");
                     return true;
@@ -587,8 +496,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 {
                     Console.WriteLine($"[UPDATE ERROR] {ex.Message}");
                     Console.WriteLine($"[UPDATE ERROR] Inner: {ex.InnerException?.Message}");
-                    await transaction.RollbackAsync(cancellationToken);
+                    await _saRepo.RollbackTransactionAsync(transaction, cancellationToken);
                     throw;
+                }
+                finally
+                {
+                    transaction.Dispose();
                 }
             }
             catch (Exception ex)
@@ -606,8 +519,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             string userName,
             CancellationToken cancellationToken = default)
         {
-            var card = await _context.Set<StockCard>()
-                .FirstOrDefaultAsync(sc => sc.Id == stockCardId && !sc.IsDeleted, cancellationToken);
+            var card = await _stockCardRepo.GetAsync(sc => sc.Id == stockCardId && !sc.IsDeleted, tracking: true);
 
             if (card == null)
                 throw new InvalidOperationException("Stok kartı bulunamadı.");
@@ -616,7 +528,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             card.DeletedDate = DateTime.Now;
             card.DeletedBy = userName;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _stockCardRepo.UpdateAsync(card);
+            await _saRepo.SaveChangesAsync(cancellationToken);
 
             return true;
         }
@@ -626,20 +539,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
         /// </summary>
         public async Task<List<FeatureValueDto>> GetFeatureValuesAsync(Guid featureId)
         {
-            var values = await _context.Set<SFeatureValue>()
-                .AsNoTracking()
-                .Where(fv => fv.SFeatureId == featureId)
-                .OrderBy(fv => fv.SortOrder)
-                .Select(fv => new FeatureValueDto
-                {
-                    Id = fv.Id,
-                    Code = fv.Code,
-                    Name = fv.Name,
-                    SortOrder = fv.SortOrder
-                })
-                .ToListAsync();
+            var values = await _saRepo.GetFeatureValuesByFeatureIdAsync(featureId);
 
-            return values;
+            return values.Select(fv => new FeatureValueDto
+            {
+                Id = fv.Id,
+                Code = fv.Code,
+                Name = fv.Name,
+                SortOrder = fv.SortOrder
+            }).ToList();
         }
 
         // ========== HELPER METHODS ==========
@@ -663,17 +571,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             var featureIds = selectedFeatureValues.Keys.ToList();
             var valueIds = selectedFeatureValues.Values.ToList();
 
-            var features = await _context.Set<SFeature>()
-                .AsNoTracking()
-                .Where(f => featureIds.Contains(f.Id))
-                .Select(f => new { f.Id, f.Code, f.SortOrder })
-                .ToListAsync(cancellationToken);
-
-            var values = await _context.Set<SFeatureValue>()
-                .AsNoTracking()
-                .Where(v => valueIds.Contains(v.Id))
-                .Select(v => new { v.Id, v.Code })
-                .ToListAsync(cancellationToken);
+            var features = await _saRepo.GetFeaturesByIdsAsync(featureIds, cancellationToken);
+            var values = await _saRepo.GetFeatureValuesByIdsAsync(valueIds, cancellationToken);
 
             var parts = selectedFeatureValues
                 .Select(kvp =>
@@ -684,16 +583,16 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                     return new { f.SortOrder, f.Code, ValueCode = v.Code };
                 })
                 .Where(x => x != null)
-                .OrderBy(x => x.SortOrder)
-                .Select(x => $"{x.Code}={x.ValueCode}")
+                .OrderBy(x => x!.SortOrder)
+                .Select(x => $"{x!.Code}={x.ValueCode}")
                 .ToList();
 
             return string.Join("|", parts);
         }
 
         private async Task<string> BuildFeatureDescriptionAsync(
-     Dictionary<Guid, Guid> selectedFeatureValues,
-     CancellationToken cancellationToken)
+            Dictionary<Guid, Guid> selectedFeatureValues,
+            CancellationToken cancellationToken)
         {
             if (selectedFeatureValues == null || !selectedFeatureValues.Any())
                 return string.Empty;
@@ -701,17 +600,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
             var featureIds = selectedFeatureValues.Keys.ToList();
             var valueIds = selectedFeatureValues.Values.ToList();
 
-            var features = await _context.Set<SFeature>()
-                .AsNoTracking()
-                .Where(f => featureIds.Contains(f.Id))
-                .Select(f => new { f.Id, f.Code })
-                .ToListAsync(cancellationToken);
-
-            var values = await _context.Set<SFeatureValue>()
-                .AsNoTracking()
-                .Where(v => valueIds.Contains(v.Id))
-                .Select(v => new { v.Id, v.Code })
-                .ToListAsync(cancellationToken);
+            var features = await _saRepo.GetFeaturesByIdsAsync(featureIds, cancellationToken);
+            var values = await _saRepo.GetFeatureValuesByIdsAsync(valueIds, cancellationToken);
 
             // Feature code → value code mapping
             var featureDict = selectedFeatureValues
@@ -723,7 +613,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                     return new { FeatureCode = f.Code, ValueCode = v.Code };
                 })
                 .Where(x => x != null)
-                .ToDictionary(x => x.FeatureCode, x => x.ValueCode);
+                .ToDictionary(x => x!.FeatureCode, x => x!.ValueCode);
 
             var parts = new List<string>();
 
@@ -781,17 +671,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 throw new InvalidOperationException("Ürün bulunamadı.");
 
             // Tüm feature'ları getir
-            var features = await _context.Set<SFeature>()
-                .AsNoTracking()
-                .OrderBy(f => f.SortOrder)
-                .ToListAsync(cancellationToken);
+            var features = await _saRepo.GetAllFeaturesOrderedAsync(cancellationToken);
 
-            // Bu ürün için feature kurallarını getir
-            var featureRules = await _context.Set<SProductFeatureRule>()
-                .AsNoTracking()
-                .Include(r => r.FixedValue)
-                .Where(r => r.SProductId == productId)
-                .ToListAsync(cancellationToken);
+            // Bu ürün için feature kurallarını getir (FixedValue include edilmiş)
+            var featureRules = await _saRepo.GetFixedProductFeatureRulesAsync(productId, cancellationToken);
 
             var formFeatures = new List<StockCodeSaFormFeatureDto>();
 
@@ -816,21 +699,16 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SA
                 // Eğer sabit değilse, izinli değerleri getir
                 if (!rule.IsFixed)
                 {
-                    var allowedValues = await _context.Set<SFeatureValueRule>()
-                        .AsNoTracking()
-                        .Include(r => r.SFeatureValue)
-                        .Where(r => r.SProductId == productId && r.SFeatureId == feature.Id)
-                        .OrderBy(r => r.SortOrder)
-                        .Select(r => new FeatureValueDto
+                    var allowedValues = await _saRepo.GetFeatureValueRulesByFeatureAsync(productId, feature.Id, cancellationToken);
+
+                    formFeature.AvailableValues = FeatureValueSortHelper.SortForUi(
+                        allowedValues.Select(r => new FeatureValueDto
                         {
                             Id = r.SFeatureValue.Id,
                             Code = r.SFeatureValue.Code,
                             Name = r.SFeatureValue.Name,
                             SortOrder = r.SortOrder
-                        })
-                        .ToListAsync(cancellationToken);
-
-                    formFeature.AvailableValues = FeatureValueSortHelper.SortForUi(allowedValues);
+                        }).ToList());
                 }
 
                 formFeatures.Add(formFeature);

@@ -1,4 +1,4 @@
-﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 
 namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
 {
