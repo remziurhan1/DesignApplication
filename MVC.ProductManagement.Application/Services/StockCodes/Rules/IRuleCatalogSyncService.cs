@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
 {
-    public interface ISaRuleCatalogSyncService
+    public interface IRuleCatalogSyncService
     {
         Task SyncAsync(CancellationToken cancellationToken = default);
     }

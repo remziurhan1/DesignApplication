@@ -12,11 +12,11 @@ builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices();
 var app = builder.Build();
 
-// SA kural kataloğunu runtime'da senkronize et (HasData migration şişmesini azaltmak için)
+// Kural kataloğunu runtime'da senkronize et (HasData migration şişmesini azaltmak için)
 using (var scope = app.Services.CreateScope())
 {
-    var saCatalogSync = scope.ServiceProvider.GetRequiredService<ISaRuleCatalogSyncService>();
-    await saCatalogSync.SyncAsync();
+    var ruleCatalogSync = scope.ServiceProvider.GetRequiredService<IRuleCatalogSyncService>();
+    await ruleCatalogSync.SyncAsync();
 }
 
 // Configure the HTTP request pipeline.
