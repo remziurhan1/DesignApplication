@@ -4,6 +4,7 @@ using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1764,17 +1765,29 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
         /// </summary>
         private async Task EnsureFeatureValuesAsync(Guid featureId, string featureName, List<string> codes, CancellationToken cancellationToken)
         {
+            static string NormalizeFeatureValueCode(string value)
+            {
+                return value.Trim().ToUpper(new CultureInfo("tr-TR"));
+            }
+
             var existing = await _db.Set<SFeatureValue>()
                 .AsNoTracking()
                 .Where(v => v.SFeatureId == featureId)
                 .Select(v => v.Code)
                 .ToListAsync(cancellationToken);
 
+            var existingNormalized = existing
+                .Select(NormalizeFeatureValueCode)
+                .ToHashSet(StringComparer.Ordinal);
+
+            var scheduledNormalized = new HashSet<string>(StringComparer.Ordinal);
+
             var toInsert = new List<SFeatureValue>();
             for (int i = 0; i < codes.Count; i++)
             {
                 var code = codes[i];
-                if (existing.Contains(code)) continue;
+                var normalizedCode = NormalizeFeatureValueCode(code);
+                if (existingNormalized.Contains(normalizedCode) || !scheduledNormalized.Add(normalizedCode)) continue;
 
                 toInsert.Add(new SFeatureValue
                 {
