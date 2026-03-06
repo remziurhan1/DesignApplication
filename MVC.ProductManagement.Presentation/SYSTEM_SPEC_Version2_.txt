@@ -24,7 +24,7 @@ CRYO-06-STR-20-V-26-A-1675
   │    │   │   │  │  │  │   │
   │    │   │   │  │  │  │   └── 1675:  İç tank çapı (mm)
   │    │   │   │  │  │  └────── A: Aboveground / U: Underground
-  │    │   │   │  │  └───────── 26: Basınç (bar)
+  │    │   │   │  │  └───────── 26: Basınç (bar)asdasafasd
   │    │   │   │  └──────────── V: Vertical / H: Horizontal
   │    │   │   └─────────────── 20: Hacim (m³)
   │    │   └──────���──────────── STR: Storage / TRN: Transport
