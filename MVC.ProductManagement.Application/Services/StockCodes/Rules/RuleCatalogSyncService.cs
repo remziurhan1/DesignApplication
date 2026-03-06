@@ -888,7 +888,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
 
             await EnsureFeatureValuesAsync(connectionTypeId, "CONNECTION_TYPE", new List<string>
             {
-                "REKOR", "TEE", "DIRSEK", "REDUKSIYON", "DIGER"
+                "Rekor", "Tee", "Dirsek", "Redüksiyon", "Flans", "Boru Boğazı/Bağlayıcı", "Diğer Bağlantı Elemanları", "Fittings"
             }, cancellationToken);
             await EnsureFeatureValuesAsync(sdMaterialId, "SD_MATERIAL", new List<string>
             {
@@ -916,25 +916,25 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
             var sdProductRules = new List<(string ProductCode, Guid FeatureId, bool IsFixed, Guid? FixedValueId)>
             {
                 // SDA0: HİDROLİK REKOR
-                ("SDA0", connectionTypeId, true,  FV("CONNECTION_TYPE", "REKOR")),
+                ("SDA0", connectionTypeId, true,  FV("CONNECTION_TYPE", "Rekor")),
                 ("SDA0", sdMaterialId,     false, null),
                 ("SDA0", connectionSizeId, false, null),
                 ("SDA0", sdStandardId,     false, null),
                 ("SDA0", sdCoatingId,      false, null),
                 // SDA1: HİDROLİK TEE
-                ("SDA1", connectionTypeId, true,  FV("CONNECTION_TYPE", "TEE")),
+                ("SDA1", connectionTypeId, true,  FV("CONNECTION_TYPE", "Tee")),
                 ("SDA1", sdMaterialId,     false, null),
                 ("SDA1", connectionSizeId, false, null),
                 ("SDA1", sdStandardId,     false, null),
                 ("SDA1", sdCoatingId,      false, null),
                 // SDA2: HİDROLİK DİRSEK
-                ("SDA2", connectionTypeId, true,  FV("CONNECTION_TYPE", "DIRSEK")),
+                ("SDA2", connectionTypeId, true,  FV("CONNECTION_TYPE", "Dirsek")),
                 ("SDA2", sdMaterialId,     false, null),
                 ("SDA2", connectionSizeId, false, null),
                 ("SDA2", sdStandardId,     false, null),
                 ("SDA2", sdCoatingId,      false, null),
                 // SDA3: HİDROLİK REDÜKSİYON
-                ("SDA3", connectionTypeId, true,  FV("CONNECTION_TYPE", "REDUKSIYON")),
+                ("SDA3", connectionTypeId, true,  FV("CONNECTION_TYPE", "Redüksiyon")),
                 ("SDA3", sdMaterialId,     false, null),
                 ("SDA3", connectionSizeId, false, null),
                 ("SDA3", sdStandardId,     false, null),
