@@ -4,6 +4,7 @@ using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -793,7 +794,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
             }, cancellationToken);
             await EnsureFeatureValuesAsync(scMaterialId, "SC_MATERIAL", new List<string>
             {
-                "CELiK", "ALUMiNYUM", "BAKIR", "PASLANMAZ", "PLASTIK"
+                "Karbon Çelik", "Alüminyum", "Bakır", "Paslanmaz Çelik AISI 304", "Paslanmaz Çelik AISI 316", "Pirinç"
             }, cancellationToken);
             await EnsureFeatureValuesAsync(scCoatingId, "SC_COATING", new List<string>
             {
@@ -811,43 +812,43 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
             {
                 // SCA0: RONDELA DÜZ ÇELİK
                 ("SCA0", washerTypeId, true,  FV("WASHER_TYPE", "DUZ")),
-                ("SCA0", scMaterialId, true,  FV("SC_MATERIAL", "CELiK")),
+                ("SCA0", scMaterialId, true,  FV("SC_MATERIAL", "Karbon Çelik")),
                 ("SCA0", scCoatingId,  false, null),
                 ("SCA0", scStandardId, false, null),
                 ("SCA0", scMetricId,   false, null),
                 // SCA1: RONDELA DÜZ ALÜMİNYUM
                 ("SCA1", washerTypeId, true,  FV("WASHER_TYPE", "DUZ")),
-                ("SCA1", scMaterialId, true,  FV("SC_MATERIAL", "ALUMiNYUM")),
+                ("SCA1", scMaterialId, true,  FV("SC_MATERIAL", "Alüminyum")),
                 ("SCA1", scCoatingId,  false, null),
                 ("SCA1", scStandardId, false, null),
                 ("SCA1", scMetricId,   false, null),
                 // SCA2: RONDELA DÜZ BAKIR
                 ("SCA2", washerTypeId, true,  FV("WASHER_TYPE", "DUZ")),
-                ("SCA2", scMaterialId, true,  FV("SC_MATERIAL", "BAKIR")),
+                ("SCA2", scMaterialId, true,  FV("SC_MATERIAL", "Bakır")),
                 ("SCA2", scCoatingId,  false, null),
                 ("SCA2", scStandardId, false, null),
                 ("SCA2", scMetricId,   false, null),
                 // SCA3: RONDELA DÜZ CROM (paslanmaz)
                 ("SCA3", washerTypeId, true,  FV("WASHER_TYPE", "DUZ")),
-                ("SCA3", scMaterialId, true,  FV("SC_MATERIAL", "PASLANMAZ")),
+                ("SCA3", scMaterialId, true,  FV("SC_MATERIAL", "Paslanmaz Çelik AISI 304")),
                 ("SCA3", scCoatingId,  false, null),
                 ("SCA3", scStandardId, false, null),
                 ("SCA3", scMetricId,   false, null),
                 // SCA4: RONDELA YAYLI ÇELİK
                 ("SCA4", washerTypeId, true,  FV("WASHER_TYPE", "YAYLI")),
-                ("SCA4", scMaterialId, true,  FV("SC_MATERIAL", "CELiK")),
+                ("SCA4", scMaterialId, true,  FV("SC_MATERIAL", "Karbon Çelik")),
                 ("SCA4", scCoatingId,  false, null),
                 ("SCA4", scStandardId, false, null),
                 ("SCA4", scMetricId,   false, null),
                 // SCA5: RONDELA YAYLI CROM
                 ("SCA5", washerTypeId, true,  FV("WASHER_TYPE", "YAYLI")),
-                ("SCA5", scMaterialId, true,  FV("SC_MATERIAL", "PASLANMAZ")),
+                ("SCA5", scMaterialId, true,  FV("SC_MATERIAL", "Paslanmaz Çelik AISI 304")),
                 ("SCA5", scCoatingId,  false, null),
                 ("SCA5", scStandardId, false, null),
                 ("SCA5", scMetricId,   false, null),
                 // SCA6: RONDELA TIRTIRLI ÇELİK
                 ("SCA6", washerTypeId, true,  FV("WASHER_TYPE", "TIRTIRLI")),
-                ("SCA6", scMaterialId, true,  FV("SC_MATERIAL", "CELiK")),
+                ("SCA6", scMaterialId, true,  FV("SC_MATERIAL", "Karbon Çelik")),
                 ("SCA6", scCoatingId,  false, null),
                 ("SCA6", scStandardId, false, null),
                 ("SCA6", scMetricId,   false, null),
@@ -1764,17 +1765,29 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
         /// </summary>
         private async Task EnsureFeatureValuesAsync(Guid featureId, string featureName, List<string> codes, CancellationToken cancellationToken)
         {
+            static string NormalizeFeatureValueCode(string value)
+            {
+                return value.Trim().ToUpper(new CultureInfo("tr-TR"));
+            }
+
             var existing = await _db.Set<SFeatureValue>()
                 .AsNoTracking()
                 .Where(v => v.SFeatureId == featureId)
                 .Select(v => v.Code)
                 .ToListAsync(cancellationToken);
 
+            var existingNormalized = existing
+                .Select(NormalizeFeatureValueCode)
+                .ToHashSet(StringComparer.Ordinal);
+
+            var scheduledNormalized = new HashSet<string>(StringComparer.Ordinal);
+
             var toInsert = new List<SFeatureValue>();
             for (int i = 0; i < codes.Count; i++)
             {
                 var code = codes[i];
-                if (existing.Contains(code)) continue;
+                var normalizedCode = NormalizeFeatureValueCode(code);
+                if (existingNormalized.Contains(normalizedCode) || !scheduledNormalized.Add(normalizedCode)) continue;
 
                 toInsert.Add(new SFeatureValue
                 {
