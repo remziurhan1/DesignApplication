@@ -1,6 +1,6 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör;
 
-namespace MVC.ProductManagement.Application.DTOs.StockCodes.Common
+namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Common
 {
     /// <summary>
     /// Stok Kartı Detay sayfası için tüm modülleri içeren ViewModel
