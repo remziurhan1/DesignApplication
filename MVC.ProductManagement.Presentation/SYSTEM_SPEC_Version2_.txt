@@ -17,7 +17,7 @@ Tank satış sürecini otomatikleştiren bir sistem.  Satışçılar dropdown'la
 
 ---
 
-## 🏷️ Tank Kodu Yapısı
+## 🏷️ Tank Kodu Yapısısasa
 
 ```
 CRYO-06-STR-20-V-26-A-1675
