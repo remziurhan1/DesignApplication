@@ -38,7 +38,6 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IAllowableStressRepository, AllowableStressRepository>();
             services.AddScoped<IEN13458Repository, EN13458Repository>();
             services.AddScoped<IStorageTypeRepositories, StorageTypeRepository>();
-            services.AddScoped<IFluidRepositories, FluidRepository>();
             services.AddScoped<ISProductGroupRepositories, SProductGroupRepository>();
             services.AddScoped<ISProductRepositories, SProductRepository>();
             services.AddScoped<ISAssemblyGroupRepositories, SAssemblyGroupRepository>();

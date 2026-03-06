@@ -120981,128 +120981,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.ToTable("StockCardFeatureSelections", (string)null);
                 });
 
-            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(1)
-                        .HasColumnType("nvarchar(1)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("Fluids", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("fad96a11-7e74-b43f-cf73-05634c562ed4"),
-                            Code = "A",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "LPG",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("8d9a8c60-96f0-8397-d386-d28a4227af6b"),
-                            Code = "B",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "LNG",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("340bada6-6b5b-b564-9a22-7e0fdfefa847"),
-                            Code = "C",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "LOX",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("6e446396-13b7-a81e-ab4d-29f9575f8a02"),
-                            Code = "D",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "LIN",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("f8c5cafe-ab0f-03d9-2474-d560a4c4fd0d"),
-                            Code = "E",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "CO2",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("b6c65425-5384-77e4-2ae5-8eabfab10acc"),
-                            Code = "F",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "FUEL",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("cce2e4bc-9165-9a86-8cfd-b9d9a1a156ad"),
-                            Code = "G",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "GOX",
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("2658013c-c697-d461-8ade-d7d1b0bdf25f"),
-                            Code = "H",
-                            CreatedBy = "SEED",
-                            CreatedDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "CNG",
-                            Status = 1
-                        });
-                });
-
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.PrefixRule", b =>
                 {
                     b.Property<Guid>("Id")
@@ -121121,9 +120999,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("FluidId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -121154,7 +121029,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.HasIndex("SProductId");
 
-                    b.HasIndex("FluidId", "SProductGroupId", "SProductId")
+                    b.HasIndex("SProductGroupId", "SProductId")
                         .IsUnique();
 
                     b.ToTable("PrefixRules", (string)null);
@@ -121179,9 +121054,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("FluidId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -121204,11 +121076,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FluidId");
-
                     b.HasIndex("SProductId");
 
-                    b.HasIndex("SProductGroupId", "FluidId", "SProductId")
+                    b.HasIndex("SProductGroupId", "SProductId")
                         .IsUnique();
 
                     b.ToTable("SPrefixRules", (string)null);
@@ -121336,9 +121206,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("FluidId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -121353,11 +121220,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FluidId");
-
                     b.HasIndex("SProductGroupId");
 
-                    b.HasIndex("CategoryId", "FluidId", "SProductGroupId")
+                    b.HasIndex("CategoryId", "SProductGroupId")
                         .IsUnique();
 
                     b.ToTable("SGroupFilterRules", (string)null);
@@ -128355,12 +128220,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.PrefixRule", b =>
                 {
-                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", "Fluid")
-                        .WithMany("PrefixRules")
-                        .HasForeignKey("FluidId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.SProductGroup", "SProductGroup")
                         .WithMany("PrefixRules")
                         .HasForeignKey("SProductGroupId")
@@ -128372,8 +128231,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasForeignKey("SProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Fluid");
 
                     b.Navigation("SProduct");
 
@@ -128382,12 +128239,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.S.SPrefixRule", b =>
                 {
-                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", "Fluid")
-                        .WithMany()
-                        .HasForeignKey("FluidId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.SProductGroup", "SProductGroup")
                         .WithMany()
                         .HasForeignKey("SProductGroupId")
@@ -128399,8 +128250,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasForeignKey("SProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Fluid");
 
                     b.Navigation("SProduct");
 
@@ -128425,12 +128274,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", "Fluid")
-                        .WithMany()
-                        .HasForeignKey("FluidId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.SProductGroup", "SProductGroup")
                         .WithMany()
                         .HasForeignKey("SProductGroupId")
@@ -128438,8 +128281,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-
-                    b.Navigation("Fluid");
 
                     b.Navigation("SProductGroup");
                 });
@@ -128652,11 +128493,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Navigation("ProductFeatures");
 
                     b.Navigation("Values");
-                });
-
-            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", b =>
-                {
-                    b.Navigation("PrefixRules");
                 });
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.SAssemblyGroup", b =>
