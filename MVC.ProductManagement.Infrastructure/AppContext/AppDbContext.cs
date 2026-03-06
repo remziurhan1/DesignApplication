@@ -46,7 +46,6 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<CapacityOption> CapacityOptions { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<ThermodynamicProperty> ThermodynamicProperties { get; set; }
-        public DbSet<Fluid> Fluids { get; set; }
         public DbSet<SProductGroup> SProductGroups { get; set; }
         public DbSet<SProduct> SProducts { get; set; }
         public DbSet<SAssemblyGroup> SAssemblyGroups { get; set; }

@@ -35,14 +35,6 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
             builder.HasIndex(x => x.StockCode8)
                    .IsUnique();
 
-            // ❌ ESKİ UNIQUE (bunu kaldırıyoruz)
-            // builder.HasIndex(x => new
-            // {
-            //     x.FluidId,
-            //     x.SProductGroupId,
-            //     x.SProductId
-            // }).IsUnique();
-
             // ✅ YENİ UNIQUE: aynı ürün + aynı feature seçiminde duplicate oluşmasın
             builder.HasIndex(x => new
             {
