@@ -142,7 +142,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.Features
             }
 
             // ========== 6. METRİK (ÇAP) ==========
-            // Not: Büyük metrik kataloğu runtime sync servisinde yönetiliyor (SaRuleCatalogSyncService).
+            // Not: Büyük metrik kataloğu runtime sync servisinde yönetiliyor (RuleCatalogSyncService).
             // HasData migration şişmesini azaltmak için seedte çekirdek set tutulur.
             var metrics = new[]
             {
