@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 
 namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
@@ -47,16 +46,10 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
             // ✅ YENİ UNIQUE: aynı ürün + aynı feature seçiminde duplicate oluşmasın
             builder.HasIndex(x => new
             {
-                x.FluidId,
                 x.SProductGroupId,
                 x.SProductId,
                 x.OptionKey
             }).IsUnique();
-
-            builder.HasOne(x => x.Fluid)
-                   .WithMany(x => x.StockCards)
-                   .HasForeignKey(x => x.FluidId)
-                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.SProductGroup)
                    .WithMany(x => x.StockCards)

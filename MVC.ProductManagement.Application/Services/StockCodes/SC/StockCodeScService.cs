@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SC;
-using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
@@ -130,14 +129,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SC
                 .FirstOrDefaultAsync(p => p.Id == request.SProductId, ct)
                 ?? throw new InvalidOperationException("Ürün bulunamadı.");
 
-            // 2️⃣ Default Fluid (SC = C)
-            var fluid = await _db.Set<Fluid>()
-                .FirstOrDefaultAsync(f => f.Code == "C", ct);
-
-            if (fluid == null)
-                throw new InvalidOperationException("C fluid tanımlı değil.");
-
-            // 3️⃣ Selected values
+            // 2️⃣ Selected values
             var selectedValueIds = request.SelectedFeatureValues.Values.ToList();
 
             var selectedValues = await _db.Set<SFeatureValue>()
@@ -210,7 +202,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SC
             {
                 Id = Guid.NewGuid(),
 
-                FluidId = fluid.Id,
                 SProductGroupId = product.SProductGroupId,
                 SProductId = product.Id,
                 StockSequenceId = sequence.Id,

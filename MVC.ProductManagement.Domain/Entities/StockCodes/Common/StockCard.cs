@@ -30,9 +30,6 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Common
         public int Serial4 { get; set; }
         public string OptionKey { get; set; } = default!;
 
-        public Guid? FluidId { get; set; }
-        public virtual Fluid Fluid { get; set; } = default!;
-
         public Guid SProductGroupId { get; set; }
         public virtual SProductGroup SProductGroup { get; set; } = default!;
 

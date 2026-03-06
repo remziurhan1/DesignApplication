@@ -17,10 +17,6 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
         public string ProductCode { get; set; } = string.Empty;
         public string ProductName { get; set; } = string.Empty;
 
-        public Guid FluidId { get; set; }
-        public string FluidCode { get; set; } = string.Empty;
-        public string FluidName { get; set; } = string.Empty;
-
         public string Description { get; set; } = string.Empty;
         public string OptionKey { get; set; } = string.Empty;
 

@@ -865,10 +865,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<Guid?>("FluidId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -924,7 +920,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.HasIndex("StockSequenceId");
 
-                    b.HasIndex("FluidId", "SProductGroupId", "SProductId", "OptionKey")
+                    b.HasIndex("SProductGroupId", "SProductId", "OptionKey")
                         .IsUnique();
 
                     b.ToTable("StockCards", (string)null);
@@ -128173,12 +128169,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Common.StockCard", b =>
                 {
-                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", "Fluid")
-                        .WithMany("StockCards")
-                        .HasForeignKey("FluidId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.SAssemblyGroup", "SAssemblyGroup")
                         .WithMany("StockCards")
                         .HasForeignKey("SAssemblyGroupId")
@@ -128201,8 +128191,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasForeignKey("StockSequenceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Fluid");
 
                     b.Navigation("SAssemblyGroup");
 
@@ -128669,8 +128657,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Fluid", b =>
                 {
                     b.Navigation("PrefixRules");
-
-                    b.Navigation("StockCards");
                 });
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.SAssemblyGroup", b =>
