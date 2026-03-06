@@ -1,6 +1,7 @@
-using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
+using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Common;
 
-namespace MVC.ProductManagement.Application.DTOs.StockCodes.SA
+namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SA
 {
     /// <summary>
     /// SA Stok Kartı Detay ViewModel

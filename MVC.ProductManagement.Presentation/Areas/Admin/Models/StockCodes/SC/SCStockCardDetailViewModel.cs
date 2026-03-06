@@ -1,11 +1,7 @@
-﻿using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SC;
 
-namespace MVC.ProductManagement.Application.DTOs.StockCodes.SC
+namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.SC
 {
     public class SCStockCardDetailViewModel
     {
