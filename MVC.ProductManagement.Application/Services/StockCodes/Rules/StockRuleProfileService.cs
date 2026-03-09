@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
 {
     /// <summary>
-    /// SA / SF gibi ürün grupları için seed tabanlı kuralları tek bir profile dönüştürür.
+    /// S* ürün grupları için seed/rule tabanlı kuralları tek bir profile dönüştürür.
     /// Bu servis ileride Admin CRUD ekranları için "okuma modeli" olarak kullanılabilir.
     /// </summary>
     public class StockRuleProfileService : IStockRuleProfileService
@@ -28,8 +28,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
                 throw new InvalidOperationException("groupCode boş olamaz.");
 
             groupCode = groupCode.Trim().ToUpperInvariant();
-            if (groupCode != "SA" && groupCode != "SF")
-                throw new InvalidOperationException("Bu profil servisi şimdilik sadece SA ve SF destekler.");
+            if (!IsSupportedGroup(groupCode))
+                throw new InvalidOperationException("Desteklenmeyen grup kodu. Geçerli değerler: SA, SB, SC, SD, SE, SF, SG, SH.");
 
             var products = await _db.SProducts
                 .AsNoTracking()
@@ -58,7 +58,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
             var profile = new StockRuleProfileDto
             {
                 GroupCode = groupCode,
-                GroupName = groupCode == "SA" ? "Standart Parçalar - Cıvata/Perçin" : "Standart Parçalar - Aksesuar",
+                GroupName = GetGroupName(groupCode),
                 Products = new List<StockRuleProductDto>()
             };
 
@@ -106,6 +106,27 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Rules
             }
 
             return profile;
+        }
+
+        private static bool IsSupportedGroup(string groupCode)
+        {
+            return groupCode is "SA" or "SB" or "SC" or "SD" or "SE" or "SF" or "SG" or "SH";
+        }
+
+        private static string GetGroupName(string groupCode)
+        {
+            return groupCode switch
+            {
+                "SA" => "Standart Parçalar - Cıvata/Perçin",
+                "SB" => "Standart Parçalar - Somun",
+                "SC" => "Standart Parçalar - Rondela/Pul",
+                "SD" => "Standart Parçalar - D Grubu",
+                "SE" => "Standart Parçalar - E Grubu",
+                "SF" => "Standart Parçalar - Aksesuar",
+                "SG" => "Standart Parçalar - G Grubu",
+                "SH" => "Standart Parçalar - H Grubu",
+                _ => "Standart Parçalar"
+            };
         }
     }
 }

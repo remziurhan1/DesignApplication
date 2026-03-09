@@ -1,6 +1,6 @@
-# SA / SF Handler + Kural Servisi Mimarisi
+# S Grupları Handler + Kural Servisi Mimarisi
 
-Bu doküman SA ve SF ürün gruplarını seed'e bağımlı kalmadan servis kuralları ile yönetmek için hedef yapıyı özetler.
+Bu doküman S ürün gruplarını (SA, SB, SC, SD, SE, SF, SG, SH) seed'e bağımlı kalmadan servis kuralları ile yönetmek için hedef yapıyı özetler.
 
 ## 1) Mevcut Entity Tabanı (korunur)
 
@@ -29,7 +29,7 @@ Eklenen servis:
 
 Görev:
 
-- `SA` veya `SF` için ürün + feature + allowed value profilini DB'den okuyup tek DTO döndürmek.
+- Seçilen `S*` grup kodu için ürün + feature + allowed value profilini DB'den okuyup tek DTO döndürmek.
 - Bu DTO Admin CRUD ekranı için okunabilir model sağlar.
 
 ## 4) Admin uç noktası
@@ -37,13 +37,19 @@ Görev:
 Eklenen endpoint:
 
 - `GET /Admin/StockRuleProfile/Profile?groupCode=SA`
+- `GET /Admin/StockRuleProfile/Profile?groupCode=SB`
+- `GET /Admin/StockRuleProfile/Profile?groupCode=SC`
+- `GET /Admin/StockRuleProfile/Profile?groupCode=SD`
+- `GET /Admin/StockRuleProfile/Profile?groupCode=SE`
 - `GET /Admin/StockRuleProfile/Profile?groupCode=SF`
+- `GET /Admin/StockRuleProfile/Profile?groupCode=SG`
+- `GET /Admin/StockRuleProfile/Profile?groupCode=SH`
 
 Bu endpoint JSON profile döner, böylece UI tarafında kural yönetim ekranı hızlıca inşa edilebilir.
 
 ## 5) Önerilen CRUD fazları
 
-1. **Read**: Profil endpointi ile SA/SF kurallarını listele
+1. **Read**: Profil endpointi ile ilgili S grubu kurallarını listele
 2. **Create/Update**: Feature rule ve value rule ekleme/güncelleme handler'ları
 3. **Delete**: Rule silme handler'ları
 4. **Publish/Audit**: Kural versiyonlama ve değişiklik logu
