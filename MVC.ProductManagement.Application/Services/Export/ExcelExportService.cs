@@ -1,6 +1,10 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.SA;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SB;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SC;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SH;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SG;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SE;
+using MVC.ProductManagement.Application.DTOs.StockCodes.SD;
 using MVC.ProductManagement.Application.DTOs.StockCodes.SF;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -20,6 +24,10 @@ namespace MVC.ProductManagement.Application.Services.Export
         private static readonly Color ColorSB = Color.FromArgb(70, 130, 90);   // Yeşil
         private static readonly Color ColorSC = Color.FromArgb(150, 100, 180); // Mor
         private static readonly Color ColorSF = Color.FromArgb(190, 100, 50);  // Turuncu
+        private static readonly Color ColorSD = Color.FromArgb(52, 152, 219);
+        private static readonly Color ColorSE = Color.FromArgb(46, 204, 113);
+        private static readonly Color ColorSG = Color.FromArgb(155, 89, 182);
+        private static readonly Color ColorSH = Color.FromArgb(241, 196, 15);
 
         public ExcelExportService()
         {
@@ -152,6 +160,39 @@ namespace MVC.ProductManagement.Application.Services.Export
                 return package.GetAsByteArray();
             });
         }
+
+        #endregion
+
+
+        #region SD
+
+        public async Task<byte[]> ExportSDStockCardsAsync(List<SDStockCardListDto> stockCards) => await ExportListAsync("SD Stok Kodları", ColorSD, stockCards.Select(item => (item.StockCode8, item.ProductCode, item.ProductName, item.Description, item.CreatedDate, item.CreatedBy)));
+
+        public async Task<byte[]> ExportSDStockCardDetailAsync(SDStockCardDetailDto detail) => await ExportDetailAsync(ColorSD, detail.StockCode8, detail.Prefix4, detail.Serial4, detail.ProductCode, detail.ProductName, detail.FluidCode, detail.FluidName, detail.Description, detail.CreatedDate, detail.CreatedBy, detail.FeatureSelections.OrderBy(f => f.SortOrder).Select(f => (f.FeatureName, f.ValueCode, f.ValueName)));
+
+        #endregion
+
+        #region SE
+
+        public async Task<byte[]> ExportSEStockCardsAsync(List<SEStockCardListDto> stockCards) => await ExportListAsync("SE Stok Kodları", ColorSE, stockCards.Select(item => (item.StockCode8, item.ProductCode, item.ProductName, item.Description, item.CreatedDate, item.CreatedBy)));
+
+        public async Task<byte[]> ExportSEStockCardDetailAsync(SEStockCardDetailDto detail) => await ExportDetailAsync(ColorSE, detail.StockCode8, detail.Prefix4, detail.Serial4, detail.ProductCode, detail.ProductName, detail.FluidCode, detail.FluidName, detail.Description, detail.CreatedDate, detail.CreatedBy, detail.FeatureSelections.OrderBy(f => f.SortOrder).Select(f => (f.FeatureName, f.ValueCode, f.ValueName)));
+
+        #endregion
+
+        #region SG
+
+        public async Task<byte[]> ExportSGStockCardsAsync(List<SGStockCardListDto> stockCards) => await ExportListAsync("SG Stok Kodları", ColorSG, stockCards.Select(item => (item.StockCode8, item.ProductCode, item.ProductName, item.Description, item.CreatedDate, item.CreatedBy)));
+
+        public async Task<byte[]> ExportSGStockCardDetailAsync(SGStockCardDetailDto detail) => await ExportDetailAsync(ColorSG, detail.StockCode8, detail.Prefix4, detail.Serial4, detail.ProductCode, detail.ProductName, detail.FluidCode, detail.FluidName, detail.Description, detail.CreatedDate, detail.CreatedBy, detail.FeatureSelections.OrderBy(f => f.SortOrder).Select(f => (f.FeatureName, f.ValueCode, f.ValueName)));
+
+        #endregion
+
+        #region SH
+
+        public async Task<byte[]> ExportSHStockCardsAsync(List<SHStockCardListDto> stockCards) => await ExportListAsync("SH Stok Kodları", ColorSH, stockCards.Select(item => (item.StockCode8, item.ProductCode, item.ProductName, item.Description, item.CreatedDate, item.CreatedBy)));
+
+        public async Task<byte[]> ExportSHStockCardDetailAsync(SHStockCardDetailDto detail) => await ExportDetailAsync(ColorSH, detail.StockCode8, detail.Prefix4, detail.Serial4, detail.ProductCode, detail.ProductName, detail.FluidCode, detail.FluidName, detail.Description, detail.CreatedDate, detail.CreatedBy, detail.FeatureSelections.OrderBy(f => f.SortOrder).Select(f => (f.FeatureName, f.ValueCode, f.ValueName)));
 
         #endregion
 

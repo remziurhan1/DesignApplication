@@ -1,27 +1,32 @@
-﻿using MVC.ProductManagement.Application.DTOs.StockCodes.Common;
-using MVC.ProductManagement.Application.DTOs.StockCodes.SH;
+﻿using MVC.ProductManagement.Application.DTOs.StockCodes.SH;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.SH
 {
     public interface IStockCodeShService
     {
-        /// <summary>
-        /// Tüm SH ürünlerini getirir (SHA0, SHA1, SHA2...)
-        /// </summary>
-        Task<IReadOnlyList<LookupDto>> GetShProductsAsync(CancellationToken cancellationToken = default);
+        // Ürün listesi
+        Task<List<ShProductDto>> GetShProductsAsync(CancellationToken ct = default);
 
-        /// <summary>
-        /// Seçilen ürüne göre feature'ları getirir
-        /// </summary>
-        Task<IReadOnlyList<FeatureDto>> GetFeaturesByProductAsync(
-            Guid productId,
-            CancellationToken cancellationToken = default);
+        // Kod üretme
+        Task<ShStockCodeGenerateResultDto> GenerateShAsync(ShStockCodeGenerateRequestDto request, CancellationToken ct = default);
 
-        /// <summary>
-        /// SH stok kodu üretir (akışkan yok, feature'larla)
-        /// </summary>
-        Task<ShStockCodeGenerateResultDto> GenerateShAsync(
-            ShStockCodeGenerateRequestDto request,
-            CancellationToken cancellationToken = default);
+        // Form data (rule-based)
+        Task<StockCodeShFormDto> GetFormDataAsync(Guid productId, CancellationToken ct = default);
+
+        // Liste
+        Task<SHStockCardListResultDto> GetStockCardsAsync(SHStockCardFilterDto filter, CancellationToken ct = default);
+
+        // Detay
+        Task<SHStockCardDetailDto> GetStockCardDetailAsync(Guid stockCardId, CancellationToken ct = default);
+
+        // Güncelleme
+        Task UpdateStockCardAsync(SHStockCardUpdateDto dto, string updatedBy, CancellationToken ct = default);
+
+        // Silme
+        Task DeleteStockCardAsync(Guid stockCardId, string deletedBy, CancellationToken ct = default);
     }
 }
