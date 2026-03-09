@@ -15,6 +15,7 @@ namespace MVC.ProductManagement.Domain.Entities
         public MaterialStandard Standard { get; set; }                // EN, ASME, ASTM...
         public string Group { get; set; } = string.Empty;             // Carbon steel, Stainless steel...
         public double Density { get; set; }                           // kg/m³
+        public double? ColdStretchYieldStrength { get; set; }         // MPa (örn: 400)
         public string? Notes { get; set; }
 
         public virtual ICollection<MaterialForm> Forms { get; set; } = new List<MaterialForm>();

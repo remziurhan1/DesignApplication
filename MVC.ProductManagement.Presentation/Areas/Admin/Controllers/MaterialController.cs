@@ -24,7 +24,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = m.Id,
                 Name = m.Name,
                 Standard = m.Standard,
-                Group = m.Group
+                Group = m.Group,
+                ColdStretchYieldStrength = m.ColdStretchYieldStrength
             }).ToList();
 
             return View(vms);
@@ -45,6 +46,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Standard = dto.Standard,
                 Group = dto.Group,
                 Density = dto.Density,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
                 Notes = dto.Notes
             };
 
@@ -68,6 +70,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Standard = vm.Standard,
                 Group = vm.Group,
                 Density = vm.Density,
+                ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
                 Notes = vm.Notes,
                 Forms = vm.Forms.Select(f => new MaterialFormCreateDto
                 {
@@ -98,6 +101,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Standard = dto.Standard,
                 Group = dto.Group,
                 Density = dto.Density,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
                 Notes = dto.Notes
             };
 
@@ -119,6 +123,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Standard = vm.Standard,
                 Group = vm.Group,
                 Density = vm.Density,
+                ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
                 Notes = vm.Notes
             };
 
@@ -140,6 +145,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Standard = dto.Standard,
                 Group = dto.Group,
                 Density = dto.Density,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
                 Notes = dto.Notes
             };
 
