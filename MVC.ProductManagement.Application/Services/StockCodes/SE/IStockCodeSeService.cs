@@ -28,5 +28,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SE
         Task<SeStockCodeGenerateResultDto> GenerateSeAsync(
             SeStockCodeGenerateRequestDto request,
             CancellationToken cancellationToken = default);
+
+        Task<GenericStockCodeFormDto> GetFormDataAsync(
+            Guid productId,
+            CancellationToken cancellationToken = default);
+
+        Task<GenericStockCardDetailDto> GetStockCardDetailAsync(
+            Guid stockCardId,
+            CancellationToken cancellationToken = default);
     }
 }

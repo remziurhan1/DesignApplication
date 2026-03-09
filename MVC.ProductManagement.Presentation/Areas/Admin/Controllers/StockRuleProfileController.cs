@@ -14,7 +14,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// SA/SF kural profilini JSON olarak döner.
+        /// S grubu kural profilini JSON olarak döner.
         /// Bu endpoint Admin CRUD ekranını geliştirmek için referans okuma modeli sağlar.
         /// </summary>
         [HttpGet]
