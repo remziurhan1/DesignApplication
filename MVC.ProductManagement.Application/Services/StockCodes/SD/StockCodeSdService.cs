@@ -59,11 +59,59 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SD
                 .OrderBy(r => r.SFeature.SortOrder)
                 .ToListAsync(ct);
 
+            // Eski seed yapısında kural tablosu boşsa legacy SProductFeature kaydından devam et
+            if (!productRules.Any())
+            {
+                var legacyProductFeatures = await _db.Set<Domain.Entities.StockCodes.Features.SProductFeature>()
+                    .Include(pf => pf.SFeature)
+                    .Where(pf => pf.SProductId == productId)
+                    .OrderBy(pf => pf.SortOrder ?? pf.SFeature.SortOrder)
+                    .ToListAsync(ct);
+
+                productRules = legacyProductFeatures
+                    .Select(pf => new Domain.Entities.StockCodes.Features.SProductFeatureRule
+                    {
+                        Id = pf.Id,
+                        SProductId = pf.SProductId,
+                        SFeatureId = pf.SFeatureId,
+                        SFeature = pf.SFeature,
+                        IsFixed = false,
+                        FixedValueId = null,
+                        FixedValue = null
+                    })
+                    .ToList();
+            }
+
             var valueRules = await _db.SFeatureValueRules
                 .Include(r => r.SFeatureValue)
                 .Where(r => r.SProductId == productId)
                 .OrderBy(r => r.SortOrder)
                 .ToListAsync(ct);
+
+            var hasValueRules = valueRules.Any();
+            var fallbackValueMap = new Dictionary<Guid, List<FeatureValueDto>>();
+            if (!hasValueRules && productRules.Any())
+            {
+                var featureIds = productRules.Select(r => r.SFeatureId).Distinct().ToList();
+                var fallbackValues = await _db.Set<Domain.Entities.StockCodes.Features.SFeatureValue>()
+                    .Where(v => featureIds.Contains(v.SFeatureId))
+                    .Select(v => new
+                    {
+                        v.SFeatureId,
+                        Value = new FeatureValueDto
+                        {
+                            Id = v.Id,
+                            Code = v.Code,
+                            Name = v.Name,
+                            SortOrder = v.SortOrder
+                        }
+                    })
+                    .ToListAsync(ct);
+
+                fallbackValueMap = fallbackValues
+                    .GroupBy(x => x.SFeatureId)
+                    .ToDictionary(g => g.Key, g => g.Select(x => x.Value).ToList());
+            }
 
             var features = new List<StockCodeSdFormFeatureDto>();
 
@@ -85,15 +133,19 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SD
                 }
                 else
                 {
-                    var sorted = FeatureValueSortHelper.SortForUi(valueRules
-                        .Where(v => v.SFeatureId == rule.SFeatureId)
-                        .Select(v => new FeatureValueDto
-                        {
-                            Id = v.SFeatureValueId,
-                            Code = v.SFeatureValue.Code,
-                            Name = v.SFeatureValue.Name,
-                            SortOrder = v.SortOrder
-                        }));
+                    var valueCandidates = hasValueRules
+                        ? valueRules
+                            .Where(v => v.SFeatureId == rule.SFeatureId)
+                            .Select(v => new FeatureValueDto
+                            {
+                                Id = v.SFeatureValueId,
+                                Code = v.SFeatureValue.Code,
+                                Name = v.SFeatureValue.Name,
+                                SortOrder = v.SortOrder
+                            })
+                        : fallbackValueMap.GetValueOrDefault(rule.SFeatureId, new List<FeatureValueDto>());
+
+                    var sorted = FeatureValueSortHelper.SortForUi(valueCandidates);
 
                     feature.AvailableValues = sorted
                         .Select(v => new SdFeatureValueOptionDto
