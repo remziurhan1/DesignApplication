@@ -241,6 +241,57 @@ namespace MVC.ProductManagement.Application.Services.Export
 
         #region ORTAK YARDIMCI METODLAR
 
+        // Bazı gruplarda expression-bodied export metotları bu helper'ları kullanıyor.
+        // Helper'ları merkezde tutmak, kopya kodu ve isim-hata riskini azaltır.
+        private async Task<byte[]> ExportListAsync(
+            string sheetName,
+            Color headerColor,
+            IEnumerable<(string StockCode, string ProductCode, string ProductName, string Description, DateTime CreatedDate, string CreatedBy)> rows)
+        {
+            return await Task.Run(() =>
+            {
+                using var package = new ExcelPackage();
+                var ws = package.Workbook.Worksheets.Add(sheetName);
+
+                WriteListHeaders(ws, headerColor);
+                int row = 2;
+                foreach (var item in rows)
+                    WriteListRow(ws, row++, item.StockCode, item.ProductCode, item.ProductName, item.Description, item.CreatedDate, item.CreatedBy);
+
+                FormatListSheet(ws);
+                return package.GetAsByteArray();
+            });
+        }
+
+        private async Task<byte[]> ExportDetailAsync(
+            Color headerColor,
+            string stockCode,
+            string prefix,
+            int serial,
+            string productCode,
+            string productName,
+            string? fluidCode,
+            string? fluidName,
+            string description,
+            DateTime createdDate,
+            string createdBy,
+            IEnumerable<(string FeatureName, string ValueCode, string ValueName)> features)
+        {
+            return await Task.Run(() =>
+            {
+                using var package = new ExcelPackage();
+                var ws = package.Workbook.Worksheets.Add("Stok Detay");
+                int row = 1;
+
+                WriteDetailHeader(ws, ref row, headerColor);
+                WriteDetailInfo(ws, ref row, stockCode, prefix, serial, productCode, productName, fluidCode, fluidName, description, createdDate, createdBy);
+                WriteFeatures(ws, ref row, features);
+                FormatDetailSheet(ws);
+
+                return package.GetAsByteArray();
+            });
+        }
+
         private void WriteListHeaders(ExcelWorksheet ws, Color headerColor)
         {
             var headers = new[] { "Stok Kodu", "Ürün Kodu", "Ürün Adı", "Açıklama", "Oluşturulma Tarihi", "Oluşturan" };
