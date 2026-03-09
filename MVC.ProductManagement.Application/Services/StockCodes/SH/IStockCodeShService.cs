@@ -14,19 +14,19 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SH
         // Kod üretme
         Task<ShStockCodeGenerateResultDto> GenerateShAsync(ShStockCodeGenerateRequestDto request, CancellationToken ct = default);
 
-        /// <summary>
-        /// SH stok kodu üretir (akışkan yok, feature'larla)
-        /// </summary>
-        Task<ShStockCodeGenerateResultDto> GenerateShAsync(
-            ShStockCodeGenerateRequestDto request,
-            CancellationToken cancellationToken = default);
+        // Form data (rule-based)
+        Task<StockCodeShFormDto> GetFormDataAsync(Guid productId, CancellationToken ct = default);
 
-        Task<GenericStockCodeFormDto> GetFormDataAsync(
-            Guid productId,
-            CancellationToken cancellationToken = default);
+        // Liste
+        Task<SHStockCardListResultDto> GetStockCardsAsync(SHStockCardFilterDto filter, CancellationToken ct = default);
 
-        Task<GenericStockCardDetailDto> GetStockCardDetailAsync(
-            Guid stockCardId,
-            CancellationToken cancellationToken = default);
+        // Detay
+        Task<SHStockCardDetailDto> GetStockCardDetailAsync(Guid stockCardId, CancellationToken ct = default);
+
+        // Güncelleme
+        Task UpdateStockCardAsync(SHStockCardUpdateDto dto, string updatedBy, CancellationToken ct = default);
+
+        // Silme
+        Task DeleteStockCardAsync(Guid stockCardId, string deletedBy, CancellationToken ct = default);
     }
 }
