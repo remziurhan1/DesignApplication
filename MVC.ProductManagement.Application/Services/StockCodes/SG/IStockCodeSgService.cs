@@ -14,19 +14,19 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
         // Kod üretme
         Task<SgStockCodeGenerateResultDto> GenerateSgAsync(SgStockCodeGenerateRequestDto request, CancellationToken ct = default);
 
-        // Form data (rule-based)
-        Task<StockCodeSgFormDto> GetFormDataAsync(Guid productId, CancellationToken ct = default);
+        /// <summary>
+        /// SG stok kodu üretir (akışkan yok, feature'larla)
+        /// </summary>
+        Task<SgStockCodeGenerateResultDto> GenerateSgAsync(
+            SgStockCodeGenerateRequestDto request,
+            CancellationToken cancellationToken = default);
 
-        // Liste
-        Task<SGStockCardListResultDto> GetStockCardsAsync(SGStockCardFilterDto filter, CancellationToken ct = default);
+        Task<GenericStockCodeFormDto> GetFormDataAsync(
+            Guid productId,
+            CancellationToken cancellationToken = default);
 
-        // Detay
-        Task<SGStockCardDetailDto> GetStockCardDetailAsync(Guid stockCardId, CancellationToken ct = default);
-
-        // Güncelleme
-        Task UpdateStockCardAsync(SGStockCardUpdateDto dto, string updatedBy, CancellationToken ct = default);
-
-        // Silme
-        Task DeleteStockCardAsync(Guid stockCardId, string deletedBy, CancellationToken ct = default);
+        Task<GenericStockCardDetailDto> GetStockCardDetailAsync(
+            Guid stockCardId,
+            CancellationToken cancellationToken = default);
     }
 }

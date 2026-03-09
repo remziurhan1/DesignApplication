@@ -267,6 +267,141 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.SG
             };
         }
 
+        public async Task<GenericStockCodeFormDto> GetFormDataAsync(Guid productId, CancellationToken cancellationToken = default)
+        {
+            var product = await _context.SProducts
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == productId, cancellationToken)
+                ?? throw new InvalidOperationException("SG ürünü bulunamadı.");
+
+            var featureRules = await _context.SProductFeatureRules
+                .AsNoTracking()
+                .Include(x => x.SFeature)
+                .Include(x => x.FixedValue)
+                .Where(x => x.SProductId == productId)
+                .OrderBy(x => x.SFeature.SortOrder)
+                .ToListAsync(cancellationToken);
+
+            var featureDtos = new List<GenericStockCodeFormFeatureDto>();
+
+            if (featureRules.Any())
+            {
+                var valueRules = await _context.SFeatureValueRules
+                    .AsNoTracking()
+                    .Include(x => x.SFeatureValue)
+                    .Where(x => x.SProductId == productId)
+                    .OrderBy(x => x.SortOrder)
+                    .ToListAsync(cancellationToken);
+
+                foreach (var fr in featureRules)
+                {
+                    var availableValues = valueRules
+                        .Where(x => x.SFeatureId == fr.SFeatureId)
+                        .Select(x => new FeatureValueDto
+                        {
+                            Id = x.SFeatureValueId,
+                            Code = x.SFeatureValue.Code,
+                            Name = x.SFeatureValue.Name,
+                            SortOrder = x.SortOrder
+                        }).ToList();
+
+                    featureDtos.Add(new GenericStockCodeFormFeatureDto
+                    {
+                        FeatureId = fr.SFeatureId,
+                        FeatureCode = fr.SFeature.Code,
+                        FeatureName = fr.SFeature.Name,
+                        IsFixed = fr.IsFixed,
+                        FixedValueId = fr.FixedValueId,
+                        FixedValueCode = fr.FixedValue?.Code,
+                        FixedValueName = fr.FixedValue?.Name,
+                        AvailableValues = availableValues
+                    });
+                }
+            }
+            else
+            {
+                var productFeatures = await _context.Set<SProductFeature>()
+                    .AsNoTracking()
+                    .Include(pf => pf.SFeature)
+                        .ThenInclude(f => f.Values)
+                    .Where(pf => pf.SProductId == productId)
+                    .OrderBy(pf => pf.SFeature.SortOrder)
+                    .ToListAsync(cancellationToken);
+
+                foreach (var pf in productFeatures)
+                {
+                    featureDtos.Add(new GenericStockCodeFormFeatureDto
+                    {
+                        FeatureId = pf.SFeatureId,
+                        FeatureCode = pf.SFeature.Code,
+                        FeatureName = pf.SFeature.Name,
+                        IsFixed = false,
+                        AvailableValues = pf.SFeature.Values
+                            .OrderBy(v => v.SortOrder)
+                            .Select(v => new FeatureValueDto
+                            {
+                                Id = v.Id,
+                                Code = v.Code,
+                                Name = v.Name,
+                                SortOrder = v.SortOrder
+                            }).ToList()
+                    });
+                }
+            }
+
+            return new GenericStockCodeFormDto
+            {
+                ProductId = product.Id,
+                ProductCode = product.Code,
+                ProductName = product.Name,
+                Features = featureDtos
+            };
+        }
+
+        public async Task<GenericStockCardDetailDto> GetStockCardDetailAsync(Guid stockCardId, CancellationToken cancellationToken = default)
+        {
+            var stockCard = await _context.Set<StockCard>()
+                .AsNoTracking()
+                .Include(x => x.SProduct)
+                .Include(x => x.Fluid)
+                .Include(x => x.FeatureSelections)
+                    .ThenInclude(fs => fs.SFeature)
+                .Include(x => x.FeatureSelections)
+                    .ThenInclude(fs => fs.SFeatureValue)
+                .FirstOrDefaultAsync(x => x.Id == stockCardId && !x.IsDeleted, cancellationToken)
+                ?? throw new InvalidOperationException("SG stok kartı bulunamadı.");
+
+            return new GenericStockCardDetailDto
+            {
+                Id = stockCard.Id,
+                StockCode8 = stockCard.StockCode8,
+                Prefix4 = stockCard.Prefix4,
+                Serial4 = stockCard.Serial4,
+                ProductId = stockCard.SProductId,
+                ProductCode = stockCard.SProduct.Code,
+                ProductName = stockCard.SProduct.Name,
+                FluidId = stockCard.FluidId,
+                FluidCode = stockCard.Fluid?.Code,
+                FluidName = stockCard.Fluid?.Name,
+                Description = stockCard.Description,
+                OptionKey = stockCard.OptionKey,
+                CreatedDate = stockCard.CreatedDate,
+                CreatedBy = stockCard.CreatedBy,
+                FeatureSelections = stockCard.FeatureSelections
+                    .OrderBy(fs => fs.SFeature.SortOrder)
+                    .Select(fs => new GenericFeatureSelectionDto
+                    {
+                        FeatureId = fs.SFeatureId,
+                        FeatureName = fs.SFeature.Name,
+                        ValueId = fs.SFeatureValueId,
+                        ValueCode = fs.SFeatureValue.Code,
+                        ValueName = fs.SFeatureValue.Name,
+                        SortOrder = fs.SFeature.SortOrder
+                    }).ToList()
+            };
+        }
+
+        // ========== HELPER METHODS ==========
 
 
 
