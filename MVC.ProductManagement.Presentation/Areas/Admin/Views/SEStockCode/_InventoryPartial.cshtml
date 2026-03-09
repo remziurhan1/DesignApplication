@@ -1,0 +1,573 @@
+﻿@using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
+@using MVC.ProductManagement.Domain.Enums
+
+@{
+    // Anonymous object'ten verileri al
+    var stockCardId = (Guid)ViewData.Model.GetType().GetProperty("StockCardId").GetValue(ViewData.Model, null);
+    var currentInventory = ViewData.Model.GetType().GetProperty("CurrentInventory").GetValue(ViewData.Model, null) as CurrentInventoryDto;
+    var inventoryMovements = ViewData.Model.GetType().GetProperty("InventoryMovements").GetValue(ViewData.Model, null) as IReadOnlyList<InventoryDto>;
+}
+
+<div class="row">
+
+    <!-- ========== MEVCUT STOK KARTI ========== -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-info mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-box-seam"></i> Mevcut Stok
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                @if (currentInventory != null && currentInventory.CurrentStock > 0)
+                {
+                    <!-- Stok VAR -->
+                    <h1 class="display-3 text-info fw-bold mb-3">
+                        @currentInventory.CurrentStock
+                    </h1>
+                    <p class="text-muted mb-2">Toplam Stok Miktarı</p>
+
+                    @if (currentInventory.LastMovementDate.HasValue)
+                    {
+                        <hr />
+                        <p class="mb-0">
+                            <small class="text-muted">
+                                <i class="bi bi-clock"></i>
+                                Son Hareket: @currentInventory.LastMovementDate.Value.ToString("dd.MM.yyyy HH:mm")
+                            </small>
+                        </p>
+                    }
+
+                    @if (currentInventory.ByLocation != null && currentInventory.ByLocation.Any())
+                    {
+                        <hr />
+                        <h6 class="text-muted mb-3">
+                            <i class="bi bi-geo-alt"></i> Lokasyonlara Göre Dağılım
+                        </h6>
+                        <div class="text-start">
+                            @foreach (var location in currentInventory.ByLocation)
+                            {
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-secondary">@location.Location</span>
+                                    <strong class="text-info">@location.Quantity adet</strong>
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <!-- Stok YOK -->
+                    <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                    <h5 class="mt-3 text-muted">Stok Yok</h5>
+                    <p class="text-muted small">İlk stok girişi yaparak başlayın</p>
+                    <button type="button"
+                            class="btn btn-primary mt-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#initialStockModal">
+                        <i class="bi bi-plus-circle"></i> İlk Stok Girişi
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- ========== HIZLI STOK HAREKETİ ========== -->
+        @if (currentInventory != null && currentInventory.CurrentStock > 0)
+        {
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-lightning-fill"></i> Hızlı Stok Hareketi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <button type="button"
+                            class="btn btn-success w-100 mb-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#stockInModal">
+                        <i class="bi bi-arrow-down-circle"></i> Stok Girişi
+                    </button>
+                    <button type="button"
+                            class="btn btn-danger w-100"
+                            data-bs-toggle="modal"
+                            data-bs-target="#stockOutModal">
+                        <i class="bi bi-arrow-up-circle"></i> Stok Çıkışı
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- ========== STOK HAREKETLERİ ========== -->
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock-history"></i> Stok Hareketleri
+                        </h5>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button type="button"
+                                class="btn btn-light btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#stockMovementModal">
+                            <i class="bi bi-plus-circle"></i> Hareket Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (inventoryMovements != null && inventoryMovements.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 15%;">Tarih</th>
+                                    <th style="width: 12%;">Hareket</th>
+                                    <th style="width: 10%;" class="text-end">Miktar</th>
+                                    <th style="width: 8%;" class="text-end">Önceki</th>
+                                    <th style="width: 8%;" class="text-end">Sonraki</th>
+                                    <th style="width: 12%;">Lokasyon</th>
+                                    <th style="width: 35%;">Açıklama</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var movement in inventoryMovements)
+                                {
+                                    <tr>
+                                        <td>
+                                            <small>@movement.MovementDate.ToString("dd.MM.yyyy")</small>
+                                            <br />
+                                            <small class="text-muted">@movement.MovementDate.ToString("HH:mm")</small>
+                                        </td>
+                                        <td>
+                                            @switch (movement.MovementType)
+                                            {
+                                                case InventoryMovementType.In:
+                                                    <span class="badge bg-success">
+                                                        <i class="bi bi-arrow-down-circle"></i> Giriş
+                                                    </span>
+                                                    break;
+                                                case InventoryMovementType.Out:
+                                                    <span class="badge bg-danger">
+                                                        <i class="bi bi-arrow-up-circle"></i> Çıkış
+                                                    </span>
+                                                    break;
+                                                case InventoryMovementType.Adjustment:
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="bi bi-wrench"></i> Düzeltme
+                                                    </span>
+                                                    break;
+                                                case InventoryMovementType.InitialStock:
+                                                    <span class="badge bg-info">
+                                                        <i class="bi bi-star-fill"></i> İlk Stok
+                                                    </span>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td class="text-end">
+                                            <strong class="@(movement.MovementType == InventoryMovementType.In || movement.MovementType == InventoryMovementType.InitialStock ? "text-success" : "text-danger")">
+                                                @if (movement.MovementType == InventoryMovementType.In || movement.MovementType == InventoryMovementType.InitialStock)
+                                                {
+                                                    <text>+@movement.Quantity</text>
+                                                }
+                                                else if (movement.MovementType == InventoryMovementType.Out)
+                                                {
+                                                    <text>-@movement.Quantity</text>
+                                                }
+                                                else
+                                                {
+                                                    @movement.Quantity
+                                                }
+                                            </strong>
+                                        </td>
+                                        <td class="text-end">@movement.StockBefore</td>
+                                        <td class="text-end"><strong class="text-primary">@movement.StockAfter</strong></td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                <i class="bi bi-geo-alt"></i> @movement.Location
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">@movement.Description</small>
+                                            @if (!string.IsNullOrEmpty(movement.ReferenceDocument))
+                                            {
+                                                <br />
+                                                <small class="badge bg-info">
+                                                    <i class="bi bi-file-text"></i> @movement.ReferenceDocument
+                                                </small>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox display-4 text-muted"></i>
+                        <h5 class="mt-3 text-muted">Henüz stok hareketi yok</h5>
+                        <p class="text-muted">İlk stok girişi yaparak başlayın</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL: İLK STOK GİRİŞİ ========== -->
+<div class="modal fade" id="initialStockModal" tabindex="-1" aria-labelledby="initialStockModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="InitialStock" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="stockCardId" value="@stockCardId" />
+
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="initialStockModalLabel">
+                        <i class="bi bi-star-fill"></i> İlk Stok Girişi
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="initialQuantity" class="form-label fw-bold">
+                            <i class="bi bi-hash"></i> Miktar
+                        </label>
+                        <input type="number"
+                               id="initialQuantity"
+                               name="quantity"
+                               class="form-control form-control-lg"
+                               min="1"
+                               required
+                               autofocus
+                               placeholder="Örn: 100" />
+                        <div class="form-text">Başlangıç stok miktarını girin</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="initialLocation" class="form-label fw-bold">
+                            <i class="bi bi-geo-alt"></i> Lokasyon
+                        </label>
+                        <input type="text"
+                               id="initialLocation"
+                               name="location"
+                               class="form-control"
+                               placeholder="Genel"
+                               value="Genel" />
+                        <div class="form-text">Stokun bulunduğu depo/lokasyon</div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-info">
+                        <i class="bi bi-save"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL: STOK GİRİŞİ ========== -->
+<div class="modal fade" id="stockInModal" tabindex="-1" aria-labelledby="stockInModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="CreateInventoryMovement" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="StockCardId" value="@stockCardId" />
+                <input type="hidden" name="MovementType" value="1" />
+
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="stockInModalLabel">
+                        <i class="bi bi-arrow-down-circle"></i> Stok Girişi
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Mevcut Stok:</strong> @(currentInventory?.CurrentStock ?? 0) adet
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inQuantity" class="form-label fw-bold">
+                            <i class="bi bi-hash"></i> Giriş Miktarı
+                        </label>
+                        <input type="number"
+                               id="inQuantity"
+                               name="Quantity"
+                               class="form-control form-control-lg"
+                               min="1"
+                               required
+                               autofocus
+                               placeholder="Örn: 50" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inMovementDate" class="form-label fw-bold">
+                            <i class="bi bi-calendar"></i> Tarih
+                        </label>
+                        <input type="datetime-local"
+                               id="inMovementDate"
+                               name="MovementDate"
+                               class="form-control"
+                               value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inLocation" class="form-label fw-bold">
+                            <i class="bi bi-geo-alt"></i> Lokasyon
+                        </label>
+                        <input type="text"
+                               id="inLocation"
+                               name="Location"
+                               class="form-control"
+                               placeholder="Genel"
+                               value="Genel" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inReference" class="form-label fw-bold">
+                            <i class="bi bi-file-text"></i> Referans Belge
+                        </label>
+                        <input type="text"
+                               id="inReference"
+                               name="ReferenceDocument"
+                               class="form-control"
+                               placeholder="İrsaliye No, Fatura No, vb." />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inDescription" class="form-label fw-bold">
+                            <i class="bi bi-chat-left-text"></i> Açıklama
+                        </label>
+                        <textarea id="inDescription"
+                                  name="Description"
+                                  class="form-control"
+                                  rows="2"
+                                  placeholder="Hareket açıklaması..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL: STOK ÇIKIŞI ========== -->
+<div class="modal fade" id="stockOutModal" tabindex="-1" aria-labelledby="stockOutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="CreateInventoryMovement" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="StockCardId" value="@stockCardId" />
+                <input type="hidden" name="MovementType" value="2" />
+
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="stockOutModalLabel">
+                        <i class="bi bi-arrow-up-circle"></i> Stok Çıkışı
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Mevcut Stok:</strong> @(currentInventory?.CurrentStock ?? 0) adet
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="outQuantity" class="form-label fw-bold">
+                            <i class="bi bi-hash"></i> Çıkış Miktarı
+                        </label>
+                        <input type="number"
+                               id="outQuantity"
+                               name="Quantity"
+                               class="form-control form-control-lg"
+                               min="1"
+                               max="@(currentInventory?.CurrentStock ?? 0)"
+                               required
+                               autofocus
+                               placeholder="Örn: 20" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="outMovementDate" class="form-label fw-bold">
+                            <i class="bi bi-calendar"></i> Tarih
+                        </label>
+                        <input type="datetime-local"
+                               id="outMovementDate"
+                               name="MovementDate"
+                               class="form-control"
+                               value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="outLocation" class="form-label fw-bold">
+                            <i class="bi bi-geo-alt"></i> Lokasyon
+                        </label>
+                        <input type="text"
+                               id="outLocation"
+                               name="Location"
+                               class="form-control"
+                               placeholder="Genel"
+                               value="Genel" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="outReference" class="form-label fw-bold">
+                            <i class="bi bi-file-text"></i> Referans Belge
+                        </label>
+                        <input type="text"
+                               id="outReference"
+                               name="ReferenceDocument"
+                               class="form-control"
+                               placeholder="İrsaliye No, Fatura No, vb." />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="outDescription" class="form-label fw-bold">
+                            <i class="bi bi-chat-left-text"></i> Açıklama
+                        </label>
+                        <textarea id="outDescription"
+                                  name="Description"
+                                  class="form-control"
+                                  rows="2"
+                                  placeholder="Hareket açıklaması..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-save"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL: GENEL STOK HAREKETİ ========== -->
+<div class="modal fade" id="stockMovementModal" tabindex="-1" aria-labelledby="stockMovementModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="CreateInventoryMovement" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="StockCardId" value="@stockCardId" />
+
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="stockMovementModalLabel">
+                        <i class="bi bi-plus-circle"></i> Stok Hareketi Ekle
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="movementType" class="form-label fw-bold">
+                            <i class="bi bi-arrow-left-right"></i> Hareket Tipi
+                        </label>
+                        <select id="movementType" name="MovementType" class="form-select" required>
+                            <option value="">Seçiniz...</option>
+                            <option value="1">Giriş (+)</option>
+                            <option value="2">Çıkış (-)</option>
+                            <option value="3">Düzeltme</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="movementQuantity" class="form-label fw-bold">
+                            <i class="bi bi-hash"></i> Miktar
+                        </label>
+                        <input type="number"
+                               id="movementQuantity"
+                               name="Quantity"
+                               class="form-control"
+                               min="1"
+                               required
+                               placeholder="0" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="movementDate" class="form-label fw-bold">
+                            <i class="bi bi-calendar"></i> Tarih
+                        </label>
+                        <input type="datetime-local"
+                               id="movementDate"
+                               name="MovementDate"
+                               class="form-control"
+                               value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="movementLocation" class="form-label fw-bold">
+                            <i class="bi bi-geo-alt"></i> Lokasyon
+                        </label>
+                        <input type="text"
+                               id="movementLocation"
+                               name="Location"
+                               class="form-control"
+                               placeholder="Genel"
+                               value="Genel" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="movementReference" class="form-label fw-bold">
+                            <i class="bi bi-file-text"></i> Referans Belge
+                        </label>
+                        <input type="text"
+                               id="movementReference"
+                               name="ReferenceDocument"
+                               class="form-control"
+                               placeholder="İrsaliye No, Fatura No, vb." />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="movementDescription" class="form-label fw-bold">
+                            <i class="bi bi-chat-left-text"></i> Açıklama
+                        </label>
+                        <textarea id="movementDescription"
+                                  name="Description"
+                                  class="form-control"
+                                  rows="2"
+                                  placeholder="Hareket açıklaması..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> İptal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
