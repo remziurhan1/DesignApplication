@@ -6,7 +6,6 @@ using MVC.ProductManagement.Application.Services.EN13458.CalculationSteps;
 using MVC.ProductManagement.Application.Services.EN13458.Engines;
 using MVC.ProductManagement.Application.Services.EN13458.Interfaces;
 using MVC.ProductManagement.Application.Services.EN13458.Managers;
-using MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter;
 using MVC.ProductManagement.Application.Services.Export;
 using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
@@ -43,7 +42,6 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IAllowableStressService, AllowableStressService>();
             services.AddScoped<IStorageTypeService, StorageTypeService>();
             services.AddScoped<IEN13458CalculationServices, EN13458CalculationServices>();
-            services.AddScoped<IEN13458MaterialStrengthProvider, EN13458MaterialStrengthProvider>();
             services.AddScoped<IEN13458CalculationManager, EN13458CalculationManager>();
             services.AddScoped<ICryogenicsCalculationEngine, EN13458CalculationEngine>();
             services.AddScoped<IEN13458CalculationStep, PressureStep>();

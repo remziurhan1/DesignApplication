@@ -17,6 +17,7 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double LiquidDensity { get; set; }
         public double SectorWidth { get; set; }
         public TankOrientation TankOrientation { get; set; } = TankOrientation.Horizontal;
+        public bool IsColdStretchApplied { get; set; }
 
         // Malzeme seçimleri
         public Guid InnerShellMaterialId { get; set; }

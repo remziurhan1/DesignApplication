@@ -23,8 +23,21 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     Group = "Fine grain pressure vessel steel",
                     Density = 7850, // kg/m³
                     Notes = "Normalized delivery condition according to EN 10028-3",
-                     CreatedBy = "SeedData",
-    CreatedDate = DateTime.UtcNow
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
+                },
+                new Material
+                {
+                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                    Name = "X5CrNi18-10",
+                    MaterialNumber = "1.4301",
+                    Standard = MaterialStandard.EN,
+                    Group = "Austenitic stainless steel",
+                    Density = 8000,
+                    ColdStretchYieldStrength = 400,
+                    Notes = "EN 10028-7 stainless pressure vessel steel",
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
                 }
             };
         }
