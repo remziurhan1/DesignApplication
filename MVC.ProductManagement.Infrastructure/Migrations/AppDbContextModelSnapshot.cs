@@ -126958,6 +126958,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("Density")
+                        .HasColumnType("float(10)")
+                        .HasPrecision(10, 3);
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
