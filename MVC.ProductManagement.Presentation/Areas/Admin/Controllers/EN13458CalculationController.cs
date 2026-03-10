@@ -280,7 +280,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .GroupBy(x => x.MaterialId)
                 .ToDictionary(
                     g => g.Key.ToString(),
-                    g => g.Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]", x.Id.ToString())).ToList());
+                    g => g.Select(x => new
+                    {
+                        value = x.Id.ToString(),
+                        text = $"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]"
+                    }).ToList());
 
             ViewBag.MaterialForms = forms
                 .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]", x.Id.ToString()))
