@@ -24,10 +24,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
 
         public async Task<EN13458ResultDTO> CalculateAsync(EN13458CalculateDTO input)
         {
-            input.InnerShellMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerShellMaterialId, input.InnerShellMaterialFormId);
-            input.InnerHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerHeadMaterialId, input.InnerHeadMaterialFormId);
-            input.OuterShellMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterShellMaterialId, input.OuterShellMaterialFormId);
-            input.OuterHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterHeadMaterialId, input.OuterHeadMaterialFormId);
+            input.InnerShellMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerShellMaterialId, input.InnerShellMaterialFormId, input.IsColdStretchApplied);
+            input.InnerHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerHeadMaterialId, input.InnerHeadMaterialFormId, input.IsColdStretchApplied);
+            input.OuterShellMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterShellMaterialId, input.OuterShellMaterialFormId, input.IsColdStretchApplied);
+            input.OuterHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterHeadMaterialId, input.OuterHeadMaterialFormId, input.IsColdStretchApplied);
             return await _engine.CalculateAsync(input);
         }
 
@@ -76,6 +76,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
         {
             Id = entity.Id, Name = entity.Name, OuterDiameter = entity.OuterDiameter, ShellLength = entity.ShellLength,
             Pressure = entity.Pressure, LiquidDensity = entity.LiquidDensity, SectorWidth = entity.SectorWidth,
+            IsColdStretchApplied = false, TankOrientation = MVC.ProductManagement.Domain.Enums.TankOrientation.Horizontal,
             InnerShellMaterialId = entity.InnerShellMaterialId, InnerShellMaterialFormId = entity.InnerShellMaterialFormId,
             InnerHeadMaterialId = entity.InnerHeadMaterialId, InnerHeadMaterialFormId = entity.InnerHeadMaterialFormId,
             OuterShellMaterialId = entity.OuterShellMaterialId, OuterShellMaterialFormId = entity.OuterShellMaterialFormId,

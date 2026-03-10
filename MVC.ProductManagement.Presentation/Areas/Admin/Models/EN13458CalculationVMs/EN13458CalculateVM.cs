@@ -27,6 +27,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         [Required]
         public TankOrientation TankOrientation { get; set; } = TankOrientation.Horizontal;
 
+        public bool IsColdStretchApplied { get; set; }
+
         [Required] public Guid InnerShellMaterialId { get; set; }
         [Required] public Guid InnerShellMaterialFormId { get; set; }
         [Required] public Guid InnerHeadMaterialId { get; set; }
