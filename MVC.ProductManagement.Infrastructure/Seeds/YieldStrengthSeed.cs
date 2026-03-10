@@ -12,6 +12,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
         public static List<YieldStrength> Get()
         {
             var formId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var ssFormId = Guid.Parse("44444444-4444-4444-4444-444444444441");
 
             return new List<YieldStrength>
             {
@@ -80,6 +81,21 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = formId, ThicknessMin = 150, ThicknessMax = 250, Temperature = 300, Rp02 = 192, Rm = 450,CreatedBy="SeedData" , CreatedDate=DateTime.UtcNow },
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = formId, ThicknessMin = 150, ThicknessMax = 250, Temperature = 350, Rp02 = 178, Rm = 450,CreatedBy="SeedData" , CreatedDate=DateTime.UtcNow },
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = formId, ThicknessMin = 150, ThicknessMax = 250, Temperature = 400, Rp02 = 167, Rm = 450,CreatedBy="SeedData" , CreatedDate=DateTime.UtcNow },
+
+                // 1.4301 (X5CrNi18-10) Plate EN 10028-7
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = -196, Rp02 = 350, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = -150, Rp02 = 330, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = -100, Rp02 = 300, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = -50, Rp02 = 260, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 20, Rp02 = 210, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 50, Rp02 = 205, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 100, Rp02 = 195, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 150, Rp02 = 185, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 200, Rp02 = 170, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 250, Rp02 = 160, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 300, Rp02 = 150, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 350, Rp02 = 140, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 400, Rp02 = 130, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
             };
         }
     }
