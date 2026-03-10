@@ -38,6 +38,10 @@
             <label asp-for="TankOrientation" class="form-label">Tank Yönelimi</label>
             <select asp-for="TankOrientation" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.TankOrientation>()" class="form-select"></select>
         </div>
+        <div class="col-md-4 form-check mt-4 ms-2">
+            <input asp-for="IsColdStretchApplied" class="form-check-input" />
+            <label asp-for="IsColdStretchApplied" class="form-check-label">Cold Stretch Uygulansın</label>
+        </div>
     </div>
 
     <hr />
@@ -87,3 +91,40 @@
         <a asp-action="Index" class="btn btn-secondary">Liste</a>
     </div>
 </form>
+
+
+@section Scripts {
+    <script>
+        const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormsByMaterial));
+
+        function bindMaterialForm(materialSelectId, formSelectId) {
+            const materialSelect = document.getElementById(materialSelectId);
+            const formSelect = document.getElementById(formSelectId);
+            if (!materialSelect || !formSelect) return;
+
+            const refill = () => {
+                const materialId = materialSelect.value;
+                const options = formsByMaterial[materialId] || [];
+                const current = formSelect.value;
+                formSelect.innerHTML = '';
+                options.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item.value;
+                    opt.text = item.text;
+                    formSelect.appendChild(opt);
+                });
+                if ([...formSelect.options].some(x => x.value === current)) {
+                    formSelect.value = current;
+                }
+            };
+
+            materialSelect.addEventListener('change', refill);
+            refill();
+        }
+
+        bindMaterialForm('InnerShellMaterialId', 'InnerShellMaterialFormId');
+        bindMaterialForm('InnerHeadMaterialId', 'InnerHeadMaterialFormId');
+        bindMaterialForm('OuterShellMaterialId', 'OuterShellMaterialFormId');
+        bindMaterialForm('OuterHeadMaterialId', 'OuterHeadMaterialFormId');
+    </script>
+}
