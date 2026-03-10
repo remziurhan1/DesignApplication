@@ -263,7 +263,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var forms = await _materialFormService.GetAllAsync();
 
             var materialItems = materials
-                .Select(x => new SelectListItem($"{x.Name} ({x.MaterialNumber})", x.Id.ToString()))
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
                 .ToList();
 
             var formItems = forms
