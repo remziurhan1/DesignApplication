@@ -27,8 +27,16 @@
             <input asp-for="Pressure" class="form-control" />
         </div>
         <div class="col-md-4">
-            <label asp-for="LiquidDensity" class="form-label"></label>
-            <input asp-for="LiquidDensity" class="form-control" />
+            <label asp-for="StorageTypeId" class="form-label">Depolama Tipi</label>
+            <select asp-for="StorageTypeId" asp-items="ViewBag.StorageTypes" class="form-select">
+                <option value="">Seçiniz</option>
+            </select>
+            <span asp-validation-for="StorageTypeId" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="LiquidDensity" class="form-label">Sıvı Yoğunluğu (kg/m³)</label>
+            <input asp-for="LiquidDensity" class="form-control" readonly />
+            <small class="text-muted">Yoğunluk, seçilen depolama tipinin termodinamik verilerinden otomatik hesaplanır.</small>
         </div>
         <div class="col-md-4">
             <label asp-for="SectorWidth" class="form-label"></label>
@@ -96,6 +104,7 @@
 @section Scripts {
     <script>
         const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormsByMaterial));
+        const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.StorageTypeDensities));
 
         function bindMaterialForm(materialSelectId, formSelectId) {
             const materialSelect = document.getElementById(materialSelectId);
@@ -122,9 +131,25 @@
             refill();
         }
 
+
+        function bindStorageTypeDensity(storageTypeSelectId, densityInputId) {
+            const storageTypeSelect = document.getElementById(storageTypeSelectId);
+            const densityInput = document.getElementById(densityInputId);
+            if (!storageTypeSelect || !densityInput) return;
+
+            const refill = () => {
+                const selectedStorageTypeId = storageTypeSelect.value;
+                const density = storageTypeDensities[selectedStorageTypeId];
+                densityInput.value = density != null ? density : '';
+            };
+
+            storageTypeSelect.addEventListener('change', refill);
+            refill();
+        }
         bindMaterialForm('InnerShellMaterialId', 'InnerShellMaterialFormId');
         bindMaterialForm('InnerHeadMaterialId', 'InnerHeadMaterialFormId');
         bindMaterialForm('OuterShellMaterialId', 'OuterShellMaterialFormId');
         bindMaterialForm('OuterHeadMaterialId', 'OuterHeadMaterialFormId');
+        bindStorageTypeDensity('StorageTypeId', 'LiquidDensity');
     </script>
 }

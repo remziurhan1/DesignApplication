@@ -4,6 +4,7 @@ using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
 using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
+using MVC.ProductManagement.Application.Services.StorageTypeServices;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 using System;
@@ -17,15 +18,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IEN13458CalculationServices _service;
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
+        private readonly IStorageTypeService _storageTypeService;
 
         public EN13458CalculationController(
             IEN13458CalculationServices service,
             IMaterialService materialService,
-            IMaterialFormService materialFormService)
+            IMaterialFormService materialFormService,
+            IStorageTypeService storageTypeService)
         {
             _service = service;
             _materialService = materialService;
             _materialFormService = materialFormService;
+            _storageTypeService = storageTypeService;
         }
 
         [HttpGet]
@@ -113,6 +117,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterDiameter = 2000,
                 ShellLength = 6000,
                 Pressure = 16,
+                StorageTypeId = Guid.Empty,
                 LiquidDensity = 808,
                 SectorWidth = 2000,
                 TankOrientation = TankOrientation.Horizontal,
@@ -130,13 +135,33 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View(vm);
             }
 
+            if (vm.StorageTypeId == Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(vm.StorageTypeId), "Lütfen bir depolama tipi seçin.");
+                await LoadLookupsAsync();
+                return View(vm);
+            }
+
+            double liquidDensity;
+            try
+            {
+                liquidDensity = await ResolveLiquidDensityAsync(vm.StorageTypeId);
+                vm.LiquidDensity = liquidDensity;
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError(nameof(vm.StorageTypeId), ex.Message);
+                await LoadLookupsAsync();
+                return View(vm);
+            }
+
             var dto = new EN13458CalculateDTO
             {
                 Name = vm.Name,
                 OuterDiameter = vm.OuterDiameter,
                 ShellLength = vm.ShellLength,
                 Pressure = vm.Pressure,
-                LiquidDensity = vm.LiquidDensity,
+                LiquidDensity = liquidDensity,
                 SectorWidth = vm.SectorWidth,
                 TankOrientation = vm.TankOrientation,
                 IsColdStretchApplied = vm.IsColdStretchApplied,
@@ -267,10 +292,24 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             };
         }
 
+
+        private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)
+        {
+            var storageType = await _storageTypeService.GetByIdAsync(storageTypeId);
+
+            if (storageType?.Data == null || storageType.Data.Density <= 0)
+            {
+                throw new InvalidOperationException("Seçilen depolama tipi için geçerli yoğunluk verisi bulunamadı.");
+            }
+
+            return storageType.Data.Density;
+        }
+
         private async Task LoadLookupsAsync()
         {
             var materials = await _materialService.GetAllAsync();
             var forms = await _materialFormService.GetAllAsync();
+            var storageTypes = await _storageTypeService.GetAllAsync();
 
             ViewBag.Materials = materials
                 .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
@@ -289,6 +328,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.MaterialForms = forms
                 .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]", x.Id.ToString()))
                 .ToList();
+
+            var storageTypeList = storageTypes.Data ?? new System.Collections.Generic.List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
+
+            ViewBag.StorageTypes = storageTypeList
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+                .ToList();
+
+            ViewBag.StorageTypeDensities = storageTypeList
+                .ToDictionary(x => x.Id.ToString(), x => x.Density);
         }
     }
 }

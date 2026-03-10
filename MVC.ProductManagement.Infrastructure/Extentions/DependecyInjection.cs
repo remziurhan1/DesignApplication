@@ -11,6 +11,7 @@ using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Co
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SA;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypeRepositories;
+using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.YieldStrengthRepositories;
 using MVC.ProductManagement.Infrastructure.Seeds;
 using System;
@@ -38,6 +39,7 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IAllowableStressRepository, AllowableStressRepository>();
             services.AddScoped<IEN13458Repository, EN13458Repository>();
             services.AddScoped<IStorageTypeRepositories, StorageTypeRepository>();
+            services.AddScoped<IStorageTypePropertiesRepository, StorageTypePropertiesRepository>();
             services.AddScoped<IFluidRepositories, FluidRepository>();
             services.AddScoped<ISProductGroupRepositories, SProductGroupRepository>();
             services.AddScoped<ISProductRepositories, SProductRepository>();

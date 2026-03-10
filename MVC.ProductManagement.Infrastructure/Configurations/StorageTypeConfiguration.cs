@@ -13,6 +13,13 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<StorageType> builder)
         {
+            builder.Property(x => x.Name)
+                .IsRequired();
+
+            builder.Property(x => x.Density)
+                .HasPrecision(10, 3)
+                .IsRequired();
+
             // İlişkiler
             // ProductType -> CryogenicsCalculations (One-to-Many)
             builder.HasMany(pt => pt.EN13458Calculations) // Bir ProductType birden fazla CryogenicsCalculation içerir
