@@ -4,6 +4,7 @@ using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
 using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
+using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 using System;
 using System.Collections.Generic;
@@ -112,7 +113,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ShellLength = 6000,
                 Pressure = 16,
                 LiquidDensity = 808,
-                SectorWidth = 2000
+                SectorWidth = 2000,
+                TankOrientation = TankOrientation.Horizontal
             });
         }
 
@@ -134,6 +136,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Pressure = vm.Pressure,
                 LiquidDensity = vm.LiquidDensity,
                 SectorWidth = vm.SectorWidth,
+                TankOrientation = vm.TankOrientation,
                 InnerShellMaterialId = vm.InnerShellMaterialId,
                 InnerShellMaterialFormId = vm.InnerShellMaterialFormId,
                 InnerHeadMaterialId = vm.InnerHeadMaterialId,
@@ -218,6 +221,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Pressure = vm.Pressure,
                 LiquidDensity = vm.LiquidDensity,
                 SectorWidth = vm.SectorWidth,
+                TankOrientation = vm.TankOrientation,
                 InnerShellMaterialId = vm.InnerShellMaterialId,
                 InnerShellMaterialFormId = vm.InnerShellMaterialFormId,
                 InnerHeadMaterialId = vm.InnerHeadMaterialId,

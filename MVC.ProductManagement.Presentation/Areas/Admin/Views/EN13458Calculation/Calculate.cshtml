@@ -34,6 +34,10 @@
             <label asp-for="SectorWidth" class="form-label"></label>
             <input asp-for="SectorWidth" class="form-control" />
         </div>
+        <div class="col-md-4">
+            <label asp-for="TankOrientation" class="form-label">Tank Yönelimi</label>
+            <select asp-for="TankOrientation" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.TankOrientation>()" class="form-select"></select>
+        </div>
     </div>
 
     <hr />

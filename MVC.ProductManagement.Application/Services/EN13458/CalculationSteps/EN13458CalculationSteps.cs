@@ -10,8 +10,12 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
         {
             const double gravity = 9.81d;
             const double testFactor = 1.5d;
-            // StorageType bilgisi DTO'da henüz olmadığı için bu fazda yatay tank varsayımıyla devam edilir.
-            var effectiveHeight = context.Input.OuterDiameter;
+            const double headFactorInner = 0.26d;
+
+            var headLengthInner = headFactorInner * context.Input.OuterDiameter;
+            var effectiveHeight = context.Input.TankOrientation == Domain.Enums.TankOrientation.Vertical
+                ? context.Input.ShellLength + (2d * headLengthInner)
+                : context.Input.OuterDiameter;
 
             var staticPressure = (context.Input.LiquidDensity * gravity * (effectiveHeight / 1000d)) / 100000d;
             staticPressure = Math.Round(staticPressure, 2);

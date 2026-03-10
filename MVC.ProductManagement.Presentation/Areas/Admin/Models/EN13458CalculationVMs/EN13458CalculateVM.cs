@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using MVC.ProductManagement.Domain.Enums;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs
 {
@@ -22,6 +23,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
 
         [Range(1, double.MaxValue)]
         public double SectorWidth { get; set; }
+
+        [Required]
+        public TankOrientation TankOrientation { get; set; } = TankOrientation.Horizontal;
 
         [Required] public Guid InnerShellMaterialId { get; set; }
         [Required] public Guid InnerShellMaterialFormId { get; set; }
