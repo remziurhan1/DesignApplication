@@ -22,6 +22,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Engines
                 OuterDiameter = input.OuterDiameter,
                 ShellLength = input.ShellLength,
                 Pressure = input.Pressure,
+                StorageTypeId = input.StorageTypeId,
                 LiquidDensity = input.LiquidDensity,
                 SectorWidth = input.SectorWidth,
                 TankOrientation = input.TankOrientation,

@@ -11,6 +11,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double OuterDiameter { get; set; }
         public double ShellLength { get; set; }
         public double Pressure { get; set; }
+        public Guid StorageTypeId { get; set; }
         public double LiquidDensity { get; set; }
         public double SectorWidth { get; set; }
         public TankOrientation TankOrientation { get; set; }

@@ -55,7 +55,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
         private static EN13458Calculation ToEntity(EN13458ResultDTO dto, string createdBy) => new EN13458Calculation
         {
             Id = Guid.NewGuid(), Name = dto.Name, OuterDiameter = dto.OuterDiameter, ShellLength = dto.ShellLength,
-            Pressure = dto.Pressure, LiquidDensity = dto.LiquidDensity, SectorWidth = dto.SectorWidth,
+            Pressure = dto.Pressure, ProductTypeId = dto.StorageTypeId, LiquidDensity = dto.LiquidDensity, SectorWidth = dto.SectorWidth,
             InnerShellMaterialId = dto.InnerShellMaterialId, InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
             InnerHeadMaterialId = dto.InnerHeadMaterialId, InnerHeadMaterialFormId = dto.InnerHeadMaterialFormId,
             OuterShellMaterialId = dto.OuterShellMaterialId, OuterShellMaterialFormId = dto.OuterShellMaterialFormId,
@@ -75,7 +75,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
         private static EN13458ResultDTO ToDto(EN13458Calculation entity) => new EN13458ResultDTO
         {
             Id = entity.Id, Name = entity.Name, OuterDiameter = entity.OuterDiameter, ShellLength = entity.ShellLength,
-            Pressure = entity.Pressure, LiquidDensity = entity.LiquidDensity, SectorWidth = entity.SectorWidth,
+            Pressure = entity.Pressure, StorageTypeId = entity.ProductTypeId, LiquidDensity = entity.LiquidDensity, SectorWidth = entity.SectorWidth,
             IsColdStretchApplied = false, TankOrientation = MVC.ProductManagement.Domain.Enums.TankOrientation.Horizontal,
             InnerShellMaterialId = entity.InnerShellMaterialId, InnerShellMaterialFormId = entity.InnerShellMaterialFormId,
             InnerHeadMaterialId = entity.InnerHeadMaterialId, InnerHeadMaterialFormId = entity.InnerHeadMaterialFormId,
