@@ -26,7 +26,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Id = m.Id,
                 Name = m.Name,
                 Standard = m.Standard,
-                Group = m.Group
+                Group = m.Group,
             }).ToList();
         }
 

@@ -24,7 +24,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = m.Id,
                 Name = m.Name,
                 Standard = m.Standard,
-                Group = m.Group
+                Group = m.Group,
             }).ToList();
 
             return View(vms);

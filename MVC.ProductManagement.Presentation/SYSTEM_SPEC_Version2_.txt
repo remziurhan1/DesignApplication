@@ -123,6 +123,43 @@ SONUÇ: Tank Kodu + Mamül Kodu oluşur
 
 ---
 
+## 🧮 Hesap + Maliyetlendirme Akışı (Yeni)
+
+Standarda göre hesaplama tamamlandıktan sonra sistem, hesap sonuçlarından otomatik bir **material tablosu** üretecek ve buradan maliyetlendirme yapacaktır.
+
+### 1) Hesap Adımı
+- Girdi: Gaz tipi, standart, basınç, çap, gövde boyu, malzeme/form seçimleri.
+- Çıktı: İç/dış gövde ve bombe et kalınlıkları, test basıncı, kaynak boyu.
+
+### 2) Material Tablosu Üretimi
+- Her satır bir kalem olacak: `İç Gövde`, `İç Bombe`, `Dış Gövde`, `Dış Bombe`.
+- Her satırda tutulacak alanlar:
+  - Malzeme
+  - Form (plate/pipe vb.)
+  - Hesap kalınlığı (mm)
+  - Kullanılan kalınlık (mm)
+  - Yoğunluk (kg/m³)
+  - Birim fiyat (`MaterialForm.UnitPrice`)
+  - Teorik ağırlık (kg)
+  - Kalem maliyeti
+
+### 3) Maliyet Hesabı
+- Kalem maliyeti: `Teorik Ağırlık × Birim Fiyat`
+- Toplam malzeme maliyeti: tüm kalemlerin toplamı
+- Yardımcı maliyetler ayrıca eklenir:
+  - Film/radyografi maliyeti (`TotalFilmCost`)
+  - İleride eklenecek: işçilik, fire, genel gider, marj
+
+### 4) Onay ve Teklif
+- Hesap + material tablosu + maliyet çıktısı tek bir sonuç ekranında gösterilir.
+- Yönetici onayı sonrası teklif/PDF çıktısına yazılır.
+
+### Uygulama Notu
+- Material fiyat kaynağı `MaterialForm.UnitPrice` alanıdır.
+- Standart değiştiğinde (EN/ASME) aynı akış korunur; yalnızca hesap formülleri ve izin verilebilir değer tabloları değişir.
+
+---
+
 ## 🏭 Mamül Kodu Mantığı
 
 1.  Yeni talep gelir → Tank kodu oluşur

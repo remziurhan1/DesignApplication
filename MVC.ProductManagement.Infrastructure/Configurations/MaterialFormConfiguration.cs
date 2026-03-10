@@ -21,6 +21,9 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(f => f.WeldingFactor)
                    .HasPrecision(5, 2);
 
+            builder.Property(f => f.ColdStretchYieldStrength)
+                   .HasPrecision(10, 3);
+
             builder.HasMany(f => f.YieldStrengths)
                    .WithOne(y => y.MaterialForm)
                    .HasForeignKey(y => y.MaterialFormId)
