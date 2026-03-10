@@ -59,11 +59,26 @@ namespace MVC.ProductManagement.Domain.Entities
         public double TestPressure { get; set; }
         public double StaticPressure { get; set; }
 
+        public double InnerTankHeadWeldLength { get; set; }
+        public double InnerTankCircumferenceWeldLength { get; set; }
+        public double OuterTankHeadWeldLength { get; set; }
+        public double OuterTankCircumferenceWeldLength { get; set; }
         public double TotalWeldLength { get; set; }
         public double TotalFilmCost { get; set; }
 
         public double InnerTankTotalLength { get; set; }
         public double OuterTankTotalLength { get; set; }
+
+        public double InnerVolume { get; set; }
+        public double OuterVolume { get; set; }
+        public double InnerSurfaceArea { get; set; }
+        public double OuterSurfaceArea { get; set; }
+        public double InnerTankWeight { get; set; }
+        public double OuterTankWeight { get; set; }
+        public double PerliteVolume { get; set; }
+        public double PerliteWeight { get; set; }
+        public double GasNitrogenVolume { get; set; }
+        public double LiquidNitrogenVolume { get; set; }
 
         public Guid ProductTypeId { get; set; } // İlgili ProductType ID
         public virtual StorageType StorageService { get; set; } // İlgili ProductType

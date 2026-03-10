@@ -93,6 +93,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = dto.DesignPressure,
                 TestPressure = dto.TestPressure,
                 StaticPressure = dto.StaticPressure,
+                InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength,
+                InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength,
+                OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength,
+                OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength,
                 TotalWeldLength = dto.TotalWeldLength,
                 TotalFilmCost = dto.TotalFilmCost,
                 InnerTankTotalLength = dto.InnerTankTotalLength,
@@ -104,6 +108,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 InnerTankWeight = dto.InnerTankWeight,
                 OuterTankWeight = dto.OuterTankWeight,
                 PerliteVolume = dto.PerliteVolume,
+                PerliteWeight = dto.PerliteWeight,
                 GasNitrogenVolume = dto.GasNitrogenVolume,
                 LiquidNitrogenVolume = dto.LiquidNitrogenVolume
             };
@@ -236,6 +241,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = dto.DesignPressure,
                 TestPressure = dto.TestPressure,
                 StaticPressure = dto.StaticPressure,
+                InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength,
+                InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength,
+                OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength,
+                OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength,
                 TotalWeldLength = dto.TotalWeldLength,
                 TotalFilmCost = dto.TotalFilmCost,
                 InnerTankTotalLength = dto.InnerTankTotalLength,
@@ -247,6 +256,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 InnerTankWeight = dto.InnerTankWeight,
                 OuterTankWeight = dto.OuterTankWeight,
                 PerliteVolume = dto.PerliteVolume,
+                PerliteWeight = dto.PerliteWeight,
                 GasNitrogenVolume = dto.GasNitrogenVolume,
                 LiquidNitrogenVolume = dto.LiquidNitrogenVolume
             };
@@ -289,6 +299,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = vm.DesignPressure,
                 TestPressure = vm.TestPressure,
                 StaticPressure = vm.StaticPressure,
+                InnerTankHeadWeldLength = vm.InnerTankHeadWeldLength,
+                InnerTankCircumferenceWeldLength = vm.InnerTankCircumferenceWeldLength,
+                OuterTankHeadWeldLength = vm.OuterTankHeadWeldLength,
+                OuterTankCircumferenceWeldLength = vm.OuterTankCircumferenceWeldLength,
                 TotalWeldLength = vm.TotalWeldLength,
                 TotalFilmCost = vm.TotalFilmCost,
                 InnerTankTotalLength = vm.InnerTankTotalLength,
@@ -300,6 +314,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 InnerTankWeight = vm.InnerTankWeight,
                 OuterTankWeight = vm.OuterTankWeight,
                 PerliteVolume = vm.PerliteVolume,
+                PerliteWeight = vm.PerliteWeight,
                 GasNitrogenVolume = vm.GasNitrogenVolume,
                 LiquidNitrogenVolume = vm.LiquidNitrogenVolume
             };
