@@ -24,6 +24,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Engines
                 Pressure = input.Pressure,
                 LiquidDensity = input.LiquidDensity,
                 SectorWidth = input.SectorWidth,
+                TankOrientation = input.TankOrientation,
+                IsColdStretchApplied = input.IsColdStretchApplied,
                 InnerShellMaterialId = input.InnerShellMaterialId,
                 InnerShellMaterialFormId = input.InnerShellMaterialFormId,
                 InnerHeadMaterialId = input.InnerHeadMaterialId,

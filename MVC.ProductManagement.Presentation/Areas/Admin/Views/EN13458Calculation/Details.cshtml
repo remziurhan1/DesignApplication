@@ -11,6 +11,8 @@
         <tr><th>Ad</th><td>@Model.Name</td></tr>
         <tr><th>OuterDiameter / ShellLength</th><td>@Model.OuterDiameter / @Model.ShellLength</td></tr>
         <tr><th>Design/Test/Static Pressure</th><td>@Model.DesignPressure / @Model.TestPressure / @Model.StaticPressure</td></tr>
+        <tr><th>Tank Yönelimi / Cold Stretch</th><td>@Model.TankOrientation / @(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
+        <tr><th>Akma Dayanımları (MPa)</th><td>İç Gövde: @Model.InnerShellMaterialStrength, İç Bombe: @Model.InnerHeadMaterialStrength, Dış Gövde: @Model.OuterShellMaterialStrength, Dış Bombe: @Model.OuterHeadMaterialStrength</td></tr>
         <tr><th>Kalınlıklar</th><td>@Model.RoundedInnerShellThickness / @Model.RoundedInnerHeadThickness / @Model.RoundedOuterShellThickness / @Model.RoundedOuterHeadThickness</td></tr>
         <tr><th>Inner-Outer Volume</th><td>@Model.InnerVolume / @Model.OuterVolume</td></tr>
         <tr><th>Inner-Outer Weight</th><td>@Model.InnerTankWeight / @Model.OuterTankWeight</td></tr>

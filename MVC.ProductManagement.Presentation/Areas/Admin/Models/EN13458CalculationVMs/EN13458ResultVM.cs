@@ -1,5 +1,7 @@
 using System;
 
+using MVC.ProductManagement.Domain.Enums;
+
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs
 {
     public class EN13458ResultVM
@@ -11,6 +13,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double Pressure { get; set; }
         public double LiquidDensity { get; set; }
         public double SectorWidth { get; set; }
+        public TankOrientation TankOrientation { get; set; }
+        public bool IsColdStretchApplied { get; set; }
 
         public Guid InnerShellMaterialId { get; set; }
         public Guid InnerShellMaterialFormId { get; set; }

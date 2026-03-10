@@ -26,7 +26,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             _yieldStrengthService = yieldStrengthService;
         }
 
-        public async Task<double> ResolveEffectiveYieldStrengthAsync(Guid materialId, Guid materialFormId)
+        public async Task<double> ResolveEffectiveYieldStrengthAsync(Guid materialId, Guid materialFormId, bool isColdStretchApplied)
         {
             var form = await _materialFormService.GetByIdAsync(materialFormId)
                 ?? throw new InvalidOperationException($"Material form not found: {materialFormId}");
@@ -36,9 +36,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
 
             var interpolated = await _yieldStrengthService.GetByConditionsAsync(materialFormId, DefaultTemperature, DefaultThickness);
 
-            var effectiveYield = form.ColdStretchYieldStrength
-                                 ?? material.ColdStretchYieldStrength
-                                 ?? interpolated?.Rp02;
+            var effectiveYield = isColdStretchApplied
+                ? (form.ColdStretchYieldStrength ?? material.ColdStretchYieldStrength ?? interpolated?.Rp02)
+                : interpolated?.Rp02;
 
             if (!effectiveYield.HasValue)
             {
