@@ -18,7 +18,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         [Range(0.01, double.MaxValue)]
         public double Pressure { get; set; }
 
-        [Range(1, double.MaxValue)]
+        public Guid StorageTypeId { get; set; }
+
         public double LiquidDensity { get; set; }
 
         [Range(1, double.MaxValue)]
