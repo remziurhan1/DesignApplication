@@ -1,0 +1,31 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458ResultVM
+@{
+    ViewData["Title"] = "EN13458 Result";
+}
+
+<h2>EN13458 Sonuç</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <tr><th>Ad</th><td>@Model.Name</td></tr>
+        <tr><th>Design/Test/Static Pressure</th><td>@Model.DesignPressure / @Model.TestPressure / @Model.StaticPressure</td></tr>
+        <tr><th>Kalınlıklar (Inner S/H - Outer S/H)</th><td>@Model.InnerShellThickness / @Model.InnerHeadThickness - @Model.OuterShellThickness / @Model.OuterHeadThickness</td></tr>
+        <tr><th>Yuvarlanmış Kalınlıklar</th><td>@Model.RoundedInnerShellThickness / @Model.RoundedInnerHeadThickness - @Model.RoundedOuterShellThickness / @Model.RoundedOuterHeadThickness</td></tr>
+        <tr><th>Hacim (Inner/Outer)</th><td>@Model.InnerVolume / @Model.OuterVolume</td></tr>
+        <tr><th>Yüzey (Inner/Outer)</th><td>@Model.InnerSurfaceArea / @Model.OuterSurfaceArea</td></tr>
+        <tr><th>Ağırlık (Inner/Outer)</th><td>@Model.InnerTankWeight / @Model.OuterTankWeight</td></tr>
+        <tr><th>Weld / Film / Perlite</th><td>@Model.TotalWeldLength / @Model.TotalFilmCost / @Model.PerliteVolume</td></tr>
+        <tr><th>LN2 (Liquid/Gas)</th><td>@Model.LiquidNitrogenVolume / @Model.GasNitrogenVolume</td></tr>
+        <tr><th>Toplam Uzunluk (Inner/Outer)</th><td>@Model.InnerTankTotalLength / @Model.OuterTankTotalLength</td></tr>
+    </table>
+</div>
+
+<form asp-action="Save" method="post">
+    @Html.AntiForgeryToken()
+    @foreach (var p in ViewData.ModelMetadata.Properties)
+    {
+        <input type="hidden" name="@p.PropertyName" value="@ViewData.ModelExplorer.GetExplorerForProperty(p.PropertyName).Model" />
+    }
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a asp-action="Calculate" class="btn btn-secondary">Yeni Hesap</a>
+</form>

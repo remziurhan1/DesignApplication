@@ -1,0 +1,89 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458CalculateVM
+@{
+    ViewData["Title"] = "EN13458 Calculate";
+}
+
+<h2>EN13458 Hesapla</h2>
+
+<form asp-action="Calculate" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="OuterDiameter" class="form-label"></label>
+            <input asp-for="OuterDiameter" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="ShellLength" class="form-label"></label>
+            <input asp-for="ShellLength" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Pressure" class="form-label"></label>
+            <input asp-for="Pressure" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="LiquidDensity" class="form-label"></label>
+            <input asp-for="LiquidDensity" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="SectorWidth" class="form-label"></label>
+            <input asp-for="SectorWidth" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="TankOrientation" class="form-label">Tank Yönelimi</label>
+            <select asp-for="TankOrientation" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.TankOrientation>()" class="form-select"></select>
+        </div>
+    </div>
+
+    <hr />
+    <h5>İç Tank</h5>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="InnerShellMaterialId" class="form-label">İç Gövde Malzemesi</label>
+            <select asp-for="InnerShellMaterialId" asp-items="ViewBag.Materials" class="form-select"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="InnerShellMaterialFormId" class="form-label">İç Gövde Formu</label>
+            <select asp-for="InnerShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="InnerHeadMaterialId" class="form-label">İç Bombe Malzemesi</label>
+            <select asp-for="InnerHeadMaterialId" asp-items="ViewBag.Materials" class="form-select"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="InnerHeadMaterialFormId" class="form-label">İç Bombe Formu</label>
+            <select asp-for="InnerHeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"></select>
+        </div>
+    </div>
+
+    <hr />
+    <h5>Dış Tank</h5>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="OuterShellMaterialId" class="form-label">Dış Gövde Malzemesi</label>
+            <select asp-for="OuterShellMaterialId" asp-items="ViewBag.Materials" class="form-select"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="OuterShellMaterialFormId" class="form-label">Dış Gövde Formu</label>
+            <select asp-for="OuterShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="OuterHeadMaterialId" class="form-label">Dış Bombe Malzemesi</label>
+            <select asp-for="OuterHeadMaterialId" asp-items="ViewBag.Materials" class="form-select"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="OuterHeadMaterialFormId" class="form-label">Dış Bombe Formu</label>
+            <select asp-for="OuterHeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"></select>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Hesapla</button>
+        <a asp-action="Index" class="btn btn-secondary">Liste</a>
+    </div>
+</form>

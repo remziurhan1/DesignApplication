@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MVC.ProductManagement.Domain.Enums;
+
 namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
 {
    public class EN13458CalculateDTO
@@ -14,6 +16,7 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double Pressure { get; set; }
         public double LiquidDensity { get; set; }
         public double SectorWidth { get; set; }
+        public TankOrientation TankOrientation { get; set; } = TankOrientation.Horizontal;
 
         // Malzeme seçimleri
         public Guid InnerShellMaterialId { get; set; }
@@ -27,5 +30,11 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
 
         public Guid OuterHeadMaterialId { get; set; }
         public Guid OuterHeadMaterialFormId { get; set; }
+
+        // Opsiyonel normalize edilmiş dayanım değerleri (adapter tarafından set edilebilir)
+        public double? InnerShellMaterialStrength { get; set; }
+        public double? InnerHeadMaterialStrength { get; set; }
+        public double? OuterShellMaterialStrength { get; set; }
+        public double? OuterHeadMaterialStrength { get; set; }
     }
 }
