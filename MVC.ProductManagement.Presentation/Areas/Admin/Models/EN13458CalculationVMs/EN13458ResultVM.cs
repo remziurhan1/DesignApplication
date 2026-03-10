@@ -1,3 +1,4 @@
+using MVC.ProductManagement.Domain.Enums;
 using System;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs
@@ -20,6 +21,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public Guid OuterShellMaterialFormId { get; set; }
         public Guid OuterHeadMaterialId { get; set; }
         public Guid OuterHeadMaterialFormId { get; set; }
+        public TankOrientation TankOrientation { get; set; }
 
         public double InnerShellMaterialStrength { get; set; }
         public double InnerHeadMaterialStrength { get; set; }
