@@ -5,21 +5,88 @@
 
 <h2>EN13458 Sonuç</h2>
 
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <tr><th>Ad</th><td>@Model.Name</td></tr>
-        <tr><th>Design/Test/Static Pressure</th><td>@Model.DesignPressure / @Model.TestPressure / @Model.StaticPressure</td></tr>
-        <tr><th>Tank Yönelimi / Cold Stretch</th><td>@Model.TankOrientation / @(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
-        <tr><th>Akma Dayanımları (MPa)</th><td>İç Gövde: @Model.InnerShellMaterialStrength, İç Bombe: @Model.InnerHeadMaterialStrength, Dış Gövde: @Model.OuterShellMaterialStrength, Dış Bombe: @Model.OuterHeadMaterialStrength</td></tr>
-        <tr><th>Kalınlıklar (Inner S/H - Outer S/H)</th><td>@Model.InnerShellThickness / @Model.InnerHeadThickness - @Model.OuterShellThickness / @Model.OuterHeadThickness</td></tr>
-        <tr><th>Yuvarlanmış Kalınlıklar</th><td>@Model.RoundedInnerShellThickness / @Model.RoundedInnerHeadThickness - @Model.RoundedOuterShellThickness / @Model.RoundedOuterHeadThickness</td></tr>
-        <tr><th>Hacim (Inner/Outer)</th><td>@Model.InnerVolume / @Model.OuterVolume</td></tr>
-        <tr><th>Yüzey (Inner/Outer)</th><td>@Model.InnerSurfaceArea / @Model.OuterSurfaceArea</td></tr>
-        <tr><th>Ağırlık (Inner/Outer)</th><td>@Model.InnerTankWeight / @Model.OuterTankWeight</td></tr>
-        <tr><th>Weld / Film / Perlite</th><td>@Model.TotalWeldLength / @Model.TotalFilmCost / @Model.PerliteVolume</td></tr>
-        <tr><th>LN2 (Liquid/Gas)</th><td>@Model.LiquidNitrogenVolume / @Model.GasNitrogenVolume</td></tr>
-        <tr><th>Toplam Uzunluk (Inner/Outer)</th><td>@Model.InnerTankTotalLength / @Model.OuterTankTotalLength</td></tr>
-    </table>
+<div class="row g-4">
+    <div class="col-12 col-xl-6">
+        <h4>Girilen Değerler</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm align-middle">
+                <thead>
+                <tr>
+                    <th>Parametre</th>
+                    <th>Değer</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><th>Ad</th><td>@Model.Name</td></tr>
+                <tr><th>Dış Çap</th><td>@Model.OuterDiameter</td></tr>
+                <tr><th>Silindirik Boy</th><td>@Model.ShellLength</td></tr>
+                <tr><th>Basınç</th><td>@Model.Pressure</td></tr>
+                <tr><th>Storage Type Id</th><td>@Model.StorageTypeId</td></tr>
+                <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td></tr>
+                <tr><th>Sektör Genişliği</th><td>@Model.SectorWidth</td></tr>
+                <tr><th>Tank Yönelimi</th><td>@Model.TankOrientation</td></tr>
+                <tr><th>Cold Stretch Uygulandı mı?</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
+
+                <tr><th>İç Gövde Malzeme Id</th><td>@Model.InnerShellMaterialId</td></tr>
+                <tr><th>İç Gövde Form Id</th><td>@Model.InnerShellMaterialFormId</td></tr>
+                <tr><th>İç Bombe Malzeme Id</th><td>@Model.InnerHeadMaterialId</td></tr>
+                <tr><th>İç Bombe Form Id</th><td>@Model.InnerHeadMaterialFormId</td></tr>
+                <tr><th>Dış Gövde Malzeme Id</th><td>@Model.OuterShellMaterialId</td></tr>
+                <tr><th>Dış Gövde Form Id</th><td>@Model.OuterShellMaterialFormId</td></tr>
+                <tr><th>Dış Bombe Malzeme Id</th><td>@Model.OuterHeadMaterialId</td></tr>
+                <tr><th>Dış Bombe Form Id</th><td>@Model.OuterHeadMaterialFormId</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <h4>Hesap Sonuçları</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm align-middle">
+                <thead>
+                <tr>
+                    <th>Parametre</th>
+                    <th>Değer</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><th>İç Gövde Akma Dayanımı (MPa)</th><td>@Model.InnerShellMaterialStrength</td></tr>
+                <tr><th>İç Bombe Akma Dayanımı (MPa)</th><td>@Model.InnerHeadMaterialStrength</td></tr>
+                <tr><th>Dış Gövde Akma Dayanımı (MPa)</th><td>@Model.OuterShellMaterialStrength</td></tr>
+                <tr><th>Dış Bombe Akma Dayanımı (MPa)</th><td>@Model.OuterHeadMaterialStrength</td></tr>
+
+                <tr><th>İç Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
+                <tr><th>İç Bombe Kalınlığı</th><td>@Model.InnerHeadThickness</td></tr>
+                <tr><th>Dış Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
+                <tr><th>Dış Bombe Kalınlığı</th><td>@Model.OuterHeadThickness</td></tr>
+
+                <tr><th>Yuvarlanmış İç Gövde Kalınlığı</th><td>@Model.RoundedInnerShellThickness</td></tr>
+                <tr><th>Yuvarlanmış İç Bombe Kalınlığı</th><td>@Model.RoundedInnerHeadThickness</td></tr>
+                <tr><th>Yuvarlanmış Dış Gövde Kalınlığı</th><td>@Model.RoundedOuterShellThickness</td></tr>
+                <tr><th>Yuvarlanmış Dış Bombe Kalınlığı</th><td>@Model.RoundedOuterHeadThickness</td></tr>
+
+                <tr><th>Design Pressure</th><td>@Model.DesignPressure</td></tr>
+                <tr><th>Test Pressure</th><td>@Model.TestPressure</td></tr>
+                <tr><th>Static Pressure</th><td>@Model.StaticPressure</td></tr>
+                <tr><th>Toplam Kaynak Uzunluğu</th><td>@Model.TotalWeldLength</td></tr>
+                <tr><th>Toplam Film Maliyeti</th><td>@Model.TotalFilmCost</td></tr>
+                <tr><th>İç Tank Toplam Uzunluk</th><td>@Model.InnerTankTotalLength</td></tr>
+                <tr><th>Dış Tank Toplam Uzunluk</th><td>@Model.OuterTankTotalLength</td></tr>
+
+                <tr><th>İç Hacim</th><td>@Model.InnerVolume</td></tr>
+                <tr><th>Dış Hacim</th><td>@Model.OuterVolume</td></tr>
+                <tr><th>İç Yüzey Alanı</th><td>@Model.InnerSurfaceArea</td></tr>
+                <tr><th>Dış Yüzey Alanı</th><td>@Model.OuterSurfaceArea</td></tr>
+                <tr><th>İç Tank Ağırlığı</th><td>@Model.InnerTankWeight</td></tr>
+                <tr><th>Dış Tank Ağırlığı</th><td>@Model.OuterTankWeight</td></tr>
+                <tr><th>Perlit Hacmi</th><td>@Model.PerliteVolume</td></tr>
+                <tr><th>Gaz Azot Hacmi</th><td>@Model.GasNitrogenVolume</td></tr>
+                <tr><th>Sıvı Azot Hacmi</th><td>@Model.LiquidNitrogenVolume</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <form asp-action="Save" method="post">
