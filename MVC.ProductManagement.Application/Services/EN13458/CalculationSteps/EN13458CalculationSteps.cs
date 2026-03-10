@@ -265,11 +265,14 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var innerBombePulDiameter =
                 (BombeCoefficient * diameter) + (BombeFactor * innerHeadT);
 
+            context.Result.InnerTankHeadPulDiameter = Math.Round(innerBombePulDiameter, 2);
+
             var innerBombeVolume =
                 (Math.PI / 4d) * Math.Pow(innerBombePulDiameter / 1000d, 2)
                 * (innerHeadT / 1000d);
 
             var innerBombeWeight = innerBombeVolume * SteelDensity;
+            context.Result.InnerTankHeadWeight = Math.Round(innerBombeWeight, 2);
 
             context.Result.InnerTankWeight =
                 Math.Round((innerShellWeight + (2d * innerBombeWeight)) * 1.03d, 2);
@@ -294,11 +297,14 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var outerBombePulDiameter =
                 (BombeCoefficient * outerDiameter) + (BombeFactor * outerHeadT);
 
+            context.Result.OuterTankHeadPulDiameter = Math.Round(outerBombePulDiameter, 2);
+
             var outerBombeVolume =
                 (Math.PI / 4d) * Math.Pow(outerBombePulDiameter / 1000d, 2)
                 * (outerHeadT / 1000d);
 
             var outerBombeWeight = outerBombeVolume * SteelDensity;
+            context.Result.OuterTankHeadWeight = Math.Round(outerBombeWeight, 2);
 
             context.Result.OuterTankWeight =
                 Math.Round((outerShellWeight + (2d * outerBombeWeight)) * 1.03d, 2);

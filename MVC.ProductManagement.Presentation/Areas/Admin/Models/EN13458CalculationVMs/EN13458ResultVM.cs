@@ -52,6 +52,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double DesignPressure { get; set; }
         public double TestPressure { get; set; }
         public double StaticPressure { get; set; }
+        public double InnerTankHeadPulDiameter { get; set; }
+        public double OuterTankHeadPulDiameter { get; set; }
+        public double InnerTankHeadWeight { get; set; }
+        public double OuterTankHeadWeight { get; set; }
         public double InnerTankHeadWeldLength { get; set; }
         public double InnerTankCircumferenceWeldLength { get; set; }
         public double OuterTankHeadWeldLength { get; set; }

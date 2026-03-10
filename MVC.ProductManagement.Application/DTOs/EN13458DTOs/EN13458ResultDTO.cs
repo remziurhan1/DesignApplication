@@ -59,6 +59,10 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double StaticPressure { get; set; }
 
         // === BOY, MALİYET, UZUNLUK ===
+        public double InnerTankHeadPulDiameter { get; set; }
+        public double OuterTankHeadPulDiameter { get; set; }
+        public double InnerTankHeadWeight { get; set; }
+        public double OuterTankHeadWeight { get; set; }
         public double InnerTankHeadWeldLength { get; set; }
         public double InnerTankCircumferenceWeldLength { get; set; }
         public double OuterTankHeadWeldLength { get; set; }
