@@ -20,20 +20,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
         private readonly IStorageTypeService _storageTypeService;
-        private readonly IStorageTypePropertiesRepository _storageTypePropertiesRepository;
 
         public EN13458CalculationController(
             IEN13458CalculationServices service,
             IMaterialService materialService,
             IMaterialFormService materialFormService,
-            IStorageTypeService storageTypeService,
-            IStorageTypePropertiesRepository storageTypePropertiesRepository)
+            IStorageTypeService storageTypeService)
         {
             _service = service;
             _materialService = materialService;
             _materialFormService = materialFormService;
             _storageTypeService = storageTypeService;
-            _storageTypePropertiesRepository = storageTypePropertiesRepository;
         }
 
         [HttpGet]
@@ -149,7 +146,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             double liquidDensity;
             try
             {
-                liquidDensity = await ResolveLiquidDensityAsync(vm.StorageTypeId, vm.Pressure);
+                liquidDensity = await ResolveLiquidDensityAsync(vm.StorageTypeId);
                 vm.LiquidDensity = liquidDensity;
             }
             catch (InvalidOperationException ex)
@@ -297,19 +294,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
 
-        private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId, double pressureBar)
+        private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)
         {
-            var properties = await _storageTypePropertiesRepository.GetByStorageTypeIdAsync(storageTypeId);
-            var nearest = properties
-                .OrderBy(x => Math.Abs(x.Pressure_bar - pressureBar))
-                .FirstOrDefault();
+            var storageType = await _storageTypeService.GetByIdAsync(storageTypeId);
 
-            if (nearest == null || nearest.SpecificVolume_Liquid_dm3kg <= 0)
+            if (storageType?.Data == null || storageType.Data.Density <= 0)
             {
-                throw new InvalidOperationException("Seçilen depolama tipi için geçerli sıvı özgül hacim verisi bulunamadı.");
+                throw new InvalidOperationException("Seçilen depolama tipi için geçerli yoğunluk verisi bulunamadı.");
             }
 
-            return 1000d / nearest.SpecificVolume_Liquid_dm3kg;
+            return storageType.Data.Density;
         }
 
         private async Task LoadLookupsAsync()
@@ -336,9 +330,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]", x.Id.ToString()))
                 .ToList();
 
-            ViewBag.StorageTypes = (storageTypes.Data ?? new System.Collections.Generic.List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>())
+            var storageTypeList = storageTypes.Data ?? new System.Collections.Generic.List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
+
+            ViewBag.StorageTypes = storageTypeList
                 .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
                 .ToList();
+
+            ViewBag.StorageTypeDensities = storageTypeList
+                .ToDictionary(x => x.Id.ToString(), x => x.Density);
         }
     }
 }

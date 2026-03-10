@@ -104,6 +104,7 @@
 @section Scripts {
     <script>
         const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormsByMaterial));
+        const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.StorageTypeDensities));
 
         function bindMaterialForm(materialSelectId, formSelectId) {
             const materialSelect = document.getElementById(materialSelectId);
@@ -130,9 +131,25 @@
             refill();
         }
 
+
+        function bindStorageTypeDensity(storageTypeSelectId, densityInputId) {
+            const storageTypeSelect = document.getElementById(storageTypeSelectId);
+            const densityInput = document.getElementById(densityInputId);
+            if (!storageTypeSelect || !densityInput) return;
+
+            const refill = () => {
+                const selectedStorageTypeId = storageTypeSelect.value;
+                const density = storageTypeDensities[selectedStorageTypeId];
+                densityInput.value = density != null ? density : '';
+            };
+
+            storageTypeSelect.addEventListener('change', refill);
+            refill();
+        }
         bindMaterialForm('InnerShellMaterialId', 'InnerShellMaterialFormId');
         bindMaterialForm('InnerHeadMaterialId', 'InnerHeadMaterialFormId');
         bindMaterialForm('OuterShellMaterialId', 'OuterShellMaterialFormId');
         bindMaterialForm('OuterHeadMaterialId', 'OuterHeadMaterialFormId');
+        bindStorageTypeDensity('StorageTypeId', 'LiquidDensity');
     </script>
 }
