@@ -10,7 +10,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
         {
             migrationBuilder.AddColumn<double>(
                 name: "ColdStretchYieldStrength",
-                table: "Materials",
+                table: "MaterialForms",
                 type: "float",
                 precision: 10,
                 scale: 3,
@@ -21,7 +21,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "ColdStretchYieldStrength",
-                table: "Materials");
+                table: "MaterialForms");
         }
     }
 }

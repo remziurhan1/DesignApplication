@@ -32,6 +32,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
                 UnitPrice=f.UnitPrice,
+                ColdStretchYieldStrength = f.ColdStretchYieldStrength,
                 MaterialName=f.Material.Name,
             }).ToList();
 
@@ -56,7 +57,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ThicknessMax = dto.ThicknessMax,
                 ProductStandard = dto.ProductStandard,
                 WeldingFactor = dto.WeldingFactor,
-                Notes = dto.Notes
+                Notes = dto.Notes,
+                UnitPrice = dto.UnitPrice,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
 
             return View(vm);
@@ -87,7 +90,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ThicknessMax = vm.ThicknessMax,
                 ProductStandard = vm.ProductStandard,
                 WeldingFactor = vm.WeldingFactor,
-                Notes = vm.Notes
+                Notes = vm.Notes,
+                UnitPrice = vm.UnitPrice,
+                ColdStretchYieldStrength = vm.ColdStretchYieldStrength
             };
 
             await _materialFormService.CreateAsync(dto);
@@ -112,7 +117,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ProductStandard = dto.ProductStandard,
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
-                UnitPrice=dto.UnitPrice
+                UnitPrice=dto.UnitPrice,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
                 
             };
 
@@ -136,7 +142,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ProductStandard = vm.ProductStandard,
                 WeldingFactor = vm.WeldingFactor,
                 Notes = vm.Notes,
-                UnitPrice = vm.UnitPrice
+                UnitPrice = vm.UnitPrice,
+                ColdStretchYieldStrength = vm.ColdStretchYieldStrength
 
             };
 
@@ -159,7 +166,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ThicknessMax = dto.ThicknessMax,
                 ProductStandard = dto.ProductStandard,
                 WeldingFactor = dto.WeldingFactor,
-                Notes = dto.Notes
+                Notes = dto.Notes,
+                UnitPrice = dto.UnitPrice,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
 
             return View(vm);

@@ -25,7 +25,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Name = m.Name,
                 Standard = m.Standard,
                 Group = m.Group,
-                ColdStretchYieldStrength = m.ColdStretchYieldStrength
             }).ToList();
 
             return View(vms);

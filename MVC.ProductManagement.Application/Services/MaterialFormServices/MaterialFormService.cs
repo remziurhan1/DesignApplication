@@ -28,7 +28,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 FormType = f.FormType,
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
-                UnitPrice=f.UnitPrice
+                UnitPrice=f.UnitPrice,
+                ColdStretchYieldStrength = f.ColdStretchYieldStrength
             }).ToList();
         }
         public async Task<IEnumerable<MaterialForm>> GetAllWithMaterialAsync()
@@ -48,7 +49,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = f.Id,
                 FormType = f.FormType,
                 ThicknessMin = f.ThicknessMin,
-                ThicknessMax = f.ThicknessMax
+                ThicknessMax = f.ThicknessMax,
+                ColdStretchYieldStrength = f.ColdStretchYieldStrength
             }).ToList();
         }
 
@@ -60,7 +62,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = f.Id,
                 FormType = f.FormType,
                 ThicknessMin = f.ThicknessMin,
-                ThicknessMax = f.ThicknessMax
+                ThicknessMax = f.ThicknessMax,
+                ColdStretchYieldStrength = f.ColdStretchYieldStrength
             }).ToList();
         }
 
@@ -79,7 +82,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 ProductStandard = form.ProductStandard,
                 WeldingFactor = form.WeldingFactor,
                 Notes = form.Notes,
-                UnitPrice=form.UnitPrice
+                UnitPrice=form.UnitPrice,
+                ColdStretchYieldStrength = form.ColdStretchYieldStrength
             };
         }
 
@@ -95,7 +99,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 ProductStandard = dto.ProductStandard,
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
-                UnitPrice = dto.UnitPrice
+                UnitPrice = dto.UnitPrice,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
 
             await _materialFormRepository.AddAsync(entity);
@@ -111,7 +116,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 ProductStandard = entity.ProductStandard,
                 WeldingFactor = entity.WeldingFactor,
                 Notes = entity.Notes,
-                UnitPrice = dto.UnitPrice
+                UnitPrice = dto.UnitPrice,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
         }
 
@@ -128,6 +134,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             entity.WeldingFactor = dto.WeldingFactor;
             entity.Notes = dto.Notes;
             entity.UnitPrice = dto.UnitPrice;
+            entity.ColdStretchYieldStrength = dto.ColdStretchYieldStrength;
 
             await _materialFormRepository.UpdateAsync(entity);
             await _materialFormRepository.SaveChangeAsync();
@@ -142,7 +149,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 ProductStandard = entity.ProductStandard,
                 WeldingFactor = entity.WeldingFactor,
                 Notes = entity.Notes,
-                UnitPrice = dto.UnitPrice
+                UnitPrice = dto.UnitPrice,
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
 
             };
         }

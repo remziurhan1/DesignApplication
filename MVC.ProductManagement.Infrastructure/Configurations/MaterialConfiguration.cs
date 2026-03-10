@@ -28,8 +28,6 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(m => m.Density)
                    .HasPrecision(10, 3);
 
-            builder.Property(m => m.ColdStretchYieldStrength)
-                   .HasPrecision(10, 3);
 
             builder.HasMany(m => m.Forms)
                    .WithOne(f => f.Material)

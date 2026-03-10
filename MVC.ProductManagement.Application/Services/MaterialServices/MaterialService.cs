@@ -27,7 +27,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Name = m.Name,
                 Standard = m.Standard,
                 Group = m.Group,
-                ColdStretchYieldStrength = m.ColdStretchYieldStrength
             }).ToList();
         }
 
