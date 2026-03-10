@@ -67,8 +67,17 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             RoundedInnerShellThickness = dto.RoundedInnerShellThickness, RoundedInnerHeadThickness = dto.RoundedInnerHeadThickness,
             RoundedOuterShellThickness = dto.RoundedOuterShellThickness, RoundedOuterHeadThickness = dto.RoundedOuterHeadThickness,
             DesignPressure = dto.DesignPressure, TestPressure = dto.TestPressure, StaticPressure = dto.StaticPressure,
+            InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength,
+            InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength,
+            OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength,
+            OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength,
             TotalWeldLength = dto.TotalWeldLength, TotalFilmCost = dto.TotalFilmCost,
             InnerTankTotalLength = dto.InnerTankTotalLength, OuterTankTotalLength = dto.OuterTankTotalLength,
+            PerliteVolume = dto.PerliteVolume, PerliteWeight = dto.PerliteWeight,
+            InnerVolume = dto.InnerVolume, OuterVolume = dto.OuterVolume,
+            InnerSurfaceArea = dto.InnerSurfaceArea, OuterSurfaceArea = dto.OuterSurfaceArea,
+            InnerTankWeight = dto.InnerTankWeight, OuterTankWeight = dto.OuterTankWeight,
+            GasNitrogenVolume = dto.GasNitrogenVolume, LiquidNitrogenVolume = dto.LiquidNitrogenVolume,
             CreatedBy = createdBy, CreatedDate = DateTime.UtcNow
         };
 
@@ -88,8 +97,17 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             RoundedInnerShellThickness = entity.RoundedInnerShellThickness, RoundedInnerHeadThickness = entity.RoundedInnerHeadThickness,
             RoundedOuterShellThickness = entity.RoundedOuterShellThickness, RoundedOuterHeadThickness = entity.RoundedOuterHeadThickness,
             DesignPressure = entity.DesignPressure, TestPressure = entity.TestPressure, StaticPressure = entity.StaticPressure,
+            InnerTankHeadWeldLength = entity.InnerTankHeadWeldLength,
+            InnerTankCircumferenceWeldLength = entity.InnerTankCircumferenceWeldLength,
+            OuterTankHeadWeldLength = entity.OuterTankHeadWeldLength,
+            OuterTankCircumferenceWeldLength = entity.OuterTankCircumferenceWeldLength,
             TotalWeldLength = entity.TotalWeldLength, TotalFilmCost = entity.TotalFilmCost,
-            InnerTankTotalLength = entity.InnerTankTotalLength, OuterTankTotalLength = entity.OuterTankTotalLength
+            InnerTankTotalLength = entity.InnerTankTotalLength, OuterTankTotalLength = entity.OuterTankTotalLength,
+            PerliteVolume = entity.PerliteVolume, PerliteWeight = entity.PerliteWeight,
+            InnerVolume = entity.InnerVolume, OuterVolume = entity.OuterVolume,
+            InnerSurfaceArea = entity.InnerSurfaceArea, OuterSurfaceArea = entity.OuterSurfaceArea,
+            InnerTankWeight = entity.InnerTankWeight, OuterTankWeight = entity.OuterTankWeight,
+            GasNitrogenVolume = entity.GasNitrogenVolume, LiquidNitrogenVolume = entity.LiquidNitrogenVolume
         };
     }
 }

@@ -401,6 +401,27 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<Guid>("InnerShellMaterialFormId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<double>("GasNitrogenVolume")
+                        .HasColumnType("float");
+
+                    b.Property<double>("InnerSurfaceArea")
+                        .HasColumnType("float");
+
+                    b.Property<double>("InnerTankCircumferenceWeldLength")
+                        .HasColumnType("float");
+
+                    b.Property<double>("InnerTankHeadWeldLength")
+                        .HasColumnType("float");
+
+                    b.Property<double>("InnerTankWeight")
+                        .HasColumnType("float");
+
+                    b.Property<double>("InnerVolume")
+                        .HasColumnType("float");
+
+                    b.Property<double>("LiquidNitrogenVolume")
+                        .HasColumnType("float");
+
                     b.Property<Guid>("InnerShellMaterialId")
                         .HasColumnType("uniqueidentifier");
 
@@ -454,6 +475,27 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasColumnType("float");
 
                     b.Property<double>("OuterTankTotalLength")
+                        .HasColumnType("float");
+
+                    b.Property<double>("OuterSurfaceArea")
+                        .HasColumnType("float");
+
+                    b.Property<double>("OuterTankCircumferenceWeldLength")
+                        .HasColumnType("float");
+
+                    b.Property<double>("OuterTankHeadWeldLength")
+                        .HasColumnType("float");
+
+                    b.Property<double>("OuterTankWeight")
+                        .HasColumnType("float");
+
+                    b.Property<double>("OuterVolume")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PerliteVolume")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PerliteWeight")
                         .HasColumnType("float");
 
                     b.Property<double>("Pressure")

@@ -12,19 +12,28 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double ShellLength { get; set; }
         public double Pressure { get; set; }
         public Guid StorageTypeId { get; set; }
+        public string StorageTypeName { get; set; } = string.Empty;
         public double LiquidDensity { get; set; }
         public double SectorWidth { get; set; }
         public TankOrientation TankOrientation { get; set; }
         public bool IsColdStretchApplied { get; set; }
 
         public Guid InnerShellMaterialId { get; set; }
+        public string InnerShellMaterialName { get; set; } = string.Empty;
         public Guid InnerShellMaterialFormId { get; set; }
+        public string InnerShellMaterialFormName { get; set; } = string.Empty;
         public Guid InnerHeadMaterialId { get; set; }
+        public string InnerHeadMaterialName { get; set; } = string.Empty;
         public Guid InnerHeadMaterialFormId { get; set; }
+        public string InnerHeadMaterialFormName { get; set; } = string.Empty;
         public Guid OuterShellMaterialId { get; set; }
+        public string OuterShellMaterialName { get; set; } = string.Empty;
         public Guid OuterShellMaterialFormId { get; set; }
+        public string OuterShellMaterialFormName { get; set; } = string.Empty;
         public Guid OuterHeadMaterialId { get; set; }
+        public string OuterHeadMaterialName { get; set; } = string.Empty;
         public Guid OuterHeadMaterialFormId { get; set; }
+        public string OuterHeadMaterialFormName { get; set; } = string.Empty;
 
         public double InnerShellMaterialStrength { get; set; }
         public double InnerHeadMaterialStrength { get; set; }
@@ -43,6 +52,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double DesignPressure { get; set; }
         public double TestPressure { get; set; }
         public double StaticPressure { get; set; }
+        public double InnerTankHeadWeldLength { get; set; }
+        public double InnerTankCircumferenceWeldLength { get; set; }
+        public double OuterTankHeadWeldLength { get; set; }
+        public double OuterTankCircumferenceWeldLength { get; set; }
         public double TotalWeldLength { get; set; }
         public double TotalFilmCost { get; set; }
         public double InnerTankTotalLength { get; set; }
@@ -55,6 +68,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double InnerTankWeight { get; set; }
         public double OuterTankWeight { get; set; }
         public double PerliteVolume { get; set; }
+        public double PerliteWeight { get; set; }
         public double GasNitrogenVolume { get; set; }
         public double LiquidNitrogenVolume { get; set; }
     }
