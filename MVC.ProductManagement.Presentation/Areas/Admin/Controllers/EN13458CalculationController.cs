@@ -7,6 +7,7 @@ using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
+using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
