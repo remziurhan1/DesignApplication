@@ -27,8 +27,16 @@
             <input asp-for="Pressure" class="form-control" />
         </div>
         <div class="col-md-4">
-            <label asp-for="LiquidDensity" class="form-label"></label>
-            <input asp-for="LiquidDensity" class="form-control" />
+            <label asp-for="StorageTypeId" class="form-label">Depolama Tipi</label>
+            <select asp-for="StorageTypeId" asp-items="ViewBag.StorageTypes" class="form-select">
+                <option value="">Seçiniz</option>
+            </select>
+            <span asp-validation-for="StorageTypeId" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="LiquidDensity" class="form-label">Sıvı Yoğunluğu (kg/m³)</label>
+            <input asp-for="LiquidDensity" class="form-control" readonly />
+            <small class="text-muted">Yoğunluk, seçilen depolama tipinin termodinamik verilerinden otomatik hesaplanır.</small>
         </div>
         <div class="col-md-4">
             <label asp-for="SectorWidth" class="form-label"></label>
