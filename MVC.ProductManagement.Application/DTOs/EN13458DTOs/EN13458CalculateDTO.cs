@@ -27,5 +27,11 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
 
         public Guid OuterHeadMaterialId { get; set; }
         public Guid OuterHeadMaterialFormId { get; set; }
+
+        // Opsiyonel normalize edilmiş dayanım değerleri (adapter tarafından set edilebilir)
+        public double? InnerShellMaterialStrength { get; set; }
+        public double? InnerHeadMaterialStrength { get; set; }
+        public double? OuterShellMaterialStrength { get; set; }
+        public double? OuterHeadMaterialStrength { get; set; }
     }
 }
