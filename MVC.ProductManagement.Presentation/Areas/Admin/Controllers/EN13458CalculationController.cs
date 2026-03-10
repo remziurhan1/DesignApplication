@@ -7,7 +7,6 @@ using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -62,6 +61,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Pressure = dto.Pressure,
                 LiquidDensity = dto.LiquidDensity,
                 SectorWidth = dto.SectorWidth,
+                TankOrientation = dto.TankOrientation,
+                IsColdStretchApplied = dto.IsColdStretchApplied,
                 InnerShellMaterialId = dto.InnerShellMaterialId,
                 InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
                 InnerHeadMaterialId = dto.InnerHeadMaterialId,
@@ -114,7 +115,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Pressure = 16,
                 LiquidDensity = 808,
                 SectorWidth = 2000,
-                TankOrientation = TankOrientation.Horizontal
+                TankOrientation = TankOrientation.Horizontal,
+                IsColdStretchApplied = false
             });
         }
 
@@ -137,6 +139,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 LiquidDensity = vm.LiquidDensity,
                 SectorWidth = vm.SectorWidth,
                 TankOrientation = vm.TankOrientation,
+                IsColdStretchApplied = vm.IsColdStretchApplied,
                 InnerShellMaterialId = vm.InnerShellMaterialId,
                 InnerShellMaterialFormId = vm.InnerShellMaterialFormId,
                 InnerHeadMaterialId = vm.InnerHeadMaterialId,
@@ -171,6 +174,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Pressure = dto.Pressure,
                 LiquidDensity = dto.LiquidDensity,
                 SectorWidth = dto.SectorWidth,
+                TankOrientation = dto.TankOrientation,
+                IsColdStretchApplied = dto.IsColdStretchApplied,
                 InnerShellMaterialId = dto.InnerShellMaterialId,
                 InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
                 InnerHeadMaterialId = dto.InnerHeadMaterialId,
@@ -222,6 +227,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 LiquidDensity = vm.LiquidDensity,
                 SectorWidth = vm.SectorWidth,
                 TankOrientation = vm.TankOrientation,
+                IsColdStretchApplied = vm.IsColdStretchApplied,
                 InnerShellMaterialId = vm.InnerShellMaterialId,
                 InnerShellMaterialFormId = vm.InnerShellMaterialFormId,
                 InnerHeadMaterialId = vm.InnerHeadMaterialId,
@@ -266,16 +272,23 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var materials = await _materialService.GetAllAsync();
             var forms = await _materialFormService.GetAllAsync();
 
-            var materialItems = materials
+            ViewBag.Materials = materials
                 .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
                 .ToList();
 
-            var formItems = forms
-                .Select(x => new SelectListItem($"{x.MaterialName} - {x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]", x.Id.ToString()))
-                .ToList();
+            ViewBag.MaterialFormsByMaterial = forms
+                .GroupBy(x => x.MaterialId)
+                .ToDictionary(
+                    g => g.Key.ToString(),
+                    g => g.Select(x => new
+                    {
+                        value = x.Id.ToString(),
+                        text = $"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]"
+                    }).ToList());
 
-            ViewBag.Materials = materialItems;
-            ViewBag.MaterialForms = formItems;
+            ViewBag.MaterialForms = forms
+                .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]", x.Id.ToString()))
+                .ToList();
         }
     }
 }
