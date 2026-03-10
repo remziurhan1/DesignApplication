@@ -8,9 +8,25 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
     {
         public void Execute(EN13458DesignContext context)
         {
-            context.Result.DesignPressure = context.Input.Pressure * 1.1d;
-            context.Result.TestPressure = context.Input.Pressure * 1.43d;
-            context.Result.StaticPressure = (context.Input.LiquidDensity * 9.81d * context.Input.ShellLength / 1000d) / 100000d;
+            const double gravity = 9.81d;
+            const double testFactor = 1.5d;
+            // StorageType bilgisi DTO'da henüz olmadığı için bu fazda yatay tank varsayımıyla devam edilir.
+            var effectiveHeight = context.Input.OuterDiameter;
+
+            var staticPressure = (context.Input.LiquidDensity * gravity * (effectiveHeight / 1000d)) / 100000d;
+            staticPressure = Math.Round(staticPressure, 2);
+
+            var ignoredPart = Math.Round(context.Input.Pressure * 0.05d, 2);
+            var designPressure = staticPressure > ignoredPart
+                ? context.Input.Pressure + (staticPressure - ignoredPart) + 1d
+                : context.Input.Pressure + 1d;
+            designPressure = Math.Round(designPressure, 2);
+
+            var testPressure = Math.Round(designPressure * testFactor, 2);
+
+            context.Result.StaticPressure = staticPressure;
+            context.Result.DesignPressure = designPressure;
+            context.Result.TestPressure = testPressure;
         }
     }
 
