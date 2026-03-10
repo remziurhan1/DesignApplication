@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Enums;
 
 namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
@@ -31,6 +31,8 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public Guid OuterShellMaterialFormId { get; set; }
         public Guid OuterHeadMaterialId { get; set; }
         public Guid OuterHeadMaterialFormId { get; set; }
+        public MaterialForm InnerShellMaterialForm { get; set; }
+        public MaterialForm InnerHeadMaterialForm { get; set; }
 
         // === MALZEME DAYANIMLARI ===
         public double InnerShellMaterialStrength { get; set; }
