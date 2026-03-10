@@ -78,6 +78,9 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<Material>().HasData(MaterialSeed.Get());
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
+            builder.Entity<StorageType>().HasData(StorageTypeSeed.Get());
+            builder.Entity<StorageTypeProperties>().HasData(StorageTypePropertiesSeed.Get());
+        //    builder.Entity<ThermodynamicProperty>().HasData(ThermodynamicPropertySeed.Get());
 
 
 
