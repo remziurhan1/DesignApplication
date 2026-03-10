@@ -15,6 +15,7 @@ namespace MVC.ProductManagement.Application.DTOs.MaterialDTOs
         public MaterialStandard Standard { get; set; }
         public string Group { get; set; } = string.Empty;
         public double Density { get; set; }
+        public double? ColdStretchYieldStrength { get; set; }
         public string? Notes { get; set; }
     }
 }
