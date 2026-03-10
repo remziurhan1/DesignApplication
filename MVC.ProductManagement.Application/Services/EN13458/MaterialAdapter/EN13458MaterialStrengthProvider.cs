@@ -10,7 +10,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
     public class EN13458MaterialStrengthProvider : IEN13458MaterialStrengthProvider
     {
         private const double DefaultTemperature = 20d;
-        private const double DefaultThickness = 10d;
 
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
@@ -34,11 +33,14 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             var material = await _materialService.GetByIdAsync(materialId)
                 ?? throw new InvalidOperationException($"Material not found: {materialId}");
 
-            var interpolated = await _yieldStrengthService.GetByConditionsAsync(materialFormId, DefaultTemperature, DefaultThickness);
+            var normalYieldSourceThickness = form.ThicknessMin > 0d ? form.ThicknessMin : 10d;
+            var interpolated = await _yieldStrengthService.GetByConditionsAsync(materialFormId, DefaultTemperature, normalYieldSourceThickness);
+            var normalYield = interpolated?.Rp02;
 
+            var coldStretchYield = form.ColdStretchYieldStrength ?? material.ColdStretchYieldStrength;
             var effectiveYield = isColdStretchApplied
-                ? (form.ColdStretchYieldStrength ?? material.ColdStretchYieldStrength ?? interpolated?.Rp02)
-                : interpolated?.Rp02;
+                ? (coldStretchYield ?? normalYield)
+                : normalYield;
 
             if (!effectiveYield.HasValue)
             {

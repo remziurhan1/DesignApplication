@@ -4,6 +4,45 @@ using System;
 
 namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 {
+    internal static class EN13458OuterTankRules
+    {
+        public static double GetEstimatedInnerVolume(double innerDiameter, double shellLength)
+        {
+            var cylindricalVolume = Math.PI / 4d * Math.Pow(innerDiameter, 2) * shellLength;
+            var headVolume = 2d * 0.1298d * Math.Pow(innerDiameter, 3);
+            return (cylindricalVolume + headVolume) / 1_000_000_000d;
+        }
+
+        public static double GetOuterDiameter(double innerDiameter, double shellLength)
+        {
+            var estimatedInnerVolume = GetEstimatedInnerVolume(innerDiameter, shellLength);
+            var diameterOffset = estimatedInnerVolume < 100d ? 500d : 700d;
+            return innerDiameter + diameterOffset;
+        }
+
+        public static double GetOuterShellLength(double innerDiameter, double shellLength)
+        {
+            var estimatedInnerVolume = GetEstimatedInnerVolume(innerDiameter, shellLength);
+            var lengthOffset = estimatedInnerVolume < 100d ? 500d : 700d;
+            return shellLength + lengthOffset;
+        }
+
+        public static (double OuterTankShellThickness, double OuterTankHeadThickness) DetermineTankThickness(double outerDiameter)
+        {
+            if (outerDiameter <= 2400d)
+            {
+                return (4d, 6d);
+            }
+
+            if (outerDiameter <= 3050d)
+            {
+                return (6d, 8d);
+            }
+
+            return (10d, 10d);
+        }
+    }
+
     public class PressureStep : IEN13458CalculationStep
     {
         public void Execute(EN13458DesignContext context)
@@ -40,15 +79,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
         {
             var d = context.Input.OuterDiameter;
             var designPressure = context.Result.DesignPressure;
-
             var innerYield = context.Result.InnerShellMaterialStrength;
-            var outerYield = context.Result.OuterShellMaterialStrength;
 
             context.Result.InnerShellThickness = Math.Round((d * designPressure) / ((20d * (innerYield / 1.5d)) + designPressure), 2);
-            context.Result.OuterShellThickness = Math.Round((d * designPressure) / ((20d * (outerYield / 1.5d)) + designPressure), 2);
-
             context.Result.RoundedInnerShellThickness = Math.Ceiling(context.Result.InnerShellThickness);
-            context.Result.RoundedOuterShellThickness = Math.Ceiling(context.Result.OuterShellThickness);
+
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength);
+            var thickness = EN13458OuterTankRules.DetermineTankThickness(outerDiameter);
+            context.Result.OuterShellThickness = thickness.OuterTankShellThickness;
+            context.Result.RoundedOuterShellThickness = thickness.OuterTankShellThickness;
         }
     }
 
@@ -58,15 +97,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
         {
             var d = context.Input.OuterDiameter;
             var designPressure = context.Result.DesignPressure;
-
             var innerYield = context.Result.InnerHeadMaterialStrength;
-            var outerYield = context.Result.OuterHeadMaterialStrength;
 
             context.Result.InnerHeadThickness = Math.Round((d * designPressure * 1.91d) / (40d * (innerYield / 1.5d)), 2);
-            context.Result.OuterHeadThickness = Math.Round((d * designPressure * 1.91d) / (40d * (outerYield / 1.5d)), 2);
-
             context.Result.RoundedInnerHeadThickness = Math.Ceiling(context.Result.InnerHeadThickness);
-            context.Result.RoundedOuterHeadThickness = Math.Ceiling(context.Result.OuterHeadThickness);
+
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength);
+            var thickness = EN13458OuterTankRules.DetermineTankThickness(outerDiameter);
+            context.Result.OuterHeadThickness = thickness.OuterTankHeadThickness;
+            context.Result.RoundedOuterHeadThickness = thickness.OuterTankHeadThickness;
         }
     }
 
@@ -88,8 +127,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var innerHeadVol = 2d * 0.1298d * Math.Pow(innerBombeDiameter, 3);
             context.Result.InnerVolume = Math.Round((innerCylinder + innerHeadVol) / 1_000_000_000d, 2);
 
-            var outerDiameter = diameter + 500d;
-            var outerShellLength = shellLength + 500d;
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(diameter, shellLength);
+            var outerShellLength = EN13458OuterTankRules.GetOuterShellLength(diameter, shellLength);
             var netOuterDiameter = outerDiameter - (2d * outerShellT);
             var outerBombeDiameter = outerDiameter - (2d * outerHeadT);
             var outerCylinder = Math.PI / 4d * Math.Pow(netOuterDiameter, 2) * outerShellLength;
@@ -113,8 +152,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var innerHeadArea = Math.PI * Math.Pow(innerBombePulDiameter / 2d / 1000d, 2);
             context.Result.InnerSurfaceArea = Math.Round(innerBodyArea + (2d * innerHeadArea), 2);
 
-            var outerDiameter = diameter + 500d;
-            var outerShellLength = shellLength + 500d;
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(diameter, shellLength);
+            var outerShellLength = EN13458OuterTankRules.GetOuterShellLength(diameter, shellLength);
             var outerBodyArea = Math.PI * outerDiameter / 1000d * outerShellLength / 1000d;
             var outerBombePulDiameter = (BombeCoefficient * outerDiameter) + (BombeFactor * context.Result.RoundedOuterHeadThickness);
             var outerHeadArea = Math.PI * Math.Pow(outerBombePulDiameter / 2d / 1000d, 2);
@@ -144,8 +183,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var innerBombeWeight = innerBombeVolume * SteelDensity;
             context.Result.InnerTankWeight = Math.Round((innerShellWeight + (2d * innerBombeWeight)) * 1.03d, 2);
 
-            var outerDiameter = diameter + 500d;
-            var outerShellLength = shellLength + 500d;
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(diameter, shellLength);
+            var outerShellLength = EN13458OuterTankRules.GetOuterShellLength(diameter, shellLength);
             var outerShellT = context.Result.RoundedOuterShellThickness;
             var outerHeadT = context.Result.RoundedOuterHeadThickness;
 
@@ -185,8 +224,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var headLength = context.Input.OuterDiameter * 0.26d;
             context.Result.InnerTankTotalLength = Math.Round((headLength * 2d) + context.Input.ShellLength, 2);
 
-            var outerHeadLength = (context.Input.OuterDiameter + 500d) * 0.2d;
-            context.Result.OuterTankTotalLength = Math.Round((outerHeadLength * 2d) + (context.Input.ShellLength + 500d) + 100d, 2);
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength);
+            var outerShellLength = EN13458OuterTankRules.GetOuterShellLength(context.Input.OuterDiameter, context.Input.ShellLength);
+            var outerHeadLength = outerDiameter * 0.2d;
+            context.Result.OuterTankTotalLength = Math.Round((outerHeadLength * 2d) + outerShellLength + 100d, 2);
         }
     }
 }
