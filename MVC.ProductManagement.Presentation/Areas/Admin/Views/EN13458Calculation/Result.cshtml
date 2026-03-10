@@ -88,7 +88,7 @@
     </div>
 </div>
 
-<form asp-action="Save" method="post" class="mt-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
+<form asp-action="Save" method="post" class="mt-4 mb-5 pb-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
     @Html.AntiForgeryToken()
     @foreach (var p in ViewData.ModelMetadata.Properties)
     {

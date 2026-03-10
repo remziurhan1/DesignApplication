@@ -58,7 +58,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
-            return View(new EN13458DetailsVM
+            var vm = new EN13458DetailsVM
             {
                 Id = dto.Id,
                 Name = dto.Name,
@@ -106,7 +106,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 PerliteVolume = dto.PerliteVolume,
                 GasNitrogenVolume = dto.GasNitrogenVolume,
                 LiquidNitrogenVolume = dto.LiquidNitrogenVolume
-            });
+            };
+
+            await PopulateResultDisplayNamesAsync(vm);
+
+            return View(vm);
         }
 
         [HttpGet]
