@@ -9,6 +9,7 @@ using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -57,7 +58,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
-            return View(new EN13458DetailsVM
+            var vm = new EN13458DetailsVM
             {
                 Id = dto.Id,
                 Name = dto.Name,
@@ -92,6 +93,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = dto.DesignPressure,
                 TestPressure = dto.TestPressure,
                 StaticPressure = dto.StaticPressure,
+                InnerTankHeadPulDiameter = dto.InnerTankHeadPulDiameter,
+                OuterTankHeadPulDiameter = dto.OuterTankHeadPulDiameter,
+                InnerTankHeadWeight = dto.InnerTankHeadWeight,
+                OuterTankHeadWeight = dto.OuterTankHeadWeight,
+                InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength,
+                InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength,
+                OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength,
+                OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength,
                 TotalWeldLength = dto.TotalWeldLength,
                 TotalFilmCost = dto.TotalFilmCost,
                 InnerTankTotalLength = dto.InnerTankTotalLength,
@@ -103,9 +112,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 InnerTankWeight = dto.InnerTankWeight,
                 OuterTankWeight = dto.OuterTankWeight,
                 PerliteVolume = dto.PerliteVolume,
+                PerliteWeight = dto.PerliteWeight,
                 GasNitrogenVolume = dto.GasNitrogenVolume,
                 LiquidNitrogenVolume = dto.LiquidNitrogenVolume
-            });
+            };
+
+            await PopulateResultDisplayNamesAsync(vm);
+
+            return View(vm);
         }
 
         [HttpGet]
@@ -179,7 +193,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             };
 
             var result = await _service.CalculateAsync(dto);
-            return View("Result", MapResultVm(result));
+            var resultVm = MapResultVm(result);
+            await PopulateResultDisplayNamesAsync(resultVm);
+
+            return View("Result", resultVm);
         }
 
         [HttpPost]
@@ -200,6 +217,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterDiameter = dto.OuterDiameter,
                 ShellLength = dto.ShellLength,
                 Pressure = dto.Pressure,
+                StorageTypeId = dto.StorageTypeId,
                 LiquidDensity = dto.LiquidDensity,
                 SectorWidth = dto.SectorWidth,
                 TankOrientation = dto.TankOrientation,
@@ -227,6 +245,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = dto.DesignPressure,
                 TestPressure = dto.TestPressure,
                 StaticPressure = dto.StaticPressure,
+                InnerTankHeadPulDiameter = dto.InnerTankHeadPulDiameter,
+                OuterTankHeadPulDiameter = dto.OuterTankHeadPulDiameter,
+                InnerTankHeadWeight = dto.InnerTankHeadWeight,
+                OuterTankHeadWeight = dto.OuterTankHeadWeight,
+                InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength,
+                InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength,
+                OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength,
+                OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength,
                 TotalWeldLength = dto.TotalWeldLength,
                 TotalFilmCost = dto.TotalFilmCost,
                 InnerTankTotalLength = dto.InnerTankTotalLength,
@@ -238,6 +264,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 InnerTankWeight = dto.InnerTankWeight,
                 OuterTankWeight = dto.OuterTankWeight,
                 PerliteVolume = dto.PerliteVolume,
+                PerliteWeight = dto.PerliteWeight,
                 GasNitrogenVolume = dto.GasNitrogenVolume,
                 LiquidNitrogenVolume = dto.LiquidNitrogenVolume
             };
@@ -280,6 +307,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = vm.DesignPressure,
                 TestPressure = vm.TestPressure,
                 StaticPressure = vm.StaticPressure,
+                InnerTankHeadPulDiameter = vm.InnerTankHeadPulDiameter,
+                OuterTankHeadPulDiameter = vm.OuterTankHeadPulDiameter,
+                InnerTankHeadWeight = vm.InnerTankHeadWeight,
+                OuterTankHeadWeight = vm.OuterTankHeadWeight,
+                InnerTankHeadWeldLength = vm.InnerTankHeadWeldLength,
+                InnerTankCircumferenceWeldLength = vm.InnerTankCircumferenceWeldLength,
+                OuterTankHeadWeldLength = vm.OuterTankHeadWeldLength,
+                OuterTankCircumferenceWeldLength = vm.OuterTankCircumferenceWeldLength,
                 TotalWeldLength = vm.TotalWeldLength,
                 TotalFilmCost = vm.TotalFilmCost,
                 InnerTankTotalLength = vm.InnerTankTotalLength,
@@ -291,11 +326,37 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 InnerTankWeight = vm.InnerTankWeight,
                 OuterTankWeight = vm.OuterTankWeight,
                 PerliteVolume = vm.PerliteVolume,
+                PerliteWeight = vm.PerliteWeight,
                 GasNitrogenVolume = vm.GasNitrogenVolume,
                 LiquidNitrogenVolume = vm.LiquidNitrogenVolume
             };
         }
 
+
+
+        private async Task PopulateResultDisplayNamesAsync(EN13458ResultVM vm)
+        {
+            var materials = await _materialService.GetAllAsync();
+            var forms = await _materialFormService.GetAllAsync();
+            var storageTypes = await _storageTypeService.GetAllAsync();
+
+            var materialMap = materials.ToDictionary(x => x.Id, x => x.Name);
+            var formMap = forms.ToDictionary(
+                x => x.Id,
+                x => $"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]");
+            var storageTypeMap = (storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>())
+                .ToDictionary(x => x.Id, x => x.Name);
+
+            vm.StorageTypeName = storageTypeMap.GetValueOrDefault(vm.StorageTypeId, "-");
+            vm.InnerShellMaterialName = materialMap.GetValueOrDefault(vm.InnerShellMaterialId, "-");
+            vm.InnerShellMaterialFormName = formMap.GetValueOrDefault(vm.InnerShellMaterialFormId, "-");
+            vm.InnerHeadMaterialName = materialMap.GetValueOrDefault(vm.InnerHeadMaterialId, "-");
+            vm.InnerHeadMaterialFormName = formMap.GetValueOrDefault(vm.InnerHeadMaterialFormId, "-");
+            vm.OuterShellMaterialName = materialMap.GetValueOrDefault(vm.OuterShellMaterialId, "-");
+            vm.OuterShellMaterialFormName = formMap.GetValueOrDefault(vm.OuterShellMaterialFormId, "-");
+            vm.OuterHeadMaterialName = materialMap.GetValueOrDefault(vm.OuterHeadMaterialId, "-");
+            vm.OuterHeadMaterialFormName = formMap.GetValueOrDefault(vm.OuterHeadMaterialFormId, "-");
+        }
 
         private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)
         {

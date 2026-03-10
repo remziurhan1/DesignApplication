@@ -59,6 +59,14 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double StaticPressure { get; set; }
 
         // === BOY, MALİYET, UZUNLUK ===
+        public double InnerTankHeadPulDiameter { get; set; }
+        public double OuterTankHeadPulDiameter { get; set; }
+        public double InnerTankHeadWeight { get; set; }
+        public double OuterTankHeadWeight { get; set; }
+        public double InnerTankHeadWeldLength { get; set; }
+        public double InnerTankCircumferenceWeldLength { get; set; }
+        public double OuterTankHeadWeldLength { get; set; }
+        public double OuterTankCircumferenceWeldLength { get; set; }
         public double TotalWeldLength { get; set; }
         public double TotalFilmCost { get; set; }
         public double InnerTankTotalLength { get; set; }
@@ -72,6 +80,7 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double InnerTankWeight { get; set; }
         public double OuterTankWeight { get; set; }
         public double PerliteVolume { get; set; }
+        public double PerliteWeight { get; set; }
         public double GasNitrogenVolume { get; set; }
         public double LiquidNitrogenVolume { get; set; }
     }

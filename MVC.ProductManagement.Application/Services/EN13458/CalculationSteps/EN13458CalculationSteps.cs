@@ -265,11 +265,14 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var innerBombePulDiameter =
                 (BombeCoefficient * diameter) + (BombeFactor * innerHeadT);
 
+            context.Result.InnerTankHeadPulDiameter = Math.Round(innerBombePulDiameter, 2);
+
             var innerBombeVolume =
                 (Math.PI / 4d) * Math.Pow(innerBombePulDiameter / 1000d, 2)
                 * (innerHeadT / 1000d);
 
             var innerBombeWeight = innerBombeVolume * SteelDensity;
+            context.Result.InnerTankHeadWeight = Math.Round(innerBombeWeight, 2);
 
             context.Result.InnerTankWeight =
                 Math.Round((innerShellWeight + (2d * innerBombeWeight)) * 1.03d, 2);
@@ -294,11 +297,14 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var outerBombePulDiameter =
                 (BombeCoefficient * outerDiameter) + (BombeFactor * outerHeadT);
 
+            context.Result.OuterTankHeadPulDiameter = Math.Round(outerBombePulDiameter, 2);
+
             var outerBombeVolume =
                 (Math.PI / 4d) * Math.Pow(outerBombePulDiameter / 1000d, 2)
                 * (outerHeadT / 1000d);
 
             var outerBombeWeight = outerBombeVolume * SteelDensity;
+            context.Result.OuterTankHeadWeight = Math.Round(outerBombeWeight, 2);
 
             context.Result.OuterTankWeight =
                 Math.Round((outerShellWeight + (2d * outerBombeWeight)) * 1.03d, 2);
@@ -307,17 +313,46 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 
     public class WeldFilmPerliteStep : IEN13458CalculationStep
     {
+        private const double HeadPulDiameterCoefficient = 1.17d;
+        private const double PerliteDensity = 120d; // kg/m3
+
         public void Execute(EN13458DesignContext context)
         {
-            context.Result.TotalWeldLength =
-                (4d * Math.PI * context.Input.OuterDiameter
-                + (2d * context.Input.ShellLength)) / 1000d;
+            var innerDiameter = context.Input.OuterDiameter;
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(
+                context.Input.OuterDiameter,
+                context.Input.ShellLength);
 
-            context.Result.TotalFilmCost =
-                context.Result.OuterSurfaceArea * 12.5d;
+            context.Result.InnerTankCircumferenceWeldLength =
+                Math.Round((2d * Math.PI * innerDiameter) / 1000d, 2);
+
+            context.Result.OuterTankCircumferenceWeldLength =
+                Math.Round((2d * Math.PI * outerDiameter) / 1000d, 2);
+
+            var innerHeadPulDiameter = HeadPulDiameterCoefficient * innerDiameter;
+            var outerHeadPulDiameter = HeadPulDiameterCoefficient * outerDiameter;
+
+            context.Result.InnerTankHeadWeldLength =
+                Math.Round(((innerHeadPulDiameter / 20d) * (innerHeadPulDiameter / 1.15d) * 2d) / 1000d, 2);
+
+            context.Result.OuterTankHeadWeldLength =
+                Math.Round(((outerHeadPulDiameter / 20d) * (outerHeadPulDiameter / 1.15d) * 2d) / 1000d, 2);
+
+            context.Result.TotalWeldLength =
+                Math.Round(
+                    context.Result.InnerTankHeadWeldLength
+                    + context.Result.InnerTankCircumferenceWeldLength
+                    + context.Result.OuterTankHeadWeldLength
+                    + context.Result.OuterTankCircumferenceWeldLength,
+                    2);
+
+            context.Result.TotalFilmCost = 0d;
 
             context.Result.PerliteVolume =
                 Math.Round(Math.Max(context.Result.OuterVolume - context.Result.InnerVolume, 0d), 2);
+
+            context.Result.PerliteWeight =
+                Math.Round(context.Result.PerliteVolume * PerliteDensity, 2);
         }
     }
 
