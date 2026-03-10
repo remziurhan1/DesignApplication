@@ -56,5 +56,16 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double TotalFilmCost { get; set; }
         public double InnerTankTotalLength { get; set; }
         public double OuterTankTotalLength { get; set; }
+
+        // === HACİM / AĞIRLIK / YÜZEY ===
+        public double InnerVolume { get; set; }
+        public double OuterVolume { get; set; }
+        public double InnerSurfaceArea { get; set; }
+        public double OuterSurfaceArea { get; set; }
+        public double InnerTankWeight { get; set; }
+        public double OuterTankWeight { get; set; }
+        public double PerliteVolume { get; set; }
+        public double GasNitrogenVolume { get; set; }
+        public double LiquidNitrogenVolume { get; set; }
     }
 }

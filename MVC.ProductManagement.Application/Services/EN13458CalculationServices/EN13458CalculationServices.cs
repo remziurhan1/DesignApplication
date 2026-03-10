@@ -1,7 +1,9 @@
 ﻿using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
+using MVC.ProductManagement.Application.Services.EN13458.Interfaces;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
@@ -10,14 +12,30 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
     {
         private readonly IMaterialRepository _materialRepository;
         private readonly IMaterialFormRepository _materialFormRepository;
+        private readonly IEN13458CalculationManager _calculationManager;
 
         public EN13458CalculationServices(
             IMaterialRepository materialRepository,
-            IMaterialFormRepository materialFormRepository)
+            IMaterialFormRepository materialFormRepository,
+            IEN13458CalculationManager calculationManager)
         {
             _materialRepository = materialRepository;
             _materialFormRepository = materialFormRepository;
+            _calculationManager = calculationManager;
         }
+
+
+        public Task<EN13458ResultDTO> CalculateAsync(EN13458CalculateDTO dto)
+            => _calculationManager.CalculateAsync(dto);
+
+        public Task<EN13458ResultDTO> SaveAsync(EN13458ResultDTO result, string createdBy = "System")
+            => _calculationManager.SaveAsync(result, createdBy);
+
+        public Task<EN13458ResultDTO?> GetByIdAsync(Guid id)
+            => _calculationManager.GetByIdAsync(id);
+
+        public Task<List<EN13458ResultDTO>> GetAllAsync()
+            => _calculationManager.GetAllAsync();
 
         public async Task<EN13458MaterialCostTableDTO> BuildMaterialCostTableAsync(EN13458ResultDTO result)
         {
