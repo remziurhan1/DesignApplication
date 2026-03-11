@@ -4,8 +4,11 @@ using MVC.ProductManagement.Application.DTOs.AD2000DTOs;
 using MVC.ProductManagement.Application.Services.AD2000CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
+using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
+using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,7 +33,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var list = await _calculationService.GetAllAsync();
+            var list = await _calculationService.GetAllAsync() ?? new List<AD2000ResultDTO>();
             var vm = list.Select(x => new AD2000ListVM
             {
                 Id = x.Id,
@@ -148,8 +151,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         private async Task LoadLookupsAsync()
         {
-            var materials = await _materialService.GetAllAsync();
-            var materialForms = await _materialFormService.GetAllAsync();
+            var materials = await _materialService.GetAllAsync() ?? new List<MaterialListDto>();
+            var materialForms = await _materialFormService.GetAllAsync() ?? new List<MaterialFormListDto>();
 
             ViewBag.Materials = new SelectList(materials, "Id", "Name");
             ViewBag.MaterialForms = new SelectList(materialForms, "Id", "Form");
