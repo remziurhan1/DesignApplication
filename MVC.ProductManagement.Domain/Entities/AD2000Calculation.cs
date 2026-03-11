@@ -1,4 +1,5 @@
 using MVC.ProductManagement.Domain.Core.BaseEntities;
+using MVC.ProductManagement.Domain.Enums;
 using System;
 
 namespace MVC.ProductManagement.Domain.Entities
@@ -16,7 +17,14 @@ namespace MVC.ProductManagement.Domain.Entities
         public double AllowableStress { get; set; }
         public double ShellAllowableStress { get; set; }
         public double HeadAllowableStress { get; set; }
+        public double EstimatedShellThickness { get; set; }
+        public double EstimatedHeadThickness { get; set; }
         public double Beta { get; set; }
+        public TankOrientation TankOrientation { get; set; } = TankOrientation.Horizontal;
+        public Guid? StorageTypeId { get; set; }
+        public bool IsManualDensity { get; set; }
+        public double LiquidDensity { get; set; }
+        public double StaticPressure { get; set; }
 
         public Guid ShellMaterialId { get; set; }
         public virtual Material ShellMaterial { get; set; } = null!;

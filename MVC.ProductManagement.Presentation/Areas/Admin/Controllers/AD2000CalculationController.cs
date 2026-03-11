@@ -7,6 +7,8 @@ using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
 using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
+using MVC.ProductManagement.Application.Services.StorageTypeServices;
+using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs;
 using System;
 using System.Collections.Generic;
@@ -21,17 +23,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
         private readonly IYieldStrengthService _yieldStrengthService;
+        private readonly IStorageTypeService _storageTypeService;
 
         public AD2000CalculationController(
             IAD2000CalculationService calculationService,
             IMaterialService materialService,
             IMaterialFormService materialFormService,
-            IYieldStrengthService yieldStrengthService)
+            IYieldStrengthService yieldStrengthService,
+            IStorageTypeService storageTypeService)
         {
             _calculationService = calculationService;
             _materialService = materialService;
             _materialFormService = materialFormService;
             _yieldStrengthService = yieldStrengthService;
+            _storageTypeService = storageTypeService;
         }
 
         [HttpGet]
@@ -63,7 +68,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Calculate()
         {
             await LoadLookupsAsync();
-            return View(new AD2000CalculateVM());
+            return View(new AD2000CalculateVM
+            {
+                TankOrientation = TankOrientation.Horizontal,
+                IsManualDensity = false
+            });
         }
 
         [HttpPost]
@@ -74,6 +83,32 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 await LoadLookupsAsync();
                 return View(vm);
+            }
+
+            if (vm.IsManualDensity)
+            {
+                if (vm.LiquidDensity <= 0)
+                {
+                    ModelState.AddModelError(nameof(vm.LiquidDensity), "Yoğunluk değeri 0'dan büyük olmalıdır.");
+                }
+            }
+            else
+            {
+                if (!vm.StorageTypeId.HasValue || vm.StorageTypeId.Value == Guid.Empty)
+                {
+                    ModelState.AddModelError(nameof(vm.StorageTypeId), "Tanımlı sıvı seçiniz veya manuel yoğunluk seçeneğini işaretleyiniz.");
+                }
+                else
+                {
+                    try
+                    {
+                        vm.LiquidDensity = await ResolveLiquidDensityAsync(vm.StorageTypeId.Value);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        ModelState.AddModelError(nameof(vm.StorageTypeId), ex.Message);
+                    }
+                }
             }
 
             var shellYield = await _yieldStrengthService.GetByConditionsAsync(
@@ -119,7 +154,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 AllowableStress = vm.AllowableStress,
                 ShellAllowableStress = vm.ShellAllowableStress,
                 HeadAllowableStress = vm.HeadAllowableStress,
+                EstimatedShellThickness = vm.EstimatedShellThickness,
+                EstimatedHeadThickness = vm.EstimatedHeadThickness,
                 Beta = vm.Beta,
+                TankOrientation = vm.TankOrientation,
+                StorageTypeId = vm.StorageTypeId,
+                IsManualDensity = vm.IsManualDensity,
+                LiquidDensity = vm.LiquidDensity,
+                StaticPressure = vm.StaticPressure,
                 ShellMaterialId = vm.ShellMaterialId,
                 ShellMaterialFormId = vm.ShellMaterialFormId,
                 HeadMaterialId = vm.HeadMaterialId,
@@ -147,7 +189,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 AllowableStress = vm.AllowableStress,
                 ShellAllowableStress = vm.ShellAllowableStress,
                 HeadAllowableStress = vm.HeadAllowableStress,
+                EstimatedShellThickness = vm.EstimatedShellThickness,
+                EstimatedHeadThickness = vm.EstimatedHeadThickness,
                 Beta = vm.Beta,
+                TankOrientation = vm.TankOrientation,
+                StorageTypeId = vm.StorageTypeId,
+                IsManualDensity = vm.IsManualDensity,
+                LiquidDensity = vm.LiquidDensity,
+                StaticPressure = vm.StaticPressure,
                 ShellMaterialId = vm.ShellMaterialId,
                 ShellMaterialFormId = vm.ShellMaterialFormId,
                 HeadMaterialId = vm.HeadMaterialId,
@@ -177,7 +226,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             AllowableStress = result.AllowableStress,
             ShellAllowableStress = result.ShellAllowableStress,
             HeadAllowableStress = result.HeadAllowableStress,
+            EstimatedShellThickness = result.EstimatedShellThickness,
+            EstimatedHeadThickness = result.EstimatedHeadThickness,
             Beta = result.Beta,
+            TankOrientation = result.TankOrientation,
+            StorageTypeId = result.StorageTypeId,
+            IsManualDensity = result.IsManualDensity,
+            LiquidDensity = result.LiquidDensity,
+            StaticPressure = result.StaticPressure,
             ShellMaterialId = result.ShellMaterialId,
             ShellMaterialFormId = result.ShellMaterialFormId,
             HeadMaterialId = result.HeadMaterialId,
@@ -189,10 +245,23 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             TestPressure = result.TestPressure
         };
 
+        private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)
+        {
+            var storageType = await _storageTypeService.GetByIdAsync(storageTypeId);
+
+            if (storageType?.Data == null || storageType.Data.Density <= 0)
+            {
+                throw new InvalidOperationException("Seçilen sıvı için geçerli yoğunluk değeri bulunamadı.");
+            }
+
+            return storageType.Data.Density;
+        }
+
         private async Task LoadLookupsAsync()
         {
             var materials = await _materialService.GetAllAsync() ?? new List<MaterialListDto>();
             var materialForms = await _materialFormService.GetAllAsync() ?? new List<MaterialFormListDto>();
+            var storageTypes = await _storageTypeService.GetAllAsync();
 
             ViewBag.Materials = new SelectList(materials, "Id", "Name");
             ViewBag.MaterialForms = new SelectList(materialForms, "Id", "FormType");
@@ -202,6 +271,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .ToDictionary(
                     g => g.Key.ToString(),
                     g => g.Select(x => new { value = x.Id, text = x.FormType.ToString() }).ToList());
+
+            var storageTypeList = storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
+            ViewBag.StorageTypes = storageTypeList
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+                .ToList();
+
+            ViewBag.StorageTypeDensities = storageTypeList
+                .ToDictionary(x => x.Id.ToString(), x => x.Density);
         }
     }
 }

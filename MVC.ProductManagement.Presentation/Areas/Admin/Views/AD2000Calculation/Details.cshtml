@@ -23,6 +23,11 @@
         <p><strong>Gövde Akma Dayanımı:</strong> @Model.ShellAllowableStress.ToString("F2") MPa</p>
         <p><strong>Bombe Akma Dayanımı:</strong> @Model.HeadAllowableStress.ToString("F2") MPa</p>
         <p><strong>Beta:</strong> @Model.Beta.ToString("F2")</p>
+        <p><strong>Tank Yönelimi:</strong> @Model.TankOrientation</p>
+        <p><strong>Tanımlı Sıvı Id:</strong> @(Model.StorageTypeId?.ToString() ?? "-")</p>
+        <p><strong>Manuel Yoğunluk:</strong> @(Model.IsManualDensity ? "Evet" : "Hayır")</p>
+        <p><strong>Sıvı Yoğunluğu:</strong> @Model.LiquidDensity.ToString("F2") kg/m³</p>
+        <p><strong>Statik Basınç:</strong> @Model.StaticPressure.ToString("F3") bar</p>
         <p><strong>Tahmini Gövde Et:</strong> @Model.EstimatedShellThickness.ToString("F2") mm</p>
         <p><strong>Tahmini Bombe Et:</strong> @Model.EstimatedHeadThickness.ToString("F2") mm</p>
         <p><strong>Gövde Malzeme Id:</strong> @Model.ShellMaterialId</p>

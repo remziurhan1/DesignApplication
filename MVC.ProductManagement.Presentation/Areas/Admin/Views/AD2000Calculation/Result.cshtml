@@ -19,6 +19,9 @@
             <div class="col-md-6">
                 <p><strong>Kaynak Faktörü (z):</strong> @Model.WeldJointFactor.ToString("F2")</p>
                 <p><strong>Beta:</strong> @Model.Beta.ToString("F2")</p>
+                <p><strong>Tank Yönelimi:</strong> @Model.TankOrientation</p>
+                <p><strong>Sıvı Yoğunluğu:</strong> @Model.LiquidDensity.ToString("F2") kg/m³</p>
+                <p><strong>Statik Basınç:</strong> @Model.StaticPressure.ToString("F3") bar</p>
                 <p><strong>Interpolasyon Sıcaklığı (Dizayn Max):</strong> @Model.DesignTemperatureMax.ToString("F2") °C</p>
                 <p><strong>Tahmini Gövde Et:</strong> @Model.EstimatedShellThickness.ToString("F2") mm</p>
                 <p><strong>Tahmini Bombe Et:</strong> @Model.EstimatedHeadThickness.ToString("F2") mm</p>
@@ -52,6 +55,11 @@
             @Html.HiddenFor(x => x.EstimatedShellThickness)
             @Html.HiddenFor(x => x.EstimatedHeadThickness)
             @Html.HiddenFor(x => x.Beta)
+            @Html.HiddenFor(x => x.TankOrientation)
+            @Html.HiddenFor(x => x.StorageTypeId)
+            @Html.HiddenFor(x => x.IsManualDensity)
+            @Html.HiddenFor(x => x.LiquidDensity)
+            @Html.HiddenFor(x => x.StaticPressure)
             @Html.HiddenFor(x => x.ShellMaterialId)
             @Html.HiddenFor(x => x.ShellMaterialFormId)
             @Html.HiddenFor(x => x.HeadMaterialId)
