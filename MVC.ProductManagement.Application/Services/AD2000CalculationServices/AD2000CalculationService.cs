@@ -27,8 +27,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             var beta = dto.Beta <= 0 ? 1.0 : dto.Beta;
             var ca = Math.Max(0, dto.CorrosionAllowance);
 
-            var shellThickness = ((p * d) / ((2 * shellSigma * z) - p)) * beta + ca;
-            var headThickness = ((p * d) / ((4 * headSigma * z) - p)) * beta + ca;
+            var shellThickness = ((p * d) / (((20 * (shellSigma/1.5) * z) + p))) + ca;
+            var headThickness = ((p * d*beta) / ((40 * (headSigma/1.5) * z) - p))  + ca;
 
             var roundedShell = RoundUpToHalf(shellThickness);
             var roundedHead = RoundUpToHalf(headThickness);
