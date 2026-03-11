@@ -22,7 +22,9 @@
                 <p><strong>Interpolasyon Sıcaklığı (Dizayn Max):</strong> @Model.DesignTemperatureMax.ToString("F2") °C</p>
                 <p><strong>Tahmini Gövde Et:</strong> @Model.EstimatedShellThickness.ToString("F2") mm</p>
                 <p><strong>Tahmini Bombe Et:</strong> @Model.EstimatedHeadThickness.ToString("F2") mm</p>
-                <p><strong>Hesapta Kullanılan Akma Dayanımı:</strong> @Model.AllowableStress.ToString("F2") MPa</p>
+                <p><strong>Gövde Akma Dayanımı:</strong> @Model.ShellAllowableStress.ToString("F2") MPa</p>
+                <p><strong>Bombe Akma Dayanımı:</strong> @Model.HeadAllowableStress.ToString("F2") MPa</p>
+                <p><strong>Hesapta Kullanılan Min Akma Dayanımı:</strong> @Model.AllowableStress.ToString("F2") MPa</p>
             </div>
         </div>
 
@@ -46,6 +48,8 @@
             @Html.HiddenFor(x => x.CorrosionAllowance)
             @Html.HiddenFor(x => x.WeldJointFactor)
             @Html.HiddenFor(x => x.AllowableStress)
+            @Html.HiddenFor(x => x.ShellAllowableStress)
+            @Html.HiddenFor(x => x.HeadAllowableStress)
             @Html.HiddenFor(x => x.Beta)
             @Html.HiddenFor(x => x.ShellMaterialId)
             @Html.HiddenFor(x => x.ShellMaterialFormId)

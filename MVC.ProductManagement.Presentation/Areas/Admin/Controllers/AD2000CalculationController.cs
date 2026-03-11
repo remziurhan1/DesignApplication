@@ -102,7 +102,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View(vm);
             }
 
-            vm.AllowableStress = Math.Min(shellYield!.Rp02, headYield!.Rp02);
+            vm.ShellAllowableStress = shellYield!.Rp02;
+            vm.HeadAllowableStress = headYield!.Rp02;
+            vm.AllowableStress = Math.Min(vm.ShellAllowableStress, vm.HeadAllowableStress);
 
             var result = await _calculationService.CalculateAsync(new AD2000CalculateDTO
             {
@@ -115,6 +117,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CorrosionAllowance = vm.CorrosionAllowance,
                 WeldJointFactor = vm.WeldJointFactor,
                 AllowableStress = vm.AllowableStress,
+                ShellAllowableStress = vm.ShellAllowableStress,
+                HeadAllowableStress = vm.HeadAllowableStress,
                 Beta = vm.Beta,
                 ShellMaterialId = vm.ShellMaterialId,
                 ShellMaterialFormId = vm.ShellMaterialFormId,
@@ -141,6 +145,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CorrosionAllowance = vm.CorrosionAllowance,
                 WeldJointFactor = vm.WeldJointFactor,
                 AllowableStress = vm.AllowableStress,
+                ShellAllowableStress = vm.ShellAllowableStress,
+                HeadAllowableStress = vm.HeadAllowableStress,
                 Beta = vm.Beta,
                 ShellMaterialId = vm.ShellMaterialId,
                 ShellMaterialFormId = vm.ShellMaterialFormId,
@@ -169,6 +175,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             CorrosionAllowance = result.CorrosionAllowance,
             WeldJointFactor = result.WeldJointFactor,
             AllowableStress = result.AllowableStress,
+            ShellAllowableStress = result.ShellAllowableStress,
+            HeadAllowableStress = result.HeadAllowableStress,
             Beta = result.Beta,
             ShellMaterialId = result.ShellMaterialId,
             ShellMaterialFormId = result.ShellMaterialFormId,
