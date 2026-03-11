@@ -323,20 +323,31 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 context.Input.OuterDiameter,
                 context.Input.ShellLength);
 
-            context.Result.InnerTankCircumferenceWeldLength =
-                Math.Round((2d * Math.PI * innerDiameter) / 1000d, 2);
+            double shellLength = context.Input.ShellLength;
+            double sectorWidth =context.Input.SectorWidth;
+            double sectorQty=(shellLength / sectorWidth);
+            double oneSectorWeld = sectorQty*innerDiameter*Math.PI;
+            double oneHeadCircularWeld = (Math.PI * innerDiameter);
 
-            context.Result.OuterTankCircumferenceWeldLength =
-                Math.Round((2d * Math.PI * outerDiameter) / 1000d, 2);
+            double outerTankShellLength = context.Input.ShellLength + 500;
+            double outerTankSectorQty= (outerTankShellLength / sectorWidth);
+            double outerTankSectorWeld = outerTankSectorQty * outerDiameter * Math.PI;
+            double outerTankCircularWeld = Math.PI * outerDiameter;
+
+
+
+            context.Result.InnerTankCircumferenceWeldLength =Math.Round(oneSectorWeld+oneHeadCircularWeld);
+
+            context.Result.OuterTankCircumferenceWeldLength = Math.Round(outerTankSectorWeld + outerTankCircularWeld);
 
             var innerHeadPulDiameter = HeadPulDiameterCoefficient * innerDiameter;
             var outerHeadPulDiameter = HeadPulDiameterCoefficient * outerDiameter;
 
             context.Result.InnerTankHeadWeldLength =
-                Math.Round(((innerHeadPulDiameter / 20d) * (innerHeadPulDiameter / 1.15d) * 2d) / 1000d, 2);
+                Math.Round(((innerHeadPulDiameter / sectorWidth) * (innerHeadPulDiameter / 1.15d) * 2d) , 2);
 
             context.Result.OuterTankHeadWeldLength =
-                Math.Round(((outerHeadPulDiameter / 20d) * (outerHeadPulDiameter / 1.15d) * 2d) / 1000d, 2);
+                Math.Round(((outerHeadPulDiameter / sectorWidth) * (outerHeadPulDiameter / 1.15d) * 2d) , 2);
 
             context.Result.TotalWeldLength =
                 Math.Round(
