@@ -15,6 +15,32 @@
         <p><strong>Hesaplanan Bombe Et:</strong> @Model.HeadThickness.ToString("F2") mm</p>
         <p><strong>Seçilen Bombe Et:</strong> @Model.RoundedHeadThickness.ToString("F2") mm</p>
         <p><strong>Test Basıncı:</strong> @Model.TestPressure.ToString("F2") bar</p>
+
+        <form asp-action="Save" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.Name)
+            @Html.HiddenFor(x => x.Diameter)
+            @Html.HiddenFor(x => x.ShellLength)
+            @Html.HiddenFor(x => x.DesignPressure)
+            @Html.HiddenFor(x => x.DesignTemperatureMin)
+            @Html.HiddenFor(x => x.DesignTemperatureMax)
+            @Html.HiddenFor(x => x.CorrosionAllowance)
+            @Html.HiddenFor(x => x.WeldJointFactor)
+            @Html.HiddenFor(x => x.AllowableStress)
+            @Html.HiddenFor(x => x.Beta)
+            @Html.HiddenFor(x => x.ShellMaterialId)
+            @Html.HiddenFor(x => x.ShellMaterialFormId)
+            @Html.HiddenFor(x => x.HeadMaterialId)
+            @Html.HiddenFor(x => x.HeadMaterialFormId)
+            @Html.HiddenFor(x => x.ShellThickness)
+            @Html.HiddenFor(x => x.HeadThickness)
+            @Html.HiddenFor(x => x.RoundedShellThickness)
+            @Html.HiddenFor(x => x.RoundedHeadThickness)
+            @Html.HiddenFor(x => x.TestPressure)
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
         <a asp-action="Calculate" class="btn btn-secondary">Yeni Hesap</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Kayıt Listesi</a>
     </div>
 </div>

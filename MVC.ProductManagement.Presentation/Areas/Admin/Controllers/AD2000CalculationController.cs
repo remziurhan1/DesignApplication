@@ -5,6 +5,7 @@ using MVC.ProductManagement.Application.Services.AD2000CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,6 +25,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             _calculationService = calculationService;
             _materialService = materialService;
             _materialFormService = materialFormService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var list = await _calculationService.GetAllAsync();
+            var vm = list.Select(x => new AD2000ListVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+                DesignPressure = x.DesignPressure,
+                RoundedShellThickness = x.RoundedShellThickness,
+                RoundedHeadThickness = x.RoundedHeadThickness
+            }).ToList();
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var dto = await _calculationService.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            return View(MapResultVm(dto));
         }
 
         [HttpGet]
@@ -61,29 +87,64 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 HeadMaterialFormId = vm.HeadMaterialFormId
             });
 
-            return View("Result", new AD2000ResultVM
-            {
-                Name = result.Name,
-                Diameter = result.Diameter,
-                ShellLength = result.ShellLength,
-                DesignPressure = result.DesignPressure,
-                DesignTemperatureMin = result.DesignTemperatureMin,
-                DesignTemperatureMax = result.DesignTemperatureMax,
-                CorrosionAllowance = result.CorrosionAllowance,
-                WeldJointFactor = result.WeldJointFactor,
-                AllowableStress = result.AllowableStress,
-                Beta = result.Beta,
-                ShellMaterialId = result.ShellMaterialId,
-                ShellMaterialFormId = result.ShellMaterialFormId,
-                HeadMaterialId = result.HeadMaterialId,
-                HeadMaterialFormId = result.HeadMaterialFormId,
-                ShellThickness = result.ShellThickness,
-                HeadThickness = result.HeadThickness,
-                RoundedShellThickness = result.RoundedShellThickness,
-                RoundedHeadThickness = result.RoundedHeadThickness,
-                TestPressure = result.TestPressure
-            });
+            return View("Result", MapResultVm(result));
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(AD2000ResultVM vm)
+        {
+            var dto = new AD2000ResultDTO
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                Diameter = vm.Diameter,
+                ShellLength = vm.ShellLength,
+                DesignPressure = vm.DesignPressure,
+                DesignTemperatureMin = vm.DesignTemperatureMin,
+                DesignTemperatureMax = vm.DesignTemperatureMax,
+                CorrosionAllowance = vm.CorrosionAllowance,
+                WeldJointFactor = vm.WeldJointFactor,
+                AllowableStress = vm.AllowableStress,
+                Beta = vm.Beta,
+                ShellMaterialId = vm.ShellMaterialId,
+                ShellMaterialFormId = vm.ShellMaterialFormId,
+                HeadMaterialId = vm.HeadMaterialId,
+                HeadMaterialFormId = vm.HeadMaterialFormId,
+                ShellThickness = vm.ShellThickness,
+                HeadThickness = vm.HeadThickness,
+                RoundedShellThickness = vm.RoundedShellThickness,
+                RoundedHeadThickness = vm.RoundedHeadThickness,
+                TestPressure = vm.TestPressure
+            };
+
+            var saved = await _calculationService.SaveAsync(dto, User?.Identity?.Name ?? "AdminUser");
+            return RedirectToAction(nameof(Details), new { id = saved.Id });
+        }
+
+        private static AD2000ResultVM MapResultVm(AD2000ResultDTO result) => new AD2000ResultVM
+        {
+            Id = result.Id,
+            Name = result.Name,
+            Diameter = result.Diameter,
+            ShellLength = result.ShellLength,
+            DesignPressure = result.DesignPressure,
+            DesignTemperatureMin = result.DesignTemperatureMin,
+            DesignTemperatureMax = result.DesignTemperatureMax,
+            CorrosionAllowance = result.CorrosionAllowance,
+            WeldJointFactor = result.WeldJointFactor,
+            AllowableStress = result.AllowableStress,
+            Beta = result.Beta,
+            ShellMaterialId = result.ShellMaterialId,
+            ShellMaterialFormId = result.ShellMaterialFormId,
+            HeadMaterialId = result.HeadMaterialId,
+            HeadMaterialFormId = result.HeadMaterialFormId,
+            ShellThickness = result.ShellThickness,
+            HeadThickness = result.HeadThickness,
+            RoundedShellThickness = result.RoundedShellThickness,
+            RoundedHeadThickness = result.RoundedHeadThickness,
+            TestPressure = result.TestPressure
+        };
 
         private async Task LoadLookupsAsync()
         {

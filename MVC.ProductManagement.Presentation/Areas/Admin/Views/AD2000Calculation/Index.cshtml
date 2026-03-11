@@ -1,0 +1,33 @@
+@model List<MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs.AD2000ListVM>
+@{
+    ViewData["Title"] = "AD2000 Index";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>AD2000 Hesapları</h2>
+    <a asp-action="Calculate" class="btn btn-primary">Yeni AD2000 Hesabı</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Dizayn Basınç</th>
+            <th>Gövde Et (mm)</th>
+            <th>Bombe Et (mm)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.DesignPressure.ToString("F2")</td>
+            <td>@item.RoundedShellThickness.ToString("F2")</td>
+            <td>@item.RoundedHeadThickness.ToString("F2")</td>
+            <td><a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Detay</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
