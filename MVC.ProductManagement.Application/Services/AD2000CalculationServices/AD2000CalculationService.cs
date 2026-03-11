@@ -21,13 +21,14 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
         {
             var p = dto.DesignPressure;
             var d = dto.Diameter;
-            var sigma = dto.AllowableStress;
+            var shellSigma = dto.ShellAllowableStress > 0 ? dto.ShellAllowableStress : dto.AllowableStress;
+            var headSigma = dto.HeadAllowableStress > 0 ? dto.HeadAllowableStress : dto.AllowableStress;
             var z = dto.WeldJointFactor <= 0 ? 1.0 : dto.WeldJointFactor;
             var beta = dto.Beta <= 0 ? 1.0 : dto.Beta;
             var ca = Math.Max(0, dto.CorrosionAllowance);
 
-            var shellThickness = ((p * d) / ((2 * sigma * z) - p)) * beta + ca;
-            var headThickness = ((p * d) / ((4 * sigma * z) - p)) * beta + ca;
+            var shellThickness = ((p * d) / ((2 * shellSigma * z) - p)) * beta + ca;
+            var headThickness = ((p * d) / ((4 * headSigma * z) - p)) * beta + ca;
 
             var roundedShell = RoundUpToHalf(shellThickness);
             var roundedHead = RoundUpToHalf(headThickness);
@@ -43,6 +44,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 CorrosionAllowance = dto.CorrosionAllowance,
                 WeldJointFactor = dto.WeldJointFactor,
                 AllowableStress = dto.AllowableStress,
+                ShellAllowableStress = dto.ShellAllowableStress,
+                HeadAllowableStress = dto.HeadAllowableStress,
                 Beta = dto.Beta,
                 ShellMaterialId = dto.ShellMaterialId,
                 ShellMaterialFormId = dto.ShellMaterialFormId,
@@ -89,6 +92,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             CorrosionAllowance = dto.CorrosionAllowance,
             WeldJointFactor = dto.WeldJointFactor,
             AllowableStress = dto.AllowableStress,
+            ShellAllowableStress = dto.ShellAllowableStress,
+            HeadAllowableStress = dto.HeadAllowableStress,
             Beta = dto.Beta,
             ShellMaterialId = dto.ShellMaterialId,
             ShellMaterialFormId = dto.ShellMaterialFormId,
@@ -115,6 +120,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             CorrosionAllowance = entity.CorrosionAllowance,
             WeldJointFactor = entity.WeldJointFactor,
             AllowableStress = entity.AllowableStress,
+            ShellAllowableStress = entity.ShellAllowableStress > 0 ? entity.ShellAllowableStress : entity.AllowableStress,
+            HeadAllowableStress = entity.HeadAllowableStress > 0 ? entity.HeadAllowableStress : entity.AllowableStress,
             Beta = entity.Beta,
             ShellMaterialId = entity.ShellMaterialId,
             ShellMaterialFormId = entity.ShellMaterialFormId,

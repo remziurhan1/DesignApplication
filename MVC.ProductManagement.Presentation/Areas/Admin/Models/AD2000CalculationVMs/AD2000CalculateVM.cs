@@ -29,8 +29,22 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
         [Range(0.1, 1)]
         public double WeldJointFactor { get; set; } = 1.0;
 
-        [Range(1, double.MaxValue)]
+
+        [Range(0.01, double.MaxValue)]
+        [Display(Name = "Tahmini Gövde Et Kalınlığı (mm)")]
+        public double EstimatedShellThickness { get; set; }
+
+        [Range(0.01, double.MaxValue)]
+        [Display(Name = "Tahmini Bombe Et Kalınlığı (mm)")]
+        public double EstimatedHeadThickness { get; set; }
+
         public double AllowableStress { get; set; }
+
+        [Display(Name = "Gövde Akma Dayanımı (MPa)")]
+        public double ShellAllowableStress { get; set; }
+
+        [Display(Name = "Bombe Akma Dayanımı (MPa)")]
+        public double HeadAllowableStress { get; set; }
 
         [Range(0.1, 5)]
         public double Beta { get; set; } = 1.0;
