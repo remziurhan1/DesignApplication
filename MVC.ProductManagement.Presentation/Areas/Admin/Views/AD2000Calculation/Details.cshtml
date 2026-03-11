@@ -1,0 +1,19 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs.AD2000ResultVM
+@{
+    ViewData["Title"] = "AD2000 Details";
+}
+
+<h2>AD2000 Detay</h2>
+<div class="card">
+    <div class="card-body">
+        <p><strong>Tank:</strong> @Model.Name</p>
+        <p><strong>Çap:</strong> @Model.Diameter mm</p>
+        <p><strong>Gövde Boyu:</strong> @Model.ShellLength mm</p>
+        <p><strong>Dizayn Basıncı:</strong> @Model.DesignPressure bar</p>
+        <p><strong>Dizayn Sıcaklık:</strong> @Model.DesignTemperatureMin / @Model.DesignTemperatureMax °C</p>
+        <p><strong>Beta:</strong> @Model.Beta</p>
+        <p><strong>Gövde Et:</strong> @Model.RoundedShellThickness mm</p>
+        <p><strong>Bombe Et:</strong> @Model.RoundedHeadThickness mm</p>
+        <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+    </div>
+</div>
