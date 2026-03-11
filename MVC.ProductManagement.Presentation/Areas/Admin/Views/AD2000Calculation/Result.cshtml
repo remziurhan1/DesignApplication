@@ -6,10 +6,28 @@
 <h2>AD2000 Sonuç</h2>
 <div class="card">
     <div class="card-body">
-        <p><strong>Tank:</strong> @Model.Name</p>
-        <p><strong>Dizayn Sıcaklığı:</strong> @Model.DesignTemperatureMin °C / @Model.DesignTemperatureMax °C</p>
-        <p><strong>Beta:</strong> @Model.Beta</p>
+        <h5 class="mb-3">Giriş Değerleri</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Tank:</strong> @Model.Name</p>
+                <p><strong>Çap:</strong> @Model.Diameter.ToString("F2") mm</p>
+                <p><strong>Silindir Boyu:</strong> @Model.ShellLength.ToString("F2") mm</p>
+                <p><strong>Dizayn Basıncı:</strong> @Model.DesignPressure.ToString("F2") bar</p>
+                <p><strong>Dizayn Sıcaklığı:</strong> @Model.DesignTemperatureMin °C / @Model.DesignTemperatureMax °C</p>
+                <p><strong>Korozyon Payı:</strong> @Model.CorrosionAllowance.ToString("F2") mm</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Kaynak Faktörü (z):</strong> @Model.WeldJointFactor.ToString("F2")</p>
+                <p><strong>Beta:</strong> @Model.Beta.ToString("F2")</p>
+                <p><strong>Interpolasyon Sıcaklığı (Dizayn Max):</strong> @Model.DesignTemperatureMax.ToString("F2") °C</p>
+                <p><strong>Tahmini Gövde Et:</strong> @Model.EstimatedShellThickness.ToString("F2") mm</p>
+                <p><strong>Tahmini Bombe Et:</strong> @Model.EstimatedHeadThickness.ToString("F2") mm</p>
+                <p><strong>Hesapta Kullanılan Akma Dayanımı:</strong> @Model.AllowableStress.ToString("F2") MPa</p>
+            </div>
+        </div>
+
         <hr />
+        <h5 class="mb-3">Çıkış Değerleri</h5>
         <p><strong>Hesaplanan Gövde Et:</strong> @Model.ShellThickness.ToString("F2") mm</p>
         <p><strong>Seçilen Gövde Et:</strong> @Model.RoundedShellThickness.ToString("F2") mm</p>
         <p><strong>Hesaplanan Bombe Et:</strong> @Model.HeadThickness.ToString("F2") mm</p>
