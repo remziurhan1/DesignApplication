@@ -14,6 +14,8 @@ namespace MVC.ProductManagement.Domain.Entities
         public double CorrosionAllowance { get; set; }
         public double WeldJointFactor { get; set; }
         public double AllowableStress { get; set; }
+        public double ShellAllowableStress { get; set; }
+        public double HeadAllowableStress { get; set; }
         public double Beta { get; set; }
 
         public Guid ShellMaterialId { get; set; }

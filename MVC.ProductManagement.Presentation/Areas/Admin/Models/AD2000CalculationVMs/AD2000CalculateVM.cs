@@ -38,7 +38,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
         [Display(Name = "Tahmini Bombe Et Kalınlığı (mm)")]
         public double EstimatedHeadThickness { get; set; }
 
-        [Display(Name = "Hesapta Kullanılan Min Akma Dayanımı (MPa)")]
         public double AllowableStress { get; set; }
 
         [Display(Name = "Gövde Akma Dayanımı (MPa)")]

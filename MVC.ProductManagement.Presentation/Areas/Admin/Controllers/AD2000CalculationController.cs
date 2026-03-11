@@ -104,7 +104,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             vm.ShellAllowableStress = shellYield!.Rp02;
             vm.HeadAllowableStress = headYield!.Rp02;
-            vm.AllowableStress = Math.Min(vm.ShellAllowableStress, vm.HeadAllowableStress);
+            vm.AllowableStress = vm.ShellAllowableStress;
 
             var result = await _calculationService.CalculateAsync(new AD2000CalculateDTO
             {
