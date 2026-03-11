@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MVC.ProductManagement.Application.Interfaces.Services;
+using MVC.ProductManagement.Application.Services.AD2000CalculationServices;
 using MVC.ProductManagement.Application.Services.AllowableStressServices;
 using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.EN13458.CalculationSteps;
@@ -42,6 +43,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IYieldStrengthService, YieldStrengthService>();
             services.AddScoped<IAllowableStressService, AllowableStressService>();
             services.AddScoped<IStorageTypeService, StorageTypeService>();
+            services.AddScoped<IAD2000CalculationService, AD2000CalculationService>();
             services.AddScoped<IEN13458CalculationServices, EN13458CalculationServices>();
             services.AddScoped<IEN13458MaterialStrengthProvider, EN13458MaterialStrengthProvider>();
             services.AddScoped<IEN13458CalculationManager, EN13458CalculationManager>();
