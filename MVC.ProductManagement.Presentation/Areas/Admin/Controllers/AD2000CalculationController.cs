@@ -155,13 +155,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var materialForms = await _materialFormService.GetAllAsync() ?? new List<MaterialFormListDto>();
 
             ViewBag.Materials = new SelectList(materials, "Id", "Name");
-            ViewBag.MaterialForms = new SelectList(materialForms, "Id", "Form");
+            ViewBag.MaterialForms = new SelectList(materialForms, "Id", "FormType");
 
             ViewBag.MaterialFormsByMaterial = materialForms
                 .GroupBy(x => x.MaterialId)
                 .ToDictionary(
                     g => g.Key.ToString(),
-                    g => g.Select(x => new { value = x.Id, text = x.Form }).ToList());
+                    g => g.Select(x => new { value = x.Id, text = x.FormType.ToString() }).ToList());
         }
     }
 }
