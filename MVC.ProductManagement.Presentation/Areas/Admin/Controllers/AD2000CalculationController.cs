@@ -6,6 +6,7 @@ using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
+using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs;
 using System;
 using System.Collections.Generic;
@@ -19,15 +20,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IAD2000CalculationService _calculationService;
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
+        private readonly IYieldStrengthService _yieldStrengthService;
 
         public AD2000CalculationController(
             IAD2000CalculationService calculationService,
             IMaterialService materialService,
-            IMaterialFormService materialFormService)
+            IMaterialFormService materialFormService,
+            IYieldStrengthService yieldStrengthService)
         {
             _calculationService = calculationService;
             _materialService = materialService;
             _materialFormService = materialFormService;
+            _yieldStrengthService = yieldStrengthService;
         }
 
         [HttpGet]
@@ -71,6 +75,34 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 await LoadLookupsAsync();
                 return View(vm);
             }
+
+            var shellYield = await _yieldStrengthService.GetByConditionsAsync(
+                vm.ShellMaterialFormId,
+                vm.InterpolationTemperature,
+                vm.EstimatedShellThickness);
+
+            var headYield = await _yieldStrengthService.GetByConditionsAsync(
+                vm.HeadMaterialFormId,
+                vm.InterpolationTemperature,
+                vm.EstimatedHeadThickness);
+
+            if (shellYield == null)
+            {
+                ModelState.AddModelError(nameof(vm.EstimatedShellThickness), "Gövde için girilen sıcaklık/kalınlıkta akma dayanımı bulunamadı.");
+            }
+
+            if (headYield == null)
+            {
+                ModelState.AddModelError(nameof(vm.EstimatedHeadThickness), "Bombe için girilen sıcaklık/kalınlıkta akma dayanımı bulunamadı.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await LoadLookupsAsync();
+                return View(vm);
+            }
+
+            vm.AllowableStress = Math.Min(shellYield!.Rp02, headYield!.Rp02);
 
             var result = await _calculationService.CalculateAsync(new AD2000CalculateDTO
             {
