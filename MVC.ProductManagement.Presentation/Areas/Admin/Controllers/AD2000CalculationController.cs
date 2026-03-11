@@ -78,12 +78,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             var shellYield = await _yieldStrengthService.GetByConditionsAsync(
                 vm.ShellMaterialFormId,
-                vm.InterpolationTemperature,
+                vm.DesignTemperatureMax,
                 vm.EstimatedShellThickness);
 
             var headYield = await _yieldStrengthService.GetByConditionsAsync(
                 vm.HeadMaterialFormId,
-                vm.InterpolationTemperature,
+                vm.DesignTemperatureMax,
                 vm.EstimatedHeadThickness);
 
             if (shellYield == null)

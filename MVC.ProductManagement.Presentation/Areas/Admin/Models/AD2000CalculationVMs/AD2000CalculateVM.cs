@@ -29,8 +29,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
         [Range(0.1, 1)]
         public double WeldJointFactor { get; set; } = 1.0;
 
-        [Display(Name = "Interpolasyon Sıcaklığı (°C)")]
-        public double InterpolationTemperature { get; set; }
 
         [Range(0.01, double.MaxValue)]
         [Display(Name = "Tahmini Gövde Et Kalınlığı (mm)")]
