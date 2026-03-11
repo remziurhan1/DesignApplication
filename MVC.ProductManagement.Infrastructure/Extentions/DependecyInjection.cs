@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Infrastructure.Repositories.AD2000Repositories;
 using MVC.ProductManagement.Infrastructure.Repositories.EN13458Repositories;
 using MVC.ProductManagement.Infrastructure.Repositories.IAllowableStressRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
@@ -38,6 +39,7 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IYieldStrengthRepository, YieldStrengthRepository>();
             services.AddScoped<IAllowableStressRepository, AllowableStressRepository>();
             services.AddScoped<IEN13458Repository, EN13458Repository>();
+            services.AddScoped<IAD2000Repository, AD2000Repository>();
             services.AddScoped<IStorageTypeRepositories, StorageTypeRepository>();
             services.AddScoped<IStorageTypePropertiesRepository, StorageTypePropertiesRepository>();
             services.AddScoped<IFluidRepositories, FluidRepository>();
