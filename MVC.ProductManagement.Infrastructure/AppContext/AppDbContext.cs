@@ -36,6 +36,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<YieldStrength> YieldStrengths { get; set; }
         public DbSet<AllowableStress> AllowableStresses { get; set; }
         public DbSet<EN13458Calculation> EN13458Calculations { get; set; }
+        public DbSet<AD2000Calculation> AD2000Calculations { get; set; }
         public DbSet<StorageTypeProperties> StorageTypeProperties { get; set; }
         public DbSet<StorageType> StorageTypes { get; set; }
         public DbSet<GasType> GasTypes { get; set; }

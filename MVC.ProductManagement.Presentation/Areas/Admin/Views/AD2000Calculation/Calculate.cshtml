@@ -1,0 +1,65 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs.AD2000CalculateVM
+@{
+    ViewData["Title"] = "AD2000 Calculate";
+}
+
+<h2>AD2000 Hesapla (Tek Cidar)</h2>
+
+<form asp-action="Calculate" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row g-3">
+        <div class="col-md-4"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="Diameter" class="form-label"></label><input asp-for="Diameter" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="ShellLength" class="form-label"></label><input asp-for="ShellLength" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="DesignPressure" class="form-label"></label><input asp-for="DesignPressure" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="DesignTemperatureMin" class="form-label"></label><input asp-for="DesignTemperatureMin" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="DesignTemperatureMax" class="form-label"></label><input asp-for="DesignTemperatureMax" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="CorrosionAllowance" class="form-label"></label><input asp-for="CorrosionAllowance" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="WeldJointFactor" class="form-label"></label><input asp-for="WeldJointFactor" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="AllowableStress" class="form-label"></label><input asp-for="AllowableStress" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="Beta" class="form-label"></label><input asp-for="Beta" class="form-control" /></div>
+    </div>
+
+    <hr />
+    <h5>Malzeme Seçimi</h5>
+    <div class="row g-3">
+        <div class="col-md-6"><label asp-for="ShellMaterialId" class="form-label">Gövde Malzemesi</label><select asp-for="ShellMaterialId" asp-items="ViewBag.Materials" class="form-select"></select></div>
+        <div class="col-md-6"><label asp-for="ShellMaterialFormId" class="form-label">Gövde Formu</label><select asp-for="ShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"></select></div>
+        <div class="col-md-6"><label asp-for="HeadMaterialId" class="form-label">Bombe Malzemesi</label><select asp-for="HeadMaterialId" asp-items="ViewBag.Materials" class="form-select"></select></div>
+        <div class="col-md-6"><label asp-for="HeadMaterialFormId" class="form-label">Bombe Formu</label><select asp-for="HeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"></select></div>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Hesapla</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormsByMaterial));
+        function bindMaterialForm(materialSelectId, formSelectId) {
+            const materialSelect = document.getElementById(materialSelectId);
+            const formSelect = document.getElementById(formSelectId);
+            if (!materialSelect || !formSelect) return;
+            const refill = () => {
+                const materialId = materialSelect.value;
+                const options = formsByMaterial[materialId] || [];
+                const current = formSelect.value;
+                formSelect.innerHTML = '';
+                options.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item.value;
+                    opt.text = item.text;
+                    formSelect.appendChild(opt);
+                });
+                if ([...formSelect.options].some(x => x.value === current)) formSelect.value = current;
+            };
+            materialSelect.addEventListener('change', refill);
+            refill();
+        }
+        bindMaterialForm('ShellMaterialId', 'ShellMaterialFormId');
+        bindMaterialForm('HeadMaterialId', 'HeadMaterialFormId');
+    </script>
+}
