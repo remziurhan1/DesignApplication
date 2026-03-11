@@ -6,14 +6,43 @@
 <h2>AD2000 Detay</h2>
 <div class="card">
     <div class="card-body">
+        <h5 class="mb-3">Kimlik</h5>
+        <p><strong>Kayıt Id:</strong> @Model.Id</p>
         <p><strong>Tank:</strong> @Model.Name</p>
-        <p><strong>Çap:</strong> @Model.Diameter mm</p>
-        <p><strong>Gövde Boyu:</strong> @Model.ShellLength mm</p>
-        <p><strong>Dizayn Basıncı:</strong> @Model.DesignPressure bar</p>
-        <p><strong>Dizayn Sıcaklık:</strong> @Model.DesignTemperatureMin / @Model.DesignTemperatureMax °C</p>
-        <p><strong>Beta:</strong> @Model.Beta</p>
-        <p><strong>Gövde Et:</strong> @Model.RoundedShellThickness mm</p>
-        <p><strong>Bombe Et:</strong> @Model.RoundedHeadThickness mm</p>
+
+        <hr />
+        <h5 class="mb-3">Giriş Değerleri</h5>
+        <p><strong>Çap:</strong> @Model.Diameter.ToString("F2") mm</p>
+        <p><strong>Gövde Boyu:</strong> @Model.ShellLength.ToString("F2") mm</p>
+        <p><strong>Dizayn Basıncı:</strong> @Model.DesignPressure.ToString("F2") bar</p>
+        <p><strong>Dizayn Sıcaklığı Min:</strong> @Model.DesignTemperatureMin.ToString("F2") °C</p>
+        <p><strong>Dizayn Sıcaklığı Max:</strong> @Model.DesignTemperatureMax.ToString("F2") °C</p>
+        <p><strong>Korozyon Payı:</strong> @Model.CorrosionAllowance.ToString("F2") mm</p>
+        <p><strong>Kaynak Faktörü:</strong> @Model.WeldJointFactor.ToString("F2")</p>
+        <p><strong>İzin Verilebilir Gerilme:</strong> @Model.AllowableStress.ToString("F2") MPa</p>
+        <p><strong>Gövde Akma Dayanımı:</strong> @Model.ShellAllowableStress.ToString("F2") MPa</p>
+        <p><strong>Bombe Akma Dayanımı:</strong> @Model.HeadAllowableStress.ToString("F2") MPa</p>
+        <p><strong>Beta:</strong> @Model.Beta.ToString("F2")</p>
+        <p><strong>Tank Yönelimi:</strong> @Model.TankOrientation</p>
+        <p><strong>Tanımlı Sıvı Id:</strong> @(Model.StorageTypeId?.ToString() ?? "-")</p>
+        <p><strong>Manuel Yoğunluk:</strong> @(Model.IsManualDensity ? "Evet" : "Hayır")</p>
+        <p><strong>Sıvı Yoğunluğu:</strong> @Model.LiquidDensity.ToString("F2") kg/m³</p>
+        <p><strong>Statik Basınç:</strong> @Model.StaticPressure.ToString("F3") bar</p>
+        <p><strong>Tahmini Gövde Et:</strong> @Model.EstimatedShellThickness.ToString("F2") mm</p>
+        <p><strong>Tahmini Bombe Et:</strong> @Model.EstimatedHeadThickness.ToString("F2") mm</p>
+        <p><strong>Gövde Malzeme Id:</strong> @Model.ShellMaterialId</p>
+        <p><strong>Gövde Form Id:</strong> @Model.ShellMaterialFormId</p>
+        <p><strong>Bombe Malzeme Id:</strong> @Model.HeadMaterialId</p>
+        <p><strong>Bombe Form Id:</strong> @Model.HeadMaterialFormId</p>
+
+        <hr />
+        <h5 class="mb-3">Hesap Sonuçları</h5>
+        <p><strong>Hesaplanan Gövde Et:</strong> @Model.ShellThickness.ToString("F2") mm</p>
+        <p><strong>Hesaplanan Bombe Et:</strong> @Model.HeadThickness.ToString("F2") mm</p>
+        <p><strong>Seçilen Gövde Et:</strong> @Model.RoundedShellThickness.ToString("F2") mm</p>
+        <p><strong>Seçilen Bombe Et:</strong> @Model.RoundedHeadThickness.ToString("F2") mm</p>
+        <p><strong>Test Basıncı:</strong> @Model.TestPressure.ToString("F2") bar</p>
+
         <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
     </div>
 </div>

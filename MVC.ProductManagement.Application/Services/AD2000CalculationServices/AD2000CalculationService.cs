@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MVC.ProductManagement.Application.DTOs.AD2000DTOs;
 using MVC.ProductManagement.Domain.Entities;
+using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.Repositories.AD2000Repositories;
 
 namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
@@ -19,7 +20,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
 
         public Task<AD2000ResultDTO> CalculateAsync(AD2000CalculateDTO dto)
         {
-            var p = dto.DesignPressure;
+            var pDesign = dto.DesignPressure;
             var d = dto.Diameter;
             var shellSigma = dto.ShellAllowableStress > 0 ? dto.ShellAllowableStress : dto.AllowableStress;
             var headSigma = dto.HeadAllowableStress > 0 ? dto.HeadAllowableStress : dto.AllowableStress;
@@ -27,8 +28,14 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             var beta = dto.Beta <= 0 ? 1.0 : dto.Beta;
             var ca = Math.Max(0, dto.CorrosionAllowance);
 
-            var shellThickness = ((p * d) / (((20 * (shellSigma/1.5) * z) + p))) + ca;
-            var headThickness = ((p * d*beta) / ((40 * (headSigma/1.5) * z) - p))  + ca;
+            var staticPressure = dto.StaticPressure > 0
+                ? dto.StaticPressure
+                : CalculateStaticPressureBar(dto.LiquidDensity, dto.TankOrientation, dto.ShellLength, dto.Diameter);
+
+            var effectivePressure = pDesign + staticPressure;
+
+            var shellThickness = ((effectivePressure * d) / ((20 * (shellSigma / 1.5) * z) + effectivePressure)) + ca;
+            var headThickness = ((effectivePressure * d * beta) / ((40 * (headSigma / 1.5) * z) - effectivePressure)) + ca;
 
             var roundedShell = RoundUpToHalf(shellThickness);
             var roundedHead = RoundUpToHalf(headThickness);
@@ -46,7 +53,14 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 AllowableStress = dto.AllowableStress,
                 ShellAllowableStress = dto.ShellAllowableStress,
                 HeadAllowableStress = dto.HeadAllowableStress,
+                EstimatedShellThickness = dto.EstimatedShellThickness,
+                EstimatedHeadThickness = dto.EstimatedHeadThickness,
                 Beta = dto.Beta,
+                TankOrientation = dto.TankOrientation,
+                StorageTypeId = dto.StorageTypeId,
+                IsManualDensity = dto.IsManualDensity,
+                LiquidDensity = dto.LiquidDensity,
+                StaticPressure = staticPressure,
                 ShellMaterialId = dto.ShellMaterialId,
                 ShellMaterialFormId = dto.ShellMaterialFormId,
                 HeadMaterialId = dto.HeadMaterialId,
@@ -55,7 +69,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 HeadThickness = headThickness,
                 RoundedShellThickness = roundedShell,
                 RoundedHeadThickness = roundedHead,
-                TestPressure = dto.DesignPressure * 1.3
+                TestPressure = effectivePressure * 1.3
             });
         }
 
@@ -94,7 +108,14 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             AllowableStress = dto.AllowableStress,
             ShellAllowableStress = dto.ShellAllowableStress,
             HeadAllowableStress = dto.HeadAllowableStress,
+            EstimatedShellThickness = dto.EstimatedShellThickness,
+            EstimatedHeadThickness = dto.EstimatedHeadThickness,
             Beta = dto.Beta,
+            TankOrientation = dto.TankOrientation,
+            StorageTypeId = dto.StorageTypeId,
+            IsManualDensity = dto.IsManualDensity,
+            LiquidDensity = dto.LiquidDensity,
+            StaticPressure = dto.StaticPressure,
             ShellMaterialId = dto.ShellMaterialId,
             ShellMaterialFormId = dto.ShellMaterialFormId,
             HeadMaterialId = dto.HeadMaterialId,
@@ -122,7 +143,14 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             AllowableStress = entity.AllowableStress,
             ShellAllowableStress = entity.ShellAllowableStress > 0 ? entity.ShellAllowableStress : entity.AllowableStress,
             HeadAllowableStress = entity.HeadAllowableStress > 0 ? entity.HeadAllowableStress : entity.AllowableStress,
+            EstimatedShellThickness = entity.EstimatedShellThickness,
+            EstimatedHeadThickness = entity.EstimatedHeadThickness,
             Beta = entity.Beta,
+            TankOrientation = entity.TankOrientation,
+            StorageTypeId = entity.StorageTypeId,
+            IsManualDensity = entity.IsManualDensity,
+            LiquidDensity = entity.LiquidDensity,
+            StaticPressure = entity.StaticPressure,
             ShellMaterialId = entity.ShellMaterialId,
             ShellMaterialFormId = entity.ShellMaterialFormId,
             HeadMaterialId = entity.HeadMaterialId,
@@ -133,6 +161,21 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             RoundedHeadThickness = entity.RoundedHeadThickness,
             TestPressure = entity.TestPressure
         };
+
+        private static double CalculateStaticPressureBar(double density, TankOrientation orientation, double shellLengthMm, double diameterMm)
+        {
+            if (density <= 0)
+            {
+                return 0;
+            }
+
+            var effectiveHeightMm = orientation == TankOrientation.Vertical
+                ? shellLengthMm + diameterMm
+                : diameterMm;
+
+            const double gravity = 9.81;
+            return (density * gravity * (effectiveHeightMm / 1000d)) / 100000d;
+        }
 
         private static double RoundUpToHalf(double value) => Math.Ceiling(value * 2.0) / 2.0;
     }

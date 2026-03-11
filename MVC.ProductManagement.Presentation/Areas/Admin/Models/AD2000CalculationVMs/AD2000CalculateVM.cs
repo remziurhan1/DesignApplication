@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using MVC.ProductManagement.Domain.Enums;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs
 {
@@ -29,7 +30,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
         [Range(0.1, 1)]
         public double WeldJointFactor { get; set; } = 1.0;
 
-
         [Range(0.01, double.MaxValue)]
         [Display(Name = "Tahmini Gövde Et Kalınlığı (mm)")]
         public double EstimatedShellThickness { get; set; }
@@ -48,6 +48,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
 
         [Range(0.1, 5)]
         public double Beta { get; set; } = 1.0;
+
+        [Display(Name = "Tank Yönelimi")]
+        public TankOrientation TankOrientation { get; set; } = TankOrientation.Horizontal;
+
+        [Display(Name = "Tanımlı Sıvı")]
+        public Guid? StorageTypeId { get; set; }
+
+        [Display(Name = "Tanımlı sıvı yok (yoğunluğu elle gireceğim)")]
+        public bool IsManualDensity { get; set; }
+
+        [Range(0.01, double.MaxValue)]
+        [Display(Name = "Sıvı Yoğunluğu (kg/m³)")]
+        public double LiquidDensity { get; set; }
+
+        public double StaticPressure { get; set; }
 
         [Required] public Guid ShellMaterialId { get; set; }
         [Required] public Guid ShellMaterialFormId { get; set; }

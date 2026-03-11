@@ -18,11 +18,29 @@
         <div class="col-md-4"><label asp-for="DesignTemperatureMax" class="form-label"></label><input asp-for="DesignTemperatureMax" class="form-control" /></div>
         <div class="col-md-4"><label asp-for="CorrosionAllowance" class="form-label"></label><input asp-for="CorrosionAllowance" class="form-control" /></div>
         <div class="col-md-4"><label asp-for="WeldJointFactor" class="form-label"></label><input asp-for="WeldJointFactor" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="TankOrientation" class="form-label"></label><select asp-for="TankOrientation" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.TankOrientation>()" class="form-select"></select></div>
         <div class="col-md-4"><label asp-for="EstimatedShellThickness" class="form-label"></label><input asp-for="EstimatedShellThickness" class="form-control" /></div>
         <div class="col-md-4"><label asp-for="EstimatedHeadThickness" class="form-label"></label><input asp-for="EstimatedHeadThickness" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="ShellAllowableStress" class="form-label"></label><input asp-for="ShellAllowableStress" class="form-control" readonly /></div>
-        <div class="col-md-4"><label asp-for="HeadAllowableStress" class="form-label"></label><input asp-for="HeadAllowableStress" class="form-control" readonly /></div>
         <div class="col-md-4"><label asp-for="Beta" class="form-label"></label><input asp-for="Beta" class="form-control" /></div>
+    </div>
+
+    <hr />
+    <h5>Sıvı / Yoğunluk</h5>
+    <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label asp-for="StorageTypeId" class="form-label">Tanımlı Sıvı</label>
+            <select asp-for="StorageTypeId" asp-items="ViewBag.StorageTypes" class="form-select" id="StorageTypeId">
+                <option value="">Seçiniz</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="LiquidDensity" class="form-label"></label>
+            <input asp-for="LiquidDensity" class="form-control" id="LiquidDensity" />
+        </div>
+        <div class="col-md-4 form-check mt-4 ps-5">
+            <input asp-for="IsManualDensity" class="form-check-input" id="IsManualDensity" />
+            <label asp-for="IsManualDensity" class="form-check-label"></label>
+        </div>
     </div>
 
     <hr />
@@ -42,6 +60,8 @@
 @section Scripts {
     <script>
         const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormsByMaterial));
+        const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.StorageTypeDensities));
+
         function bindMaterialForm(materialSelectId, formSelectId) {
             const materialSelect = document.getElementById(materialSelectId);
             const formSelect = document.getElementById(formSelectId);
@@ -62,7 +82,33 @@
             materialSelect.addEventListener('change', refill);
             refill();
         }
+
+        function bindDensityMode() {
+            const manualCheckbox = document.getElementById('IsManualDensity');
+            const storageSelect = document.getElementById('StorageTypeId');
+            const densityInput = document.getElementById('LiquidDensity');
+
+            if (!manualCheckbox || !storageSelect || !densityInput) return;
+
+            const updateDensity = () => {
+                const isManual = manualCheckbox.checked;
+                storageSelect.disabled = isManual;
+                densityInput.readOnly = !isManual;
+
+                if (!isManual) {
+                    const selectedStorageTypeId = storageSelect.value;
+                    const density = storageTypeDensities[selectedStorageTypeId];
+                    densityInput.value = density != null ? density : '';
+                }
+            };
+
+            manualCheckbox.addEventListener('change', updateDensity);
+            storageSelect.addEventListener('change', updateDensity);
+            updateDensity();
+        }
+
         bindMaterialForm('ShellMaterialId', 'ShellMaterialFormId');
         bindMaterialForm('HeadMaterialId', 'HeadMaterialFormId');
+        bindDensityMode();
     </script>
 }
