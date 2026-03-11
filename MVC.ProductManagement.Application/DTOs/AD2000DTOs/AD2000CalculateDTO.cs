@@ -13,6 +13,8 @@ namespace MVC.ProductManagement.Application.DTOs.AD2000DTOs
         public double CorrosionAllowance { get; set; }
         public double WeldJointFactor { get; set; } = 1.0;
         public double AllowableStress { get; set; }
+        public double ShellAllowableStress { get; set; }
+        public double HeadAllowableStress { get; set; }
         public double Beta { get; set; }
 
         public Guid ShellMaterialId { get; set; }

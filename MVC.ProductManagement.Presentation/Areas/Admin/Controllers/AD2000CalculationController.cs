@@ -6,6 +6,7 @@ using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
+using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs;
 using System;
 using System.Collections.Generic;
@@ -19,15 +20,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IAD2000CalculationService _calculationService;
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
+        private readonly IYieldStrengthService _yieldStrengthService;
 
         public AD2000CalculationController(
             IAD2000CalculationService calculationService,
             IMaterialService materialService,
-            IMaterialFormService materialFormService)
+            IMaterialFormService materialFormService,
+            IYieldStrengthService yieldStrengthService)
         {
             _calculationService = calculationService;
             _materialService = materialService;
             _materialFormService = materialFormService;
+            _yieldStrengthService = yieldStrengthService;
         }
 
         [HttpGet]
@@ -72,6 +76,36 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View(vm);
             }
 
+            var shellYield = await _yieldStrengthService.GetByConditionsAsync(
+                vm.ShellMaterialFormId,
+                vm.DesignTemperatureMax,
+                vm.EstimatedShellThickness);
+
+            var headYield = await _yieldStrengthService.GetByConditionsAsync(
+                vm.HeadMaterialFormId,
+                vm.DesignTemperatureMax,
+                vm.EstimatedHeadThickness);
+
+            if (shellYield == null)
+            {
+                ModelState.AddModelError(nameof(vm.EstimatedShellThickness), "Gövde için girilen sıcaklık/kalınlıkta akma dayanımı bulunamadı.");
+            }
+
+            if (headYield == null)
+            {
+                ModelState.AddModelError(nameof(vm.EstimatedHeadThickness), "Bombe için girilen sıcaklık/kalınlıkta akma dayanımı bulunamadı.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await LoadLookupsAsync();
+                return View(vm);
+            }
+
+            vm.ShellAllowableStress = shellYield!.Rp02;
+            vm.HeadAllowableStress = headYield!.Rp02;
+            vm.AllowableStress = Math.Min(vm.ShellAllowableStress, vm.HeadAllowableStress);
+
             var result = await _calculationService.CalculateAsync(new AD2000CalculateDTO
             {
                 Name = vm.Name,
@@ -83,6 +117,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CorrosionAllowance = vm.CorrosionAllowance,
                 WeldJointFactor = vm.WeldJointFactor,
                 AllowableStress = vm.AllowableStress,
+                ShellAllowableStress = vm.ShellAllowableStress,
+                HeadAllowableStress = vm.HeadAllowableStress,
                 Beta = vm.Beta,
                 ShellMaterialId = vm.ShellMaterialId,
                 ShellMaterialFormId = vm.ShellMaterialFormId,
@@ -109,6 +145,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CorrosionAllowance = vm.CorrosionAllowance,
                 WeldJointFactor = vm.WeldJointFactor,
                 AllowableStress = vm.AllowableStress,
+                ShellAllowableStress = vm.ShellAllowableStress,
+                HeadAllowableStress = vm.HeadAllowableStress,
                 Beta = vm.Beta,
                 ShellMaterialId = vm.ShellMaterialId,
                 ShellMaterialFormId = vm.ShellMaterialFormId,
@@ -137,6 +175,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             CorrosionAllowance = result.CorrosionAllowance,
             WeldJointFactor = result.WeldJointFactor,
             AllowableStress = result.AllowableStress,
+            ShellAllowableStress = result.ShellAllowableStress,
+            HeadAllowableStress = result.HeadAllowableStress,
             Beta = result.Beta,
             ShellMaterialId = result.ShellMaterialId,
             ShellMaterialFormId = result.ShellMaterialFormId,
