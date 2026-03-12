@@ -12,6 +12,7 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
     {
         public string Name { get; set; }
         public double OuterDiameter { get; set; }
+        public double OuterTankDiameter { get; set; }
         public double ShellLength { get; set; }
         public double Pressure { get; set; }
         public Guid StorageTypeId { get; set; }

@@ -58,7 +58,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
 
         private static EN13458Calculation ToEntity(EN13458ResultDTO dto, string createdBy) => new EN13458Calculation
         {
-            Id = Guid.NewGuid(), Name = dto.Name, OuterDiameter = dto.OuterDiameter, ShellLength = dto.ShellLength,
+            Id = Guid.NewGuid(), Name = dto.Name, OuterDiameter = dto.OuterDiameter, OuterTankDiameter = dto.OuterTankDiameter, ShellLength = dto.ShellLength,
             Pressure = dto.Pressure, ProductTypeId = dto.StorageTypeId, LiquidDensity = dto.LiquidDensity,
             InnerShellMaterialId = dto.InnerShellMaterialId, InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
             InnerHeadMaterialId = dto.InnerHeadMaterialId, InnerHeadMaterialFormId = dto.InnerHeadMaterialFormId,
@@ -107,7 +107,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
 
         private static EN13458ResultDTO ToDto(EN13458Calculation entity) => new EN13458ResultDTO
         {
-            Id = entity.Id, Name = entity.Name, OuterDiameter = entity.OuterDiameter, ShellLength = entity.ShellLength,
+            Id = entity.Id, Name = entity.Name, OuterDiameter = entity.OuterDiameter, OuterTankDiameter = entity.OuterTankDiameter, ShellLength = entity.ShellLength,
             Pressure = entity.Pressure, StorageTypeId = entity.ProductTypeId, LiquidDensity = entity.LiquidDensity,
             IsColdStretchApplied = false, TankOrientation = MVC.ProductManagement.Domain.Enums.TankOrientation.Horizontal,
             InnerShellMaterialId = entity.InnerShellMaterialId, InnerShellMaterialFormId = entity.InnerShellMaterialFormId,
@@ -156,7 +156,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
         private static void ApplySectorOrientationOutputs(EN13458ResultDTO result, EN13458CalculateDTO input)
         {
             var innerDiameter = input.OuterDiameter;
-            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(input.OuterDiameter, input.ShellLength);
+            var outerDiameter = input.OuterTankDiameter;
             var innerShellLength = input.ShellLength;
             var outerShellLength = EN13458OuterTankRules.GetOuterShellLength(input.OuterDiameter, input.ShellLength);
 

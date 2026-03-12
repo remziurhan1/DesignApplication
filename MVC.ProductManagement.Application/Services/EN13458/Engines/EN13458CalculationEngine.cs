@@ -20,6 +20,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Engines
             {
                 Name = input.Name,
                 OuterDiameter = input.OuterDiameter,
+                OuterTankDiameter = input.OuterTankDiameter,
                 ShellLength = input.ShellLength,
                 Pressure = input.Pressure,
                 StorageTypeId = input.StorageTypeId,
