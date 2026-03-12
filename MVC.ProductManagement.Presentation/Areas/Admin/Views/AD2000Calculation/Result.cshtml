@@ -37,6 +37,7 @@
         <p><strong>Hesaplanan Bombe Et:</strong> @Model.HeadThickness.ToString("F2") mm</p>
         <p><strong>Seçilen Bombe Et:</strong> @Model.RoundedHeadThickness.ToString("F2") mm</p>
         <p><strong>Test Basıncı:</strong> @Model.TestPressure.ToString("F2") bar</p>
+        <p><strong>Toplam Kaynak Metrajı (1500+2000+3000+4000):</strong> @Model.TotalWeldLength.ToString("F2") mm</p>
 
         <form asp-action="Save" method="post" class="d-inline">
             @Html.AntiForgeryToken()
@@ -69,6 +70,7 @@
             @Html.HiddenFor(x => x.RoundedShellThickness)
             @Html.HiddenFor(x => x.RoundedHeadThickness)
             @Html.HiddenFor(x => x.TestPressure)
+            @Html.HiddenFor(x => x.TotalWeldLength)
             <button type="submit" class="btn btn-primary">Kaydet</button>
         </form>
         <a asp-action="Calculate" class="btn btn-secondary">Yeni Hesap</a>

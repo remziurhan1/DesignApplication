@@ -41,5 +41,6 @@ namespace MVC.ProductManagement.Domain.Entities
         public double RoundedShellThickness { get; set; }
         public double RoundedHeadThickness { get; set; }
         public double TestPressure { get; set; }
+        public double TotalWeldLength { get; set; }
     }
 }

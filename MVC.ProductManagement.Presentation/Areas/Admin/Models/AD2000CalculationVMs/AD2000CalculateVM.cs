@@ -68,5 +68,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
         [Required] public Guid ShellMaterialFormId { get; set; }
         [Required] public Guid HeadMaterialId { get; set; }
         [Required] public Guid HeadMaterialFormId { get; set; }
+
+        public double TotalWeldLength { get; set; }
     }
 }

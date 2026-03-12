@@ -165,7 +165,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ShellMaterialId = vm.ShellMaterialId,
                 ShellMaterialFormId = vm.ShellMaterialFormId,
                 HeadMaterialId = vm.HeadMaterialId,
-                HeadMaterialFormId = vm.HeadMaterialFormId
+                HeadMaterialFormId = vm.HeadMaterialFormId,
+                TotalWeldLength = vm.TotalWeldLength
             });
 
             return View("Result", MapResultVm(result));
@@ -205,7 +206,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 HeadThickness = vm.HeadThickness,
                 RoundedShellThickness = vm.RoundedShellThickness,
                 RoundedHeadThickness = vm.RoundedHeadThickness,
-                TestPressure = vm.TestPressure
+                TestPressure = vm.TestPressure,
+                TotalWeldLength = vm.TotalWeldLength
             };
 
             var saved = await _calculationService.SaveAsync(dto, User?.Identity?.Name ?? "AdminUser");
@@ -242,7 +244,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             HeadThickness = result.HeadThickness,
             RoundedShellThickness = result.RoundedShellThickness,
             RoundedHeadThickness = result.RoundedHeadThickness,
-            TestPressure = result.TestPressure
+            TestPressure = result.TestPressure,
+            TotalWeldLength = result.TotalWeldLength
         };
 
         private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)
