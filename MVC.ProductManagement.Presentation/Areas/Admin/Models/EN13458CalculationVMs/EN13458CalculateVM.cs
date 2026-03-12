@@ -38,5 +38,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         [Required] public Guid OuterShellMaterialFormId { get; set; }
         [Required] public Guid OuterHeadMaterialId { get; set; }
         [Required] public Guid OuterHeadMaterialFormId { get; set; }
+
+
+        [Range(1, double.MaxValue)]
+        public double StiffenerSpacing { get; set; } = 750;
+
+        public Guid? StiffenerMaterialId { get; set; }
+        public Guid? StiffenerMaterialFormId { get; set; }
+
+        public double? StiffenerInertia { get; set; }
+        public double? StiffenerArea { get; set; }
+        public double? StiffenerSectionModulus { get; set; }
     }
 }

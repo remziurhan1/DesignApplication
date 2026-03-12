@@ -66,10 +66,10 @@
 
 @section Scripts {
     <script>
-        const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormsByMaterial));
-        const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.StorageTypeDensities));
-        const materialsByGroup = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialsByGroup));
-        const formTypesByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormTypesByMaterial));
+        const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialFormsByMaterial));
+        const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.StorageTypeDensities));
+        const materialsByGroup = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialsByGroup));
+        const formTypesByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialFormTypesByMaterial));
 
         function fillOptions(selectElement, options, placeholder = 'Seçiniz') {
             if (!selectElement) return;

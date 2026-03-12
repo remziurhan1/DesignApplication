@@ -38,6 +38,20 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow
                 }
+                ,new Material
+                {
+                    Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                    Name = "S235JR",
+                    MaterialNumber = "1.0038",
+                    Standard = MaterialStandard.EN,
+                    Group = "Structural steel",
+                    Density = 7850,
+                    ElasticModulus = 206000,
+                    YieldFactorK = 235,
+                    Notes = "Profile material for supports/rings",
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
+                }
             };
         }
     }

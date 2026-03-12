@@ -109,8 +109,44 @@
         </div>
     </div>
 
+
+
+    <hr />
+    <h5>Profil (Destek Ring)</h5>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label asp-for="StiffenerSpacing" class="form-label">Profil Arası Mesafe / Burkulma Boyu L (mm)</label>
+            <input asp-for="StiffenerSpacing" class="form-control" />
+            <span asp-validation-for="StiffenerSpacing" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="StiffenerMaterialId" class="form-label">Profil Malzemesi</label>
+            <select asp-for="StiffenerMaterialId" asp-items="ViewBag.Materials" class="form-select">
+                <option value="">Seçiniz</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="StiffenerMaterialFormId" class="form-label">Profil Formu</label>
+            <select asp-for="StiffenerMaterialFormId" class="form-select">
+                <option value="">Seçiniz</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="StiffenerInertia" class="form-label">Atalet Momenti I (mm⁴)</label>
+            <input asp-for="StiffenerInertia" class="form-control" readonly />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="StiffenerArea" class="form-label">Kesit Alanı A (mm²)</label>
+            <input asp-for="StiffenerArea" class="form-control" readonly />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="StiffenerSectionModulus" class="form-label">Kesit Modülü W (mm³)</label>
+            <input asp-for="StiffenerSectionModulus" class="form-control" readonly />
+        </div>
+    </div>
+
     <div class="mt-4">
-        <button type="submit" class="btn btn-primary">Hesapla</button>
+        <button type="submit" class="btn btn-primary btn-lg">Hesapla</button>
         <a asp-action="Index" class="btn btn-secondary">Liste</a>
     </div>
 </form>
@@ -118,11 +154,11 @@
 
 @section Scripts {
     <script>
-        const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormsByMaterial));
-        const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.StorageTypeDensities));
-        const materialsByGroup = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialsByGroup));
-        const formTypesByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormTypesByMaterial));
-        const materialExternalProperties = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialExternalProperties));
+        const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialFormsByMaterial));
+        const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.StorageTypeDensities));
+        const materialsByGroup = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialsByGroup));
+        const formTypesByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialFormTypesByMaterial));
+        const materialExternalProperties = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialExternalProperties));
 
         function fillOptions(selectElement, options, placeholder = 'Seçiniz') {
             if (!selectElement) return;
@@ -236,11 +272,12 @@
             refill();
         }
 
-        function bindStiffenerFormProperties(formSelectId, inertiaInputId, areaInputId) {
+        function bindStiffenerFormProperties(formSelectId, inertiaInputId, areaInputId, sectionModulusInputId) {
             const formSelect = document.getElementById(formSelectId);
             const inertiaInput = document.getElementById(inertiaInputId);
             const areaInput = document.getElementById(areaInputId);
-            if (!formSelect || !inertiaInput || !areaInput) return;
+            const sectionModulusInput = document.getElementById(sectionModulusInputId);
+            if (!formSelect || !inertiaInput || !areaInput || !sectionModulusInput) return;
 
             const getFormById = (formId) => {
                 if (!formId) return null;
@@ -252,6 +289,7 @@
                 const selected = getFormById(formSelect.value);
                 inertiaInput.value = selected && selected.momentOfInertia != null ? selected.momentOfInertia : '';
                 areaInput.value = selected && selected.sectionArea != null ? selected.sectionArea : '';
+                sectionModulusInput.value = selected && selected.sectionModulus != null ? selected.sectionModulus : '';
             };
 
             formSelect.addEventListener('change', refill);
@@ -263,5 +301,7 @@
         bindMaterialCascade('OuterShellMaterialGroup', 'OuterShellMaterialId', 'OuterShellMaterialFormType', 'OuterShellMaterialFormId');
         bindMaterialCascade('OuterHeadMaterialGroup', 'OuterHeadMaterialId', 'OuterHeadMaterialFormType', 'OuterHeadMaterialFormId');
         bindStorageTypeDensity('StorageTypeId', 'LiquidDensity');
+        bindStiffenerMaterialFormCascade('StiffenerMaterialId', 'StiffenerMaterialFormId');
+        bindStiffenerFormProperties('StiffenerMaterialFormId', 'StiffenerInertia', 'StiffenerArea', 'StiffenerSectionModulus');
     </script>
 }

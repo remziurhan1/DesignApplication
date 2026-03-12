@@ -17,6 +17,9 @@ namespace MVC.ProductManagement.Application.DTOs.MaterialFormDTOs
         public double ThicknessMax { get; set; }
         public double UnitPrice { get; set; }
         public double? ColdStretchYieldStrength { get; set; }
+        public double? SectionArea { get; set; }
+        public double? MomentOfInertia { get; set; }
+        public double? SectionModulus { get; set; }
         public string MaterialName { get; set; }
 
     }

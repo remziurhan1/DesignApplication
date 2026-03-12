@@ -121,6 +121,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 PerliteWeight = dto.PerliteWeight,
                 GasNitrogenVolume = dto.GasNitrogenVolume,
                 LiquidNitrogenVolume = dto.LiquidNitrogenVolume,
+                BucklingWaveNumber = dto.BucklingWaveNumber,
+                ElasticBucklingPressureP1 = dto.ElasticBucklingPressureP1,
+                PlasticCollapsePressureP2 = dto.PlasticCollapsePressureP2,
+                DesignExternalPressurePv = dto.DesignExternalPressurePv,
+                SupportRingRequired = dto.SupportRingRequired,
+                SupportRingCriticalPressurePe = dto.SupportRingCriticalPressurePe,
+                SupportRingStressX = dto.SupportRingStressX,
+                SupportRingAllowableStress = dto.SupportRingAllowableStress,
+                SupportRingAdequate = dto.SupportRingAdequate,
+                HeadCollapsePressure = dto.HeadCollapsePressure,
+                RequiredProfileCount = dto.RequiredProfileCount,
+                ProfileDevelopedLength = dto.ProfileDevelopedLength,
 
                 InnerDevelopedLength = dto.InnerDevelopedLength,
                 OuterDevelopedLength = dto.OuterDevelopedLength,
@@ -154,7 +166,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 StorageTypeId = Guid.Empty,
                 LiquidDensity = 808,
                 TankOrientation = TankOrientation.Horizontal,
-                IsColdStretchApplied = false
+                IsColdStretchApplied = false,
+                StiffenerSpacing = 750
             });
         }
 
@@ -206,7 +219,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterShellMaterialId = vm.OuterShellMaterialId,
                 OuterShellMaterialFormId = vm.OuterShellMaterialFormId,
                 OuterHeadMaterialId = vm.OuterHeadMaterialId,
-                OuterHeadMaterialFormId = vm.OuterHeadMaterialFormId
+                OuterHeadMaterialFormId = vm.OuterHeadMaterialFormId,
+                StiffenerSpacing = vm.StiffenerSpacing,
+                StiffenerArea = vm.StiffenerArea,
+                StiffenerInertia = vm.StiffenerInertia,
+                StiffenerSectionModulus = vm.StiffenerSectionModulus
             };
 
             try
@@ -296,7 +313,29 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 PerliteVolume = dto.PerliteVolume,
                 PerliteWeight = dto.PerliteWeight,
                 GasNitrogenVolume = dto.GasNitrogenVolume,
-                LiquidNitrogenVolume = dto.LiquidNitrogenVolume
+                LiquidNitrogenVolume = dto.LiquidNitrogenVolume,
+                BucklingWaveNumber = dto.BucklingWaveNumber,
+                ElasticBucklingPressureP1 = dto.ElasticBucklingPressureP1,
+                PlasticCollapsePressureP2 = dto.PlasticCollapsePressureP2,
+                DesignExternalPressurePv = dto.DesignExternalPressurePv,
+                SupportRingRequired = dto.SupportRingRequired,
+                SupportRingCriticalPressurePe = dto.SupportRingCriticalPressurePe,
+                SupportRingStressX = dto.SupportRingStressX,
+                SupportRingAllowableStress = dto.SupportRingAllowableStress,
+                SupportRingAdequate = dto.SupportRingAdequate,
+                HeadCollapsePressure = dto.HeadCollapsePressure,
+                RequiredProfileCount = dto.RequiredProfileCount,
+                ProfileDevelopedLength = dto.ProfileDevelopedLength,
+                InnerDevelopedLength = dto.InnerDevelopedLength,
+                OuterDevelopedLength = dto.OuterDevelopedLength,
+                InnerSectorPlan1500 = dto.InnerSectorPlan1500,
+                InnerSectorPlan2000 = dto.InnerSectorPlan2000,
+                InnerSectorPlan2500 = dto.InnerSectorPlan2500,
+                InnerSectorPlan3000 = dto.InnerSectorPlan3000,
+                OuterSectorPlan1500 = dto.OuterSectorPlan1500,
+                OuterSectorPlan2000 = dto.OuterSectorPlan2000,
+                OuterSectorPlan2500 = dto.OuterSectorPlan2500,
+                OuterSectorPlan3000 = dto.OuterSectorPlan3000
             };
         }
 
@@ -363,6 +402,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 PerliteWeight = vm.PerliteWeight,
                 GasNitrogenVolume = vm.GasNitrogenVolume,
                 LiquidNitrogenVolume = vm.LiquidNitrogenVolume,
+                BucklingWaveNumber = vm.BucklingWaveNumber,
+                ElasticBucklingPressureP1 = vm.ElasticBucklingPressureP1,
+                PlasticCollapsePressureP2 = vm.PlasticCollapsePressureP2,
+                DesignExternalPressurePv = vm.DesignExternalPressurePv,
+                SupportRingRequired = vm.SupportRingRequired,
+                SupportRingCriticalPressurePe = vm.SupportRingCriticalPressurePe,
+                SupportRingStressX = vm.SupportRingStressX,
+                SupportRingAllowableStress = vm.SupportRingAllowableStress,
+                SupportRingAdequate = vm.SupportRingAdequate,
+                HeadCollapsePressure = vm.HeadCollapsePressure,
+                RequiredProfileCount = vm.RequiredProfileCount,
+                ProfileDevelopedLength = vm.ProfileDevelopedLength,
 
                 InnerDevelopedLength = vm.InnerDevelopedLength,
                 OuterDevelopedLength = vm.OuterDevelopedLength,
@@ -441,6 +492,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     g => g.Select(x => new { value = x.Id.ToString(), text = x.Name }).ToList(),
                     StringComparer.OrdinalIgnoreCase);
 
+            ViewBag.MaterialExternalProperties = materials
+                .ToDictionary(
+                    x => x.Id.ToString(),
+                    x => new
+                    {
+                        elasticModulus = x.ElasticModulus,
+                        yieldFactorK = x.YieldFactorK
+                    });
+
             ViewBag.MaterialFormsByMaterial = forms
                 .GroupBy(x => x.MaterialId)
                 .ToDictionary(
@@ -451,7 +511,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]",
                         formType = x.FormType.ToString(),
                         momentOfInertia = x.MomentOfInertia,
-                        sectionArea = x.SectionArea
+                        sectionArea = x.SectionArea,
+                        sectionModulus = x.SectionModulus
                     }).ToList());
 
             ViewBag.MaterialFormTypesByMaterial = forms

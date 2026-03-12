@@ -42,5 +42,15 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double? InnerHeadMaterialStrength { get; set; }
         public double? OuterShellMaterialStrength { get; set; }
         public double? OuterHeadMaterialStrength { get; set; }
+
+        // Dış tank elastik-plastik burkulma için seçilen malzemeden resolve edilir
+        public double? ElasticModulus { get; set; }
+        public double? YieldFactorK { get; set; }
+
+
+        public double? StiffenerSpacing { get; set; }
+        public double? StiffenerInertia { get; set; }
+        public double? StiffenerArea { get; set; }
+        public double? StiffenerSectionModulus { get; set; }
     }
 }
