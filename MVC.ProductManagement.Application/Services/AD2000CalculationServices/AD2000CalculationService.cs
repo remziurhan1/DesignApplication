@@ -39,7 +39,10 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
 
             var roundedShell = RoundUpToHalf(shellThickness);
             var roundedHead = RoundUpToHalf(headThickness);
-            var totalWeldLength = CalculateTotalWeldLengthForStandardSectorWidths(d, dto.ShellLength);
+            var weldLength1500 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 1500d);
+            var weldLength2000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 2000d);
+            var weldLength3000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 3000d);
+            var weldLength4000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 4000d);
 
             return Task.FromResult(new AD2000ResultDTO
             {
@@ -71,7 +74,10 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 RoundedShellThickness = roundedShell,
                 RoundedHeadThickness = roundedHead,
                 TestPressure = effectivePressure * 1.3,
-                TotalWeldLength = totalWeldLength
+                WeldLength1500 = weldLength1500,
+                WeldLength2000 = weldLength2000,
+                WeldLength3000 = weldLength3000,
+                WeldLength4000 = weldLength4000
             });
         }
 
@@ -127,7 +133,10 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             RoundedShellThickness = dto.RoundedShellThickness,
             RoundedHeadThickness = dto.RoundedHeadThickness,
             TestPressure = dto.TestPressure,
-            TotalWeldLength = dto.TotalWeldLength,
+            WeldLength1500 = dto.WeldLength1500,
+            WeldLength2000 = dto.WeldLength2000,
+            WeldLength3000 = dto.WeldLength3000,
+            WeldLength4000 = dto.WeldLength4000,
             CreatedBy = createdBy,
             CreatedDate = DateTime.UtcNow
         };
@@ -163,21 +172,11 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             RoundedShellThickness = entity.RoundedShellThickness,
             RoundedHeadThickness = entity.RoundedHeadThickness,
             TestPressure = entity.TestPressure,
-            TotalWeldLength = entity.TotalWeldLength
+            WeldLength1500 = entity.WeldLength1500,
+            WeldLength2000 = entity.WeldLength2000,
+            WeldLength3000 = entity.WeldLength3000,
+            WeldLength4000 = entity.WeldLength4000
         };
-
-        private static double CalculateTotalWeldLengthForStandardSectorWidths(double diameter, double shellLength)
-        {
-            var standardSectorWidths = new[] { 1500d, 2000d, 3000d, 4000d };
-            double totalWeldLength = 0d;
-
-            foreach (var sectorWidth in standardSectorWidths)
-            {
-                totalWeldLength += CalculateWeldLengthForSectorWidth(diameter, shellLength, sectorWidth);
-            }
-
-            return Math.Round(totalWeldLength, 2);
-        }
 
         private static double CalculateWeldLengthForSectorWidth(double diameter, double shellLength, double sectorWidth)
         {

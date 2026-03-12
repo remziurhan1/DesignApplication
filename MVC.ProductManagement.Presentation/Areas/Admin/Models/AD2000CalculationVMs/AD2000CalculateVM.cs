@@ -69,6 +69,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
         [Required] public Guid HeadMaterialId { get; set; }
         [Required] public Guid HeadMaterialFormId { get; set; }
 
-        public double TotalWeldLength { get; set; }
+        public double WeldLength1500 { get; set; }
+        public double WeldLength2000 { get; set; }
+        public double WeldLength3000 { get; set; }
+        public double WeldLength4000 { get; set; }
     }
 }
