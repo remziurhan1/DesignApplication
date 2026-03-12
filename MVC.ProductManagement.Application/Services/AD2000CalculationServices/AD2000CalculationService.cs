@@ -39,6 +39,11 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
 
             var roundedShell = RoundUpToHalf(shellThickness);
             var roundedHead = RoundUpToHalf(headThickness);
+            var weldLength1500 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 1500d);
+            var weldLength2000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 2000d);
+            var weldLength3000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 3000d);
+            var weldLength4000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 4000d);
+            var surfaceArea = CalculateSurfaceArea(d, dto.ShellLength);
 
             return Task.FromResult(new AD2000ResultDTO
             {
@@ -69,7 +74,12 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 HeadThickness = headThickness,
                 RoundedShellThickness = roundedShell,
                 RoundedHeadThickness = roundedHead,
-                TestPressure = effectivePressure * 1.3
+                TestPressure = effectivePressure * 1.3,
+                WeldLength1500 = weldLength1500,
+                WeldLength2000 = weldLength2000,
+                WeldLength3000 = weldLength3000,
+                WeldLength4000 = weldLength4000,
+                SurfaceArea = surfaceArea
             });
         }
 
@@ -125,6 +135,11 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             RoundedShellThickness = dto.RoundedShellThickness,
             RoundedHeadThickness = dto.RoundedHeadThickness,
             TestPressure = dto.TestPressure,
+            WeldLength1500 = dto.WeldLength1500,
+            WeldLength2000 = dto.WeldLength2000,
+            WeldLength3000 = dto.WeldLength3000,
+            WeldLength4000 = dto.WeldLength4000,
+            SurfaceArea = dto.SurfaceArea,
             CreatedBy = createdBy,
             CreatedDate = DateTime.UtcNow
         };
@@ -159,8 +174,34 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             HeadThickness = entity.HeadThickness,
             RoundedShellThickness = entity.RoundedShellThickness,
             RoundedHeadThickness = entity.RoundedHeadThickness,
-            TestPressure = entity.TestPressure
+            TestPressure = entity.TestPressure,
+            WeldLength1500 = entity.WeldLength1500,
+            WeldLength2000 = entity.WeldLength2000,
+            WeldLength3000 = entity.WeldLength3000,
+            WeldLength4000 = entity.WeldLength4000,
+            SurfaceArea = entity.SurfaceArea
         };
+
+        private static double CalculateSurfaceArea(double diameterMm, double shellLengthMm)
+        {
+            var diameterM = diameterMm / 1000d;
+            var shellLengthM = shellLengthMm / 1000d;
+            var shellArea = Math.PI * diameterM * shellLengthM;
+            var headArea = 2d * Math.PI * Math.Pow(diameterM / 2d, 2);
+            return Math.Round(shellArea + headArea, 2);
+        }
+
+        private static double CalculateWeldLengthForSectorWidth(double diameter, double shellLength, double sectorWidth)
+        {
+            var sectorCount = shellLength / sectorWidth;
+            var shellWeldLength = sectorCount * diameter * Math.PI;
+            var circularWeldLength = Math.PI * diameter;
+
+            var headPulDiameter = 1.17d * diameter;
+            var headWeldLength = Math.Round((headPulDiameter / sectorWidth) * (headPulDiameter / 1.15d) * 2d, 2);
+
+            return Math.Round(shellWeldLength + circularWeldLength + headWeldLength, 2);
+        }
 
         private static double CalculateStaticPressureBar(double density, TankOrientation orientation, double shellLengthMm, double diameterMm)
         {

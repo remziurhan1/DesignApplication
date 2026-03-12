@@ -37,6 +37,11 @@
         <p><strong>Hesaplanan Bombe Et:</strong> @Model.HeadThickness.ToString("F2") mm</p>
         <p><strong>Seçilen Bombe Et:</strong> @Model.RoundedHeadThickness.ToString("F2") mm</p>
         <p><strong>Test Basıncı:</strong> @Model.TestPressure.ToString("F2") bar</p>
+        <p><strong>Kaynak Metrajı (1500):</strong> @Model.WeldLength1500.ToString("F2") mm</p>
+        <p><strong>Kaynak Metrajı (2000):</strong> @Model.WeldLength2000.ToString("F2") mm</p>
+        <p><strong>Kaynak Metrajı (3000):</strong> @Model.WeldLength3000.ToString("F2") mm</p>
+        <p><strong>Kaynak Metrajı (4000):</strong> @Model.WeldLength4000.ToString("F2") mm</p>
+        <p><strong>Yüzey Alanı:</strong> @Model.SurfaceArea.ToString("F2") m²</p>
 
         <form asp-action="Save" method="post" class="d-inline">
             @Html.AntiForgeryToken()
@@ -69,6 +74,11 @@
             @Html.HiddenFor(x => x.RoundedShellThickness)
             @Html.HiddenFor(x => x.RoundedHeadThickness)
             @Html.HiddenFor(x => x.TestPressure)
+            @Html.HiddenFor(x => x.WeldLength1500)
+            @Html.HiddenFor(x => x.WeldLength2000)
+            @Html.HiddenFor(x => x.WeldLength3000)
+            @Html.HiddenFor(x => x.WeldLength4000)
+            @Html.HiddenFor(x => x.SurfaceArea)
             <button type="submit" class="btn btn-primary">Kaydet</button>
         </form>
         <a asp-action="Calculate" class="btn btn-secondary">Yeni Hesap</a>

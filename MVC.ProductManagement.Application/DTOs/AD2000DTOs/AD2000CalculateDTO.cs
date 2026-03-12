@@ -29,5 +29,11 @@ namespace MVC.ProductManagement.Application.DTOs.AD2000DTOs
         public Guid ShellMaterialFormId { get; set; }
         public Guid HeadMaterialId { get; set; }
         public Guid HeadMaterialFormId { get; set; }
+
+        public double WeldLength1500 { get; set; }
+        public double WeldLength2000 { get; set; }
+        public double WeldLength3000 { get; set; }
+        public double WeldLength4000 { get; set; }
+        public double SurfaceArea { get; set; }
     }
 }
