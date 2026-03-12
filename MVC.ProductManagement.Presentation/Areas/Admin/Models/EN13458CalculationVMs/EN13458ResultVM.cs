@@ -14,10 +14,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public Guid StorageTypeId { get; set; }
         public string StorageTypeName { get; set; } = string.Empty;
         public double LiquidDensity { get; set; }
-        public double SectorWidth { get; set; }
         public TankOrientation TankOrientation { get; set; }
         public bool IsColdStretchApplied { get; set; }
 
+        public double WeldLength1500 { get; set; }
+        public double WeldLength2000 { get; set; }
+        public double WeldLength2500 { get; set; }
+        public double WeldLength3000 { get; set; }
         public Guid InnerShellMaterialId { get; set; }
         public string InnerShellMaterialName { get; set; } = string.Empty;
         public Guid InnerShellMaterialFormId { get; set; }
