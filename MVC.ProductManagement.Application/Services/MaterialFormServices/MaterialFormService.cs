@@ -29,6 +29,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
                 UnitPrice=f.UnitPrice,
+                MomentOfInertia = f.MomentOfInertia,
                 SectionArea = f.SectionArea,
                 ColdStretchYieldStrength = f.ColdStretchYieldStrength
             }).ToList();
@@ -51,6 +52,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 FormType = f.FormType,
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
+                MomentOfInertia = f.MomentOfInertia,
                 SectionArea = f.SectionArea,
                 ColdStretchYieldStrength = f.ColdStretchYieldStrength
             }).ToList();
@@ -65,6 +67,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 FormType = f.FormType,
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
+                MomentOfInertia = f.MomentOfInertia,
                 SectionArea = f.SectionArea,
                 ColdStretchYieldStrength = f.ColdStretchYieldStrength
             }).ToList();
@@ -86,6 +89,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 WeldingFactor = form.WeldingFactor,
                 Notes = form.Notes,
                 UnitPrice=form.UnitPrice,
+                MomentOfInertia = form.MomentOfInertia,
                 SectionArea = form.SectionArea,
                 ColdStretchYieldStrength = form.ColdStretchYieldStrength
             };
@@ -104,6 +108,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
                 UnitPrice = dto.UnitPrice,
+                MomentOfInertia = dto.MomentOfInertia,
                 SectionArea = dto.SectionArea,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
@@ -122,6 +127,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 WeldingFactor = entity.WeldingFactor,
                 Notes = entity.Notes,
                 UnitPrice = dto.UnitPrice,
+                MomentOfInertia = entity.MomentOfInertia,
                 SectionArea = entity.SectionArea,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
@@ -140,6 +146,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             entity.WeldingFactor = dto.WeldingFactor;
             entity.Notes = dto.Notes;
             entity.UnitPrice = dto.UnitPrice;
+            entity.MomentOfInertia = dto.MomentOfInertia;
             entity.SectionArea = dto.SectionArea;
             entity.ColdStretchYieldStrength = dto.ColdStretchYieldStrength;
 
@@ -157,6 +164,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 WeldingFactor = entity.WeldingFactor,
                 Notes = entity.Notes,
                 UnitPrice = dto.UnitPrice,
+                MomentOfInertia = entity.MomentOfInertia,
                 SectionArea = entity.SectionArea,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
 

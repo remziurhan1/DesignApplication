@@ -39,17 +39,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         [Range(1, double.MaxValue)]
         public double ElasticModulus { get; set; } = 210000;
 
-        [Range(0, 0.49)]
         public double PoissonRatio { get; set; } = 0.3;
-
-        [Range(0, 99.99)]
-        public double RoundnessErrorPercent { get; set; }
+        public double RoundnessErrorPercent { get; set; } = 1.5;
 
         [Range(0.01, double.MaxValue)]
         public double YieldFactorK { get; set; }
 
         public bool UseGeneralElasticFormula { get; set; }
         public bool HasStiffener { get; set; }
+        public bool UseManualStiffenerValues { get; set; }
+        public Guid? StiffenerMaterialId { get; set; }
+        public Guid? StiffenerMaterialFormId { get; set; }
         public double? StiffenerInertia { get; set; }
         public double? StiffenerArea { get; set; }
 

@@ -53,7 +53,8 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     WeldingFactor = null,
                     Notes = "S235JR profile form",
                     UnitPrice = 1.2,
-                    SectionArea = 0,
+                    MomentOfInertia = 118.330,
+                    SectionArea = 94.61,
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow
                 }

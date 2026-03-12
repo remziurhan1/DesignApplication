@@ -25,6 +25,9 @@ namespace MVC.ProductManagement.Domain.Entities
         public double YieldFactorK { get; set; }
         public bool UseGeneralElasticFormula { get; set; }
         public bool HasStiffener { get; set; }
+        public bool UseManualStiffenerValues { get; set; }
+        public Guid? StiffenerMaterialId { get; set; }
+        public Guid? StiffenerMaterialFormId { get; set; }
         public double? StiffenerInertia { get; set; }
         public double? StiffenerArea { get; set; }
 
@@ -83,6 +86,9 @@ namespace MVC.ProductManagement.Domain.Entities
         public double AllowableExternalPressure { get; set; }
         public double ExternalDesignPressure { get; set; }
         public bool ExternalPressureDesignOk { get; set; }
+        public double FixedOutOfRoundnessPercent { get; set; }
+        public double FixedPoissonRatio { get; set; }
+        public double FixedWeldCoefficient { get; set; }
         public double? RequiredStiffenerInertia { get; set; }
         public double? RequiredStiffenerArea { get; set; }
         public bool? StiffenerInertiaOk { get; set; }

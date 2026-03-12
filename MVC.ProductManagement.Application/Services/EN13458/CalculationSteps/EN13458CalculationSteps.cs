@@ -187,6 +187,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 
     public class ShellThicknessStep : IEN13458CalculationStep
     {
+        private const double FixedPoissonRatio = 0.3d;
+        private const double FixedOutOfRoundnessPercent = 1.5d;
+        private const double FixedWeldCoefficient = 0.3d;
+
         public void Execute(EN13458DesignContext context)
         {
             var d = context.Input.OuterDiameter;
@@ -214,9 +218,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 context.Input.CorrosionAllowance,
                 context.Input.BucklingLength,
                 context.Input.ElasticModulus,
-                context.Input.PoissonRatio,
+                FixedPoissonRatio,
                 context.Input.YieldFactorK,
-                context.Input.RoundnessErrorPercent,
+                FixedOutOfRoundnessPercent,
                 context.Input.UseGeneralElasticFormula,
                 context.Input.HasStiffener,
                 context.Input.StiffenerInertia,
@@ -234,9 +238,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                         context.Input.CorrosionAllowance,
                         context.Input.BucklingLength,
                         context.Input.ElasticModulus,
-                        context.Input.PoissonRatio,
+                        FixedPoissonRatio,
                         context.Input.YieldFactorK,
-                        context.Input.RoundnessErrorPercent,
+                        FixedOutOfRoundnessPercent,
                         context.Input.UseGeneralElasticFormula,
                         context.Input.HasStiffener,
                         context.Input.StiffenerInertia,
@@ -260,6 +264,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             context.Result.AllowableExternalPressure = externalPressure.AllowableExternalPressure;
             context.Result.ExternalDesignPressure = externalPressure.ExternalDesignPressure;
             context.Result.ExternalPressureDesignOk = externalPressure.ExternalPressureDesignOk;
+            context.Result.FixedOutOfRoundnessPercent = FixedOutOfRoundnessPercent;
+            context.Result.FixedPoissonRatio = FixedPoissonRatio;
+            context.Result.FixedWeldCoefficient = FixedWeldCoefficient;
             context.Result.RequiredStiffenerInertia = externalPressure.RequiredStiffenerInertia;
             context.Result.RequiredStiffenerArea = externalPressure.RequiredStiffenerArea;
             context.Result.StiffenerInertiaOk = externalPressure.StiffenerInertiaOk;

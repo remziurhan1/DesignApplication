@@ -34,6 +34,9 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double YieldFactorK { get; set; }
         public bool UseGeneralElasticFormula { get; set; }
         public bool HasStiffener { get; set; }
+        public bool UseManualStiffenerValues { get; set; }
+        public Guid? StiffenerMaterialId { get; set; }
+        public Guid? StiffenerMaterialFormId { get; set; }
         public double? StiffenerInertia { get; set; }
         public double? StiffenerArea { get; set; }
 

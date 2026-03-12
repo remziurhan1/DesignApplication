@@ -32,6 +32,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
                 UnitPrice=f.UnitPrice,
+                MomentOfInertia = f.MomentOfInertia,
                 SectionArea = f.SectionArea,
                 ColdStretchYieldStrength = f.ColdStretchYieldStrength,
                 MaterialName=f.Material.Name,
@@ -60,6 +61,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
                 UnitPrice = dto.UnitPrice,
+                MomentOfInertia = dto.MomentOfInertia,
                 SectionArea = dto.SectionArea,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
@@ -94,6 +96,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = vm.WeldingFactor,
                 Notes = vm.Notes,
                 UnitPrice = vm.UnitPrice,
+                MomentOfInertia = vm.MomentOfInertia,
                 SectionArea = vm.SectionArea,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength
             };
@@ -121,6 +124,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
                 UnitPrice=dto.UnitPrice,
+                MomentOfInertia = dto.MomentOfInertia,
                 SectionArea = dto.SectionArea,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
                 
@@ -147,6 +151,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = vm.WeldingFactor,
                 Notes = vm.Notes,
                 UnitPrice = vm.UnitPrice,
+                MomentOfInertia = vm.MomentOfInertia,
                 SectionArea = vm.SectionArea,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength
 
@@ -173,6 +178,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
                 UnitPrice = dto.UnitPrice,
+                MomentOfInertia = dto.MomentOfInertia,
                 SectionArea = dto.SectionArea,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };

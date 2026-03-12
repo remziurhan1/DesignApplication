@@ -35,8 +35,12 @@
                         <tr><th>E (MPa)</th><td>@Model.ElasticModulus</td></tr>
                         <tr><th>Poisson ν</th><td>@Model.PoissonRatio</td></tr>
                         <tr><th>Ovalite u (%)</th><td>@Model.RoundnessErrorPercent</td></tr>
+                        <tr><th>Welding u (sabit)</th><td>@Model.FixedWeldCoefficient</td></tr>
                         <tr><th>K katsayısı</th><td>@Model.YieldFactorK</td></tr>
                         <tr><th>Stiffener</th><td>@(Model.HasStiffener ? "Var" : "Yok")</td></tr>
+                        <tr><th>Stiffener Malzemesi</th><td>@Model.StiffenerMaterialName</td></tr>
+                        <tr><th>Stiffener Formu</th><td>@Model.StiffenerMaterialFormName</td></tr>
+                        <tr><th>Stiffener Manuel Giriş</th><td>@(Model.UseManualStiffenerValues ? "Evet" : "Hayır")</td></tr>
                         <tr><th>Stiffener I</th><td>@Model.StiffenerInertia</td></tr>
                         <tr><th>Stiffener A</th><td>@Model.StiffenerArea</td></tr>
                         <tr><th>Tank Yönelimi</th><td>@Model.TankOrientation</td></tr>
@@ -90,6 +94,8 @@
                         <tr><th>pp (Plastik Deformasyon)</th><td>@Model.PlasticDeformationPressure</td></tr>
                         <tr><th>p_allow</th><td>@Model.AllowableExternalPressure</td></tr>
                         <tr><th>p_design</th><td>@Model.ExternalDesignPressure</td></tr>
+                        <tr><th>ν (sabit)</th><td>@Model.FixedPoissonRatio</td></tr>
+                        <tr><th>u (%) (sabit)</th><td>@Model.FixedOutOfRoundnessPercent</td></tr>
                         <tr><th>Dış Basınç Uygunluk</th><td>@(Model.ExternalPressureDesignOk ? "Uygun" : "Uygun Değil")</td></tr>
                         <tr><th>I_gerekli</th><td>@Model.RequiredStiffenerInertia</td></tr>
                         <tr><th>A_gerekli</th><td>@Model.RequiredStiffenerArea</td></tr>
@@ -113,6 +119,18 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-light fw-semibold">Dış Tank Harici Basınç Kuralları (EN13458)</div>
+    <div class="card-body">
+        <ul class="mb-0">
+            <li><strong>Elastik Burkulma:</strong> <code>pe = (E/Sk) * (t/Da)^3 * (1/1.2)</code> veya genel formül.</li>
+            <li><strong>Plastik Deformasyon:</strong> <code>pp</code> değeri <code>Da/lb</code> oranına göre iki farklı denklemden hesaplanır.</li>
+            <li><strong>Karar:</strong> <code>p_allow = min(pe, pp)</code> ve koşul <code>p_allow &gt;= p_atm(0.1 MPa)</code>.</li>
+            <li><strong>Sabitler:</strong> ν = @Model.FixedPoissonRatio, u = @Model.FixedOutOfRoundnessPercent%, welding u = @Model.FixedWeldCoefficient.</li>
+        </ul>
     </div>
 </div>
 
