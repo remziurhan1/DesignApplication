@@ -1,4 +1,6 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458ResultVM
+@using System.Globalization
+@using System.Collections.Generic
 @{
     ViewData["Title"] = "EN13458 Result";
 }
@@ -90,6 +92,72 @@
     </div>
 </div>
 
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-light fw-semibold">Sac Oryantasyonu (Sektör Bazlı)</div>
+    <div class="card-body">
+        <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
+
+        <h6 class="text-muted text-uppercase fw-semibold mb-2">İç Tank Gövde</h6>
+        <div class="table-responsive mb-3">
+            <table class="table table-sm table-striped table-bordered align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Sektör Genişliği</th>
+                        <th>Parça Adedi</th>
+                        <th>Sac Açınımı</th>
+                        <th>Kesim Listesi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sectorWidth in new[] { 1500d, 2000d, 2500d, 3000d })
+                    {
+                        var plan = BuildSectorPlan(Model.ShellLength, sectorWidth);
+                        var developedLength = Math.Round(Math.PI * Model.OuterDiameter, 2);
+                        var cutList = string.Join(" + ", plan.Widths.Select(w => $"{Model.RoundedInnerShellThickness.ToString("0.##", CultureInfo.InvariantCulture)} x {w.ToString("0.##", CultureInfo.InvariantCulture)} x {developedLength.ToString("0.##", CultureInfo.InvariantCulture)}"));
+
+                        <tr>
+                            <td>@sectorWidth.ToString("0", CultureInfo.InvariantCulture) mm</td>
+                            <td>@plan.PieceCount adet</td>
+                            <td>@developedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td>
+                            <td>@cutList</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h6 class="text-muted text-uppercase fw-semibold mb-2">Dış Tank Gövde</h6>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Sektör Genişliği</th>
+                        <th>Parça Adedi</th>
+                        <th>Sac Açınımı</th>
+                        <th>Kesim Listesi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sectorWidth in new[] { 1500d, 2000d, 2500d, 3000d })
+                    {
+                        var plan = BuildSectorPlan(Model.ShellLength, sectorWidth);
+                        var developedLength = Math.Round(Math.PI * Model.OuterDiameter, 2);
+                        var cutList = string.Join(" + ", plan.Widths.Select(w => $"{Model.RoundedOuterShellThickness.ToString("0.##", CultureInfo.InvariantCulture)} x {w.ToString("0.##", CultureInfo.InvariantCulture)} x {developedLength.ToString("0.##", CultureInfo.InvariantCulture)}"));
+
+                        <tr>
+                            <td>@sectorWidth.ToString("0", CultureInfo.InvariantCulture) mm</td>
+                            <td>@plan.PieceCount adet</td>
+                            <td>@developedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td>
+                            <td>@cutList</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <form asp-action="Save" method="post" class="mt-4 mb-5 pb-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
     @Html.AntiForgeryToken()
     @foreach (var p in ViewData.ModelMetadata.Properties)
@@ -103,3 +171,25 @@
         <i class="bi bi-plus-circle me-1"></i>Yeni Hesap
     </a>
 </form>
+
+
+@functions {
+    private static (int PieceCount, List<double> Widths) BuildSectorPlan(double shellLength, double sectorWidth)
+    {
+        if (shellLength <= 0 || sectorWidth <= 0)
+        {
+            return (0, new List<double>());
+        }
+
+        var pieceCount = (int)Math.Ceiling(shellLength / sectorWidth);
+        var widths = new List<double>(pieceCount);
+
+        for (var i = 0; i < pieceCount; i++)
+        {
+            var remaining = shellLength - (i * sectorWidth);
+            widths.Add(Math.Round(Math.Min(sectorWidth, Math.Max(0, remaining)), 2));
+        }
+
+        return (pieceCount, widths);
+    }
+}

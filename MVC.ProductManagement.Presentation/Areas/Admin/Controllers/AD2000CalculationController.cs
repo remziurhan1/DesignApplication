@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Globalization;
 using MVC.ProductManagement.Application.DTOs.AD2000DTOs;
 using MVC.ProductManagement.Application.Services.AD2000CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
@@ -279,13 +280,34 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var storageTypes = await _storageTypeService.GetAllAsync();
 
             ViewBag.Materials = new SelectList(materials, "Id", "Name");
-            ViewBag.MaterialForms = new SelectList(materialForms, "Id", "FormType");
+            ViewBag.MaterialGroups = materials
+                .Select(x => (x.Group ?? string.Empty).Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem(x, x))
+                .ToList();
 
+            ViewBag.MaterialsByGroup = materials
+                .Where(x => !string.IsNullOrWhiteSpace(x.Group))
+                .GroupBy(x => x.Group.Trim(), StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(x => new { value = x.Id.ToString(), text = x.Name }).ToList(),
+                    StringComparer.OrdinalIgnoreCase);
+
+            ViewBag.MaterialForms = new SelectList(materialForms, "Id", "FormType");
             ViewBag.MaterialFormsByMaterial = materialForms
                 .GroupBy(x => x.MaterialId)
                 .ToDictionary(
                     g => g.Key.ToString(),
-                    g => g.Select(x => new { value = x.Id, text = x.FormType.ToString() }).ToList());
+                    g => g.Select(x => new { value = x.Id.ToString(), text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", formType = x.FormType.ToString() }).ToList());
+
+            ViewBag.MaterialFormTypesByMaterial = materialForms
+                .GroupBy(x => x.MaterialId)
+                .ToDictionary(
+                    g => g.Key.ToString(),
+                    g => g.Select(x => x.FormType.ToString()).Distinct().OrderBy(x => x).ToList());
 
             var storageTypeList = storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
             ViewBag.StorageTypes = storageTypeList

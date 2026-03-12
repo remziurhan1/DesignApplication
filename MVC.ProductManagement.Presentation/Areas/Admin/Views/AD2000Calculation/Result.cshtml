@@ -1,4 +1,6 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs.AD2000ResultVM
+@using System.Globalization
+@using System.Collections.Generic
 @{
     ViewData["Title"] = "AD2000 Result";
 }
@@ -43,6 +45,38 @@
         <p><strong>Kaynak Metrajı (4000):</strong> @Model.WeldLength4000.ToString("F2") mm</p>
         <p><strong>Yüzey Alanı:</strong> @Model.SurfaceArea.ToString("F2") m²</p>
 
+
+        <hr />
+        <h5 class="mb-3">Sac Oryantasyonu (Sektör Bazlı)</h5>
+        <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <th>Sektör Genişliği</th>
+                        <th>Parça Adedi</th>
+                        <th>Sac Açınımı</th>
+                        <th>Kesim Listesi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sectorWidth in new[] { 1500d, 2000d, 3000d, 4000d })
+                    {
+                        var plan = BuildSectorPlan(Model.ShellLength, sectorWidth);
+                        var developedLength = Math.Round(Math.PI * Model.Diameter, 2);
+                        var cutList = string.Join(" + ", plan.Widths.Select(w => $"{Model.RoundedShellThickness.ToString("0.##", CultureInfo.InvariantCulture)} x {w.ToString("0.##", CultureInfo.InvariantCulture)} x {developedLength.ToString("0.##", CultureInfo.InvariantCulture)}"));
+
+                        <tr>
+                            <td>@sectorWidth.ToString("0", CultureInfo.InvariantCulture) mm</td>
+                            <td>@plan.PieceCount adet</td>
+                            <td>@developedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td>
+                            <td>@cutList</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
         <form asp-action="Save" method="post" class="d-inline">
             @Html.AntiForgeryToken()
             @Html.HiddenFor(x => x.Id)
@@ -85,3 +119,25 @@
         <a asp-action="Index" class="btn btn-outline-secondary">Kayıt Listesi</a>
     </div>
 </div>
+
+
+@functions {
+    private static (int PieceCount, List<double> Widths) BuildSectorPlan(double shellLength, double sectorWidth)
+    {
+        if (shellLength <= 0 || sectorWidth <= 0)
+        {
+            return (0, new List<double>());
+        }
+
+        var pieceCount = (int)Math.Ceiling(shellLength / sectorWidth);
+        var widths = new List<double>(pieceCount);
+
+        for (var i = 0; i < pieceCount; i++)
+        {
+            var remaining = shellLength - (i * sectorWidth);
+            widths.Add(Math.Round(Math.Min(sectorWidth, Math.Max(0, remaining)), 2));
+        }
+
+        return (pieceCount, widths);
+    }
+}

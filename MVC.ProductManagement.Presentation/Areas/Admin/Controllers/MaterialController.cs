@@ -3,11 +3,21 @@ using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialVMs;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
     public class MaterialController : AdminBaseController
     {
+        private static readonly string[] MaterialGroups =
+        {
+            "Carbon Steel",
+            "Stainless Steel",
+            "Aluminum",
+            "Duplex Stainless Steel",
+            "Nickel Alloy"
+        };
+
         private readonly IMaterialService _materialService;
 
         public MaterialController(IMaterialService materialService)
@@ -53,14 +63,22 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         // 📌 Yeni kayıt GET
-        public IActionResult Create() => View();
+        public IActionResult Create()
+        {
+            LoadMaterialGroups();
+            return View();
+        }
 
         // 📌 Yeni kayıt POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MaterialCreateVm vm)
         {
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                LoadMaterialGroups();
+                return View(vm);
+            }
 
             var dto = new MaterialCreateDto
             {
@@ -104,6 +122,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Notes = dto.Notes
             };
 
+            LoadMaterialGroups();
+
             return View(vm);
         }
 
@@ -112,7 +132,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MaterialUpdateVm vm)
         {
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                LoadMaterialGroups();
+                return View(vm);
+            }
 
             var dto = new MaterialUpdateDto
             {
@@ -128,6 +152,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             await _materialService.UpdateAsync(dto);
             return RedirectToAction(nameof(Index));
+        }
+
+        private void LoadMaterialGroups()
+        {
+            ViewBag.MaterialGroups = MaterialGroups
+                .Select(group => new SelectListItem(group, group))
+                .ToList();
         }
 
         // 📌 Silme GET
