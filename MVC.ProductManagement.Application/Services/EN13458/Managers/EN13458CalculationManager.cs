@@ -30,6 +30,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             input.OuterShellMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterShellMaterialId, input.OuterShellMaterialFormId, input.IsColdStretchApplied);
             input.OuterHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterHeadMaterialId, input.OuterHeadMaterialFormId, input.IsColdStretchApplied);
 
+            input.YieldFactorK = input.OuterShellMaterialStrength ?? input.YieldFactorK;
+            input.ElasticModulus = await _strengthProvider.ResolveElasticModulusAsync(input.OuterShellMaterialId);
+
             var result = await _engine.CalculateAsync(input);
             ApplySectorOrientationOutputs(result, input);
             return result;
