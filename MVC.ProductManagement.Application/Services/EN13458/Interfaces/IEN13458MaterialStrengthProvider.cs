@@ -7,5 +7,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Interfaces
     {
         Task<double> ResolveEffectiveYieldStrengthAsync(Guid materialId, Guid materialFormId, bool isColdStretchApplied);
         Task<double> ResolveElasticModulusAsync(Guid materialId);
+        Task<double> ResolveYieldFactorKAsync(Guid materialId);
     }
 }

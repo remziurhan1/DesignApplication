@@ -16,6 +16,8 @@ namespace MVC.ProductManagement.Domain.Entities
         public string Group { get; set; } = string.Empty;             // Carbon steel, Stainless steel...
         public double Density { get; set; }                           // kg/m³
         public double? ColdStretchYieldStrength { get; set; }         // MPa (örn: 400)
+        public double? ElasticModulus { get; set; }                   // MPa (Young modülü, EN dış basınç hesabı)
+        public double? YieldFactorK { get; set; }                     // MPa (dış basınç plastisite katsayısı)
         public string? Notes { get; set; }
 
         public virtual ICollection<MaterialForm> Forms { get; set; } = new List<MaterialForm>();

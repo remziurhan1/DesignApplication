@@ -27,6 +27,9 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Name = m.Name,
                 Standard = m.Standard,
                 Group = m.Group,
+                ColdStretchYieldStrength = m.ColdStretchYieldStrength,
+                ElasticModulus = m.ElasticModulus,
+                YieldFactorK = m.YieldFactorK,
             }).ToList();
         }
 
@@ -44,6 +47,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Group = material.Group,
                 Density = material.Density,
                 ColdStretchYieldStrength = material.ColdStretchYieldStrength,
+                ElasticModulus = material.ElasticModulus,
+                YieldFactorK = material.YieldFactorK,
                 Notes = material.Notes
             };
         }
@@ -62,6 +67,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Group = material.Group,
                 Density = material.Density,
                 ColdStretchYieldStrength = material.ColdStretchYieldStrength,
+                ElasticModulus = material.ElasticModulus,
+                YieldFactorK = material.YieldFactorK,
                 Notes = material.Notes
             };
         }
@@ -77,6 +84,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Group = dto.Group,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK,
                 Notes = dto.Notes
             };
 
@@ -92,6 +101,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Group = entity.Group,
                 Density = entity.Density,
                 ColdStretchYieldStrength = entity.ColdStretchYieldStrength,
+                ElasticModulus = entity.ElasticModulus,
+                YieldFactorK = entity.YieldFactorK,
                 Notes = entity.Notes
             };
         }
@@ -107,6 +118,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
             entity.Group = dto.Group;
             entity.Density = dto.Density;
             entity.ColdStretchYieldStrength = dto.ColdStretchYieldStrength;
+            entity.ElasticModulus = dto.ElasticModulus;
+            entity.YieldFactorK = dto.YieldFactorK;
             entity.Notes = dto.Notes;
 
             await _materialRepository.UpdateAsync(entity);
@@ -121,6 +134,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Group = entity.Group,
                 Density = entity.Density,
                 ColdStretchYieldStrength = entity.ColdStretchYieldStrength,
+                ElasticModulus = entity.ElasticModulus,
+                YieldFactorK = entity.YieldFactorK,
                 Notes = entity.Notes
             };
         }

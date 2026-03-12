@@ -17,6 +17,8 @@
             <th>Standard</th>
             <th>Group</th>
             <th>Cold Stretch (MPa)</th>
+            <th>E (MPa)</th>
+            <th>K (MPa)</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -29,6 +31,8 @@
                 <td>@item.Standard</td>
                 <td>@item.Group</td>
                 <td>@item.ColdStretchYieldStrength</td>
+                <td>@item.ElasticModulus</td>
+                <td>@item.YieldFactorK</td>
                 <td>
                     <a asp-area="Admin" asp-controller="Material" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
                     <a asp-area="Admin" asp-controller="Material" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>

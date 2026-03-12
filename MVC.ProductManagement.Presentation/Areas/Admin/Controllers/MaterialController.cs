@@ -35,6 +35,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Name = m.Name,
                 Standard = m.Standard,
                 Group = m.Group,
+                ElasticModulus = m.ElasticModulus,
+                YieldFactorK = m.YieldFactorK,
             }).ToList();
 
             return View(vms);
@@ -56,6 +58,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Group = dto.Group,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK,
                 Notes = dto.Notes
             };
 
@@ -88,6 +92,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Group = vm.Group,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
+                ElasticModulus = vm.ElasticModulus,
+                YieldFactorK = vm.YieldFactorK,
                 Notes = vm.Notes,
                 Forms = vm.Forms.Select(f => new MaterialFormCreateDto
                 {
@@ -119,6 +125,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Group = dto.Group,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK,
                 Notes = dto.Notes
             };
 
@@ -147,6 +155,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Group = vm.Group,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
+                ElasticModulus = vm.ElasticModulus,
+                YieldFactorK = vm.YieldFactorK,
                 Notes = vm.Notes
             };
 
@@ -176,6 +186,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Group = dto.Group,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK,
                 Notes = dto.Notes
             };
 
