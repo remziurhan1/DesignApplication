@@ -11,7 +11,10 @@ namespace MVC.ProductManagement.Domain.Entities
         public double ShellLength { get; set; }              // mm
         public double Pressure { get; set; }                 // bar
         public double LiquidDensity { get; set; }            // kg/m³
-        public double SectorWidth { get; set; }              // mm (1500, 2000, 2500)
+        public double WeldLength1500 { get; set; }
+        public double WeldLength2000 { get; set; }
+        public double WeldLength2500 { get; set; }
+        public double WeldLength3000 { get; set; }
 
         // === MALZEME BAĞLANTILARI ===
         // İç Gövde

@@ -324,30 +324,33 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 context.Input.ShellLength);
 
             double shellLength = context.Input.ShellLength;
-            double sectorWidth =context.Input.SectorWidth;
-            double sectorQty=(shellLength / sectorWidth);
-            double oneSectorWeld = sectorQty*innerDiameter*Math.PI;
-            double oneHeadCircularWeld = (Math.PI * innerDiameter);
 
-            double outerTankShellLength = context.Input.ShellLength + 500;
-            double outerTankSectorQty= (outerTankShellLength / sectorWidth);
-            double outerTankSectorWeld = outerTankSectorQty * outerDiameter * Math.PI;
-            double outerTankCircularWeld = Math.PI * outerDiameter;
+            context.Result.WeldLength1500 = CalculateWeldLengthForSource(shellLength, innerDiameter, outerDiameter, 1500d);
+            context.Result.WeldLength2000 = CalculateWeldLengthForSource(shellLength, innerDiameter, outerDiameter, 2000d);
+            context.Result.WeldLength2500 = CalculateWeldLengthForSource(shellLength, innerDiameter, outerDiameter, 2500d);
+            context.Result.WeldLength3000 = CalculateWeldLengthForSource(shellLength, innerDiameter, outerDiameter, 3000d);
 
+            var sectorWidth = 2000d;
+            var sectorQty = shellLength / sectorWidth;
+            var oneSectorWeld = sectorQty * innerDiameter * Math.PI;
+            var oneHeadCircularWeld = Math.PI * innerDiameter;
 
+            var outerTankShellLength = shellLength + 500d;
+            var outerTankSectorQty = outerTankShellLength / sectorWidth;
+            var outerTankSectorWeld = outerTankSectorQty * outerDiameter * Math.PI;
+            var outerTankCircularWeld = Math.PI * outerDiameter;
 
-            context.Result.InnerTankCircumferenceWeldLength =Math.Round(oneSectorWeld+oneHeadCircularWeld);
-
+            context.Result.InnerTankCircumferenceWeldLength = Math.Round(oneSectorWeld + oneHeadCircularWeld);
             context.Result.OuterTankCircumferenceWeldLength = Math.Round(outerTankSectorWeld + outerTankCircularWeld);
 
             var innerHeadPulDiameter = HeadPulDiameterCoefficient * innerDiameter;
             var outerHeadPulDiameter = HeadPulDiameterCoefficient * outerDiameter;
 
             context.Result.InnerTankHeadWeldLength =
-                Math.Round(((innerHeadPulDiameter / sectorWidth) * (innerHeadPulDiameter / 1.15d) * 2d) , 2);
+                Math.Round(((innerHeadPulDiameter / sectorWidth) * (innerHeadPulDiameter / 1.15d) * 2d), 2);
 
             context.Result.OuterTankHeadWeldLength =
-                Math.Round(((outerHeadPulDiameter / sectorWidth) * (outerHeadPulDiameter / 1.15d) * 2d) , 2);
+                Math.Round(((outerHeadPulDiameter / sectorWidth) * (outerHeadPulDiameter / 1.15d) * 2d), 2);
 
             context.Result.TotalWeldLength =
                 Math.Round(
@@ -365,6 +368,22 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             context.Result.PerliteWeight =
                 Math.Round(context.Result.PerliteVolume * PerliteDensity, 2);
         }
+        private static double CalculateWeldLengthForSource(double shellLength, double innerDiameter, double outerDiameter, double sourceLength)
+        {
+            var innerSectionCount = shellLength / sourceLength;
+            var innerCircumferenceWeld = (innerSectionCount * innerDiameter * Math.PI) + (Math.PI * innerDiameter);
+            var innerHeadPulDiameter = HeadPulDiameterCoefficient * innerDiameter;
+            var innerHeadWeld = ((innerHeadPulDiameter / sourceLength) * (innerHeadPulDiameter / 1.15d) * 2d);
+
+            var outerShellLength = shellLength + 500d;
+            var outerSectionCount = outerShellLength / sourceLength;
+            var outerCircumferenceWeld = (outerSectionCount * outerDiameter * Math.PI) + (Math.PI * outerDiameter);
+            var outerHeadPulDiameter = HeadPulDiameterCoefficient * outerDiameter;
+            var outerHeadWeld = ((outerHeadPulDiameter / sourceLength) * (outerHeadPulDiameter / 1.15d) * 2d);
+
+            return Math.Round(innerCircumferenceWeld + innerHeadWeld + outerCircumferenceWeld + outerHeadWeld, 2);
+        }
+
     }
 
     public class GasAndLiquidNitrogenStep : IEN13458CalculationStep

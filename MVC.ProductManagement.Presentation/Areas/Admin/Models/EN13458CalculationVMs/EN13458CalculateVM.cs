@@ -22,9 +22,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
 
         public double LiquidDensity { get; set; }
 
-        [Range(1, double.MaxValue)]
-        public double SectorWidth { get; set; }
-
         [Required]
         public TankOrientation TankOrientation { get; set; } = TankOrientation.Horizontal;
 

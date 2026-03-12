@@ -633,7 +633,16 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<double>("RoundedOuterShellThickness")
                         .HasColumnType("float");
 
-                    b.Property<double>("SectorWidth")
+                    b.Property<double>("WeldLength1500")
+                        .HasColumnType("float");
+
+                    b.Property<double>("WeldLength2000")
+                        .HasColumnType("float");
+
+                    b.Property<double>("WeldLength2500")
+                        .HasColumnType("float");
+
+                    b.Property<double>("WeldLength3000")
                         .HasColumnType("float");
 
                     b.Property<double>("ShellLength")

@@ -19,10 +19,13 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double Pressure { get; set; }
         public Guid StorageTypeId { get; set; }
         public double LiquidDensity { get; set; }
-        public double SectorWidth { get; set; }
         public TankOrientation TankOrientation { get; set; }
         public bool IsColdStretchApplied { get; set; }
 
+        public double WeldLength1500 { get; set; }
+        public double WeldLength2000 { get; set; }
+        public double WeldLength2500 { get; set; }
+        public double WeldLength3000 { get; set; }
         // Malzeme ve Form Id'leri
         public Guid InnerShellMaterialId { get; set; }
         public Guid InnerShellMaterialFormId { get; set; }

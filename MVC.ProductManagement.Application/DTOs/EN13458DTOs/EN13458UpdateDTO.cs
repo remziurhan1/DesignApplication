@@ -16,7 +16,6 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double ShellLength { get; set; }
         public double Pressure { get; set; }
         public double LiquidDensity { get; set; }
-        public double SectorWidth { get; set; }
 
         // Malzeme ve Form Id'leri
         public Guid InnerShellMaterialId { get; set; }
