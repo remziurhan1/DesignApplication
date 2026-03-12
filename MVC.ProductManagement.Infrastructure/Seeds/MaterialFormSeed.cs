@@ -41,6 +41,21 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     ColdStretchYieldStrength = 400,
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow
+                },
+                new MaterialForm
+                {
+                    Id = Guid.Parse("66666666-6666-6666-6666-666666666661"),
+                    MaterialId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                    FormType = MaterialFormType.Profile,
+                    ThicknessMin = 3,
+                    ThicknessMax = 30,
+                    ProductStandard = "EN 10025-2",
+                    WeldingFactor = null,
+                    Notes = "S235JR profile form",
+                    UnitPrice = 1.2,
+                    SectionArea = 0,
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
                 }
             };
         }

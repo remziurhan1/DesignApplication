@@ -14,6 +14,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialFormVms
         public double? WeldingFactor { get; set; }
         public string? Notes { get; set; }
         public double UnitPrice { get; set; }
+        public double? SectionArea { get; set; }
         public double? ColdStretchYieldStrength { get; set; }
 
     }

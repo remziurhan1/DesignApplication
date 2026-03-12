@@ -6,7 +6,9 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <h2 class="mb-0">EN13458 Sonuç</h2>
-    <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Hesaplama tamamlandı</span>
+    <span class="badge @(Model.ExternalPressureDesignOk ? "bg-success-subtle text-success-emphasis border border-success-subtle" : "bg-danger-subtle text-danger-emphasis border border-danger-subtle") px-3 py-2">
+        @(Model.ExternalPressureDesignOk ? "Dış basınç kontrolü geçti" : "Dış basınç kontrolü başarısız")
+    </span>
 </div>
 
 <div class="row g-4">
@@ -28,6 +30,15 @@
                         <tr><th>Kaynak Boyu 2000</th><td>@Model.WeldLength2000</td></tr>
                         <tr><th>Kaynak Boyu 2500</th><td>@Model.WeldLength2500</td></tr>
                         <tr><th>Kaynak Boyu 3000</th><td>@Model.WeldLength3000</td></tr>
+                        <tr><th>Korozyon/Tolerans c</th><td>@Model.CorrosionAllowance</td></tr>
+                        <tr><th>Burkulma Boyu lb</th><td>@Model.BucklingLength</td></tr>
+                        <tr><th>E (MPa)</th><td>@Model.ElasticModulus</td></tr>
+                        <tr><th>Poisson ν</th><td>@Model.PoissonRatio</td></tr>
+                        <tr><th>Ovalite u (%)</th><td>@Model.RoundnessErrorPercent</td></tr>
+                        <tr><th>K katsayısı</th><td>@Model.YieldFactorK</td></tr>
+                        <tr><th>Stiffener</th><td>@(Model.HasStiffener ? "Var" : "Yok")</td></tr>
+                        <tr><th>Stiffener I</th><td>@Model.StiffenerInertia</td></tr>
+                        <tr><th>Stiffener A</th><td>@Model.StiffenerArea</td></tr>
                         <tr><th>Tank Yönelimi</th><td>@Model.TankOrientation</td></tr>
                         <tr><th>Cold Stretch Uygulandı mı?</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
 
@@ -71,6 +82,19 @@
                         <tr><th>Design Pressure</th><td>@Model.DesignPressure</td></tr>
                         <tr><th>Test Pressure</th><td>@Model.TestPressure</td></tr>
                         <tr><th>Static Pressure</th><td>@Model.StaticPressure</td></tr>
+                        <tr><th>t = s-c</th><td>@Model.EffectiveOuterThickness</td></tr>
+                        <tr><th>Da/t</th><td>@Model.DOverT</td></tr>
+                        <tr><th>lb/Da</th><td>@Model.LOverD</td></tr>
+                        <tr><th>Da/lb</th><td>@Model.DaOverLb</td></tr>
+                        <tr><th>pe (Elastik Burkulma)</th><td>@Model.ElasticBucklingPressure</td></tr>
+                        <tr><th>pp (Plastik Deformasyon)</th><td>@Model.PlasticDeformationPressure</td></tr>
+                        <tr><th>p_allow</th><td>@Model.AllowableExternalPressure</td></tr>
+                        <tr><th>p_design</th><td>@Model.ExternalDesignPressure</td></tr>
+                        <tr><th>Dış Basınç Uygunluk</th><td>@(Model.ExternalPressureDesignOk ? "Uygun" : "Uygun Değil")</td></tr>
+                        <tr><th>I_gerekli</th><td>@Model.RequiredStiffenerInertia</td></tr>
+                        <tr><th>A_gerekli</th><td>@Model.RequiredStiffenerArea</td></tr>
+                        <tr><th>I kontrolü</th><td>@(Model.StiffenerInertiaOk.HasValue ? (Model.StiffenerInertiaOk.Value ? "Geçti" : "Kaldı") : "N/A")</td></tr>
+                        <tr><th>A kontrolü</th><td>@(Model.StiffenerAreaOk.HasValue ? (Model.StiffenerAreaOk.Value ? "Geçti" : "Kaldı") : "N/A")</td></tr>
                         <tr><th>İç Tank Toplam Uzunluk</th><td>@Model.InnerTankTotalLength</td></tr>
                         <tr><th>Dış Tank Toplam Uzunluk</th><td>@Model.OuterTankTotalLength</td></tr>
 
