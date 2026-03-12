@@ -148,6 +148,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Name = "EN13458 Hesabı",
                 OuterDiameter = 2000,
+                OuterTankDiameter = 2500,
                 ShellLength = 6000,
                 Pressure = 16,
                 StorageTypeId = Guid.Empty,
