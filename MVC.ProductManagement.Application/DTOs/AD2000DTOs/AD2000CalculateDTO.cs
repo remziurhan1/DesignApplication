@@ -34,5 +34,6 @@ namespace MVC.ProductManagement.Application.DTOs.AD2000DTOs
         public double WeldLength2000 { get; set; }
         public double WeldLength3000 { get; set; }
         public double WeldLength4000 { get; set; }
+        public double SurfaceArea { get; set; }
     }
 }

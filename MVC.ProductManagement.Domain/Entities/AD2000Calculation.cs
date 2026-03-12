@@ -45,5 +45,6 @@ namespace MVC.ProductManagement.Domain.Entities
         public double WeldLength2000 { get; set; }
         public double WeldLength3000 { get; set; }
         public double WeldLength4000 { get; set; }
+        public double SurfaceArea { get; set; }
     }
 }

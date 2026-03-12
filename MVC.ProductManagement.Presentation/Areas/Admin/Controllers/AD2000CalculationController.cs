@@ -169,7 +169,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldLength1500 = vm.WeldLength1500,
                 WeldLength2000 = vm.WeldLength2000,
                 WeldLength3000 = vm.WeldLength3000,
-                WeldLength4000 = vm.WeldLength4000
+                WeldLength4000 = vm.WeldLength4000,
+                SurfaceArea = vm.SurfaceArea
             });
 
             return View("Result", MapResultVm(result));
@@ -213,7 +214,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldLength1500 = vm.WeldLength1500,
                 WeldLength2000 = vm.WeldLength2000,
                 WeldLength3000 = vm.WeldLength3000,
-                WeldLength4000 = vm.WeldLength4000
+                WeldLength4000 = vm.WeldLength4000,
+                SurfaceArea = vm.SurfaceArea
             };
 
             var saved = await _calculationService.SaveAsync(dto, User?.Identity?.Name ?? "AdminUser");
@@ -254,7 +256,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             WeldLength1500 = result.WeldLength1500,
             WeldLength2000 = result.WeldLength2000,
             WeldLength3000 = result.WeldLength3000,
-            WeldLength4000 = result.WeldLength4000
+            WeldLength4000 = result.WeldLength4000,
+            SurfaceArea = result.SurfaceArea
         };
 
         private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)

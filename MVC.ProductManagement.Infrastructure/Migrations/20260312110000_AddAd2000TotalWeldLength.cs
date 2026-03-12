@@ -35,6 +35,13 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 type: "float",
                 nullable: false,
                 defaultValue: 0d);
+
+            migrationBuilder.AddColumn<double>(
+                name: "SurfaceArea",
+                table: "AD2000Calculations",
+                type: "float",
+                nullable: false,
+                defaultValue: 0d);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -53,6 +60,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             migrationBuilder.DropColumn(
                 name: "WeldLength4000",
+                table: "AD2000Calculations");
+
+            migrationBuilder.DropColumn(
+                name: "SurfaceArea",
                 table: "AD2000Calculations");
         }
     }

@@ -43,6 +43,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             var weldLength2000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 2000d);
             var weldLength3000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 3000d);
             var weldLength4000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 4000d);
+            var surfaceArea = CalculateSurfaceArea(d, dto.ShellLength);
 
             return Task.FromResult(new AD2000ResultDTO
             {
@@ -77,7 +78,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 WeldLength1500 = weldLength1500,
                 WeldLength2000 = weldLength2000,
                 WeldLength3000 = weldLength3000,
-                WeldLength4000 = weldLength4000
+                WeldLength4000 = weldLength4000,
+                SurfaceArea = surfaceArea
             });
         }
 
@@ -137,6 +139,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             WeldLength2000 = dto.WeldLength2000,
             WeldLength3000 = dto.WeldLength3000,
             WeldLength4000 = dto.WeldLength4000,
+            SurfaceArea = dto.SurfaceArea,
             CreatedBy = createdBy,
             CreatedDate = DateTime.UtcNow
         };
@@ -175,8 +178,18 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             WeldLength1500 = entity.WeldLength1500,
             WeldLength2000 = entity.WeldLength2000,
             WeldLength3000 = entity.WeldLength3000,
-            WeldLength4000 = entity.WeldLength4000
+            WeldLength4000 = entity.WeldLength4000,
+            SurfaceArea = entity.SurfaceArea
         };
+
+        private static double CalculateSurfaceArea(double diameterMm, double shellLengthMm)
+        {
+            var diameterM = diameterMm / 1000d;
+            var shellLengthM = shellLengthMm / 1000d;
+            var shellArea = Math.PI * diameterM * shellLengthM;
+            var headArea = 2d * Math.PI * Math.Pow(diameterM / 2d, 2);
+            return Math.Round(shellArea + headArea, 2);
+        }
 
         private static double CalculateWeldLengthForSectorWidth(double diameter, double shellLength, double sectorWidth)
         {
