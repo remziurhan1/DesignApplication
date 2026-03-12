@@ -166,7 +166,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 StorageTypeId = Guid.Empty,
                 LiquidDensity = 808,
                 TankOrientation = TankOrientation.Horizontal,
-                IsColdStretchApplied = false
+                IsColdStretchApplied = false,
+                StiffenerSpacing = 750
             });
         }
 
@@ -218,7 +219,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterShellMaterialId = vm.OuterShellMaterialId,
                 OuterShellMaterialFormId = vm.OuterShellMaterialFormId,
                 OuterHeadMaterialId = vm.OuterHeadMaterialId,
-                OuterHeadMaterialFormId = vm.OuterHeadMaterialFormId
+                OuterHeadMaterialFormId = vm.OuterHeadMaterialFormId,
+                StiffenerSpacing = vm.StiffenerSpacing,
+                StiffenerArea = vm.StiffenerArea,
+                StiffenerInertia = vm.StiffenerInertia,
+                StiffenerSectionModulus = vm.StiffenerSectionModulus
             };
 
             try
@@ -487,6 +492,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     g => g.Select(x => new { value = x.Id.ToString(), text = x.Name }).ToList(),
                     StringComparer.OrdinalIgnoreCase);
 
+            ViewBag.MaterialExternalProperties = materials
+                .ToDictionary(
+                    x => x.Id.ToString(),
+                    x => new
+                    {
+                        elasticModulus = x.ElasticModulus,
+                        yieldFactorK = x.YieldFactorK
+                    });
+
             ViewBag.MaterialFormsByMaterial = forms
                 .GroupBy(x => x.MaterialId)
                 .ToDictionary(
@@ -497,7 +511,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]",
                         formType = x.FormType.ToString(),
                         momentOfInertia = x.MomentOfInertia,
-                        sectionArea = x.SectionArea
+                        sectionArea = x.SectionArea,
+                        sectionModulus = x.SectionModulus
                     }).ToList());
 
             ViewBag.MaterialFormTypesByMaterial = forms

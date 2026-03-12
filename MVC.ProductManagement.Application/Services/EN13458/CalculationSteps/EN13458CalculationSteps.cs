@@ -386,32 +386,43 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 
     public class ExternalBucklingStep : IEN13458CalculationStep
     {
-        private const double BucklingLength = 750d;
+        private const double DefaultBucklingLength = 750d;
         private const double PoissonRatio = 0.3d;
         private const double ElasticSafetyFactor = 2d;
         private const double PlasticSafetyFactor = 1.1d;
         private const double OutOfRoundnessFactor = 1.5d;
         private const double DesignExternalPressure = 1.05d; // bar
 
-        // Varsayılan ring kesiti (S235JR 40x40x3) - kullanıcı tarafında profile göre revize edilebilir.
-        private const double RingSectionArea = 444d;       // mm²
-        private const double RingNeutralAxisOffsetY = 20d; // mm
-        private const double RingInertia = 101700d;        // mm4
-        private const double RingSectionModulus = 5080d;   // mm3
+        // Varsayılan ring kesiti (S235JR 40x40x3)
+        private const double DefaultRingSectionArea = 444d;       // mm²
+        private const double RingNeutralAxisOffsetY = 20d;        // mm
+        private const double DefaultRingInertia = 101700d;        // mm4
+        private const double DefaultRingSectionModulus = 5080d;   // mm3
 
         public void Execute(EN13458DesignContext context)
         {
             var da = context.Result.OuterTankDiameter;
             var ls = EN13458OuterTankRules.GetOuterShellLength(context.Input.OuterDiameter, context.Input.ShellLength);
-            var se = context.Result.RoundedOuterShellThickness;
-            var t = se;
-
-            var rawN = 1.63d * Math.Pow(Math.Pow(da, 3d) / (Math.Pow(BucklingLength, 2d) * t), 0.25d);
-            var n = Math.Max(2d, Math.Floor(rawN));
-            var z = 0.5d * Math.PI * da / BucklingLength;
+            var t = context.Result.RoundedOuterShellThickness;
 
             var e = context.Input.ElasticModulus ?? 206000d;
             var k = context.Input.YieldFactorK ?? 355d;
+            var bucklingLength = context.Input.StiffenerSpacing.HasValue && context.Input.StiffenerSpacing.Value > 0d
+                ? context.Input.StiffenerSpacing.Value
+                : DefaultBucklingLength;
+            var ringArea = context.Input.StiffenerArea.HasValue && context.Input.StiffenerArea.Value > 0d
+                ? context.Input.StiffenerArea.Value
+                : DefaultRingSectionArea;
+            var ringInertia = context.Input.StiffenerInertia.HasValue && context.Input.StiffenerInertia.Value > 0d
+                ? context.Input.StiffenerInertia.Value
+                : DefaultRingInertia;
+            var ringSectionModulus = context.Input.StiffenerSectionModulus.HasValue && context.Input.StiffenerSectionModulus.Value > 0d
+                ? context.Input.StiffenerSectionModulus.Value
+                : DefaultRingSectionModulus;
+
+            var rawN = 1.63d * Math.Pow(Math.Pow(da, 3d) / (Math.Pow(bucklingLength, 2d) * t), 0.25d);
+            var n = Math.Max(2d, Math.Floor(rawN));
+            var z = 0.5d * Math.PI * da / bucklingLength;
 
             var nz = 1d + Math.Pow(n / z, 2d);
             var term1 = (20d / ((Math.Pow(n, 2d) - 1d) * Math.Pow(nz, 2d))) * (t / da);
@@ -422,7 +433,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var p1Bar = ((e / ElasticSafetyFactor) * (term1 + term2)) / 10d;
 
             var p2Bar = (20d * (k / PlasticSafetyFactor) * (t / da)
-                * (1d / (1d + ((1.5d * OutOfRoundnessFactor * (1d - 0.2d * (da / BucklingLength)) * da) / (100d * t))))) / 10d;
+                * (1d / (1d + ((1.5d * OutOfRoundnessFactor * (1d - 0.2d * (da / bucklingLength)) * da) / (100d * t))))) / 10d;
 
             var supportRingRequired = DesignExternalPressure > p1Bar;
 
@@ -432,15 +443,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var lm = bm + b;
 
             var dm = da - RingNeutralAxisOffsetY;
-            var peBar = (240d * e * RingInertia)
-                / ((1d - Math.Pow(PoissonRatio, 2d)) * (da - t) * Math.Pow(dm, 2d) * BucklingLength) / 10d;
+            var peBar = (240d * e * ringInertia)
+                / ((1d - Math.Pow(PoissonRatio, 2d)) * (da - t) * Math.Pow(dm, 2d) * bucklingLength) / 10d;
 
             var denom = 1d - ElasticSafetyFactor * (DesignExternalPressure / Math.Max(peBar, 0.0001d));
             if (Math.Abs(denom) < 1e-6d)
                 denom = 1e-6d;
 
-            var x = ((DesignExternalPressure * lm * da) / (2d * RingSectionArea))
-                    + ((DesignExternalPressure * BucklingLength * Math.Pow(da, 2d)) / (8000d * RingSectionModulus))
+            var x = ((DesignExternalPressure * lm * da) / (2d * ringArea))
+                    + ((DesignExternalPressure * bucklingLength * Math.Pow(da, 2d)) / (8000d * ringSectionModulus))
                     * (OutOfRoundnessFactor / denom);
 
             var sigmaAllow = k / PlasticSafetyFactor;
@@ -452,7 +463,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var skHead = 2d + (0.0014d * (da / Math.Max(th, 0.1d)));
             var headCollapsePressureBar = (3.66d * (e / skHead) * Math.Pow(teff / da, 2d)) / 10d;
 
-            var profileCount = supportRingRequired ? (int)Math.Ceiling(ls / BucklingLength) : 0;
+            var profileCount = supportRingRequired ? (int)Math.Ceiling(ls / bucklingLength) : 0;
             var profileDevelopedLength = Math.PI * dm;
 
             context.Result.BucklingWaveNumber = n;
