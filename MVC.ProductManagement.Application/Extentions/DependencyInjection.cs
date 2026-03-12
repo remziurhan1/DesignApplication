@@ -55,6 +55,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IEN13458CalculationStep, SurfaceAreaStep>();
             services.AddScoped<IEN13458CalculationStep, WeightStep>();
             services.AddScoped<IEN13458CalculationStep, WeldFilmPerliteStep>();
+            services.AddScoped<IEN13458CalculationStep, ExternalBucklingStep>();
             services.AddScoped<IEN13458CalculationStep, GasAndLiquidNitrogenStep>();
             services.AddScoped<IEN13458CalculationStep, TankLengthStep>();
             services.AddScoped<IStockCodeSaService, StockCodeSaService>();

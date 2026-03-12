@@ -42,6 +42,23 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow
                 }
+,
+                new MaterialForm
+                {
+                    Id = Guid.Parse("66666666-6666-6666-6666-666666666661"),
+                    MaterialId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                    FormType = MaterialFormType.Profile,
+                    ThicknessMin = 3,
+                    ThicknessMax = 30,
+                    ProductStandard = "EN 10025-2",
+                    Notes = "S235JR kutu profil 40x40x3 mm",
+                    UnitPrice = 1.2,
+                    SectionArea = 444,
+                    MomentOfInertia = 101700,
+                    SectionModulus = 5080,
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
+                }
             };
         }
     }

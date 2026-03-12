@@ -88,6 +88,19 @@ namespace MVC.ProductManagement.Domain.Entities
         public double GasNitrogenVolume { get; set; }
         public double LiquidNitrogenVolume { get; set; }
 
+        // === DIŞ TANK ELASTİK-PLASTİK BURKULMA ===
+        public double BucklingWaveNumber { get; set; }
+        public double ElasticBucklingPressureP1 { get; set; }
+        public double PlasticCollapsePressureP2 { get; set; }
+        public double DesignExternalPressurePv { get; set; }
+        public bool SupportRingRequired { get; set; }
+        public double SupportRingCriticalPressurePe { get; set; }
+        public double SupportRingStressX { get; set; }
+        public double SupportRingAllowableStress { get; set; }
+        public bool SupportRingAdequate { get; set; }
+        public double HeadCollapsePressure { get; set; }
+        public int RequiredProfileCount { get; set; }
+        public double ProfileDevelopedLength { get; set; }
 
         // === SAC ORYANTASYONU / AÇINIM ÇIKTILARI ===
         public double InnerDevelopedLength { get; set; }
