@@ -118,7 +118,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 PerliteVolume = dto.PerliteVolume,
                 PerliteWeight = dto.PerliteWeight,
                 GasNitrogenVolume = dto.GasNitrogenVolume,
-                LiquidNitrogenVolume = dto.LiquidNitrogenVolume
+                LiquidNitrogenVolume = dto.LiquidNitrogenVolume,
+
+                InnerDevelopedLength = dto.InnerDevelopedLength,
+                OuterDevelopedLength = dto.OuterDevelopedLength,
+                InnerSectorPlan1500 = dto.InnerSectorPlan1500,
+                InnerSectorPlan2000 = dto.InnerSectorPlan2000,
+                InnerSectorPlan2500 = dto.InnerSectorPlan2500,
+                InnerSectorPlan3000 = dto.InnerSectorPlan3000,
+                OuterSectorPlan1500 = dto.OuterSectorPlan1500,
+                OuterSectorPlan2000 = dto.OuterSectorPlan2000,
+                OuterSectorPlan2500 = dto.OuterSectorPlan2500,
+                OuterSectorPlan3000 = dto.OuterSectorPlan3000
             };
 
             await PopulateResultDisplayNamesAsync(vm);
@@ -336,7 +347,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 PerliteVolume = vm.PerliteVolume,
                 PerliteWeight = vm.PerliteWeight,
                 GasNitrogenVolume = vm.GasNitrogenVolume,
-                LiquidNitrogenVolume = vm.LiquidNitrogenVolume
+                LiquidNitrogenVolume = vm.LiquidNitrogenVolume,
+
+                InnerDevelopedLength = vm.InnerDevelopedLength,
+                OuterDevelopedLength = vm.OuterDevelopedLength,
+                InnerSectorPlan1500 = vm.InnerSectorPlan1500,
+                InnerSectorPlan2000 = vm.InnerSectorPlan2000,
+                InnerSectorPlan2500 = vm.InnerSectorPlan2500,
+                InnerSectorPlan3000 = vm.InnerSectorPlan3000,
+                OuterSectorPlan1500 = vm.OuterSectorPlan1500,
+                OuterSectorPlan2000 = vm.OuterSectorPlan2000,
+                OuterSectorPlan2500 = vm.OuterSectorPlan2500,
+                OuterSectorPlan3000 = vm.OuterSectorPlan3000
             };
         }
 

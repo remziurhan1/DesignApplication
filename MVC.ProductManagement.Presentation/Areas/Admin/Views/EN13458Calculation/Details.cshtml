@@ -1,4 +1,5 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM
+@using System.Globalization
 @{
     ViewData["Title"] = "EN13458 Details";
 }
@@ -196,19 +197,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var sectorWidth in new[] { 1500d, 2000d, 2500d, 3000d })
-                    {
-                        var plan = BuildSectorPlan(Model.ShellLength, sectorWidth);
-                        var developedLength = Math.Round(Math.PI * Model.OuterDiameter, 2);
-                        var cutList = string.Join(" + ", plan.Widths.Select(w => $"{Model.RoundedInnerShellThickness.ToString("0.##", CultureInfo.InvariantCulture)} x {w.ToString("0.##", CultureInfo.InvariantCulture)} x {developedLength.ToString("0.##", CultureInfo.InvariantCulture)}"));
-
-                        <tr>
-                            <td>@sectorWidth.ToString("0", CultureInfo.InvariantCulture) mm</td>
-                            <td>@plan.PieceCount adet</td>
-                            <td>@developedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td>
-                            <td>@cutList</td>
-                        </tr>
-                    }
+                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan1500</td></tr>
+                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2000</td></tr>
+                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2500</td></tr>
+                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan3000</td></tr>
                 </tbody>
             </table>
         </div>
@@ -225,19 +217,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var sectorWidth in new[] { 1500d, 2000d, 2500d, 3000d })
-                    {
-                        var plan = BuildSectorPlan(Model.ShellLength, sectorWidth);
-                        var developedLength = Math.Round(Math.PI * Model.OuterDiameter, 2);
-                        var cutList = string.Join(" + ", plan.Widths.Select(w => $"{Model.RoundedOuterShellThickness.ToString("0.##", CultureInfo.InvariantCulture)} x {w.ToString("0.##", CultureInfo.InvariantCulture)} x {developedLength.ToString("0.##", CultureInfo.InvariantCulture)}"));
-
-                        <tr>
-                            <td>@sectorWidth.ToString("0", CultureInfo.InvariantCulture) mm</td>
-                            <td>@plan.PieceCount adet</td>
-                            <td>@developedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td>
-                            <td>@cutList</td>
-                        </tr>
-                    }
+                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan1500</td></tr>
+                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2000</td></tr>
+                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2500</td></tr>
+                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan3000</td></tr>
                 </tbody>
             </table>
         </div>
@@ -255,22 +238,9 @@
 
 
 @functions {
-    private static (int PieceCount, List<double> Widths) BuildSectorPlan(double shellLength, double sectorWidth)
+    private static int GetPieceCount(string? cutList)
     {
-        if (shellLength <= 0 || sectorWidth <= 0)
-        {
-            return (0, new List<double>());
-        }
-
-        var pieceCount = (int)Math.Ceiling(shellLength / sectorWidth);
-        var widths = new List<double>(pieceCount);
-
-        for (var i = 0; i < pieceCount; i++)
-        {
-            var remaining = shellLength - (i * sectorWidth);
-            widths.Add(Math.Round(Math.Min(sectorWidth, Math.Max(0, remaining)), 2));
-        }
-
-        return (pieceCount, widths);
+        if (string.IsNullOrWhiteSpace(cutList)) return 0;
+        return cutList.Split(" + ", StringSplitOptions.RemoveEmptyEntries).Length;
     }
 }

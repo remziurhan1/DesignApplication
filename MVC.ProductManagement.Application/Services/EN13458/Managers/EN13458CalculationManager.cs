@@ -1,5 +1,6 @@
 ﻿using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
 using MVC.ProductManagement.Application.Services.EN13458.Interfaces;
+using MVC.ProductManagement.Application.Services.EN13458.CalculationSteps;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Infrastructure.Repositories.EN13458Repositories;
 using System;
@@ -28,7 +29,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             input.InnerHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerHeadMaterialId, input.InnerHeadMaterialFormId, input.IsColdStretchApplied);
             input.OuterShellMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterShellMaterialId, input.OuterShellMaterialFormId, input.IsColdStretchApplied);
             input.OuterHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterHeadMaterialId, input.OuterHeadMaterialFormId, input.IsColdStretchApplied);
-            return await _engine.CalculateAsync(input);
+
+            var result = await _engine.CalculateAsync(input);
+            ApplySectorOrientationOutputs(result, input);
+            return result;
         }
 
         public async Task<EN13458ResultDTO> SaveAsync(EN13458ResultDTO result, string createdBy = "System")
@@ -86,6 +90,18 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             WeldLength2500 = dto.WeldLength2500,
             WeldLength3000 = dto.WeldLength3000,
             GasNitrogenVolume = dto.GasNitrogenVolume, LiquidNitrogenVolume = dto.LiquidNitrogenVolume,
+
+            InnerDevelopedLength = dto.InnerDevelopedLength,
+            OuterDevelopedLength = dto.OuterDevelopedLength,
+            InnerSectorPlan1500 = dto.InnerSectorPlan1500,
+            InnerSectorPlan2000 = dto.InnerSectorPlan2000,
+            InnerSectorPlan2500 = dto.InnerSectorPlan2500,
+            InnerSectorPlan3000 = dto.InnerSectorPlan3000,
+            OuterSectorPlan1500 = dto.OuterSectorPlan1500,
+            OuterSectorPlan2000 = dto.OuterSectorPlan2000,
+            OuterSectorPlan2500 = dto.OuterSectorPlan2500,
+            OuterSectorPlan3000 = dto.OuterSectorPlan3000,
+
             CreatedBy = createdBy, CreatedDate = DateTime.UtcNow
         };
 
@@ -123,7 +139,59 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             WeldLength2000 = entity.WeldLength2000,
             WeldLength2500 = entity.WeldLength2500,
             WeldLength3000 = entity.WeldLength3000,
-            GasNitrogenVolume = entity.GasNitrogenVolume, LiquidNitrogenVolume = entity.LiquidNitrogenVolume
+            GasNitrogenVolume = entity.GasNitrogenVolume, LiquidNitrogenVolume = entity.LiquidNitrogenVolume,
+
+            InnerDevelopedLength = entity.InnerDevelopedLength,
+            OuterDevelopedLength = entity.OuterDevelopedLength,
+            InnerSectorPlan1500 = entity.InnerSectorPlan1500,
+            InnerSectorPlan2000 = entity.InnerSectorPlan2000,
+            InnerSectorPlan2500 = entity.InnerSectorPlan2500,
+            InnerSectorPlan3000 = entity.InnerSectorPlan3000,
+            OuterSectorPlan1500 = entity.OuterSectorPlan1500,
+            OuterSectorPlan2000 = entity.OuterSectorPlan2000,
+            OuterSectorPlan2500 = entity.OuterSectorPlan2500,
+            OuterSectorPlan3000 = entity.OuterSectorPlan3000
         };
+
+        private static void ApplySectorOrientationOutputs(EN13458ResultDTO result, EN13458CalculateDTO input)
+        {
+            var innerDiameter = input.OuterDiameter;
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(input.OuterDiameter, input.ShellLength);
+            var innerShellLength = input.ShellLength;
+            var outerShellLength = EN13458OuterTankRules.GetOuterShellLength(input.OuterDiameter, input.ShellLength);
+
+            result.InnerDevelopedLength = Math.Round(Math.PI * innerDiameter, 2);
+            result.OuterDevelopedLength = Math.Round(Math.PI * outerDiameter, 2);
+
+            result.InnerSectorPlan1500 = BuildSectorCutList(innerShellLength, 1500d, result.RoundedInnerShellThickness, result.InnerDevelopedLength);
+            result.InnerSectorPlan2000 = BuildSectorCutList(innerShellLength, 2000d, result.RoundedInnerShellThickness, result.InnerDevelopedLength);
+            result.InnerSectorPlan2500 = BuildSectorCutList(innerShellLength, 2500d, result.RoundedInnerShellThickness, result.InnerDevelopedLength);
+            result.InnerSectorPlan3000 = BuildSectorCutList(innerShellLength, 3000d, result.RoundedInnerShellThickness, result.InnerDevelopedLength);
+
+            result.OuterSectorPlan1500 = BuildSectorCutList(outerShellLength, 1500d, result.RoundedOuterShellThickness, result.OuterDevelopedLength);
+            result.OuterSectorPlan2000 = BuildSectorCutList(outerShellLength, 2000d, result.RoundedOuterShellThickness, result.OuterDevelopedLength);
+            result.OuterSectorPlan2500 = BuildSectorCutList(outerShellLength, 2500d, result.RoundedOuterShellThickness, result.OuterDevelopedLength);
+            result.OuterSectorPlan3000 = BuildSectorCutList(outerShellLength, 3000d, result.RoundedOuterShellThickness, result.OuterDevelopedLength);
+        }
+
+        private static string BuildSectorCutList(double shellLength, double sectorWidth, double thickness, double developedLength)
+        {
+            if (shellLength <= 0 || sectorWidth <= 0)
+            {
+                return string.Empty;
+            }
+
+            var pieceCount = (int)Math.Ceiling(shellLength / sectorWidth);
+            var items = new List<string>(pieceCount);
+
+            for (var i = 0; i < pieceCount; i++)
+            {
+                var remaining = shellLength - (i * sectorWidth);
+                var width = Math.Round(Math.Min(sectorWidth, Math.Max(0, remaining)), 2);
+                items.Add($"{thickness:0.##} x {width:0.##} x {developedLength:0.##}");
+            }
+
+            return string.Join(" + ", items);
+        }
     }
 }
