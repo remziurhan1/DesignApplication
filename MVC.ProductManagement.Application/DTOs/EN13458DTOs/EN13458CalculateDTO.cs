@@ -24,6 +24,19 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double WeldLength2000 { get; set; }
         public double WeldLength2500 { get; set; }
         public double WeldLength3000 { get; set; }
+
+        // Outer vessel external pressure inputs
+        public double CorrosionAllowance { get; set; }
+        public double BucklingLength { get; set; }
+        public double ElasticModulus { get; set; }
+        public double PoissonRatio { get; set; }
+        public double RoundnessErrorPercent { get; set; }
+        public double YieldFactorK { get; set; }
+        public bool UseGeneralElasticFormula { get; set; }
+        public bool HasStiffener { get; set; }
+        public double? StiffenerInertia { get; set; }
+        public double? StiffenerArea { get; set; }
+
         // Malzeme seçimleri
         public Guid InnerShellMaterialId { get; set; }
         public Guid InnerShellMaterialFormId { get; set; }
