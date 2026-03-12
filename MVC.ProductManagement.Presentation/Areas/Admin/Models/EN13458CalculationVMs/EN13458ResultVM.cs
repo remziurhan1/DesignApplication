@@ -78,5 +78,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double PerliteWeight { get; set; }
         public double GasNitrogenVolume { get; set; }
         public double LiquidNitrogenVolume { get; set; }
+
+        public double InnerDevelopedLength { get; set; }
+        public double OuterDevelopedLength { get; set; }
+        public string InnerSectorPlan1500 { get; set; } = string.Empty;
+        public string InnerSectorPlan2000 { get; set; } = string.Empty;
+        public string InnerSectorPlan2500 { get; set; } = string.Empty;
+        public string InnerSectorPlan3000 { get; set; } = string.Empty;
+        public string OuterSectorPlan1500 { get; set; } = string.Empty;
+        public string OuterSectorPlan2000 { get; set; } = string.Empty;
+        public string OuterSectorPlan2500 { get; set; } = string.Empty;
+        public string OuterSectorPlan3000 { get; set; } = string.Empty;
     }
 }

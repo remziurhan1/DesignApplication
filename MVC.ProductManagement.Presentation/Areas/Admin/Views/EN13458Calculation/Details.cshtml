@@ -1,4 +1,5 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM
+@using System.Globalization
 @{
     ViewData["Title"] = "EN13458 Details";
 }
@@ -178,6 +179,54 @@
     </div>
 </div>
 
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-light fw-semibold">Sac Oryantasyonu (Sektör Bazlı)</div>
+    <div class="card-body">
+        <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
+
+        <h6 class="text-muted text-uppercase fw-semibold mb-2">İç Tank Gövde</h6>
+        <div class="table-responsive mb-3">
+            <table class="table table-sm table-striped table-bordered align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Sektör Genişliği</th>
+                        <th>Parça Adedi</th>
+                        <th>Sac Açınımı</th>
+                        <th>Kesim Listesi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan1500</td></tr>
+                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2000</td></tr>
+                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2500</td></tr>
+                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan3000</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h6 class="text-muted text-uppercase fw-semibold mb-2">Dış Tank Gövde</h6>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Sektör Genişliği</th>
+                        <th>Parça Adedi</th>
+                        <th>Sac Açınımı</th>
+                        <th>Kesim Listesi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan1500</td></tr>
+                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2000</td></tr>
+                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2500</td></tr>
+                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan3000</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <div class="mt-4 mb-5 pb-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
     <a asp-action="Index" class="btn btn-secondary px-4">
         <i class="bi bi-arrow-left-circle me-1"></i>Listeye Dön
@@ -186,3 +235,12 @@
         <i class="bi bi-plus-circle me-1"></i>Yeni Hesap
     </a>
 </div>
+
+
+@functions {
+    private static int GetPieceCount(string? cutList)
+    {
+        if (string.IsNullOrWhiteSpace(cutList)) return 0;
+        return cutList.Split(" + ", StringSplitOptions.RemoveEmptyEntries).Length;
+    }
+}
