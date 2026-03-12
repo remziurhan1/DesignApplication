@@ -24,6 +24,12 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(f => f.ColdStretchYieldStrength)
                    .HasPrecision(10, 3);
 
+            builder.Property(f => f.SectionArea)
+                   .HasPrecision(12, 3);
+
+            builder.Property(f => f.MomentOfInertia)
+                   .HasPrecision(12, 3);
+
             builder.HasMany(f => f.YieldStrengths)
                    .WithOne(y => y.MaterialForm)
                    .HasForeignKey(y => y.MaterialFormId)

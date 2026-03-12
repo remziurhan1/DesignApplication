@@ -20,6 +20,8 @@ namespace MVC.ProductManagement.Domain.Entities
         public double? WeldingFactor { get; set; }                    // ASME’de E faktörü, EN’de boş olabilir
         public string? Notes { get; set; }
         public double UnitPrice { get; set; }
+        public double? MomentOfInertia { get; set; }
+        public double? SectionArea { get; set; }
         public double? ColdStretchYieldStrength { get; set; }         // MPa (sadece plate/paslanmaz senaryoları için)
 
         public virtual ICollection<YieldStrength> YieldStrengths { get; set; } = new List<YieldStrength>();

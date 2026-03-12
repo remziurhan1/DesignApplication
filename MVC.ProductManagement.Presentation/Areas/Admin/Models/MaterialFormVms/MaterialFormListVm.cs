@@ -10,6 +10,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialFormVms
         public double ThicknessMin { get; set; }
         public double ThicknessMax { get; set; }
         public double UnitPrice { get; set; }
+        public double? MomentOfInertia { get; set; }
+        public double? SectionArea { get; set; }
         public double? ColdStretchYieldStrength { get; set; }
         public string MaterialName { get; set; }
 
