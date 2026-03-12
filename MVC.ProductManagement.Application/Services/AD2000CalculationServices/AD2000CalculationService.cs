@@ -39,6 +39,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
 
             var roundedShell = RoundUpToHalf(shellThickness);
             var roundedHead = RoundUpToHalf(headThickness);
+            var totalWeldLength = CalculateTotalWeldLengthForStandardSectorWidths(d, dto.ShellLength);
 
             return Task.FromResult(new AD2000ResultDTO
             {
@@ -69,7 +70,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 HeadThickness = headThickness,
                 RoundedShellThickness = roundedShell,
                 RoundedHeadThickness = roundedHead,
-                TestPressure = effectivePressure * 1.3
+                TestPressure = effectivePressure * 1.3,
+                TotalWeldLength = totalWeldLength
             });
         }
 
@@ -125,6 +127,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             RoundedShellThickness = dto.RoundedShellThickness,
             RoundedHeadThickness = dto.RoundedHeadThickness,
             TestPressure = dto.TestPressure,
+            TotalWeldLength = dto.TotalWeldLength,
             CreatedBy = createdBy,
             CreatedDate = DateTime.UtcNow
         };
@@ -159,8 +162,34 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             HeadThickness = entity.HeadThickness,
             RoundedShellThickness = entity.RoundedShellThickness,
             RoundedHeadThickness = entity.RoundedHeadThickness,
-            TestPressure = entity.TestPressure
+            TestPressure = entity.TestPressure,
+            TotalWeldLength = entity.TotalWeldLength
         };
+
+        private static double CalculateTotalWeldLengthForStandardSectorWidths(double diameter, double shellLength)
+        {
+            var standardSectorWidths = new[] { 1500d, 2000d, 3000d, 4000d };
+            double totalWeldLength = 0d;
+
+            foreach (var sectorWidth in standardSectorWidths)
+            {
+                totalWeldLength += CalculateWeldLengthForSectorWidth(diameter, shellLength, sectorWidth);
+            }
+
+            return Math.Round(totalWeldLength, 2);
+        }
+
+        private static double CalculateWeldLengthForSectorWidth(double diameter, double shellLength, double sectorWidth)
+        {
+            var sectorCount = shellLength / sectorWidth;
+            var shellWeldLength = sectorCount * diameter * Math.PI;
+            var circularWeldLength = Math.PI * diameter;
+
+            var headPulDiameter = 1.17d * diameter;
+            var headWeldLength = Math.Round((headPulDiameter / sectorWidth) * (headPulDiameter / 1.15d) * 2d, 2);
+
+            return Math.Round(shellWeldLength + circularWeldLength + headWeldLength, 2);
+        }
 
         private static double CalculateStaticPressureBar(double density, TankOrientation orientation, double shellLengthMm, double diameterMm)
         {
