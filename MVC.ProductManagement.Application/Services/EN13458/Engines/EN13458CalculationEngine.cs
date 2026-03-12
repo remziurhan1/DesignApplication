@@ -1,5 +1,6 @@
 ﻿using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
 using MVC.ProductManagement.Application.Services.EN13458.Interfaces;
+using MVC.ProductManagement.Application.Services.EN13458.CalculationSteps;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Engines
             {
                 Name = input.Name,
                 OuterDiameter = input.OuterDiameter,
-                OuterTankDiameter = input.OuterTankDiameter,
+                OuterTankDiameter = EN13458OuterTankRules.GetOuterDiameter(input.OuterDiameter, input.ShellLength, input.OuterTankDiameter),
                 ShellLength = input.ShellLength,
                 Pressure = input.Pressure,
                 StorageTypeId = input.StorageTypeId,

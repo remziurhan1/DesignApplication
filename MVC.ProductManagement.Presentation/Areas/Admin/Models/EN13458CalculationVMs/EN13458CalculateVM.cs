@@ -13,7 +13,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double OuterDiameter { get; set; }
 
         [Range(1, double.MaxValue)]
-        public double OuterTankDiameter { get; set; }
+        public double? OuterTankDiameter { get; set; }
 
         [Range(1, double.MaxValue)]
         public double ShellLength { get; set; }

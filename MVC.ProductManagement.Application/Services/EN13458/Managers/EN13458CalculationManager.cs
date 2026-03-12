@@ -156,7 +156,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
         private static void ApplySectorOrientationOutputs(EN13458ResultDTO result, EN13458CalculateDTO input)
         {
             var innerDiameter = input.OuterDiameter;
-            var outerDiameter = input.OuterTankDiameter;
+            var outerDiameter = result.OuterTankDiameter;
             var innerShellLength = input.ShellLength;
             var outerShellLength = EN13458OuterTankRules.GetOuterShellLength(input.OuterDiameter, input.ShellLength);
 
