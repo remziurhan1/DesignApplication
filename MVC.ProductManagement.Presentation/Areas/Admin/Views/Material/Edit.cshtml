@@ -27,7 +27,9 @@
 
     <div class="mb-3">
         <label asp-for="Group" class="form-label"></label>
-        <input asp-for="Group" class="form-control" />
+        <select asp-for="Group" class="form-select" asp-items="ViewBag.MaterialGroups">
+            <option value="">Seçiniz</option>
+        </select>
     </div>
 
     <div class="mb-3">
