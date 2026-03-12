@@ -29,8 +29,11 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             return (cylindricalVolume + headVolume) / 1_000_000_000d;
         }
 
-        public static double GetOuterDiameter(double innerDiameter, double shellLength)
+        public static double GetOuterDiameter(double innerDiameter, double shellLength, double? enteredOuterDiameter)
         {
+            if (enteredOuterDiameter.HasValue && enteredOuterDiameter.Value > 0d)
+                return enteredOuterDiameter.Value;
+
             var estimatedInnerVolume = GetEstimatedInnerVolume(innerDiameter, shellLength);
             var diameterOffset = estimatedInnerVolume < 100d ? 500d : 700d;
             return innerDiameter + diameterOffset;
@@ -111,9 +114,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             context.Result.InnerShellThickness = Math.Round(thickness, 2);
             context.Result.RoundedInnerShellThickness = Math.Ceiling(thickness);
 
-            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(
-                context.Input.OuterDiameter,
-                context.Input.ShellLength);
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength, context.Input.OuterTankDiameter);
 
             var thicknessOuter =
                 EN13458OuterTankRules.DetermineTankThickness(outerDiameter);
@@ -142,9 +143,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             context.Result.InnerHeadThickness = Math.Round(thickness, 2);
             context.Result.RoundedInnerHeadThickness = Math.Ceiling(thickness);
 
-            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(
-                context.Input.OuterDiameter,
-                context.Input.ShellLength);
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength, context.Input.OuterTankDiameter);
 
             var thicknessOuter =
                 EN13458OuterTankRules.DetermineTankThickness(outerDiameter);
@@ -176,7 +175,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 Math.Round((innerCylinder + innerHeadVol) / 1_000_000_000d, 2);
 
             var outerDiameter =
-                EN13458OuterTankRules.GetOuterDiameter(diameter, shellLength);
+                EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength, context.Input.OuterTankDiameter);
 
             var outerShellLength =
                 EN13458OuterTankRules.GetOuterShellLength(diameter, shellLength);
@@ -220,7 +219,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 Math.Round(innerBodyArea + (2d * innerHeadArea), 2);
 
             var outerDiameter =
-                EN13458OuterTankRules.GetOuterDiameter(diameter, shellLength);
+                EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength, context.Input.OuterTankDiameter);
 
             var outerShellLength =
                 EN13458OuterTankRules.GetOuterShellLength(diameter, shellLength);
@@ -278,7 +277,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 Math.Round((innerShellWeight + (2d * innerBombeWeight)) * 1.03d, 2);
 
             var outerDiameter =
-                EN13458OuterTankRules.GetOuterDiameter(diameter, shellLength);
+                EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength, context.Input.OuterTankDiameter);
 
             var outerShellLength =
                 EN13458OuterTankRules.GetOuterShellLength(diameter, shellLength);
@@ -319,9 +318,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
         public void Execute(EN13458DesignContext context)
         {
             var innerDiameter = context.Input.OuterDiameter;
-            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(
-                context.Input.OuterDiameter,
-                context.Input.ShellLength);
+            var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength, context.Input.OuterTankDiameter);
 
             double shellLength = context.Input.ShellLength;
 
@@ -335,7 +332,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var oneSectorWeld = sectorQty * innerDiameter * Math.PI;
             var oneHeadCircularWeld = Math.PI * innerDiameter;
 
-            var outerTankShellLength = shellLength + 500d;
+            var outerTankShellLength = EN13458OuterTankRules.GetOuterShellLength(innerDiameter, shellLength);
             var outerTankSectorQty = outerTankShellLength / sectorWidth;
             var outerTankSectorWeld = outerTankSectorQty * outerDiameter * Math.PI;
             var outerTankCircularWeld = Math.PI * outerDiameter;
@@ -375,7 +372,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var innerHeadPulDiameter = HeadPulDiameterCoefficient * innerDiameter;
             var innerHeadWeld = ((innerHeadPulDiameter / sourceLength) * (innerHeadPulDiameter / 1.15d) * 2d);
 
-            var outerShellLength = shellLength + 500d;
+            var outerShellLength = EN13458OuterTankRules.GetOuterShellLength(innerDiameter, shellLength);
             var outerSectionCount = outerShellLength / sourceLength;
             var outerCircumferenceWeld = (outerSectionCount * outerDiameter * Math.PI) + (Math.PI * outerDiameter);
             var outerHeadPulDiameter = HeadPulDiameterCoefficient * outerDiameter;
@@ -405,9 +402,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 Math.Round((headLength * 2d) + context.Input.ShellLength, 2);
 
             var outerDiameter =
-                EN13458OuterTankRules.GetOuterDiameter(
-                    context.Input.OuterDiameter,
-                    context.Input.ShellLength);
+                EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength, context.Input.OuterTankDiameter);
 
             var outerShellLength =
                 EN13458OuterTankRules.GetOuterShellLength(

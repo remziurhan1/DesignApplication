@@ -15,8 +15,13 @@
             <input asp-for="Name" class="form-control" />
         </div>
         <div class="col-md-4">
-            <label asp-for="OuterDiameter" class="form-label"></label>
+            <label asp-for="OuterDiameter" class="form-label">İç Tank Çapı (mm)</label>
             <input asp-for="OuterDiameter" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="OuterTankDiameter" class="form-label">Dış Tank Çapı (mm)</label>
+            <input asp-for="OuterTankDiameter" class="form-control" />
+            <small class="text-muted">Boş bırakılırsa EN13458 otomatik kuralı uygulanır.</small>
         </div>
         <div class="col-md-4">
             <label asp-for="ShellLength" class="form-label"></label>
