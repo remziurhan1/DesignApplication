@@ -46,10 +46,17 @@
     <hr />
     <h5>Malzeme Seçimi</h5>
     <div class="row g-3">
-        <div class="col-md-6"><label asp-for="ShellMaterialId" class="form-label">Gövde Malzemesi</label><select asp-for="ShellMaterialId" asp-items="ViewBag.Materials" class="form-select"></select></div>
-        <div class="col-md-6"><label asp-for="ShellMaterialFormId" class="form-label">Gövde Formu</label><select asp-for="ShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"></select></div>
-        <div class="col-md-6"><label asp-for="HeadMaterialId" class="form-label">Bombe Malzemesi</label><select asp-for="HeadMaterialId" asp-items="ViewBag.Materials" class="form-select"></select></div>
-        <div class="col-md-6"><label asp-for="HeadMaterialFormId" class="form-label">Bombe Formu</label><select asp-for="HeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"></select></div>
+        <div class="col-md-6"><label class="form-label">Gövde Malzeme Sınıfı</label><select id="ShellMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+        <div class="col-md-6"><label class="form-label">Bombe Malzeme Sınıfı</label><select id="HeadMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+
+        <div class="col-md-6"><label asp-for="ShellMaterialId" class="form-label">Gövde Malzemesi</label><select asp-for="ShellMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
+        <div class="col-md-6"><label asp-for="HeadMaterialId" class="form-label">Bombe Malzemesi</label><select asp-for="HeadMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
+
+        <div class="col-md-6"><label class="form-label">Gövde Form Tipi</label><select id="ShellMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+        <div class="col-md-6"><label class="form-label">Bombe Form Tipi</label><select id="HeadMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+
+        <div class="col-md-6"><label asp-for="ShellMaterialFormId" class="form-label">Gövde Formu</label><select asp-for="ShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
+        <div class="col-md-6"><label asp-for="HeadMaterialFormId" class="form-label">Bombe Formu</label><select asp-for="HeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
     </div>
 
     <div class="mt-4">
@@ -61,26 +68,69 @@
     <script>
         const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormsByMaterial));
         const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.StorageTypeDensities));
+        const materialsByGroup = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialsByGroup));
+        const formTypesByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaterialFormTypesByMaterial));
 
-        function bindMaterialForm(materialSelectId, formSelectId) {
+        function fillOptions(selectElement, options, placeholder = 'Seçiniz') {
+            if (!selectElement) return;
+            const current = selectElement.value;
+            selectElement.innerHTML = '';
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.text = placeholder;
+            selectElement.appendChild(defaultOption);
+
+            (options || []).forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.value;
+                opt.text = item.text;
+                selectElement.appendChild(opt);
+            });
+
+            if ([...selectElement.options].some(x => x.value === current)) {
+                selectElement.value = current;
+            }
+        }
+
+        function bindMaterialCascade(groupSelectId, materialSelectId, formTypeSelectId, formSelectId) {
+            const groupSelect = document.getElementById(groupSelectId);
             const materialSelect = document.getElementById(materialSelectId);
+            const formTypeSelect = document.getElementById(formTypeSelectId);
             const formSelect = document.getElementById(formSelectId);
-            if (!materialSelect || !formSelect) return;
-            const refill = () => {
-                const materialId = materialSelect.value;
-                const options = formsByMaterial[materialId] || [];
-                const current = formSelect.value;
-                formSelect.innerHTML = '';
-                options.forEach(item => {
-                    const opt = document.createElement('option');
-                    opt.value = item.value;
-                    opt.text = item.text;
-                    formSelect.appendChild(opt);
-                });
-                if ([...formSelect.options].some(x => x.value === current)) formSelect.value = current;
+            if (!groupSelect || !materialSelect || !formTypeSelect || !formSelect) return;
+
+            const refillMaterials = () => {
+                const selectedGroup = groupSelect.value;
+                const materialOptions = materialsByGroup[selectedGroup] || [];
+                fillOptions(materialSelect, materialOptions);
+                refillFormTypes();
             };
-            materialSelect.addEventListener('change', refill);
-            refill();
+
+            const refillFormTypes = () => {
+                const selectedMaterialId = materialSelect.value;
+                const types = formTypesByMaterial[selectedMaterialId] || [];
+                const options = types.map(type => ({ value: type, text: type }));
+                fillOptions(formTypeSelect, options);
+                refillForms();
+            };
+
+            const refillForms = () => {
+                const selectedMaterialId = materialSelect.value;
+                const selectedFormType = formTypeSelect.value;
+                const baseForms = formsByMaterial[selectedMaterialId] || [];
+                const filtered = selectedFormType
+                    ? baseForms.filter(x => x.formType === selectedFormType)
+                    : baseForms;
+
+                fillOptions(formSelect, filtered);
+            };
+
+            groupSelect.addEventListener('change', refillMaterials);
+            materialSelect.addEventListener('change', refillFormTypes);
+            formTypeSelect.addEventListener('change', refillForms);
+
+            refillMaterials();
         }
 
         function bindDensityMode() {
@@ -107,8 +157,8 @@
             updateDensity();
         }
 
-        bindMaterialForm('ShellMaterialId', 'ShellMaterialFormId');
-        bindMaterialForm('HeadMaterialId', 'HeadMaterialFormId');
+        bindMaterialCascade('ShellMaterialGroup', 'ShellMaterialId', 'ShellMaterialFormType', 'ShellMaterialFormId');
+        bindMaterialCascade('HeadMaterialGroup', 'HeadMaterialId', 'HeadMaterialFormType', 'HeadMaterialFormId');
         bindDensityMode();
     </script>
 }
