@@ -80,6 +80,19 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double GasNitrogenVolume { get; set; }
         public double LiquidNitrogenVolume { get; set; }
 
+        public double BucklingWaveNumber { get; set; }
+        public double ElasticBucklingPressureP1 { get; set; }
+        public double PlasticCollapsePressureP2 { get; set; }
+        public double DesignExternalPressurePv { get; set; }
+        public bool SupportRingRequired { get; set; }
+        public double SupportRingCriticalPressurePe { get; set; }
+        public double SupportRingStressX { get; set; }
+        public double SupportRingAllowableStress { get; set; }
+        public bool SupportRingAdequate { get; set; }
+        public double HeadCollapsePressure { get; set; }
+        public int RequiredProfileCount { get; set; }
+        public double ProfileDevelopedLength { get; set; }
+
         public double InnerDevelopedLength { get; set; }
         public double OuterDevelopedLength { get; set; }
         public string InnerSectorPlan1500 { get; set; } = string.Empty;

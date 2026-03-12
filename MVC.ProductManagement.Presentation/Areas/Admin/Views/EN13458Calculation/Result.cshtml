@@ -84,6 +84,18 @@
                         <tr><th>Perlit Ağırlığı (kg)</th><td>@Model.PerliteWeight</td></tr>
                         <tr><th>Gaz Azot Hacmi</th><td>@Model.GasNitrogenVolume</td></tr>
                         <tr><th>Sıvı Azot Hacmi</th><td>@Model.LiquidNitrogenVolume</td></tr>
+                        <tr><th>Burkulma Dalga Sayısı (n)</th><td>@Model.BucklingWaveNumber</td></tr>
+                        <tr><th>Elastik Burkulma Basıncı P1 (bar)</th><td>@Model.ElasticBucklingPressureP1</td></tr>
+                        <tr><th>Plastik Çökme Basıncı P2 (bar)</th><td>@Model.PlasticCollapsePressureP2</td></tr>
+                        <tr><th>Tasarım Dış Basıncı Pv (bar)</th><td>@Model.DesignExternalPressurePv</td></tr>
+                        <tr><th>Destek Ring Gerekli mi?</th><td>@(Model.SupportRingRequired ? "Evet" : "Hayır")</td></tr>
+                        <tr><th>Ring Elastik Kritik Basınç Pe (bar)</th><td>@Model.SupportRingCriticalPressurePe</td></tr>
+                        <tr><th>Ring Gerilme X (N/mm²)</th><td>@Model.SupportRingStressX</td></tr>
+                        <tr><th>Ring İzinli Gerilme (N/mm²)</th><td>@Model.SupportRingAllowableStress</td></tr>
+                        <tr><th>Ring Yeterlilik</th><td>@(Model.SupportRingAdequate ? "Yeterli" : "Yetersiz")</td></tr>
+                        <tr><th>Head Çökme Basıncı (bar)</th><td>@Model.HeadCollapsePressure</td></tr>
+                        <tr><th>Gerekli Profil Adedi</th><td>@Model.RequiredProfileCount</td></tr>
+                        <tr><th>Profil Açınım Uzunluğu (mm)</th><td>@Model.ProfileDevelopedLength</td></tr>
                         </tbody>
                     </table>
                 </div>

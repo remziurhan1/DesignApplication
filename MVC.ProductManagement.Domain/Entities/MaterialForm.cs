@@ -21,6 +21,9 @@ namespace MVC.ProductManagement.Domain.Entities
         public string? Notes { get; set; }
         public double UnitPrice { get; set; }
         public double? ColdStretchYieldStrength { get; set; }         // MPa (sadece plate/paslanmaz senaryoları için)
+        public double? SectionArea { get; set; }                      // mm² (profil kesit alanı)
+        public double? MomentOfInertia { get; set; }                  // mm4 (atalet momenti)
+        public double? SectionModulus { get; set; }                   // mm3 (mukavemet momenti)
 
         public virtual ICollection<YieldStrength> YieldStrengths { get; set; } = new List<YieldStrength>();
         public virtual ICollection<AllowableStress> AllowableStresses { get; set; } = new List<AllowableStress>();
