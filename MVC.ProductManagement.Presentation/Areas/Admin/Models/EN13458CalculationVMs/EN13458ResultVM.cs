@@ -9,6 +9,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public double OuterDiameter { get; set; }
+        public double OuterTankDiameter { get; set; }
         public double ShellLength { get; set; }
         public double Pressure { get; set; }
         public Guid StorageTypeId { get; set; }

@@ -8,6 +8,7 @@ namespace MVC.ProductManagement.Domain.Entities
         // === GİRİŞ VERİLERİ ===
         public string Name { get; set; }
         public double OuterDiameter { get; set; }            // mm
+        public double OuterTankDiameter { get; set; }        // mm
         public double ShellLength { get; set; }              // mm
         public double Pressure { get; set; }                 // bar
         public double LiquidDensity { get; set; }            // kg/m³
