@@ -10,6 +10,7 @@ using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVM
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -387,6 +388,22 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
                 .ToList();
 
+            ViewBag.MaterialGroups = materials
+                .Select(x => (x.Group ?? string.Empty).Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem(x, x))
+                .ToList();
+
+            ViewBag.MaterialsByGroup = materials
+                .Where(x => !string.IsNullOrWhiteSpace(x.Group))
+                .GroupBy(x => x.Group.Trim(), StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(x => new { value = x.Id.ToString(), text = x.Name }).ToList(),
+                    StringComparer.OrdinalIgnoreCase);
+
             ViewBag.MaterialFormsByMaterial = forms
                 .GroupBy(x => x.MaterialId)
                 .ToDictionary(
@@ -394,11 +411,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     g => g.Select(x => new
                     {
                         value = x.Id.ToString(),
-                        text = $"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]"
+                        text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]",
+                        formType = x.FormType.ToString()
                     }).ToList());
 
+            ViewBag.MaterialFormTypesByMaterial = forms
+                .GroupBy(x => x.MaterialId)
+                .ToDictionary(
+                    g => g.Key.ToString(),
+                    g => g.Select(x => x.FormType.ToString()).Distinct().OrderBy(x => x).ToList());
+
             ViewBag.MaterialForms = forms
-                .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]", x.Id.ToString()))
+                .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", x.Id.ToString()))
                 .ToList();
 
             var storageTypeList = storageTypes.Data ?? new System.Collections.Generic.List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
