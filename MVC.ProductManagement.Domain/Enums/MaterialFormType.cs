@@ -11,7 +11,6 @@ namespace MVC.ProductManagement.Domain.Enums
         Plate,
         Pipe,
         Forging,
-        Bar,
-        Profile
+        Bar
     }
 }

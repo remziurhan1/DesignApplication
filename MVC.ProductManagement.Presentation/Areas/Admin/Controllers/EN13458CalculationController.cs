@@ -76,19 +76,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldLength2000 = dto.WeldLength2000,
                 WeldLength2500 = dto.WeldLength2500,
                 WeldLength3000 = dto.WeldLength3000,
-                CorrosionAllowance = dto.CorrosionAllowance,
-                BucklingLength = dto.BucklingLength,
-                ElasticModulus = dto.ElasticModulus,
-                PoissonRatio = dto.PoissonRatio,
-                RoundnessErrorPercent = dto.RoundnessErrorPercent,
-                YieldFactorK = dto.YieldFactorK,
-                UseGeneralElasticFormula = dto.UseGeneralElasticFormula,
-                HasStiffener = dto.HasStiffener,
-                UseManualStiffenerValues = dto.UseManualStiffenerValues,
-                StiffenerMaterialId = dto.StiffenerMaterialId,
-                StiffenerMaterialFormId = dto.StiffenerMaterialFormId,
-                StiffenerInertia = dto.StiffenerInertia,
-                StiffenerArea = dto.StiffenerArea,
                 InnerShellMaterialId = dto.InnerShellMaterialId,
                 InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
                 InnerHeadMaterialId = dto.InnerHeadMaterialId,
@@ -112,22 +99,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = dto.DesignPressure,
                 TestPressure = dto.TestPressure,
                 StaticPressure = dto.StaticPressure,
-                EffectiveOuterThickness = dto.EffectiveOuterThickness,
-                DOverT = dto.DOverT,
-                LOverD = dto.LOverD,
-                DaOverLb = dto.DaOverLb,
-                ElasticBucklingPressure = dto.ElasticBucklingPressure,
-                PlasticDeformationPressure = dto.PlasticDeformationPressure,
-                AllowableExternalPressure = dto.AllowableExternalPressure,
-                ExternalDesignPressure = dto.ExternalDesignPressure,
-                ExternalPressureDesignOk = dto.ExternalPressureDesignOk,
-                FixedOutOfRoundnessPercent = dto.FixedOutOfRoundnessPercent,
-                FixedPoissonRatio = dto.FixedPoissonRatio,
-                FixedWeldCoefficient = dto.FixedWeldCoefficient,
-                RequiredStiffenerInertia = dto.RequiredStiffenerInertia,
-                RequiredStiffenerArea = dto.RequiredStiffenerArea,
-                StiffenerInertiaOk = dto.StiffenerInertiaOk,
-                StiffenerAreaOk = dto.StiffenerAreaOk,
                 InnerTankHeadPulDiameter = dto.InnerTankHeadPulDiameter,
                 OuterTankHeadPulDiameter = dto.OuterTankHeadPulDiameter,
                 InnerTankHeadWeight = dto.InnerTankHeadWeight,
@@ -183,16 +154,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 StorageTypeId = Guid.Empty,
                 LiquidDensity = 808,
                 TankOrientation = TankOrientation.Horizontal,
-                IsColdStretchApplied = false,
-                CorrosionAllowance = 0.3,
-                BucklingLength = 6000,
-                ElasticModulus = 210000,
-                PoissonRatio = 0.3,
-                RoundnessErrorPercent = 1.5,
-                YieldFactorK = 235,
-                UseGeneralElasticFormula = false,
-                HasStiffener = false,
-                UseManualStiffenerValues = false
+                IsColdStretchApplied = false
             });
         }
 
@@ -226,33 +188,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View(vm);
             }
 
-            var poissonRatio = 0.3d;
-            var roundnessError = 1.5d;
-
-            double? stiffenerInertia = vm.StiffenerInertia;
-            double? stiffenerArea = vm.StiffenerArea;
-
-            if (vm.HasStiffener && !vm.UseManualStiffenerValues)
-            {
-                if (!vm.StiffenerMaterialFormId.HasValue || vm.StiffenerMaterialFormId.Value == Guid.Empty)
-                {
-                    ModelState.AddModelError(nameof(vm.StiffenerMaterialFormId), "Stiffener için malzeme formu seçiniz.");
-                    await LoadLookupsAsync();
-                    return View(vm);
-                }
-
-                var stiffenerForm = await _materialFormService.GetByIdAsync(vm.StiffenerMaterialFormId.Value);
-                if (stiffenerForm == null)
-                {
-                    ModelState.AddModelError(nameof(vm.StiffenerMaterialFormId), "Seçilen stiffener malzeme formu bulunamadı.");
-                    await LoadLookupsAsync();
-                    return View(vm);
-                }
-
-                stiffenerInertia = stiffenerForm.MomentOfInertia;
-                stiffenerArea = stiffenerForm.SectionArea;
-            }
-
             var dto = new EN13458CalculateDTO
             {
                 Name = vm.Name,
@@ -264,19 +199,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 LiquidDensity = liquidDensity,
                 TankOrientation = vm.TankOrientation,
                 IsColdStretchApplied = vm.IsColdStretchApplied,
-                CorrosionAllowance = vm.CorrosionAllowance,
-                BucklingLength = vm.BucklingLength,
-                ElasticModulus = vm.ElasticModulus,
-                PoissonRatio = poissonRatio,
-                RoundnessErrorPercent = roundnessError,
-                YieldFactorK = vm.YieldFactorK,
-                UseGeneralElasticFormula = vm.UseGeneralElasticFormula,
-                HasStiffener = vm.HasStiffener,
-                UseManualStiffenerValues = vm.UseManualStiffenerValues,
-                StiffenerMaterialId = vm.StiffenerMaterialId,
-                StiffenerMaterialFormId = vm.StiffenerMaterialFormId,
-                StiffenerInertia = stiffenerInertia,
-                StiffenerArea = stiffenerArea,
                 InnerShellMaterialId = vm.InnerShellMaterialId,
                 InnerShellMaterialFormId = vm.InnerShellMaterialFormId,
                 InnerHeadMaterialId = vm.InnerHeadMaterialId,
@@ -321,19 +243,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldLength2000 = dto.WeldLength2000,
                 WeldLength2500 = dto.WeldLength2500,
                 WeldLength3000 = dto.WeldLength3000,
-                CorrosionAllowance = dto.CorrosionAllowance,
-                BucklingLength = dto.BucklingLength,
-                ElasticModulus = dto.ElasticModulus,
-                PoissonRatio = dto.PoissonRatio,
-                RoundnessErrorPercent = dto.RoundnessErrorPercent,
-                YieldFactorK = dto.YieldFactorK,
-                UseGeneralElasticFormula = dto.UseGeneralElasticFormula,
-                HasStiffener = dto.HasStiffener,
-                UseManualStiffenerValues = dto.UseManualStiffenerValues,
-                StiffenerMaterialId = dto.StiffenerMaterialId,
-                StiffenerMaterialFormId = dto.StiffenerMaterialFormId,
-                StiffenerInertia = dto.StiffenerInertia,
-                StiffenerArea = dto.StiffenerArea,
                 InnerShellMaterialId = dto.InnerShellMaterialId,
                 InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
                 InnerHeadMaterialId = dto.InnerHeadMaterialId,
@@ -357,22 +266,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = dto.DesignPressure,
                 TestPressure = dto.TestPressure,
                 StaticPressure = dto.StaticPressure,
-                EffectiveOuterThickness = dto.EffectiveOuterThickness,
-                DOverT = dto.DOverT,
-                LOverD = dto.LOverD,
-                DaOverLb = dto.DaOverLb,
-                ElasticBucklingPressure = dto.ElasticBucklingPressure,
-                PlasticDeformationPressure = dto.PlasticDeformationPressure,
-                AllowableExternalPressure = dto.AllowableExternalPressure,
-                ExternalDesignPressure = dto.ExternalDesignPressure,
-                ExternalPressureDesignOk = dto.ExternalPressureDesignOk,
-                FixedOutOfRoundnessPercent = dto.FixedOutOfRoundnessPercent,
-                FixedPoissonRatio = dto.FixedPoissonRatio,
-                FixedWeldCoefficient = dto.FixedWeldCoefficient,
-                RequiredStiffenerInertia = dto.RequiredStiffenerInertia,
-                RequiredStiffenerArea = dto.RequiredStiffenerArea,
-                StiffenerInertiaOk = dto.StiffenerInertiaOk,
-                StiffenerAreaOk = dto.StiffenerAreaOk,
                 InnerTankHeadPulDiameter = dto.InnerTankHeadPulDiameter,
                 OuterTankHeadPulDiameter = dto.OuterTankHeadPulDiameter,
                 InnerTankHeadWeight = dto.InnerTankHeadWeight,
@@ -416,19 +309,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldLength2000 = vm.WeldLength2000,
                 WeldLength2500 = vm.WeldLength2500,
                 WeldLength3000 = vm.WeldLength3000,
-                CorrosionAllowance = vm.CorrosionAllowance,
-                BucklingLength = vm.BucklingLength,
-                ElasticModulus = vm.ElasticModulus,
-                PoissonRatio = vm.PoissonRatio,
-                RoundnessErrorPercent = vm.RoundnessErrorPercent,
-                YieldFactorK = vm.YieldFactorK,
-                UseGeneralElasticFormula = vm.UseGeneralElasticFormula,
-                HasStiffener = vm.HasStiffener,
-                UseManualStiffenerValues = vm.UseManualStiffenerValues,
-                StiffenerMaterialId = vm.StiffenerMaterialId,
-                StiffenerMaterialFormId = vm.StiffenerMaterialFormId,
-                StiffenerInertia = vm.StiffenerInertia,
-                StiffenerArea = vm.StiffenerArea,
                 InnerShellMaterialId = vm.InnerShellMaterialId,
                 InnerShellMaterialFormId = vm.InnerShellMaterialFormId,
                 InnerHeadMaterialId = vm.InnerHeadMaterialId,
@@ -452,22 +332,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 DesignPressure = vm.DesignPressure,
                 TestPressure = vm.TestPressure,
                 StaticPressure = vm.StaticPressure,
-                EffectiveOuterThickness = vm.EffectiveOuterThickness,
-                DOverT = vm.DOverT,
-                LOverD = vm.LOverD,
-                DaOverLb = vm.DaOverLb,
-                ElasticBucklingPressure = vm.ElasticBucklingPressure,
-                PlasticDeformationPressure = vm.PlasticDeformationPressure,
-                AllowableExternalPressure = vm.AllowableExternalPressure,
-                ExternalDesignPressure = vm.ExternalDesignPressure,
-                ExternalPressureDesignOk = vm.ExternalPressureDesignOk,
-                FixedOutOfRoundnessPercent = vm.FixedOutOfRoundnessPercent,
-                FixedPoissonRatio = vm.FixedPoissonRatio,
-                FixedWeldCoefficient = vm.FixedWeldCoefficient,
-                RequiredStiffenerInertia = vm.RequiredStiffenerInertia,
-                RequiredStiffenerArea = vm.RequiredStiffenerArea,
-                StiffenerInertiaOk = vm.StiffenerInertiaOk,
-                StiffenerAreaOk = vm.StiffenerAreaOk,
                 InnerTankHeadPulDiameter = vm.InnerTankHeadPulDiameter,
                 OuterTankHeadPulDiameter = vm.OuterTankHeadPulDiameter,
                 InnerTankHeadWeight = vm.InnerTankHeadWeight,
@@ -528,12 +392,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             vm.OuterShellMaterialFormName = formMap.GetValueOrDefault(vm.OuterShellMaterialFormId, "-");
             vm.OuterHeadMaterialName = materialMap.GetValueOrDefault(vm.OuterHeadMaterialId, "-");
             vm.OuterHeadMaterialFormName = formMap.GetValueOrDefault(vm.OuterHeadMaterialFormId, "-");
-            vm.StiffenerMaterialName = vm.StiffenerMaterialId.HasValue
-                ? materialMap.GetValueOrDefault(vm.StiffenerMaterialId.Value, "-")
-                : "-";
-            vm.StiffenerMaterialFormName = vm.StiffenerMaterialFormId.HasValue
-                ? formMap.GetValueOrDefault(vm.StiffenerMaterialFormId.Value, "-")
-                : "-";
         }
 
         private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)
@@ -592,11 +450,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     g => g.Select(x => x.FormType.ToString()).Distinct().OrderBy(x => x).ToList());
 
             ViewBag.MaterialForms = forms
-                .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", x.Id.ToString()))
-                .ToList();
-
-            ViewBag.StiffenerMaterialForms = forms
-                .Where(x => x.FormType == MaterialFormType.Pipe || x.FormType == MaterialFormType.Profile)
                 .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", x.Id.ToString()))
                 .ToList();
 
