@@ -166,50 +166,6 @@
 </div>
 
 <div class="card shadow-sm mt-4">
-    <div class="card-header bg-light fw-semibold">Dış Tank Harici Basınç Sonuçları</div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped table-hover table-sm align-middle mb-0">
-                <tbody>
-                <tr><th class="w-50">Etkin Et Kalınlığı t</th><td>@Model.EffectiveOuterThickness</td></tr>
-                <tr><th>Da/t</th><td>@Model.DOverT</td></tr>
-                <tr><th>lb/Da</th><td>@Model.LOverD</td></tr>
-                <tr><th>Da/lb</th><td>@Model.DaOverLb</td></tr>
-                <tr><th>pe (Elastik Burkulma)</th><td>@Model.ElasticBucklingPressure</td></tr>
-                <tr><th>pp (Plastik Deformasyon)</th><td>@Model.PlasticDeformationPressure</td></tr>
-                <tr><th>p_allow</th><td>@Model.AllowableExternalPressure</td></tr>
-                <tr><th>p_design</th><td>@Model.ExternalDesignPressure</td></tr>
-                <tr><th>Stiffener Malzemesi</th><td>@Model.StiffenerMaterialName</td></tr>
-                <tr><th>Stiffener Formu</th><td>@Model.StiffenerMaterialFormName</td></tr>
-                <tr><th>Stiffener Manuel Giriş</th><td>@(Model.UseManualStiffenerValues ? "Evet" : "Hayır")</td></tr>
-                <tr><th>I (kullanılan)</th><td>@Model.StiffenerInertia</td></tr>
-                <tr><th>A (kullanılan)</th><td>@Model.StiffenerArea</td></tr>
-                <tr><th>I (gereken)</th><td>@Model.RequiredStiffenerInertia</td></tr>
-                <tr><th>A (gereken)</th><td>@Model.RequiredStiffenerArea</td></tr>
-                <tr><th>I Kontrol</th><td>@(Model.StiffenerInertiaOk.HasValue ? (Model.StiffenerInertiaOk.Value ? "Geçti" : "Kaldı") : "N/A")</td></tr>
-                <tr><th>A Kontrol</th><td>@(Model.StiffenerAreaOk.HasValue ? (Model.StiffenerAreaOk.Value ? "Geçti" : "Kaldı") : "N/A")</td></tr>
-                <tr><th>ν (sabit)</th><td>@Model.FixedPoissonRatio</td></tr>
-                <tr><th>u (%) (sabit)</th><td>@Model.FixedOutOfRoundnessPercent</td></tr>
-                <tr><th>welding u (sabit)</th><td>@Model.FixedWeldCoefficient</td></tr>
-                <tr><th>Uygunluk</th><td>@(Model.ExternalPressureDesignOk ? "Uygun" : "Uygun Değil")</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light fw-semibold">Dış Tank Harici Basınç Kuralları</div>
-    <div class="card-body">
-        <ul class="mb-0">
-            <li><code>p_allow = min(pe, pp)</code></li>
-            <li>Kontrol: <code>p_allow &gt;= p_atm (0.1 MPa)</code></li>
-            <li>Stiffener varsa I/A koşulları ayrıca sağlanmalıdır.</li>
-        </ul>
-    </div>
-</div>
-
-<div class="card shadow-sm mt-4">
     <div class="card-header bg-light fw-semibold">Ortak Sonuçlar</div>
     <div class="card-body p-0">
         <div class="table-responsive">

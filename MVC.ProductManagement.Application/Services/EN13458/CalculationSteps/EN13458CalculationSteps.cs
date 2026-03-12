@@ -22,96 +22,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 
     internal static class EN13458OuterTankRules
     {
-        internal sealed class OuterVesselExternalPressureResult
-        {
-            public double EffectiveThickness { get; set; }
-            public double DOverT { get; set; }
-            public double LOverD { get; set; }
-            public double DaOverLb { get; set; }
-            public double ElasticBucklingPressure { get; set; }
-            public double PlasticDeformationPressure { get; set; }
-            public double AllowableExternalPressure { get; set; }
-            public double ExternalDesignPressure { get; set; }
-            public bool ExternalPressureDesignOk { get; set; }
-            public double? RequiredStiffenerInertia { get; set; }
-            public double? RequiredStiffenerArea { get; set; }
-            public bool? StiffenerInertiaOk { get; set; }
-            public bool? StiffenerAreaOk { get; set; }
-        }
-
-        public static OuterVesselExternalPressureResult CalculateExternalPressure(
-            double da,
-            double s,
-            double c,
-            double lb,
-            double e,
-            double nu,
-            double k,
-            double u,
-            bool useGeneralElasticFormula,
-            bool hasStiffener,
-            double? stiffenerInertia,
-            double? stiffenerArea)
-        {
-            const double sk = 2d;
-            const double sp = 1.1d;
-            const double pDesign = 0.1d; // MPa
-
-            var t = Math.Max(s - c, 0.0001d);
-            var safeLb = Math.Max(lb, 0.0001d);
-            var safeK = Math.Max(k, 0.0001d);
-            var safeE = Math.Max(e, 0.0001d);
-            var daOverLb = da / safeLb;
-
-            var peFactor = useGeneralElasticFormula
-                ? (1d / (12d * (1d - (nu * nu))))
-                : (1d / 1.2d);
-
-            var pe = (safeE / sk) * Math.Pow(t / da, 3) * peFactor;
-
-            double pp;
-            if (daOverLb <= 5d)
-            {
-                pp = (safeK / sp)
-                     * (t / da)
-                     * (1d / (1d + (0.2d * daOverLb)))
-                     * (1d / (1d - (u / 100d)));
-            }
-            else
-            {
-                var pp1 = (safeK / sp) * (t / da);
-                var pp2 = (safeK / sp) * 30d * Math.Pow(t / safeLb, 2);
-                pp = Math.Min(pp1, pp2);
-            }
-
-            var pAllow = Math.Min(pe, pp);
-            var output = new OuterVesselExternalPressureResult
-            {
-                EffectiveThickness = Math.Round(t, 3),
-                DOverT = Math.Round(da / t, 3),
-                LOverD = Math.Round(lb / da, 3),
-                DaOverLb = Math.Round(daOverLb, 3),
-                ElasticBucklingPressure = Math.Round(pe, 5),
-                PlasticDeformationPressure = Math.Round(pp, 5),
-                AllowableExternalPressure = Math.Round(pAllow, 5),
-                ExternalDesignPressure = pDesign,
-                ExternalPressureDesignOk = pAllow >= pDesign
-            };
-
-            if (hasStiffener)
-            {
-                var iRequired = ((0.124d * pDesign * Math.Pow(da, 3) / safeE) * 10d * (da - t));
-                var aRequired = ((0.75d * pDesign * da / safeK) * 10d * (da - t));
-
-                output.RequiredStiffenerInertia = Math.Round(iRequired, 4);
-                output.RequiredStiffenerArea = Math.Round(aRequired, 4);
-                output.StiffenerInertiaOk = stiffenerInertia.HasValue && stiffenerInertia.Value >= iRequired;
-                output.StiffenerAreaOk = stiffenerArea.HasValue && stiffenerArea.Value >= aRequired;
-            }
-
-            return output;
-        }
-
         public static double GetEstimatedInnerVolume(double innerDiameter, double shellLength)
         {
             var cylindricalVolume = Math.PI / 4d * Math.Pow(innerDiameter, 2) * shellLength;
@@ -187,10 +97,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 
     public class ShellThicknessStep : IEN13458CalculationStep
     {
-        private const double FixedPoissonRatio = 0.3d;
-        private const double FixedOutOfRoundnessPercent = 1.5d;
-        private const double FixedWeldCoefficient = 0.3d;
-
         public void Execute(EN13458DesignContext context)
         {
             var d = context.Input.OuterDiameter;
@@ -210,67 +116,11 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 
             var outerDiameter = EN13458OuterTankRules.GetOuterDiameter(context.Input.OuterDiameter, context.Input.ShellLength, context.Input.OuterTankDiameter);
 
-            var thicknessOuter = EN13458OuterTankRules.DetermineTankThickness(outerDiameter);
+            var thicknessOuter =
+                EN13458OuterTankRules.DetermineTankThickness(outerDiameter);
 
-            var externalPressure = EN13458OuterTankRules.CalculateExternalPressure(
-                outerDiameter,
-                thicknessOuter.OuterTankShellThickness,
-                context.Input.CorrosionAllowance,
-                context.Input.BucklingLength,
-                context.Input.ElasticModulus,
-                FixedPoissonRatio,
-                context.Input.YieldFactorK,
-                FixedOutOfRoundnessPercent,
-                context.Input.UseGeneralElasticFormula,
-                context.Input.HasStiffener,
-                context.Input.StiffenerInertia,
-                context.Input.StiffenerArea);
-
-            if (!externalPressure.ExternalPressureDesignOk)
-            {
-                var trialThickness = thicknessOuter.OuterTankShellThickness;
-                for (var i = 0; i < 500 && !externalPressure.ExternalPressureDesignOk; i++)
-                {
-                    trialThickness += 1d;
-                    externalPressure = EN13458OuterTankRules.CalculateExternalPressure(
-                        outerDiameter,
-                        trialThickness,
-                        context.Input.CorrosionAllowance,
-                        context.Input.BucklingLength,
-                        context.Input.ElasticModulus,
-                        FixedPoissonRatio,
-                        context.Input.YieldFactorK,
-                        FixedOutOfRoundnessPercent,
-                        context.Input.UseGeneralElasticFormula,
-                        context.Input.HasStiffener,
-                        context.Input.StiffenerInertia,
-                        context.Input.StiffenerArea);
-                }
-
-                context.Result.OuterShellThickness = Math.Round(trialThickness, 2);
-            }
-            else
-            {
-                context.Result.OuterShellThickness = thicknessOuter.OuterTankShellThickness;
-            }
-
-            context.Result.RoundedOuterShellThickness = Math.Ceiling(context.Result.OuterShellThickness);
-            context.Result.EffectiveOuterThickness = externalPressure.EffectiveThickness;
-            context.Result.DOverT = externalPressure.DOverT;
-            context.Result.LOverD = externalPressure.LOverD;
-            context.Result.DaOverLb = externalPressure.DaOverLb;
-            context.Result.ElasticBucklingPressure = externalPressure.ElasticBucklingPressure;
-            context.Result.PlasticDeformationPressure = externalPressure.PlasticDeformationPressure;
-            context.Result.AllowableExternalPressure = externalPressure.AllowableExternalPressure;
-            context.Result.ExternalDesignPressure = externalPressure.ExternalDesignPressure;
-            context.Result.ExternalPressureDesignOk = externalPressure.ExternalPressureDesignOk;
-            context.Result.FixedOutOfRoundnessPercent = FixedOutOfRoundnessPercent;
-            context.Result.FixedPoissonRatio = FixedPoissonRatio;
-            context.Result.FixedWeldCoefficient = FixedWeldCoefficient;
-            context.Result.RequiredStiffenerInertia = externalPressure.RequiredStiffenerInertia;
-            context.Result.RequiredStiffenerArea = externalPressure.RequiredStiffenerArea;
-            context.Result.StiffenerInertiaOk = externalPressure.StiffenerInertiaOk;
-            context.Result.StiffenerAreaOk = externalPressure.StiffenerAreaOk;
+            context.Result.OuterShellThickness = thicknessOuter.OuterTankShellThickness;
+            context.Result.RoundedOuterShellThickness = thicknessOuter.OuterTankShellThickness;
         }
     }
 

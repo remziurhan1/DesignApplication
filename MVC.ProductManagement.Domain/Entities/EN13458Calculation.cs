@@ -17,20 +17,6 @@ namespace MVC.ProductManagement.Domain.Entities
         public double WeldLength2500 { get; set; }
         public double WeldLength3000 { get; set; }
 
-        public double CorrosionAllowance { get; set; }
-        public double BucklingLength { get; set; }
-        public double ElasticModulus { get; set; }
-        public double PoissonRatio { get; set; }
-        public double RoundnessErrorPercent { get; set; }
-        public double YieldFactorK { get; set; }
-        public bool UseGeneralElasticFormula { get; set; }
-        public bool HasStiffener { get; set; }
-        public bool UseManualStiffenerValues { get; set; }
-        public Guid? StiffenerMaterialId { get; set; }
-        public Guid? StiffenerMaterialFormId { get; set; }
-        public double? StiffenerInertia { get; set; }
-        public double? StiffenerArea { get; set; }
-
         // === MALZEME BAĞLANTILARI ===
         // İç Gövde
         public Guid InnerShellMaterialId { get; set; }
@@ -76,23 +62,6 @@ namespace MVC.ProductManagement.Domain.Entities
         public double DesignPressure { get; set; }
         public double TestPressure { get; set; }
         public double StaticPressure { get; set; }
-
-        public double EffectiveOuterThickness { get; set; }
-        public double DOverT { get; set; }
-        public double LOverD { get; set; }
-        public double DaOverLb { get; set; }
-        public double ElasticBucklingPressure { get; set; }
-        public double PlasticDeformationPressure { get; set; }
-        public double AllowableExternalPressure { get; set; }
-        public double ExternalDesignPressure { get; set; }
-        public bool ExternalPressureDesignOk { get; set; }
-        public double FixedOutOfRoundnessPercent { get; set; }
-        public double FixedPoissonRatio { get; set; }
-        public double FixedWeldCoefficient { get; set; }
-        public double? RequiredStiffenerInertia { get; set; }
-        public double? RequiredStiffenerArea { get; set; }
-        public bool? StiffenerInertiaOk { get; set; }
-        public bool? StiffenerAreaOk { get; set; }
 
         public double InnerTankHeadPulDiameter { get; set; }
         public double OuterTankHeadPulDiameter { get; set; }

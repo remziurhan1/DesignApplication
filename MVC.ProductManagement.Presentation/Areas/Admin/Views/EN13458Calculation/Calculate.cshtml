@@ -109,67 +109,6 @@
         </div>
     </div>
 
-    <hr class="my-4" />
-    <h5 class="mb-3">Dış Basınç (Outer Vessel) Girdileri</h5>
-    <div class="row g-3">
-        <div class="col-md-4">
-            <label asp-for="CorrosionAllowance" class="form-label">Korozyon/Tolerans Payı c (mm)</label>
-            <input asp-for="CorrosionAllowance" class="form-control" type="number" step="0.01" />
-        </div>
-        <div class="col-md-4">
-            <label asp-for="BucklingLength" class="form-label">Desteklenmemiş Boy lb (mm)</label>
-            <input asp-for="BucklingLength" class="form-control" type="number" step="0.01" />
-        </div>
-        <div class="col-md-4">
-            <label asp-for="ElasticModulus" class="form-label">Elastisite Modülü E (MPa)</label>
-            <input asp-for="ElasticModulus" class="form-control" type="number" step="1" readonly />
-            <small class="text-muted">Dış gövde malzemesine göre otomatik belirlenir.</small>
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Poisson Oranı ν (Sabit)</label>
-            <input class="form-control" value="0.3" readonly />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Dairesellik Hatası u (%) (Sabit)</label>
-            <input class="form-control" value="1.5" readonly />
-        </div>
-        <div class="col-md-4">
-            <label asp-for="YieldFactorK" class="form-label">K Katsayısı (MPa)</label>
-            <input asp-for="YieldFactorK" class="form-control" type="number" step="0.01" readonly />
-            <small class="text-muted">Dış gövde malzemesinin akma dayanımından otomatik alınır.</small>
-        </div>
-        <div class="col-md-4 form-check mt-4 ms-2">
-            <input asp-for="UseGeneralElasticFormula" class="form-check-input" />
-            <label asp-for="UseGeneralElasticFormula" class="form-check-label">Genel elastik denklem kullan</label>
-        </div>
-        <div class="col-md-4 form-check mt-4 ms-2">
-            <input asp-for="HasStiffener" class="form-check-input" />
-            <label asp-for="HasStiffener" class="form-check-label">Stiffener mevcut</label>
-        </div>
-        <div class="col-md-4 form-check mt-4 ms-2">
-            <input asp-for="UseManualStiffenerValues" class="form-check-input" />
-            <label asp-for="UseManualStiffenerValues" class="form-check-label">Stiffener değerlerini manuel gir</label>
-        </div>
-        <div class="col-md-4">
-            <label asp-for="StiffenerMaterialId" class="form-label">Stiffener Malzemesi</label>
-            <select asp-for="StiffenerMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select>
-        </div>
-        <div class="col-md-4">
-            <label asp-for="StiffenerMaterialFormId" class="form-label">Stiffener Malzeme Formu (Boru/Profil)</label>
-            <select asp-for="StiffenerMaterialFormId" asp-items="ViewBag.StiffenerMaterialForms" class="form-select"><option value="">Seçiniz</option></select>
-        </div>
-        <div class="col-md-4">
-            <label asp-for="StiffenerInertia" class="form-label">Stiffener Atalet Momenti I</label>
-            <input asp-for="StiffenerInertia" class="form-control" type="number" step="0.01" />
-            <small class="text-muted">Seçilen stiffener formundan otomatik gelir.</small>
-        </div>
-        <div class="col-md-4">
-            <label asp-for="StiffenerArea" class="form-label">Stiffener Kesit Alanı A</label>
-            <input asp-for="StiffenerArea" class="form-control" type="number" step="0.01" />
-            <small class="text-muted">Seçilen stiffener formundan otomatik gelir.</small>
-        </div>
-    </div>
-
     <div class="mt-4">
         <button type="submit" class="btn btn-primary">Hesapla</button>
         <a asp-action="Index" class="btn btn-secondary">Liste</a>
@@ -324,27 +263,5 @@
         bindMaterialCascade('OuterShellMaterialGroup', 'OuterShellMaterialId', 'OuterShellMaterialFormType', 'OuterShellMaterialFormId');
         bindMaterialCascade('OuterHeadMaterialGroup', 'OuterHeadMaterialId', 'OuterHeadMaterialFormType', 'OuterHeadMaterialFormId');
         bindStorageTypeDensity('StorageTypeId', 'LiquidDensity');
-        bindOuterShellMaterialProperties('OuterShellMaterialId', 'ElasticModulus', 'YieldFactorK');
-        bindStiffenerMaterialFormCascade('StiffenerMaterialId', 'StiffenerMaterialFormId');
-        bindStiffenerFormProperties('StiffenerMaterialFormId', 'StiffenerInertia', 'StiffenerArea');
-
-        const useManualStiffenerValues = document.getElementById('UseManualStiffenerValues');
-        const stiffenerInertia = document.getElementById('StiffenerInertia');
-        const stiffenerArea = document.getElementById('StiffenerArea');
-        const stiffenerMaterialId = document.getElementById('StiffenerMaterialId');
-        const stiffenerMaterialFormId = document.getElementById('StiffenerMaterialFormId');
-
-        function toggleStiffenerInputMode() {
-            const isManual = useManualStiffenerValues && useManualStiffenerValues.checked;
-            if (stiffenerInertia) stiffenerInertia.readOnly = !isManual;
-            if (stiffenerArea) stiffenerArea.readOnly = !isManual;
-            if (stiffenerMaterialId) stiffenerMaterialId.disabled = isManual;
-            if (stiffenerMaterialFormId) stiffenerMaterialFormId.disabled = isManual;
-        }
-
-        if (useManualStiffenerValues) {
-            useManualStiffenerValues.addEventListener('change', toggleStiffenerInputMode);
-            toggleStiffenerInputMode();
-        }
     </script>
 }
