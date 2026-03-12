@@ -8,9 +8,12 @@ using MVC.ProductManagement.Application.Services.StorageTypeServices;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -149,6 +152,188 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             await PopulateResultDisplayNamesAsync(vm);
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportDetailExcel(Guid id)
+        {
+            var dto = await _service.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            var vm = new EN13458DetailsVM
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                OuterDiameter = dto.OuterDiameter,
+                OuterTankDiameter = dto.OuterTankDiameter,
+                ShellLength = dto.ShellLength,
+                Pressure = dto.Pressure,
+                StorageTypeId = dto.StorageTypeId,
+                LiquidDensity = dto.LiquidDensity,
+                TankOrientation = dto.TankOrientation,
+                IsColdStretchApplied = dto.IsColdStretchApplied,
+                WeldLength1500 = dto.WeldLength1500,
+                WeldLength2000 = dto.WeldLength2000,
+                WeldLength2500 = dto.WeldLength2500,
+                WeldLength3000 = dto.WeldLength3000,
+                InnerShellMaterialId = dto.InnerShellMaterialId,
+                InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
+                InnerHeadMaterialId = dto.InnerHeadMaterialId,
+                InnerHeadMaterialFormId = dto.InnerHeadMaterialFormId,
+                OuterShellMaterialId = dto.OuterShellMaterialId,
+                OuterShellMaterialFormId = dto.OuterShellMaterialFormId,
+                OuterHeadMaterialId = dto.OuterHeadMaterialId,
+                OuterHeadMaterialFormId = dto.OuterHeadMaterialFormId,
+                InnerShellMaterialStrength = dto.InnerShellMaterialStrength,
+                InnerHeadMaterialStrength = dto.InnerHeadMaterialStrength,
+                OuterShellMaterialStrength = dto.OuterShellMaterialStrength,
+                OuterHeadMaterialStrength = dto.OuterHeadMaterialStrength,
+                InnerShellThickness = dto.InnerShellThickness,
+                InnerHeadThickness = dto.InnerHeadThickness,
+                OuterShellThickness = dto.OuterShellThickness,
+                OuterHeadThickness = dto.OuterHeadThickness,
+                RoundedInnerShellThickness = dto.RoundedInnerShellThickness,
+                RoundedInnerHeadThickness = dto.RoundedInnerHeadThickness,
+                RoundedOuterShellThickness = dto.RoundedOuterShellThickness,
+                RoundedOuterHeadThickness = dto.RoundedOuterHeadThickness,
+                DesignPressure = dto.DesignPressure,
+                TestPressure = dto.TestPressure,
+                StaticPressure = dto.StaticPressure,
+                InnerTankHeadPulDiameter = dto.InnerTankHeadPulDiameter,
+                OuterTankHeadPulDiameter = dto.OuterTankHeadPulDiameter,
+                InnerTankHeadWeight = dto.InnerTankHeadWeight,
+                OuterTankHeadWeight = dto.OuterTankHeadWeight,
+                InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength,
+                InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength,
+                OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength,
+                OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength,
+                TotalWeldLength = dto.TotalWeldLength,
+                TotalFilmCost = dto.TotalFilmCost,
+                InnerTankTotalLength = dto.InnerTankTotalLength,
+                OuterTankTotalLength = dto.OuterTankTotalLength,
+                InnerVolume = dto.InnerVolume,
+                OuterVolume = dto.OuterVolume,
+                InnerSurfaceArea = dto.InnerSurfaceArea,
+                OuterSurfaceArea = dto.OuterSurfaceArea,
+                InnerTankWeight = dto.InnerTankWeight,
+                OuterTankWeight = dto.OuterTankWeight,
+                PerliteVolume = dto.PerliteVolume,
+                PerliteWeight = dto.PerliteWeight,
+                GasNitrogenVolume = dto.GasNitrogenVolume,
+                LiquidNitrogenVolume = dto.LiquidNitrogenVolume,
+                BucklingWaveNumber = dto.BucklingWaveNumber,
+                ElasticBucklingPressureP1 = dto.ElasticBucklingPressureP1,
+                PlasticCollapsePressureP2 = dto.PlasticCollapsePressureP2,
+                DesignExternalPressurePv = dto.DesignExternalPressurePv,
+                SupportRingRequired = dto.SupportRingRequired,
+                SupportRingCriticalPressurePe = dto.SupportRingCriticalPressurePe,
+                SupportRingStressX = dto.SupportRingStressX,
+                SupportRingAllowableStress = dto.SupportRingAllowableStress,
+                SupportRingAdequate = dto.SupportRingAdequate,
+                HeadCollapsePressure = dto.HeadCollapsePressure,
+                RequiredProfileCount = dto.RequiredProfileCount,
+                ProfileDevelopedLength = dto.ProfileDevelopedLength,
+                InnerDevelopedLength = dto.InnerDevelopedLength,
+                OuterDevelopedLength = dto.OuterDevelopedLength,
+                InnerSectorPlan1500 = dto.InnerSectorPlan1500,
+                InnerSectorPlan2000 = dto.InnerSectorPlan2000,
+                InnerSectorPlan2500 = dto.InnerSectorPlan2500,
+                InnerSectorPlan3000 = dto.InnerSectorPlan3000,
+                OuterSectorPlan1500 = dto.OuterSectorPlan1500,
+                OuterSectorPlan2000 = dto.OuterSectorPlan2000,
+                OuterSectorPlan2500 = dto.OuterSectorPlan2500,
+                OuterSectorPlan3000 = dto.OuterSectorPlan3000
+            };
+
+            await PopulateResultDisplayNamesAsync(vm);
+
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+            using var package = new ExcelPackage();
+            var ws = package.Workbook.Worksheets.Add("EN13458 Detay");
+            var row = 1;
+
+            WriteSectionHeader(ws, row++, "EN13458 Hesap Özeti");
+            row = WriteKeyValues(ws, row, new List<(string Label, object Value)>
+            {
+                ("Ad", vm.Name),
+                ("İç Tank Çapı", vm.OuterDiameter),
+                ("Dış Tank Çapı", vm.OuterTankDiameter),
+                ("Silindirik Boy", vm.ShellLength),
+                ("Basınç", vm.Pressure),
+                ("Depolama Tipi", vm.StorageTypeName),
+                ("Sıvı Yoğunluğu", vm.LiquidDensity),
+                ("Tank Yönelimi", vm.TankOrientation),
+                ("Cold Stretch", vm.IsColdStretchApplied ? "Evet" : "Hayır")
+            });
+
+            row = WriteSection(ws, row, "İç Tank", new List<(string Label, object Value)>
+            {
+                ("Gövde Malzemesi", vm.InnerShellMaterialName),
+                ("Gövde Malzeme Formu", vm.InnerShellMaterialFormName),
+                ("Bombe Malzemesi", vm.InnerHeadMaterialName),
+                ("Bombe Malzeme Formu", vm.InnerHeadMaterialFormName),
+                ("Gövde Kalınlığı", vm.InnerShellThickness),
+                ("Bombe Kalınlığı", vm.InnerHeadThickness),
+                ("Yuvarlanmış Gövde Kalınlığı", vm.RoundedInnerShellThickness),
+                ("Yuvarlanmış Bombe Kalınlığı", vm.RoundedInnerHeadThickness),
+                ("Toplam Uzunluk", vm.InnerTankTotalLength),
+                ("İç Hacim", vm.InnerVolume),
+                ("İç Yüzey Alanı", vm.InnerSurfaceArea),
+                ("Tank Ağırlığı", vm.InnerTankWeight)
+            });
+
+            row = WriteSection(ws, row, "Dış Tank", new List<(string Label, object Value)>
+            {
+                ("Gövde Malzemesi", vm.OuterShellMaterialName),
+                ("Gövde Malzeme Formu", vm.OuterShellMaterialFormName),
+                ("Bombe Malzemesi", vm.OuterHeadMaterialName),
+                ("Bombe Malzeme Formu", vm.OuterHeadMaterialFormName),
+                ("Gövde Kalınlığı", vm.OuterShellThickness),
+                ("Bombe Kalınlığı", vm.OuterHeadThickness),
+                ("Yuvarlanmış Gövde Kalınlığı", vm.RoundedOuterShellThickness),
+                ("Yuvarlanmış Bombe Kalınlığı", vm.RoundedOuterHeadThickness),
+                ("Toplam Uzunluk", vm.OuterTankTotalLength),
+                ("Dış Hacim", vm.OuterVolume),
+                ("Dış Yüzey Alanı", vm.OuterSurfaceArea),
+                ("Tank Ağırlığı", vm.OuterTankWeight)
+            });
+
+            row = WriteSection(ws, row, "Ortak Sonuçlar", new List<(string Label, object Value)>
+            {
+                ("Design Pressure", vm.DesignPressure),
+                ("Test Pressure", vm.TestPressure),
+                ("Static Pressure", vm.StaticPressure),
+                ("Toplam Kaynak Uzunluğu", vm.TotalWeldLength),
+                ("Perlit Hacmi", vm.PerliteVolume),
+                ("Perlit Ağırlığı", vm.PerliteWeight),
+                ("Gaz Azot Hacmi", vm.GasNitrogenVolume),
+                ("Sıvı Azot Hacmi", vm.LiquidNitrogenVolume),
+                ("Head Collapse Pressure", vm.HeadCollapsePressure),
+                ("Gerekli Profil Sayısı", vm.RequiredProfileCount)
+            });
+
+            WriteSection(ws, row, "Sac Oryantasyonu", new List<(string Label, object Value)>
+            {
+                ("İç Tank Açınım", vm.InnerDevelopedLength),
+                ("Dış Tank Açınım", vm.OuterDevelopedLength),
+                ("İç 1500", vm.InnerSectorPlan1500),
+                ("İç 2000", vm.InnerSectorPlan2000),
+                ("İç 2500", vm.InnerSectorPlan2500),
+                ("İç 3000", vm.InnerSectorPlan3000),
+                ("Dış 1500", vm.OuterSectorPlan1500),
+                ("Dış 2000", vm.OuterSectorPlan2000),
+                ("Dış 2500", vm.OuterSectorPlan2500),
+                ("Dış 3000", vm.OuterSectorPlan3000)
+            });
+
+            ws.Cells[ws.Dimension.Address].AutoFitColumns();
+            var safeName = string.Concat((vm.Name ?? "EN13458").Where(ch => !Path.GetInvalidFileNameChars().Contains(ch)));
+            var fileName = $"EN13458_Detay_{safeName}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+
+            return File(
+                package.GetAsByteArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileName);
         }
 
         [HttpGet]
@@ -533,6 +718,36 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             ViewBag.StorageTypeDensities = storageTypeList
                 .ToDictionary(x => x.Id.ToString(), x => x.Density);
+        }
+
+        private static int WriteSection(ExcelWorksheet ws, int row, string title, IReadOnlyCollection<(string Label, object Value)> values)
+        {
+            WriteSectionHeader(ws, row++, title);
+            row = WriteKeyValues(ws, row, values);
+            return row;
+        }
+
+        private static void WriteSectionHeader(ExcelWorksheet ws, int row, string title)
+        {
+            ws.Cells[row, 1].Value = title;
+            ws.Cells[row, 1, row, 2].Merge = true;
+            ws.Cells[row, 1, row, 2].Style.Font.Bold = true;
+            ws.Cells[row, 1, row, 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            ws.Cells[row, 1, row, 2].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(226, 239, 218));
+        }
+
+        private static int WriteKeyValues(ExcelWorksheet ws, int row, IReadOnlyCollection<(string Label, object Value)> values)
+        {
+            foreach (var (label, value) in values)
+            {
+                ws.Cells[row, 1].Value = label;
+                ws.Cells[row, 1].Style.Font.Bold = true;
+                ws.Cells[row, 2].Value = value?.ToString();
+                row++;
+            }
+
+            row++;
+            return row;
         }
     }
 }
