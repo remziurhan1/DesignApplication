@@ -25,6 +25,33 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             _yieldStrengthService = yieldStrengthService;
         }
 
+
+        public async Task<double> ResolveElasticModulusAsync(Guid materialId)
+        {
+            var material = await _materialService.GetByIdAsync(materialId)
+                ?? throw new InvalidOperationException($"Material not found: {materialId}");
+
+            if (material.ElasticModulus.HasValue && material.ElasticModulus.Value > 0d)
+                return material.ElasticModulus.Value;
+
+            return 210000d;
+        }
+
+
+        public async Task<double> ResolveYieldFactorKAsync(Guid materialId)
+        {
+            var material = await _materialService.GetByIdAsync(materialId)
+                ?? throw new InvalidOperationException($"Material not found: {materialId}");
+
+            if (material.YieldFactorK.HasValue && material.YieldFactorK.Value > 0d)
+                return material.YieldFactorK.Value;
+
+            if (material.ColdStretchYieldStrength.HasValue && material.ColdStretchYieldStrength.Value > 0d)
+                return material.ColdStretchYieldStrength.Value;
+
+            return 235d;
+        }
+
         public async Task<double> ResolveEffectiveYieldStrengthAsync(Guid materialId, Guid materialFormId, bool isColdStretchApplied)
         {
             var form = await _materialFormService.GetByIdAsync(materialFormId)

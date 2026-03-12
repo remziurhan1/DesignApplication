@@ -209,11 +209,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterHeadMaterialFormId = vm.OuterHeadMaterialFormId
             };
 
-            var result = await _service.CalculateAsync(dto);
-            var resultVm = MapResultVm(result);
-            await PopulateResultDisplayNamesAsync(resultVm);
+            try
+            {
+                var result = await _service.CalculateAsync(dto);
+                var resultVm = MapResultVm(result);
+                await PopulateResultDisplayNamesAsync(resultVm);
 
-            return View("Result", resultVm);
+                return View("Result", resultVm);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                await LoadLookupsAsync();
+                return View(vm);
+            }
         }
 
         [HttpPost]
@@ -440,7 +449,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     {
                         value = x.Id.ToString(),
                         text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]",
-                        formType = x.FormType.ToString()
+                        formType = x.FormType.ToString(),
+                        momentOfInertia = x.MomentOfInertia,
+                        sectionArea = x.SectionArea
                     }).ToList());
 
             ViewBag.MaterialFormTypesByMaterial = forms
