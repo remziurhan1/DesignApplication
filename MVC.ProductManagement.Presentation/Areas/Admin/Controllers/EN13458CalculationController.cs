@@ -197,6 +197,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .OrderBy(x => x.GroupCode)
                 .ToList();
 
+            var selectedGroupDetails = new List<MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.StockCardGroupDetailDto>();
+            foreach (var groupId in vm.SelectedStockCardGroupIds)
+            {
+                var groupDetail = await _stockCardGroupService.GetGroupDetailAsync(groupId);
+                if (groupDetail != null)
+                {
+                    selectedGroupDetails.Add(groupDetail);
+                }
+            }
+
+            ViewBag.SelectedStockCardGroupDetails = selectedGroupDetails
+                .OrderBy(x => x.GroupCode)
+                .ToList();
+
             return View(vm);
         }
 
