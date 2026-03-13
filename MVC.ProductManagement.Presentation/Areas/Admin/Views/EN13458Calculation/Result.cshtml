@@ -2,6 +2,8 @@
 @using System.Globalization
 @{
     ViewData["Title"] = "EN13458 Result";
+    var totalProfileLengthMm = Model.RequiredProfileCount * Model.ProfileDevelopedLength;
+    var totalProfileLengthM = totalProfileLengthMm / 1000d;
 }
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
@@ -96,6 +98,8 @@
                         <tr><th>Head Çökme Basıncı (bar)</th><td>@Model.HeadCollapsePressure</td></tr>
                         <tr><th>Gerekli Profil Adedi</th><td>@Model.RequiredProfileCount</td></tr>
                         <tr><th>Profil Açınım Uzunluğu (mm)</th><td>@Model.ProfileDevelopedLength</td></tr>
+                        <tr><th>Toplam Profil Metrajı (m)</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                        <tr><th>Toplam Profil Boyu (mm)</th><td>@totalProfileLengthMm.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
                         </tbody>
                     </table>
                 </div>
