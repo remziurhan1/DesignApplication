@@ -105,6 +105,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             HeadCollapsePressure = dto.HeadCollapsePressure,
             RequiredProfileCount = dto.RequiredProfileCount,
             ProfileDevelopedLength = dto.ProfileDevelopedLength,
+            TotalProfileLength = dto.TotalProfileLength,
+            ProfileWeldLength = dto.ProfileWeldLength,
 
             InnerDevelopedLength = dto.InnerDevelopedLength,
             OuterDevelopedLength = dto.OuterDevelopedLength,
@@ -167,6 +169,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             HeadCollapsePressure = entity.HeadCollapsePressure,
             RequiredProfileCount = entity.RequiredProfileCount,
             ProfileDevelopedLength = entity.ProfileDevelopedLength,
+            TotalProfileLength = entity.TotalProfileLength,
+            ProfileWeldLength = entity.ProfileWeldLength,
 
             InnerDevelopedLength = entity.InnerDevelopedLength,
             OuterDevelopedLength = entity.OuterDevelopedLength,

@@ -93,6 +93,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double HeadCollapsePressure { get; set; }
         public int RequiredProfileCount { get; set; }
         public double ProfileDevelopedLength { get; set; }
+        public double TotalProfileLength { get; set; }
+        public double ProfileWeldLength { get; set; }
 
         public double InnerDevelopedLength { get; set; }
         public double OuterDevelopedLength { get; set; }
