@@ -150,6 +150,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             };
 
             await PopulateResultDisplayNamesAsync(vm);
+            ViewBag.CostTable = await _service.GetSavedMaterialCostTableAsync(dto.Id)
+                ?? await _service.BuildMaterialCostTableAsync(dto);
 
             return View(vm);
         }
@@ -416,6 +418,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 var result = await _service.CalculateAsync(dto);
                 var resultVm = MapResultVm(result);
                 await PopulateResultDisplayNamesAsync(resultVm);
+                ViewBag.CostTable = await _service.BuildMaterialCostTableAsync(result);
 
                 return View("Result", resultVm);
             }

@@ -1,5 +1,6 @@
 ﻿using MVC.ProductManagement.Domain.Core.BaseEntities;
 using System;
+using System.Collections.Generic;
 
 namespace MVC.ProductManagement.Domain.Entities
 {
@@ -116,6 +117,8 @@ namespace MVC.ProductManagement.Domain.Entities
         public string OuterSectorPlan2500 { get; set; } = string.Empty;
         public string OuterSectorPlan3000 { get; set; } = string.Empty;
 
+
+        public virtual ICollection<EN13458CostDetail> CostDetails { get; set; } = new List<EN13458CostDetail>();
         public Guid ProductTypeId { get; set; } // İlgili ProductType ID
         public virtual StorageType StorageService { get; set; } // İlgili ProductType
     }

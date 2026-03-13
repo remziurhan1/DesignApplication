@@ -233,6 +233,68 @@
     </div>
 </div>
 
+@{
+    var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
+}
+@if (costTable != null)
+{
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light fw-semibold">Maliyet Grupları</div>
+        <div class="card-body">
+            <div class="row g-3 mb-3">
+                @foreach (var group in costTable.GroupTotals)
+                {
+                    <div class="col-12 col-md-4">
+                        <div class="border rounded p-3 h-100">
+                            <div class="small text-muted">@group.CostGroupCode - @group.CostGroupName</div>
+                            <div class="fs-5 fw-semibold">@group.TotalCost.ToString("N2")</div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm table-striped align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>Grup</th>
+                        <th>Kalem</th>
+                        <th>Stok Kodu</th>
+                        <th>Malzeme</th>
+                        <th class="text-end">Miktar</th>
+                        <th>Birim</th>
+                        <th class="text-end">Birim Fiyat</th>
+                        <th class="text-end">Tutar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in costTable.Items)
+                    {
+                        <tr>
+                            <td>@item.CostGroupCode</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.StockCode</td>
+                            <td>@item.MaterialName</td>
+                            <td class="text-end">@item.Quantity.ToString("N2")</td>
+                            <td>@item.Unit</td>
+                            <td class="text-end">@item.UnitPrice.ToString("N2")</td>
+                            <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
+                        </tr>
+                    }
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="7" class="text-end">Genel Toplam</th>
+                        <th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
 <div class="mt-4 mb-5 pb-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
     <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-success px-4">
         <i class="bi bi-file-earmark-excel me-1"></i>Excel Çıktı
