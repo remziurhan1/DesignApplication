@@ -247,7 +247,7 @@
                     <tbody>
                     @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                     {
-                        var selectedGroup = selectedGroups.FirstOrDefault(x => x.GroupCode == groupItems.Key.CostGroupCode);
+                        var selectedGroup = FindMatchingSelectedGroup(selectedGroups, groupItems.Key.CostGroupCode, groupItems.Key.CostGroupName, groupItems.Select(x => x.ItemName));
 
                         <tr class="table-primary">
                             <td colspan="8" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
@@ -283,6 +283,13 @@
                                         </table>
                                     </div>
                                 </td>
+                            </tr>
+                        }
+
+                        @if (selectedGroup == null && groupItems.Key.CostGroupCode.StartsWith("GRP-", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <tr class="table-warning">
+                                <td colspan="8" class="small">Bu grup için alt kırılım bulunamadı (grup satırları eşleşmedi).</td>
                             </tr>
                         }
 
@@ -328,6 +335,60 @@
 
 
 @functions {
+    private static StockCardGroupDetailDto? FindMatchingSelectedGroup(
+        IReadOnlyList<StockCardGroupDetailDto> selectedGroups,
+        string? costGroupCode,
+        string? costGroupName,
+        IEnumerable<string>? itemNames)
+    {
+        if (selectedGroups == null || selectedGroups.Count == 0)
+        {
+            return null;
+        }
+
+        var candidates = new List<string>();
+        if (!string.IsNullOrWhiteSpace(costGroupCode)) candidates.Add(costGroupCode);
+        if (!string.IsNullOrWhiteSpace(costGroupCode) && !string.IsNullOrWhiteSpace(costGroupName))
+            candidates.Add($"{costGroupCode} - {costGroupName}");
+
+        if (itemNames != null)
+        {
+            candidates.AddRange(itemNames.Where(x => !string.IsNullOrWhiteSpace(x)));
+        }
+
+        foreach (var group in selectedGroups)
+        {
+            var groupCode = NormalizeGroupToken(group.GroupCode);
+            var groupTitle = NormalizeGroupToken($"{group.GroupCode} - {group.Name}");
+
+            foreach (var candidate in candidates)
+            {
+                var token = NormalizeGroupToken(candidate);
+                if (string.IsNullOrWhiteSpace(token)) continue;
+
+                if (token == groupCode || token == groupTitle || token.Contains(groupCode))
+                {
+                    return group;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static string NormalizeGroupToken(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        return value
+            .Replace("Grup Maliyeti", string.Empty, StringComparison.OrdinalIgnoreCase)
+            .Trim()
+            .ToUpperInvariant();
+    }
+
     private static int GetPieceCount(string? cutList)
     {
         if (string.IsNullOrWhiteSpace(cutList)) return 0;
