@@ -178,6 +178,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 });
             }
 
+            var groupRows = await BuildGroupCostRowsAsync();
+            table.Items.AddRange(groupRows);
+
             table.TotalMaterialCost = table.Items.Sum(x => x.ItemCost);
             table.TotalFilmCost = result.TotalFilmCost;
             table.GrandTotalCost = table.TotalMaterialCost;
@@ -261,6 +264,34 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 UnitPrice = unitPrice,
                 ItemCost = itemCost
             };
+        }
+
+        private async Task<List<EN13458MaterialCostRowDTO>> BuildGroupCostRowsAsync()
+        {
+            var groups = await _context.StockCardGroups
+                .AsNoTracking()
+                .Where(g => g.Status != Status.Deleted && g.TotalAmount > 0)
+                .OrderBy(g => g.GroupCode)
+                .Select(g => new
+                {
+                    g.GroupCode,
+                    g.Name,
+                    g.TotalAmount
+                })
+                .ToListAsync();
+
+            return groups.Select(group => new EN13458MaterialCostRowDTO
+            {
+                CostGroupCode = group.GroupCode,
+                CostGroupName = group.Name,
+                ItemName = $"{group.GroupCode} Grup Maliyeti",
+                MaterialName = "Grup Toplamı",
+                FormType = "Grup",
+                Quantity = 1,
+                Unit = "lot",
+                UnitPrice = (double)group.TotalAmount,
+                ItemCost = (double)group.TotalAmount
+            }).ToList();
         }
 
         private async Task<double> ResolveActiveUnitPriceByStockCodeAsync(string stockCode)
