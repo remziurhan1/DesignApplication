@@ -1,8 +1,17 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM
 @using System.Globalization
+@using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
 @{
     ViewData["Title"] = "EN13458 Details";
 }
+
+
+<style>
+    .section-title { letter-spacing: .04em; font-size: .78rem; }
+    .detail-table th { width: 52%; color: #5b6472; }
+    .summary-chip { border-left: 4px solid #0d6efd; background: #f8fbff; }
+    .group-card { border: 1px solid #dbe7ff; background: #f9fbff; }
+</style>
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <h2 class="mb-0">EN13458 Detay</h2>
@@ -83,7 +92,7 @@
             <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">İç Tank</div>
             <div class="card-body">
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Malzeme</h6>
-                <table class="table table-sm table-striped align-middle mb-3">
+                <table class="table table-sm table-striped align-middle mb-3 detail-table">
                     <tbody>
                     <tr><th class="w-50">Gövde Malzemesi</th><td>@Model.InnerShellMaterialName</td></tr>
                     <tr><th>Gövde Malzeme Formu</th><td>@Model.InnerShellMaterialFormName</td></tr>
@@ -95,7 +104,7 @@
                 </table>
 
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Kalınlık ve Uzunluk</h6>
-                <table class="table table-sm table-striped align-middle mb-3">
+                <table class="table table-sm table-striped align-middle mb-3 detail-table">
                     <tbody>
                     <tr><th class="w-50">Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
                     <tr><th>Bombe Kalınlığı</th><td>@Model.InnerHeadThickness</td></tr>
@@ -107,7 +116,7 @@
                 </table>
 
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Kaynak, Hacim ve Ağırlık</h6>
-                <table class="table table-sm table-striped align-middle mb-0">
+                <table class="table table-sm table-striped align-middle mb-0 detail-table">
                     <tbody>
                     <tr><th class="w-50">Bombe Kaynak Uzunluğu</th><td>@Model.InnerTankHeadWeldLength</td></tr>
                     <tr><th>Çevre Kaynak Uzunluğu</th><td>@Model.InnerTankCircumferenceWeldLength</td></tr>
@@ -126,7 +135,7 @@
             <div class="card-header bg-secondary-subtle text-secondary-emphasis fw-semibold">Dış Tank</div>
             <div class="card-body">
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Malzeme</h6>
-                <table class="table table-sm table-striped align-middle mb-3">
+                <table class="table table-sm table-striped align-middle mb-3 detail-table">
                     <tbody>
                     <tr><th class="w-50">Gövde Malzemesi</th><td>@Model.OuterShellMaterialName</td></tr>
                     <tr><th>Gövde Malzeme Formu</th><td>@Model.OuterShellMaterialFormName</td></tr>
@@ -138,7 +147,7 @@
                 </table>
 
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Kalınlık ve Uzunluk</h6>
-                <table class="table table-sm table-striped align-middle mb-3">
+                <table class="table table-sm table-striped align-middle mb-3 detail-table">
                     <tbody>
                     <tr><th class="w-50">Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
                     <tr><th>Bombe Kalınlığı</th><td>@Model.OuterHeadThickness</td></tr>
@@ -150,7 +159,7 @@
                 </table>
 
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Kaynak, Hacim ve Ağırlık</h6>
-                <table class="table table-sm table-striped align-middle mb-0">
+                <table class="table table-sm table-striped align-middle mb-0 detail-table">
                     <tbody>
                     <tr><th class="w-50">Bombe Kaynak Uzunluğu</th><td>@Model.OuterTankHeadWeldLength</td></tr>
                     <tr><th>Çevre Kaynak Uzunluğu</th><td>@Model.OuterTankCircumferenceWeldLength</td></tr>
@@ -199,14 +208,15 @@
                         <th>Sektör Genişliği</th>
                         <th>Parça Adedi</th>
                         <th>Sac Açınımı</th>
+                        <th>Kaynak Metrajı</th>
                         <th>Kesim Listesi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan1500</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2000</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2500</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan3000</td></tr>
+                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan1500)</td></tr>
+                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan2000)</td></tr>
+                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan2500)</td></tr>
+                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan3000)</td></tr>
                 </tbody>
             </table>
         </div>
@@ -219,19 +229,48 @@
                         <th>Sektör Genişliği</th>
                         <th>Parça Adedi</th>
                         <th>Sac Açınımı</th>
+                        <th>Kaynak Metrajı</th>
                         <th>Kesim Listesi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan1500</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2000</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2500</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan3000</td></tr>
+                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan1500)</td></tr>
+                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan2000)</td></tr>
+                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan2500)</td></tr>
+                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan3000)</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+@{
+    var selectedGroups = ViewBag.SelectedStockCardGroups as IReadOnlyList<StockCardGroupListItemDto> ?? new List<StockCardGroupListItemDto>();
+}
+@if (selectedGroups.Any())
+{
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light fw-semibold">Seçilen Grup İçerikleri</div>
+        <div class="card-body">
+            <div class="row g-3">
+                @foreach (var selectedGroup in selectedGroups)
+                {
+                    <div class="col-12 col-lg-6">
+                        <div class="group-card rounded p-3 h-100">
+                            <div class="d-flex justify-content-between gap-2 align-items-start">
+                                <div>
+                                    <div class="fw-semibold">@selectedGroup.GroupCode - @selectedGroup.Name</div>
+                                    <div class="small text-muted">İçerik adedi: @selectedGroup.ItemCount</div>
+                                </div>
+                                <span class="badge text-bg-primary">@selectedGroup.TotalAmount.ToString("N2") @selectedGroup.CurrencyCode</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
 
 @{
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
@@ -268,18 +307,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in costTable.Items)
+                    @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                     {
-                        <tr>
-                            <td>@item.CostGroupCode</td>
-                            <td>@item.ItemName</td>
-                            <td>@item.StockCode</td>
-                            <td>@item.MaterialName</td>
-                            <td class="text-end">@item.Quantity.ToString("N2")</td>
-                            <td>@item.Unit</td>
-                            <td class="text-end">@item.UnitPrice.ToString("N2")</td>
-                            <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
+                        <tr class="table-primary">
+                            <td colspan="8" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
                         </tr>
+                        @foreach (var item in groupItems)
+                        {
+                            <tr>
+                                <td>@item.CostGroupCode</td>
+                                <td>@item.ItemName</td>
+                                <td>@item.StockCode</td>
+                                <td>@item.MaterialName</td>
+                                <td class="text-end">@item.Quantity.ToString("N2")</td>
+                                <td>@item.Unit</td>
+                                <td class="text-end">@item.UnitPrice.ToString("N2")</td>
+                                <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
+                            </tr>
+                        }
                     }
                     </tbody>
                     <tfoot>
@@ -313,5 +358,21 @@
     {
         if (string.IsNullOrWhiteSpace(cutList)) return 0;
         return cutList.Split(" + ", StringSplitOptions.RemoveEmptyEntries).Length;
+    }
+
+    private static string FormatCutList(string? cutList)
+    {
+        if (string.IsNullOrWhiteSpace(cutList))
+        {
+            return "-";
+        }
+
+        var grouped = cutList
+            .Split(" + ", StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x.Trim())
+            .GroupBy(x => x)
+            .Select(x => $"{x.Count()} adet {x.Key.Replace(" x ", "x")}");
+
+        return string.Join(" + ", grouped);
     }
 }
