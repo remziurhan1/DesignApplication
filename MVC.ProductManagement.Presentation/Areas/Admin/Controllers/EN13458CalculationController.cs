@@ -140,6 +140,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 HeadCollapsePressure = dto.HeadCollapsePressure,
                 RequiredProfileCount = dto.RequiredProfileCount,
                 ProfileDevelopedLength = dto.ProfileDevelopedLength,
+                TotalProfileLength = dto.TotalProfileLength,
+                ProfileWeldLength = dto.ProfileWeldLength,
 
                 InnerDevelopedLength = dto.InnerDevelopedLength,
                 OuterDevelopedLength = dto.OuterDevelopedLength,
@@ -280,6 +282,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 HeadCollapsePressure = dto.HeadCollapsePressure,
                 RequiredProfileCount = dto.RequiredProfileCount,
                 ProfileDevelopedLength = dto.ProfileDevelopedLength,
+                TotalProfileLength = dto.TotalProfileLength,
+                ProfileWeldLength = dto.ProfileWeldLength,
                 InnerDevelopedLength = dto.InnerDevelopedLength,
                 OuterDevelopedLength = dto.OuterDevelopedLength,
                 InnerSectorPlan1500 = dto.InnerSectorPlan1500,
@@ -356,7 +360,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ("Gaz Azot Hacmi", vm.GasNitrogenVolume),
                 ("Sıvı Azot Hacmi", vm.LiquidNitrogenVolume),
                 ("Head Collapse Pressure", vm.HeadCollapsePressure),
-                ("Gerekli Profil Sayısı", vm.RequiredProfileCount)
+                ("Gerekli Profil Sayısı", vm.RequiredProfileCount),
+                ("Toplam Profil Boyu (mm)", vm.TotalProfileLength),
+                ("Profil Kaynak Metrajı (mm)", vm.ProfileWeldLength)
             });
 
             WriteSection(ws, row, "Sac Oryantasyonu", new List<(string Label, object Value)>
@@ -561,6 +567,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 HeadCollapsePressure = dto.HeadCollapsePressure,
                 RequiredProfileCount = dto.RequiredProfileCount,
                 ProfileDevelopedLength = dto.ProfileDevelopedLength,
+                TotalProfileLength = dto.TotalProfileLength,
+                ProfileWeldLength = dto.ProfileWeldLength,
                 InnerDevelopedLength = dto.InnerDevelopedLength,
                 OuterDevelopedLength = dto.OuterDevelopedLength,
                 InnerSectorPlan1500 = dto.InnerSectorPlan1500,
@@ -652,6 +660,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 HeadCollapsePressure = vm.HeadCollapsePressure,
                 RequiredProfileCount = vm.RequiredProfileCount,
                 ProfileDevelopedLength = vm.ProfileDevelopedLength,
+                TotalProfileLength = vm.TotalProfileLength,
+                ProfileWeldLength = vm.ProfileWeldLength,
 
                 InnerDevelopedLength = vm.InnerDevelopedLength,
                 OuterDevelopedLength = vm.OuterDevelopedLength,

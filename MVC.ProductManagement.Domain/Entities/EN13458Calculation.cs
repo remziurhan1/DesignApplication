@@ -102,6 +102,8 @@ namespace MVC.ProductManagement.Domain.Entities
         public double HeadCollapsePressure { get; set; }
         public int RequiredProfileCount { get; set; }
         public double ProfileDevelopedLength { get; set; }
+        public double TotalProfileLength { get; set; }
+        public double ProfileWeldLength { get; set; }
 
         // === SAC ORYANTASYONU / AÇINIM ÇIKTILARI ===
         public double InnerDevelopedLength { get; set; }

@@ -2,7 +2,7 @@
 @using System.Globalization
 @{
     ViewData["Title"] = "EN13458 Result";
-    var totalProfileLengthMm = Model.RequiredProfileCount * Model.ProfileDevelopedLength;
+    var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
 }
 
@@ -100,6 +100,7 @@
                         <tr><th>Profil Açınım Uzunluğu (mm)</th><td>@Model.ProfileDevelopedLength</td></tr>
                         <tr><th>Toplam Profil Metrajı (m)</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
                         <tr><th>Toplam Profil Boyu (mm)</th><td>@totalProfileLengthMm.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                        <tr><th>Profil Kaynak Metrajı (mm)</th><td>@Model.ProfileWeldLength.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
                         </tbody>
                     </table>
                 </div>

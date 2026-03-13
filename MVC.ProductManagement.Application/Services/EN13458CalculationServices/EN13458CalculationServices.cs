@@ -23,6 +23,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string GasNitrogenStockCode = "ZA001871";
         private const string LiquidNitrogenStockCode = "ZA000216";
         private const string PerliteStockCode = "ZA000464";
+        private const string ProfileWeldStockCode = "";
 
         public EN13458CalculationServices(
             IMaterialRepository materialRepository,
@@ -184,6 +185,12 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 table.Items.Add(profileRow);
             }
 
+            var profileWeldRow = await BuildProfileWeldCostRowAsync(result);
+            if (profileWeldRow is not null)
+            {
+                table.Items.Add(profileWeldRow);
+            }
+
             var groupRows = await BuildGroupCostRowsAsync(result.SelectedStockCardGroupIds);
             table.Items.AddRange(groupRows);
 
@@ -288,7 +295,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             }
 
             const double defaultProfileAreaMm2 = 444d; // 40x40x3 profil
-            var totalLengthMm = result.RequiredProfileCount * result.ProfileDevelopedLength;
+            var totalLengthMm = result.TotalProfileLength > 0 ? result.TotalProfileLength : (result.RequiredProfileCount * result.ProfileDevelopedLength);
             var totalLengthM = totalLengthMm / 1000d;
             var volumeMm3 = defaultProfileAreaMm2 * totalLengthMm;
             var weightKg = volumeMm3 * 1e-9 * material.Density;
@@ -309,6 +316,32 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 UnitPrice = form.UnitPrice,
                 Density = material.Density,
                 TheoreticalWeight = Math.Round(weightKg, 2),
+                ItemCost = itemCost
+            };
+        }
+
+        private async Task<EN13458MaterialCostRowDTO?> BuildProfileWeldCostRowAsync(EN13458ResultDTO result)
+        {
+            if (result.ProfileWeldLength <= 0)
+            {
+                return null;
+            }
+
+            var quantityMeters = result.ProfileWeldLength / 1000d;
+            var unitPrice = await ResolveActiveUnitPriceByStockCodeAsync(ProfileWeldStockCode);
+            var itemCost = quantityMeters * unitPrice;
+
+            return new EN13458MaterialCostRowDTO
+            {
+                CostGroupCode = "WELD",
+                CostGroupName = "Kaynak Maliyeti",
+                ItemName = "Profil Kaynak Metrajı",
+                StockCode = ProfileWeldStockCode,
+                MaterialName = "Profil Kaynağı",
+                FormType = "Hizmet",
+                Quantity = Math.Round(quantityMeters, 2),
+                Unit = "m",
+                UnitPrice = unitPrice,
                 ItemCost = itemCost
             };
         }

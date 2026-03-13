@@ -489,7 +489,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             context.Result.HeadCollapsePressure = Math.Round(headCollapsePressureBar, 4);
             context.Result.RequiredProfileCount = profileCount;
             context.Result.ProfileDevelopedLength = Math.Round(profileDevelopedLength, 2);
-            context.Result.TotalWeldLength = Math.Round(context.Result.TotalWeldLength + profileWeldLength, 2);
+            context.Result.TotalProfileLength = Math.Round(totalProfileLength, 2);
+            context.Result.ProfileWeldLength = Math.Round(profileWeldLength, 2);
         }
     }
 
