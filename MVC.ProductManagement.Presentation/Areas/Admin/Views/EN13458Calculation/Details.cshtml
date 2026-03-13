@@ -1,8 +1,17 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM
 @using System.Globalization
+@using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
 @{
     ViewData["Title"] = "EN13458 Details";
 }
+
+
+<style>
+    .section-title { letter-spacing: .04em; font-size: .78rem; }
+    .detail-table th { width: 52%; color: #5b6472; }
+    .input-table th { width: 20%; background: #f8f9fa; color: #5b6472; }
+    .group-card { border: 1px solid #dbe7ff; background: #f9fbff; }
+</style>
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <h2 class="mb-0">EN13458 Detay</h2>
@@ -11,79 +20,41 @@
 
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-light fw-semibold">Giriş Verileri</div>
-    <div class="card-body">
-        <div class="row g-3 row-cols-1 row-cols-md-2 row-cols-xl-4">
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Ad</div>
-                    <div class="fw-semibold">@Model.Name</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">İç Tank Çapı</div>
-                    <div class="fw-semibold">@Model.OuterDiameter</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Dış Tank Çapı</div>
-                    <div class="fw-semibold">@Model.OuterTankDiameter</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Silindirik Boy</div>
-                    <div class="fw-semibold">@Model.ShellLength</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Basınç</div>
-                    <div class="fw-semibold">@Model.Pressure</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Depolanacak Ürün</div>
-                    <div class="fw-semibold">@Model.StorageTypeName</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Sıvı Yoğunluğu</div>
-                    <div class="fw-semibold">@Model.LiquidDensity</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Kaynak Boyları</div>
-                    <div class="fw-semibold">1500: @Model.WeldLength1500 | 2000: @Model.WeldLength2000 | 2500: @Model.WeldLength2500 | 3000: @Model.WeldLength3000</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Tank Yönelimi</div>
-                    <div class="fw-semibold">@Model.TankOrientation</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-3 h-100 bg-body-tertiary">
-                    <div class="small text-muted mb-1">Cold Stretch</div>
-                    <div class="fw-semibold">@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</div>
-                </div>
-            </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm align-middle mb-0 input-table">
+                <tbody>
+                    <tr>
+                        <th>Ad</th><td>@Model.Name</td>
+                        <th>İç Tank Çapı</th><td>@Model.OuterDiameter</td>
+                        <th>Dış Tank Çapı</th><td>@Model.OuterTankDiameter</td>
+                    </tr>
+                    <tr>
+                        <th>Silindirik Boy</th><td>@Model.ShellLength</td>
+                        <th>Basınç</th><td>@Model.Pressure</td>
+                        <th>Depolanacak Ürün</th><td>@Model.StorageTypeName</td>
+                    </tr>
+                    <tr>
+                        <th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td>
+                        <th>Tank Yönelimi</th><td>@Model.TankOrientation</td>
+                        <th>Cold Stretch</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td>
+                    </tr>
+                    <tr>
+                        <th>Kaynak Metrajları</th>
+                        <td colspan="5">1500: @Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m | 2000: @Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m | 2500: @Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m | 3000: @Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-
 <div class="row g-4">
     <div class="col-12 col-xxl-6">
         <div class="card shadow-sm h-100 border-primary-subtle">
             <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">İç Tank</div>
             <div class="card-body">
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Malzeme</h6>
-                <table class="table table-sm table-striped align-middle mb-3">
+                <table class="table table-sm table-striped align-middle mb-3 detail-table">
                     <tbody>
                     <tr><th class="w-50">Gövde Malzemesi</th><td>@Model.InnerShellMaterialName</td></tr>
                     <tr><th>Gövde Malzeme Formu</th><td>@Model.InnerShellMaterialFormName</td></tr>
@@ -95,7 +66,7 @@
                 </table>
 
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Kalınlık ve Uzunluk</h6>
-                <table class="table table-sm table-striped align-middle mb-3">
+                <table class="table table-sm table-striped align-middle mb-3 detail-table">
                     <tbody>
                     <tr><th class="w-50">Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
                     <tr><th>Bombe Kalınlığı</th><td>@Model.InnerHeadThickness</td></tr>
@@ -107,7 +78,7 @@
                 </table>
 
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Kaynak, Hacim ve Ağırlık</h6>
-                <table class="table table-sm table-striped align-middle mb-0">
+                <table class="table table-sm table-striped align-middle mb-0 detail-table">
                     <tbody>
                     <tr><th class="w-50">Bombe Kaynak Uzunluğu</th><td>@Model.InnerTankHeadWeldLength</td></tr>
                     <tr><th>Çevre Kaynak Uzunluğu</th><td>@Model.InnerTankCircumferenceWeldLength</td></tr>
@@ -126,7 +97,7 @@
             <div class="card-header bg-secondary-subtle text-secondary-emphasis fw-semibold">Dış Tank</div>
             <div class="card-body">
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Malzeme</h6>
-                <table class="table table-sm table-striped align-middle mb-3">
+                <table class="table table-sm table-striped align-middle mb-3 detail-table">
                     <tbody>
                     <tr><th class="w-50">Gövde Malzemesi</th><td>@Model.OuterShellMaterialName</td></tr>
                     <tr><th>Gövde Malzeme Formu</th><td>@Model.OuterShellMaterialFormName</td></tr>
@@ -138,7 +109,7 @@
                 </table>
 
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Kalınlık ve Uzunluk</h6>
-                <table class="table table-sm table-striped align-middle mb-3">
+                <table class="table table-sm table-striped align-middle mb-3 detail-table">
                     <tbody>
                     <tr><th class="w-50">Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
                     <tr><th>Bombe Kalınlığı</th><td>@Model.OuterHeadThickness</td></tr>
@@ -150,7 +121,7 @@
                 </table>
 
                 <h6 class="text-muted text-uppercase fw-semibold mb-2">Kaynak, Hacim ve Ağırlık</h6>
-                <table class="table table-sm table-striped align-middle mb-0">
+                <table class="table table-sm table-striped align-middle mb-0 detail-table">
                     <tbody>
                     <tr><th class="w-50">Bombe Kaynak Uzunluğu</th><td>@Model.OuterTankHeadWeldLength</td></tr>
                     <tr><th>Çevre Kaynak Uzunluğu</th><td>@Model.OuterTankCircumferenceWeldLength</td></tr>
@@ -199,14 +170,15 @@
                         <th>Sektör Genişliği</th>
                         <th>Parça Adedi</th>
                         <th>Sac Açınımı</th>
+                        <th>Kaynak Metrajı</th>
                         <th>Kesim Listesi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan1500</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2000</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2500</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan3000</td></tr>
+                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan1500)</td></tr>
+                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan2000)</td></tr>
+                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan2500)</td></tr>
+                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan3000)</td></tr>
                 </tbody>
             </table>
         </div>
@@ -219,19 +191,24 @@
                         <th>Sektör Genişliği</th>
                         <th>Parça Adedi</th>
                         <th>Sac Açınımı</th>
+                        <th>Kaynak Metrajı</th>
                         <th>Kesim Listesi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan1500</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2000</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2500</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan3000</td></tr>
+                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan1500)</td></tr>
+                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan2000)</td></tr>
+                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan2500)</td></tr>
+                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan3000)</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+@{
+    var selectedGroups = ViewBag.SelectedStockCardGroupDetails as IReadOnlyList<StockCardGroupDetailDto> ?? new List<StockCardGroupDetailDto>();
+}
 
 @{
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
@@ -268,18 +245,67 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in costTable.Items)
+                    @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                     {
-                        <tr>
-                            <td>@item.CostGroupCode</td>
-                            <td>@item.ItemName</td>
-                            <td>@item.StockCode</td>
-                            <td>@item.MaterialName</td>
-                            <td class="text-end">@item.Quantity.ToString("N2")</td>
-                            <td>@item.Unit</td>
-                            <td class="text-end">@item.UnitPrice.ToString("N2")</td>
-                            <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
+                        var selectedGroup = FindMatchingSelectedGroup(selectedGroups, groupItems.Key.CostGroupCode, groupItems.Key.CostGroupName, groupItems.Select(x => x.ItemName));
+
+                        <tr class="table-primary">
+                            <td colspan="8" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
                         </tr>
+
+                        @if (selectedGroup != null && selectedGroup.Items.Any())
+                        {
+                            <tr class="table-light">
+                                <td colspan="8" class="p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm mb-0 align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th class="ps-4">Alt Kırılım / Stok Kodu</th>
+                                                    <th>Açıklama</th>
+                                                    <th class="text-end">Adet</th>
+                                                    <th class="text-end">Birim Fiyat</th>
+                                                    <th class="text-end pe-4">Satır Toplam</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var groupItem in selectedGroup.Items)
+                                                {
+                                                    <tr>
+                                                        <td class="ps-4">@groupItem.StockCode8</td>
+                                                        <td>@groupItem.Description</td>
+                                                        <td class="text-end">@groupItem.Quantity</td>
+                                                        <td class="text-end">@groupItem.UnitPrice.ToString("N2")</td>
+                                                        <td class="text-end pe-4 fw-semibold">@groupItem.LineTotal.ToString("N2") @selectedGroup.CurrencyCode</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (selectedGroup == null && groupItems.Key.CostGroupCode.StartsWith("GRP-", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <tr class="table-warning">
+                                <td colspan="8" class="small">Bu grup için alt kırılım bulunamadı (grup satırları eşleşmedi).</td>
+                            </tr>
+                        }
+
+                        @foreach (var item in groupItems)
+                        {
+                            <tr>
+                                <td>@item.CostGroupCode</td>
+                                <td>@item.ItemName</td>
+                                <td>@item.StockCode</td>
+                                <td>@item.MaterialName</td>
+                                <td class="text-end">@item.Quantity.ToString("N2")</td>
+                                <td>@item.Unit</td>
+                                <td class="text-end">@item.UnitPrice.ToString("N2")</td>
+                                <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
+                            </tr>
+                        }
                     }
                     </tbody>
                     <tfoot>
@@ -309,9 +335,79 @@
 
 
 @functions {
+    private static StockCardGroupDetailDto? FindMatchingSelectedGroup(
+        IReadOnlyList<StockCardGroupDetailDto> selectedGroups,
+        string? costGroupCode,
+        string? costGroupName,
+        IEnumerable<string>? itemNames)
+    {
+        if (selectedGroups == null || selectedGroups.Count == 0)
+        {
+            return null;
+        }
+
+        var candidates = new List<string>();
+        if (!string.IsNullOrWhiteSpace(costGroupCode)) candidates.Add(costGroupCode);
+        if (!string.IsNullOrWhiteSpace(costGroupCode) && !string.IsNullOrWhiteSpace(costGroupName))
+            candidates.Add($"{costGroupCode} - {costGroupName}");
+
+        if (itemNames != null)
+        {
+            candidates.AddRange(itemNames.Where(x => !string.IsNullOrWhiteSpace(x)));
+        }
+
+        foreach (var group in selectedGroups)
+        {
+            var groupCode = NormalizeGroupToken(group.GroupCode);
+            var groupTitle = NormalizeGroupToken($"{group.GroupCode} - {group.Name}");
+
+            foreach (var candidate in candidates)
+            {
+                var token = NormalizeGroupToken(candidate);
+                if (string.IsNullOrWhiteSpace(token)) continue;
+
+                if (token == groupCode || token == groupTitle || token.Contains(groupCode))
+                {
+                    return group;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static string NormalizeGroupToken(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        return value
+            .Replace("Grup Maliyeti", string.Empty, StringComparison.OrdinalIgnoreCase)
+            .Trim()
+            .ToUpperInvariant();
+    }
+
     private static int GetPieceCount(string? cutList)
     {
         if (string.IsNullOrWhiteSpace(cutList)) return 0;
         return cutList.Split(" + ", StringSplitOptions.RemoveEmptyEntries).Length;
+    }
+
+    private static string FormatCutList(string? cutList)
+    {
+        if (string.IsNullOrWhiteSpace(cutList))
+        {
+            return "-";
+        }
+
+        var grouped = cutList
+            .Split(" + ", StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x.Trim())
+            .GroupBy(x => x)
+            .Select(x => $"{x.Count()} adet {x.Key.Replace(" x ", "x")}");
+
+        return string.Join(" + ", grouped);
     }
 }

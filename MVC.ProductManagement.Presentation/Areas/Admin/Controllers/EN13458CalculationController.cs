@@ -153,9 +153,49 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan3000 = dto.OuterSectorPlan3000
             };
 
+            vm.SelectedStockCardGroupIds = GetSelectedStockCardGroupIds(dto);
+
             await PopulateResultDisplayNamesAsync(vm);
-            ViewBag.CostTable = await _service.GetSavedMaterialCostTableAsync(dto.Id)
-                ?? await _service.BuildMaterialCostTableAsync(dto);
+            var costTable = await GetSavedOrBuiltCostTableAsync(dto);
+            ViewBag.CostTable = costTable;
+
+            var selectedGroupIds = vm.SelectedStockCardGroupIds
+                .Where(x => x != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            if (selectedGroupIds.Count == 0 && costTable?.Items != null)
+            {
+                var groupCodesFromCost = costTable.Items
+                    .Where(x => !string.IsNullOrWhiteSpace(x.CostGroupCode) && x.CostGroupCode.StartsWith("GRP-", StringComparison.OrdinalIgnoreCase))
+                    .Select(x => x.CostGroupCode.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                if (groupCodesFromCost.Count > 0)
+                {
+                    var allGroups = await _stockCardGroupService.GetGroupsAsync();
+                    selectedGroupIds = allGroups
+                        .Where(x => groupCodesFromCost.Contains(x.GroupCode, StringComparer.OrdinalIgnoreCase))
+                        .Select(x => x.Id)
+                        .Distinct()
+                        .ToList();
+                }
+            }
+
+            var selectedGroupDetails = new List<MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.StockCardGroupDetailDto>();
+            foreach (var groupId in selectedGroupIds)
+            {
+                var groupDetail = await _stockCardGroupService.GetGroupDetailAsync(groupId);
+                if (groupDetail != null)
+                {
+                    selectedGroupDetails.Add(groupDetail);
+                }
+            }
+
+            ViewBag.SelectedStockCardGroupDetails = selectedGroupDetails
+                .OrderBy(x => x.GroupCode)
+                .ToList();
 
             return View(vm);
         }
@@ -414,9 +454,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 StiffenerSpacing = vm.StiffenerSpacing,
                 StiffenerArea = vm.StiffenerArea,
                 StiffenerInertia = vm.StiffenerInertia,
-                StiffenerSectionModulus = vm.StiffenerSectionModulus,
-                SelectedStockCardGroupIds = vm.SelectedStockCardGroupIds?.Where(x => x != Guid.Empty).Distinct().ToList() ?? new List<Guid>()
+                StiffenerSectionModulus = vm.StiffenerSectionModulus
             };
+
+            SetSelectedStockCardGroupIds(dto, vm.SelectedStockCardGroupIds);
 
             try
             {
@@ -446,7 +487,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         private EN13458ResultVM MapResultVm(EN13458ResultDTO dto)
         {
-            return new EN13458ResultVM
+            var vm = new EN13458ResultVM
             {
                 Id = dto.Id,
                 Name = dto.Name,
@@ -528,14 +569,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan1500 = dto.OuterSectorPlan1500,
                 OuterSectorPlan2000 = dto.OuterSectorPlan2000,
                 OuterSectorPlan2500 = dto.OuterSectorPlan2500,
-                OuterSectorPlan3000 = dto.OuterSectorPlan3000,
-                SelectedStockCardGroupIds = dto.SelectedStockCardGroupIds?.ToList() ?? new List<Guid>()
+                OuterSectorPlan3000 = dto.OuterSectorPlan3000
             };
+
+            vm.SelectedStockCardGroupIds = GetSelectedStockCardGroupIds(dto);
+            return vm;
         }
 
         private static EN13458ResultDTO MapResultDto(EN13458ResultVM vm)
         {
-            return new EN13458ResultDTO
+            var dto = new EN13458ResultDTO
             {
                 Id = vm.Id,
                 Name = vm.Name,
@@ -618,9 +661,59 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan1500 = vm.OuterSectorPlan1500,
                 OuterSectorPlan2000 = vm.OuterSectorPlan2000,
                 OuterSectorPlan2500 = vm.OuterSectorPlan2500,
-                OuterSectorPlan3000 = vm.OuterSectorPlan3000,
-                SelectedStockCardGroupIds = vm.SelectedStockCardGroupIds?.Where(x => x != Guid.Empty).Distinct().ToList() ?? new List<Guid>()
+                OuterSectorPlan3000 = vm.OuterSectorPlan3000
             };
+
+            SetSelectedStockCardGroupIds(dto, vm.SelectedStockCardGroupIds);
+            return dto;
+        }
+
+
+        private async Task<EN13458MaterialCostTableDTO> GetSavedOrBuiltCostTableAsync(EN13458ResultDTO dto)
+        {
+            var serviceType = _service.GetType();
+            var savedMethod = serviceType.GetMethod("GetSavedMaterialCostTableAsync", new[] { typeof(Guid) });
+            if (savedMethod != null)
+            {
+                var taskObj = savedMethod.Invoke(_service, new object[] { dto.Id });
+                if (taskObj is Task<EN13458MaterialCostTableDTO?> savedTask)
+                {
+                    var saved = await savedTask;
+                    if (saved != null)
+                    {
+                        return saved;
+                    }
+                }
+            }
+
+            return await _service.BuildMaterialCostTableAsync(dto);
+        }
+
+        private static List<Guid> GetSelectedStockCardGroupIds(object source)
+        {
+            var prop = source.GetType().GetProperty("SelectedStockCardGroupIds");
+            if (prop?.GetValue(source) is IEnumerable<Guid> values)
+            {
+                return values.Where(x => x != Guid.Empty).Distinct().ToList();
+            }
+
+            return new List<Guid>();
+        }
+
+        private static void SetSelectedStockCardGroupIds(object target, IEnumerable<Guid>? ids)
+        {
+            var prop = target.GetType().GetProperty("SelectedStockCardGroupIds");
+            if (prop == null || !prop.CanWrite)
+            {
+                return;
+            }
+
+            var value = (ids ?? Enumerable.Empty<Guid>())
+                .Where(x => x != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            prop.SetValue(target, value);
         }
 
 
