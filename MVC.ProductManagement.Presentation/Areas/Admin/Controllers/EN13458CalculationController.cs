@@ -158,9 +158,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.CostTable = await _service.GetSavedMaterialCostTableAsync(dto.Id)
                 ?? await _service.BuildMaterialCostTableAsync(dto);
 
-            var groups = await _stockCardGroupService.GetGroupsAsync();
-            ViewBag.SelectedStockCardGroups = groups
-                .Where(x => vm.SelectedStockCardGroupIds.Contains(x.Id))
+            var selectedGroupDetails = new List<MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.StockCardGroupDetailDto>();
+            foreach (var groupId in vm.SelectedStockCardGroupIds)
+            {
+                var groupDetail = await _stockCardGroupService.GetGroupDetailAsync(groupId);
+                if (groupDetail != null)
+                {
+                    selectedGroupDetails.Add(groupDetail);
+                }
+            }
+
+            ViewBag.SelectedStockCardGroupDetails = selectedGroupDetails
                 .OrderBy(x => x.GroupCode)
                 .ToList();
 
