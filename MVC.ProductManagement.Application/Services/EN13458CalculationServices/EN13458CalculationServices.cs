@@ -178,7 +178,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 });
             }
 
-            var groupRows = await BuildGroupCostRowsAsync();
+            var groupRows = await BuildGroupCostRowsAsync(result.SelectedStockCardGroupIds);
             table.Items.AddRange(groupRows);
 
             table.TotalMaterialCost = table.Items.Sum(x => x.ItemCost);
@@ -266,11 +266,21 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             };
         }
 
-        private async Task<List<EN13458MaterialCostRowDTO>> BuildGroupCostRowsAsync()
+        private async Task<List<EN13458MaterialCostRowDTO>> BuildGroupCostRowsAsync(IEnumerable<Guid>? selectedGroupIds)
         {
+            var groupIds = selectedGroupIds?
+                .Where(x => x != Guid.Empty)
+                .Distinct()
+                .ToList() ?? new List<Guid>();
+
+            if (groupIds.Count == 0)
+            {
+                return new List<EN13458MaterialCostRowDTO>();
+            }
+
             var groups = await _context.StockCardGroups
                 .AsNoTracking()
-                .Where(g => g.Status != Status.Deleted && g.TotalAmount > 0)
+                .Where(g => groupIds.Contains(g.Id) && g.Status != Status.Deleted && g.TotalAmount > 0)
                 .OrderBy(g => g.GroupCode)
                 .Select(g => new
                 {

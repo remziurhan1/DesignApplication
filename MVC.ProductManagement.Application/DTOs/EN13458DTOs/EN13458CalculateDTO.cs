@@ -52,5 +52,8 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double? StiffenerInertia { get; set; }
         public double? StiffenerArea { get; set; }
         public double? StiffenerSectionModulus { get; set; }
+
+
+        public List<Guid> SelectedStockCardGroupIds { get; set; } = new();
     }
 }
