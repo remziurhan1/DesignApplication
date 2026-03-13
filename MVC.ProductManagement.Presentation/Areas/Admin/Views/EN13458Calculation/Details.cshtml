@@ -3,6 +3,8 @@
 @using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
 @{
     ViewData["Title"] = "EN13458 Details";
+    var totalProfileLengthMm = Model.RequiredProfileCount * Model.ProfileDevelopedLength;
+    var totalProfileLengthM = totalProfileLengthMm / 1000d;
 }
 
 
@@ -146,6 +148,8 @@
                 <tr><th>Test Pressure</th><td>@Model.TestPressure</td></tr>
                 <tr><th>Static Pressure</th><td>@Model.StaticPressure</td></tr>
                 <tr><th>Toplam Kaynak Uzunluğu</th><td>@Model.TotalWeldLength</td></tr>
+                <tr><th>Toplam Profil Metrajı (m)</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                <tr><th>Toplam Profil Boyu (mm)</th><td>@totalProfileLengthMm.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
                 <tr><th>Perlit Hacmi</th><td>@Model.PerliteVolume</td></tr>
                 <tr><th>Perlit Ağırlığı (kg)</th><td>@Model.PerliteWeight</td></tr>
                 <tr><th>Gaz Azot Hacmi</th><td>@Model.GasNitrogenVolume</td></tr>

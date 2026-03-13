@@ -387,6 +387,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
     public class ExternalBucklingStep : IEN13458CalculationStep
     {
         private const double DefaultBucklingLength = 750d;
+        private const double DefaultProfileSpacingWhenNotSelected = 500d;
+        private const double IntermittentWeldLength = 100d;
+        private const double IntermittentWeldGap = 100d;
         private const double PoissonRatio = 0.3d;
         private const double ElasticSafetyFactor = 2d;
         private const double PlasticSafetyFactor = 1.1d;
@@ -407,7 +410,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 
             var e = context.Input.ElasticModulus ?? 206000d;
             var k = context.Input.YieldFactorK ?? 355d;
-            var bucklingLength = context.Input.StiffenerSpacing.HasValue && context.Input.StiffenerSpacing.Value > 0d
+            var hasCustomStiffenerSpacing = context.Input.StiffenerSpacing.HasValue && context.Input.StiffenerSpacing.Value > 0d;
+            var bucklingLength = hasCustomStiffenerSpacing
                 ? context.Input.StiffenerSpacing.Value
                 : DefaultBucklingLength;
             var ringArea = context.Input.StiffenerArea.HasValue && context.Input.StiffenerArea.Value > 0d
@@ -463,8 +467,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var skHead = 2d + (0.0014d * (da / Math.Max(th, 0.1d)));
             var headCollapsePressureBar = (3.66d * (e / skHead) * Math.Pow(teff / da, 2d)) / 10d;
 
-            var profileCount = supportRingRequired ? (int)Math.Ceiling(ls / bucklingLength) : 0;
+            var profileCount = supportRingRequired
+                ? (int)Math.Ceiling(ls / bucklingLength)
+                : (!hasCustomStiffenerSpacing ? (int)Math.Ceiling(ls / DefaultProfileSpacingWhenNotSelected) : 0);
             var profileDevelopedLength = Math.PI * dm;
+            var totalProfileLength = profileCount * profileDevelopedLength;
+
+            var oneSideWeldRatio = IntermittentWeldLength / (IntermittentWeldLength + IntermittentWeldGap);
+            var staggeredDoubleSideWeldRatio = oneSideWeldRatio * 2d;
+            var profileWeldLength = totalProfileLength * staggeredDoubleSideWeldRatio;
 
             context.Result.BucklingWaveNumber = n;
             context.Result.ElasticBucklingPressureP1 = Math.Round(p1Bar, 4);
@@ -478,6 +489,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             context.Result.HeadCollapsePressure = Math.Round(headCollapsePressureBar, 4);
             context.Result.RequiredProfileCount = profileCount;
             context.Result.ProfileDevelopedLength = Math.Round(profileDevelopedLength, 2);
+            context.Result.TotalWeldLength = Math.Round(context.Result.TotalWeldLength + profileWeldLength, 2);
         }
     }
 
