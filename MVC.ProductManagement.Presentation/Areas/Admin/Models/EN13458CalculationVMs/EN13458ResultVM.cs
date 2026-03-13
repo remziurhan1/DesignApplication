@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using MVC.ProductManagement.Domain.Enums;
 
@@ -103,5 +104,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public string OuterSectorPlan2000 { get; set; } = string.Empty;
         public string OuterSectorPlan2500 { get; set; } = string.Empty;
         public string OuterSectorPlan3000 { get; set; } = string.Empty;
+
+        public List<Guid> SelectedStockCardGroupIds { get; set; } = new();
     }
 }
