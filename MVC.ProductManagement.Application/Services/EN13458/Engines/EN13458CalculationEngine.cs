@@ -1,7 +1,9 @@
 ﻿using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
 using MVC.ProductManagement.Application.Services.EN13458.Interfaces;
 using MVC.ProductManagement.Application.Services.EN13458.CalculationSteps;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.EN13458.Engines
@@ -40,6 +42,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Engines
                 OuterShellMaterialFormId = input.OuterShellMaterialFormId,
                 OuterHeadMaterialId = input.OuterHeadMaterialId,
                 OuterHeadMaterialFormId = input.OuterHeadMaterialFormId,
+                SelectedStockCardGroupIds = input.SelectedStockCardGroupIds?.ToList() ?? new List<Guid>(),
                 InnerShellMaterialStrength = input.InnerShellMaterialStrength ?? 0d,
                 InnerHeadMaterialStrength = input.InnerHeadMaterialStrength ?? 0d,
                 OuterShellMaterialStrength = input.OuterShellMaterialStrength ?? 0d,

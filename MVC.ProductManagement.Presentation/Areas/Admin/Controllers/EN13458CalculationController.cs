@@ -5,6 +5,7 @@ using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
+using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
@@ -25,17 +26,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
         private readonly IStorageTypeService _storageTypeService;
+        private readonly IStockCardGroupService _stockCardGroupService;
 
         public EN13458CalculationController(
             IEN13458CalculationServices service,
             IMaterialService materialService,
             IMaterialFormService materialFormService,
-            IStorageTypeService storageTypeService)
+            IStorageTypeService storageTypeService,
+            IStockCardGroupService stockCardGroupService)
         {
             _service = service;
             _materialService = materialService;
             _materialFormService = materialFormService;
             _storageTypeService = storageTypeService;
+            _stockCardGroupService = stockCardGroupService;
         }
 
         [HttpGet]
@@ -410,7 +414,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 StiffenerSpacing = vm.StiffenerSpacing,
                 StiffenerArea = vm.StiffenerArea,
                 StiffenerInertia = vm.StiffenerInertia,
-                StiffenerSectionModulus = vm.StiffenerSectionModulus
+                StiffenerSectionModulus = vm.StiffenerSectionModulus,
+                SelectedStockCardGroupIds = vm.SelectedStockCardGroupIds?.Where(x => x != Guid.Empty).Distinct().ToList() ?? new List<Guid>()
             };
 
             try
@@ -523,7 +528,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan1500 = dto.OuterSectorPlan1500,
                 OuterSectorPlan2000 = dto.OuterSectorPlan2000,
                 OuterSectorPlan2500 = dto.OuterSectorPlan2500,
-                OuterSectorPlan3000 = dto.OuterSectorPlan3000
+                OuterSectorPlan3000 = dto.OuterSectorPlan3000,
+                SelectedStockCardGroupIds = dto.SelectedStockCardGroupIds?.ToList() ?? new List<Guid>()
             };
         }
 
@@ -612,7 +618,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan1500 = vm.OuterSectorPlan1500,
                 OuterSectorPlan2000 = vm.OuterSectorPlan2000,
                 OuterSectorPlan2500 = vm.OuterSectorPlan2500,
-                OuterSectorPlan3000 = vm.OuterSectorPlan3000
+                OuterSectorPlan3000 = vm.OuterSectorPlan3000,
+                SelectedStockCardGroupIds = vm.SelectedStockCardGroupIds?.Where(x => x != Guid.Empty).Distinct().ToList() ?? new List<Guid>()
             };
         }
 
@@ -721,6 +728,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             ViewBag.StorageTypeDensities = storageTypeList
                 .ToDictionary(x => x.Id.ToString(), x => x.Density);
+
+            var groups = await _stockCardGroupService.GetGroupsAsync();
+            ViewBag.StockCardGroups = groups
+                .Where(x => x.TotalAmount > 0)
+                .OrderBy(x => x.GroupCode)
+                .Select(x => new SelectListItem($"{x.GroupCode} - {x.Name} ({x.TotalAmount:N2} {x.CurrencyCode})", x.Id.ToString()))
+                .ToList();
         }
 
         private static int WriteSection(ExcelWorksheet ws, int row, string title, IReadOnlyCollection<(string Label, object Value)> values)
