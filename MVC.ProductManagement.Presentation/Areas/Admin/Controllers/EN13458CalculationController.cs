@@ -150,12 +150,52 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan1500 = dto.OuterSectorPlan1500,
                 OuterSectorPlan2000 = dto.OuterSectorPlan2000,
                 OuterSectorPlan2500 = dto.OuterSectorPlan2500,
-                OuterSectorPlan3000 = dto.OuterSectorPlan3000
+                OuterSectorPlan3000 = dto.OuterSectorPlan3000,
+                SelectedStockCardGroupIds = dto.SelectedStockCardGroupIds?.ToList() ?? new List<Guid>()
             };
 
             await PopulateResultDisplayNamesAsync(vm);
-            ViewBag.CostTable = await _service.GetSavedMaterialCostTableAsync(dto.Id)
+            var costTable = await _service.GetSavedMaterialCostTableAsync(dto.Id)
                 ?? await _service.BuildMaterialCostTableAsync(dto);
+            ViewBag.CostTable = costTable;
+
+            var selectedGroupIds = vm.SelectedStockCardGroupIds
+                .Where(x => x != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            if (selectedGroupIds.Count == 0 && costTable?.Items != null)
+            {
+                var groupCodesFromCost = costTable.Items
+                    .Where(x => !string.IsNullOrWhiteSpace(x.CostGroupCode) && x.CostGroupCode.StartsWith("GRP-", StringComparison.OrdinalIgnoreCase))
+                    .Select(x => x.CostGroupCode.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                if (groupCodesFromCost.Count > 0)
+                {
+                    var allGroups = await _stockCardGroupService.GetGroupsAsync();
+                    selectedGroupIds = allGroups
+                        .Where(x => groupCodesFromCost.Contains(x.GroupCode, StringComparer.OrdinalIgnoreCase))
+                        .Select(x => x.Id)
+                        .Distinct()
+                        .ToList();
+                }
+            }
+
+            var selectedGroupDetails = new List<MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.StockCardGroupDetailDto>();
+            foreach (var groupId in selectedGroupIds)
+            {
+                var groupDetail = await _stockCardGroupService.GetGroupDetailAsync(groupId);
+                if (groupDetail != null)
+                {
+                    selectedGroupDetails.Add(groupDetail);
+                }
+            }
+
+            ViewBag.SelectedStockCardGroupDetails = selectedGroupDetails
+                .OrderBy(x => x.GroupCode)
+                .ToList();
 
             return View(vm);
         }
