@@ -150,7 +150,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan1500 = dto.OuterSectorPlan1500,
                 OuterSectorPlan2000 = dto.OuterSectorPlan2000,
                 OuterSectorPlan2500 = dto.OuterSectorPlan2500,
-                OuterSectorPlan3000 = dto.OuterSectorPlan3000
+                OuterSectorPlan3000 = dto.OuterSectorPlan3000,
+                SelectedStockCardGroupIds = dto.SelectedStockCardGroupIds?.ToList() ?? new List<Guid>()
             };
 
             vm.SelectedStockCardGroupIds = GetSelectedStockCardGroupIds(dto);
