@@ -150,12 +150,19 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan1500 = dto.OuterSectorPlan1500,
                 OuterSectorPlan2000 = dto.OuterSectorPlan2000,
                 OuterSectorPlan2500 = dto.OuterSectorPlan2500,
-                OuterSectorPlan3000 = dto.OuterSectorPlan3000
+                OuterSectorPlan3000 = dto.OuterSectorPlan3000,
+                SelectedStockCardGroupIds = dto.SelectedStockCardGroupIds?.ToList() ?? new List<Guid>()
             };
 
             await PopulateResultDisplayNamesAsync(vm);
             ViewBag.CostTable = await _service.GetSavedMaterialCostTableAsync(dto.Id)
                 ?? await _service.BuildMaterialCostTableAsync(dto);
+
+            var groups = await _stockCardGroupService.GetGroupsAsync();
+            ViewBag.SelectedStockCardGroups = groups
+                .Where(x => vm.SelectedStockCardGroupIds.Contains(x.Id))
+                .OrderBy(x => x.GroupCode)
+                .ToList();
 
             return View(vm);
         }
