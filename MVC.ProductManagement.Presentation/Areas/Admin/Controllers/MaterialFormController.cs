@@ -32,6 +32,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
                 UnitPrice=f.UnitPrice,
+                TargetPrice=f.TargetPrice,
                 ColdStretchYieldStrength = f.ColdStretchYieldStrength,
                 MaterialName=f.Material.Name,
             }).ToList();
@@ -59,6 +60,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
                 UnitPrice = dto.UnitPrice,
+                TargetPrice = dto.TargetPrice,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
 
@@ -92,6 +94,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = vm.WeldingFactor,
                 Notes = vm.Notes,
                 UnitPrice = vm.UnitPrice,
+                TargetPrice = vm.TargetPrice,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength
             };
 
@@ -118,6 +121,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
                 UnitPrice=dto.UnitPrice,
+                TargetPrice=dto.TargetPrice,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
                 
             };
@@ -143,6 +147,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = vm.WeldingFactor,
                 Notes = vm.Notes,
                 UnitPrice = vm.UnitPrice,
+                TargetPrice = vm.TargetPrice,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength
 
             };
@@ -168,6 +173,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldingFactor = dto.WeldingFactor,
                 Notes = dto.Notes,
                 UnitPrice = dto.UnitPrice,
+                TargetPrice = dto.TargetPrice,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength
             };
 
