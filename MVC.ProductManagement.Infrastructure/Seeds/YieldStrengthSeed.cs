@@ -13,6 +13,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
         {
             var formId = Guid.Parse("22222222-2222-2222-2222-222222222222");
             var ssFormId = Guid.Parse("44444444-4444-4444-4444-444444444441");
+            var pipeFormId = Guid.Parse("22222222-2222-2222-2222-222222222223");
             var profileFormId = Guid.Parse("66666666-6666-6666-6666-666666666661");
 
             return new List<YieldStrength>
@@ -97,6 +98,17 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 300, Rp02 = 150, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 350, Rp02 = 140, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 400, Rp02 = 130, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+
+                // P355NH Pipe EN 10216-3
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 20, Rp02 = 355, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 50, Rp02 = 343, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 100, Rp02 = 323, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 150, Rp02 = 299, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 200, Rp02 = 275, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 250, Rp02 = 252, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 300, Rp02 = 232, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 350, Rp02 = 214, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 400, Rp02 = 202, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
 
                 // S235JR Profil (40x40x3)
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = profileFormId, ThicknessMin = 3, ThicknessMax = 30, Temperature = 20, Rp02 = 235, Rm = 360, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
