@@ -21,6 +21,10 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(f => f.WeldingFactor)
                    .HasPrecision(5, 2);
 
+            builder.Property(f => f.TargetPrice)
+                   .HasPrecision(10, 3)
+                   .IsRequired(false);
+
             builder.Property(f => f.ColdStretchYieldStrength)
                    .HasPrecision(10, 3);
 

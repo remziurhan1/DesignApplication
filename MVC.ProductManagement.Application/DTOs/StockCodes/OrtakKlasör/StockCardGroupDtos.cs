@@ -51,6 +51,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
         public string QuantityUnit { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
+        public decimal? TargetPrice { get; set; }
         public decimal LineTotal { get; set; }
     }
 

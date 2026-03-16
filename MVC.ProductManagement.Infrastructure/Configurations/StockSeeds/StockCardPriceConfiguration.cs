@@ -20,6 +20,10 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockCodes
                 .IsRequired()
                 .HasColumnType("decimal(18,4)");
 
+            builder.Property(x => x.TargetPrice)
+                .IsRequired(false)
+                .HasColumnType("decimal(18,4)");
+
             builder.Property(x => x.ValidFrom)
                 .IsRequired();
 
