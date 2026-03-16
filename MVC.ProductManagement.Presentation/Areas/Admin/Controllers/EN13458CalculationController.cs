@@ -835,7 +835,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             var groups = await _stockCardGroupService.GetGroupsAsync();
             ViewBag.StockCardGroups = groups
-                .Where(x => x.TotalAmount > 0)
                 .OrderBy(x => x.GroupCode)
                 .Select(x => new SelectListItem($"{x.GroupCode} - {x.Name} ({x.TotalAmount:N2} {x.CurrencyCode})", x.Id.ToString()))
                 .ToList();
