@@ -24,6 +24,11 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes
         public decimal UnitPrice { get; set; }
 
         /// <summary>
+        /// Hedef fiyat (opsiyonel)
+        /// </summary>
+        public decimal? TargetPrice { get; set; }
+
+        /// <summary>
         /// Geçerlilik başlangıç tarihi
         /// </summary>
         public DateTime ValidFrom { get; set; }

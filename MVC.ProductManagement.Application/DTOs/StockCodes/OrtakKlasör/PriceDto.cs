@@ -7,6 +7,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
         public string StockCode { get; set; } = string.Empty;
         public string Currency { get; set; } = string.Empty;
         public decimal UnitPrice { get; set; }
+        public decimal? TargetPrice { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
         public bool IsActive { get; set; }

@@ -102,6 +102,18 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                             QuantityUnit = i.QuantityUnit ?? string.Empty,
                             Quantity = i.Quantity,
                             UnitPrice = i.UnitPrice,
+                            TargetPrice = i.IsCustomItem || i.StockCardId == null
+                                ? null
+                                : i.StockCard!.Prices
+                                    .Where(p => p.Status != Status.Deleted
+                                        && p.IsActive
+                                        && p.ValidFrom.Date <= DateTime.UtcNow.Date
+                                        && (p.ValidTo == null || p.ValidTo.Value.Date >= DateTime.UtcNow.Date)
+                                        && (p.Currency ?? string.Empty).Trim().ToUpper() == GroupCurrencyCode)
+                                    .OrderByDescending(p => p.ValidFrom)
+                                    .ThenByDescending(p => p.CreatedDate)
+                                    .Select(p => p.TargetPrice)
+                                    .FirstOrDefault(),
                             LineTotal = i.LineTotal
                         }).ToList()
                 })
