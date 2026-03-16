@@ -1,6 +1,7 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM
 @using System.Globalization
 @using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
+@using Microsoft.AspNetCore.Mvc.Rendering
 @{
     ViewData["Title"] = "EN13458 Details";
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
@@ -216,6 +217,35 @@
 @{
     var selectedGroups = ViewBag.SelectedStockCardGroupDetails as IReadOnlyList<StockCardGroupDetailDto> ?? new List<StockCardGroupDetailDto>();
 }
+
+@{
+    var stockCardGroups = ViewBag.StockCardGroups as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+}
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-light fw-semibold">Stok Grubu Ekle (EN13458 Maliyet)</div>
+    <div class="card-body">
+        <form asp-action="Details" method="get" class="row g-2 align-items-end">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="col-12 col-lg-9">
+                <label class="form-label">Maliyete eklenecek stok grupları</label>
+                <select name="selectedStockCardGroupIds" class="form-select" multiple size="6">
+                    @foreach (var group in stockCardGroups)
+                    {
+                        var selected = Model.SelectedStockCardGroupIds.Any(x => x.ToString() == group.Value);
+                        <option value="@group.Value" selected="@(selected ? "selected" : null)">@group.Text</option>
+                    }
+                </select>
+                <small class="text-muted">Bir veya birden fazla grup seçip "Maliyeti Güncelle" butonuna basın.</small>
+            </div>
+            <div class="col-12 col-lg-3 d-grid">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i>Maliyeti Güncelle
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 @{
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;

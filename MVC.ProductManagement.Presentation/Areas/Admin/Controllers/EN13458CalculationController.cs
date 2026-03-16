@@ -62,7 +62,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(Guid id, List<Guid>? selectedStockCardGroupIds = null)
         {
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
@@ -156,11 +156,30 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 SelectedStockCardGroupIds = dto.SelectedStockCardGroupIds?.ToList() ?? new List<Guid>()
             };
 
-            vm.SelectedStockCardGroupIds = GetSelectedStockCardGroupIds(dto);
+            var querySelectedGroupIds = (selectedStockCardGroupIds ?? new List<Guid>())
+                .Where(x => x != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            if (querySelectedGroupIds.Count > 0)
+            {
+                vm.SelectedStockCardGroupIds = querySelectedGroupIds;
+                SetSelectedStockCardGroupIds(dto, querySelectedGroupIds);
+            }
+            else
+            {
+                vm.SelectedStockCardGroupIds = GetSelectedStockCardGroupIds(dto);
+            }
 
             await PopulateResultDisplayNamesAsync(vm);
-            var costTable = await GetSavedOrBuiltCostTableAsync(dto);
+            var costTable = await GetSavedOrBuiltCostTableAsync(dto, forceBuild: querySelectedGroupIds.Count > 0);
             ViewBag.CostTable = costTable;
+
+            var allGroups = await _stockCardGroupService.GetGroupsAsync();
+            ViewBag.StockCardGroups = allGroups
+                .OrderBy(x => x.GroupCode)
+                .Select(x => new SelectListItem($"{x.GroupCode} - {x.Name} ({x.TotalAmount:N2} {x.CurrencyCode})", x.Id.ToString()))
+                .ToList();
 
             var selectedGroupIds = vm.SelectedStockCardGroupIds
                 .Where(x => x != Guid.Empty)
@@ -177,7 +196,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
                 if (groupCodesFromCost.Count > 0)
                 {
-                    var allGroups = await _stockCardGroupService.GetGroupsAsync();
                     selectedGroupIds = allGroups
                         .Where(x => !string.IsNullOrWhiteSpace(x.GroupCode)
                             && groupCodesFromCost.Contains(x.GroupCode.Trim(), StringComparer.OrdinalIgnoreCase))
@@ -681,8 +699,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
 
-        private async Task<EN13458MaterialCostTableDTO> GetSavedOrBuiltCostTableAsync(EN13458ResultDTO dto)
+        private async Task<EN13458MaterialCostTableDTO> GetSavedOrBuiltCostTableAsync(EN13458ResultDTO dto, bool forceBuild = false)
         {
+            if (forceBuild)
+            {
+                return await _service.BuildMaterialCostTableAsync(dto);
+            }
+
             var serviceType = _service.GetType();
             var savedMethod = serviceType.GetMethod("GetSavedMaterialCostTableAsync", new[] { typeof(Guid) });
             if (savedMethod != null)
