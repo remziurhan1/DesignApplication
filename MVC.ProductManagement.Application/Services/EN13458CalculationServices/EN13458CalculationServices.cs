@@ -353,20 +353,31 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 .Distinct()
                 .ToList() ?? new List<Guid>();
 
-            if (groupIds.Count == 0)
+            var groupsQuery = _context.StockCardGroups
+                .AsNoTracking()
+                .Where(g => g.Status != Status.Deleted);
+
+            if (groupIds.Count > 0)
             {
-                return new List<EN13458MaterialCostRowDTO>();
+                groupsQuery = groupsQuery.Where(g => groupIds.Contains(g.Id));
+            }
+            else
+            {
+                // Kullanıcı grup seçmediyse, oluşturulan GRP-* gruplarını maliyete dahil et.
+                groupsQuery = groupsQuery.Where(g => g.GroupCode.StartsWith("GRP-"));
             }
 
-            var groups = await _context.StockCardGroups
-                .AsNoTracking()
-                .Where(g => groupIds.Contains(g.Id) && g.Status != Status.Deleted && g.TotalAmount > 0)
+            var groups = await groupsQuery
                 .OrderBy(g => g.GroupCode)
                 .Select(g => new
                 {
                     g.GroupCode,
                     g.Name,
-                    g.TotalAmount
+                    g.TotalAmount,
+                    ComputedAmount = g.Items
+                        .Where(i => i.Status != Status.Deleted)
+                        .Select(i => (decimal?)i.LineTotal)
+                        .Sum() ?? 0m
                 })
                 .ToListAsync();
 
@@ -379,8 +390,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 FormType = "Grup",
                 Quantity = 1,
                 Unit = "lot",
-                UnitPrice = (double)group.TotalAmount,
-                ItemCost = (double)group.TotalAmount
+                UnitPrice = (double)(group.ComputedAmount > 0 ? group.ComputedAmount : group.TotalAmount),
+                ItemCost = (double)(group.ComputedAmount > 0 ? group.ComputedAmount : group.TotalAmount)
             }).ToList();
         }
 
