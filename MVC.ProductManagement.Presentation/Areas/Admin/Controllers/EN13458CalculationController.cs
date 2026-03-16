@@ -326,14 +326,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             row = WriteKeyValues(ws, row, new List<(string Label, object Value)>
             {
                 ("Ad", vm.Name),
+                ("Kayıt Id", vm.Id),
                 ("İç Tank Çapı", vm.OuterDiameter),
                 ("Dış Tank Çapı", vm.OuterTankDiameter),
                 ("Silindirik Boy", vm.ShellLength),
                 ("Basınç", vm.Pressure),
                 ("Depolama Tipi", vm.StorageTypeName),
+                ("Depolama Tipi Id", vm.StorageTypeId),
                 ("Sıvı Yoğunluğu", vm.LiquidDensity),
                 ("Tank Yönelimi", vm.TankOrientation),
-                ("Cold Stretch", vm.IsColdStretchApplied ? "Evet" : "Hayır")
+                ("Cold Stretch", vm.IsColdStretchApplied ? "Evet" : "Hayır"),
+                ("Kaynak Metrajı 1500", vm.WeldLength1500),
+                ("Kaynak Metrajı 2000", vm.WeldLength2000),
+                ("Kaynak Metrajı 2500", vm.WeldLength2500),
+                ("Kaynak Metrajı 3000", vm.WeldLength3000)
             });
 
             row = WriteSection(ws, row, "İç Tank", new List<(string Label, object Value)>
@@ -341,11 +347,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ("Gövde Malzemesi", vm.InnerShellMaterialName),
                 ("Gövde Malzeme Formu", vm.InnerShellMaterialFormName),
                 ("Bombe Malzemesi", vm.InnerHeadMaterialName),
+                ("Bombe Malzeme Id", vm.InnerHeadMaterialId),
                 ("Bombe Malzeme Formu", vm.InnerHeadMaterialFormName),
+                ("Bombe Malzeme Formu Id", vm.InnerHeadMaterialFormId),
+                ("Gövde Malzeme Id", vm.InnerShellMaterialId),
+                ("Gövde Malzeme Formu Id", vm.InnerShellMaterialFormId),
+                ("Gövde Akma Dayanımı", vm.InnerShellMaterialStrength),
+                ("Bombe Akma Dayanımı", vm.InnerHeadMaterialStrength),
                 ("Gövde Kalınlığı", vm.InnerShellThickness),
                 ("Bombe Kalınlığı", vm.InnerHeadThickness),
                 ("Yuvarlanmış Gövde Kalınlığı", vm.RoundedInnerShellThickness),
                 ("Yuvarlanmış Bombe Kalınlığı", vm.RoundedInnerHeadThickness),
+                ("Bombe Pulu Çapı", vm.InnerTankHeadPulDiameter),
+                ("Bombe Ağırlığı", vm.InnerTankHeadWeight),
+                ("Bombe Kaynak Uzunluğu", vm.InnerTankHeadWeldLength),
+                ("Çevre Kaynak Uzunluğu", vm.InnerTankCircumferenceWeldLength),
                 ("Toplam Uzunluk", vm.InnerTankTotalLength),
                 ("İç Hacim", vm.InnerVolume),
                 ("İç Yüzey Alanı", vm.InnerSurfaceArea),
@@ -357,11 +373,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ("Gövde Malzemesi", vm.OuterShellMaterialName),
                 ("Gövde Malzeme Formu", vm.OuterShellMaterialFormName),
                 ("Bombe Malzemesi", vm.OuterHeadMaterialName),
+                ("Bombe Malzeme Id", vm.OuterHeadMaterialId),
                 ("Bombe Malzeme Formu", vm.OuterHeadMaterialFormName),
+                ("Bombe Malzeme Formu Id", vm.OuterHeadMaterialFormId),
+                ("Gövde Malzeme Id", vm.OuterShellMaterialId),
+                ("Gövde Malzeme Formu Id", vm.OuterShellMaterialFormId),
+                ("Gövde Akma Dayanımı", vm.OuterShellMaterialStrength),
+                ("Bombe Akma Dayanımı", vm.OuterHeadMaterialStrength),
                 ("Gövde Kalınlığı", vm.OuterShellThickness),
                 ("Bombe Kalınlığı", vm.OuterHeadThickness),
                 ("Yuvarlanmış Gövde Kalınlığı", vm.RoundedOuterShellThickness),
                 ("Yuvarlanmış Bombe Kalınlığı", vm.RoundedOuterHeadThickness),
+                ("Bombe Pulu Çapı", vm.OuterTankHeadPulDiameter),
+                ("Bombe Ağırlığı", vm.OuterTankHeadWeight),
+                ("Bombe Kaynak Uzunluğu", vm.OuterTankHeadWeldLength),
+                ("Çevre Kaynak Uzunluğu", vm.OuterTankCircumferenceWeldLength),
                 ("Toplam Uzunluk", vm.OuterTankTotalLength),
                 ("Dış Hacim", vm.OuterVolume),
                 ("Dış Yüzey Alanı", vm.OuterSurfaceArea),
@@ -374,12 +400,23 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ("Test Pressure", vm.TestPressure),
                 ("Static Pressure", vm.StaticPressure),
                 ("Toplam Kaynak Uzunluğu", vm.TotalWeldLength),
+                ("Toplam Film Maliyeti", vm.TotalFilmCost),
                 ("Perlit Hacmi", vm.PerliteVolume),
                 ("Perlit Ağırlığı", vm.PerliteWeight),
                 ("Gaz Azot Hacmi", vm.GasNitrogenVolume),
                 ("Sıvı Azot Hacmi", vm.LiquidNitrogenVolume),
+                ("Burkulma Dalga Sayısı", vm.BucklingWaveNumber),
+                ("Elastik Burkulma Basıncı (P1)", vm.ElasticBucklingPressureP1),
+                ("Plastik Çökme Basıncı (P2)", vm.PlasticCollapsePressureP2),
+                ("Dış Tasarım Basıncı (Pv)", vm.DesignExternalPressurePv),
+                ("Takviye Halkası Gerekli", vm.SupportRingRequired ? "Evet" : "Hayır"),
+                ("Takviye Halkası Kritik Basınç (Pe)", vm.SupportRingCriticalPressurePe),
+                ("Takviye Halkası Gerilme (X)", vm.SupportRingStressX),
+                ("Takviye Halkası İzin Verilen Gerilme", vm.SupportRingAllowableStress),
+                ("Takviye Halkası Yeterli", vm.SupportRingAdequate ? "Evet" : "Hayır"),
                 ("Head Collapse Pressure", vm.HeadCollapsePressure),
                 ("Gerekli Profil Sayısı", vm.RequiredProfileCount),
+                ("Profil Açınım Boyu (mm)", vm.ProfileDevelopedLength),
                 ("Toplam Profil Boyu (mm)", vm.TotalProfileLength),
                 ("Profil Kaynak Metrajı (mm)", vm.ProfileWeldLength)
             });
@@ -397,6 +434,57 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ("Dış 2500", vm.OuterSectorPlan2500),
                 ("Dış 3000", vm.OuterSectorPlan3000)
             });
+
+            var costTable = await GetSavedOrBuiltCostTableAsync(dto);
+            if (costTable != null)
+            {
+                var costWs = package.Workbook.Worksheets.Add("Maliyet Detay");
+                var costRow = 1;
+
+                WriteSectionHeader(costWs, costRow++, "Maliyet Grup Toplamları");
+                costRow = WriteKeyValues(costWs, costRow,
+                    costTable.GroupTotals
+                        .OrderBy(x => x.CostGroupCode)
+                        .Select(x => ($"{x.CostGroupCode} - {x.CostGroupName}", (object)x.TotalCost))
+                        .ToList());
+
+                costRow += 1;
+                WriteSectionHeader(costWs, costRow++, "Maliyet Kalemleri");
+                costWs.Cells[costRow, 1].Value = "Grup";
+                costWs.Cells[costRow, 2].Value = "Kalem";
+                costWs.Cells[costRow, 3].Value = "Stok Kodu";
+                costWs.Cells[costRow, 4].Value = "Malzeme";
+                costWs.Cells[costRow, 5].Value = "Miktar";
+                costWs.Cells[costRow, 6].Value = "Birim";
+                costWs.Cells[costRow, 7].Value = "Birim Fiyat";
+                costWs.Cells[costRow, 8].Value = "Tutar";
+
+                using (var header = costWs.Cells[costRow, 1, costRow, 8])
+                {
+                    header.Style.Font.Bold = true;
+                    header.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    header.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                    header.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                }
+
+                foreach (var item in costTable.Items)
+                {
+                    costRow++;
+                    costWs.Cells[costRow, 1].Value = $"{item.CostGroupCode} - {item.CostGroupName}";
+                    costWs.Cells[costRow, 2].Value = item.ItemName;
+                    costWs.Cells[costRow, 3].Value = item.StockCode;
+                    costWs.Cells[costRow, 4].Value = item.MaterialName;
+                    costWs.Cells[costRow, 5].Value = item.Quantity;
+                    costWs.Cells[costRow, 6].Value = item.Unit;
+                    costWs.Cells[costRow, 7].Value = item.UnitPrice;
+                    costWs.Cells[costRow, 8].Value = item.ItemCost;
+
+                    using var dataRange = costWs.Cells[costRow, 1, costRow, 8];
+                    dataRange.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                }
+
+                costWs.Cells[costWs.Dimension.Address].AutoFitColumns();
+            }
 
             ws.Cells[ws.Dimension.Address].AutoFitColumns();
             var safeName = string.Concat((vm.Name ?? "EN13458").Where(ch => !Path.GetInvalidFileNameChars().Contains(ch)));
