@@ -716,8 +716,14 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<double>("ProfileDevelopedLength")
                         .HasColumnType("float");
 
+                    b.Property<double>("ProfileWeldLength")
+                        .HasColumnType("float");
+
                     b.Property<int>("RequiredProfileCount")
                         .HasColumnType("int");
+
+                    b.Property<double>("TotalProfileLength")
+                        .HasColumnType("float");
 
                     b.Property<double>("RoundedInnerHeadThickness")
                         .HasColumnType("float");

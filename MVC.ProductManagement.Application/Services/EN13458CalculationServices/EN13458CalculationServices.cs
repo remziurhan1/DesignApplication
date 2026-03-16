@@ -23,6 +23,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string GasNitrogenStockCode = "ZA001871";
         private const string LiquidNitrogenStockCode = "ZA000216";
         private const string PerliteStockCode = "ZA000464";
+        private const string ProfileWeldStockCode = "";
 
         public EN13458CalculationServices(
             IMaterialRepository materialRepository,
@@ -178,6 +179,18 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 });
             }
 
+            var profileRow = await BuildProfileCostRowAsync(result);
+            if (profileRow is not null)
+            {
+                table.Items.Add(profileRow);
+            }
+
+            var profileWeldRow = await BuildProfileWeldCostRowAsync(result);
+            if (profileWeldRow is not null)
+            {
+                table.Items.Add(profileWeldRow);
+            }
+
             var groupRows = await BuildGroupCostRowsAsync(result.SelectedStockCardGroupIds);
             table.Items.AddRange(groupRows);
 
@@ -261,6 +274,73 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 FormType = "Sarf",
                 Quantity = quantity,
                 Unit = unit,
+                UnitPrice = unitPrice,
+                ItemCost = itemCost
+            };
+        }
+
+        private async Task<EN13458MaterialCostRowDTO?> BuildProfileCostRowAsync(EN13458ResultDTO result)
+        {
+            if (result.RequiredProfileCount <= 0 || result.ProfileDevelopedLength <= 0)
+            {
+                return null;
+            }
+
+            var material = await _materialRepository.GetByIdAsync(result.OuterShellMaterialId);
+            var form = await _materialFormRepository.GetByIdAsync(result.OuterShellMaterialFormId);
+
+            if (material == null || form == null)
+            {
+                return null;
+            }
+
+            const double defaultProfileAreaMm2 = 444d; // 40x40x3 profil
+            var totalLengthMm = result.TotalProfileLength > 0 ? result.TotalProfileLength : (result.RequiredProfileCount * result.ProfileDevelopedLength);
+            var totalLengthM = totalLengthMm / 1000d;
+            var volumeMm3 = defaultProfileAreaMm2 * totalLengthMm;
+            var weightKg = volumeMm3 * 1e-9 * material.Density;
+            var itemCost = weightKg * form.UnitPrice;
+
+            return new EN13458MaterialCostRowDTO
+            {
+                CostGroupCode = "PROF",
+                CostGroupName = "Profil Maliyeti",
+                ItemName = "Dış Tank Stifner Profili (40x40x3)",
+                StockCode = string.Empty,
+                MaterialId = material.Id,
+                MaterialName = material.Name,
+                MaterialFormId = form.Id,
+                FormType = form.FormType.ToString(),
+                Quantity = Math.Round(totalLengthM, 2),
+                Unit = "m",
+                UnitPrice = form.UnitPrice,
+                Density = material.Density,
+                TheoreticalWeight = Math.Round(weightKg, 2),
+                ItemCost = itemCost
+            };
+        }
+
+        private async Task<EN13458MaterialCostRowDTO?> BuildProfileWeldCostRowAsync(EN13458ResultDTO result)
+        {
+            if (result.ProfileWeldLength <= 0)
+            {
+                return null;
+            }
+
+            var quantityMeters = result.ProfileWeldLength / 1000d;
+            var unitPrice = await ResolveActiveUnitPriceByStockCodeAsync(ProfileWeldStockCode);
+            var itemCost = quantityMeters * unitPrice;
+
+            return new EN13458MaterialCostRowDTO
+            {
+                CostGroupCode = "WELD",
+                CostGroupName = "Kaynak Maliyeti",
+                ItemName = "Profil Kaynak Metrajı",
+                StockCode = ProfileWeldStockCode,
+                MaterialName = "Profil Kaynağı",
+                FormType = "Hizmet",
+                Quantity = Math.Round(quantityMeters, 2),
+                Unit = "m",
                 UnitPrice = unitPrice,
                 ItemCost = itemCost
             };

@@ -102,6 +102,8 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double HeadCollapsePressure { get; set; }
         public int RequiredProfileCount { get; set; }
         public double ProfileDevelopedLength { get; set; }
+        public double TotalProfileLength { get; set; }
+        public double ProfileWeldLength { get; set; }
 
         // Sac oryantasyonu / açınım çıktıları
         public double InnerDevelopedLength { get; set; }
