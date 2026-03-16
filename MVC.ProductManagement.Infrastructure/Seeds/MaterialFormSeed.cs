@@ -41,8 +41,24 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     ColdStretchYieldStrength = 400,
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow
-                }
-,
+                },
+
+                // P355NH Pipe
+                new MaterialForm
+                {
+                    Id = Guid.Parse("22222222-2222-2222-2222-222222222223"),
+                    MaterialId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    FormType = MaterialFormType.Pipe,
+                    ThicknessMin = 2,
+                    ThicknessMax = 40,
+                    ProductStandard = "EN 10216-3",
+                    WeldingFactor = 1,
+                    Notes = "Seamless pipe form for P355NH",
+                    UnitPrice = 2.3,
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
+                },
+
                 new MaterialForm
                 {
                     Id = Guid.Parse("66666666-6666-6666-6666-666666666661"),
