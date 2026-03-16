@@ -8,6 +8,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
         Task<IReadOnlyList<StockCardGroupListItemDto>> GetGroupsAsync(CancellationToken cancellationToken = default);
         Task<StockCardGroupDetailDto?> GetGroupDetailAsync(Guid groupId, CancellationToken cancellationToken = default);
         Task AddItemAsync(Guid groupId, Guid stockCardId, int quantity, string userName, CancellationToken cancellationToken = default);
+        Task AddCustomItemAsync(Guid groupId, string description, int quantity, string quantityUnit, decimal unitPrice, string userName, CancellationToken cancellationToken = default);
         Task UpdateItemQuantityAsync(Guid groupItemId, int quantity, string userName, CancellationToken cancellationToken = default);
         Task RemoveItemAsync(Guid groupItemId, string userName, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<StockCardLookupDto>> SearchStockCardsAsync(string? term, int take = 50, CancellationToken cancellationToken = default);

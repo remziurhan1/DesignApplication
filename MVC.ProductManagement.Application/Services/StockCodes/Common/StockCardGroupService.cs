@@ -40,8 +40,16 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
 
             foreach (var item in dto.Items ?? new List<StockCardGroupCreateItemDto>())
             {
-                if (item.StockCardId == Guid.Empty || item.Quantity <= 0) continue;
-                await AddItemInternalAsync(group.Id, item.StockCardId, item.Quantity, userName, cancellationToken);
+                if (item.Quantity <= 0) continue;
+
+                if (item.IsCustomItem)
+                {
+                    await AddCustomItemInternalAsync(group.Id, item.CustomDescription ?? string.Empty, item.Quantity, item.QuantityUnit ?? string.Empty, item.UnitPrice ?? 0, userName, cancellationToken);
+                    continue;
+                }
+
+                if (!item.StockCardId.HasValue || item.StockCardId.Value == Guid.Empty) continue;
+                await AddItemInternalAsync(group.Id, item.StockCardId.Value, item.Quantity, userName, cancellationToken);
             }
 
             await RecalculateGroupTotalAsync(group.Id, userName, cancellationToken);
@@ -88,8 +96,10 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                         {
                             ItemId = i.Id,
                             StockCardId = i.StockCardId,
-                            StockCode8 = i.StockCard.StockCode8,
-                            Description = i.StockCard.Description,
+                            IsCustomItem = i.IsCustomItem,
+                            StockCode8 = i.IsCustomItem ? "HAMMADDE" : (i.StockCard != null ? i.StockCard.StockCode8 : string.Empty),
+                            Description = i.IsCustomItem ? (i.CustomDescription ?? string.Empty) : (i.StockCard != null ? i.StockCard.Description : string.Empty),
+                            QuantityUnit = i.QuantityUnit ?? string.Empty,
                             Quantity = i.Quantity,
                             UnitPrice = i.UnitPrice,
                             LineTotal = i.LineTotal
@@ -104,6 +114,16 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 ?? throw new InvalidOperationException("Grup bulunamadı.");
 
             await AddItemInternalAsync(groupId, stockCardId, quantity, userName, cancellationToken);
+            await RecalculateGroupTotalAsync(groupId, userName, cancellationToken);
+        }
+
+
+        public async Task AddCustomItemAsync(Guid groupId, string description, int quantity, string quantityUnit, decimal unitPrice, string userName, CancellationToken cancellationToken = default)
+        {
+            var group = await _context.StockCardGroups.FirstOrDefaultAsync(g => g.Id == groupId && g.Status != Status.Deleted, cancellationToken)
+                ?? throw new InvalidOperationException("Grup bulunamadı.");
+
+            await AddCustomItemInternalAsync(groupId, description, quantity, quantityUnit, unitPrice, userName, cancellationToken);
             await RecalculateGroupTotalAsync(groupId, userName, cancellationToken);
         }
 
@@ -205,6 +225,43 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             await _context.SaveChangesAsync(cancellationToken);
         }
 
+
+        private async Task AddCustomItemInternalAsync(Guid groupId, string description, int quantity, string quantityUnit, decimal unitPrice, string userName, CancellationToken cancellationToken)
+        {
+            if (quantity <= 0)
+                throw new InvalidOperationException("Miktar 1 veya daha büyük olmalıdır.");
+
+            if (string.IsNullOrWhiteSpace(description))
+                throw new InvalidOperationException("Hammadde açıklaması zorunludur.");
+
+            if (string.IsNullOrWhiteSpace(quantityUnit))
+                throw new InvalidOperationException("Birim zorunludur.");
+
+            if (unitPrice < 0)
+                throw new InvalidOperationException("Birim fiyat negatif olamaz.");
+
+            var sortOrder = await _context.StockCardGroupItems.Where(i => i.StockCardGroupId == groupId && i.Status != Status.Deleted).CountAsync(cancellationToken);
+
+            _context.StockCardGroupItems.Add(new StockCardGroupItem
+            {
+                Id = Guid.NewGuid(),
+                StockCardGroupId = groupId,
+                StockCardId = null,
+                IsCustomItem = true,
+                CustomDescription = description.Trim(),
+                QuantityUnit = quantityUnit.Trim(),
+                Quantity = quantity,
+                UnitPrice = unitPrice,
+                LineTotal = unitPrice * quantity,
+                SortOrder = sortOrder,
+                CreatedBy = userName,
+                CreatedDate = DateTime.UtcNow,
+                Status = Status.Added
+            });
+
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
         private async Task<decimal> ResolveUnitPriceAsync(Guid stockCardId, CancellationToken cancellationToken)
         {
             var today = DateTime.UtcNow.Date;
@@ -245,6 +302,8 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             var itemsWithoutPrice = await _context.StockCardGroupItems
                 .Where(i => i.StockCardGroupId == groupId
                     && i.Status != Status.Deleted
+                    && !i.IsCustomItem
+                    && i.StockCardId.HasValue
                     && i.UnitPrice <= 0)
                 .ToListAsync(cancellationToken);
 
@@ -254,7 +313,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             var changed = false;
             foreach (var item in itemsWithoutPrice)
             {
-                var resolvedPrice = await ResolveUnitPriceAsync(item.StockCardId, cancellationToken);
+                var resolvedPrice = await ResolveUnitPriceAsync(item.StockCardId!.Value, cancellationToken);
                 if (resolvedPrice <= 0)
                     continue;
 
