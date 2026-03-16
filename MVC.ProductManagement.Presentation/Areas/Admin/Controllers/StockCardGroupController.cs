@@ -102,6 +102,24 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return RedirectToAction(nameof(Detail), new { id = groupId });
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCustomItem(Guid groupId, string customDescription, int quantity, string quantityUnit, decimal unitPrice)
+        {
+            try
+            {
+                await _groupService.AddCustomItemAsync(groupId, customDescription, quantity, quantityUnit, unitPrice, "Admin");
+                TempData["SuccessMessage"] = "Hammadde satırı eklendi.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = groupId });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateQty(Guid groupId, Guid itemId, int quantity)
