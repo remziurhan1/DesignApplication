@@ -14,6 +14,8 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockCodes
             builder.Property(x => x.Quantity).IsRequired();
             builder.Property(x => x.UnitPrice).HasColumnType("decimal(18,4)");
             builder.Property(x => x.LineTotal).HasColumnType("decimal(18,4)");
+            builder.Property(x => x.CustomDescription).HasMaxLength(500);
+            builder.Property(x => x.QuantityUnit).HasMaxLength(50);
 
             builder.HasOne(x => x.StockCardGroup)
                 .WithMany(g => g.Items)
@@ -23,7 +25,8 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockCodes
             builder.HasOne(x => x.StockCard)
                 .WithMany(c => c.GroupItems)
                 .HasForeignKey(x => x.StockCardId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
 
             builder.HasIndex(x => new { x.StockCardGroupId, x.StockCardId });
         }

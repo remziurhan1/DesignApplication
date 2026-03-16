@@ -12,8 +12,12 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
 
     public class StockCardGroupCreateItemDto
     {
-        public Guid StockCardId { get; set; }
+        public Guid? StockCardId { get; set; }
         public int Quantity { get; set; }
+        public bool IsCustomItem { get; set; }
+        public string? CustomDescription { get; set; }
+        public string? QuantityUnit { get; set; }
+        public decimal? UnitPrice { get; set; }
     }
 
     public class StockCardGroupListItemDto
@@ -40,9 +44,11 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
     public class StockCardGroupItemDto
     {
         public Guid ItemId { get; set; }
-        public Guid StockCardId { get; set; }
+        public Guid? StockCardId { get; set; }
+        public bool IsCustomItem { get; set; }
         public string StockCode8 { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public string QuantityUnit { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal LineTotal { get; set; }
