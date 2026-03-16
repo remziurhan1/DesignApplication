@@ -360,7 +360,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
             var groups = await _context.StockCardGroups
                 .AsNoTracking()
-                .Where(g => groupIds.Contains(g.Id) && g.Status != Status.Deleted && g.TotalAmount > 0)
+                .Where(g => groupIds.Contains(g.Id) && g.Status != Status.Deleted)
                 .OrderBy(g => g.GroupCode)
                 .Select(g => new
                 {
