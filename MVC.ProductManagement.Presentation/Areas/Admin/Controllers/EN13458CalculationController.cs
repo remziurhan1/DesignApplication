@@ -170,7 +170,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             if (selectedGroupIds.Count == 0 && costTable?.Items != null)
             {
                 var groupCodesFromCost = costTable.Items
-                    .Where(x => !string.IsNullOrWhiteSpace(x.CostGroupCode) && x.CostGroupCode.StartsWith("GRP-", StringComparison.OrdinalIgnoreCase))
+                    .Where(x => !string.IsNullOrWhiteSpace(x.CostGroupCode))
                     .Select(x => x.CostGroupCode.Trim())
                     .Distinct(StringComparer.OrdinalIgnoreCase)
                     .ToList();
@@ -179,7 +179,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 {
                     var allGroups = await _stockCardGroupService.GetGroupsAsync();
                     selectedGroupIds = allGroups
-                        .Where(x => groupCodesFromCost.Contains(x.GroupCode, StringComparer.OrdinalIgnoreCase))
+                        .Where(x => !string.IsNullOrWhiteSpace(x.GroupCode)
+                            && groupCodesFromCost.Contains(x.GroupCode.Trim(), StringComparer.OrdinalIgnoreCase))
                         .Select(x => x.Id)
                         .Distinct()
                         .ToList();
@@ -835,7 +836,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             var groups = await _stockCardGroupService.GetGroupsAsync();
             ViewBag.StockCardGroups = groups
-                .Where(x => x.TotalAmount > 0)
                 .OrderBy(x => x.GroupCode)
                 .Select(x => new SelectListItem($"{x.GroupCode} - {x.Name} ({x.TotalAmount:N2} {x.CurrencyCode})", x.Id.ToString()))
                 .ToList();
