@@ -67,7 +67,5 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Common
         /// Stok hareketleri (opsiyonel)
         /// </summary>
         public virtual ICollection<StockCardInventory> InventoryMovements { get; set; } = new List<StockCardInventory>();
-
-        public virtual ICollection<StockCardGroupItem> GroupItems { get; set; } = new List<StockCardGroupItem>();
     }
 }
