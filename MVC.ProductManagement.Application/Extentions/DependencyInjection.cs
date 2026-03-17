@@ -14,7 +14,6 @@ using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Application.Services.StockCodes.Catalog;
-using MVC.ProductManagement.Application.Services.StockCodes.S;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
 using MVC.ProductManagement.Infrastructure.Services.StockCards;
 using System;
@@ -57,7 +56,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockSubCodeGroupService, StockSubCodeGroupService>();
             services.AddScoped<IStockSubCodeRuleService, StockSubCodeRuleService>();
 
-            services.AddScoped<IExcelExportService, ExcelExportService>();
+            //services.AddScoped<IExcelExportService, ExcelExportService>();
 
 
 
