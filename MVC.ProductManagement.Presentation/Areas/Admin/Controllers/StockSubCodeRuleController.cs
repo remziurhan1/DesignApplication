@@ -145,44 +145,44 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> RulesBySubGroup(Guid subGroupId)
-        {
-            var rules = await _service.GetAllAsync(subGroupId);
-            return Json(rules
-                .Where(x => x.IsEnabled)
-                .OrderBy(x => x.RuleCode)
-                .Select(x => new
-                {
-                    x.Id,
-                    x.RuleCode,
-                    x.RuleName,
-                    x.Description
-                }));
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> RulesBySubGroup(Guid subGroupId)
+        //{
+        //    var rules = await _service.GetAllAsync(subGroupId);
+        //    return Json(rules
+        //        .Where(x => x.IsEnabled)
+        //        .OrderBy(x => x.RuleCode)
+        //        .Select(x => new
+        //        {
+        //            x.Id,
+        //            x.RuleCode,
+        //            x.RuleName,
+        //            x.Description
+        //        }));
+        //}
 
-        [HttpGet]
-        public async Task<IActionResult> ResolveCode(Guid subGroupId, string? description)
-        {
-            var existingRule = await _service.FindBySubGroupAndDescriptionAsync(subGroupId, description);
-            if (existingRule != null)
-            {
-                return Json(new
-                {
-                    code = existingRule.RuleCode,
-                    description = existingRule.Description,
-                    isExisting = true
-                });
-            }
+        //[HttpGet]
+        //public async Task<IActionResult> ResolveCode(Guid subGroupId, string? description)
+        //{
+        //    var existingRule = await _service.FindBySubGroupAndDescriptionAsync(subGroupId, description);
+        //    if (existingRule != null)
+        //    {
+        //        return Json(new
+        //        {
+        //            code = existingRule.RuleCode,
+        //            description = existingRule.Description,
+        //            isExisting = true
+        //        });
+        //    }
 
-            var nextCode = await _service.GetNextStockCodeBySubGroupAsync(subGroupId);
-            return Json(new
-            {
-                code = nextCode,
-                description = description?.Trim(),
-                isExisting = false
-            });
-        }
+        //    var nextCode = await _service.GetNextStockCodeBySubGroupAsync(subGroupId);
+        //    return Json(new
+        //    {
+        //        code = nextCode,
+        //        description = description?.Trim(),
+        //        isExisting = false
+        //    });
+        //}
 
         [HttpGet]
         public async Task<IActionResult> NextCode(Guid subGroupId)
