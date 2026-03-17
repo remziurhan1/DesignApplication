@@ -1,38 +1,16 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog.StockSubCodeRuleVm
 @using Microsoft.AspNetCore.Mvc.Rendering
+
 <h4>Alt Grup Kuralı Ekle</h4>
+<div class="mb-3">
+    <a asp-action="Generate" class="btn btn-outline-secondary">Önce Kod Üret Ekranına Git</a>
+</div>
+
 <form asp-action="Create" method="post">
     <div class="mb-3"><label asp-for="StockSubCodeGroupId" class="form-label">Alt Grup</label><select asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select"></select></div>
-    <div class="mb-3">
-        <label asp-for="RuleCode" class="form-label"></label>
-        <div class="input-group">
-            <input asp-for="RuleCode" class="form-control" />
-            <button class="btn btn-outline-secondary" type="button" id="btn-generate-code">Alt Gruptan Kod Üret</button>
-        </div>
-    </div>
+    <div class="mb-3"><label asp-for="RuleCode" class="form-label"></label><input asp-for="RuleCode" class="form-control" /></div>
     <div class="mb-3"><label asp-for="RuleName" class="form-label"></label><input asp-for="RuleName" class="form-control" /></div>
     <div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control"></textarea></div>
     <div class="form-check mb-3"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">Kural Aktif</label></div>
     <button class="btn btn-primary" type="submit">Kaydet</button>
 </form>
-
-<script>
-    document.getElementById('btn-generate-code')?.addEventListener('click', async function () {
-        const subGroupSelect = document.getElementById('StockSubCodeGroupId');
-        const ruleCodeInput = document.getElementById('RuleCode');
-
-        if (!subGroupSelect?.value) {
-            alert('Lütfen önce alt grup seçiniz.');
-            return;
-        }
-
-        const response = await fetch(`@Url.Action("NextCode", "StockSubCodeRule")?subGroupId=${subGroupSelect.value}`);
-        if (!response.ok) {
-            alert('Kod üretilemedi.');
-            return;
-        }
-
-        const data = await response.json();
-        ruleCodeInput.value = data.nextCode;
-    });
-</script>
