@@ -13,6 +13,7 @@ using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StockCodes.Common;
+using MVC.ProductManagement.Application.Services.StockCodes.Catalog;
 using MVC.ProductManagement.Application.Services.StockCodes.S;
 using MVC.ProductManagement.Application.Services.StockCodes.S.Features;
 using MVC.ProductManagement.Application.Services.StockCodes.SA;
@@ -23,7 +24,6 @@ using MVC.ProductManagement.Application.Services.StockCodes.SE;
 using MVC.ProductManagement.Application.Services.StockCodes.SF;
 using MVC.ProductManagement.Application.Services.StockCodes.SG;
 using MVC.ProductManagement.Application.Services.StockCodes.SH;
-using MVC.ProductManagement.Application.Services.StockCodes.Rules;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
 using MVC.ProductManagement.Infrastructure.Services.StockCards;
 using System;
@@ -68,12 +68,13 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockCodeShService, StockCodeShService>();
             services.AddScoped<ISFeatureQueryService, SFeatureQueryService>();
             services.AddScoped<IStockCodeLookupService, StockCodeLookupService>();// ========== STOK KART MODÜL SERVİSLERİ ==========
-            services.AddScoped<IStockRuleProfileService, StockRuleProfileService>();
-            services.AddScoped<ISaRuleCatalogSyncService, SaRuleCatalogSyncService>();
             services.AddScoped<IStockCardDatasheetService, StockCardDatasheetService>();
             services.AddScoped<IStockCardPriceService, StockCardPriceService>();
             services.AddScoped<IStockCardInventoryService, StockCardInventoryService>();
             services.AddScoped<IStockCardGroupService, StockCardGroupService>();
+            services.AddScoped<IStockMainCodeGroupService, StockMainCodeGroupService>();
+            services.AddScoped<IStockSubCodeGroupService, StockSubCodeGroupService>();
+            services.AddScoped<IStockSubCodeRuleService, StockSubCodeRuleService>();
 
             services.AddScoped<IStockCodeSbService, StockCodeSbService>();
             services.AddScoped<IExcelExportService, ExcelExportService>();
