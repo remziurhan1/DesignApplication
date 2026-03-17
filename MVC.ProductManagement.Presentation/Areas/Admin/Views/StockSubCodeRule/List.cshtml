@@ -1,0 +1,46 @@
+@model IEnumerable<MVC.ProductManagement.Application.DTOs.StockCodes.Catalog.StockSubCodeRuleListDto>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<h4>Stok Kodları Görünümü</h4>
+<p class="text-muted">Stok kodlarını açıklaması, birim fiyatı ve hedef fiyatı ile görüntüleyin.</p>
+
+<form method="get" asp-action="List" class="row g-2 align-items-end mb-3">
+    <div class="col-md-6">
+        <label class="form-label">Alt Grup</label>
+        <select name="subGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select">
+            <option value="">Tümü</option>
+        </select>
+    </div>
+    <div class="col-md-6 text-md-end">
+        <button class="btn btn-outline-primary" type="submit">Filtrele</button>
+        <a asp-action="Generate" class="btn btn-primary">Yeni Stok Kodu Üret</a>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ana/Alt Grup</th>
+            <th>Kod</th>
+            <th>Kural Adı</th>
+            <th>Açıklama</th>
+            <th>Birim Fiyat</th>
+            <th>Hedef Fiyat</th>
+            <th>Durum</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MainGroupCode / @item.SubGroupCode - @item.SubGroupName</td>
+            <td>@item.RuleCode</td>
+            <td>@item.RuleName</td>
+            <td>@item.Description</td>
+            <td>@item.UnitPrice.ToString("N2")</td>
+            <td>@item.TargetPrice.ToString("N2")</td>
+            <td>@(item.IsEnabled ? "Açık" : "Kapalı")</td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -7,6 +7,8 @@
     <div class="mb-3"><label asp-for="RuleCode" class="form-label"></label><input asp-for="RuleCode" class="form-control" /></div>
     <div class="mb-3"><label asp-for="RuleName" class="form-label"></label><input asp-for="RuleName" class="form-control" /></div>
     <div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control"></textarea></div>
+    <div class="mb-3"><label asp-for="UnitPrice" class="form-label">Birim Fiyat</label><input asp-for="UnitPrice" type="number" step="0.01" min="0" class="form-control" /></div>
+    <div class="mb-3"><label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label><input asp-for="TargetPrice" type="number" step="0.01" min="0" class="form-control" /></div>
     <div class="form-check mb-3"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">Kural Aktif</label></div>
     <button class="btn btn-primary" type="submit">Güncelle</button>
 </form>

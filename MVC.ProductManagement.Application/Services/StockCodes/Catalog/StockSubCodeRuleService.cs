@@ -69,6 +69,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                         RuleCode = x.RuleCode,
                         RuleName = x.RuleName,
                         Description = x.Description,
+                        UnitPrice = x.UnitPrice,
+                        TargetPrice = x.TargetPrice,
                         IsEnabled = x.IsEnabled
                     };
                 })
@@ -97,6 +99,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 RuleCode = entity.RuleCode,
                 RuleName = entity.RuleName,
                 Description = entity.Description,
+                UnitPrice = entity.UnitPrice,
+                TargetPrice = entity.TargetPrice,
                 IsEnabled = entity.IsEnabled
             };
         }
@@ -146,6 +150,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 RuleCode = normalizedRuleCode,
                 RuleName = dto.RuleName.Trim(),
                 Description = dto.Description?.Trim(),
+                UnitPrice = dto.UnitPrice,
+                TargetPrice = dto.TargetPrice,
                 IsEnabled = dto.IsEnabled
             };
 
@@ -164,6 +170,8 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             entity.RuleCode = dto.RuleCode.Trim().ToUpperInvariant();
             entity.RuleName = dto.RuleName.Trim();
             entity.Description = dto.Description?.Trim();
+            entity.UnitPrice = dto.UnitPrice;
+            entity.TargetPrice = dto.TargetPrice;
             entity.IsEnabled = dto.IsEnabled;
 
             await _repository.UpdateAsync(entity);
