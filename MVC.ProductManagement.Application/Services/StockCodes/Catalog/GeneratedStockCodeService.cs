@@ -65,7 +65,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 
         public async Task<GeneratedStockCodeResolveDto> ResolveCodeAsync(Guid subGroupId, string? ruleName, List<Guid>? selectedRuleIds = null)
         {
-            var normalizedName = Normalize(ruleName);
+            var fallbackName = await ComposeRuleNameAsync(subGroupId, selectedRuleIds);
+            var effectiveRuleName = !string.IsNullOrWhiteSpace(ruleName) ? ruleName.Trim() : fallbackName;
+            var normalizedName = Normalize(effectiveRuleName);
+
             if (!string.IsNullOrWhiteSpace(normalizedName))
             {
                 var existing = (await _repository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId, tracking: false))
@@ -91,7 +94,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             return new GeneratedStockCodeResolveDto
             {
                 Code = nextCode,
-                RuleName = ruleName?.Trim() ?? string.Empty,
+                RuleName = effectiveRuleName,
                 Description = composedDescription,
                 IsExisting = false
             };
@@ -99,18 +102,31 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 
         public async Task<GeneratedStockCodeListDto> CreateAsync(GeneratedStockCodeCreateDto dto)
         {
-            var normalizedName = Normalize(dto.RuleName);
-            var existing = (await _repository.GetAllAsync(x => x.StockSubCodeGroupId == dto.StockSubCodeGroupId, tracking: false))
-                .FirstOrDefault(x => Normalize(x.RuleName) == normalizedName);
-
-            if (existing != null)
-            {
-                return (await GetAllAsync(dto.StockSubCodeGroupId)).First(x => x.Id == existing.Id);
-            }
-
             var generatedCode = string.IsNullOrWhiteSpace(dto.GeneratedCode)
                 ? await GetNextCodeBySubGroupAsync(dto.StockSubCodeGroupId)
                 : dto.GeneratedCode.Trim().ToUpperInvariant();
+
+            var existingByCode = (await _repository.GetAllAsync(x => x.StockSubCodeGroupId == dto.StockSubCodeGroupId, tracking: false))
+                .FirstOrDefault(x => Normalize(x.GeneratedCode) == Normalize(generatedCode));
+            if (existingByCode != null)
+            {
+                return (await GetAllAsync(dto.StockSubCodeGroupId)).First(x => x.Id == existingByCode.Id);
+            }
+
+            var fallbackName = await ComposeRuleNameAsync(dto.StockSubCodeGroupId, dto.SelectedRuleIds);
+            var effectiveRuleName = !string.IsNullOrWhiteSpace(dto.RuleName) ? dto.RuleName.Trim() : fallbackName;
+            var normalizedName = Normalize(effectiveRuleName);
+
+            if (!string.IsNullOrWhiteSpace(normalizedName))
+            {
+                var existingByName = (await _repository.GetAllAsync(x => x.StockSubCodeGroupId == dto.StockSubCodeGroupId, tracking: false))
+                    .FirstOrDefault(x => Normalize(x.RuleName) == normalizedName);
+
+                if (existingByName != null)
+                {
+                    return (await GetAllAsync(dto.StockSubCodeGroupId)).First(x => x.Id == existingByName.Id);
+                }
+            }
 
             var description = await ComposeDescriptionAsync(dto.StockSubCodeGroupId, dto.SelectedRuleIds, dto.Description);
 
@@ -119,7 +135,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 StockSubCodeGroupId = dto.StockSubCodeGroupId,
                 StockSubCodeRuleId = dto.StockSubCodeRuleId,
                 GeneratedCode = generatedCode,
-                RuleName = dto.RuleName.Trim(),
+                RuleName = effectiveRuleName,
                 Description = description,
                 UnitPrice = dto.UnitPrice,
                 TargetPrice = dto.TargetPrice
@@ -129,6 +145,31 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             await _repository.SaveChangeAsync();
 
             return (await GetAllAsync(entity.StockSubCodeGroupId)).First(x => x.Id == entity.Id);
+        }
+
+        private async Task<string> ComposeRuleNameAsync(Guid subGroupId, List<Guid>? selectedRuleIds)
+        {
+            if (selectedRuleIds?.Any() != true)
+            {
+                return string.Empty;
+            }
+
+            var ruleIdSet = selectedRuleIds.Distinct().ToList();
+            var rules = await _ruleRepository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId && ruleIdSet.Contains(x.Id), tracking: false);
+            var orderedRules = rules
+                .OrderBy(x => x.SortOrder ?? int.MaxValue)
+                .ThenBy(x => x.CreatedDate)
+                .ThenBy(x => x.RuleCode)
+                .ToList();
+
+            var parts = orderedRules
+                .Select(x => x.Description?.Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x!)
+                .Distinct()
+                .ToList();
+
+            return string.Join(" ", parts);
         }
 
         private async Task<string> GetNextCodeBySubGroupAsync(Guid subGroupId)

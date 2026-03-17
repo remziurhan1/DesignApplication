@@ -165,7 +165,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             if (!subGroupExists) throw new Exception("Sub group not found");
 
             entity.StockSubCodeGroupId = dto.StockSubCodeGroupId;
-            entity.RuleCode = dto.RuleCode.Trim().ToUpperInvariant();
+            entity.RuleCode = string.IsNullOrWhiteSpace(dto.RuleCode)
+                ? await GetNextStockCodeBySubGroupAsync(dto.StockSubCodeGroupId)
+                : dto.RuleCode.Trim().ToUpperInvariant();
             entity.RuleName = dto.RuleName.Trim();
             entity.Description = dto.Description?.Trim();
             entity.SortOrder = dto.SortOrder;

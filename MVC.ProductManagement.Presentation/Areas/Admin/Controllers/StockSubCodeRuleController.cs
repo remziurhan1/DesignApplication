@@ -50,7 +50,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             await _service.CreateAsync(new StockSubCodeRuleCreateDto
             {
                 StockSubCodeGroupId = vm.StockSubCodeGroupId,
-                RuleCode = vm.RuleCode,
+                RuleCode = vm.RuleCode ?? string.Empty,
                 RuleName = vm.RuleName,
                 Description = vm.Description,
                 SortOrder = vm.SortOrder,
@@ -69,7 +69,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = dto.Id,
                 StockSubCodeGroupId = dto.StockSubCodeGroupId,
-                RuleCode = dto.RuleCode,
+                RuleCode = dto.RuleCode ?? string.Empty,
                 RuleName = dto.RuleName,
                 Description = dto.Description,
                 SortOrder = dto.SortOrder,
@@ -91,13 +91,28 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = vm.Id,
                 StockSubCodeGroupId = vm.StockSubCodeGroupId,
-                RuleCode = vm.RuleCode,
+                RuleCode = vm.RuleCode ?? string.Empty,
                 RuleName = vm.RuleName,
                 Description = vm.Description,
                 SortOrder = vm.SortOrder,
                 IsEnabled = vm.IsEnabled
             });
             return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ExistingRulesBySubGroup(Guid subGroupId)
+        {
+            var rules = await _service.GetAllAsync(subGroupId);
+            return Json(rules.OrderBy(x => x.SortOrder ?? int.MaxValue).ThenBy(x => x.RuleName).ThenBy(x => x.RuleCode).Select(x => new
+            {
+                x.Id,
+                x.RuleCode,
+                x.RuleName,
+                x.Description,
+                x.SortOrder
+            }));
         }
 
         [HttpPost]

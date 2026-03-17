@@ -14,9 +14,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
         [MaxLength(50)]
         public string? GeneratedCode { get; set; }
 
-        [Required]
         [MaxLength(250)]
-        public string RuleName { get; set; } = default!;
+        public string? RuleName { get; set; }
 
         [MaxLength(1000)]
         public string? Description { get; set; }
