@@ -8,6 +8,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         Task<StockSubCodeRuleDetailDto?> GetByIdAsync(Guid id);
         Task<StockSubCodeRuleDetailDto> CreateAsync(StockSubCodeRuleCreateDto dto);
         Task<StockSubCodeRuleDetailDto> UpdateAsync(StockSubCodeRuleUpdateDto dto);
+        Task<string> GetNextStockCodeBySubGroupAsync(Guid subGroupId);
         Task DeleteAsync(Guid id);
     }
 }

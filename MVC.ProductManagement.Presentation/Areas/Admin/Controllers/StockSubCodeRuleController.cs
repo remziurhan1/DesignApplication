@@ -89,6 +89,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> NextCode(Guid subGroupId)
+        {
+            var nextCode = await _service.GetNextStockCodeBySubGroupAsync(subGroupId);
+            return Json(new { nextCode });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
