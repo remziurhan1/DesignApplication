@@ -5,7 +5,6 @@ using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
-using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
@@ -26,20 +25,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
         private readonly IStorageTypeService _storageTypeService;
-        private readonly IStockCardGroupService _stockCardGroupService;
 
         public EN13458CalculationController(
             IEN13458CalculationServices service,
             IMaterialService materialService,
             IMaterialFormService materialFormService,
-            IStorageTypeService storageTypeService,
-            IStockCardGroupService stockCardGroupService)
+            IStorageTypeService storageTypeService)
         {
             _service = service;
             _materialService = materialService;
             _materialFormService = materialFormService;
             _storageTypeService = storageTypeService;
-            _stockCardGroupService = stockCardGroupService;
         }
 
         [HttpGet]
@@ -62,7 +58,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id, List<Guid>? selectedStockCardGroupIds = null)
+        public async Task<IActionResult> Details(Guid id)
         {
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
@@ -153,71 +149,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan2000 = dto.OuterSectorPlan2000,
                 OuterSectorPlan2500 = dto.OuterSectorPlan2500,
                 OuterSectorPlan3000 = dto.OuterSectorPlan3000,
-                SelectedStockCardGroupIds = dto.SelectedStockCardGroupIds?.ToList() ?? new List<Guid>()
             };
 
-            var querySelectedGroupIds = (selectedStockCardGroupIds ?? new List<Guid>())
-                .Where(x => x != Guid.Empty)
-                .Distinct()
-                .ToList();
-
-            if (querySelectedGroupIds.Count > 0)
-            {
-                vm.SelectedStockCardGroupIds = querySelectedGroupIds;
-                SetSelectedStockCardGroupIds(dto, querySelectedGroupIds);
-            }
-            else
-            {
-                vm.SelectedStockCardGroupIds = GetSelectedStockCardGroupIds(dto);
-            }
-
             await PopulateResultDisplayNamesAsync(vm);
-            var costTable = await GetSavedOrBuiltCostTableAsync(dto, forceBuild: querySelectedGroupIds.Count > 0);
+            var costTable = await GetSavedOrBuiltCostTableAsync(dto);
             ViewBag.CostTable = costTable;
-
-            var allGroups = await _stockCardGroupService.GetGroupsAsync();
-            ViewBag.StockCardGroups = allGroups
-                .OrderBy(x => x.GroupCode)
-                .Select(x => new SelectListItem($"{x.GroupCode} - {x.Name} ({x.TotalAmount:N2} {x.CurrencyCode})", x.Id.ToString()))
-                .ToList();
-
-            var selectedGroupIds = vm.SelectedStockCardGroupIds
-                .Where(x => x != Guid.Empty)
-                .Distinct()
-                .ToList();
-
-            if (selectedGroupIds.Count == 0 && costTable?.Items != null)
-            {
-                var groupCodesFromCost = costTable.Items
-                    .Where(x => !string.IsNullOrWhiteSpace(x.CostGroupCode))
-                    .Select(x => x.CostGroupCode.Trim())
-                    .Distinct(StringComparer.OrdinalIgnoreCase)
-                    .ToList();
-
-                if (groupCodesFromCost.Count > 0)
-                {
-                    selectedGroupIds = allGroups
-                        .Where(x => !string.IsNullOrWhiteSpace(x.GroupCode)
-                            && groupCodesFromCost.Contains(x.GroupCode.Trim(), StringComparer.OrdinalIgnoreCase))
-                        .Select(x => x.Id)
-                        .Distinct()
-                        .ToList();
-                }
-            }
-
-            var selectedGroupDetails = new List<MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör.StockCardGroupDetailDto>();
-            foreach (var groupId in selectedGroupIds)
-            {
-                var groupDetail = await _stockCardGroupService.GetGroupDetailAsync(groupId);
-                if (groupDetail != null)
-                {
-                    selectedGroupDetails.Add(groupDetail);
-                }
-            }
-
-            ViewBag.SelectedStockCardGroupDetails = selectedGroupDetails
-                .OrderBy(x => x.GroupCode)
-                .ToList();
 
             return View(vm);
         }
@@ -571,8 +507,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 StiffenerSectionModulus = vm.StiffenerSectionModulus
             };
 
-            SetSelectedStockCardGroupIds(dto, vm.SelectedStockCardGroupIds);
-
             try
             {
                 var result = await _service.CalculateAsync(dto);
@@ -688,7 +622,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan3000 = dto.OuterSectorPlan3000
             };
 
-            vm.SelectedStockCardGroupIds = GetSelectedStockCardGroupIds(dto);
             return vm;
         }
 
@@ -782,18 +715,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 OuterSectorPlan3000 = vm.OuterSectorPlan3000
             };
 
-            SetSelectedStockCardGroupIds(dto, vm.SelectedStockCardGroupIds);
             return dto;
         }
 
 
-        private async Task<EN13458MaterialCostTableDTO> GetSavedOrBuiltCostTableAsync(EN13458ResultDTO dto, bool forceBuild = false)
+        private async Task<EN13458MaterialCostTableDTO> GetSavedOrBuiltCostTableAsync(EN13458ResultDTO dto)
         {
-            if (forceBuild)
-            {
-                return await _service.BuildMaterialCostTableAsync(dto);
-            }
-
             var serviceType = _service.GetType();
             var savedMethod = serviceType.GetMethod("GetSavedMaterialCostTableAsync", new[] { typeof(Guid) });
             if (savedMethod != null)
@@ -810,33 +737,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
 
             return await _service.BuildMaterialCostTableAsync(dto);
-        }
-
-        private static List<Guid> GetSelectedStockCardGroupIds(object source)
-        {
-            var prop = source.GetType().GetProperty("SelectedStockCardGroupIds");
-            if (prop?.GetValue(source) is IEnumerable<Guid> values)
-            {
-                return values.Where(x => x != Guid.Empty).Distinct().ToList();
-            }
-
-            return new List<Guid>();
-        }
-
-        private static void SetSelectedStockCardGroupIds(object target, IEnumerable<Guid>? ids)
-        {
-            var prop = target.GetType().GetProperty("SelectedStockCardGroupIds");
-            if (prop == null || !prop.CanWrite)
-            {
-                return;
-            }
-
-            var value = (ids ?? Enumerable.Empty<Guid>())
-                .Where(x => x != Guid.Empty)
-                .Distinct()
-                .ToList();
-
-            prop.SetValue(target, value);
         }
 
 
@@ -944,12 +844,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             ViewBag.StorageTypeDensities = storageTypeList
                 .ToDictionary(x => x.Id.ToString(), x => x.Density);
-
-            var groups = await _stockCardGroupService.GetGroupsAsync();
-            ViewBag.StockCardGroups = groups
-                .OrderBy(x => x.GroupCode)
-                .Select(x => new SelectListItem($"{x.GroupCode} - {x.Name} ({x.TotalAmount:N2} {x.CurrencyCode})", x.Id.ToString()))
-                .ToList();
         }
 
         private static int WriteSection(ExcelWorksheet ws, int row, string title, IReadOnlyCollection<(string Label, object Value)> values)

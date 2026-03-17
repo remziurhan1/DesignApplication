@@ -117,6 +117,5 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public string OuterSectorPlan2500 { get; set; } = string.Empty;
         public string OuterSectorPlan3000 { get; set; } = string.Empty;
 
-        public List<Guid> SelectedStockCardGroupIds { get; set; } = new();
     }
 }

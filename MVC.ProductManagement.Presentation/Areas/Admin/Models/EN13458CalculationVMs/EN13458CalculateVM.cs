@@ -51,6 +51,5 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double? StiffenerArea { get; set; }
         public double? StiffenerSectionModulus { get; set; }
 
-        public List<Guid> SelectedStockCardGroupIds { get; set; } = new();
     }
 }

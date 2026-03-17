@@ -1,6 +1,5 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM
 @using System.Globalization
-@using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör
 @using Microsoft.AspNetCore.Mvc.Rendering
 @{
     ViewData["Title"] = "EN13458 Details";
@@ -215,39 +214,6 @@
 </div>
 
 @{
-    var selectedGroups = ViewBag.SelectedStockCardGroupDetails as IReadOnlyList<StockCardGroupDetailDto> ?? new List<StockCardGroupDetailDto>();
-}
-
-@{
-    var stockCardGroups = ViewBag.StockCardGroups as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
-}
-
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light fw-semibold">Stok Grubu Ekle (EN13458 Maliyet)</div>
-    <div class="card-body">
-        <form asp-action="Details" method="get" class="row g-2 align-items-end">
-            <input type="hidden" name="id" value="@Model.Id" />
-            <div class="col-12 col-lg-9">
-                <label class="form-label">Maliyete eklenecek stok grupları</label>
-                <select name="selectedStockCardGroupIds" class="form-select" multiple size="6">
-                    @foreach (var group in stockCardGroups)
-                    {
-                        var selected = Model.SelectedStockCardGroupIds.Any(x => x.ToString() == group.Value);
-                        <option value="@group.Value" selected="@(selected ? "selected" : null)">@group.Text</option>
-                    }
-                </select>
-                <small class="text-muted">Bir veya birden fazla grup seçip "Maliyeti Güncelle" butonuna basın.</small>
-            </div>
-            <div class="col-12 col-lg-3 d-grid">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-1"></i>Maliyeti Güncelle
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-@{
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
 }
 @if (costTable != null)
@@ -284,51 +250,9 @@
                     <tbody>
                     @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                     {
-                        var selectedGroup = FindMatchingSelectedGroup(selectedGroups, groupItems.Key.CostGroupCode, groupItems.Key.CostGroupName, groupItems.Select(x => x.ItemName));
-
                         <tr class="table-primary">
                             <td colspan="8" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
                         </tr>
-
-                        @if (selectedGroup != null && selectedGroup.Items.Any())
-                        {
-                            <tr class="table-light">
-                                <td colspan="8" class="p-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-sm mb-0 align-middle">
-                                            <thead>
-                                                <tr>
-                                                    <th class="ps-4">Alt Kırılım / Stok Kodu</th>
-                                                    <th>Açıklama</th>
-                                                    <th class="text-end">Adet</th>
-                                                    <th class="text-end">Birim Fiyat</th>
-                                                    <th class="text-end pe-4">Satır Toplam</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var groupItem in selectedGroup.Items)
-                                                {
-                                                    <tr>
-                                                        <td class="ps-4">@groupItem.StockCode8</td>
-                                                        <td>@groupItem.Description</td>
-                                                        <td class="text-end">@groupItem.Quantity</td>
-                                                        <td class="text-end">@groupItem.UnitPrice.ToString("N2")</td>
-                                                        <td class="text-end pe-4 fw-semibold">@groupItem.LineTotal.ToString("N2") @selectedGroup.CurrencyCode</td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-
-                        @if (selectedGroup == null && groupItems.Key.CostGroupCode.StartsWith("GRP-", StringComparison.OrdinalIgnoreCase))
-                        {
-                            <tr class="table-warning">
-                                <td colspan="8" class="small">Bu grup için alt kırılım bulunamadı (grup satırları eşleşmedi).</td>
-                            </tr>
-                        }
 
                         @foreach (var item in groupItems)
                         {
@@ -372,60 +296,6 @@
 
 
 @functions {
-    private static StockCardGroupDetailDto? FindMatchingSelectedGroup(
-        IReadOnlyList<StockCardGroupDetailDto> selectedGroups,
-        string? costGroupCode,
-        string? costGroupName,
-        IEnumerable<string>? itemNames)
-    {
-        if (selectedGroups == null || selectedGroups.Count == 0)
-        {
-            return null;
-        }
-
-        var candidates = new List<string>();
-        if (!string.IsNullOrWhiteSpace(costGroupCode)) candidates.Add(costGroupCode);
-        if (!string.IsNullOrWhiteSpace(costGroupCode) && !string.IsNullOrWhiteSpace(costGroupName))
-            candidates.Add($"{costGroupCode} - {costGroupName}");
-
-        if (itemNames != null)
-        {
-            candidates.AddRange(itemNames.Where(x => !string.IsNullOrWhiteSpace(x)));
-        }
-
-        foreach (var group in selectedGroups)
-        {
-            var groupCode = NormalizeGroupToken(group.GroupCode);
-            var groupTitle = NormalizeGroupToken($"{group.GroupCode} - {group.Name}");
-
-            foreach (var candidate in candidates)
-            {
-                var token = NormalizeGroupToken(candidate);
-                if (string.IsNullOrWhiteSpace(token)) continue;
-
-                if (token == groupCode || token == groupTitle || token.Contains(groupCode))
-                {
-                    return group;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private static string NormalizeGroupToken(string? value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return string.Empty;
-        }
-
-        return value
-            .Replace("Grup Maliyeti", string.Empty, StringComparison.OrdinalIgnoreCase)
-            .Trim()
-            .ToUpperInvariant();
-    }
-
     private static int GetPieceCount(string? cutList)
     {
         if (string.IsNullOrWhiteSpace(cutList)) return 0;
