@@ -21,15 +21,23 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 ? await _repository.GetAllAsync(x => x.StockMainCodeGroupId == mainGroupId.Value, tracking: false)
                 : await _repository.GetAllAsync(tracking: false);
 
+            var mainGroupIds = entities
+                .Select(x => x.StockMainCodeGroupId)
+                .Distinct()
+                .ToList();
+
+            var mainGroups = await _mainGroupRepository.GetAllAsync(x => mainGroupIds.Contains(x.Id), tracking: false);
+            var mainGroupsById = mainGroups.ToDictionary(x => x.Id);
+
             return entities
-                .OrderBy(x => x.StockMainCodeGroup.Code)
+                .OrderBy(x => mainGroupsById.TryGetValue(x.StockMainCodeGroupId, out var group) ? group.Code : string.Empty)
                 .ThenBy(x => x.Code)
                 .Select(x => new StockSubCodeGroupListDto
                 {
                     Id = x.Id,
                     StockMainCodeGroupId = x.StockMainCodeGroupId,
-                    MainGroupCode = x.StockMainCodeGroup.Code,
-                    MainGroupName = x.StockMainCodeGroup.Name,
+                    MainGroupCode = mainGroupsById.TryGetValue(x.StockMainCodeGroupId, out var group) ? group.Code : string.Empty,
+                    MainGroupName = mainGroupsById.TryGetValue(x.StockMainCodeGroupId, out group) ? group.Name : string.Empty,
                     Code = x.Code,
                     Name = x.Name,
                     IsEnabled = x.IsEnabled
@@ -41,12 +49,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var entity = await _repository.GetByIdAsync(id, tracking: false);
             if (entity == null) return null;
 
+            var mainGroup = await _mainGroupRepository.GetByIdAsync(entity.StockMainCodeGroupId, tracking: false)
+                ?? throw new Exception("Main group not found");
+
             return new StockSubCodeGroupDetailDto
             {
                 Id = entity.Id,
                 StockMainCodeGroupId = entity.StockMainCodeGroupId,
-                MainGroupCode = entity.StockMainCodeGroup.Code,
-                MainGroupName = entity.StockMainCodeGroup.Name,
+                MainGroupCode = mainGroup.Code,
+                MainGroupName = mainGroup.Name,
                 Code = entity.Code,
                 Name = entity.Name,
                 IsEnabled = entity.IsEnabled
