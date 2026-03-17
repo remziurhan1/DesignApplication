@@ -32,8 +32,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = ruleCode ?? string.Empty,
                 Description = description,
                 RuleName = ruleName ?? string.Empty,
-                UnitPrice = null,
-                TargetPrice = null,
+                SortOrder = null,
                 IsEnabled = true
             });
         }
@@ -54,8 +53,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = vm.RuleCode,
                 RuleName = vm.RuleName,
                 Description = vm.Description,
-                UnitPrice = vm.UnitPrice,
-                TargetPrice = vm.TargetPrice,
+                SortOrder = vm.SortOrder,
                 IsEnabled = vm.IsEnabled
             });
             return RedirectToAction(nameof(Index));
@@ -74,8 +72,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = dto.RuleCode,
                 RuleName = dto.RuleName,
                 Description = dto.Description,
-                UnitPrice = dto.UnitPrice,
-                TargetPrice = dto.TargetPrice,
+                SortOrder = dto.SortOrder,
                 IsEnabled = dto.IsEnabled
             });
         }
@@ -97,8 +94,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = vm.RuleCode,
                 RuleName = vm.RuleName,
                 Description = vm.Description,
-                UnitPrice = vm.UnitPrice,
-                TargetPrice = vm.TargetPrice,
+                SortOrder = vm.SortOrder,
                 IsEnabled = vm.IsEnabled
             });
             return RedirectToAction(nameof(Index));

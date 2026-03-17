@@ -14,8 +14,7 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds.Catalog
             builder.Property(x => x.RuleCode).HasMaxLength(50).IsRequired();
             builder.Property(x => x.RuleName).HasMaxLength(250).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(1000);
-            builder.Property(x => x.UnitPrice).HasColumnType("decimal(18,2)");
-            builder.Property(x => x.TargetPrice).HasColumnType("decimal(18,2)");
+            builder.Property(x => x.SortOrder);
             builder.Property(x => x.IsEnabled).IsRequired();
 
             builder.HasIndex(x => new { x.StockSubCodeGroupId, x.RuleCode }).IsUnique();

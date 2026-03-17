@@ -90,15 +90,17 @@
     }
 
     function syncDescriptionFromSelectedRules() {
-        const selected = rules.filter(r => getSelectedRuleIds().includes(r.id));
+        const selected = rules
+            .filter(r => getSelectedRuleIds().includes(r.id))
+            .sort((a, b) => {
+                const aOrder = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                const bOrder = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                if (aOrder !== bOrder) return aOrder - bOrder;
+                return (a.ruleCode ?? '').localeCompare(b.ruleCode ?? '');
+            });
+
         const descriptions = [...new Set(selected.map(r => (r.description ?? '').trim()).filter(x => x))];
         descriptionInput.value = descriptions.join(' | ');
-
-        const firstWithPrice = selected.find(r => r.unitPrice != null || r.targetPrice != null);
-        if (firstWithPrice) {
-            if (firstWithPrice.unitPrice != null) unitPriceInput.value = firstWithPrice.unitPrice;
-            if (firstWithPrice.targetPrice != null) targetPriceInput.value = firstWithPrice.targetPrice;
-        }
 
         stockSubCodeRuleIdInput.value = selected.length === 1 ? selected[0].id : '';
         renderSelectedRuleInputs();
@@ -114,7 +116,7 @@
             <div class="form-check mb-1">
                 <input class="form-check-input rule-check" type="checkbox" value="${rule.id}" id="rule-${rule.id}">
                 <label class="form-check-label" for="rule-${rule.id}">
-                    <strong>${rule.ruleCode}</strong> - ${rule.ruleName}
+                    <strong>${rule.ruleCode}</strong> - ${rule.ruleName} ${(rule.sortOrder ?? '') !== '' ? '(Sıra: ' + rule.sortOrder + ')' : ''}
                     <small class="text-muted d-block">${rule.description ?? ''}</small>
                 </label>
             </div>

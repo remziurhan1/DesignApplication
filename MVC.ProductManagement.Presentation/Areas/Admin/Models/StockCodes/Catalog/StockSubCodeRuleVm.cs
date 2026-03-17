@@ -19,6 +19,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
 
         [MaxLength(1000)]
         public string? Description { get; set; }
+        public int? SortOrder { get; set; }
 
         [Range(0, 999999999)]
         public decimal? UnitPrice { get; set; }

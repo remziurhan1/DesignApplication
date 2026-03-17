@@ -158,10 +158,19 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             {
                 var ruleIdSet = selectedRuleIds.Distinct().ToList();
                 var rules = await _ruleRepository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId && ruleIdSet.Contains(x.Id), tracking: false);
-                descriptionParts.AddRange(rules
-                    .Select(x => x.Description?.Trim())
-                    .Where(x => !string.IsNullOrWhiteSpace(x))
-                    .Distinct()!);
+                var orderedRules = rules
+                    .OrderBy(x => x.SortOrder ?? int.MaxValue)
+                    .ThenBy(x => x.CreatedDate)
+                    .ThenBy(x => x.RuleCode)
+                    .ToList();
+
+                foreach (var description in orderedRules.Select(x => x.Description?.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)))
+                {
+                    if (!descriptionParts.Contains(description!))
+                    {
+                        descriptionParts.Add(description!);
+                    }
+                }
             }
 
             var extra = manualDescription?.Trim();

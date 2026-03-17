@@ -50,6 +50,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                     return mainGroupsById.TryGetValue(subGroup.StockMainCodeGroupId, out var mainGroup) ? mainGroup.Code : string.Empty;
                 })
                 .ThenBy(x => subGroupsById.TryGetValue(x.StockSubCodeGroupId, out var subGroup) ? subGroup.Code : string.Empty)
+                .ThenBy(x => x.SortOrder ?? int.MaxValue)
                 .ThenBy(x => x.RuleCode)
                 .Select(x =>
                 {
@@ -69,8 +70,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                         RuleCode = x.RuleCode,
                         RuleName = x.RuleName,
                         Description = x.Description,
-                        UnitPrice = x.UnitPrice,
-                        TargetPrice = x.TargetPrice,
+                        SortOrder = x.SortOrder,
                         IsEnabled = x.IsEnabled
                     };
                 })
@@ -99,8 +99,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 RuleCode = entity.RuleCode,
                 RuleName = entity.RuleName,
                 Description = entity.Description,
-                UnitPrice = entity.UnitPrice,
-                TargetPrice = entity.TargetPrice,
+                SortOrder = entity.SortOrder,
                 IsEnabled = entity.IsEnabled
             };
         }
@@ -150,8 +149,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 RuleCode = normalizedRuleCode,
                 RuleName = dto.RuleName.Trim(),
                 Description = dto.Description?.Trim(),
-                UnitPrice = dto.UnitPrice,
-                TargetPrice = dto.TargetPrice,
+                SortOrder = dto.SortOrder,
                 IsEnabled = dto.IsEnabled
             };
 
@@ -170,8 +168,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             entity.RuleCode = dto.RuleCode.Trim().ToUpperInvariant();
             entity.RuleName = dto.RuleName.Trim();
             entity.Description = dto.Description?.Trim();
-            entity.UnitPrice = dto.UnitPrice;
-            entity.TargetPrice = dto.TargetPrice;
+            entity.SortOrder = dto.SortOrder;
             entity.IsEnabled = dto.IsEnabled;
 
             await _repository.UpdateAsync(entity);

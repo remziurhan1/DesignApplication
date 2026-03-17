@@ -64,14 +64,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> RulesBySubGroup(Guid subGroupId)
         {
             var rules = await _ruleService.GetAllAsync(subGroupId);
-            return Json(rules.OrderBy(x => x.RuleCode).Select(x => new
+            return Json(rules.OrderBy(x => x.SortOrder ?? int.MaxValue).ThenBy(x => x.RuleCode).Select(x => new
             {
                 x.Id,
                 x.RuleCode,
                 x.RuleName,
                 x.Description,
-                x.UnitPrice,
-                x.TargetPrice
+                x.SortOrder
             }));
         }
 
