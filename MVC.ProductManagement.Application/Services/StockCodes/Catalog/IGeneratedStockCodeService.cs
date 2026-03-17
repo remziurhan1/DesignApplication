@@ -1,0 +1,11 @@
+using MVC.ProductManagement.Application.DTOs.StockCodes.Catalog;
+
+namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
+{
+    public interface IGeneratedStockCodeService
+    {
+        Task<List<GeneratedStockCodeListDto>> GetAllAsync(Guid? subGroupId = null);
+        Task<GeneratedStockCodeListDto> CreateAsync(GeneratedStockCodeCreateDto dto);
+        Task<GeneratedStockCodeResolveDto> ResolveCodeAsync(Guid subGroupId, string? ruleName, List<Guid>? selectedRuleIds = null);
+    }
+}

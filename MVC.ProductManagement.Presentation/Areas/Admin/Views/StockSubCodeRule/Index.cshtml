@@ -1,10 +1,10 @@
 @model IEnumerable<MVC.ProductManagement.Application.DTOs.StockCodes.Catalog.StockSubCodeRuleListDto>
 
 <h4>Alt Grup Kuralları</h4>
-<a asp-action="Generate" class="btn btn-outline-primary mb-3">Kod Üretme Ekranı</a>
+<a asp-controller="StockCodeGeneration" asp-action="Index" class="btn btn-outline-primary mb-3">Üretilen Stok Kodları</a>
 <a asp-action="Create" class="btn btn-primary mb-3">Yeni Kural</a>
 <table class="table table-striped">
-    <thead><tr><th>Ana/Alt Grup</th><th>Kural Kodu</th><th>Kural Adı</th><th>Durum</th><th></th></tr></thead>
+    <thead><tr><th>Ana/Alt Grup</th><th>Kural Kodu</th><th>Kural Grubu</th><th>Kural Seçeneği</th><th>Sıra</th><th>Durum</th><th></th></tr></thead>
     <tbody>
     @foreach (var item in Model)
     {
@@ -12,6 +12,8 @@
             <td>@item.MainGroupCode / @item.SubGroupCode - @item.SubGroupName</td>
             <td>@item.RuleCode</td>
             <td>@item.RuleName</td>
+            <td>@item.Description</td>
+            <td>@(item.SortOrder?.ToString() ?? "-")</td>
             <td>@(item.IsEnabled ? "Açık" : "Kapalı")</td>
             <td class="text-end">
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>

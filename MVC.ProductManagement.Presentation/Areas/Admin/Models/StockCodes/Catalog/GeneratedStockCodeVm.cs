@@ -2,16 +2,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog
 {
-    public class StockSubCodeRuleVm
+    public class GeneratedStockCodeVm
     {
-        public Guid Id { get; set; }
-
         [Required]
         public Guid StockSubCodeGroupId { get; set; }
 
-        [Required]
+        public Guid? StockSubCodeRuleId { get; set; }
+
+        public List<Guid> SelectedRuleIds { get; set; } = new();
+
         [MaxLength(50)]
-        public string RuleCode { get; set; } = default!;
+        public string? GeneratedCode { get; set; }
 
         [Required]
         [MaxLength(250)]
@@ -19,8 +20,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
 
         [MaxLength(1000)]
         public string? Description { get; set; }
-        public int? SortOrder { get; set; }
 
-        public bool IsEnabled { get; set; } = true;
+        [Range(0, 999999999)]
+        public decimal? UnitPrice { get; set; }
+
+        [Range(0, 999999999)]
+        public decimal? TargetPrice { get; set; }
     }
 }

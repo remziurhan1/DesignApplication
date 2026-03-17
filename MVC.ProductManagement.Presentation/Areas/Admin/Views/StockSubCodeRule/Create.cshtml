@@ -3,14 +3,15 @@
 
 <h4>Alt Grup Kuralı Ekle</h4>
 <div class="mb-3">
-    <a asp-action="Generate" class="btn btn-outline-secondary">Önce Kod Üret Ekranına Git</a>
+    <a asp-controller="StockCodeGeneration" asp-action="Generate" class="btn btn-outline-secondary">Stok Kodu Üretme Ekranına Git</a>
 </div>
 
 <form asp-action="Create" method="post">
     <div class="mb-3"><label asp-for="StockSubCodeGroupId" class="form-label">Alt Grup</label><select asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select"></select></div>
     <div class="mb-3"><label asp-for="RuleCode" class="form-label"></label><input asp-for="RuleCode" class="form-control" /></div>
-    <div class="mb-3"><label asp-for="RuleName" class="form-label"></label><input asp-for="RuleName" class="form-control" /></div>
-    <div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control"></textarea></div>
+    <div class="mb-3"><label asp-for="RuleName" class="form-label">Kural Grubu Adı</label><input asp-for="RuleName" class="form-control" placeholder="Örn: Basınç Sınıfı / Ölçü" /></div>
+    <div class="mb-3"><label asp-for="Description" class="form-label">Kural Seçeneği Açıklaması</label><textarea asp-for="Description" class="form-control" placeholder="Örn: PN40, DN40"></textarea></div>
+    <div class="mb-3"><label asp-for="SortOrder" class="form-label">İsimlendirme Sırası</label><input asp-for="SortOrder" type="number" min="1" class="form-control" /><div class="form-text">Boş bırakılırsa varsayılan sıralama kullanılır.</div></div>
     <div class="form-check mb-3"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">Kural Aktif</label></div>
     <button class="btn btn-primary" type="submit">Kaydet</button>
 </form>

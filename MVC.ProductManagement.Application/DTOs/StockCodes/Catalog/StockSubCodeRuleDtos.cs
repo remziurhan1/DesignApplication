@@ -11,6 +11,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public string RuleCode { get; set; } = default!;
         public string RuleName { get; set; } = default!;
         public string? Description { get; set; }
+        public int? SortOrder { get; set; }
         public bool IsEnabled { get; set; }
     }
 
@@ -22,6 +23,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public string RuleCode { get; set; } = default!;
         public string RuleName { get; set; } = default!;
         public string? Description { get; set; }
+        public int? SortOrder { get; set; }
         public bool IsEnabled { get; set; } = true;
     }
 

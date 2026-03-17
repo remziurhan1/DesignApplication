@@ -1,0 +1,174 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog.GeneratedStockCodeVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<h4>Stok Kodu Üretimi</h4>
+<p class="text-muted">Alt gruptaki istediğiniz kadar kuralı seçin. Seçilen kuralların açıklamaları stok kodu açıklamasına otomatik eklenir.</p>
+
+<form asp-action="Generate" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label">Alt Grup</label>
+        <select id="StockSubCodeGroupId" asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select">
+            <option value="">Alt grup seçiniz...</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Alt Gruba Ait Kurallar</label>
+        <div id="rules-container" class="border rounded p-2" style="max-height:260px; overflow:auto;">
+            <span class="text-muted">Alt grup seçiniz...</span>
+        </div>
+        <div class="form-text">Birden fazla kural seçebilirsiniz.</div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RuleName" class="form-label">Stok Kodu Adı</label>
+        <input id="rule-name" asp-for="RuleName" class="form-control" />
+        <div class="form-text">Aynı isimde kayıt varsa mevcut kod geri getirilir.</div>
+    </div>
+
+    <div class="mb-3">
+        <button id="btn-generate" type="button" class="btn btn-outline-primary">Kod Üret</button>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="GeneratedCode" class="form-label">Üretilen Kod</label>
+        <input id="generated-code" asp-for="GeneratedCode" class="form-control" readonly />
+        <div id="generate-info" class="form-text"></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Stok Kodu Açıklaması</label>
+        <textarea id="description" asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="UnitPrice" class="form-label">Birim Fiyat</label>
+            <input id="unit-price" asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label>
+            <input id="target-price" asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
+        </div>
+    </div>
+
+    <input asp-for="StockSubCodeRuleId" id="stock-sub-code-rule-id" type="hidden" />
+    <div id="selected-rule-inputs"></div>
+
+    <button type="submit" class="btn btn-success">Üretilen Kodu Kaydet</button>
+</form>
+
+<script>
+    const subGroupSelect = document.getElementById('StockSubCodeGroupId');
+    const rulesContainer = document.getElementById('rules-container');
+    const selectedRuleInputsContainer = document.getElementById('selected-rule-inputs');
+    const descriptionInput = document.getElementById('description');
+    const generatedCodeInput = document.getElementById('generated-code');
+    const ruleNameInput = document.getElementById('rule-name');
+    const unitPriceInput = document.getElementById('unit-price');
+    const targetPriceInput = document.getElementById('target-price');
+    const stockSubCodeRuleIdInput = document.getElementById('stock-sub-code-rule-id');
+    const infoText = document.getElementById('generate-info');
+
+    let rules = [];
+
+    function getSelectedRuleIds() {
+        return Array.from(document.querySelectorAll('.rule-check:checked')).map(x => x.value);
+    }
+
+    function renderSelectedRuleInputs() {
+        selectedRuleInputsContainer.innerHTML = '';
+        for (const id of getSelectedRuleIds()) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'SelectedRuleIds';
+            input.value = id;
+            selectedRuleInputsContainer.appendChild(input);
+        }
+    }
+
+    function syncDescriptionFromSelectedRules() {
+        const selected = rules
+            .filter(r => getSelectedRuleIds().includes(r.id))
+            .sort((a, b) => {
+                const aOrder = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                const bOrder = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                if (aOrder !== bOrder) return aOrder - bOrder;
+                return (a.ruleCode ?? '').localeCompare(b.ruleCode ?? '');
+            });
+
+        const descriptions = [...new Set(selected.map(r => (r.description ?? '').trim()).filter(x => x))];
+        descriptionInput.value = descriptions.join(' | ');
+
+        stockSubCodeRuleIdInput.value = selected.length === 1 ? selected[0].id : '';
+        renderSelectedRuleInputs();
+    }
+
+    function renderRules() {
+        if (!rules.length) {
+            rulesContainer.innerHTML = '<span class="text-muted">Bu alt grupta kural bulunamadı.</span>';
+            return;
+        }
+
+        rulesContainer.innerHTML = rules.map(rule => `
+            <div class="form-check mb-1">
+                <input class="form-check-input rule-check" type="checkbox" value="${rule.id}" id="rule-${rule.id}">
+                <label class="form-check-label" for="rule-${rule.id}">
+                    <strong>${rule.ruleCode}</strong> - ${rule.ruleName} ${(rule.sortOrder ?? '') !== '' ? '(Sıra: ' + rule.sortOrder + ')' : ''}
+                    <small class="text-muted d-block">${rule.description ?? ''}</small>
+                </label>
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.rule-check').forEach(cb => cb.addEventListener('change', syncDescriptionFromSelectedRules));
+    }
+
+    async function loadRules() {
+        rules = [];
+        rulesContainer.innerHTML = '<span class="text-muted">Yükleniyor...</span>';
+        renderSelectedRuleInputs();
+
+        if (!subGroupSelect?.value) {
+            rulesContainer.innerHTML = '<span class="text-muted">Alt grup seçiniz...</span>';
+            return;
+        }
+
+        const response = await fetch(`@Url.Action("RulesBySubGroup", "StockCodeGeneration")?subGroupId=${subGroupSelect.value}`);
+        if (!response.ok) {
+            rulesContainer.innerHTML = '<span class="text-danger">Kurallar yüklenemedi.</span>';
+            return;
+        }
+
+        rules = await response.json();
+        renderRules();
+    }
+
+    subGroupSelect?.addEventListener('change', loadRules);
+
+    document.getElementById('btn-generate')?.addEventListener('click', async function () {
+        if (!subGroupSelect?.value) {
+            alert('Lütfen önce alt grup seçiniz.');
+            return;
+        }
+
+        const selectedIds = getSelectedRuleIds().join(',');
+        const response = await fetch(`@Url.Action("ResolveCode", "StockCodeGeneration")?subGroupId=${subGroupSelect.value}&ruleName=${encodeURIComponent(ruleNameInput.value ?? '')}&selectedRuleIds=${encodeURIComponent(selectedIds)}`);
+        if (!response.ok) {
+            alert('Kod üretilemedi.');
+            return;
+        }
+
+        const data = await response.json();
+        generatedCodeInput.value = data.code;
+        if (data.description) descriptionInput.value = data.description;
+        if (data.ruleName) ruleNameInput.value = data.ruleName;
+        if (data.unitPrice != null) unitPriceInput.value = data.unitPrice;
+        if (data.targetPrice != null) targetPriceInput.value = data.targetPrice;
+        infoText.textContent = data.isExisting ? 'Aynı isimde kod bulundu, mevcut kod getirildi.' : 'Yeni kod üretildi.';
+        renderSelectedRuleInputs();
+    });
+
+    loadRules();
+</script>
