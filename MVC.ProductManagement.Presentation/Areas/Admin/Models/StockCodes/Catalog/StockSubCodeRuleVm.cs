@@ -9,9 +9,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
         [Required]
         public Guid StockSubCodeGroupId { get; set; }
 
-        [Required]
         [MaxLength(50)]
-        public string RuleCode { get; set; } = default!;
+        public string? RuleCode { get; set; }
 
         [Required]
         [MaxLength(250)]

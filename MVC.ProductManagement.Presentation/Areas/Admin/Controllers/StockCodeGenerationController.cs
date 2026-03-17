@@ -51,7 +51,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 StockSubCodeRuleId = vm.StockSubCodeRuleId,
                 SelectedRuleIds = vm.SelectedRuleIds,
                 GeneratedCode = vm.GeneratedCode,
-                RuleName = vm.RuleName,
+                RuleName = vm.RuleName ?? string.Empty,
                 Description = vm.Description,
                 UnitPrice = vm.UnitPrice,
                 TargetPrice = vm.TargetPrice

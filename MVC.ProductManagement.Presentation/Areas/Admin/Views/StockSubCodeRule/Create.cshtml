@@ -7,11 +7,89 @@
 </div>
 
 <form asp-action="Create" method="post">
-    <div class="mb-3"><label asp-for="StockSubCodeGroupId" class="form-label">Alt Grup</label><select asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select"></select></div>
-    <div class="mb-3"><label asp-for="RuleCode" class="form-label"></label><input asp-for="RuleCode" class="form-control" /></div>
-    <div class="mb-3"><label asp-for="RuleName" class="form-label">Kural Grubu Adı</label><input asp-for="RuleName" class="form-control" placeholder="Örn: Basınç Sınıfı / Ölçü" /></div>
-    <div class="mb-3"><label asp-for="Description" class="form-label">Kural Seçeneği Açıklaması</label><textarea asp-for="Description" class="form-control" placeholder="Örn: PN40, DN40"></textarea></div>
-    <div class="mb-3"><label asp-for="SortOrder" class="form-label">İsimlendirme Sırası</label><input asp-for="SortOrder" type="number" min="1" class="form-control" /><div class="form-text">Boş bırakılırsa varsayılan sıralama kullanılır.</div></div>
-    <div class="form-check mb-3"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">Kural Aktif</label></div>
+    <div class="mb-3">
+        <label asp-for="StockSubCodeGroupId" class="form-label">Alt Grup</label>
+        <select id="StockSubCodeGroupId" asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RuleCode" class="form-label">RuleCode (boş bırakılırsa otomatik üretilir)</label>
+        <input asp-for="RuleCode" class="form-control" placeholder="Örn: SA/SFA00001" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RuleName" class="form-label">Kural Grubu Adı</label>
+        <input id="rule-name" asp-for="RuleName" class="form-control" placeholder="Örn: Basınç Sınıfı / Ölçü" />
+        <div class="form-text">Bu alt grupta daha önce kural grubu varsa aşağıdaki listeden seçebilir veya yeni bir ad yazabilirsiniz.</div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Kural Seçeneği Açıklaması</label>
+        <textarea asp-for="Description" class="form-control" placeholder="Örn: PN40, DN40"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SortOrder" class="form-label">İsimlendirme Sırası</label>
+        <input asp-for="SortOrder" type="number" min="1" class="form-control" />
+        <div class="form-text">Boş bırakılırsa varsayılan sıralama kullanılır.</div>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsEnabled" class="form-check-input" />
+        <label asp-for="IsEnabled" class="form-check-label">Kural Aktif</label>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Bu Alt Gruptaki Mevcut Kurallar</label>
+        <div id="existing-rules" class="border rounded p-2" style="max-height: 260px; overflow:auto;">
+            <span class="text-muted">Alt grup seçiniz...</span>
+        </div>
+    </div>
+
     <button class="btn btn-primary" type="submit">Kaydet</button>
 </form>
+
+<script>
+    const subGroupSelect = document.getElementById('StockSubCodeGroupId');
+    const existingRulesContainer = document.getElementById('existing-rules');
+    const ruleNameInput = document.getElementById('rule-name');
+
+    async function loadExistingRules() {
+        const subGroupId = subGroupSelect?.value;
+        if (!subGroupId) {
+            existingRulesContainer.innerHTML = '<span class="text-muted">Alt grup seçiniz...</span>';
+            return;
+        }
+
+        existingRulesContainer.innerHTML = '<span class="text-muted">Yükleniyor...</span>';
+        const response = await fetch(`@Url.Action("ExistingRulesBySubGroup", "StockSubCodeRule")?subGroupId=${subGroupId}`);
+
+        if (!response.ok) {
+            existingRulesContainer.innerHTML = '<span class="text-danger">Kurallar yüklenemedi.</span>';
+            return;
+        }
+
+        const rules = await response.json();
+        if (!rules.length) {
+            existingRulesContainer.innerHTML = '<span class="text-muted">Bu alt grupta henüz kural yok.</span>';
+            return;
+        }
+
+        existingRulesContainer.innerHTML = rules.map(rule => `
+            <div class="border rounded px-2 py-1 mb-2 bg-light-subtle">
+                <div><strong>${rule.ruleName}</strong> <button type="button" class="btn btn-sm btn-link p-0 ms-1 use-rule-name" data-rule-name="${rule.ruleName}">kullan</button></div>
+                <div class="small text-muted">RuleCode: ${rule.ruleCode}${rule.sortOrder != null ? ` | Sıra: ${rule.sortOrder}` : ''}</div>
+                <div>${rule.description ?? '-'}</div>
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.use-rule-name').forEach(btn => {
+            btn.addEventListener('click', function () {
+                ruleNameInput.value = this.dataset.ruleName || '';
+            });
+        });
+    }
+
+    subGroupSelect?.addEventListener('change', loadExistingRules);
+    loadExistingRules();
+</script>
