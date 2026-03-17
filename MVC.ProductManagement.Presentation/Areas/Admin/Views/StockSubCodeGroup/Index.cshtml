@@ -1,0 +1,25 @@
+@model IEnumerable<MVC.ProductManagement.Application.DTOs.StockCodes.Catalog.StockSubCodeGroupListDto>
+
+<h4>Alt Kod Grupları</h4>
+<a asp-action="Create" class="btn btn-primary mb-3">Yeni Alt Grup</a>
+<table class="table table-striped">
+    <thead><tr><th>Ana Grup</th><th>Alt Kod</th><th>Ad</th><th>Durum</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MainGroupCode - @item.MainGroupName</td>
+            <td>@item.Code</td>
+            <td>@item.Name</td>
+            <td>@(item.IsEnabled ? "Açık" : "Kapalı")</td>
+            <td class="text-end">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>
+                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-danger">Sil</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

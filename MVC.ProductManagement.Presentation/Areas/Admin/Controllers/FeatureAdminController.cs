@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Infrastructure.AppContext;
-using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.FeatureAdmin;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
@@ -69,7 +68,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             _db.Set<SFeature>().Add(new SFeature
             {
-                Id = SeedId.From($"SFeature:{code}"),
+                Id = Guid.NewGuid(),
                 Code = code,
                 Name = vm.Name.Trim(),
                 SortOrder = vm.SortOrder,
@@ -125,7 +124,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             _db.Set<SFeatureValue>().Add(new SFeatureValue
             {
-                Id = SeedId.From($"SFeatureValue:{feature.Code}:{code}"),
+                Id = Guid.NewGuid(),
                 SFeatureId = vm.FeatureId,
                 Code = code,
                 Name = vm.Name.Trim(),
