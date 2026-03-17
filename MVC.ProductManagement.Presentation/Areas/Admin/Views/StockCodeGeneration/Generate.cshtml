@@ -2,9 +2,9 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 <h4>Stok Kodu Üretimi</h4>
-<p class="text-muted">Alt gruptaki kuralları seçin. Stok kodu adı ve açıklaması seçimlere göre otomatik oluşturulur.</p>
+<p class="text-muted">Alt gruptaki kural gruplarından seçenekleri dropdown ile seçin. Kod adı ve açıklama otomatik oluşturulur.</p>
 
-<form asp-action="Generate" method="post">
+<form asp-action="Generate" method="post" id="generate-form">
     @Html.AntiForgeryToken()
 
     <div class="mb-3">
@@ -15,11 +15,11 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Alt Gruba Ait Kurallar</label>
-        <div id="rules-container" class="border rounded p-2" style="max-height:260px; overflow:auto;">
+        <label class="form-label">Alt Gruba Ait Kural Grupları</label>
+        <div id="rules-container" class="border rounded p-2">
             <span class="text-muted">Alt grup seçiniz...</span>
         </div>
-        <div class="form-text">Birden fazla kural seçebilirsiniz.</div>
+        <div class="form-text">Her kural grubundan uygun seçeneği dropdown ile belirleyin.</div>
     </div>
 
     <div class="mb-3">
@@ -92,7 +92,9 @@
     let rules = [];
 
     function getSelectedRuleIds() {
-        return Array.from(document.querySelectorAll('.rule-check:checked')).map(x => x.value);
+        return Array.from(document.querySelectorAll('.rule-group-select'))
+            .map(x => x.value)
+            .filter(x => x);
     }
 
     function renderSelectedRuleInputs() {
@@ -106,16 +108,20 @@
         }
     }
 
-    function syncDerivedTexts() {
-        const selected = rules
-            .filter(r => getSelectedRuleIds().includes(r.id))
+    function getSelectedRules() {
+        const selectedIdSet = new Set(getSelectedRuleIds());
+        return rules
+            .filter(r => selectedIdSet.has(r.id))
             .sort((a, b) => {
                 const aOrder = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
                 const bOrder = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
                 if (aOrder !== bOrder) return aOrder - bOrder;
                 return (a.ruleCode ?? '').localeCompare(b.ruleCode ?? '');
             });
+    }
 
+    function syncDerivedTexts() {
+        const selected = getSelectedRules();
         const descriptions = [...new Set(selected.map(r => (r.description ?? '').trim()).filter(x => x))];
         const autoRuleName = descriptions.join(' ');
         const autoDescription = descriptions.join(' | ');
@@ -138,24 +144,45 @@
             return;
         }
 
-        rulesContainer.innerHTML = rules.map(rule => `
-            <div class="form-check mb-1 border-bottom pb-1">
-                <input class="form-check-input rule-check" type="checkbox" value="${rule.id}" id="rule-${rule.id}">
-                <label class="form-check-label" for="rule-${rule.id}">
-                    <strong>${rule.ruleName}</strong>: ${rule.description ?? '-'}
-                    <small class="text-muted d-block">RuleCode: ${rule.ruleCode}${rule.sortOrder != null ? ` | Sıra: ${rule.sortOrder}` : ''}</small>
-                </label>
-            </div>
-        `).join('');
+        const groups = new Map();
+        for (const rule of rules) {
+            const key = (rule.ruleName ?? '').trim() || 'Tanımsız Kural Grubu';
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(rule);
+        }
 
-        document.querySelectorAll('.rule-check').forEach(cb => cb.addEventListener('change', syncDerivedTexts));
+        const rows = Array.from(groups.entries())
+            .sort((a, b) => a[0].localeCompare(b[0], 'tr'))
+            .map(([groupName, items]) => {
+                const options = items
+                    .sort((a, b) => {
+                        const aOrder = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                        const bOrder = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                        if (aOrder !== bOrder) return aOrder - bOrder;
+                        return (a.ruleCode ?? '').localeCompare(b.ruleCode ?? '');
+                    })
+                    .map(x => `<option value="${x.id}">${x.description ?? '-'} (${x.ruleCode})</option>`)
+                    .join('');
+
+                return `
+                    <div class="mb-2">
+                        <label class="form-label mb-1"><strong>${groupName}</strong></label>
+                        <select class="form-select form-select-sm rule-group-select" data-group-name="${groupName}">
+                            <option value="">Seçiniz...</option>
+                            ${options}
+                        </select>
+                    </div>
+                `;
+            });
+
+        rulesContainer.innerHTML = rows.join('');
+        document.querySelectorAll('.rule-group-select').forEach(x => x.addEventListener('change', syncDerivedTexts));
         syncDerivedTexts();
     }
 
     async function loadRules() {
         rules = [];
         rulesContainer.innerHTML = '<span class="text-muted">Yükleniyor...</span>';
-        renderSelectedRuleInputs();
 
         if (!subGroupSelect?.value) {
             rulesContainer.innerHTML = '<span class="text-muted">Alt grup seçiniz...</span>';
@@ -191,6 +218,11 @@
         syncDerivedTexts();
 
         const selectedIds = getSelectedRuleIds().join(',');
+        if (!selectedIds) {
+            alert('Lütfen en az bir kural seçeneği seçiniz.');
+            return;
+        }
+
         const response = await fetch(`@Url.Action("ResolveCode", "StockCodeGeneration")?subGroupId=${subGroupSelect.value}&ruleName=${encodeURIComponent(ruleNameHiddenInput.value ?? '')}&selectedRuleIds=${encodeURIComponent(selectedIds)}`);
         if (!response.ok) {
             alert('Kod üretilemedi.');
@@ -212,6 +244,14 @@
         if (data.targetPrice != null) targetPriceInput.value = data.targetPrice;
         infoText.textContent = data.isExisting ? 'Bu kombinasyon için kod zaten üretilmiş, mevcut kod getirildi.' : 'Yeni kod üretildi.';
         renderSelectedRuleInputs();
+    });
+
+    document.getElementById('generate-form')?.addEventListener('submit', function (event) {
+        syncDerivedTexts();
+        if (!ruleNameHiddenInput.value?.trim()) {
+            event.preventDefault();
+            alert('Kayıt için en az bir kural seçeneği seçiniz.');
+        }
     });
 
     loadRules();
