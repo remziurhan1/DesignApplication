@@ -23,7 +23,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return View(await _service.GetAllAsync(subGroupId));
         }
 
-        public async Task<IActionResult> Create(Guid? stockSubCodeGroupId, string? ruleCode, string? description, string? ruleName)
+        public async Task<IActionResult> Create(Guid? stockSubCodeGroupId, string? ruleCode, string? description, string? ruleName, decimal? unitPrice, decimal? targetPrice)
         {
             await LoadSubGroups(stockSubCodeGroupId);
             return View(new StockSubCodeRuleVm
