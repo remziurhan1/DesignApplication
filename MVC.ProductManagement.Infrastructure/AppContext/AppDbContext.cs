@@ -7,22 +7,18 @@ using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
+using MVC.ProductManagement.Domain.Entities.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Entities.StockCodes.S;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.Configurations;
 using MVC.ProductManagement.Infrastructure.Seeds;
-using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.Common;
-using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA;
-using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SB;
 
-using MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using static MVC.ProductManagement.Infrastructure.Seeds.StockCardSeed.SA.SASeed;
 
 namespace MVC.ProductManagement.Infrastructure.AppContext
 {
@@ -52,6 +48,9 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<SProductGroup> SProductGroups { get; set; }
         public DbSet<SProduct> SProducts { get; set; }
         public DbSet<SAssemblyGroup> SAssemblyGroups { get; set; }
+        public DbSet<StockMainCodeGroup> StockMainCodeGroups { get; set; }
+        public DbSet<StockSubCodeGroup> StockSubCodeGroups { get; set; }
+        public DbSet<StockSubCodeRule> StockSubCodeRules { get; set; }
         public DbSet<PrefixRule> PrefixRules { get; set; }
         public DbSet<StockSequence> StockSequences { get; set; }
         //  public DbSet<StockCard> StockCards { get; set; }

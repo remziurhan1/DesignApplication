@@ -9,8 +9,9 @@ using MVC.ProductManagement.Infrastructure.Repositories.IAllowableStressReposito
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
-using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Catalog;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.SA;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypeRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.YieldStrengthRepositories;
@@ -43,13 +44,13 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IStorageTypeRepositories, StorageTypeRepository>();
             services.AddScoped<IStorageTypePropertiesRepository, StorageTypePropertiesRepository>();
             services.AddScoped<IFluidRepositories, FluidRepository>();
-            services.AddScoped<ISProductGroupRepositories, SProductGroupRepository>();
-            services.AddScoped<ISProductRepositories, SProductRepository>();
-            services.AddScoped<ISAssemblyGroupRepositories, SAssemblyGroupRepository>();
-            services.AddScoped<IPrefixRuleRepositories, PrefixRuleRepository>();
-            services.AddScoped<IStockSequenceRepositories, StockSequenceRepository>();
             services.AddScoped<IStockCardRepositories, StockCardRepository>();
             services.AddScoped<ISAStockCardRepository, SAStockCardRepository>();
+            services.AddScoped<ISProductRepositories, SProductRepository>();
+            services.AddScoped<ISProductGroupRepositories, SProductGroupRepository>();
+            services.AddScoped<IStockMainCodeGroupRepository, StockMainCodeGroupRepository>();
+            services.AddScoped<IStockSubCodeGroupRepository, StockSubCodeGroupRepository>();
+            services.AddScoped<IStockSubCodeRuleRepository, StockSubCodeRuleRepository>();
 
 
 
