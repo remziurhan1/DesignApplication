@@ -12,5 +12,6 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Catalog
         public bool IsEnabled { get; set; } = true;
 
         public virtual ICollection<StockSubCodeRule> Rules { get; set; } = new List<StockSubCodeRule>();
+        public virtual ICollection<GeneratedStockCode> GeneratedCodes { get; set; } = new List<GeneratedStockCode>();
     }
 }

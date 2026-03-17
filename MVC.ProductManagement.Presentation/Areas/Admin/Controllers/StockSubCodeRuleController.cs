@@ -32,8 +32,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = ruleCode ?? string.Empty,
                 Description = description,
                 RuleName = ruleName ?? string.Empty,
-                UnitPrice = unitPrice ?? 0,
-                TargetPrice = targetPrice ?? 0,
+                UnitPrice = null,
+                TargetPrice = null,
                 IsEnabled = true
             });
         }
@@ -102,109 +102,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 IsEnabled = vm.IsEnabled
             });
             return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Generate(Guid? stockSubCodeGroupId)
-        {
-            await LoadSubGroups(stockSubCodeGroupId);
-            return View();
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> List(Guid? subGroupId)
-        {
-            await LoadSubGroups(subGroupId);
-            return View(await _service.GetAllAsync(subGroupId));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> RulesBySubGroup(Guid subGroupId)
-        {
-            var rules = await _service.GetAllAsync(subGroupId);
-            return Json(rules
-                .Where(x => x.IsEnabled)
-                .OrderBy(x => x.RuleCode)
-                .Select(x => new
-                {
-                    x.Id,
-                    x.RuleCode,
-                    x.RuleName,
-                    x.Description
-                }));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ResolveCode(Guid subGroupId, string? description)
-        {
-            var existingRule = await _service.FindBySubGroupAndDescriptionAsync(subGroupId, description);
-            if (existingRule != null)
-            {
-                return Json(new
-                {
-                    code = existingRule.RuleCode,
-                    description = existingRule.Description,
-                    ruleName = existingRule.RuleName,
-                    isExisting = true
-                });
-            }
-
-            var nextCode = await _service.GetNextStockCodeBySubGroupAsync(subGroupId);
-            return Json(new
-            {
-                code = nextCode,
-                description = description?.Trim(),
-                ruleName = string.Empty,
-                isExisting = false
-            });
-        }
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> RulesBySubGroup(Guid subGroupId)
-        //{
-        //    var rules = await _service.GetAllAsync(subGroupId);
-        //    return Json(rules
-        //        .Where(x => x.IsEnabled)
-        //        .OrderBy(x => x.RuleCode)
-        //        .Select(x => new
-        //        {
-        //            x.Id,
-        //            x.RuleCode,
-        //            x.RuleName,
-        //            x.Description
-        //        }));
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> ResolveCode(Guid subGroupId, string? description)
-        //{
-        //    var existingRule = await _service.FindBySubGroupAndDescriptionAsync(subGroupId, description);
-        //    if (existingRule != null)
-        //    {
-        //        return Json(new
-        //        {
-        //            code = existingRule.RuleCode,
-        //            description = existingRule.Description,
-        //            isExisting = true
-        //        });
-        //    }
-
-        //    var nextCode = await _service.GetNextStockCodeBySubGroupAsync(subGroupId);
-        //    return Json(new
-        //    {
-        //        code = nextCode,
-        //        description = description?.Trim(),
-        //        isExisting = false
-        //    });
-        //}
-
-        [HttpGet]
-        public async Task<IActionResult> NextCode(Guid subGroupId)
-        {
-            var nextCode = await _service.GetNextStockCodeBySubGroupAsync(subGroupId);
-            return Json(new { nextCode });
         }
 
         [HttpPost]

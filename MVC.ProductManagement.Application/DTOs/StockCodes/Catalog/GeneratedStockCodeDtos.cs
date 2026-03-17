@@ -1,36 +1,39 @@
 namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
 {
-    public class StockSubCodeRuleListDto
+    public class GeneratedStockCodeListDto
     {
         public Guid Id { get; set; }
         public Guid StockSubCodeGroupId { get; set; }
+        public Guid? StockSubCodeRuleId { get; set; }
         public string MainGroupCode { get; set; } = default!;
-        public string MainGroupName { get; set; } = default!;
         public string SubGroupCode { get; set; } = default!;
         public string SubGroupName { get; set; } = default!;
-        public string RuleCode { get; set; } = default!;
+        public string GeneratedCode { get; set; } = default!;
         public string RuleName { get; set; } = default!;
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }
-        public bool IsEnabled { get; set; }
     }
 
-    public class StockSubCodeRuleDetailDto : StockSubCodeRuleListDto { }
-
-    public class StockSubCodeRuleCreateDto
+    public class GeneratedStockCodeCreateDto
     {
         public Guid StockSubCodeGroupId { get; set; }
-        public string RuleCode { get; set; } = default!;
+        public Guid? StockSubCodeRuleId { get; set; }
+        public List<Guid> SelectedRuleIds { get; set; } = new();
+        public string? GeneratedCode { get; set; }
         public string RuleName { get; set; } = default!;
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }
-        public bool IsEnabled { get; set; } = true;
     }
 
-    public class StockSubCodeRuleUpdateDto : StockSubCodeRuleCreateDto
+    public class GeneratedStockCodeResolveDto
     {
-        public Guid Id { get; set; }
+        public string Code { get; set; } = default!;
+        public string RuleName { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public decimal? TargetPrice { get; set; }
+        public bool IsExisting { get; set; }
     }
 }
