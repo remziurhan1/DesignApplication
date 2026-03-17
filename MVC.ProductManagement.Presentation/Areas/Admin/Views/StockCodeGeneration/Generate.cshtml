@@ -23,7 +23,7 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Stok Kodu Adı (otomatik)</label>
+        <label class="form-label">Özellikler (otomatik)</label>
         <input id="rule-name-preview" class="form-control" readonly />
         <input id="rule-name" asp-for="RuleName" type="hidden" />
     </div>
@@ -123,8 +123,8 @@
     function syncDerivedTexts() {
         const selected = getSelectedRules();
         const descriptions = [...new Set(selected.map(r => (r.description ?? '').trim()).filter(x => x))];
-        const autoRuleName = descriptions.join(' ');
-        const autoDescription = descriptions.join(' | ');
+        const autoRuleName = descriptions.join('-');
+        const autoDescription = descriptions.join('-');
 
         ruleNamePreviewInput.value = autoRuleName;
         ruleNameHiddenInput.value = autoRuleName;
@@ -146,7 +146,7 @@
 
         const groups = new Map();
         for (const rule of rules) {
-            const key = (rule.ruleName ?? '').trim() || 'Tanımsız Kural Grubu';
+            const key = (rule.ruleName ?? '').trim() || 'Özellik Grubu';
             if (!groups.has(key)) groups.set(key, []);
             groups.get(key).push(rule);
         }
@@ -161,7 +161,7 @@
                         if (aOrder !== bOrder) return aOrder - bOrder;
                         return (a.ruleCode ?? '').localeCompare(b.ruleCode ?? '');
                     })
-                    .map(x => `<option value="${x.id}">${x.description ?? '-'} (${x.ruleCode})</option>`)
+                    .map(x => `<option value="${x.id}">${x.description ?? '-'}</option>`)
                     .join('');
 
                 return `
