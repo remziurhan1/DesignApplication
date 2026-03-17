@@ -1,0 +1,151 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<h4>Alt Grup İçin Kod Üret</h4>
+<p class="text-muted">Alt grup seçin, mevcut kurallardan açıklama seçin veya yeni açıklama girin. Sistem aynı açıklama için mevcut kodu, yeni açıklama için sıradaki kodu verir.</p>
+
+<div class="card">
+    <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label">Alt Grup</label>
+            <select id="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select">
+                <option value="">Alt grup seçiniz...</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mevcut Kurallar</label>
+            <select id="existing-rule" class="form-select">
+                <option value="">Kural seçiniz...</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Açıklama</label>
+            <textarea id="description" class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <button id="btn-generate" type="button" class="btn btn-outline-primary">Açıklamaya Göre Kod Üret</button>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Üretilen Kod</label>
+            <input id="generated-code" class="form-control" readonly />
+            <div id="generate-info" class="form-text"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Kural Adı</label>
+            <input id="rule-name" class="form-control" placeholder="Örn: 6m3 LAr Tank" />
+            <div class="form-text">Mevcut kural seçtiyseniz otomatik gelir; yeni açıklama için manuel girebilirsiniz.</div>
+        </div>
+
+        <a id="go-create" href="#" class="btn btn-success disabled" aria-disabled="true">Bu Kodla Kural Oluşturma Ekranına Git</a>
+    </div>
+</div>
+
+<script>
+    const subGroupSelect = document.getElementById('StockSubCodeGroupId');
+    const existingRuleSelect = document.getElementById('existing-rule');
+    const descriptionInput = document.getElementById('description');
+    const generatedCodeInput = document.getElementById('generated-code');
+    const ruleNameInput = document.getElementById('rule-name');
+    const infoText = document.getElementById('generate-info');
+    const goCreateBtn = document.getElementById('go-create');
+
+    async function loadRules() {
+        existingRuleSelect.innerHTML = '<option value="">Kural seçiniz...</option>';
+        generatedCodeInput.value = '';
+        infoText.textContent = '';
+        updateCreateLink();
+
+        if (!subGroupSelect?.value) {
+            descriptionInput.value = '';
+            ruleNameInput.value = '';
+            return;
+        }
+
+        const response = await fetch(`@Url.Action("RulesBySubGroup", "StockSubCodeRule")?subGroupId=${subGroupSelect.value}`);
+        if (!response.ok) {
+            return;
+        }
+
+        const rules = await response.json();
+        for (const rule of rules) {
+            const option = document.createElement('option');
+            option.value = rule.id;
+            option.textContent = `${rule.ruleCode} - ${rule.ruleName}`;
+            option.dataset.description = rule.description ?? '';
+            option.dataset.ruleCode = rule.ruleCode ?? '';
+            option.dataset.ruleName = rule.ruleName ?? '';
+            existingRuleSelect.appendChild(option);
+        }
+    }
+
+    function updateCreateLink() {
+        const subGroupId = subGroupSelect.value;
+        const code = generatedCodeInput.value?.trim();
+        const description = descriptionInput.value?.trim();
+        const ruleName = ruleNameInput.value?.trim();
+
+        if (!subGroupId || !code || !ruleName) {
+            goCreateBtn.classList.add('disabled');
+            goCreateBtn.setAttribute('aria-disabled', 'true');
+            goCreateBtn.href = '#';
+            return;
+        }
+
+        const url = `@Url.Action("Create", "StockSubCodeRule")?stockSubCodeGroupId=${encodeURIComponent(subGroupId)}&ruleCode=${encodeURIComponent(code)}&description=${encodeURIComponent(description ?? '')}&ruleName=${encodeURIComponent(ruleName)}`;
+        goCreateBtn.href = url;
+        goCreateBtn.classList.remove('disabled');
+        goCreateBtn.setAttribute('aria-disabled', 'false');
+    }
+
+    subGroupSelect?.addEventListener('change', loadRules);
+
+    existingRuleSelect?.addEventListener('change', function () {
+        const selected = existingRuleSelect.options[existingRuleSelect.selectedIndex];
+        if (!selected || !selected.value) {
+            return;
+        }
+
+        descriptionInput.value = selected.dataset.description ?? '';
+        generatedCodeInput.value = selected.dataset.ruleCode ?? '';
+        ruleNameInput.value = selected.dataset.ruleName ?? '';
+        infoText.textContent = 'Mevcut kural seçildi; aynı açıklamada yeni kod üretilmez.';
+        updateCreateLink();
+    });
+
+    descriptionInput?.addEventListener('input', updateCreateLink);
+    ruleNameInput?.addEventListener('input', updateCreateLink);
+
+    document.getElementById('btn-generate')?.addEventListener('click', async function () {
+        if (!subGroupSelect?.value) {
+            alert('Lütfen önce alt grup seçiniz.');
+            return;
+        }
+
+        const description = descriptionInput?.value ?? '';
+        const response = await fetch(`@Url.Action("ResolveCode", "StockSubCodeRule")?subGroupId=${subGroupSelect.value}&description=${encodeURIComponent(description)}`);
+        if (!response.ok) {
+            alert('Kod üretilemedi.');
+            return;
+        }
+
+        const data = await response.json();
+        generatedCodeInput.value = data.code;
+        descriptionInput.value = data.description ?? description;
+
+        if (data.ruleName && !ruleNameInput.value?.trim()) {
+            ruleNameInput.value = data.ruleName;
+        }
+
+        infoText.textContent = data.isExisting
+            ? 'Aynı açıklama bulundu, mevcut kod getirildi.'
+            : 'Yeni açıklama için sıradaki kod üretildi.';
+
+        updateCreateLink();
+    });
+
+    loadRules();
+</script>
