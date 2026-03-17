@@ -51,11 +51,6 @@
             <input asp-for="IsColdStretchApplied" class="form-check-input" />
             <label asp-for="IsColdStretchApplied" class="form-check-label">Cold Stretch Uygulansın</label>
         </div>
-        <div class="col-md-12">
-            <label asp-for="SelectedStockCardGroupIds" class="form-label">Maliyete Eklenecek Stok Grupları</label>
-            <select asp-for="SelectedStockCardGroupIds" asp-items="ViewBag.StockCardGroups" class="form-select" multiple size="6"></select>
-            <small class="text-muted">Birden fazla grup seçebilirsiniz. Sadece seçilen gruplar bu hesap maliyetine eklenir.</small>
-        </div>
     </div>
 
     <hr />

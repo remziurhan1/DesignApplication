@@ -191,9 +191,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 table.Items.Add(profileWeldRow);
             }
 
-            var groupRows = await BuildGroupCostRowsAsync(result.SelectedStockCardGroupIds);
-            table.Items.AddRange(groupRows);
-
             table.TotalMaterialCost = table.Items.Sum(x => x.ItemCost);
             table.TotalFilmCost = result.TotalFilmCost;
             table.GrandTotalCost = table.TotalMaterialCost;
@@ -344,55 +341,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 UnitPrice = unitPrice,
                 ItemCost = itemCost
             };
-        }
-
-        private async Task<List<EN13458MaterialCostRowDTO>> BuildGroupCostRowsAsync(IEnumerable<Guid>? selectedGroupIds)
-        {
-            var groupIds = selectedGroupIds?
-                .Where(x => x != Guid.Empty)
-                .Distinct()
-                .ToList() ?? new List<Guid>();
-
-            var groupsQuery = _context.StockCardGroups
-                .AsNoTracking()
-                .Where(g => g.Status != Status.Deleted);
-
-            if (groupIds.Count > 0)
-            {
-                groupsQuery = groupsQuery.Where(g => groupIds.Contains(g.Id));
-            }
-            else
-            {
-                // Kullanıcı grup seçmediyse, oluşturulan GRP-* gruplarını maliyete dahil et.
-                groupsQuery = groupsQuery.Where(g => g.GroupCode.StartsWith("GRP-"));
-            }
-
-            var groups = await groupsQuery
-                .OrderBy(g => g.GroupCode)
-                .Select(g => new
-                {
-                    g.GroupCode,
-                    g.Name,
-                    g.TotalAmount,
-                    ComputedAmount = g.Items
-                        .Where(i => i.Status != Status.Deleted)
-                        .Select(i => (decimal?)i.LineTotal)
-                        .Sum() ?? 0m
-                })
-                .ToListAsync();
-
-            return groups.Select(group => new EN13458MaterialCostRowDTO
-            {
-                CostGroupCode = group.GroupCode,
-                CostGroupName = group.Name,
-                ItemName = $"{group.GroupCode} Grup Maliyeti",
-                MaterialName = "Grup Toplamı",
-                FormType = "Grup",
-                Quantity = 1,
-                Unit = "lot",
-                UnitPrice = (double)(group.ComputedAmount > 0 ? group.ComputedAmount : group.TotalAmount),
-                ItemCost = (double)(group.ComputedAmount > 0 ? group.ComputedAmount : group.TotalAmount)
-            }).ToList();
         }
 
         private async Task<double> ResolveActiveUnitPriceByStockCodeAsync(string stockCode)
