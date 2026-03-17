@@ -40,6 +40,17 @@
             <div class="form-text">Mevcut kural seçtiyseniz otomatik gelir; yeni açıklama için manuel girebilirsiniz.</div>
         </div>
 
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Birim Fiyat</label>
+                <input id="unit-price" type="number" min="0" step="0.01" class="form-control" value="0" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Hedef Fiyat</label>
+                <input id="target-price" type="number" min="0" step="0.01" class="form-control" value="0" />
+            </div>
+        </div>
+
         <a id="go-create" href="#" class="btn btn-success disabled" aria-disabled="true">Bu Kodla Kural Oluşturma Ekranına Git</a>
     </div>
 </div>
@@ -52,6 +63,8 @@
     const ruleNameInput = document.getElementById('rule-name');
     const infoText = document.getElementById('generate-info');
     const goCreateBtn = document.getElementById('go-create');
+    const unitPriceInput = document.getElementById('unit-price');
+    const targetPriceInput = document.getElementById('target-price');
 
     async function loadRules() {
         existingRuleSelect.innerHTML = '<option value="">Kural seçiniz...</option>';
@@ -87,6 +100,8 @@
         const code = generatedCodeInput.value?.trim();
         const description = descriptionInput.value?.trim();
         const ruleName = ruleNameInput.value?.trim();
+        const unitPrice = unitPriceInput.value?.trim();
+        const targetPrice = targetPriceInput.value?.trim();
 
         if (!subGroupId || !code || !ruleName) {
             goCreateBtn.classList.add('disabled');
@@ -95,7 +110,7 @@
             return;
         }
 
-        const url = `@Url.Action("Create", "StockSubCodeRule")?stockSubCodeGroupId=${encodeURIComponent(subGroupId)}&ruleCode=${encodeURIComponent(code)}&description=${encodeURIComponent(description ?? '')}&ruleName=${encodeURIComponent(ruleName)}`;
+        const url = `@Url.Action("Create", "StockSubCodeRule")?stockSubCodeGroupId=${encodeURIComponent(subGroupId)}&ruleCode=${encodeURIComponent(code)}&description=${encodeURIComponent(description ?? '')}&ruleName=${encodeURIComponent(ruleName)}&unitPrice=${encodeURIComponent(unitPrice ?? "0")}&targetPrice=${encodeURIComponent(targetPrice ?? "0")}`;
         goCreateBtn.href = url;
         goCreateBtn.classList.remove('disabled');
         goCreateBtn.setAttribute('aria-disabled', 'false');
@@ -118,6 +133,8 @@
 
     descriptionInput?.addEventListener('input', updateCreateLink);
     ruleNameInput?.addEventListener('input', updateCreateLink);
+    unitPriceInput?.addEventListener('input', updateCreateLink);
+    targetPriceInput?.addEventListener('input', updateCreateLink);
 
     document.getElementById('btn-generate')?.addEventListener('click', async function () {
         if (!subGroupSelect?.value) {

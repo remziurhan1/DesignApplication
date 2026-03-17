@@ -1332,6 +1332,70 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         });
                 });
 
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Catalog.GeneratedStockCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("GeneratedCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RuleName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StockSubCodeGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("StockSubCodeRuleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("TargetPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StockSubCodeGroupId");
+
+                    b.HasIndex("StockSubCodeRuleId");
+
+                    b.ToTable("GeneratedStockCodes", (string)null);
+                });
+
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Catalog.StockMainCodeGroup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1433,6 +1497,25 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.ToTable("StockSubCodeGroups", (string)null);
                 });
 
+
+            modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Catalog.GeneratedStockCode", b =>
+                {
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Catalog.StockSubCodeGroup", "StockSubCodeGroup")
+                        .WithMany("GeneratedCodes")
+                        .HasForeignKey("StockSubCodeGroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MVC.ProductManagement.Domain.Entities.StockCodes.Catalog.StockSubCodeRule", "StockSubCodeRule")
+                        .WithMany("GeneratedCodes")
+                        .HasForeignKey("StockSubCodeRuleId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("StockSubCodeGroup");
+
+                    b.Navigation("StockSubCodeRule");
+                });
+
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Catalog.StockSubCodeRule", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1458,6 +1541,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<decimal?>("TargetPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -4377,6 +4466,8 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("GeneratedCodes");
+
                     b.Navigation("StockSubCodeGroup");
                 });
 
@@ -4848,6 +4939,8 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.StockCodes.Catalog.StockSubCodeGroup", b =>
                 {
+                    b.Navigation("GeneratedCodes");
+
                     b.Navigation("Rules");
                 });
 

@@ -1,0 +1,87 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace MVC.ProductManagement.Infrastructure.Migrations
+{
+    public partial class MakeStockCodePricesNullable : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterColumn<decimal>(
+                name: "UnitPrice",
+                table: "StockSubCodeRules",
+                type: "decimal(18,2)",
+                nullable: true,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)");
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "TargetPrice",
+                table: "StockSubCodeRules",
+                type: "decimal(18,2)",
+                nullable: true,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)");
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "UnitPrice",
+                table: "GeneratedStockCodes",
+                type: "decimal(18,2)",
+                nullable: true,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)");
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "TargetPrice",
+                table: "GeneratedStockCodes",
+                type: "decimal(18,2)",
+                nullable: true,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterColumn<decimal>(
+                name: "UnitPrice",
+                table: "StockSubCodeRules",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "TargetPrice",
+                table: "StockSubCodeRules",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "UnitPrice",
+                table: "GeneratedStockCodes",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "TargetPrice",
+                table: "GeneratedStockCodes",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)",
+                oldNullable: true);
+        }
+    }
+}
