@@ -101,10 +101,40 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             };
         }
 
+
+
+        public async Task<StockSubCodeRuleDetailDto?> FindBySubGroupAndDescriptionAsync(Guid subGroupId, string? description)
+        {
+            var normalizedDescription = NormalizeDescription(description);
+            if (string.IsNullOrEmpty(normalizedDescription))
+            {
+                return null;
+            }
+
+            var entities = await _repository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId, tracking: false);
+            var matched = entities.FirstOrDefault(x => NormalizeDescription(x.Description) == normalizedDescription);
+            if (matched == null)
+            {
+                return null;
+            }
+
+            return await GetByIdAsync(matched.Id);
+        }
+
         public async Task<StockSubCodeRuleDetailDto> CreateAsync(StockSubCodeRuleCreateDto dto)
         {
             _ = await _subGroupRepository.GetByIdAsync(dto.StockSubCodeGroupId, tracking: false)
                 ?? throw new Exception("Sub group not found");
+
+            var normalizedDescription = NormalizeDescription(dto.Description);
+            if (!string.IsNullOrEmpty(normalizedDescription))
+            {
+                var existingRule = await FindBySubGroupAndDescriptionAsync(dto.StockSubCodeGroupId, normalizedDescription);
+                if (existingRule != null)
+                {
+                    return existingRule;
+                }
+            }
 
             var normalizedRuleCode = string.IsNullOrWhiteSpace(dto.RuleCode)
                 ? await GetNextStockCodeBySubGroupAsync(dto.StockSubCodeGroupId)
@@ -159,6 +189,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 
             var nextNumber = maxNumber + 1;
             return $"{subGroupCode}{nextNumber:D5}";
+        }
+
+
+        private static string? NormalizeDescription(string? description)
+        {
+            var normalized = description?.Trim();
+            return string.IsNullOrWhiteSpace(normalized) ? null : normalized.ToUpperInvariant();
         }
 
         public async Task DeleteAsync(Guid id)

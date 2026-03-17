@@ -4,11 +4,19 @@
 <form asp-action="Create" method="post">
     <div class="mb-3"><label asp-for="StockSubCodeGroupId" class="form-label">Alt Grup</label><select asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select"></select></div>
     <div class="mb-3">
+        <label class="form-label">Mevcut Kurallar</label>
+        <select id="existing-rule" class="form-select">
+            <option value="">Kural seçiniz...</option>
+        </select>
+        <div class="form-text">Seçilen kuralın açıklaması otomatik doldurulur.</div>
+    </div>
+    <div class="mb-3">
         <label asp-for="RuleCode" class="form-label"></label>
         <div class="input-group">
             <input asp-for="RuleCode" class="form-control" />
-            <button class="btn btn-outline-secondary" type="button" id="btn-generate-code">Alt Gruptan Kod Üret</button>
+            <button class="btn btn-outline-secondary" type="button" id="btn-generate-code">Açıklamaya Göre Kod Üret</button>
         </div>
+        <div id="generate-info" class="form-text"></div>
     </div>
     <div class="mb-3"><label asp-for="RuleName" class="form-label"></label><input asp-for="RuleName" class="form-control" /></div>
     <div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control"></textarea></div>
@@ -17,22 +25,75 @@
 </form>
 
 <script>
-    document.getElementById('btn-generate-code')?.addEventListener('click', async function () {
-        const subGroupSelect = document.getElementById('StockSubCodeGroupId');
-        const ruleCodeInput = document.getElementById('RuleCode');
+    const subGroupSelect = document.getElementById('StockSubCodeGroupId');
+    const existingRuleSelect = document.getElementById('existing-rule');
+    const ruleCodeInput = document.getElementById('RuleCode');
+    const ruleNameInput = document.getElementById('RuleName');
+    const descriptionInput = document.getElementById('Description');
+    const infoText = document.getElementById('generate-info');
 
+    async function loadRules() {
+        existingRuleSelect.innerHTML = '<option value="">Kural seçiniz...</option>';
+
+        if (!subGroupSelect?.value) {
+            return;
+        }
+
+        const response = await fetch(`@Url.Action("RulesBySubGroup", "StockSubCodeRule")?subGroupId=${subGroupSelect.value}`);
+        if (!response.ok) {
+            return;
+        }
+
+        const rules = await response.json();
+        for (const rule of rules) {
+            const option = document.createElement('option');
+            option.value = rule.id;
+            option.textContent = `${rule.ruleCode} - ${rule.ruleName}`;
+            option.dataset.description = rule.description ?? '';
+            option.dataset.ruleCode = rule.ruleCode ?? '';
+            option.dataset.ruleName = rule.ruleName ?? '';
+            existingRuleSelect.appendChild(option);
+        }
+    }
+
+    subGroupSelect?.addEventListener('change', async function () {
+        await loadRules();
+    });
+
+    existingRuleSelect?.addEventListener('change', function () {
+        const selected = existingRuleSelect.options[existingRuleSelect.selectedIndex];
+        if (!selected || !selected.value) {
+            return;
+        }
+
+        descriptionInput.value = selected.dataset.description ?? '';
+        ruleCodeInput.value = selected.dataset.ruleCode ?? '';
+        if (!ruleNameInput.value?.trim()) {
+            ruleNameInput.value = selected.dataset.ruleName ?? '';
+        }
+        infoText.textContent = 'Mevcut kural seçildi; aynı açıklama ile yeni kod üretilmez.';
+    });
+
+    document.getElementById('btn-generate-code')?.addEventListener('click', async function () {
         if (!subGroupSelect?.value) {
             alert('Lütfen önce alt grup seçiniz.');
             return;
         }
 
-        const response = await fetch(`@Url.Action("NextCode", "StockSubCodeRule")?subGroupId=${subGroupSelect.value}`);
+        const description = descriptionInput?.value ?? '';
+        const response = await fetch(`@Url.Action("ResolveCode", "StockSubCodeRule")?subGroupId=${subGroupSelect.value}&description=${encodeURIComponent(description)}`);
         if (!response.ok) {
             alert('Kod üretilemedi.');
             return;
         }
 
         const data = await response.json();
-        ruleCodeInput.value = data.nextCode;
+        ruleCodeInput.value = data.code;
+        descriptionInput.value = data.description ?? description;
+        infoText.textContent = data.isExisting
+            ? 'Aynı açıklama daha önce tanımlandığı için mevcut kod getirildi.'
+            : 'Yeni açıklama için sıradaki kod oluşturuldu.';
     });
+
+    loadRules();
 </script>
