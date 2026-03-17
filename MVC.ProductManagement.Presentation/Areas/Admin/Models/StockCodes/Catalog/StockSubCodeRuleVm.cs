@@ -20,6 +20,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
         [MaxLength(1000)]
         public string? Description { get; set; }
 
+        [Range(0, 999999999)]
+        public decimal UnitPrice { get; set; }
+
+        [Range(0, 999999999)]
+        public decimal TargetPrice { get; set; }
+
         public bool IsEnabled { get; set; } = true;
     }
 }

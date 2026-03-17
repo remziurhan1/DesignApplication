@@ -23,7 +23,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return View(await _service.GetAllAsync(subGroupId));
         }
 
-        public async Task<IActionResult> Create(Guid? stockSubCodeGroupId, string? ruleCode, string? description, string? ruleName)
+        public async Task<IActionResult> Create(Guid? stockSubCodeGroupId, string? ruleCode, string? description, string? ruleName, decimal? unitPrice, decimal? targetPrice)
         {
             await LoadSubGroups(stockSubCodeGroupId);
             return View(new StockSubCodeRuleVm
@@ -32,6 +32,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = ruleCode ?? string.Empty,
                 Description = description,
                 RuleName = ruleName ?? string.Empty,
+                UnitPrice = unitPrice ?? 0,
+                TargetPrice = targetPrice ?? 0,
                 IsEnabled = true
             });
         }
@@ -52,6 +54,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = vm.RuleCode,
                 RuleName = vm.RuleName,
                 Description = vm.Description,
+                UnitPrice = vm.UnitPrice,
+                TargetPrice = vm.TargetPrice,
                 IsEnabled = vm.IsEnabled
             });
             return RedirectToAction(nameof(Index));
@@ -70,6 +74,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = dto.RuleCode,
                 RuleName = dto.RuleName,
                 Description = dto.Description,
+                UnitPrice = dto.UnitPrice,
+                TargetPrice = dto.TargetPrice,
                 IsEnabled = dto.IsEnabled
             });
         }
@@ -91,6 +97,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleCode = vm.RuleCode,
                 RuleName = vm.RuleName,
                 Description = vm.Description,
+                UnitPrice = vm.UnitPrice,
+                TargetPrice = vm.TargetPrice,
                 IsEnabled = vm.IsEnabled
             });
             return RedirectToAction(nameof(Index));
@@ -101,6 +109,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             await LoadSubGroups(stockSubCodeGroupId);
             return View();
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> List(Guid? subGroupId)
+        {
+            await LoadSubGroups(subGroupId);
+            return View(await _service.GetAllAsync(subGroupId));
         }
 
         [HttpGet]
