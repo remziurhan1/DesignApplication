@@ -381,6 +381,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 {
                     items[index].Quantity = ReadLocalizedDoubleFromForm($"items[{index}].Quantity", items[index].Quantity);
                     items[index].ManualUnitPrice = ReadLocalizedDoubleFromForm($"items[{index}].ManualUnitPrice", items[index].ManualUnitPrice);
+                    items[index].UseManualUnitPrice = ReadBooleanFromForm($"items[{index}].UseManualUnitPrice", items[index].UseManualUnitPrice);
                 }
 
                 await _service.BulkUpdateCostAnalysisItemsAsync(
@@ -789,6 +790,30 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
 
             return fallback;
+        }
+
+        private bool ReadBooleanFromForm(string key, bool fallback = false)
+        {
+            if (!Request.HasFormContentType)
+            {
+                return fallback;
+            }
+
+            var values = Request.Form[key];
+            if (values.Count == 0)
+            {
+                return fallback;
+            }
+
+            foreach (var value in values)
+            {
+                if (bool.TryParse(value, out var parsed) && parsed)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private async Task PopulateResultDisplayNamesAsync(EN13458ResultVM vm)
