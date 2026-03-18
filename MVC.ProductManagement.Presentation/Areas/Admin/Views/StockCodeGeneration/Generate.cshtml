@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 <h4>Stok Kodu Üretimi</h4>
-<p class="text-muted">Alt grup seçin, her kural grubundan uygun seçeneği belirleyin. Stok kodu alt grup kodundan, açıklama ise seçilen özelliklerden otomatik oluşturulur.</p>
+<p class="text-muted">Alt grup seçin, her kural grubundan uygun seçeneği belirleyin. Stok kodu ilk 4 karakter alt grup kodu + 4 haneli sayaç olarak üretilir ve açıklama seçilen özelliklerden otomatik oluşturulur.</p>
 
 <form asp-action="Generate" method="post" id="generate-form">
     @Html.AntiForgeryToken()
@@ -46,7 +46,7 @@
     <div class="mb-3">
         <label asp-for="GeneratedCode" class="form-label">Üretilen Kod</label>
         <input id="generated-code" asp-for="GeneratedCode" class="form-control" readonly />
-        <div id="generate-info" class="form-text"></div>
+        <div id="generate-info" class="form-text">Format: ilk 4 karakter alt grup kodu + 4 haneli sıra (örn. SFC00000).</div>
     </div>
 
     <div class="row">

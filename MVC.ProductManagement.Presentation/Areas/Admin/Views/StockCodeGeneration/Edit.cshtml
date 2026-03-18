@@ -1,0 +1,37 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog.GeneratedStockCodeVm
+
+<h4>Stok Kodu Düzenle</h4>
+<p class="text-muted">Stok kodu sabittir; açıklama, birim fiyat ve hedef fiyat güncellenebilir.</p>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="StockSubCodeGroupId" type="hidden" />
+    <input asp-for="StockSubCodeRuleId" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="GeneratedCode" class="form-label">Stok Kodu</label>
+        <input asp-for="GeneratedCode" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Açıklama</label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="UnitPrice" class="form-label">Birim Fiyat</label>
+            <input asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label>
+            <input asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a asp-action="Index" asp-route-subGroupId="@Model.StockSubCodeGroupId" class="btn btn-outline-secondary">Listeye Dön</a>
+    </div>
+</form>

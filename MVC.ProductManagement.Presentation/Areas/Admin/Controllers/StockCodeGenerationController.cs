@@ -29,6 +29,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GroupBuilder(Guid? subGroupId)
+        {
+            await LoadSubGroups(subGroupId);
+            var items = await _generatedService.GetAllAsync(subGroupId);
+            return View(items.OrderBy(x => x.GeneratedCode).ToList());
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Generate(Guid? stockSubCodeGroupId)
         {
             await LoadSubGroups(stockSubCodeGroupId);
@@ -58,6 +66,47 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             });
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var dto = await _generatedService.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            await LoadSubGroups(dto.StockSubCodeGroupId);
+            return View(new GeneratedStockCodeVm
+            {
+                Id = dto.Id,
+                StockSubCodeGroupId = dto.StockSubCodeGroupId,
+                StockSubCodeRuleId = dto.StockSubCodeRuleId,
+                GeneratedCode = dto.GeneratedCode,
+                RuleName = dto.RuleName,
+                Description = dto.Description,
+                UnitPrice = dto.UnitPrice,
+                TargetPrice = dto.TargetPrice
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(GeneratedStockCodeVm vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                await LoadSubGroups(vm.StockSubCodeGroupId);
+                return View(vm);
+            }
+
+            await _generatedService.UpdateAsync(new GeneratedStockCodeUpdateDto
+            {
+                Id = vm.Id,
+                Description = vm.Description,
+                UnitPrice = vm.UnitPrice,
+                TargetPrice = vm.TargetPrice
+            });
+
+            return RedirectToAction(nameof(Index), new { subGroupId = vm.StockSubCodeGroupId });
         }
 
         [HttpGet]

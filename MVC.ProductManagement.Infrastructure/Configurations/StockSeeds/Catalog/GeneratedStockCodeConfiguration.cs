@@ -11,7 +11,7 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds.Catalog
             builder.ToTable("GeneratedStockCodes");
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.GeneratedCode).HasMaxLength(50).IsRequired();
+            builder.Property(x => x.GeneratedCode).HasMaxLength(8).IsRequired();
             builder.Property(x => x.RuleName).HasMaxLength(250).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(1000);
             builder.Property(x => x.UnitPrice).HasColumnType("decimal(18,2)");

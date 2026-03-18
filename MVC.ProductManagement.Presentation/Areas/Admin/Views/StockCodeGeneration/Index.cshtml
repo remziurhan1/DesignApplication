@@ -13,11 +13,12 @@
     <div class="col-md-6 text-md-end">
         <button class="btn btn-outline-primary" type="submit">Filtrele</button>
         <a asp-action="Generate" class="btn btn-primary">Yeni Kod Üret</a>
+        <a asp-action="GroupBuilder" class="btn btn-outline-success">Ürün Grubu Oluştur</a>
     </div>
 </form>
 
 <table class="table table-striped">
-    <thead><tr><th>Ana/Alt Grup</th><th>Kod</th><th>Açıklama</th><th>Birim Fiyat</th><th>Hedef Fiyat</th></tr></thead>
+    <thead><tr><th>Ana/Alt Grup</th><th>Kod</th><th>Açıklama</th><th>Birim Fiyat</th><th>Hedef Fiyat</th><th>İşlem</th></tr></thead>
     <tbody>
     @foreach (var item in Model)
     {
@@ -27,6 +28,9 @@
             <td>@item.Description</td>
             <td>@(item.UnitPrice?.ToString("N2") ?? "-")</td>
             <td>@(item.TargetPrice?.ToString("N2") ?? "-")</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+            </td>
         </tr>
     }
     </tbody>

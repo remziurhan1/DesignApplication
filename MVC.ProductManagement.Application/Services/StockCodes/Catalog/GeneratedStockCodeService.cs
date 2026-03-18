@@ -7,6 +7,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 {
     public class GeneratedStockCodeService : IGeneratedStockCodeService
     {
+        private const int GeneratedCodePrefixLength = 4;
+        private const int GeneratedCodeNumericLength = 4;
+        private const int GeneratedCodeLength = GeneratedCodePrefixLength + GeneratedCodeNumericLength;
+
         private readonly IGeneratedStockCodeRepository _repository;
         private readonly IStockSubCodeGroupRepository _subGroupRepository;
         private readonly IStockMainCodeGroupRepository _mainGroupRepository;
@@ -63,6 +67,36 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 .ToList();
         }
 
+        public async Task<GeneratedStockCodeDetailDto?> GetByIdAsync(Guid id)
+        {
+            var entity = await _repository.GetByIdAsync(id, tracking: false);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            var item = (await GetAllAsync(entity.StockSubCodeGroupId)).FirstOrDefault(x => x.Id == id);
+            if (item == null)
+            {
+                return null;
+            }
+
+            return new GeneratedStockCodeDetailDto
+            {
+                Id = item.Id,
+                StockSubCodeGroupId = item.StockSubCodeGroupId,
+                StockSubCodeRuleId = item.StockSubCodeRuleId,
+                MainGroupCode = item.MainGroupCode,
+                SubGroupCode = item.SubGroupCode,
+                SubGroupName = item.SubGroupName,
+                GeneratedCode = item.GeneratedCode,
+                RuleName = item.RuleName,
+                Description = item.Description,
+                UnitPrice = item.UnitPrice,
+                TargetPrice = item.TargetPrice
+            };
+        }
+
         public async Task<GeneratedStockCodeResolveDto> ResolveCodeAsync(Guid subGroupId, List<Guid>? selectedRuleIds = null)
         {
             var nextCode = await GetNextCodeBySubGroupAsync(subGroupId);
@@ -80,9 +114,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 
         public async Task<GeneratedStockCodeListDto> CreateAsync(GeneratedStockCodeCreateDto dto)
         {
+            var subGroup = await _subGroupRepository.GetByIdAsync(dto.StockSubCodeGroupId, tracking: false)
+                ?? throw new Exception("Sub group not found");
+
+            var stockCodePrefix = GetStockCodePrefix(subGroup.Code);
             var generatedCode = string.IsNullOrWhiteSpace(dto.GeneratedCode)
                 ? await GetNextCodeBySubGroupAsync(dto.StockSubCodeGroupId)
-                : dto.GeneratedCode.Trim().ToUpperInvariant();
+                : NormalizeGeneratedCode(dto.GeneratedCode, stockCodePrefix);
 
             var existingByCode = (await _repository.GetAllAsync(x => x.StockSubCodeGroupId == dto.StockSubCodeGroupId, tracking: false))
                 .FirstOrDefault(x => Normalize(x.GeneratedCode) == Normalize(generatedCode));
@@ -111,6 +149,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             await _repository.SaveChangeAsync();
 
             return (await GetAllAsync(entity.StockSubCodeGroupId)).First(x => x.Id == entity.Id);
+        }
+
+        public async Task<GeneratedStockCodeDetailDto> UpdateAsync(GeneratedStockCodeUpdateDto dto)
+        {
+            var entity = await _repository.GetByIdAsync(dto.Id) ?? throw new Exception("Generated stock code not found");
+
+            entity.Description = dto.Description?.Trim();
+            entity.UnitPrice = dto.UnitPrice;
+            entity.TargetPrice = dto.TargetPrice;
+
+            await _repository.UpdateAsync(entity);
+            await _repository.SaveChangeAsync();
+
+            return await GetByIdAsync(entity.Id) ?? throw new Exception("Generated stock code update failed");
         }
 
         private async Task<string> ComposeRuleNameAsync(Guid subGroupId, List<Guid>? selectedRuleIds)
@@ -146,15 +198,15 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var stockCodePrefix = GetStockCodePrefix(subGroup.Code);
             var existingCodes = await _repository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId, tracking: false);
 
-            var regex = new Regex($"^{Regex.Escape(stockCodePrefix)}(\\d{{5}})$", RegexOptions.CultureInvariant);
+            var regex = new Regex($"^{Regex.Escape(stockCodePrefix)}(\\d{{{GeneratedCodeNumericLength}}})$", RegexOptions.CultureInvariant);
             var maxNumber = existingCodes
                 .Select(x => regex.Match(x.GeneratedCode))
                 .Where(m => m.Success)
                 .Select(m => int.Parse(m.Groups[1].Value))
-                .DefaultIfEmpty(0)
+                .DefaultIfEmpty(-1)
                 .Max();
 
-            return $"{stockCodePrefix}{maxNumber + 1:D5}";
+            return $"{stockCodePrefix}{maxNumber + 1:D4}";
         }
 
         private async Task<string?> ComposeDescriptionAsync(Guid subGroupId, List<Guid>? selectedRuleIds, string? manualDescription)
@@ -212,9 +264,31 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         private static string GetStockCodePrefix(string subGroupCode)
         {
             var normalized = subGroupCode.Trim().ToUpperInvariant();
-            if (normalized.EndsWith('0') && normalized.Length > 1)
+            if (normalized.Length >= GeneratedCodePrefixLength)
             {
-                return normalized[..^1];
+                return normalized[..GeneratedCodePrefixLength];
+            }
+
+            return normalized.PadRight(GeneratedCodePrefixLength, '0');
+        }
+
+        private static string NormalizeGeneratedCode(string generatedCode, string stockCodePrefix)
+        {
+            var normalized = generatedCode.Trim().ToUpperInvariant();
+            if (normalized.Length != GeneratedCodeLength)
+            {
+                throw new Exception($"Generated stock code must be exactly {GeneratedCodeLength} characters.");
+            }
+
+            if (!normalized.StartsWith(stockCodePrefix, StringComparison.Ordinal))
+            {
+                throw new Exception($"Generated stock code must start with subgroup prefix {stockCodePrefix}.");
+            }
+
+            var numericPart = normalized[GeneratedCodePrefixLength..];
+            if (numericPart.Length != GeneratedCodeNumericLength || !numericPart.All(char.IsDigit))
+            {
+                throw new Exception($"Generated stock code must end with {GeneratedCodeNumericLength} digits.");
             }
 
             return normalized;
