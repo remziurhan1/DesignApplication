@@ -1,23 +1,33 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM
 @using System.Globalization
-@using Microsoft.AspNetCore.Mvc.Rendering
 @{
     ViewData["Title"] = "EN13458 Details";
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
-    var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
 }
 
 <style>
-    .section-title { letter-spacing: .04em; font-size: .78rem; }
     .detail-table th { width: 52%; color: #5b6472; }
     .input-table th { width: 20%; background: #f8f9fa; color: #5b6472; }
-    .group-card { border: 1px solid #dbe7ff; background: #f9fbff; }
 </style>
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-    <h2 class="mb-0">EN13458 Detay</h2>
-    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-3 py-2">Kayıt detayı</span>
+    <div>
+        <h2 class="mb-0">EN13458 Detay</h2>
+        <div class="text-muted small">Kayıt Id: @Model.Id</div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-3 py-2">Kayıt detayı</span>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+            <i class="bi bi-pencil-square me-1"></i>Tankı Güncelle
+        </a>
+        <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="bi bi-cash-coin me-1"></i>Maliyet Sayfası
+        </a>
+        <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
+            <i class="bi bi-file-earmark-excel me-1"></i>Excel
+        </a>
+    </div>
 </div>
 
 @if (TempData["SuccessMessage"] is string successMessage)
@@ -35,6 +45,43 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
+
+<div class="card shadow-sm mb-4 border-warning-subtle">
+    <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span>Maliyet Durumu</span>
+        <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Maliyet Ekranına Git</a>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-12 col-md-4">
+                <div class="border rounded p-3 h-100">
+                    <div class="small text-muted">Kayıtlı Revizyon Sayısı</div>
+                    <div class="fs-4 fw-semibold">@Model.CostAnalyses.Count</div>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="border rounded p-3 h-100">
+                    <div class="small text-muted mb-2">Son Revizyonlar</div>
+                    @if (Model.CostAnalyses.Any())
+                    {
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var analysis in Model.CostAnalyses.Take(5))
+                            {
+                                <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id" class="btn btn-sm btn-outline-warning">
+                                    @analysis.RevisionCode - @analysis.GrandTotalCost.ToString("N2")
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted small">Henüz maliyet revizyonu oluşturulmadı.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-light fw-semibold">Giriş Verileri</div>
@@ -66,40 +113,26 @@
         </div>
     </div>
 </div>
+
 <div class="row g-4">
     <div class="col-12 col-xxl-6">
         <div class="card shadow-sm h-100 border-primary-subtle">
             <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">İç Tank</div>
             <div class="card-body">
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Malzeme</h6>
-                <table class="table table-sm table-striped align-middle mb-3 detail-table">
+                <table class="table table-sm table-striped align-middle mb-0 detail-table">
                     <tbody>
-                    <tr><th class="w-50">Gövde Malzemesi</th><td>@Model.InnerShellMaterialName</td></tr>
+                    <tr><th>Gövde Malzemesi</th><td>@Model.InnerShellMaterialName</td></tr>
                     <tr><th>Gövde Malzeme Formu</th><td>@Model.InnerShellMaterialFormName</td></tr>
                     <tr><th>Bombe Malzemesi</th><td>@Model.InnerHeadMaterialName</td></tr>
                     <tr><th>Bombe Malzeme Formu</th><td>@Model.InnerHeadMaterialFormName</td></tr>
                     <tr><th>Gövde Akma Dayanımı (MPa)</th><td>@Model.InnerShellMaterialStrength</td></tr>
                     <tr><th>Bombe Akma Dayanımı (MPa)</th><td>@Model.InnerHeadMaterialStrength</td></tr>
-                    </tbody>
-                </table>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Kalınlık ve Uzunluk</h6>
-                <table class="table table-sm table-striped align-middle mb-3 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
+                    <tr><th>Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
                     <tr><th>Bombe Kalınlığı</th><td>@Model.InnerHeadThickness</td></tr>
                     <tr><th>Yuvarlanmış Gövde Kalınlığı</th><td>@Model.RoundedInnerShellThickness</td></tr>
                     <tr><th>Yuvarlanmış Bombe Kalınlığı</th><td>@Model.RoundedInnerHeadThickness</td></tr>
                     <tr><th>Bombe Pulu Çapı</th><td>@Model.InnerTankHeadPulDiameter</td></tr>
                     <tr><th>Toplam Uzunluk</th><td>@Model.InnerTankTotalLength</td></tr>
-                    </tbody>
-                </table>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Kaynak, Hacim ve Ağırlık</h6>
-                <table class="table table-sm table-striped align-middle mb-0 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Bombe Kaynak Uzunluğu</th><td>@Model.InnerTankHeadWeldLength</td></tr>
-                    <tr><th>Çevre Kaynak Uzunluğu</th><td>@Model.InnerTankCircumferenceWeldLength</td></tr>
                     <tr><th>İç Hacim</th><td>@Model.InnerVolume</td></tr>
                     <tr><th>İç Yüzey Alanı</th><td>@Model.InnerSurfaceArea</td></tr>
                     <tr><th>Bombe Ağırlığı</th><td>@Model.InnerTankHeadWeight</td></tr>
@@ -114,35 +147,20 @@
         <div class="card shadow-sm h-100 border-secondary-subtle">
             <div class="card-header bg-secondary-subtle text-secondary-emphasis fw-semibold">Dış Tank</div>
             <div class="card-body">
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Malzeme</h6>
-                <table class="table table-sm table-striped align-middle mb-3 detail-table">
+                <table class="table table-sm table-striped align-middle mb-0 detail-table">
                     <tbody>
-                    <tr><th class="w-50">Gövde Malzemesi</th><td>@Model.OuterShellMaterialName</td></tr>
+                    <tr><th>Gövde Malzemesi</th><td>@Model.OuterShellMaterialName</td></tr>
                     <tr><th>Gövde Malzeme Formu</th><td>@Model.OuterShellMaterialFormName</td></tr>
                     <tr><th>Bombe Malzemesi</th><td>@Model.OuterHeadMaterialName</td></tr>
                     <tr><th>Bombe Malzeme Formu</th><td>@Model.OuterHeadMaterialFormName</td></tr>
                     <tr><th>Gövde Akma Dayanımı (MPa)</th><td>@Model.OuterShellMaterialStrength</td></tr>
                     <tr><th>Bombe Akma Dayanımı (MPa)</th><td>@Model.OuterHeadMaterialStrength</td></tr>
-                    </tbody>
-                </table>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Kalınlık ve Uzunluk</h6>
-                <table class="table table-sm table-striped align-middle mb-3 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
+                    <tr><th>Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
                     <tr><th>Bombe Kalınlığı</th><td>@Model.OuterHeadThickness</td></tr>
                     <tr><th>Yuvarlanmış Gövde Kalınlığı</th><td>@Model.RoundedOuterShellThickness</td></tr>
                     <tr><th>Yuvarlanmış Bombe Kalınlığı</th><td>@Model.RoundedOuterHeadThickness</td></tr>
                     <tr><th>Bombe Pulu Çapı</th><td>@Model.OuterTankHeadPulDiameter</td></tr>
                     <tr><th>Toplam Uzunluk</th><td>@Model.OuterTankTotalLength</td></tr>
-                    </tbody>
-                </table>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Kaynak, Hacim ve Ağırlık</h6>
-                <table class="table table-sm table-striped align-middle mb-0 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Bombe Kaynak Uzunluğu</th><td>@Model.OuterTankHeadWeldLength</td></tr>
-                    <tr><th>Çevre Kaynak Uzunluğu</th><td>@Model.OuterTankCircumferenceWeldLength</td></tr>
                     <tr><th>Dış Hacim</th><td>@Model.OuterVolume</td></tr>
                     <tr><th>Dış Yüzey Alanı</th><td>@Model.OuterSurfaceArea</td></tr>
                     <tr><th>Bombe Ağırlığı</th><td>@Model.OuterTankHeadWeight</td></tr>
@@ -178,249 +196,3 @@
         </div>
     </div>
 </div>
-
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light fw-semibold">Sac Oryantasyonu (Sektör Bazlı)</div>
-    <div class="card-body">
-        <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
-
-        <h6 class="text-muted text-uppercase fw-semibold mb-2">İç Tank Gövde</h6>
-        <div class="table-responsive mb-3">
-            <table class="table table-sm table-striped table-bordered align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Sektör Genişliği</th>
-                        <th>Parça Adedi</th>
-                        <th>Sac Açınımı</th>
-                        <th>Kaynak Metrajı</th>
-                        <th>Kesim Listesi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan1500)</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan2000)</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan2500)</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan3000)</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h6 class="text-muted text-uppercase fw-semibold mb-2">Dış Tank Gövde</h6>
-        <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Sektör Genişliği</th>
-                        <th>Parça Adedi</th>
-                        <th>Sac Açınımı</th>
-                        <th>Kaynak Metrajı</th>
-                        <th>Kesim Listesi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan1500)</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan2000)</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan2500)</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan3000)</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="card shadow-sm mt-4 border-success-subtle">
-    <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">Ek Stok / Grup Maliyeti</div>
-    <div class="card-body">
-        <div class="row g-4">
-            <div class="col-12 col-xl-6">
-                <div class="border rounded p-3 h-100 bg-light-subtle">
-                    <h6 class="fw-semibold mb-3">Stok Kod Grubu Ekle</h6>
-                    <form asp-action="AddStockGroup" method="post" class="row g-3">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@Model.Id" />
-                        <div class="col-12">
-                            <label class="form-label">Grup</label>
-                            <select name="stockProductGroupId" class="form-select" asp-items="Model.AvailableStockGroups">
-                                <option value="">Grup seçiniz</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Çarpan</label>
-                            <input type="number" name="multiplier" class="form-control" min="0.01" step="0.01" value="1" />
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-success">
-                                <i class="bi bi-collection me-1"></i>Grubu Maliyete Ekle
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-12 col-xl-6">
-                <div class="border rounded p-3 h-100 bg-light-subtle">
-                    <h6 class="fw-semibold mb-3">Tekil Stok Kodu Ekle</h6>
-                    <form asp-action="AddStockCode" method="post" class="row g-3">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@Model.Id" />
-                        <div class="col-12">
-                            <label class="form-label">Stok Kodu</label>
-                            <select name="generatedStockCodeId" class="form-select" asp-items="Model.AvailableStockCodes">
-                                <option value="">Stok kodu seçiniz</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Miktar</label>
-                            <input type="number" name="quantity" class="form-control" min="0.01" step="0.01" value="1" />
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-plus-circle me-1"></i>Stok Kodunu Ekle
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-@if (costTable != null)
-{
-    <div class="card shadow-sm mt-4">
-        <div class="card-header bg-light fw-semibold">Maliyet Grupları</div>
-        <div class="card-body">
-            <div class="row g-3 mb-4">
-                <div class="col-12 col-md-4">
-                    <div class="border rounded p-3 h-100">
-                        <div class="small text-muted">Toplam Malzeme Maliyeti</div>
-                        <div class="fs-5 fw-semibold">@costTable.TotalMaterialCost.ToString("N2")</div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4">
-                    <div class="border rounded p-3 h-100">
-                        <div class="small text-muted">Film / İzolasyon</div>
-                        <div class="fs-5 fw-semibold">@costTable.TotalFilmCost.ToString("N2")</div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4">
-                    <div class="border rounded p-3 h-100 bg-success-subtle border-success-subtle">
-                        <div class="small text-muted">Genel Toplam</div>
-                        <div class="fs-5 fw-semibold">@costTable.GrandTotalCost.ToString("N2")</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-                @foreach (var group in costTable.GroupTotals)
-                {
-                    <div class="col-12 col-md-4">
-                        <div class="border rounded p-3 h-100">
-                            <div class="small text-muted">@group.CostGroupCode - @group.CostGroupName</div>
-                            <div class="fs-5 fw-semibold">@group.TotalCost.ToString("N2")</div>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-sm table-striped align-middle mb-0">
-                    <thead>
-                    <tr>
-                        <th>Grup</th>
-                        <th>Kalem</th>
-                        <th>Stok Kodu</th>
-                        <th>Malzeme</th>
-                        <th class="text-end">Miktar</th>
-                        <th>Birim</th>
-                        <th class="text-end">Birim Fiyat</th>
-                        <th class="text-end">Tutar</th>
-                        <th class="text-end">İşlem</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
-                    {
-                        <tr class="table-primary">
-                            <td colspan="9" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
-                        </tr>
-
-                        @foreach (var item in groupItems)
-                        {
-                            <tr>
-                                <td>@item.CostGroupCode</td>
-                                <td>@item.ItemName</td>
-                                <td>@item.StockCode</td>
-                                <td>@item.MaterialName</td>
-                                <td class="text-end">@item.Quantity.ToString("N2")</td>
-                                <td>@item.Unit</td>
-                                <td class="text-end">@item.UnitPrice.ToString("N2")</td>
-                                <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
-                                <td class="text-end">
-                                    @if (item.CostDetailId.HasValue)
-                                    {
-                                        <form asp-action="RemoveCostItem" method="post" class="d-inline">
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="id" value="@Model.Id" />
-                                            <input type="hidden" name="costDetailId" value="@item.CostDetailId" />
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bu maliyet kalemi kaldırılsın mı?');">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted small">Sabit</span>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    }
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <th colspan="7" class="text-end">Genel Toplam</th>
-                        <th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th>
-                        <th></th>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-}
-
-<div class="mt-4 mb-5 pb-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
-    <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-success px-4">
-        <i class="bi bi-file-earmark-excel me-1"></i>Excel Çıktı
-    </a>
-    <a asp-action="Index" class="btn btn-secondary px-4">
-        <i class="bi bi-arrow-left-circle me-1"></i>Listeye Dön
-    </a>
-    <a asp-action="Calculate" class="btn btn-primary px-4">
-        <i class="bi bi-plus-circle me-1"></i>Yeni Hesap
-    </a>
-</div>
-
-@functions {
-    private static int GetPieceCount(string? cutList)
-    {
-        if (string.IsNullOrWhiteSpace(cutList)) return 0;
-        return cutList.Split(" + ", StringSplitOptions.RemoveEmptyEntries).Length;
-    }
-
-    private static string FormatCutList(string? cutList)
-    {
-        if (string.IsNullOrWhiteSpace(cutList))
-        {
-            return "-";
-        }
-
-        var grouped = cutList
-            .Split(" + ", StringSplitOptions.RemoveEmptyEntries)
-            .Select(x => x.Trim())
-            .GroupBy(x => x)
-            .Select(x => $"{x.Count()} adet {x.Key.Replace(" x ", "x")}");
-
-        return string.Join(" + ", grouped);
-    }
-}

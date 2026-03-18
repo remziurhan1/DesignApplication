@@ -7,6 +7,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
 {
     public class EN13458CalculateVM
     {
+        public Guid Id { get; set; }
+
         [Required]
         public string Name { get; set; } = string.Empty;
 
