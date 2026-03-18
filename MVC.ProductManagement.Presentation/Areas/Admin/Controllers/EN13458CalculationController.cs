@@ -739,10 +739,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .Select(x => new SelectListItem($"{x.Name} (Kalem: {x.ItemCount}, Tutar: {x.TotalCost:N2})", x.Id.ToString()))
                 .ToList();
 
-            vm.AvailableStockCodes = (await _generatedStockCodeService.GetAllAsync())
+            var stockCodes = (await _generatedStockCodeService.GetAllAsync())
+                .OrderBy(x => x.GeneratedCode)
+                .ToList();
+
+            vm.AvailableStockCodes = stockCodes
                 .OrderBy(x => x.GeneratedCode)
                 .Select(x => new SelectListItem($"{x.GeneratedCode} - {(!string.IsNullOrWhiteSpace(x.Description) ? x.Description : x.RuleName)}", x.Id.ToString()))
                 .ToList();
+
+            ViewBag.StockCodeOptions = stockCodes.Select(x => new
+            {
+                id = x.Id,
+                text = $"{x.GeneratedCode} - {(!string.IsNullOrWhiteSpace(x.Description) ? x.Description : x.RuleName)}",
+                unitPrice = Convert.ToDouble(x.UnitPrice ?? 0m)
+            }).ToList();
         }
 
         private async Task PopulateResultDisplayNamesAsync(EN13458ResultVM vm)
