@@ -51,191 +51,21 @@
 }
 
 <div class="card shadow-sm mb-4">
-    <div class="card-header bg-light fw-semibold">Giriş Verileri</div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-bordered table-sm align-middle mb-0 input-table">
-                <tbody>
-                    <tr>
-                        <th>Ad</th><td>@Model.Name</td>
-                        <th>İç Tank Çapı</th><td>@Model.OuterDiameter</td>
-                        <th>Dış Tank Çapı</th><td>@Model.OuterTankDiameter</td>
-                    </tr>
-                    <tr>
-                        <th>Silindirik Boy</th><td>@Model.ShellLength</td>
-                        <th>Basınç</th><td>@Model.Pressure</td>
-                        <th>Depolanacak Ürün</th><td>@Model.StorageTypeName</td>
-                    </tr>
-                    <tr>
-                        <th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td>
-                        <th>Tank Yönelimi</th><td>@Model.TankOrientation</td>
-                        <th>Cold Stretch</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td>
-                    </tr>
-                    <tr>
-                        <th>Kaynak Metrajları</th>
-                        <td colspan="5">1500: @Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m | 2000: @Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m | 2500: @Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m | 3000: @Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<div class="row g-4">
-    <div class="col-12 col-xxl-6">
-        <div class="card shadow-sm h-100 border-primary-subtle">
-            <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">İç Tank</div>
-            <div class="card-body">
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Malzeme</h6>
-                <table class="table table-sm table-striped align-middle mb-3 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Gövde Malzemesi</th><td>@Model.InnerShellMaterialName</td></tr>
-                    <tr><th>Gövde Malzeme Formu</th><td>@Model.InnerShellMaterialFormName</td></tr>
-                    <tr><th>Bombe Malzemesi</th><td>@Model.InnerHeadMaterialName</td></tr>
-                    <tr><th>Bombe Malzeme Formu</th><td>@Model.InnerHeadMaterialFormName</td></tr>
-                    <tr><th>Gövde Akma Dayanımı (MPa)</th><td>@Model.InnerShellMaterialStrength</td></tr>
-                    <tr><th>Bombe Akma Dayanımı (MPa)</th><td>@Model.InnerHeadMaterialStrength</td></tr>
-                    </tbody>
-                </table>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Kalınlık ve Uzunluk</h6>
-                <table class="table table-sm table-striped align-middle mb-3 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
-                    <tr><th>Bombe Kalınlığı</th><td>@Model.InnerHeadThickness</td></tr>
-                    <tr><th>Yuvarlanmış Gövde Kalınlığı</th><td>@Model.RoundedInnerShellThickness</td></tr>
-                    <tr><th>Yuvarlanmış Bombe Kalınlığı</th><td>@Model.RoundedInnerHeadThickness</td></tr>
-                    <tr><th>Bombe Pulu Çapı</th><td>@Model.InnerTankHeadPulDiameter</td></tr>
-                    <tr><th>Toplam Uzunluk</th><td>@Model.InnerTankTotalLength</td></tr>
-                    </tbody>
-                </table>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Kaynak, Hacim ve Ağırlık</h6>
-                <table class="table table-sm table-striped align-middle mb-0 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Bombe Kaynak Uzunluğu</th><td>@Model.InnerTankHeadWeldLength</td></tr>
-                    <tr><th>Çevre Kaynak Uzunluğu</th><td>@Model.InnerTankCircumferenceWeldLength</td></tr>
-                    <tr><th>İç Hacim</th><td>@Model.InnerVolume</td></tr>
-                    <tr><th>İç Yüzey Alanı</th><td>@Model.InnerSurfaceArea</td></tr>
-                    <tr><th>Bombe Ağırlığı</th><td>@Model.InnerTankHeadWeight</td></tr>
-                    <tr><th>Tank Ağırlığı</th><td>@Model.InnerTankWeight</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-xxl-6">
-        <div class="card shadow-sm h-100 border-secondary-subtle">
-            <div class="card-header bg-secondary-subtle text-secondary-emphasis fw-semibold">Dış Tank</div>
-            <div class="card-body">
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Malzeme</h6>
-                <table class="table table-sm table-striped align-middle mb-3 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Gövde Malzemesi</th><td>@Model.OuterShellMaterialName</td></tr>
-                    <tr><th>Gövde Malzeme Formu</th><td>@Model.OuterShellMaterialFormName</td></tr>
-                    <tr><th>Bombe Malzemesi</th><td>@Model.OuterHeadMaterialName</td></tr>
-                    <tr><th>Bombe Malzeme Formu</th><td>@Model.OuterHeadMaterialFormName</td></tr>
-                    <tr><th>Gövde Akma Dayanımı (MPa)</th><td>@Model.OuterShellMaterialStrength</td></tr>
-                    <tr><th>Bombe Akma Dayanımı (MPa)</th><td>@Model.OuterHeadMaterialStrength</td></tr>
-                    </tbody>
-                </table>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Kalınlık ve Uzunluk</h6>
-                <table class="table table-sm table-striped align-middle mb-3 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
-                    <tr><th>Bombe Kalınlığı</th><td>@Model.OuterHeadThickness</td></tr>
-                    <tr><th>Yuvarlanmış Gövde Kalınlığı</th><td>@Model.RoundedOuterShellThickness</td></tr>
-                    <tr><th>Yuvarlanmış Bombe Kalınlığı</th><td>@Model.RoundedOuterHeadThickness</td></tr>
-                    <tr><th>Bombe Pulu Çapı</th><td>@Model.OuterTankHeadPulDiameter</td></tr>
-                    <tr><th>Toplam Uzunluk</th><td>@Model.OuterTankTotalLength</td></tr>
-                    </tbody>
-                </table>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-2">Kaynak, Hacim ve Ağırlık</h6>
-                <table class="table table-sm table-striped align-middle mb-0 detail-table">
-                    <tbody>
-                    <tr><th class="w-50">Bombe Kaynak Uzunluğu</th><td>@Model.OuterTankHeadWeldLength</td></tr>
-                    <tr><th>Çevre Kaynak Uzunluğu</th><td>@Model.OuterTankCircumferenceWeldLength</td></tr>
-                    <tr><th>Dış Hacim</th><td>@Model.OuterVolume</td></tr>
-                    <tr><th>Dış Yüzey Alanı</th><td>@Model.OuterSurfaceArea</td></tr>
-                    <tr><th>Bombe Ağırlığı</th><td>@Model.OuterTankHeadWeight</td></tr>
-                    <tr><th>Tank Ağırlığı</th><td>@Model.OuterTankWeight</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light fw-semibold">Ortak Sonuçlar</div>
+    <div class="card-header bg-light fw-semibold">Sonuç Özeti</div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-striped table-hover table-sm align-middle mb-0">
                 <tbody>
-                <tr><th class="w-50">Design Pressure</th><td>@Model.DesignPressure</td></tr>
-                <tr><th>Test Pressure</th><td>@Model.TestPressure</td></tr>
-                <tr><th>Static Pressure</th><td>@Model.StaticPressure</td></tr>
+                <tr><th class="w-50">İç Tank</th><td>@Model.RoundedInnerShellThickness.ToString("0.##", CultureInfo.InvariantCulture) mm / @Model.InnerTankWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
+                <tr><th>Dış Tank</th><td>@Model.RoundedOuterShellThickness.ToString("0.##", CultureInfo.InvariantCulture) mm / @Model.OuterTankWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
+                <tr><th>İç Bombe</th><td>@Model.RoundedInnerHeadThickness.ToString("0.##", CultureInfo.InvariantCulture) mm / @Model.InnerTankHeadWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
+                <tr><th>Dış Bombe</th><td>@Model.RoundedOuterHeadThickness.ToString("0.##", CultureInfo.InvariantCulture) mm / @Model.OuterTankHeadWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
                 <tr><th>Toplam Kaynak Uzunluğu</th><td>@Model.TotalWeldLength</td></tr>
                 <tr><th>Gerekli Profil Adedi</th><td>@Model.RequiredProfileCount</td></tr>
-                <tr><th>Profil Açınım Uzunluğu (mm)</th><td>@Model.ProfileDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                <tr><th>Toplam Profil Metrajı (m)</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                <tr><th>Toplam Profil Boyu (mm)</th><td>@totalProfileLengthMm.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                <tr><th>Profil Kaynak Metrajı (mm)</th><td>@Model.ProfileWeldLength.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                <tr><th>Perlit Hacmi</th><td>@Model.PerliteVolume</td></tr>
-                <tr><th>Perlit Ağırlığı (kg)</th><td>@Model.PerliteWeight</td></tr>
-                <tr><th>Gaz Azot Hacmi</th><td>@Model.GasNitrogenVolume</td></tr>
-                <tr><th>Sıvı Azot Hacmi</th><td>@Model.LiquidNitrogenVolume</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light fw-semibold">Sac Oryantasyonu (Sektör Bazlı)</div>
-    <div class="card-body">
-        <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
-
-        <h6 class="text-muted text-uppercase fw-semibold mb-2">İç Tank Gövde</h6>
-        <div class="table-responsive mb-3">
-            <table class="table table-sm table-striped table-bordered align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Sektör Genişliği</th>
-                        <th>Parça Adedi</th>
-                        <th>Sac Açınımı</th>
-                        <th>Kaynak Metrajı</th>
-                        <th>Kesim Listesi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan1500)</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan2000)</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan2500)</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.InnerSectorPlan3000)</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h6 class="text-muted text-uppercase fw-semibold mb-2">Dış Tank Gövde</h6>
-        <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Sektör Genişliği</th>
-                        <th>Parça Adedi</th>
-                        <th>Sac Açınımı</th>
-                        <th>Kaynak Metrajı</th>
-                        <th>Kesim Listesi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan1500)</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan2000)</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan2500)</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td><td>@FormatCutList(Model.OuterSectorPlan3000)</td></tr>
+                <tr><th>Toplam Profil Metrajı</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture) m</td></tr>
+                <tr><th>Perlit</th><td>@Model.PerliteWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
+                <tr><th>Gaz Azot</th><td>@Model.GasNitrogenVolume.ToString("0.##", CultureInfo.InvariantCulture) Nm³</td></tr>
+                <tr><th>Sıvı Azot</th><td>@Model.LiquidNitrogenVolume.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
                 </tbody>
             </table>
         </div>
@@ -572,9 +402,11 @@
 @section Scripts {
     <script>
         document.querySelectorAll('.js-manual-toggle').forEach(function (checkbox) {
-            const form = checkbox.closest('form');
-            if (!form) return;
-            const manualInput = form.querySelector('.js-manual-price');
+            const container = checkbox.closest('td, .row, .col-md-4, .col-12, form');
+            if (!container) return;
+            const manualInput = container.querySelector('.js-manual-price')
+                || checkbox.closest('tr')?.querySelector(`input[name="${checkbox.name.replace('UseManualUnitPrice', 'ManualUnitPrice')}"]`)
+                || checkbox.closest('form')?.querySelector('.js-manual-price');
             const sync = () => {
                 if (!manualInput) return;
                 manualInput.disabled = !checkbox.checked;
@@ -586,18 +418,4 @@
             sync();
         });
     </script>
-}
-
-@functions {
-    private static int GetPieceCount(string? cutList)
-    {
-        if (string.IsNullOrWhiteSpace(cutList)) return 0;
-        return cutList.Split(" + ", StringSplitOptions.RemoveEmptyEntries).Length;
-    }
-
-    private static string FormatCutList(string? cutList)
-    {
-        if (string.IsNullOrWhiteSpace(cutList)) return "-";
-        return cutList.Replace(" + ", " | ");
-    }
 }
