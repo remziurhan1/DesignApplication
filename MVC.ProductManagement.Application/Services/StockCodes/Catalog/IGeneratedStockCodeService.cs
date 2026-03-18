@@ -6,6 +6,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
     {
         Task<List<GeneratedStockCodeListDto>> GetAllAsync(Guid? subGroupId = null);
         Task<GeneratedStockCodeListDto> CreateAsync(GeneratedStockCodeCreateDto dto);
-        Task<GeneratedStockCodeResolveDto> ResolveCodeAsync(Guid subGroupId, string? ruleName, List<Guid>? selectedRuleIds = null);
+        Task<GeneratedStockCodeResolveDto> ResolveCodeAsync(Guid subGroupId, List<Guid>? selectedRuleIds = null);
     }
 }

@@ -17,14 +17,13 @@
 </form>
 
 <table class="table table-striped">
-    <thead><tr><th>Ana/Alt Grup</th><th>Kod</th><th>Özellikler</th><th>Açıklama</th><th>Birim Fiyat</th><th>Hedef Fiyat</th></tr></thead>
+    <thead><tr><th>Ana/Alt Grup</th><th>Kod</th><th>Açıklama</th><th>Birim Fiyat</th><th>Hedef Fiyat</th></tr></thead>
     <tbody>
     @foreach (var item in Model)
     {
         <tr>
             <td>@item.MainGroupCode / @item.SubGroupCode - @item.SubGroupName</td>
             <td>@item.GeneratedCode</td>
-            <td>@item.RuleName</td>
             <td>@item.Description</td>
             <td>@item.UnitPrice.ToString("N2")</td>
             <td>@item.TargetPrice.ToString("N2")</td>

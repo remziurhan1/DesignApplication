@@ -75,15 +75,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ResolveCode(Guid subGroupId, string? ruleName, string? selectedRuleIds)
+        public async Task<IActionResult> ResolveCode(Guid subGroupId, string? selectedRuleIds)
         {
             var selectedIds = ParseIds(selectedRuleIds);
-            var result = await _generatedService.ResolveCodeAsync(subGroupId, ruleName, selectedIds);
+            var result = await _generatedService.ResolveCodeAsync(subGroupId, selectedIds);
             return Json(new
             {
                 code = result.Code,
                 description = result.Description,
-                ruleName = result.RuleName,
                 unitPrice = result.UnitPrice,
                 targetPrice = result.TargetPrice,
                 isExisting = result.IsExisting
