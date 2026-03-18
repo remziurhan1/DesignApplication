@@ -50,6 +50,8 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IStockSubCodeGroupRepository, StockSubCodeGroupRepository>();
             services.AddScoped<IStockSubCodeRuleRepository, StockSubCodeRuleRepository>();
             services.AddScoped<IGeneratedStockCodeRepository, GeneratedStockCodeRepository>();
+            services.AddScoped<IStockProductGroupRepository, StockProductGroupRepository>();
+            services.AddScoped<IStockProductGroupItemRepository, StockProductGroupItemRepository>();
 
 
 

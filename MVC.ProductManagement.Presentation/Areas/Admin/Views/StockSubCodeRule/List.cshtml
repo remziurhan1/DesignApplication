@@ -1,4 +1,4 @@
-@model IEnumerable<MVC.ProductManagement.Application.DTOs.StockCodes.Catalog.StockSubCodeRuleListDto>
+@model IEnumerable<MVC.ProductManagement.Application.DTOs.StockCodes.Catalog.GeneratedStockCodeListDto>
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 <h4>Stok Kodları Görünümü</h4>
@@ -26,7 +26,6 @@
             <th>Açıklama</th>
             <th>Birim Fiyat</th>
             <th>Hedef Fiyat</th>
-            <th>Durum</th>
         </tr>
     </thead>
     <tbody>
@@ -34,12 +33,11 @@
     {
         <tr>
             <td>@item.MainGroupCode / @item.SubGroupCode - @item.SubGroupName</td>
-            <td>@item.RuleCode</td>
+            <td>@item.GeneratedCode</td>
             <td>@item.RuleName</td>
             <td>@item.Description</td>
-            <td>@item.UnitPrice.ToString("N2")</td>
-            <td>@item.TargetPrice.ToString("N2")</td>
-            <td>@(item.IsEnabled ? "Açık" : "Kapalı")</td>
+            <td>@(item.UnitPrice?.ToString("N2") ?? "-")</td>
+            <td>@(item.TargetPrice?.ToString("N2") ?? "-")</td>
         </tr>
     }
     </tbody>

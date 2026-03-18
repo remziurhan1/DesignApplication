@@ -1,0 +1,175 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog.StockProductGroupVm
+
+<form asp-action="@(Model.Id == Guid.Empty ? "Create" : "Edit")" method="post" id="product-group-form">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="ItemsJson" type="hidden" id="ItemsJson" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün Grubu Adı</label>
+        <input asp-for="Name" class="form-control" placeholder="Örn: 10 LOX STD" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Açıklama</label>
+        <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle" id="group-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Stok Kodu</th>
+                    <th>Açıklama</th>
+                    <th style="width: 10%;">Adet</th>
+                    <th style="width: 14%;">Birim Maliyet</th>
+                    <th style="width: 14%;">Toplam Maliyet</th>
+                    <th style="width: 8%;"></th>
+                </tr>
+            </thead>
+            <tbody id="group-items"></tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2" class="text-end">Genel Toplam</th>
+                    <th id="total-quantity">0</th>
+                    <th id="average-unit-cost">0.00</th>
+                    <th id="grand-total">0.00</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-success" id="add-row">Satır Ekle</button>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Listeye Dön</a>
+    </div>
+</form>
+
+<script>
+    const availableCodes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model.AvailableCodes.Select(x => new
+        {
+            id = x.Id,
+            generatedCode = x.GeneratedCode,
+            description = x.Description ?? string.Empty,
+            unitPrice = x.UnitPrice ?? 0m,
+            mainGroupCode = x.MainGroupCode,
+            subGroupCode = x.SubGroupCode,
+            subGroupName = x.SubGroupName
+        })));
+    const initialItems = @Html.Raw(string.IsNullOrWhiteSpace(Model.ItemsJson) ? "[]" : Model.ItemsJson);
+
+    const itemsBody = document.getElementById('group-items');
+    const totalQuantityCell = document.getElementById('total-quantity');
+    const averageUnitCostCell = document.getElementById('average-unit-cost');
+    const grandTotalCell = document.getElementById('grand-total');
+    const addRowButton = document.getElementById('add-row');
+    const itemsJsonInput = document.getElementById('ItemsJson');
+
+    function buildOptions(selectedId) {
+        const options = ['<option value="">Stok kodu seçiniz...</option>'];
+        for (const item of availableCodes) {
+            const selected = item.id === selectedId ? 'selected' : '';
+            options.push(`<option value="${item.id}" ${selected}>${item.generatedCode} - ${item.description}</option>`);
+        }
+        return options.join('');
+    }
+
+    function formatCurrency(value) {
+        return Number(value || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function syncItemsJson() {
+        const items = [];
+        for (const row of itemsBody.querySelectorAll('tr')) {
+            const generatedStockCodeId = row.querySelector('.stock-code-select')?.value;
+            const quantity = Number(row.querySelector('.quantity-input')?.value || 0);
+            if (generatedStockCodeId && quantity > 0) {
+                items.push({ GeneratedStockCodeId: generatedStockCodeId, Quantity: quantity });
+            }
+        }
+        itemsJsonInput.value = JSON.stringify(items);
+    }
+
+    function recalculateRow(row) {
+        const select = row.querySelector('.stock-code-select');
+        const quantityInput = row.querySelector('.quantity-input');
+        const descriptionCell = row.querySelector('.description-cell');
+        const unitPriceCell = row.querySelector('.unit-price-cell');
+        const totalCell = row.querySelector('.total-price-cell');
+
+        const selected = availableCodes.find(x => x.id === select.value) || null;
+        const quantity = Number(quantityInput.value || 0);
+        const unitPrice = selected?.unitPrice ?? 0;
+        const total = quantity * unitPrice;
+
+        descriptionCell.textContent = selected
+            ? `${selected.mainGroupCode}/${selected.subGroupCode} - ${selected.subGroupName}${selected.description ? ` | ${selected.description}` : ''}`
+            : '-';
+        unitPriceCell.textContent = formatCurrency(unitPrice);
+        totalCell.textContent = formatCurrency(total);
+    }
+
+    function recalculateTotals() {
+        let totalQuantity = 0;
+        let grandTotal = 0;
+
+        for (const row of itemsBody.querySelectorAll('tr')) {
+            const quantity = Number(row.querySelector('.quantity-input')?.value || 0);
+            const selectedId = row.querySelector('.stock-code-select')?.value;
+            const selected = availableCodes.find(x => x.id === selectedId) || null;
+
+            totalQuantity += quantity;
+            grandTotal += quantity * (selected?.unitPrice ?? 0);
+            recalculateRow(row);
+        }
+
+        totalQuantityCell.textContent = totalQuantity.toString();
+        averageUnitCostCell.textContent = formatCurrency(totalQuantity > 0 ? grandTotal / totalQuantity : 0);
+        grandTotalCell.textContent = formatCurrency(grandTotal);
+        syncItemsJson();
+    }
+
+    function addRow(selectedId = '', quantity = 1) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><select class="form-select stock-code-select">${buildOptions(selectedId)}</select></td>
+            <td class="description-cell">-</td>
+            <td><input type="number" min="1" step="1" value="${quantity}" class="form-control quantity-input" /></td>
+            <td class="unit-price-cell">0.00</td>
+            <td class="total-price-cell">0.00</td>
+            <td><button type="button" class="btn btn-sm btn-outline-danger remove-row">Sil</button></td>
+        `;
+
+        row.querySelector('.stock-code-select')?.addEventListener('change', recalculateTotals);
+        row.querySelector('.quantity-input')?.addEventListener('input', recalculateTotals);
+        row.querySelector('.remove-row')?.addEventListener('click', function () {
+            row.remove();
+            recalculateTotals();
+        });
+
+        itemsBody.appendChild(row);
+        recalculateTotals();
+    }
+
+    addRowButton?.addEventListener('click', function () {
+        addRow();
+    });
+
+    if (initialItems.length) {
+        initialItems.forEach(item => addRow(item.GeneratedStockCodeId, item.Quantity));
+    } else {
+        addRow();
+    }
+
+    document.getElementById('product-group-form')?.addEventListener('submit', function (event) {
+        syncItemsJson();
+        const items = JSON.parse(itemsJsonInput.value || '[]');
+        if (!items.length) {
+            event.preventDefault();
+            alert('Lütfen en az bir stok kodu satırı ekleyin.');
+        }
+    });
+</script>
