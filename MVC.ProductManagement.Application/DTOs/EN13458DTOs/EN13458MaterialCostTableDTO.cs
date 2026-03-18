@@ -1,3 +1,4 @@
+using MVC.ProductManagement.Application.DTOs.CostingDTOs;
 using System;
 using System.Collections.Generic;
 
@@ -12,10 +13,13 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public string AnalysisName { get; set; } = string.Empty;
         public DateTime? CreatedDate { get; set; }
         public bool IsPreview { get; set; }
+        public Guid? InnerHeadBombeLaborRateId { get; set; }
+        public Guid? OuterHeadBombeLaborRateId { get; set; }
         public List<EN13458MaterialCostRowDTO> Items { get; set; } = new();
         public List<EN13458CostGroupSummaryDTO> GroupTotals { get; set; } = new();
         public double TotalMaterialCost { get; set; }
         public double TotalFilmCost { get; set; }
         public double GrandTotalCost { get; set; }
+        public EN13458SalesPriceDTO? SalesPrice { get; set; }
     }
 }

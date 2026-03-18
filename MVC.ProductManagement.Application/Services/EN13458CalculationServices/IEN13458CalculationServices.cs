@@ -1,3 +1,4 @@
+using MVC.ProductManagement.Application.DTOs.CostingDTOs;
 using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         Task AddManualStockCodeCostAsync(Guid calculationId, Guid costAnalysisId, Guid generatedStockCodeId, double quantity, bool useManualUnitPrice, double? manualUnitPrice, string createdBy = "System");
         Task AddManualStockGroupCostAsync(Guid calculationId, Guid costAnalysisId, Guid stockProductGroupId, double multiplier, string createdBy = "System");
         Task RemoveCostAnalysisItemAsync(Guid calculationId, Guid costAnalysisId, Guid costAnalysisItemId);
+        Task UpdateBombeLaborAsync(Guid calculationId, Guid costAnalysisId, Guid? innerHeadBombeLaborRateId, Guid? outerHeadBombeLaborRateId, string modifiedBy = "System");
+        Task<EN13458SalesPriceDTO?> GetSalesPriceAsync(Guid calculationId, Guid costAnalysisId);
+        Task<EN13458SalesPriceDTO> UpsertSalesPriceAsync(Guid calculationId, Guid costAnalysisId, Guid laborRateId, double laborHours, Guid gugHourlyRateId, Guid financeOverheadRateId, Guid generalManagementOverheadRateId, double profitPercentage, string modifiedBy = "System");
     }
 }

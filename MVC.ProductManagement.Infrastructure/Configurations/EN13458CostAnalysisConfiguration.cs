@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MVC.ProductManagement.Domain.Entities;
+using MVC.ProductManagement.Domain.Entities.Costing;
 
 namespace MVC.ProductManagement.Infrastructure.Configurations
 {
@@ -18,6 +19,16 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
                 .WithMany(x => x.CostAnalyses)
                 .HasForeignKey(x => x.EN13458CalculationId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.InnerHeadBombeLaborRate)
+                .WithMany()
+                .HasForeignKey(x => x.InnerHeadBombeLaborRateId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x => x.OuterHeadBombeLaborRate)
+                .WithMany()
+                .HasForeignKey(x => x.OuterHeadBombeLaborRateId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasIndex(x => new { x.EN13458CalculationId, x.RevisionNo }).IsUnique();
         }

@@ -5,6 +5,7 @@ using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
+using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Application.Services.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
@@ -27,6 +28,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IStorageTypeService _storageTypeService;
         private readonly IGeneratedStockCodeService _generatedStockCodeService;
         private readonly IStockProductGroupService _stockProductGroupService;
+        private readonly AppDbContext _context;
 
         public EN13458CalculationController(
             IEN13458CalculationServices service,
@@ -34,7 +36,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             IMaterialFormService materialFormService,
             IStorageTypeService storageTypeService,
             IGeneratedStockCodeService generatedStockCodeService,
-            IStockProductGroupService stockProductGroupService)
+            IStockProductGroupService stockProductGroupService,
+            AppDbContext context)
         {
             _service = service;
             _materialService = materialService;
@@ -42,6 +45,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             _storageTypeService = storageTypeService;
             _generatedStockCodeService = generatedStockCodeService;
             _stockProductGroupService = stockProductGroupService;
+            _context = context;
         }
 
         [HttpGet]
@@ -90,6 +94,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             vm.CostAnalyses = await _service.GetCostAnalysesAsync(id);
 
             var costTable = await _service.GetCostAnalysisAsync(id, costAnalysisId) ?? await _service.BuildMaterialCostTableAsync(dto);
+            await PopulateCostParameterLookupsAsync(costTable);
             vm.SelectedCostAnalysisId = costTable.CostAnalysisId;
             ViewBag.CostTable = costTable;
 
@@ -396,6 +401,43 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     User?.Identity?.Name ?? "AdminUser");
 
                 TempData["SuccessMessage"] = "Maliyet kalemleri güncellendi.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateBombeLabor(Guid id, Guid costAnalysisId, Guid? innerHeadBombeLaborRateId, Guid? outerHeadBombeLaborRateId)
+        {
+            try
+            {
+                await _service.UpdateBombeLaborAsync(id, costAnalysisId, innerHeadBombeLaborRateId, outerHeadBombeLaborRateId, User?.Identity?.Name ?? "AdminUser");
+                TempData["SuccessMessage"] = "Bombe işçilik seçimleri güncellendi.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveSalesPrice(Guid id, Guid costAnalysisId, Guid laborRateId, double laborHours, Guid gugHourlyRateId, Guid financeOverheadRateId, Guid generalManagementOverheadRateId, double profitPercentage)
+        {
+            try
+            {
+                laborHours = ReadLocalizedDoubleFromForm(nameof(laborHours), laborHours) ?? laborHours;
+                profitPercentage = ReadLocalizedDoubleFromForm(nameof(profitPercentage), profitPercentage) ?? profitPercentage;
+
+                await _service.UpsertSalesPriceAsync(id, costAnalysisId, laborRateId, laborHours, gugHourlyRateId, financeOverheadRateId, generalManagementOverheadRateId, profitPercentage, User?.Identity?.Name ?? "AdminUser");
+                TempData["SuccessMessage"] = "Satış fiyatı hesabı kaydedildi.";
             }
             catch (InvalidOperationException ex)
             {
@@ -770,6 +812,22 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 text = $"{x.GeneratedCode} - {(!string.IsNullOrWhiteSpace(x.Description) ? x.Description : x.RuleName)}",
                 unitPrice = Convert.ToDouble(x.UnitPrice ?? 0m)
             }).ToList();
+        }
+
+        private async Task PopulateCostParameterLookupsAsync(EN13458MaterialCostTableDTO costTable)
+        {
+            var laborRates = await _context.LaborRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.Name).ToListAsync();
+            var gugHourlyRates = await _context.GugHourlyRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.Name).ToListAsync();
+            var overheadRates = await _context.OverheadRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.OverheadType).ThenBy(x => x.Name).ToListAsync();
+            var bombeRates = await _context.BombeLaborRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.MaterialType).ThenBy(x => x.Name).ToListAsync();
+
+            ViewBag.LaborRateOptions = laborRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.LaborRateId == x.Id)).ToList();
+            ViewBag.GugRateOptions = gugHourlyRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.GugHourlyRateId == x.Id)).ToList();
+            ViewBag.FinanceRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "Finance", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.FinanceOverheadRateId == x.Id)).ToList();
+            ViewBag.GeneralManagementRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "GeneralManagement", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.GeneralManagementOverheadRateId == x.Id)).ToList();
+
+            ViewBag.InnerBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
+            ViewBag.OuterBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
         }
 
         private double? ReadLocalizedDoubleFromForm(string key, double? fallback = null)
