@@ -1,4 +1,5 @@
 ﻿using MVC.ProductManagement.Domain.Core.BaseEntities;
+using MVC.ProductManagement.Domain.Entities.Costing;
 using System;
 using System.Collections.Generic;
 
@@ -122,6 +123,7 @@ namespace MVC.ProductManagement.Domain.Entities
 
         public virtual ICollection<EN13458CostDetail> CostDetails { get; set; } = new List<EN13458CostDetail>();
         public virtual ICollection<EN13458CostAnalysis> CostAnalyses { get; set; } = new List<EN13458CostAnalysis>();
+        public virtual ICollection<EN13458SalesPrice> SalesPrices { get; set; } = new List<EN13458SalesPrice>();
         public Guid ProductTypeId { get; set; } // İlgili ProductType ID
         public virtual StorageType StorageService { get; set; } // İlgili ProductType
     }

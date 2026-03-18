@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Application.DTOs.CostingDTOs;
 using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
 using MVC.ProductManagement.Application.Services.EN13458.Interfaces;
 using MVC.ProductManagement.Domain.Entities;
+using MVC.ProductManagement.Domain.Entities.Costing;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
@@ -34,6 +36,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string ManualStockCostGroupName = "Ek Stok Kodları";
         private const string ManualGroupCostGroupCode = "EK-GRP";
         private const string ManualGroupCostGroupName = "Ek Stok Grupları";
+        private const string BombeLaborCostGroupCode = "BOMBE";
+        private const string BombeLaborCostGroupName = "Bombe İşçilik";
+        private const string FinanceOverheadType = "Finance";
+        private const string GeneralManagementOverheadType = "GeneralManagement";
 
         public EN13458CalculationServices(
             IMaterialRepository materialRepository,
@@ -89,6 +95,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             {
                 analysis = await query
                     .Include(x => x.Items)
+                    .Include(x => x.SalesPrices)
                     .FirstOrDefaultAsync(x => x.Id == costAnalysisId.Value);
             }
             else
@@ -96,10 +103,11 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 analysis = await query
                     .OrderByDescending(x => x.RevisionNo)
                     .Include(x => x.Items)
+                    .Include(x => x.SalesPrices)
                     .FirstOrDefaultAsync();
             }
 
-            return analysis == null ? null : BuildCostTableFromItems(analysis, analysis.Items.Where(x => x.Status != Status.Deleted).OrderBy(x => x.SortOrder).ThenBy(x => x.ItemName).Select(ToRowDto).ToList());
+            return analysis == null ? null : BuildCostTableFromItems(analysis, analysis.Items.Where(x => x.Status != Status.Deleted).OrderBy(x => x.SortOrder).ThenBy(x => x.ItemName).Select(ToRowDto).ToList(), analysis.SalesPrices.FirstOrDefault(x => x.Status != Status.Deleted));
         }
 
         public async Task<EN13458MaterialCostTableDTO> CreateCostAnalysisAsync(Guid calculationId, string analysisName, string notes = "", string createdBy = "System")
@@ -110,7 +118,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             var result = await GetRequiredResultAsync(calculationId);
             var latest = await GetLatestCostAnalysisAsync(calculationId);
             var revisionNo = (latest?.RevisionNo ?? -1) + 1;
-            var rows = await BuildMaterialCostRowsAsync(result, latest?.Items.Where(x => x.Status != Status.Deleted).ToList());
+            var rows = await BuildMaterialCostRowsAsync(result, latest);
 
             var analysis = new EN13458CostAnalysis
             {
@@ -121,6 +129,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 Notes = notes?.Trim() ?? string.Empty,
                 CreatedBy = createdBy,
                 CreatedDate = DateTime.UtcNow,
+                InnerHeadBombeLaborRateId = latest?.InnerHeadBombeLaborRateId,
+                OuterHeadBombeLaborRateId = latest?.OuterHeadBombeLaborRateId,
                 Items = rows.Select(row => ToEntity(row, createdBy)).ToList()
             };
 
@@ -146,7 +156,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             var result = await GetRequiredResultAsync(calculationId);
             var latest = await GetLatestCostAnalysisAsync(calculationId);
             var revisionNo = (latest?.RevisionNo ?? -1) + 1;
-            var rows = await BuildMaterialCostRowsAsync(result, source.Items.Where(x => x.Status != Status.Deleted).ToList());
+            var rows = await BuildMaterialCostRowsAsync(result, source);
 
             var analysis = new EN13458CostAnalysis
             {
@@ -157,6 +167,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 Notes = string.IsNullOrWhiteSpace(notes) ? source.Notes : notes.Trim(),
                 CreatedBy = createdBy,
                 CreatedDate = DateTime.UtcNow,
+                InnerHeadBombeLaborRateId = source.InnerHeadBombeLaborRateId,
+                OuterHeadBombeLaborRateId = source.OuterHeadBombeLaborRateId,
                 Items = rows.Select(row => ToEntity(row, createdBy)).ToList()
             };
 
@@ -382,9 +394,117 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateBombeLaborAsync(Guid calculationId, Guid costAnalysisId, Guid? innerHeadBombeLaborRateId, Guid? outerHeadBombeLaborRateId, string modifiedBy = "System")
+        {
+            var analysis = await _context.EN13458CostAnalyses
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync(x => x.Id == costAnalysisId && x.EN13458CalculationId == calculationId);
+
+            if (analysis == null)
+            {
+                throw new InvalidOperationException("Seçilen maliyet analizi bulunamadı.");
+            }
+
+            analysis.InnerHeadBombeLaborRateId = innerHeadBombeLaborRateId;
+            analysis.OuterHeadBombeLaborRateId = outerHeadBombeLaborRateId;
+            analysis.ModifiedBy = modifiedBy;
+            analysis.ModifiedDate = DateTime.UtcNow;
+
+            var result = await GetRequiredResultAsync(calculationId);
+            var rebuiltRows = await BuildMaterialCostRowsAsync(result, analysis);
+            var rebuiltMap = rebuiltRows.ToDictionary(x => x.ItemKey, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var item in analysis.Items.Where(x => x.Status != Status.Deleted && rebuiltMap.ContainsKey(x.ItemKey)))
+            {
+                var row = rebuiltMap[item.ItemKey];
+                item.MaterialName = row.MaterialName;
+                item.FormType = row.FormType;
+                item.Quantity = row.Quantity;
+                item.Unit = row.Unit;
+                item.StockCode = row.StockCode;
+                item.StockCodeName = row.StockCodeName;
+                item.StockUnitPrice = row.StockUnitPrice;
+                item.UnitPrice = row.UnitPrice;
+                item.ItemCost = row.ItemCost;
+                item.ModifiedBy = modifiedBy;
+                item.ModifiedDate = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<EN13458SalesPriceDTO?> GetSalesPriceAsync(Guid calculationId, Guid costAnalysisId)
+        {
+            var salesPrice = await _context.EN13458SalesPrices
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.EN13458CalculationId == calculationId && x.EN13458CostAnalysisId == costAnalysisId && x.Status != Status.Deleted);
+
+            return salesPrice == null ? null : MapSalesPrice(salesPrice);
+        }
+
+        public async Task<EN13458SalesPriceDTO> UpsertSalesPriceAsync(Guid calculationId, Guid costAnalysisId, Guid laborRateId, double laborHours, Guid gugHourlyRateId, Guid financeOverheadRateId, Guid generalManagementOverheadRateId, double profitPercentage, string modifiedBy = "System")
+        {
+            if (laborHours < 0)
+            {
+                throw new InvalidOperationException("İşçilik saati negatif olamaz.");
+            }
+
+            var costTable = await GetCostAnalysisAsync(calculationId, costAnalysisId)
+                ?? throw new InvalidOperationException("Satış fiyatı için maliyet analizi bulunamadı.");
+
+            var laborRate = await _context.LaborRates.FirstOrDefaultAsync(x => x.Id == laborRateId && x.Status != Status.Deleted)
+                ?? throw new InvalidOperationException("İşçilik tarifesi bulunamadı.");
+            var gugRate = await _context.GugHourlyRates.FirstOrDefaultAsync(x => x.Id == gugHourlyRateId && x.Status != Status.Deleted)
+                ?? throw new InvalidOperationException("GÜG saatlik değeri bulunamadı.");
+            var financeRate = await _context.OverheadRates.FirstOrDefaultAsync(x => x.Id == financeOverheadRateId && x.Status != Status.Deleted)
+                ?? throw new InvalidOperationException("Finans gideri bulunamadı.");
+            var generalManagementRate = await _context.OverheadRates.FirstOrDefaultAsync(x => x.Id == generalManagementOverheadRateId && x.Status != Status.Deleted)
+                ?? throw new InvalidOperationException("Genel yönetim gideri bulunamadı.");
+
+            var calculation = CalculateSalesPrice(costTable.GrandTotalCost, laborHours, laborRate.HourlyRate, gugRate.HourlyRate, financeRate.Percentage, generalManagementRate.Percentage, profitPercentage);
+
+            var entity = await _context.EN13458SalesPrices
+                .FirstOrDefaultAsync(x => x.EN13458CalculationId == calculationId && x.EN13458CostAnalysisId == costAnalysisId && x.Status != Status.Deleted);
+
+            if (entity == null)
+            {
+                entity = new EN13458SalesPrice
+                {
+                    EN13458CalculationId = calculationId,
+                    EN13458CostAnalysisId = costAnalysisId,
+                    CreatedBy = modifiedBy,
+                    CreatedDate = DateTime.UtcNow
+                };
+                _context.EN13458SalesPrices.Add(entity);
+            }
+            else
+            {
+                entity.ModifiedBy = modifiedBy;
+                entity.ModifiedDate = DateTime.UtcNow;
+            }
+
+            entity.LaborRateId = laborRateId;
+            entity.GugHourlyRateId = gugHourlyRateId;
+            entity.FinanceOverheadRateId = financeOverheadRateId;
+            entity.GeneralManagementOverheadRateId = generalManagementOverheadRateId;
+            entity.LaborHours = laborHours;
+            entity.ProfitPercentage = profitPercentage;
+            entity.LaborCost = calculation.LaborCost;
+            entity.GugCost = calculation.GugCost;
+            entity.ImmCost = calculation.ImmCost;
+            entity.AraToplam1 = calculation.AraToplam1;
+            entity.FinanceCost = calculation.FinanceCost;
+            entity.GeneralManagementCost = calculation.GeneralManagementCost;
+            entity.AraToplam2 = calculation.AraToplam2;
+            entity.SalesPrice = calculation.SalesPrice;
+
+            await _context.SaveChangesAsync();
+            return MapSalesPrice(entity, laborRate.HourlyRate, gugRate.HourlyRate, financeRate.Percentage, generalManagementRate.Percentage);
+        }
+
         public async Task<EN13458MaterialCostTableDTO> BuildMaterialCostTableAsync(EN13458ResultDTO result)
         {
-            var rows = await BuildMaterialCostRowsAsync(result, previousItems: null);
+            var rows = await BuildMaterialCostRowsAsync(result, previousAnalysis: null);
             return new EN13458MaterialCostTableDTO
             {
                 EN13458CalculationId = result.Id == Guid.Empty ? null : result.Id,
@@ -443,11 +563,11 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             return analysis;
         }
 
-        private async Task<List<EN13458MaterialCostRowDTO>> BuildMaterialCostRowsAsync(EN13458ResultDTO result, List<EN13458CostAnalysisItem>? previousItems)
+        private async Task<List<EN13458MaterialCostRowDTO>> BuildMaterialCostRowsAsync(EN13458ResultDTO result, EN13458CostAnalysis? previousAnalysis)
         {
             var rows = new List<EN13458MaterialCostRowDTO>();
+            var previousItems = previousAnalysis?.Items?.Where(x => x.Status != Status.Deleted).ToList();
             var previousCalculatedItems = previousItems?
-                .Where(x => x.Status != Status.Deleted)
                 .Where(x => string.Equals(x.ItemSourceType, CalculatedSourceType, StringComparison.OrdinalIgnoreCase))
                 .ToDictionary(x => x.ItemKey, StringComparer.OrdinalIgnoreCase)
                 ?? new Dictionary<string, EN13458CostAnalysisItem>(StringComparer.OrdinalIgnoreCase);
@@ -456,6 +576,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             rows.Add(await BuildMaterialRowAsync("INNER-HEAD", 20, "SAC", "Sac Maliyeti", "İç Bombe", result.InnerHeadMaterialId, result.InnerHeadMaterialFormId, result.InnerHeadThickness, result.RoundedInnerHeadThickness, result.OuterDiameter, result.ShellLength, isHead: true, previousCalculatedItems));
             rows.Add(await BuildMaterialRowAsync("OUTER-SHELL", 30, "SAC", "Sac Maliyeti", "Dış Gövde", result.OuterShellMaterialId, result.OuterShellMaterialFormId, result.OuterShellThickness, result.RoundedOuterShellThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: false, previousCalculatedItems));
             rows.Add(await BuildMaterialRowAsync("OUTER-HEAD", 40, "SAC", "Sac Maliyeti", "Dış Bombe", result.OuterHeadMaterialId, result.OuterHeadMaterialFormId, result.OuterHeadThickness, result.RoundedOuterHeadThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: true, previousCalculatedItems));
+            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-INNER", 25, "İç Bombe İşçilik", result.InnerHeadMaterialId, result.InnerTankHeadWeight, previousAnalysis?.InnerHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-INNER")));
+            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-OUTER", 45, "Dış Bombe İşçilik", result.OuterHeadMaterialId, result.OuterTankHeadWeight, previousAnalysis?.OuterHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-OUTER")));
+            rows = rows.Where(x => x != null).ToList();
 
             if (result.GasNitrogenVolume > 0)
             {
@@ -570,6 +693,43 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             };
 
             return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
+        }
+
+        private async Task<EN13458MaterialCostRowDTO> BuildBombeLaborRowAsync(string itemKey, int sortOrder, string itemName, Guid materialId, double quantity, Guid? selectedRateId, EN13458CostAnalysisItem? previous)
+        {
+            var material = await _materialRepository.GetByIdAsync(materialId);
+            var selectedRate = selectedRateId.HasValue
+                ? await _context.BombeLaborRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == selectedRateId.Value)
+                : null;
+
+            var row = new EN13458MaterialCostRowDTO
+            {
+                SortOrder = sortOrder,
+                ItemKey = itemKey,
+                ItemSourceType = CalculatedSourceType,
+                CostGroupCode = BombeLaborCostGroupCode,
+                CostGroupName = BombeLaborCostGroupName,
+                ItemName = itemName,
+                MaterialId = materialId,
+                MaterialName = material?.Name ?? itemName,
+                FormType = selectedRate == null ? "Bombe işçilik seçilmedi" : $"{selectedRate.MaterialType} / {selectedRate.Name}",
+                Quantity = quantity,
+                Unit = "kg",
+                StockCode = string.Empty,
+                StockCodeName = selectedRate?.Name ?? string.Empty,
+                StockUnitPrice = selectedRate?.RatePerKg ?? 0,
+                UnitPrice = selectedRate?.RatePerKg ?? 0,
+                ItemCost = quantity * (selectedRate?.RatePerKg ?? 0)
+            };
+
+            if (previous != null)
+            {
+                row.StockUnitPrice = selectedRate?.RatePerKg ?? previous.StockUnitPrice;
+                row.UnitPrice = selectedRate?.RatePerKg ?? previous.UnitPrice;
+                row.ItemCost = row.Quantity * row.UnitPrice;
+            }
+
+            return row;
         }
 
         private async Task<EN13458MaterialCostRowDTO> BuildServiceRowAsync(string itemKey, int sortOrder, string costGroupCode, string costGroupName, string itemName, string defaultStockCode, double quantity, string unit, IReadOnlyDictionary<string, EN13458CostAnalysisItem> previousItems)
@@ -847,7 +1007,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             };
         }
 
-        private static EN13458MaterialCostTableDTO BuildCostTableFromItems(EN13458CostAnalysis analysis, List<EN13458MaterialCostRowDTO> items)
+        private static EN13458MaterialCostTableDTO BuildCostTableFromItems(EN13458CostAnalysis analysis, List<EN13458MaterialCostRowDTO> items, EN13458SalesPrice? salesPrice = null)
         {
             return new EN13458MaterialCostTableDTO
             {
@@ -857,10 +1017,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 RevisionCode = analysis.RevisionCode,
                 AnalysisName = analysis.Name,
                 CreatedDate = analysis.CreatedDate,
+                InnerHeadBombeLaborRateId = analysis.InnerHeadBombeLaborRateId,
+                OuterHeadBombeLaborRateId = analysis.OuterHeadBombeLaborRateId,
                 Items = items.OrderBy(x => x.SortOrder).ThenBy(x => x.ItemName).ToList(),
                 TotalMaterialCost = items.Sum(x => x.ItemCost),
                 TotalFilmCost = items.Where(x => x.CostGroupCode == "FILM").Sum(x => x.ItemCost),
                 GrandTotalCost = items.Sum(x => x.ItemCost),
+                SalesPrice = salesPrice == null ? null : MapSalesPrice(salesPrice),
                 GroupTotals = items
                     .GroupBy(x => new { x.CostGroupCode, x.CostGroupName })
                     .Select(g => new EN13458CostGroupSummaryDTO
@@ -874,6 +1037,63 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             };
         }
 
+
+        private static EN13458SalesPriceDTO MapSalesPrice(EN13458SalesPrice salesPrice, double? laborHourlyRate = null, double? gugHourlyRate = null, double? financePercentage = null, double? generalManagementPercentage = null)
+        {
+            return new EN13458SalesPriceDTO
+            {
+                Id = salesPrice.Id,
+                EN13458CalculationId = salesPrice.EN13458CalculationId,
+                EN13458CostAnalysisId = salesPrice.EN13458CostAnalysisId,
+                LaborRateId = salesPrice.LaborRateId,
+                GugHourlyRateId = salesPrice.GugHourlyRateId,
+                FinanceOverheadRateId = salesPrice.FinanceOverheadRateId,
+                GeneralManagementOverheadRateId = salesPrice.GeneralManagementOverheadRateId,
+                LaborHours = salesPrice.LaborHours,
+                ProfitPercentage = salesPrice.ProfitPercentage,
+                LaborHourlyRate = laborHourlyRate ?? 0,
+                GugHourlyRateValue = gugHourlyRate ?? 0,
+                FinancePercentage = financePercentage ?? 0,
+                GeneralManagementPercentage = generalManagementPercentage ?? 0,
+                LaborCost = salesPrice.LaborCost,
+                GugCost = salesPrice.GugCost,
+                ImmCost = salesPrice.ImmCost,
+                AraToplam1 = salesPrice.AraToplam1,
+                FinanceCost = salesPrice.FinanceCost,
+                GeneralManagementCost = salesPrice.GeneralManagementCost,
+                AraToplam2 = salesPrice.AraToplam2,
+                SalesPrice = salesPrice.SalesPrice
+            };
+        }
+
+        private static EN13458SalesPriceDTO CalculateSalesPrice(double immCost, double laborHours, double laborHourlyRate, double gugHourlyRate, double financePercentage, double generalManagementPercentage, double profitPercentage)
+        {
+            var laborCost = laborHours * laborHourlyRate;
+            var gugCost = laborHours * gugHourlyRate;
+            var araToplam1 = immCost + laborCost + gugCost;
+            var financeCost = araToplam1 * financePercentage / 100d;
+            var generalManagementCost = araToplam1 * generalManagementPercentage / 100d;
+            var araToplam2 = araToplam1 + financeCost + generalManagementCost;
+            var salesPrice = araToplam2 * (1 + (profitPercentage / 100d));
+
+            return new EN13458SalesPriceDTO
+            {
+                LaborHours = laborHours,
+                ProfitPercentage = profitPercentage,
+                LaborHourlyRate = laborHourlyRate,
+                GugHourlyRateValue = gugHourlyRate,
+                FinancePercentage = financePercentage,
+                GeneralManagementPercentage = generalManagementPercentage,
+                LaborCost = laborCost,
+                GugCost = gugCost,
+                ImmCost = immCost,
+                AraToplam1 = araToplam1,
+                FinanceCost = financeCost,
+                GeneralManagementCost = generalManagementCost,
+                AraToplam2 = araToplam2,
+                SalesPrice = salesPrice
+            };
+        }
 
         private static string BuildManualGroupItemKey(Guid groupId, Guid codeId, int index)
         {
