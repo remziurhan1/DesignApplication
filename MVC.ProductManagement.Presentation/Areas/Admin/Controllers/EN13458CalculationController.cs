@@ -246,10 +246,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             costWs.Cells[costRow, 5].Value = "Miktar";
             costWs.Cells[costRow, 6].Value = "Birim";
             costWs.Cells[costRow, 7].Value = "Stok Fiyatı";
-            costWs.Cells[costRow, 8].Value = "Birim Fiyat";
-            costWs.Cells[costRow, 9].Value = "Tutar";
+            costWs.Cells[costRow, 8].Value = "Hesaba Giren Fiyat";
+            costWs.Cells[costRow, 9].Value = "Hesaplanan Birim Fiyat";
+            costWs.Cells[costRow, 10].Value = "Tutar";
 
-            using (var header = costWs.Cells[costRow, 1, costRow, 9])
+            using (var header = costWs.Cells[costRow, 1, costRow, 10])
             {
                 header.Style.Font.Bold = true;
                 header.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -267,8 +268,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 costWs.Cells[costRow, 5].Value = item.Quantity;
                 costWs.Cells[costRow, 6].Value = item.Unit;
                 costWs.Cells[costRow, 7].Value = item.StockUnitPrice;
-                costWs.Cells[costRow, 8].Value = item.UnitPrice;
-                costWs.Cells[costRow, 9].Value = item.ItemCost;
+                costWs.Cells[costRow, 8].Value = item.UseManualUnitPrice ? item.ManualUnitPrice ?? 0 : item.StockUnitPrice;
+                costWs.Cells[costRow, 9].Value = item.UnitPrice;
+                costWs.Cells[costRow, 10].Value = item.ItemCost;
             }
 
             costWs.Cells[costWs.Dimension.Address].AutoFitColumns();
@@ -381,6 +383,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 {
                     items[index].Quantity = ReadLocalizedDoubleFromForm($"items[{index}].Quantity", items[index].Quantity);
                     items[index].ManualUnitPrice = ReadLocalizedDoubleFromForm($"items[{index}].ManualUnitPrice", items[index].ManualUnitPrice);
+                    items[index].UseManualUnitPrice = ReadBooleanFromForm($"items[{index}].UseManualUnitPrice", items[index].UseManualUnitPrice);
                 }
 
                 await _service.BulkUpdateCostAnalysisItemsAsync(
@@ -789,6 +792,30 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
 
             return fallback;
+        }
+
+        private bool ReadBooleanFromForm(string key, bool fallback = false)
+        {
+            if (!Request.HasFormContentType)
+            {
+                return fallback;
+            }
+
+            var values = Request.Form[key];
+            if (values.Count == 0)
+            {
+                return fallback;
+            }
+
+            foreach (var value in values)
+            {
+                if (bool.TryParse(value, out var parsed) && parsed)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private async Task PopulateResultDisplayNamesAsync(EN13458ResultVM vm)
