@@ -7,6 +7,8 @@
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
     var stockCodeOptions = (ViewBag.StockCodeOptions as IEnumerable<dynamic>)?.ToList() ?? new List<dynamic>();
+    string ResolveInputPriceSource(bool useManualUnitPrice) => useManualUnitPrice ? "Manuel fiyat" : "Stok fiyatı";
+    double ResolveInputPrice(double stockUnitPrice, bool useManualUnitPrice, double? manualUnitPrice) => useManualUnitPrice ? (manualUnitPrice ?? 0) : stockUnitPrice;
 }
 
 <style>
@@ -291,7 +293,8 @@
                                 <th>Birim</th>
                                 <th>Stok Seçimi</th>
                                 <th class="text-end">Stok Fiyatı</th>
-                                <th class="text-end">Birim Fiyat</th>
+                                <th class="text-end">Hesaba Giren Fiyat</th>
+                                <th class="text-end">Hesaplanan Birim Fiyat</th>
                                 <th class="text-end">Tutar</th>
                                 <th class="text-end">İşlem</th>
                             </tr>
@@ -301,11 +304,13 @@
                             @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                             {
                                 <tr class="table-primary">
-                                    <td colspan="10" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
+                                    <td colspan="11" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
                                 </tr>
 
                                 @foreach (var item in groupItems)
                                 {
+                                    var inputPrice = ResolveInputPrice(item.StockUnitPrice, item.UseManualUnitPrice, item.ManualUnitPrice);
+                                    var inputPriceSource = ResolveInputPriceSource(item.UseManualUnitPrice);
                                     <tr>
                                         <td>@item.CostGroupCode</td>
                                         <td>
@@ -362,6 +367,10 @@
                                             <input type="text" name="items[@itemIndex].ManualUnitPrice" value="@item.ManualUnitPrice?.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-manual-price js-decimal-input" inputmode="decimal" @(!item.UseManualUnitPrice ? "disabled" : null) />
                                         </td>
                                         <td class="text-end js-stock-price-cell" data-value="@item.StockUnitPrice.ToString(CultureInfo.InvariantCulture)">@item.StockUnitPrice.ToString("N2")</td>
+                                        <td class="text-end js-input-price-cell" data-value="@inputPrice.ToString(CultureInfo.InvariantCulture)">
+                                            <div>@inputPrice.ToString("N2")</div>
+                                            <div class="small text-muted js-input-price-source">@inputPriceSource</div>
+                                        </td>
                                         <td class="text-end js-effective-price-cell" data-value="@item.UnitPrice.ToString(CultureInfo.InvariantCulture)">@item.UnitPrice.ToString("N2")</td>
                                         <td class="text-end fw-semibold js-line-total-cell" data-quantity="@item.Quantity.ToString(CultureInfo.InvariantCulture)" data-value="@item.ItemCost.ToString(CultureInfo.InvariantCulture)">@item.ItemCost.ToString("N2")</td>
                                         <td class="text-end">
@@ -391,12 +400,12 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th colspan="8" class="text-end">Genel Toplam</th>
+                                <th colspan="9" class="text-end">Genel Toplam</th>
                                 <th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th>
                                 <th></th>
                             </tr>
                             <tr>
-                                <td colspan="10" class="text-end">
+                                <td colspan="11" class="text-end">
                                     <button type="submit" class="btn btn-primary px-4">
                                         <i class="bi bi-check2-circle me-1"></i>Uygula
                                     </button>
@@ -420,7 +429,8 @@
                             <th>Birim</th>
                             <th>Stok Kodu</th>
                             <th class="text-end">Stok Fiyatı</th>
-                            <th class="text-end">Birim Fiyat</th>
+                            <th class="text-end">Hesaba Giren Fiyat</th>
+                            <th class="text-end">Hesaplanan Birim Fiyat</th>
                             <th class="text-end">Tutar</th>
                         </tr>
                         </thead>
@@ -428,10 +438,12 @@
                         @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                         {
                             <tr class="table-primary">
-                                <td colspan="9" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
+                                <td colspan="10" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
                             </tr>
                             @foreach (var item in groupItems)
                             {
+                                var inputPrice = ResolveInputPrice(item.StockUnitPrice, item.UseManualUnitPrice, item.ManualUnitPrice);
+                                var inputPriceSource = ResolveInputPriceSource(item.UseManualUnitPrice);
                                 <tr>
                                     <td>@item.CostGroupCode</td>
                                     <td>@item.ItemName</td>
@@ -440,6 +452,10 @@
                                     <td>@item.Unit</td>
                                     <td>@(string.IsNullOrWhiteSpace(item.StockCodeName) ? "-" : item.StockCodeName)</td>
                                     <td class="text-end">@item.StockUnitPrice.ToString("N2")</td>
+                                    <td class="text-end">
+                                        <div>@inputPrice.ToString("N2")</div>
+                                        <div class="small text-muted">@inputPriceSource</div>
+                                    </td>
                                     <td class="text-end">@item.UnitPrice.ToString("N2")</td>
                                     <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
                                 </tr>
@@ -448,7 +464,7 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th colspan="8" class="text-end">Genel Toplam</th>
+                            <th colspan="9" class="text-end">Genel Toplam</th>
                             <th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th>
                         </tr>
                         </tfoot>
@@ -518,20 +534,28 @@
                 const manualInput = row.querySelector('.js-manual-price');
                 const quantityInput = row.querySelector('.js-quantity-input');
                 const stockPriceCell = row.querySelector('.js-stock-price-cell');
+                const inputPriceCell = row.querySelector('.js-input-price-cell');
+                const inputPriceSource = row.querySelector('.js-input-price-source');
                 const effectivePriceCell = row.querySelector('.js-effective-price-cell');
                 const totalCell = row.querySelector('.js-line-total-cell');
 
-                if (!stockSelect || !stockPriceCell || !effectivePriceCell || !totalCell) return;
+                if (!stockSelect || !stockPriceCell || !inputPriceCell || !effectivePriceCell || !totalCell) return;
 
                 const selectedOption = stockSelect.options[stockSelect.selectedIndex];
                 const stockUnitPrice = parseDecimal(selectedOption?.dataset?.unitPrice);
                 const manualUnitPrice = parseDecimal(manualInput?.value);
                 const quantity = quantityInput ? parseDecimal(quantityInput.value) : parseDecimal(totalCell.dataset.quantity);
-                const effectiveUnitPrice = manualToggle?.checked ? manualUnitPrice : stockUnitPrice;
+                const calculationInputPrice = manualToggle?.checked ? manualUnitPrice : stockUnitPrice;
+                const effectiveUnitPrice = calculationInputPrice;
                 const total = quantity * effectiveUnitPrice;
 
                 stockPriceCell.dataset.value = String(stockUnitPrice);
                 stockPriceCell.textContent = formatDecimal(stockUnitPrice);
+                inputPriceCell.dataset.value = String(calculationInputPrice);
+                inputPriceCell.firstElementChild.textContent = formatDecimal(calculationInputPrice);
+                if (inputPriceSource) {
+                    inputPriceSource.textContent = manualToggle?.checked ? 'Manuel fiyat' : 'Stok fiyatı';
+                }
                 effectivePriceCell.dataset.value = String(effectiveUnitPrice);
                 effectivePriceCell.textContent = formatDecimal(effectiveUnitPrice);
                 totalCell.dataset.quantity = String(quantity);
