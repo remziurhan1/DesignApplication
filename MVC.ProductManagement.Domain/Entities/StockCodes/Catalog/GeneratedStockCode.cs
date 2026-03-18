@@ -15,5 +15,7 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Catalog
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }
+
+        public virtual ICollection<StockProductGroupItem> ProductGroupItems { get; set; } = new List<StockProductGroupItem>();
     }
 }

@@ -31,9 +31,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> GroupBuilder(Guid? subGroupId)
         {
-            await LoadSubGroups(subGroupId);
-            var items = await _generatedService.GetAllAsync(subGroupId);
-            return View(items.OrderBy(x => x.GeneratedCode).ToList());
+            return RedirectToAction("Create", "StockProductGroup");
         }
 
         [HttpGet]
