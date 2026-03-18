@@ -166,7 +166,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             return await GetCostAnalysisAsync(calculationId, analysis.Id) ?? BuildCostTableFromItems(analysis, rows);
         }
 
-        public async Task UpdateCostAnalysisItemAsync(Guid calculationId, Guid costAnalysisId, Guid costAnalysisItemId, Guid? generatedStockCodeId, bool useManualUnitPrice, double? manualUnitPrice, string modifiedBy = "System")
+        public async Task UpdateCostAnalysisItemAsync(Guid calculationId, Guid costAnalysisId, Guid costAnalysisItemId, Guid? generatedStockCodeId, double? quantity, bool useManualUnitPrice, double? manualUnitPrice, string modifiedBy = "System")
         {
             var item = await _context.EN13458CostAnalysisItems
                 .Include(x => x.EN13458CostAnalysis)
@@ -179,12 +179,12 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 throw new InvalidOperationException("Güncellenecek maliyet kalemi bulunamadı.");
             }
 
-            await ApplyCostAnalysisItemUpdateAsync(item, generatedStockCodeId, useManualUnitPrice, manualUnitPrice, modifiedBy);
+            await ApplyCostAnalysisItemUpdateAsync(item, generatedStockCodeId, quantity, useManualUnitPrice, manualUnitPrice, modifiedBy);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task BulkUpdateCostAnalysisItemsAsync(Guid calculationId, Guid costAnalysisId, IReadOnlyCollection<(Guid CostAnalysisItemId, Guid? GeneratedStockCodeId, bool UseManualUnitPrice, double? ManualUnitPrice)> items, string modifiedBy = "System")
+        public async Task BulkUpdateCostAnalysisItemsAsync(Guid calculationId, Guid costAnalysisId, IReadOnlyCollection<(Guid CostAnalysisItemId, Guid? GeneratedStockCodeId, double? Quantity, bool UseManualUnitPrice, double? ManualUnitPrice)> items, string modifiedBy = "System")
         {
             var itemIds = items
                 .Where(x => x.CostAnalysisItemId != Guid.Empty)
@@ -213,7 +213,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                     throw new InvalidOperationException("Güncellenecek maliyet kalemi bulunamadı.");
                 }
 
-                await ApplyCostAnalysisItemUpdateAsync(item, request.GeneratedStockCodeId, request.UseManualUnitPrice, request.ManualUnitPrice, modifiedBy);
+                await ApplyCostAnalysisItemUpdateAsync(item, request.GeneratedStockCodeId, request.Quantity, request.UseManualUnitPrice, request.ManualUnitPrice, modifiedBy);
             }
 
             await _context.SaveChangesAsync();
@@ -343,8 +343,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             await _context.SaveChangesAsync();
         }
 
-        private async Task ApplyCostAnalysisItemUpdateAsync(EN13458CostAnalysisItem item, Guid? generatedStockCodeId, bool useManualUnitPrice, double? manualUnitPrice, string modifiedBy)
+        private async Task ApplyCostAnalysisItemUpdateAsync(EN13458CostAnalysisItem item, Guid? generatedStockCodeId, double? quantity, bool useManualUnitPrice, double? manualUnitPrice, string modifiedBy)
         {
+            if (quantity.HasValue && IsManualSource(item))
+            {
+                item.Quantity = NormalizeManualQuantity(quantity.Value);
+            }
+
             var stockInfo = await ResolveGeneratedStockCodeAsync(generatedStockCodeId, item.StockCode);
             item.GeneratedStockCodeId = stockInfo?.Id;
             item.StockCode = stockInfo?.GeneratedCode ?? string.Empty;
@@ -893,6 +898,22 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             }
 
             return stockUnitPrice;
+        }
+
+        private static bool IsManualSource(EN13458CostAnalysisItem item)
+        {
+            return string.Equals(item.ItemSourceType, ManualSourceType, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(item.ItemSourceType, ManualGroupSourceType, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static double NormalizeManualQuantity(double quantity)
+        {
+            if (quantity <= 0)
+            {
+                throw new InvalidOperationException("Manuel maliyet kalemi miktarı sıfırdan büyük olmalıdır.");
+            }
+
+            return quantity;
         }
 
         private static double? NormalizeNullablePrice(double? value)

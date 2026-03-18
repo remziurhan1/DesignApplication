@@ -316,7 +316,19 @@
                                             <div>@item.MaterialName</div>
                                             <div class="small text-muted">@item.FormType</div>
                                         </td>
-                                        <td class="text-end">@item.Quantity.ToString("N2")</td>
+                                        <td class="text-end">
+                                            @if (item.IsManual)
+                                            {
+                                                <input type="text"
+                                                       name="items[@itemIndex].Quantity"
+                                                       value="@item.Quantity.ToString(CultureInfo.InvariantCulture)"
+                                                       class="form-control form-control-sm text-end js-quantity-input js-decimal-input" inputmode="decimal" />
+                                            }
+                                            else
+                                            {
+                                                @item.Quantity.ToString("N2")
+                                            }
+                                        </td>
                                         <td>@item.Unit</td>
                                         <td>
                                             <input type="hidden" name="items[@itemIndex].CostAnalysisItemId" value="@item.CostAnalysisItemId" />
@@ -353,7 +365,24 @@
                                         <td class="text-end js-effective-price-cell" data-value="@item.UnitPrice.ToString(CultureInfo.InvariantCulture)">@item.UnitPrice.ToString("N2")</td>
                                         <td class="text-end fw-semibold js-line-total-cell" data-quantity="@item.Quantity.ToString(CultureInfo.InvariantCulture)" data-value="@item.ItemCost.ToString(CultureInfo.InvariantCulture)">@item.ItemCost.ToString("N2")</td>
                                         <td class="text-end">
-                                            <span class="small text-muted">@(item.IsManual ? "Manuel" : "Hesap")</span>
+                                            @if (item.IsManual && item.CostAnalysisItemId.HasValue)
+                                            {
+                                                <div class="d-flex flex-column gap-2 align-items-end">
+                                                    <span class="small text-muted">Manuel</span>
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger"
+                                                            formaction="@Url.Action("RemoveCostItem", "EN13458Calculation", new { area = "Admin" })"
+                                                            formmethod="post"
+                                                            name="costAnalysisItemId"
+                                                            value="@item.CostAnalysisItemId">
+                                                        <i class="bi bi-trash me-1"></i>Sil
+                                                    </button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="small text-muted">Hesap</span>
+                                            }
                                         </td>
                                     </tr>
                                     itemIndex++;
@@ -487,6 +516,7 @@
                 const stockSelect = row.querySelector('.cost-stock-select');
                 const manualToggle = row.querySelector('.js-manual-toggle');
                 const manualInput = row.querySelector('.js-manual-price');
+                const quantityInput = row.querySelector('.js-quantity-input');
                 const stockPriceCell = row.querySelector('.js-stock-price-cell');
                 const effectivePriceCell = row.querySelector('.js-effective-price-cell');
                 const totalCell = row.querySelector('.js-line-total-cell');
@@ -496,7 +526,7 @@
                 const selectedOption = stockSelect.options[stockSelect.selectedIndex];
                 const stockUnitPrice = parseDecimal(selectedOption?.dataset?.unitPrice);
                 const manualUnitPrice = parseDecimal(manualInput?.value);
-                const quantity = parseDecimal(totalCell.dataset.quantity);
+                const quantity = quantityInput ? parseDecimal(quantityInput.value) : parseDecimal(totalCell.dataset.quantity);
                 const effectiveUnitPrice = manualToggle?.checked ? manualUnitPrice : stockUnitPrice;
                 const total = quantity * effectiveUnitPrice;
 
@@ -504,6 +534,7 @@
                 stockPriceCell.textContent = formatDecimal(stockUnitPrice);
                 effectivePriceCell.dataset.value = String(effectiveUnitPrice);
                 effectivePriceCell.textContent = formatDecimal(effectiveUnitPrice);
+                totalCell.dataset.quantity = String(quantity);
                 totalCell.dataset.value = String(total);
                 totalCell.textContent = formatDecimal(total);
             };

@@ -353,11 +353,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateCostItem(Guid id, Guid costAnalysisId, Guid costAnalysisItemId, Guid? generatedStockCodeId, bool useManualUnitPrice = false, double? manualUnitPrice = null)
+        public async Task<IActionResult> UpdateCostItem(Guid id, Guid costAnalysisId, Guid costAnalysisItemId, Guid? generatedStockCodeId, double? quantity = null, bool useManualUnitPrice = false, double? manualUnitPrice = null)
         {
             try
             {
-                await _service.UpdateCostAnalysisItemAsync(id, costAnalysisId, costAnalysisItemId, generatedStockCodeId, useManualUnitPrice, manualUnitPrice, User?.Identity?.Name ?? "AdminUser");
+                manualUnitPrice = ReadLocalizedDoubleFromForm(nameof(manualUnitPrice), manualUnitPrice);
+                quantity = ReadLocalizedDoubleFromForm(nameof(quantity), quantity);
+
+                await _service.UpdateCostAnalysisItemAsync(id, costAnalysisId, costAnalysisItemId, generatedStockCodeId, quantity, useManualUnitPrice, manualUnitPrice, User?.Identity?.Name ?? "AdminUser");
                 TempData["SuccessMessage"] = "Maliyet kalemi güncellendi.";
             }
             catch (InvalidOperationException ex)
@@ -374,12 +377,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             try
             {
+                for (var index = 0; index < items.Count; index++)
+                {
+                    items[index].Quantity = ReadLocalizedDoubleFromForm($"items[{index}].Quantity", items[index].Quantity);
+                    items[index].ManualUnitPrice = ReadLocalizedDoubleFromForm($"items[{index}].ManualUnitPrice", items[index].ManualUnitPrice);
+                }
+
                 await _service.BulkUpdateCostAnalysisItemsAsync(
                     id,
                     costAnalysisId,
                     items
                         .Where(x => x.CostAnalysisItemId != Guid.Empty)
-                        .Select(x => (x.CostAnalysisItemId, x.GeneratedStockCodeId, x.UseManualUnitPrice, x.ManualUnitPrice))
+                        .Select(x => (x.CostAnalysisItemId, x.GeneratedStockCodeId, x.Quantity, x.UseManualUnitPrice, x.ManualUnitPrice))
                         .ToList(),
                     User?.Identity?.Name ?? "AdminUser");
 
@@ -399,6 +408,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             try
             {
+                quantity = ReadLocalizedDoubleFromForm(nameof(quantity), quantity) ?? quantity;
+                manualUnitPrice = ReadLocalizedDoubleFromForm(nameof(manualUnitPrice), manualUnitPrice);
+
                 await _service.AddManualStockCodeCostAsync(id, costAnalysisId, generatedStockCodeId, quantity, useManualUnitPrice, manualUnitPrice, User?.Identity?.Name ?? "AdminUser");
                 TempData["SuccessMessage"] = "Stok kodu maliyete eklendi.";
             }
@@ -416,6 +428,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             try
             {
+                multiplier = ReadLocalizedDoubleFromForm(nameof(multiplier), multiplier) ?? multiplier;
                 await _service.AddManualStockGroupCostAsync(id, costAnalysisId, stockProductGroupId, multiplier, User?.Identity?.Name ?? "AdminUser");
                 TempData["SuccessMessage"] = "Stok kod grubu maliyete eklendi.";
             }
@@ -754,6 +767,28 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 text = $"{x.GeneratedCode} - {(!string.IsNullOrWhiteSpace(x.Description) ? x.Description : x.RuleName)}",
                 unitPrice = Convert.ToDouble(x.UnitPrice ?? 0m)
             }).ToList();
+        }
+
+        private double? ReadLocalizedDoubleFromForm(string key, double? fallback = null)
+        {
+            if (!Request.HasFormContentType)
+            {
+                return fallback;
+            }
+
+            var rawValue = Request.Form[key].ToString();
+            if (string.IsNullOrWhiteSpace(rawValue))
+            {
+                return fallback;
+            }
+
+            var normalized = rawValue.Trim().Replace(" ", string.Empty).Replace(',', '.');
+            if (double.TryParse(normalized, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsed))
+            {
+                return parsed;
+            }
+
+            return fallback;
         }
 
         private async Task PopulateResultDisplayNamesAsync(EN13458ResultVM vm)
