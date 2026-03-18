@@ -25,8 +25,8 @@
             <td>@item.MainGroupCode / @item.SubGroupCode - @item.SubGroupName</td>
             <td>@item.GeneratedCode</td>
             <td>@item.Description</td>
-            <td>@item.UnitPrice.ToString("N2")</td>
-            <td>@item.TargetPrice.ToString("N2")</td>
+            <td>@(item.UnitPrice?.ToString("N2") ?? "-")</td>
+            <td>@(item.TargetPrice?.ToString("N2") ?? "-")</td>
         </tr>
     }
     </tbody>
