@@ -8,6 +8,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
     public class EN13458ResultVM
     {
         public Guid Id { get; set; }
+        public bool IsEditMode { get; set; }
         public string Name { get; set; } = string.Empty;
         public double OuterDiameter { get; set; }
         public double OuterTankDiameter { get; set; }

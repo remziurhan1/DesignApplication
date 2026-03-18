@@ -40,8 +40,21 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
 
         public async Task<EN13458ResultDTO> SaveAsync(EN13458ResultDTO result, string createdBy = "System")
         {
-            var entity = ToEntity(result, createdBy);
-            await _repository.AddAsync(entity);
+            EN13458Calculation entity;
+            if (result.Id != Guid.Empty)
+            {
+                entity = await _repository.GetByIdAsync(result.Id)
+                    ?? throw new InvalidOperationException($"EN13458 calculation not found: {result.Id}");
+                ApplyToEntity(entity, result, createdBy);
+                await _repository.UpdateAsync(entity);
+            }
+            else
+            {
+                entity = ToEntity(result, createdBy);
+                await _repository.AddAsync(entity);
+                result.Id = entity.Id;
+            }
+
             await _repository.SaveChangeAsync();
             result.Id = entity.Id;
             return result;
@@ -121,6 +134,92 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
 
             CreatedBy = createdBy, CreatedDate = DateTime.UtcNow
         };
+
+        private static void ApplyToEntity(EN13458Calculation entity, EN13458ResultDTO dto, string modifiedBy)
+        {
+            entity.Name = dto.Name;
+            entity.OuterDiameter = dto.OuterDiameter;
+            entity.OuterTankDiameter = dto.OuterTankDiameter;
+            entity.ShellLength = dto.ShellLength;
+            entity.Pressure = dto.Pressure;
+            entity.ProductTypeId = dto.StorageTypeId;
+            entity.LiquidDensity = dto.LiquidDensity;
+            entity.InnerShellMaterialId = dto.InnerShellMaterialId;
+            entity.InnerShellMaterialFormId = dto.InnerShellMaterialFormId;
+            entity.InnerHeadMaterialId = dto.InnerHeadMaterialId;
+            entity.InnerHeadMaterialFormId = dto.InnerHeadMaterialFormId;
+            entity.OuterShellMaterialId = dto.OuterShellMaterialId;
+            entity.OuterShellMaterialFormId = dto.OuterShellMaterialFormId;
+            entity.OuterHeadMaterialId = dto.OuterHeadMaterialId;
+            entity.OuterHeadMaterialFormId = dto.OuterHeadMaterialFormId;
+            entity.InnerShellMaterialStrength = dto.InnerShellMaterialStrength;
+            entity.InnerHeadMaterialStrength = dto.InnerHeadMaterialStrength;
+            entity.OuterShellMaterialStrength = dto.OuterShellMaterialStrength;
+            entity.OuterHeadMaterialStrength = dto.OuterHeadMaterialStrength;
+            entity.InnerShellThickness = dto.InnerShellThickness;
+            entity.InnerHeadThickness = dto.InnerHeadThickness;
+            entity.OuterShellThickness = dto.OuterShellThickness;
+            entity.OuterHeadThickness = dto.OuterHeadThickness;
+            entity.RoundedInnerShellThickness = dto.RoundedInnerShellThickness;
+            entity.RoundedInnerHeadThickness = dto.RoundedInnerHeadThickness;
+            entity.RoundedOuterShellThickness = dto.RoundedOuterShellThickness;
+            entity.RoundedOuterHeadThickness = dto.RoundedOuterHeadThickness;
+            entity.DesignPressure = dto.DesignPressure;
+            entity.TestPressure = dto.TestPressure;
+            entity.StaticPressure = dto.StaticPressure;
+            entity.InnerTankHeadPulDiameter = dto.InnerTankHeadPulDiameter;
+            entity.OuterTankHeadPulDiameter = dto.OuterTankHeadPulDiameter;
+            entity.InnerTankHeadWeight = dto.InnerTankHeadWeight;
+            entity.OuterTankHeadWeight = dto.OuterTankHeadWeight;
+            entity.InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength;
+            entity.InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength;
+            entity.OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength;
+            entity.OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength;
+            entity.TotalWeldLength = dto.TotalWeldLength;
+            entity.TotalFilmCost = dto.TotalFilmCost;
+            entity.InnerTankTotalLength = dto.InnerTankTotalLength;
+            entity.OuterTankTotalLength = dto.OuterTankTotalLength;
+            entity.PerliteVolume = dto.PerliteVolume;
+            entity.PerliteWeight = dto.PerliteWeight;
+            entity.InnerVolume = dto.InnerVolume;
+            entity.OuterVolume = dto.OuterVolume;
+            entity.InnerSurfaceArea = dto.InnerSurfaceArea;
+            entity.OuterSurfaceArea = dto.OuterSurfaceArea;
+            entity.InnerTankWeight = dto.InnerTankWeight;
+            entity.OuterTankWeight = dto.OuterTankWeight;
+            entity.WeldLength1500 = dto.WeldLength1500;
+            entity.WeldLength2000 = dto.WeldLength2000;
+            entity.WeldLength2500 = dto.WeldLength2500;
+            entity.WeldLength3000 = dto.WeldLength3000;
+            entity.GasNitrogenVolume = dto.GasNitrogenVolume;
+            entity.LiquidNitrogenVolume = dto.LiquidNitrogenVolume;
+            entity.BucklingWaveNumber = dto.BucklingWaveNumber;
+            entity.ElasticBucklingPressureP1 = dto.ElasticBucklingPressureP1;
+            entity.PlasticCollapsePressureP2 = dto.PlasticCollapsePressureP2;
+            entity.DesignExternalPressurePv = dto.DesignExternalPressurePv;
+            entity.SupportRingRequired = dto.SupportRingRequired;
+            entity.SupportRingCriticalPressurePe = dto.SupportRingCriticalPressurePe;
+            entity.SupportRingStressX = dto.SupportRingStressX;
+            entity.SupportRingAllowableStress = dto.SupportRingAllowableStress;
+            entity.SupportRingAdequate = dto.SupportRingAdequate;
+            entity.HeadCollapsePressure = dto.HeadCollapsePressure;
+            entity.RequiredProfileCount = dto.RequiredProfileCount;
+            entity.ProfileDevelopedLength = dto.ProfileDevelopedLength;
+            entity.TotalProfileLength = dto.TotalProfileLength;
+            entity.ProfileWeldLength = dto.ProfileWeldLength;
+            entity.InnerDevelopedLength = dto.InnerDevelopedLength;
+            entity.OuterDevelopedLength = dto.OuterDevelopedLength;
+            entity.InnerSectorPlan1500 = dto.InnerSectorPlan1500;
+            entity.InnerSectorPlan2000 = dto.InnerSectorPlan2000;
+            entity.InnerSectorPlan2500 = dto.InnerSectorPlan2500;
+            entity.InnerSectorPlan3000 = dto.InnerSectorPlan3000;
+            entity.OuterSectorPlan1500 = dto.OuterSectorPlan1500;
+            entity.OuterSectorPlan2000 = dto.OuterSectorPlan2000;
+            entity.OuterSectorPlan2500 = dto.OuterSectorPlan2500;
+            entity.OuterSectorPlan3000 = dto.OuterSectorPlan3000;
+            entity.ModifiedBy = modifiedBy;
+            entity.ModifiedDate = DateTime.UtcNow;
+        }
 
         private static EN13458ResultDTO ToDto(EN13458Calculation entity) => new EN13458ResultDTO
         {

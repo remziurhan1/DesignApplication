@@ -33,6 +33,8 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<AllowableStress> AllowableStresses { get; set; }
         public DbSet<EN13458Calculation> EN13458Calculations { get; set; }
         public DbSet<EN13458CostDetail> EN13458CostDetails { get; set; }
+        public DbSet<EN13458CostAnalysis> EN13458CostAnalyses { get; set; }
+        public DbSet<EN13458CostAnalysisItem> EN13458CostAnalysisItems { get; set; }
         public DbSet<AD2000Calculation> AD2000Calculations { get; set; }
         public DbSet<StorageTypeProperties> StorageTypeProperties { get; set; }
         public DbSet<StorageType> StorageTypes { get; set; }

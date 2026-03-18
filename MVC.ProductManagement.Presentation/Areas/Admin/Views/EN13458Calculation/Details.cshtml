@@ -1,6 +1,6 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM
+@using System
 @using System.Globalization
-@using Microsoft.AspNetCore.Mvc.Rendering
 @{
     ViewData["Title"] = "EN13458 Details";
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
@@ -16,8 +16,19 @@
 </style>
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-    <h2 class="mb-0">EN13458 Detay</h2>
-    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-3 py-2">Kayıt detayı</span>
+    <div>
+        <h2 class="mb-0">EN13458 Detay</h2>
+        <div class="text-muted small">Kayıt Id: @Model.Id</div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-3 py-2">Kayıt detayı</span>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+            <i class="bi bi-pencil-square me-1"></i>Tankı Güncelle
+        </a>
+        <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" asp-route-costAnalysisId="@costTable?.CostAnalysisId" class="btn btn-outline-secondary">
+            <i class="bi bi-file-earmark-excel me-1"></i>Excel
+        </a>
+    </div>
 </div>
 
 @if (TempData["SuccessMessage"] is string successMessage)
@@ -228,56 +239,79 @@
     </div>
 </div>
 
-<div class="card shadow-sm mt-4 border-success-subtle">
-    <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">Ek Stok / Grup Maliyeti</div>
+<div class="card shadow-sm mt-4 border-warning-subtle">
+    <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold">Maliyet Revizyonları</div>
     <div class="card-body">
         <div class="row g-4">
-            <div class="col-12 col-xl-6">
+            <div class="col-12 col-xl-4">
                 <div class="border rounded p-3 h-100 bg-light-subtle">
-                    <h6 class="fw-semibold mb-3">Stok Kod Grubu Ekle</h6>
-                    <form asp-action="AddStockGroup" method="post" class="row g-3">
+                    <h6 class="fw-semibold">Yeni Maliyet Analizi</h6>
+                    <form asp-action="CreateCostAnalysis" method="post" class="row g-3 mt-1">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.Id" />
                         <div class="col-12">
-                            <label class="form-label">Grup</label>
-                            <select name="stockProductGroupId" class="form-select" asp-items="Model.AvailableStockGroups">
-                                <option value="">Grup seçiniz</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Çarpan</label>
-                            <input type="number" name="multiplier" class="form-control" min="0.01" step="0.01" value="1" />
+                            <label class="form-label">Analiz Adı</label>
+                            <input type="text" name="analysisName" class="form-control" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" />
                         </div>
                         <div class="col-12">
-                            <button type="submit" class="btn btn-success">
-                                <i class="bi bi-collection me-1"></i>Grubu Maliyete Ekle
+                            <label class="form-label">Not</label>
+                            <textarea name="notes" class="form-control" rows="2" placeholder="İlk maliyet çalışması veya açıklama"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-calculator me-1"></i>Yeni Analiz Oluştur
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
-            <div class="col-12 col-xl-6">
+            <div class="col-12 col-xl-4">
                 <div class="border rounded p-3 h-100 bg-light-subtle">
-                    <h6 class="fw-semibold mb-3">Tekil Stok Kodu Ekle</h6>
-                    <form asp-action="AddStockCode" method="post" class="row g-3">
+                    <h6 class="fw-semibold">Revizyon Oluştur</h6>
+                    <form asp-action="CreateCostAnalysisRevision" method="post" class="row g-3 mt-1">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="sourceCostAnalysisId" value="@(costTable?.CostAnalysisId ?? Guid.Empty)" />
                         <div class="col-12">
-                            <label class="form-label">Stok Kodu</label>
-                            <select name="generatedStockCodeId" class="form-select" asp-items="Model.AvailableStockCodes">
-                                <option value="">Stok kodu seçiniz</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Miktar</label>
-                            <input type="number" name="quantity" class="form-control" min="0.01" step="0.01" value="1" />
+                            <label class="form-label">Revizyon Adı</label>
+                            <input type="text" name="analysisName" class="form-control" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" @(costTable?.CostAnalysisId == null ? "disabled" : null) />
                         </div>
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-plus-circle me-1"></i>Stok Kodunu Ekle
+                            <label class="form-label">Revizyon Notu</label>
+                            <textarea name="notes" class="form-control" rows="2" placeholder="Örn. 1900 çap revizyonu" @(costTable?.CostAnalysisId == null ? "disabled" : null)></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-outline-warning" @(costTable?.CostAnalysisId == null ? "disabled" : null)>
+                                <i class="bi bi-layers me-1"></i>REV Oluştur
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+            <div class="col-12 col-xl-4">
+                <div class="border rounded p-3 h-100 bg-light-subtle">
+                    <h6 class="fw-semibold">Kayıtlı Revizyonlar</h6>
+                    @if (Model.CostAnalyses.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var analysis in Model.CostAnalyses)
+                            {
+                                <a asp-action="Details" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id"
+                                   class="list-group-item list-group-item-action @(analysis.Id == costTable?.CostAnalysisId ? "active" : string.Empty)">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <strong>@analysis.RevisionCode</strong>
+                                        <span>@analysis.GrandTotalCost.ToString("N2")</span>
+                                    </div>
+                                    <div class="small">@analysis.Name</div>
+                                    <div class="small @(analysis.Id == costTable?.CostAnalysisId ? string.Empty : "text-muted")">@analysis.CreatedDate.ToString("dd.MM.yyyy HH:mm")</div>
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted small">Henüz kayıtlı maliyet analizi yok. İsterseniz önce yeni analiz oluşturun.</div>
+                    }
                 </div>
             </div>
         </div>
@@ -287,7 +321,10 @@
 @if (costTable != null)
 {
     <div class="card shadow-sm mt-4">
-        <div class="card-header bg-light fw-semibold">Maliyet Grupları</div>
+        <div class="card-header bg-light fw-semibold d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span>Maliyet Analizi @costTable.RevisionCode - @costTable.AnalysisName</span>
+            <span class="badge @(costTable.IsPreview ? "bg-secondary" : "bg-success")">@(costTable.IsPreview ? "Ön İzleme" : "Kayıtlı Revizyon")</span>
+        </div>
         <div class="card-body">
             <div class="row g-3 mb-4">
                 <div class="col-12 col-md-4">
@@ -322,16 +359,86 @@
                 }
             </div>
 
-            <div class="table-responsive">
+            @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue)
+            {
+                <div class="card shadow-sm mt-4 border-success-subtle">
+                    <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">Ek Stok / Grup Maliyeti</div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-12 col-xl-6">
+                                <div class="border rounded p-3 h-100 bg-light-subtle">
+                                    <h6 class="fw-semibold mb-3">Stok Kod Grubu Ekle</h6>
+                                    <form asp-action="AddStockGroup" method="post" class="row g-3">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@Model.Id" />
+                                        <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
+                                        <div class="col-12">
+                                            <label class="form-label">Grup</label>
+                                            <select name="stockProductGroupId" class="form-select" asp-items="Model.AvailableStockGroups">
+                                                <option value="">Grup seçiniz</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Çarpan</label>
+                                            <input type="number" name="multiplier" class="form-control" min="0.01" step="0.01" value="1" />
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-collection me-1"></i>Grubu Maliyete Ekle
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-6">
+                                <div class="border rounded p-3 h-100 bg-light-subtle">
+                                    <h6 class="fw-semibold mb-3">Tekil Stok Kodu Ekle</h6>
+                                    <form asp-action="AddStockCode" method="post" class="row g-3">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@Model.Id" />
+                                        <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
+                                        <div class="col-12">
+                                            <label class="form-label">Stok Kodu</label>
+                                            <select name="generatedStockCodeId" class="form-select" asp-items="Model.AvailableStockCodes">
+                                                <option value="">Stok kodu seçiniz</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Miktar</label>
+                                            <input type="number" name="quantity" class="form-control" min="0.01" step="0.01" value="1" />
+                                        </div>
+                                        <div class="col-md-4 form-check mt-4">
+                                            <input class="form-check-input js-manual-toggle" type="checkbox" name="useManualUnitPrice" value="true" />
+                                            <label class="form-check-label">Manuel fiyat</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Manuel Birim Fiyat</label>
+                                            <input type="number" name="manualUnitPrice" class="form-control js-manual-price" min="0" step="0.0001" disabled />
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-plus-circle me-1"></i>Stok Kodunu Ekle
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="table-responsive mt-4">
                 <table class="table table-sm table-striped align-middle mb-0">
                     <thead>
                     <tr>
                         <th>Grup</th>
                         <th>Kalem</th>
-                        <th>Stok Kodu</th>
-                        <th>Malzeme</th>
+                        <th>Malzeme / Form</th>
                         <th class="text-end">Miktar</th>
                         <th>Birim</th>
+                        <th>Stok Kodu</th>
+                        <th class="text-end">Stok Fiyatı</th>
                         <th class="text-end">Birim Fiyat</th>
                         <th class="text-end">Tutar</th>
                         <th class="text-end">İşlem</th>
@@ -341,27 +448,71 @@
                     @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                     {
                         <tr class="table-primary">
-                            <td colspan="9" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
+                            <td colspan="10" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
                         </tr>
 
                         @foreach (var item in groupItems)
                         {
                             <tr>
                                 <td>@item.CostGroupCode</td>
-                                <td>@item.ItemName</td>
-                                <td>@item.StockCode</td>
-                                <td>@item.MaterialName</td>
+                                <td>
+                                    <div>@item.ItemName</div>
+                                    <div class="small text-muted">@item.ItemKey</div>
+                                </td>
+                                <td>
+                                    <div>@item.MaterialName</div>
+                                    <div class="small text-muted">@item.FormType</div>
+                                </td>
                                 <td class="text-end">@item.Quantity.ToString("N2")</td>
                                 <td>@item.Unit</td>
-                                <td class="text-end">@item.UnitPrice.ToString("N2")</td>
+                                <td>
+                                    @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue && item.CostAnalysisItemId.HasValue)
+                                    {
+                                        <form asp-action="UpdateCostItem" method="post" class="row g-2">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@Model.Id" />
+                                            <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
+                                            <input type="hidden" name="costAnalysisItemId" value="@item.CostAnalysisItemId" />
+                                            <div class="col-12">
+                                                <select name="generatedStockCodeId" class="form-select form-select-sm" asp-items="Model.AvailableStockCodes">
+                                                    <option value="">Stok seçiniz</option>
+                                                </select>
+                                                <script>document.currentScript.previousElementSibling.value='@item.GeneratedStockCodeId';</script>
+                                            </div>
+                                            <div class="col-12 form-check ms-1">
+                                                <input class="form-check-input js-manual-toggle" type="checkbox" name="useManualUnitPrice" value="true" @(item.UseManualUnitPrice ? "checked" : null) />
+                                                <label class="form-check-label small">Manuel fiyat gir</label>
+                                            </div>
+                                            <div class="col-12">
+                                                <input type="number" name="manualUnitPrice" value="@item.ManualUnitPrice?.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-manual-price" min="0" step="0.0001" @(!item.UseManualUnitPrice ? "disabled" : null) />
+                                            </div>
+                                            <div class="col-12 d-grid">
+                                                <button type="submit" class="btn btn-sm btn-outline-primary">Uygula</button>
+                                            </div>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span>@(string.IsNullOrWhiteSpace(item.StockCodeName) ? "-" : item.StockCodeName)</span>
+                                    }
+                                </td>
+                                <td class="text-end">@item.StockUnitPrice.ToString("N2")</td>
+                                <td class="text-end">
+                                    @item.UnitPrice.ToString("N2")
+                                    @if (item.UseManualUnitPrice)
+                                    {
+                                        <div class="small text-warning-emphasis">manuel</div>
+                                    }
+                                </td>
                                 <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
                                 <td class="text-end">
-                                    @if (item.CostDetailId.HasValue)
+                                    @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue && item.CostAnalysisItemId.HasValue)
                                     {
                                         <form asp-action="RemoveCostItem" method="post" class="d-inline">
                                             @Html.AntiForgeryToken()
                                             <input type="hidden" name="id" value="@Model.Id" />
-                                            <input type="hidden" name="costDetailId" value="@item.CostDetailId" />
+                                            <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
+                                            <input type="hidden" name="costAnalysisItemId" value="@item.CostAnalysisItemId" />
                                             <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bu maliyet kalemi kaldırılsın mı?');">
                                                 <i class="bi bi-trash"></i>
                                             </button>
@@ -369,7 +520,7 @@
                                     }
                                     else
                                     {
-                                        <span class="text-muted small">Sabit</span>
+                                        <span class="text-muted small">Ön izleme</span>
                                     }
                                 </td>
                             </tr>
@@ -378,7 +529,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th colspan="7" class="text-end">Genel Toplam</th>
+                        <th colspan="8" class="text-end">Genel Toplam</th>
                         <th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th>
                         <th></th>
                     </tr>
@@ -389,17 +540,24 @@
     </div>
 }
 
-<div class="mt-4 mb-5 pb-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
-    <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-success px-4">
-        <i class="bi bi-file-earmark-excel me-1"></i>Excel Çıktı
-    </a>
-    <a asp-action="Index" class="btn btn-secondary px-4">
-        <i class="bi bi-arrow-left-circle me-1"></i>Listeye Dön
-    </a>
-    <a asp-action="Calculate" class="btn btn-primary px-4">
-        <i class="bi bi-plus-circle me-1"></i>Yeni Hesap
-    </a>
-</div>
+@section Scripts {
+    <script>
+        document.querySelectorAll('.js-manual-toggle').forEach(function (checkbox) {
+            const form = checkbox.closest('form');
+            if (!form) return;
+            const manualInput = form.querySelector('.js-manual-price');
+            const sync = () => {
+                if (!manualInput) return;
+                manualInput.disabled = !checkbox.checked;
+                if (!checkbox.checked) {
+                    manualInput.value = '';
+                }
+            };
+            checkbox.addEventListener('change', sync);
+            sync();
+        });
+    </script>
+}
 
 @functions {
     private static int GetPieceCount(string? cutList)
@@ -410,17 +568,7 @@
 
     private static string FormatCutList(string? cutList)
     {
-        if (string.IsNullOrWhiteSpace(cutList))
-        {
-            return "-";
-        }
-
-        var grouped = cutList
-            .Split(" + ", StringSplitOptions.RemoveEmptyEntries)
-            .Select(x => x.Trim())
-            .GroupBy(x => x)
-            .Select(x => $"{x.Count()} adet {x.Key.Replace(" x ", "x")}");
-
-        return string.Join(" + ", grouped);
+        if (string.IsNullOrWhiteSpace(cutList)) return "-";
+        return cutList.Replace(" + ", " | ");
     }
 }
