@@ -179,19 +179,42 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 throw new InvalidOperationException("Güncellenecek maliyet kalemi bulunamadı.");
             }
 
-            var stockInfo = await ResolveGeneratedStockCodeAsync(generatedStockCodeId, item.StockCode);
-            item.GeneratedStockCodeId = stockInfo?.Id;
-            item.StockCode = stockInfo?.GeneratedCode ?? string.Empty;
-            item.StockCodeName = stockInfo == null
-                ? string.Empty
-                : BuildStockDisplayName(stockInfo.GeneratedCode, stockInfo.Description, stockInfo.RuleName);
-            item.StockUnitPrice = stockInfo == null ? 0 : Convert.ToDouble(stockInfo.UnitPrice ?? 0m);
-            item.UseManualUnitPrice = useManualUnitPrice;
-            item.ManualUnitPrice = useManualUnitPrice ? NormalizeNullablePrice(manualUnitPrice) : null;
-            item.UnitPrice = ResolveEffectiveUnitPrice(item.StockUnitPrice, item.UseManualUnitPrice, item.ManualUnitPrice);
-            item.ItemCost = item.Quantity * item.UnitPrice;
-            item.ModifiedBy = modifiedBy;
-            item.ModifiedDate = DateTime.UtcNow;
+            await ApplyCostAnalysisItemUpdateAsync(item, generatedStockCodeId, useManualUnitPrice, manualUnitPrice, modifiedBy);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task BulkUpdateCostAnalysisItemsAsync(Guid calculationId, Guid costAnalysisId, IReadOnlyCollection<(Guid CostAnalysisItemId, Guid? GeneratedStockCodeId, bool UseManualUnitPrice, double? ManualUnitPrice)> items, string modifiedBy = "System")
+        {
+            var itemIds = items
+                .Where(x => x.CostAnalysisItemId != Guid.Empty)
+                .Select(x => x.CostAnalysisItemId)
+                .Distinct()
+                .ToList();
+
+            if (itemIds.Count == 0)
+            {
+                return;
+            }
+
+            var analysisItems = await _context.EN13458CostAnalysisItems
+                .Include(x => x.EN13458CostAnalysis)
+                .Where(x => x.EN13458CostAnalysisId == costAnalysisId
+                    && x.EN13458CostAnalysis.EN13458CalculationId == calculationId
+                    && itemIds.Contains(x.Id))
+                .ToListAsync();
+        }
+
+            var analysisItemMap = analysisItems.ToDictionary(x => x.Id);
+            foreach (var request in items.Where(x => x.CostAnalysisItemId != Guid.Empty))
+            {
+                if (!analysisItemMap.TryGetValue(request.CostAnalysisItemId, out var item))
+                {
+                    throw new InvalidOperationException("Güncellenecek maliyet kalemi bulunamadı.");
+                }
+
+                await ApplyCostAnalysisItemUpdateAsync(item, request.GeneratedStockCodeId, request.UseManualUnitPrice, request.ManualUnitPrice, modifiedBy);
+            }
 
             await _context.SaveChangesAsync();
         }
@@ -274,6 +297,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                     item => item.GeneratedStockCodeId,
                     code => code.Id,
                     (item, code) => new { Item = item, Code = code })
+                .OrderBy(x => x.Code.GeneratedCode)
+                .ThenBy(x => x.Code.Id)
                 .ToListAsync();
 
             if (groupItems.Count == 0)
@@ -294,7 +319,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 {
                     EN13458CostAnalysisId = costAnalysisId,
                     SortOrder = nextSortOrder + index,
-                    ItemKey = $"MANUAL-GROUP-{group.Id:N}-{x.Code.Id:N}-{Guid.NewGuid():N}",
+                    ItemKey = BuildManualGroupItemKey(group.Id, x.Code.Id, index),
                     ItemSourceType = ManualGroupSourceType,
                     CostGroupCode = ManualGroupCostGroupCode,
                     CostGroupName = ManualGroupCostGroupName,
@@ -316,6 +341,23 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
             _context.EN13458CostAnalysisItems.AddRange(details);
             await _context.SaveChangesAsync();
+        }
+
+        private async Task ApplyCostAnalysisItemUpdateAsync(EN13458CostAnalysisItem item, Guid? generatedStockCodeId, bool useManualUnitPrice, double? manualUnitPrice, string modifiedBy)
+        {
+            var stockInfo = await ResolveGeneratedStockCodeAsync(generatedStockCodeId, item.StockCode);
+            item.GeneratedStockCodeId = stockInfo?.Id;
+            item.StockCode = stockInfo?.GeneratedCode ?? string.Empty;
+            item.StockCodeName = stockInfo == null
+                ? string.Empty
+                : BuildStockDisplayName(stockInfo.GeneratedCode, stockInfo.Description, stockInfo.RuleName);
+            item.StockUnitPrice = stockInfo == null ? 0 : Convert.ToDouble(stockInfo.UnitPrice ?? 0m);
+            item.UseManualUnitPrice = useManualUnitPrice;
+            item.ManualUnitPrice = useManualUnitPrice ? NormalizeNullablePrice(manualUnitPrice) : null;
+            item.UnitPrice = ResolveEffectiveUnitPrice(item.StockUnitPrice, item.UseManualUnitPrice, item.ManualUnitPrice);
+            item.ItemCost = item.Quantity * item.UnitPrice;
+            item.ModifiedBy = modifiedBy;
+            item.ModifiedDate = DateTime.UtcNow;
         }
 
         public async Task RemoveCostAnalysisItemAsync(Guid calculationId, Guid costAnalysisId, Guid costAnalysisItemId)
@@ -825,6 +867,14 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                     .OrderBy(x => x.CostGroupCode)
                     .ToList()
             };
+        }
+
+
+        private static string BuildManualGroupItemKey(Guid groupId, Guid codeId, int index)
+        {
+            var groupToken = groupId.ToString("N")[..8];
+            var codeToken = codeId.ToString("N")[..8];
+            return $"MG-{groupToken}-{codeToken}-{index:000}";
         }
 
         private static string FormatRevisionCode(int revisionNo) => $"REV{revisionNo:00}";

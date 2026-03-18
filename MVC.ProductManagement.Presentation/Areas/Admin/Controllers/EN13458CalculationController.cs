@@ -70,6 +70,19 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             if (dto == null) return NotFound();
 
             var vm = MapDetailsVm(dto);
+            await PopulateResultDisplayNamesAsync(vm);
+            vm.CostAnalyses = await _service.GetCostAnalysesAsync(id);
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Cost(Guid id, Guid? costAnalysisId = null)
+        {
+            var dto = await _service.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            var vm = MapDetailsVm(dto);
             vm.SelectedCostAnalysisId = costAnalysisId;
 
             await PopulateResultDisplayNamesAsync(vm);
@@ -320,12 +333,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 var analysis = await _service.CreateCostAnalysisAsync(id, analysisName, notes, User?.Identity?.Name ?? "AdminUser");
                 TempData["SuccessMessage"] = $"{analysis.RevisionCode} maliyet analizi oluşturuldu.";
-                return RedirectToAction(nameof(Details), new { id, costAnalysisId = analysis.CostAnalysisId });
+                return RedirectToAction(nameof(Cost), new { id, costAnalysisId = analysis.CostAnalysisId });
             }
             catch (InvalidOperationException ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
-                return RedirectToAction(nameof(Details), new { id });
+                return RedirectToAction(nameof(Cost), new { id });
             }
         }
 
@@ -337,12 +350,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 var analysis = await _service.CreateCostAnalysisRevisionAsync(id, sourceCostAnalysisId, analysisName, notes, User?.Identity?.Name ?? "AdminUser");
                 TempData["SuccessMessage"] = $"{analysis.RevisionCode} revizyonu oluşturuldu.";
-                return RedirectToAction(nameof(Details), new { id, costAnalysisId = analysis.CostAnalysisId });
+                return RedirectToAction(nameof(Cost), new { id, costAnalysisId = analysis.CostAnalysisId });
             }
             catch (InvalidOperationException ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
-                return RedirectToAction(nameof(Details), new { id, costAnalysisId = sourceCostAnalysisId });
+                return RedirectToAction(nameof(Cost), new { id, costAnalysisId = sourceCostAnalysisId });
             }
         }
 
@@ -360,7 +373,32 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Details), new { id, costAnalysisId });
+            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BulkUpdateCostItems(Guid id, Guid costAnalysisId, List<EN13458CostItemBulkUpdateVM> items)
+        {
+            try
+            {
+                await _service.BulkUpdateCostAnalysisItemsAsync(
+                    id,
+                    costAnalysisId,
+                    items
+                        .Where(x => x.CostAnalysisItemId != Guid.Empty)
+                        .Select(x => (x.CostAnalysisItemId, x.GeneratedStockCodeId, x.UseManualUnitPrice, x.ManualUnitPrice))
+                        .ToList(),
+                    User?.Identity?.Name ?? "AdminUser");
+
+                TempData["SuccessMessage"] = "Maliyet kalemleri güncellendi.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -377,7 +415,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Details), new { id, costAnalysisId });
+            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -394,7 +432,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Details), new { id, costAnalysisId });
+            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -411,7 +449,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Details), new { id, costAnalysisId });
+            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
         }
 
         private async Task<IActionResult> ProcessCalculationAsync(EN13458CalculateVM vm, bool isEditMode)
