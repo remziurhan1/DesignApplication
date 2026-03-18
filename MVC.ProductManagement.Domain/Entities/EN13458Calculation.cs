@@ -121,6 +121,7 @@ namespace MVC.ProductManagement.Domain.Entities
 
 
         public virtual ICollection<EN13458CostDetail> CostDetails { get; set; } = new List<EN13458CostDetail>();
+        public virtual ICollection<EN13458CostAnalysis> CostAnalyses { get; set; } = new List<EN13458CostAnalysis>();
         public Guid ProductTypeId { get; set; } // İlgili ProductType ID
         public virtual StorageType StorageService { get; set; } // İlgili ProductType
     }
