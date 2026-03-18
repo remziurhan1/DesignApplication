@@ -155,7 +155,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         {
             var entity = await _repository.GetByIdAsync(dto.Id) ?? throw new Exception("Generated stock code not found");
 
-            entity.Description = dto.Description?.Trim();
+            entity.StockSubCodeRuleId = dto.StockSubCodeRuleId;
+            entity.RuleName = await ComposeRuleNameAsync(entity.StockSubCodeGroupId, dto.SelectedRuleIds);
+            entity.Description = string.IsNullOrWhiteSpace(dto.Description)
+                ? await ComposeDescriptionAsync(entity.StockSubCodeGroupId, dto.SelectedRuleIds, null)
+                : dto.Description.Trim();
             entity.UnitPrice = dto.UnitPrice;
             entity.TargetPrice = dto.TargetPrice;
 

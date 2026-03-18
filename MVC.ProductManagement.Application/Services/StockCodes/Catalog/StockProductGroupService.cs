@@ -93,8 +93,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 Description = dto.Description?.Trim()
             };
 
-            await ApplyItemsAsync(group, dto.Items);
+            var preparedItems = await PrepareItemsAsync(group.Id, dto.Items);
+            group.TotalQuantity = preparedItems.TotalQuantity;
+            group.TotalCost = preparedItems.TotalCost;
+
             await _groupRepository.AddAsync(group);
+            await _itemRepository.AddRangeAsync(preparedItems.Items);
             await _groupRepository.SaveChangeAsync();
 
             return await GetByIdAsync(group.Id) ?? throw new Exception("Product group create failed");
@@ -113,8 +117,12 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 await _itemRepository.DeleteRangeAsync(existingItems);
             }
 
-            await ApplyItemsAsync(group, dto.Items);
+            var preparedItems = await PrepareItemsAsync(group.Id, dto.Items);
+            group.TotalQuantity = preparedItems.TotalQuantity;
+            group.TotalCost = preparedItems.TotalCost;
+
             await _groupRepository.UpdateAsync(group);
+            await _itemRepository.AddRangeAsync(preparedItems.Items);
             await _groupRepository.SaveChangeAsync();
 
             return await GetByIdAsync(group.Id) ?? throw new Exception("Product group update failed");
@@ -133,7 +141,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             await _groupRepository.SaveChangeAsync();
         }
 
-        private async Task ApplyItemsAsync(StockProductGroup group, List<StockProductGroupItemCreateDto> itemDtos)
+        private async Task<(List<StockProductGroupItem> Items, int TotalQuantity, decimal TotalCost)> PrepareItemsAsync(Guid stockProductGroupId, List<StockProductGroupItemCreateDto> itemDtos)
         {
             if (itemDtos == null || itemDtos.Count == 0)
             {
@@ -152,9 +160,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var generatedCodeIds = normalizedItems.Select(x => x.GeneratedStockCodeId).Distinct().ToList();
             var generatedCodes = (await _generatedCodeRepository.GetAllAsync(x => generatedCodeIds.Contains(x.Id))).ToDictionary(x => x.Id);
 
-            group.Items.Clear();
-            group.TotalQuantity = 0;
-            group.TotalCost = 0;
+            var items = new List<StockProductGroupItem>();
+            var totalQuantity = 0;
+            var totalCost = 0m;
 
             foreach (var itemDto in normalizedItems)
             {
@@ -164,20 +172,22 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 }
 
                 var unitPrice = generatedCode.UnitPrice ?? 0;
-                var totalCost = unitPrice * itemDto.Quantity;
+                var itemTotalCost = unitPrice * itemDto.Quantity;
 
-                group.Items.Add(new StockProductGroupItem
+                items.Add(new StockProductGroupItem
                 {
-                    StockProductGroupId = group.Id,
+                    StockProductGroupId = stockProductGroupId,
                     GeneratedStockCodeId = generatedCode.Id,
                     Quantity = itemDto.Quantity,
                     UnitPrice = unitPrice,
-                    TotalCost = totalCost
+                    TotalCost = itemTotalCost
                 });
 
-                group.TotalQuantity += itemDto.Quantity;
-                group.TotalCost += totalCost;
+                totalQuantity += itemDto.Quantity;
+                totalCost += itemTotalCost;
             }
+
+            return (items, totalQuantity, totalCost);
         }
     }
 }
