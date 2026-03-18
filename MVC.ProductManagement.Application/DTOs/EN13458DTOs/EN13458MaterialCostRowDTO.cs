@@ -38,5 +38,6 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
 
         public bool IsCalculated => string.Equals(ItemSourceType, "Calculated", StringComparison.OrdinalIgnoreCase);
         public bool IsManual => string.Equals(ItemSourceType, "Manual", StringComparison.OrdinalIgnoreCase) || string.Equals(ItemSourceType, "ManualGroup", StringComparison.OrdinalIgnoreCase);
+        public bool IsBombeLabor => ItemKey.StartsWith("BOMBE-LABOR-", StringComparison.OrdinalIgnoreCase);
     }
 }

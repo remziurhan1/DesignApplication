@@ -1,0 +1,177 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.CostSettingsVMs.CostSettingsIndexVM
+@using System.Globalization
+@{
+    ViewData["Title"] = "Maliyet Parametreleri";
+    string fmt(double value) => value.ToString("N2", CultureInfo.InvariantCulture);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1">Maliyet Parametreleri</h2>
+        <div class="text-muted">İşçilik, bombe işçiliği, GÜG ve gider yüzdeleri bu ekrandan yönetilir.</div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header fw-semibold">İşçilik Saatlik Ücretleri</div>
+            <div class="card-body">
+                <form asp-action="CreateLaborRate" method="post" class="row g-3 mb-4">
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-4"><input asp-for="NewLaborRate.Name" class="form-control" placeholder="İşçilik adı" /></div>
+                    <div class="col-md-3"><input asp-for="NewLaborRate.HourlyRate" class="form-control" placeholder="Saatlik ücret" /></div>
+                    <div class="col-md-3"><input asp-for="NewLaborRate.Notes" class="form-control" placeholder="Not" /></div>
+                    <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Ekle</button></div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead><tr><th>Ad</th><th>Saatlik</th><th>Not</th><th></th></tr></thead>
+                        <tbody>
+                        @foreach (var item in Model.LaborRates)
+                        {
+                            <tr>
+                                <td colspan="4">
+                                    <form asp-action="UpdateLaborRate" method="post" class="row g-2 align-items-center">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="Id" value="@item.Id" />
+                                        <div class="col-md-4"><input name="Name" value="@item.Name" class="form-control form-control-sm" /></div>
+                                        <div class="col-md-2"><input name="HourlyRate" value="@item.HourlyRate.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm" /></div>
+                                        <div class="col-md-4"><input name="Notes" value="@item.Notes" class="form-control form-control-sm" /></div>
+                                        <div class="col-md-2 d-flex gap-2 justify-content-end">
+                                            <button class="btn btn-sm btn-outline-primary" type="submit">Güncelle</button>
+                                            <button class="btn btn-sm btn-outline-danger" type="submit" formaction="@Url.Action("DeleteLaborRate")" name="id" value="@item.Id">Sil</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-semibold">Bombe İşçilik Tarifeleri</div>
+            <div class="card-body">
+                <form asp-action="CreateBombeLaborRate" method="post" class="row g-3 mb-4">
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-4"><input asp-for="NewBombeLaborRate.Name" class="form-control" placeholder="Tarife adı" /></div>
+                    <div class="col-md-3">
+                        <select asp-for="NewBombeLaborRate.MaterialType" class="form-select">
+                            <option>Paslanmaz</option>
+                            <option>Karbon Çelik</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3"><input asp-for="NewBombeLaborRate.RatePerKg" class="form-control" placeholder="Kg başı ücret" /></div>
+                    <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Ekle</button></div>
+                    <div class="col-12"><input asp-for="NewBombeLaborRate.Notes" class="form-control" placeholder="Not" /></div>
+                </form>
+                @foreach (var item in Model.BombeLaborRates)
+                {
+                    <form asp-action="UpdateBombeLaborRate" method="post" class="row g-2 align-items-center border rounded p-2 mb-2">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" value="@item.Id" />
+                        <div class="col-md-4"><input name="Name" value="@item.Name" class="form-control form-control-sm" /></div>
+                        <div class="col-md-3">
+                            <select name="MaterialType" class="form-select form-select-sm">
+                                <option value="Paslanmaz" @(item.MaterialType == "Paslanmaz" ? "selected" : null)>Paslanmaz</option>
+                                <option value="Karbon Çelik" @(item.MaterialType == "Karbon Çelik" ? "selected" : null)>Karbon Çelik</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2"><input name="RatePerKg" value="@item.RatePerKg.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm" /></div>
+                        <div class="col-md-3 d-flex gap-2 justify-content-end">
+                            <button class="btn btn-sm btn-outline-primary" type="submit">Güncelle</button>
+                            <button class="btn btn-sm btn-outline-danger" type="submit" formaction="@Url.Action("DeleteBombeLaborRate")" name="id" value="@item.Id">Sil</button>
+                        </div>
+                        <div class="col-12"><input name="Notes" value="@item.Notes" class="form-control form-control-sm" /></div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-semibold">GÜG Saatlik Değerleri</div>
+            <div class="card-body">
+                <form asp-action="CreateGugHourlyRate" method="post" class="row g-3 mb-4">
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-4"><input asp-for="NewGugHourlyRate.Name" class="form-control" placeholder="GÜG adı" /></div>
+                    <div class="col-md-4"><input asp-for="NewGugHourlyRate.HourlyRate" class="form-control" placeholder="Saatlik değer" /></div>
+                    <div class="col-md-4"><button class="btn btn-primary w-100" type="submit">Ekle</button></div>
+                    <div class="col-12"><input asp-for="NewGugHourlyRate.Notes" class="form-control" placeholder="Not" /></div>
+                </form>
+                @foreach (var item in Model.GugHourlyRates)
+                {
+                    <form asp-action="UpdateGugHourlyRate" method="post" class="row g-2 align-items-center border rounded p-2 mb-2">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" value="@item.Id" />
+                        <div class="col-md-4"><input name="Name" value="@item.Name" class="form-control form-control-sm" /></div>
+                        <div class="col-md-3"><input name="HourlyRate" value="@item.HourlyRate.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm" /></div>
+                        <div class="col-md-5 d-flex gap-2 justify-content-end">
+                            <input name="Notes" value="@item.Notes" class="form-control form-control-sm" />
+                            <button class="btn btn-sm btn-outline-primary" type="submit">Güncelle</button>
+                            <button class="btn btn-sm btn-outline-danger" type="submit" formaction="@Url.Action("DeleteGugHourlyRate")" name="id" value="@item.Id">Sil</button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header fw-semibold">Gider Oranları</div>
+            <div class="card-body">
+                <form asp-action="CreateOverheadRate" method="post" class="row g-3 mb-4">
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-3"><input asp-for="NewOverheadRate.Name" class="form-control" placeholder="Gider adı" /></div>
+                    <div class="col-md-3">
+                        <select asp-for="NewOverheadRate.OverheadType" class="form-select">
+                            <option value="Finance">Finans</option>
+                            <option value="GeneralManagement">Genel Yönetim</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3"><input asp-for="NewOverheadRate.Percentage" class="form-control" placeholder="Yüzde" /></div>
+                    <div class="col-md-3"><button class="btn btn-primary w-100" type="submit">Ekle</button></div>
+                    <div class="col-12"><input asp-for="NewOverheadRate.Notes" class="form-control" placeholder="Not" /></div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead><tr><th>Ad</th><th>Tip</th><th>Oran %</th><th>Not</th><th></th></tr></thead>
+                        <tbody>
+                        @foreach (var item in Model.OverheadRates)
+                        {
+                            <tr>
+                                <td colspan="5">
+                                    <form asp-action="UpdateOverheadRate" method="post" class="row g-2 align-items-center">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="Id" value="@item.Id" />
+                                        <div class="col-md-3"><input name="Name" value="@item.Name" class="form-control form-control-sm" /></div>
+                                        <div class="col-md-2">
+                                            <select name="OverheadType" class="form-select form-select-sm">
+                                                <option value="Finance" @(item.OverheadType == "Finance" ? "selected" : null)>Finans</option>
+                                                <option value="GeneralManagement" @(item.OverheadType == "GeneralManagement" ? "selected" : null)>Genel Yönetim</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2"><input name="Percentage" value="@item.Percentage.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm" /></div>
+                                        <div class="col-md-3"><input name="Notes" value="@item.Notes" class="form-control form-control-sm" /></div>
+                                        <div class="col-md-2 d-flex gap-2 justify-content-end">
+                                            <button class="btn btn-sm btn-outline-primary" type="submit">Güncelle</button>
+                                            <button class="btn btn-sm btn-outline-danger" type="submit" formaction="@Url.Action("DeleteOverheadRate")" name="id" value="@item.Id">Sil</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

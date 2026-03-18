@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MVC.ProductManagement.Domain.Core.BaseEntities;
 using MVC.ProductManagement.Domain.Entities;
+using MVC.ProductManagement.Domain.Entities.Costing;
 using MVC.ProductManagement.Domain.Entities.MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
@@ -35,6 +36,11 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<EN13458CostDetail> EN13458CostDetails { get; set; }
         public DbSet<EN13458CostAnalysis> EN13458CostAnalyses { get; set; }
         public DbSet<EN13458CostAnalysisItem> EN13458CostAnalysisItems { get; set; }
+        public DbSet<EN13458SalesPrice> EN13458SalesPrices { get; set; }
+        public DbSet<LaborRate> LaborRates { get; set; }
+        public DbSet<GugHourlyRate> GugHourlyRates { get; set; }
+        public DbSet<BombeLaborRate> BombeLaborRates { get; set; }
+        public DbSet<OverheadRate> OverheadRates { get; set; }
         public DbSet<AD2000Calculation> AD2000Calculations { get; set; }
         public DbSet<StorageTypeProperties> StorageTypeProperties { get; set; }
         public DbSet<StorageType> StorageTypes { get; set; }
