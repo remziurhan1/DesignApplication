@@ -821,13 +821,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var overheadRates = await _context.OverheadRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.OverheadType).ThenBy(x => x.Name).ToListAsync();
             var bombeRates = await _context.BombeLaborRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.MaterialType).ThenBy(x => x.Name).ToListAsync();
 
-            ViewBag.LaborRateOptions = laborRates.Select(x => new SelectListItem($"{x.Name} ({x.HourlyRate:N2}/saat)", x.Id.ToString(), costTable.SalesPrice?.LaborRateId == x.Id)).ToList();
-            ViewBag.GugRateOptions = gugHourlyRates.Select(x => new SelectListItem($"{x.Name} ({x.HourlyRate:N2}/saat)", x.Id.ToString(), costTable.SalesPrice?.GugHourlyRateId == x.Id)).ToList();
-            ViewBag.FinanceRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "Finance", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"{x.Name} (%{x.Percentage:N2})", x.Id.ToString(), costTable.SalesPrice?.FinanceOverheadRateId == x.Id)).ToList();
-            ViewBag.GeneralManagementRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "GeneralManagement", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"{x.Name} (%{x.Percentage:N2})", x.Id.ToString(), costTable.SalesPrice?.GeneralManagementOverheadRateId == x.Id)).ToList();
+            ViewBag.LaborRateOptions = laborRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.LaborRateId == x.Id)).ToList();
+            ViewBag.GugRateOptions = gugHourlyRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.GugHourlyRateId == x.Id)).ToList();
+            ViewBag.FinanceRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "Finance", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.FinanceOverheadRateId == x.Id)).ToList();
+            ViewBag.GeneralManagementRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "GeneralManagement", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.GeneralManagementOverheadRateId == x.Id)).ToList();
 
-            ViewBag.InnerBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.Name} ({x.RatePerKg:N2}/kg)", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
-            ViewBag.OuterBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.Name} ({x.RatePerKg:N2}/kg)", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
+            ViewBag.InnerBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
+            ViewBag.OuterBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
         }
 
         private double? ReadLocalizedDoubleFromForm(string key, double? fallback = null)
