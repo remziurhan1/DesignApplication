@@ -1,37 +1,267 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog.GeneratedStockCodeVm
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 <h4>Stok Kodu Düzenle</h4>
-<p class="text-muted">Stok kodu sabittir; açıklama, birim fiyat ve hedef fiyat güncellenebilir.</p>
+<p class="text-muted">Alt gruba ait kural seçeneklerini güncelleyebilir, checkbox ile ek açıklama yazabilir ve fiyat bilgilerini değiştirebilirsiniz.</p>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" id="edit-form">
     @Html.AntiForgeryToken()
     <input asp-for="Id" type="hidden" />
-    <input asp-for="StockSubCodeGroupId" type="hidden" />
-    <input asp-for="StockSubCodeRuleId" type="hidden" />
+    <input asp-for="StockSubCodeGroupId" type="hidden" id="StockSubCodeGroupId" />
+    <input asp-for="StockSubCodeRuleId" id="stock-sub-code-rule-id" type="hidden" />
+    <input id="description" asp-for="Description" type="hidden" />
 
     <div class="mb-3">
-        <label asp-for="GeneratedCode" class="form-label">Stok Kodu</label>
-        <input asp-for="GeneratedCode" class="form-control" readonly />
+        <label class="form-label">Alt Grup</label>
+        <select asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select" disabled>
+            <option value="">Alt grup seçiniz...</option>
+        </select>
+        <div class="form-text">Alt grup bilgisi gösterim amaçlıdır; düzenleme sırasında stok kodunun bağlı olduğu grup korunur.</div>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Description" class="form-label">Açıklama</label>
-        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <label asp-for="GeneratedCode" class="form-label">Stok Kodu</label>
+        <input id="generated-code" asp-for="GeneratedCode" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Alt Gruba Ait Kural Grupları</label>
+        <div id="rules-container" class="border rounded p-2">
+            <span class="text-muted">Kurallar yükleniyor...</span>
+        </div>
+        <div class="form-text">Kod üret ekranındaki gibi her kural grubundan uygun seçeneği belirleyebilirsiniz.</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Stok Kodu Açıklaması (otomatik)</label>
+        <textarea id="description-preview" class="form-control" readonly></textarea>
+    </div>
+
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="include-custom-description" />
+        <label class="form-check-label" for="include-custom-description">Ek açıklama eklemek istiyorum</label>
+    </div>
+
+    <div id="custom-description-wrapper" class="mb-3" style="display:none;">
+        <label class="form-label">Ek Açıklama</label>
+        <textarea id="custom-description" class="form-control" placeholder="Opsiyonel ek açıklama"></textarea>
     </div>
 
     <div class="row">
         <div class="col-md-6 mb-3">
             <label asp-for="UnitPrice" class="form-label">Birim Fiyat</label>
-            <input asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
+            <input id="unit-price" asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
         </div>
         <div class="col-md-6 mb-3">
             <label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label>
-            <input asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
+            <input id="target-price" asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
         </div>
     </div>
+
+    <div id="selected-rule-inputs"></div>
 
     <div class="d-flex gap-2">
         <button type="submit" class="btn btn-primary">Kaydet</button>
         <a asp-action="Index" asp-route-subGroupId="@Model.StockSubCodeGroupId" class="btn btn-outline-secondary">Listeye Dön</a>
     </div>
 </form>
+
+<script>
+    const subGroupIdInput = document.getElementById('StockSubCodeGroupId');
+    const rulesContainer = document.getElementById('rules-container');
+    const selectedRuleInputsContainer = document.getElementById('selected-rule-inputs');
+    const descriptionHiddenInput = document.getElementById('description');
+    const descriptionPreviewInput = document.getElementById('description-preview');
+    const customDescriptionInput = document.getElementById('custom-description');
+    const customDescriptionWrapper = document.getElementById('custom-description-wrapper');
+    const includeCustomDescriptionCheckbox = document.getElementById('include-custom-description');
+    const stockSubCodeRuleIdInput = document.getElementById('stock-sub-code-rule-id');
+
+    const initialDescription = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Description ?? string.Empty));
+    const initialSelectedRuleIds = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SelectedRuleIds));
+
+    let rules = [];
+
+    function getSelectedRuleIds() {
+        return Array.from(document.querySelectorAll('.rule-group-select'))
+            .map(x => x.value)
+            .filter(x => x);
+    }
+
+    function renderSelectedRuleInputs() {
+        selectedRuleInputsContainer.innerHTML = '';
+        for (const id of getSelectedRuleIds()) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'SelectedRuleIds';
+            input.value = id;
+            selectedRuleInputsContainer.appendChild(input);
+        }
+    }
+
+    function getSelectedRules() {
+        const selectedIdSet = new Set(getSelectedRuleIds());
+        return rules
+            .filter(r => selectedIdSet.has(r.id))
+            .sort((a, b) => {
+                const aOrder = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                const bOrder = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                if (aOrder !== bOrder) return aOrder - bOrder;
+                return (a.ruleCode ?? '').localeCompare(b.ruleCode ?? '');
+            });
+    }
+
+    function syncDerivedTexts() {
+        const selected = getSelectedRules();
+        const descriptions = [...new Set(selected.map(r => (r.description ?? '').trim()).filter(x => x))];
+        const autoDescription = descriptions.join(' - ');
+        descriptionPreviewInput.value = autoDescription;
+
+        const customText = includeCustomDescriptionCheckbox.checked ? (customDescriptionInput.value ?? '').trim() : '';
+        descriptionHiddenInput.value = customText ? `${autoDescription}${autoDescription ? ' | ' : ''}${customText}` : autoDescription;
+
+        stockSubCodeRuleIdInput.value = selected.length === 1 ? selected[0].id : '';
+        renderSelectedRuleInputs();
+    }
+
+    function inferSelectionsFromExistingDescription() {
+        if (!initialDescription) {
+            return;
+        }
+
+        const normalized = initialDescription.toLocaleLowerCase('tr-TR');
+        const groups = new Map();
+
+        for (const rule of rules) {
+            const key = (rule.ruleName ?? '').trim() || 'Özellik Grubu';
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(rule);
+        }
+
+        document.querySelectorAll('.rule-group-select').forEach(select => {
+            if (select.value) {
+                return;
+            }
+
+            const groupName = select.dataset.groupName;
+            const groupRules = groups.get(groupName) ?? [];
+            const matched = groupRules.find(rule => {
+                const description = (rule.description ?? '').trim().toLocaleLowerCase('tr-TR');
+                return description && normalized.includes(description);
+            });
+
+            if (matched) {
+                select.value = matched.id;
+            }
+        });
+    }
+
+    function initializeCustomDescription() {
+        syncDerivedTexts();
+
+        const autoDescription = (descriptionPreviewInput.value ?? '').trim();
+        const existingDescription = (initialDescription ?? '').trim();
+        let customText = '';
+
+        if (existingDescription) {
+            if (autoDescription && existingDescription.startsWith(`${autoDescription} | `)) {
+                customText = existingDescription.substring(autoDescription.length + 3).trim();
+            } else if (!autoDescription || existingDescription !== autoDescription) {
+                customText = existingDescription;
+            }
+        }
+
+        if (customText) {
+            includeCustomDescriptionCheckbox.checked = true;
+            customDescriptionWrapper.style.display = 'block';
+            customDescriptionInput.value = customText;
+        }
+
+        syncDerivedTexts();
+    }
+
+    function renderRules() {
+        if (!rules.length) {
+            rulesContainer.innerHTML = '<span class="text-muted">Bu alt grupta kural bulunamadı.</span>';
+            syncDerivedTexts();
+            return;
+        }
+
+        const initialIdSet = new Set(initialSelectedRuleIds);
+        const groups = new Map();
+        for (const rule of rules) {
+            const key = (rule.ruleName ?? '').trim() || 'Özellik Grubu';
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(rule);
+        }
+
+        const rows = Array.from(groups.entries())
+            .sort((a, b) => a[0].localeCompare(b[0], 'tr'))
+            .map(([groupName, items]) => {
+                const sortedItems = items
+                    .sort((a, b) => {
+                        const aOrder = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                        const bOrder = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                        if (aOrder !== bOrder) return aOrder - bOrder;
+                        return (a.ruleCode ?? '').localeCompare(b.ruleCode ?? '');
+                    });
+
+                const selectedRule = sortedItems.find(x => initialIdSet.has(x.id));
+                const options = sortedItems
+                    .map(x => `<option value="${x.id}" ${selectedRule?.id === x.id ? 'selected' : ''}>${x.description ?? '-'}</option>`)
+                    .join('');
+
+                return `
+                    <div class="mb-2">
+                        <label class="form-label mb-1"><strong>${groupName}</strong></label>
+                        <select class="form-select form-select-sm rule-group-select" data-group-name="${groupName}">
+                            <option value="">Seçiniz...</option>
+                            ${options}
+                        </select>
+                    </div>
+                `;
+            });
+
+        rulesContainer.innerHTML = rows.join('');
+        document.querySelectorAll('.rule-group-select').forEach(x => x.addEventListener('change', syncDerivedTexts));
+
+        inferSelectionsFromExistingDescription();
+        initializeCustomDescription();
+    }
+
+    async function loadRules() {
+        rules = [];
+        rulesContainer.innerHTML = '<span class="text-muted">Yükleniyor...</span>';
+
+        if (!subGroupIdInput?.value) {
+            rulesContainer.innerHTML = '<span class="text-muted">Alt grup bulunamadı.</span>';
+            syncDerivedTexts();
+            return;
+        }
+
+        const response = await fetch(`@Url.Action("RulesBySubGroup", "StockCodeGeneration")?subGroupId=${subGroupIdInput.value}`);
+        if (!response.ok) {
+            rulesContainer.innerHTML = '<span class="text-danger">Kurallar yüklenemedi.</span>';
+            return;
+        }
+
+        rules = await response.json();
+        renderRules();
+    }
+
+    includeCustomDescriptionCheckbox?.addEventListener('change', function () {
+        customDescriptionWrapper.style.display = this.checked ? 'block' : 'none';
+        if (!this.checked) {
+            customDescriptionInput.value = '';
+        }
+        syncDerivedTexts();
+    });
+
+    customDescriptionInput?.addEventListener('input', syncDerivedTexts);
+
+    document.getElementById('edit-form')?.addEventListener('submit', function () {
+        syncDerivedTexts();
+    });
+
+    loadRules();
+</script>

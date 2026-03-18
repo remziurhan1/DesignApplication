@@ -32,6 +32,8 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
     public class GeneratedStockCodeUpdateDto
     {
         public Guid Id { get; set; }
+        public Guid? StockSubCodeRuleId { get; set; }
+        public List<Guid> SelectedRuleIds { get; set; } = new();
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }

@@ -78,6 +78,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = dto.Id,
                 StockSubCodeGroupId = dto.StockSubCodeGroupId,
                 StockSubCodeRuleId = dto.StockSubCodeRuleId,
+                SelectedRuleIds = dto.StockSubCodeRuleId.HasValue ? new List<Guid> { dto.StockSubCodeRuleId.Value } : new List<Guid>(),
                 GeneratedCode = dto.GeneratedCode,
                 RuleName = dto.RuleName,
                 Description = dto.Description,
@@ -99,6 +100,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             await _generatedService.UpdateAsync(new GeneratedStockCodeUpdateDto
             {
                 Id = vm.Id,
+                StockSubCodeRuleId = vm.StockSubCodeRuleId,
+                SelectedRuleIds = vm.SelectedRuleIds,
                 Description = vm.Description,
                 UnitPrice = vm.UnitPrice,
                 TargetPrice = vm.TargetPrice
