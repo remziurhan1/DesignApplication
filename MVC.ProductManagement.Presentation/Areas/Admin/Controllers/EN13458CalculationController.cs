@@ -64,7 +64,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(Guid id, Guid? costAnalysisId = null)
         {
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();

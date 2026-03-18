@@ -203,6 +203,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                     && x.EN13458CostAnalysis.EN13458CalculationId == calculationId
                     && itemIds.Contains(x.Id))
                 .ToListAsync();
+        }
 
             var analysisItemMap = analysisItems.ToDictionary(x => x.Id);
             foreach (var request in items.Where(x => x.CostAnalysisItemId != Guid.Empty))
