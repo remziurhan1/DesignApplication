@@ -56,6 +56,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockSubCodeGroupService, StockSubCodeGroupService>();
             services.AddScoped<IStockSubCodeRuleService, StockSubCodeRuleService>();
             services.AddScoped<IGeneratedStockCodeService, GeneratedStockCodeService>();
+            services.AddScoped<IStockProductGroupService, StockProductGroupService>();
 
             //services.AddScoped<IExcelExportService, ExcelExportService>();
 

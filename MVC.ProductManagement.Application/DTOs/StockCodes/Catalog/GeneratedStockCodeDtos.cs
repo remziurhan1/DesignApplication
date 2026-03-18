@@ -15,6 +15,8 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public decimal? TargetPrice { get; set; }
     }
 
+    public class GeneratedStockCodeDetailDto : GeneratedStockCodeListDto { }
+
     public class GeneratedStockCodeCreateDto
     {
         public Guid StockSubCodeGroupId { get; set; }
@@ -22,6 +24,14 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public List<Guid> SelectedRuleIds { get; set; } = new();
         public string? GeneratedCode { get; set; }
         public string RuleName { get; set; } = default!;
+        public string? Description { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public decimal? TargetPrice { get; set; }
+    }
+
+    public class GeneratedStockCodeUpdateDto
+    {
+        public Guid Id { get; set; }
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }

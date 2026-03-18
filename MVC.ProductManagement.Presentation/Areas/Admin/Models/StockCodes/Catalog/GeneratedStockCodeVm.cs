@@ -4,6 +4,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
 {
     public class GeneratedStockCodeVm
     {
+        public Guid Id { get; set; }
+
         [Required]
         public Guid StockSubCodeGroupId { get; set; }
 
@@ -11,7 +13,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
 
         public List<Guid> SelectedRuleIds { get; set; } = new();
 
-        [MaxLength(50)]
+        [StringLength(8, MinimumLength = 8)]
         public string? GeneratedCode { get; set; }
 
         [MaxLength(250)]
