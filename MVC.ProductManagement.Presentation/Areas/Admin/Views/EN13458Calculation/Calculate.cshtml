@@ -1,12 +1,14 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458CalculateVM
+@using System
 @{
     ViewData["Title"] = "EN13458 Calculate";
 }
 
-<h2>EN13458 Hesapla</h2>
+<h2>@(Model.Id == Guid.Empty ? "EN13458 Hesapla" : "EN13458 Tank Güncelle")</h2>
 
-<form asp-action="Calculate" method="post">
+<form asp-action="@(Model.Id == Guid.Empty ? "Calculate" : "Update")" method="post">
     @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="row g-3">
@@ -146,7 +148,7 @@
     </div>
 
     <div class="mt-4 mb-5 pb-4">
-        <button type="submit" class="btn btn-primary btn-lg">Hesapla</button>
+        <button type="submit" class="btn btn-primary btn-lg">@(Model.Id == Guid.Empty ? "Hesapla" : "Güncellenmiş Hesabı Hazırla")</button>
         <a asp-action="Index" class="btn btn-secondary">Liste</a>
     </div>
 </form>
