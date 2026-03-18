@@ -6,6 +6,7 @@
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
+    var stockCodeOptions = (ViewBag.StockCodeOptions as IEnumerable<dynamic>)?.ToList() ?? new List<dynamic>();
 }
 
 <style>
@@ -213,7 +214,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Çarpan</label>
-                                            <input type="number" name="multiplier" class="form-control" min="0.01" step="0.01" value="1" />
+                                            <input type="text" name="multiplier" class="form-control js-decimal-input" inputmode="decimal" value="1" />
                                         </div>
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-success">
@@ -232,13 +233,17 @@
                                         <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
                                         <div class="col-12">
                                             <label class="form-label">Stok Kodu</label>
-                                            <select name="generatedStockCodeId" class="form-select" asp-items="Model.AvailableStockCodes">
+                                            <select name="generatedStockCodeId" class="form-select cost-stock-select">
                                                 <option value="">Stok kodu seçiniz</option>
+                                                @foreach (var stockOption in stockCodeOptions)
+                                                {
+                                                    <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">@stockOption.text</option>
+                                                }
                                             </select>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">Miktar</label>
-                                            <input type="number" name="quantity" class="form-control" min="0.01" step="0.01" value="1" />
+                                            <input type="text" name="quantity" class="form-control js-decimal-input js-quantity-input" inputmode="decimal" value="1" />
                                         </div>
                                         <div class="col-md-4 form-check mt-4">
                                             <input class="form-check-input js-manual-toggle" type="checkbox" name="useManualUnitPrice" value="true" />
@@ -246,7 +251,15 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">Manuel Birim Fiyat</label>
-                                            <input type="number" name="manualUnitPrice" class="form-control js-manual-price" min="0" step="0.0001" disabled />
+                                            <input type="text" name="manualUnitPrice" class="form-control js-manual-price js-decimal-input" inputmode="decimal" disabled />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Birim Fiyat</label>
+                                            <input type="text" class="form-control js-effective-unit-price" value="0,00" readonly />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Toplam</label>
+                                            <input type="text" class="form-control js-line-total" value="0,00" readonly />
                                         </div>
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-primary">
@@ -303,27 +316,73 @@
                                             <div>@item.MaterialName</div>
                                             <div class="small text-muted">@item.FormType</div>
                                         </td>
-                                        <td class="text-end">@item.Quantity.ToString("N2")</td>
+                                        <td class="text-end">
+                                            @if (item.IsManual)
+                                            {
+                                                <input type="text"
+                                                       name="items[@itemIndex].Quantity"
+                                                       value="@item.Quantity.ToString(CultureInfo.InvariantCulture)"
+                                                       class="form-control form-control-sm text-end js-quantity-input js-decimal-input" inputmode="decimal" />
+                                            }
+                                            else
+                                            {
+                                                @item.Quantity.ToString("N2")
+                                            }
+                                        </td>
                                         <td>@item.Unit</td>
                                         <td>
                                             <input type="hidden" name="items[@itemIndex].CostAnalysisItemId" value="@item.CostAnalysisItemId" />
                                             <div class="small fw-semibold mb-1">@(string.IsNullOrWhiteSpace(item.StockCodeName) ? "Stok seçilmedi" : $"Seçili: {item.StockCodeName}")</div>
-                                            <select name="items[@itemIndex].GeneratedStockCodeId" class="form-select form-select-sm mb-2 cost-stock-select" asp-items="Model.AvailableStockCodes">
+                                            <select name="items[@itemIndex].GeneratedStockCodeId" class="form-select form-select-sm mb-2 cost-stock-select">
                                                 <option value="">Stok seçiniz</option>
+                                                @foreach (var stockOption in stockCodeOptions)
+                                                {
+                                                    if (item.GeneratedStockCodeId?.ToString() == stockOption.id.ToString())
+                                                    {
+                                                        <option value="@stockOption.id"
+                                                                data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)"
+                                                                selected>
+                                                            @stockOption.text
+                                                        </option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@stockOption.id"
+                                                                data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">
+                                                            @stockOption.text
+                                                        </option>
+                                                    }
+                                                }
                                             </select>
-                                            <script>document.currentScript.previousElementSibling.value='@item.GeneratedStockCodeId';</script>
                                             <div class="form-check mb-2">
                                                 <input type="hidden" name="items[@itemIndex].UseManualUnitPrice" value="false" />
                                                 <input class="form-check-input js-manual-toggle" type="checkbox" name="items[@itemIndex].UseManualUnitPrice" value="true" @(item.UseManualUnitPrice ? "checked" : null) />
                                                 <label class="form-check-label small">Manuel fiyat gir</label>
                                             </div>
-                                            <input type="number" name="items[@itemIndex].ManualUnitPrice" value="@item.ManualUnitPrice?.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-manual-price" min="0" step="0.0001" @(!item.UseManualUnitPrice ? "disabled" : null) />
+                                            <input type="text" name="items[@itemIndex].ManualUnitPrice" value="@item.ManualUnitPrice?.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-manual-price js-decimal-input" inputmode="decimal" @(!item.UseManualUnitPrice ? "disabled" : null) />
                                         </td>
-                                        <td class="text-end">@item.StockUnitPrice.ToString("N2")</td>
-                                        <td class="text-end">@item.UnitPrice.ToString("N2")</td>
-                                        <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
+                                        <td class="text-end js-stock-price-cell" data-value="@item.StockUnitPrice.ToString(CultureInfo.InvariantCulture)">@item.StockUnitPrice.ToString("N2")</td>
+                                        <td class="text-end js-effective-price-cell" data-value="@item.UnitPrice.ToString(CultureInfo.InvariantCulture)">@item.UnitPrice.ToString("N2")</td>
+                                        <td class="text-end fw-semibold js-line-total-cell" data-quantity="@item.Quantity.ToString(CultureInfo.InvariantCulture)" data-value="@item.ItemCost.ToString(CultureInfo.InvariantCulture)">@item.ItemCost.ToString("N2")</td>
                                         <td class="text-end">
-                                            <span class="small text-muted">@(item.IsManual ? "Manuel" : "Hesap")</span>
+                                            @if (item.IsManual && item.CostAnalysisItemId.HasValue)
+                                            {
+                                                <div class="d-flex flex-column gap-2 align-items-end">
+                                                    <span class="small text-muted">Manuel</span>
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger"
+                                                            formaction="@Url.Action("RemoveCostItem", "EN13458Calculation", new { area = "Admin" })"
+                                                            formmethod="post"
+                                                            name="costAnalysisItemId"
+                                                            value="@item.CostAnalysisItemId">
+                                                        <i class="bi bi-trash me-1"></i>Sil
+                                                    </button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="small text-muted">Hesap</span>
+                                            }
                                         </td>
                                     </tr>
                                     itemIndex++;
@@ -401,21 +460,140 @@
 
 @section Scripts {
     <script>
-        document.querySelectorAll('.js-manual-toggle').forEach(function (checkbox) {
-            const container = checkbox.closest('td, .row, .col-md-4, .col-12, form');
-            if (!container) return;
-            const manualInput = container.querySelector('.js-manual-price')
-                || checkbox.closest('tr')?.querySelector(`input[name="${checkbox.name.replace('UseManualUnitPrice', 'ManualUnitPrice')}"]`)
-                || checkbox.closest('form')?.querySelector('.js-manual-price');
-            const sync = () => {
-                if (!manualInput) return;
-                manualInput.disabled = !checkbox.checked;
-                if (!checkbox.checked) {
-                    manualInput.value = '';
-                }
+        (() => {
+            const parseDecimal = (value) => {
+                if (value === null || value === undefined) return 0;
+                const normalized = String(value).trim().replace(/\s+/g, '').replace(',', '.');
+                if (!normalized) return 0;
+                const parsed = Number(normalized);
+                return Number.isFinite(parsed) ? parsed : 0;
             };
-            checkbox.addEventListener('change', sync);
-            sync();
-        });
+
+            const formatDecimal = (value) => Number(value || 0).toLocaleString('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            const normalizeDecimalInputs = (scope) => {
+                scope.querySelectorAll('.js-decimal-input').forEach((input) => {
+                    if (input.disabled) return;
+                    const rawValue = input.value?.trim();
+                    if (!rawValue) return;
+                    input.value = String(parseDecimal(rawValue)).replace(',', '.');
+                });
+            };
+
+            const resolveManualInput = (checkbox) => {
+                const container = checkbox.closest('td, .row, .col-md-4, .col-12, form');
+                if (!container) return null;
+
+                return container.querySelector('.js-manual-price')
+                    || checkbox.closest('tr')?.querySelector(`input[name="${checkbox.name.replace('UseManualUnitPrice', 'ManualUnitPrice')}"]`)
+                    || checkbox.closest('form')?.querySelector('.js-manual-price');
+            };
+
+            const updateAddStockForm = (form) => {
+                const quantityInput = form.querySelector('.js-quantity-input');
+                const stockSelect = form.querySelector('.cost-stock-select');
+                const manualToggle = form.querySelector('.js-manual-toggle');
+                const manualInput = form.querySelector('.js-manual-price');
+                const effectiveUnitPriceInput = form.querySelector('.js-effective-unit-price');
+                const totalInput = form.querySelector('.js-line-total');
+
+                if (!quantityInput || !stockSelect || !effectiveUnitPriceInput || !totalInput) return;
+
+                const selectedOption = stockSelect.options[stockSelect.selectedIndex];
+                const stockUnitPrice = parseDecimal(selectedOption?.dataset?.unitPrice);
+                const manualUnitPrice = parseDecimal(manualInput?.value);
+                const quantity = parseDecimal(quantityInput.value);
+                const effectiveUnitPrice = manualToggle?.checked ? manualUnitPrice : stockUnitPrice;
+
+                effectiveUnitPriceInput.value = formatDecimal(effectiveUnitPrice);
+                totalInput.value = formatDecimal(quantity * effectiveUnitPrice);
+            };
+
+            const updateCostRow = (row) => {
+                const stockSelect = row.querySelector('.cost-stock-select');
+                const manualToggle = row.querySelector('.js-manual-toggle');
+                const manualInput = row.querySelector('.js-manual-price');
+                const quantityInput = row.querySelector('.js-quantity-input');
+                const stockPriceCell = row.querySelector('.js-stock-price-cell');
+                const effectivePriceCell = row.querySelector('.js-effective-price-cell');
+                const totalCell = row.querySelector('.js-line-total-cell');
+
+                if (!stockSelect || !stockPriceCell || !effectivePriceCell || !totalCell) return;
+
+                const selectedOption = stockSelect.options[stockSelect.selectedIndex];
+                const stockUnitPrice = parseDecimal(selectedOption?.dataset?.unitPrice);
+                const manualUnitPrice = parseDecimal(manualInput?.value);
+                const quantity = quantityInput ? parseDecimal(quantityInput.value) : parseDecimal(totalCell.dataset.quantity);
+                const effectiveUnitPrice = manualToggle?.checked ? manualUnitPrice : stockUnitPrice;
+                const total = quantity * effectiveUnitPrice;
+
+                stockPriceCell.dataset.value = String(stockUnitPrice);
+                stockPriceCell.textContent = formatDecimal(stockUnitPrice);
+                effectivePriceCell.dataset.value = String(effectiveUnitPrice);
+                effectivePriceCell.textContent = formatDecimal(effectiveUnitPrice);
+                totalCell.dataset.quantity = String(quantity);
+                totalCell.dataset.value = String(total);
+                totalCell.textContent = formatDecimal(total);
+            };
+
+            document.querySelectorAll('.js-manual-toggle').forEach((checkbox) => {
+                const manualInput = resolveManualInput(checkbox);
+                const sync = () => {
+                    if (!manualInput) return;
+                    manualInput.disabled = !checkbox.checked;
+                    if (!checkbox.checked) {
+                        manualInput.value = '';
+                    }
+
+                    const form = checkbox.closest('form');
+                    const row = checkbox.closest('tr');
+                    if (row) {
+                        updateCostRow(row);
+                    } else if (form) {
+                        updateAddStockForm(form);
+                    }
+                };
+
+                checkbox.addEventListener('change', sync);
+                sync();
+            });
+
+            document.querySelectorAll('.cost-stock-select').forEach((select) => {
+                const handler = () => {
+                    const row = select.closest('tr');
+                    const form = select.closest('form');
+                    if (row) {
+                        updateCostRow(row);
+                    } else if (form) {
+                        updateAddStockForm(form);
+                    }
+                };
+
+                select.addEventListener('change', handler);
+                handler();
+            });
+
+            document.querySelectorAll('.js-manual-price, .js-quantity-input').forEach((input) => {
+                const handler = () => {
+                    const row = input.closest('tr');
+                    const form = input.closest('form');
+                    if (row) {
+                        updateCostRow(row);
+                    } else if (form) {
+                        updateAddStockForm(form);
+                    }
+                };
+
+                input.addEventListener('input', handler);
+                input.addEventListener('change', handler);
+            });
+
+            document.querySelectorAll('form').forEach((form) => {
+                form.addEventListener('submit', () => normalizeDecimalInputs(form));
+            });
+        })();
     </script>
 }
