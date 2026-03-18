@@ -19,7 +19,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _service.GetAllAsync());
+            var groups = await _service.GetAllAsync();
+            var detailedGroups = await Task.WhenAll(groups.Select(x => _service.GetByIdAsync(x.Id)));
+
+            return View(detailedGroups
+                .Where(x => x != null)
+                .Select(x => x!)
+                .OrderBy(x => x.Name)
+                .ToList());
         }
 
         [HttpGet]
