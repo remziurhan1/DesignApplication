@@ -5,6 +5,7 @@ using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
+using MVC.ProductManagement.Application.Services.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 using MVC.ProductManagement.Infrastructure.Repositories.StorageTypePropertiesRepository;
@@ -25,17 +26,23 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IMaterialService _materialService;
         private readonly IMaterialFormService _materialFormService;
         private readonly IStorageTypeService _storageTypeService;
+        private readonly IGeneratedStockCodeService _generatedStockCodeService;
+        private readonly IStockProductGroupService _stockProductGroupService;
 
         public EN13458CalculationController(
             IEN13458CalculationServices service,
             IMaterialService materialService,
             IMaterialFormService materialFormService,
-            IStorageTypeService storageTypeService)
+            IStorageTypeService storageTypeService,
+            IGeneratedStockCodeService generatedStockCodeService,
+            IStockProductGroupService stockProductGroupService)
         {
             _service = service;
             _materialService = materialService;
             _materialFormService = materialFormService;
             _storageTypeService = storageTypeService;
+            _generatedStockCodeService = generatedStockCodeService;
+            _stockProductGroupService = stockProductGroupService;
         }
 
         [HttpGet]
@@ -152,6 +159,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             };
 
             await PopulateResultDisplayNamesAsync(vm);
+            await PopulateManualCostLookupsAsync(vm);
             var costTable = await GetSavedOrBuiltCostTableAsync(dto);
             ViewBag.CostTable = costTable;
 
@@ -533,6 +541,57 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return RedirectToAction(nameof(Details), new { id = saved.Id });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddStockCode(Guid id, Guid generatedStockCodeId, double quantity = 1)
+        {
+            try
+            {
+                await _service.AddManualStockCodeCostAsync(id, generatedStockCodeId, quantity, User?.Identity?.Name ?? "AdminUser");
+                TempData["SuccessMessage"] = "Stok kodu maliyete eklendi.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddStockGroup(Guid id, Guid stockProductGroupId, double multiplier = 1)
+        {
+            try
+            {
+                await _service.AddManualStockGroupCostAsync(id, stockProductGroupId, multiplier, User?.Identity?.Name ?? "AdminUser");
+                TempData["SuccessMessage"] = "Stok kod grubu maliyete eklendi.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveCostItem(Guid id, Guid costDetailId)
+        {
+            try
+            {
+                await _service.RemoveCostDetailAsync(id, costDetailId);
+                TempData["SuccessMessage"] = "Maliyet kalemi kaldırıldı.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
         private EN13458ResultVM MapResultVm(EN13458ResultDTO dto)
         {
             var vm = new EN13458ResultVM
@@ -721,25 +780,22 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         private async Task<EN13458MaterialCostTableDTO> GetSavedOrBuiltCostTableAsync(EN13458ResultDTO dto)
         {
-            var serviceType = _service.GetType();
-            var savedMethod = serviceType.GetMethod("GetSavedMaterialCostTableAsync", new[] { typeof(Guid) });
-            if (savedMethod != null)
-            {
-                var taskObj = savedMethod.Invoke(_service, new object[] { dto.Id });
-                if (taskObj is Task<EN13458MaterialCostTableDTO?> savedTask)
-                {
-                    var saved = await savedTask;
-                    if (saved != null)
-                    {
-                        return saved;
-                    }
-                }
-            }
-
-            return await _service.BuildMaterialCostTableAsync(dto);
+            var saved = await _service.GetSavedMaterialCostTableAsync(dto.Id);
+            return saved ?? await _service.BuildMaterialCostTableAsync(dto);
         }
 
+        private async Task PopulateManualCostLookupsAsync(EN13458DetailsVM vm)
+        {
+            vm.AvailableStockGroups = (await _stockProductGroupService.GetAllAsync())
+                .OrderBy(x => x.Name)
+                .Select(x => new SelectListItem($"{x.Name} (Kalem: {x.ItemCount}, Tutar: {x.TotalCost:N2})", x.Id.ToString()))
+                .ToList();
 
+            vm.AvailableStockCodes = (await _generatedStockCodeService.GetAllAsync())
+                .OrderBy(x => x.GeneratedCode)
+                .Select(x => new SelectListItem($"{x.GeneratedCode} - {(!string.IsNullOrWhiteSpace(x.Description) ? x.Description : x.RuleName)}", x.Id.ToString()))
+                .ToList();
+        }
 
         private async Task PopulateResultDisplayNamesAsync(EN13458ResultVM vm)
         {

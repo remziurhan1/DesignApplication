@@ -24,6 +24,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string LiquidNitrogenStockCode = "ZA000216";
         private const string PerliteStockCode = "ZA000464";
         private const string ProfileWeldStockCode = "";
+        private const string ManualStockCostGroupCode = "EK-STK";
+        private const string ManualStockCostGroupName = "Ek Stok Kodları";
+        private const string ManualGroupCostGroupCode = "EK-GRP";
+        private const string ManualGroupCostGroupName = "Ek Stok Grupları";
 
         public EN13458CalculationServices(
             IMaterialRepository materialRepository,
@@ -36,7 +40,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             _calculationManager = calculationManager;
             _context = context;
         }
-
 
         public Task<EN13458ResultDTO> CalculateAsync(EN13458CalculateDTO dto)
             => _calculationManager.CalculateAsync(dto);
@@ -90,6 +93,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 .ThenBy(x => x.ItemName)
                 .Select(x => new EN13458MaterialCostRowDTO
                 {
+                    CostDetailId = x.Id,
                     CostGroupCode = x.CostGroupCode,
                     CostGroupName = x.CostGroupName,
                     ItemName = x.ItemName,
@@ -114,29 +118,127 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 return null;
             }
 
-            var table = new EN13458MaterialCostTableDTO
+            return BuildCostTableFromItems(items);
+        }
+
+        public async Task AddManualStockCodeCostAsync(Guid calculationId, Guid generatedStockCodeId, double quantity, string createdBy = "System")
+        {
+            if (quantity <= 0)
             {
-                Items = items,
-                TotalMaterialCost = items.Sum(x => x.ItemCost),
-                GrandTotalCost = items.Sum(x => x.ItemCost)
-            };
+                throw new InvalidOperationException("Stok kodu miktarı sıfırdan büyük olmalıdır.");
+            }
 
-            table.TotalFilmCost = items
-                .Where(x => x.CostGroupCode == "FILM")
-                .Sum(x => x.ItemCost);
+            await EnsureCalculationExistsAsync(calculationId);
 
-            table.GroupTotals = items
-                .GroupBy(x => new { x.CostGroupCode, x.CostGroupName })
-                .Select(g => new EN13458CostGroupSummaryDTO
+            var generatedCode = await _context.GeneratedStockCodes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == generatedStockCodeId);
+
+            if (generatedCode == null)
+            {
+                throw new InvalidOperationException("Seçilen stok kodu bulunamadı.");
+            }
+
+            var unitPrice = Convert.ToDouble(generatedCode.UnitPrice ?? 0m);
+            var itemName = string.IsNullOrWhiteSpace(generatedCode.Description)
+                ? generatedCode.GeneratedCode
+                : generatedCode.Description!;
+
+            _context.EN13458CostDetails.Add(new EN13458CostDetail
+            {
+                EN13458CalculationId = calculationId,
+                CostGroupCode = ManualStockCostGroupCode,
+                CostGroupName = ManualStockCostGroupName,
+                ItemName = itemName,
+                StockCode = generatedCode.GeneratedCode,
+                MaterialName = string.IsNullOrWhiteSpace(generatedCode.RuleName) ? "Stok Kodu" : generatedCode.RuleName,
+                FormType = "Stok Kodu",
+                Quantity = quantity,
+                Unit = "adet",
+                UnitPrice = unitPrice,
+                ItemCost = quantity * unitPrice,
+                CreatedBy = createdBy,
+                CreatedDate = DateTime.UtcNow
+            });
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddManualStockGroupCostAsync(Guid calculationId, Guid stockProductGroupId, double multiplier, string createdBy = "System")
+        {
+            if (multiplier <= 0)
+            {
+                throw new InvalidOperationException("Grup çarpanı sıfırdan büyük olmalıdır.");
+            }
+
+            await EnsureCalculationExistsAsync(calculationId);
+
+            var group = await _context.StockProductGroups
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == stockProductGroupId);
+
+            if (group == null)
+            {
+                throw new InvalidOperationException("Seçilen stok grubu bulunamadı.");
+            }
+
+            var groupItems = await _context.StockProductGroupItems
+                .AsNoTracking()
+                .Where(x => x.StockProductGroupId == stockProductGroupId)
+                .Join(
+                    _context.GeneratedStockCodes.AsNoTracking(),
+                    item => item.GeneratedStockCodeId,
+                    code => code.Id,
+                    (item, code) => new { Item = item, Code = code })
+                .ToListAsync();
+
+            if (groupItems.Count == 0)
+            {
+                throw new InvalidOperationException("Seçilen stok grubunda eklenebilir kalem bulunamadı.");
+            }
+
+            var details = groupItems.Select(x =>
+            {
+                var quantity = x.Item.Quantity * multiplier;
+                var unitPrice = Convert.ToDouble(x.Item.UnitPrice > 0 ? x.Item.UnitPrice : (x.Code.UnitPrice ?? 0m));
+                var itemName = string.IsNullOrWhiteSpace(x.Code.Description)
+                    ? x.Code.GeneratedCode
+                    : x.Code.Description!;
+
+                return new EN13458CostDetail
                 {
-                    CostGroupCode = g.Key.CostGroupCode,
-                    CostGroupName = g.Key.CostGroupName,
-                    TotalCost = g.Sum(i => i.ItemCost)
-                })
-                .OrderBy(x => x.CostGroupCode)
-                .ToList();
+                    EN13458CalculationId = calculationId,
+                    CostGroupCode = ManualGroupCostGroupCode,
+                    CostGroupName = ManualGroupCostGroupName,
+                    ItemName = $"{group.Name} / {itemName}",
+                    StockCode = x.Code.GeneratedCode,
+                    MaterialName = string.IsNullOrWhiteSpace(x.Code.RuleName) ? group.Name : x.Code.RuleName,
+                    FormType = group.Name,
+                    Quantity = quantity,
+                    Unit = "adet",
+                    UnitPrice = unitPrice,
+                    ItemCost = quantity * unitPrice,
+                    CreatedBy = createdBy,
+                    CreatedDate = DateTime.UtcNow
+                };
+            }).ToList();
 
-            return table;
+            _context.EN13458CostDetails.AddRange(details);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveCostDetailAsync(Guid calculationId, Guid costDetailId)
+        {
+            var detail = await _context.EN13458CostDetails
+                .FirstOrDefaultAsync(x => x.Id == costDetailId && x.EN13458CalculationId == calculationId);
+
+            if (detail == null)
+            {
+                throw new InvalidOperationException("Silinecek maliyet kalemi bulunamadı.");
+            }
+
+            _context.EN13458CostDetails.Remove(detail);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<EN13458MaterialCostTableDTO> BuildMaterialCostTableAsync(EN13458ResultDTO result)
@@ -191,22 +293,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 table.Items.Add(profileWeldRow);
             }
 
-            table.TotalMaterialCost = table.Items.Sum(x => x.ItemCost);
-            table.TotalFilmCost = result.TotalFilmCost;
-            table.GrandTotalCost = table.TotalMaterialCost;
-
-            table.GroupTotals = table.Items
-                .GroupBy(x => new { x.CostGroupCode, x.CostGroupName })
-                .Select(g => new EN13458CostGroupSummaryDTO
-                {
-                    CostGroupCode = g.Key.CostGroupCode,
-                    CostGroupName = g.Key.CostGroupName,
-                    TotalCost = g.Sum(i => i.ItemCost)
-                })
-                .OrderBy(x => x.CostGroupCode)
-                .ToList();
-
-            return table;
+            return BuildCostTableFromItems(table.Items);
         }
 
         private async Task<EN13458MaterialCostRowDTO> BuildRowAsync(
@@ -364,6 +451,42 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 .FirstOrDefaultAsync();
 
             return unitPrice ?? 0;
+        }
+
+        private async Task EnsureCalculationExistsAsync(Guid calculationId)
+        {
+            var exists = await _context.EN13458Calculations
+                .AsNoTracking()
+                .AnyAsync(x => x.Id == calculationId);
+
+            if (!exists)
+            {
+                throw new InvalidOperationException("EN13458 kaydı bulunamadı.");
+            }
+        }
+
+        private static EN13458MaterialCostTableDTO BuildCostTableFromItems(List<EN13458MaterialCostRowDTO> items)
+        {
+            return new EN13458MaterialCostTableDTO
+            {
+                Items = items
+                    .OrderBy(x => x.CostGroupCode)
+                    .ThenBy(x => x.ItemName)
+                    .ToList(),
+                TotalMaterialCost = items.Sum(x => x.ItemCost),
+                TotalFilmCost = items.Where(x => x.CostGroupCode == "FILM").Sum(x => x.ItemCost),
+                GrandTotalCost = items.Sum(x => x.ItemCost),
+                GroupTotals = items
+                    .GroupBy(x => new { x.CostGroupCode, x.CostGroupName })
+                    .Select(g => new EN13458CostGroupSummaryDTO
+                    {
+                        CostGroupCode = g.Key.CostGroupCode,
+                        CostGroupName = g.Key.CostGroupName,
+                        TotalCost = g.Sum(i => i.ItemCost)
+                    })
+                    .OrderBy(x => x.CostGroupCode)
+                    .ToList()
+            };
         }
 
         private static double GetSingleHeadAreaApproximation(double diameter)

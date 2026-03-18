@@ -13,5 +13,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         Task<List<EN13458ResultDTO>> GetAllAsync();
         Task<EN13458MaterialCostTableDTO> BuildMaterialCostTableAsync(EN13458ResultDTO result);
         Task<EN13458MaterialCostTableDTO?> GetSavedMaterialCostTableAsync(Guid calculationId);
+        Task AddManualStockCodeCostAsync(Guid calculationId, Guid generatedStockCodeId, double quantity, string createdBy = "System");
+        Task AddManualStockGroupCostAsync(Guid calculationId, Guid stockProductGroupId, double multiplier, string createdBy = "System");
+        Task RemoveCostDetailAsync(Guid calculationId, Guid costDetailId);
     }
 }
