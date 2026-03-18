@@ -4,6 +4,7 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
 {
     public class EN13458MaterialCostRowDTO
     {
+        public Guid? CostDetailId { get; set; }
         public string CostGroupCode { get; set; } = string.Empty;
         public string CostGroupName { get; set; } = string.Empty;
         public string ItemName { get; set; } = string.Empty;
