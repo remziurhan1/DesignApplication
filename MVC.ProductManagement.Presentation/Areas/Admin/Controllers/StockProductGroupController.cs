@@ -23,6 +23,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var dto = await _service.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            return View(dto);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             return View(await BuildVmAsync(new StockProductGroupVm()));
