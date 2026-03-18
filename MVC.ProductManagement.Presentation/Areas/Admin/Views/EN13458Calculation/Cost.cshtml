@@ -355,8 +355,8 @@
                                                 }
                                             </select>
                                             <div class="form-check mb-2">
-                                                <input type="hidden" name="items[@itemIndex].UseManualUnitPrice" value="false" />
                                                 <input class="form-check-input js-manual-toggle" type="checkbox" name="items[@itemIndex].UseManualUnitPrice" value="true" @(item.UseManualUnitPrice ? "checked" : null) />
+                                                <input type="hidden" name="items[@itemIndex].UseManualUnitPrice" value="false" />
                                                 <label class="form-check-label small">Manuel fiyat gir</label>
                                             </div>
                                             <input type="text" name="items[@itemIndex].ManualUnitPrice" value="@item.ManualUnitPrice?.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-manual-price js-decimal-input" inputmode="decimal" @(!item.UseManualUnitPrice ? "disabled" : null) />
