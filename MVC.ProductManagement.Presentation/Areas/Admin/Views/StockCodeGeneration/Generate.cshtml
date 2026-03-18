@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 <h4>Stok Kodu Üretimi</h4>
-<p class="text-muted">Alt gruptaki kural gruplarından seçenekleri dropdown ile seçin. Kod adı ve açıklama otomatik oluşturulur.</p>
+<p class="text-muted">Alt grup seçin, her kural grubundan uygun seçeneği belirleyin. Stok kodu ilk 4 karakter alt grup kodu + 4 haneli sayaç olarak üretilir ve açıklama seçilen özelliklerden otomatik oluşturulur.</p>
 
 <form asp-action="Generate" method="post" id="generate-form">
     @Html.AntiForgeryToken()
@@ -20,12 +20,6 @@
             <span class="text-muted">Alt grup seçiniz...</span>
         </div>
         <div class="form-text">Her kural grubundan uygun seçeneği dropdown ile belirleyin.</div>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Özellikler (otomatik)</label>
-        <input id="rule-name-preview" class="form-control" readonly />
-        <input id="rule-name" asp-for="RuleName" type="hidden" />
     </div>
 
     <div class="mb-3">
@@ -52,7 +46,7 @@
     <div class="mb-3">
         <label asp-for="GeneratedCode" class="form-label">Üretilen Kod</label>
         <input id="generated-code" asp-for="GeneratedCode" class="form-control" readonly />
-        <div id="generate-info" class="form-text"></div>
+        <div id="generate-info" class="form-text">Format: ilk 4 karakter alt grup kodu + 4 haneli sıra (örn. SFC00000).</div>
     </div>
 
     <div class="row">
@@ -82,8 +76,6 @@
     const customDescriptionWrapper = document.getElementById('custom-description-wrapper');
     const includeCustomDescriptionCheckbox = document.getElementById('include-custom-description');
     const generatedCodeInput = document.getElementById('generated-code');
-    const ruleNameHiddenInput = document.getElementById('rule-name');
-    const ruleNamePreviewInput = document.getElementById('rule-name-preview');
     const unitPriceInput = document.getElementById('unit-price');
     const targetPriceInput = document.getElementById('target-price');
     const stockSubCodeRuleIdInput = document.getElementById('stock-sub-code-rule-id');
@@ -123,11 +115,7 @@
     function syncDerivedTexts() {
         const selected = getSelectedRules();
         const descriptions = [...new Set(selected.map(r => (r.description ?? '').trim()).filter(x => x))];
-        const autoRuleName = descriptions.join('-');
-        const autoDescription = descriptions.join('-');
-
-        ruleNamePreviewInput.value = autoRuleName;
-        ruleNameHiddenInput.value = autoRuleName;
+        const autoDescription = descriptions.join(' - ');
         descriptionPreviewInput.value = autoDescription;
 
         const customText = includeCustomDescriptionCheckbox.checked ? (customDescriptionInput.value ?? '').trim() : '';
@@ -223,7 +211,7 @@
             return;
         }
 
-        const response = await fetch(`@Url.Action("ResolveCode", "StockCodeGeneration")?subGroupId=${subGroupSelect.value}&ruleName=${encodeURIComponent(ruleNameHiddenInput.value ?? '')}&selectedRuleIds=${encodeURIComponent(selectedIds)}`);
+        const response = await fetch(`@Url.Action("ResolveCode", "StockCodeGeneration")?subGroupId=${subGroupSelect.value}&selectedRuleIds=${encodeURIComponent(selectedIds)}`);
         if (!response.ok) {
             alert('Kod üretilemedi.');
             return;
@@ -236,19 +224,15 @@
             const customText = includeCustomDescriptionCheckbox.checked ? (customDescriptionInput.value ?? '').trim() : '';
             descriptionHiddenInput.value = customText ? `${data.description}${data.description ? ' | ' : ''}${customText}` : data.description;
         }
-        if (data.ruleName) {
-            ruleNamePreviewInput.value = data.ruleName;
-            ruleNameHiddenInput.value = data.ruleName;
-        }
         if (data.unitPrice != null) unitPriceInput.value = data.unitPrice;
         if (data.targetPrice != null) targetPriceInput.value = data.targetPrice;
-        infoText.textContent = data.isExisting ? 'Bu kombinasyon için kod zaten üretilmiş, mevcut kod getirildi.' : 'Yeni kod üretildi.';
+        infoText.textContent = data.isExisting ? 'Bu stok kodu daha önce üretilmiş.' : 'Yeni stok kodu hazır.';
         renderSelectedRuleInputs();
     });
 
     document.getElementById('generate-form')?.addEventListener('submit', function (event) {
         syncDerivedTexts();
-        if (!ruleNameHiddenInput.value?.trim()) {
+        if (!descriptionHiddenInput.value?.trim()) {
             event.preventDefault();
             alert('Kayıt için en az bir kural seçeneği seçiniz.');
         }
