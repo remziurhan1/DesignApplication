@@ -152,7 +152,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var generatedCodeIds = normalizedItems.Select(x => x.GeneratedStockCodeId).Distinct().ToList();
             var generatedCodes = (await _generatedCodeRepository.GetAllAsync(x => generatedCodeIds.Contains(x.Id))).ToDictionary(x => x.Id);
 
-            group.Items.Clear();
             group.TotalQuantity = 0;
             group.TotalCost = 0;
 
