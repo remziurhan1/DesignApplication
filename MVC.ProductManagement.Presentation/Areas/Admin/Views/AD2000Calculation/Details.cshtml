@@ -5,6 +5,7 @@
 @using System.Collections.Generic
 @{
     ViewData["Title"] = "AD2000 Details";
+    var isSalesView = ViewBag.IsSalesView is bool flag && flag;
 }
 
 @section Styles {
@@ -21,7 +22,10 @@
             </div>
             <div class="col-lg-4">
                 <div class="en-hero-actions">
-                    <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-cash-stack me-1"></i>Maliyet</a>
+                    @if (!isSalesView)
+                    {
+                        <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-cash-stack me-1"></i>Maliyet</a>
+                    }
                     <a asp-action="Index" class="btn btn-outline-light"><i class="bi bi-list-ul me-1"></i>Liste</a>
                 </div>
             </div>

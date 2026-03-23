@@ -105,13 +105,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(Guid id, string mode = "manager")
         {
             var dto = await _calculationService.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
             var vm = MapResultVm(dto);
             await PopulateDisplayNamesAsync(vm);
+            ViewBag.IsSalesView = string.Equals(mode, "sales", StringComparison.OrdinalIgnoreCase);
             return View(vm);
         }
 

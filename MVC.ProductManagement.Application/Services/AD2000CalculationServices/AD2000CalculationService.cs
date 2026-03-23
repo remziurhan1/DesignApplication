@@ -459,6 +459,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             entity.FinanceCost = calculation.FinanceCost;
             entity.GeneralManagementCost = calculation.GeneralManagementCost;
             entity.AraToplam2 = calculation.AraToplam2;
+            entity.MinimumSalesPrice = calculation.MinimumSalesPrice;
             entity.SalesPrice = calculation.SalesPrice;
             entity.ModifiedBy = modifiedBy;
             entity.ModifiedDate = DateTime.UtcNow;
@@ -816,6 +817,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 FinanceCost = calculation.FinanceCost,
                 GeneralManagementCost = calculation.GeneralManagementCost,
                 AraToplam2 = calculation.AraToplam2,
+                MinimumSalesPrice = calculation.MinimumSalesPrice,
                 SalesPrice = calculation.SalesPrice,
                 CreatedBy = modifiedBy,
                 CreatedDate = DateTime.UtcNow
@@ -938,6 +940,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 FinanceCost = salesPrice.FinanceCost,
                 GeneralManagementCost = salesPrice.GeneralManagementCost,
                 AraToplam2 = salesPrice.AraToplam2,
+                MinimumSalesPrice = salesPrice.MinimumSalesPrice,
                 SalesPrice = salesPrice.SalesPrice
             };
         }
@@ -967,6 +970,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 FinanceCost = financeCost,
                 GeneralManagementCost = generalManagementCost,
                 AraToplam2 = araToplam2,
+                MinimumSalesPrice = immCost,
                 SalesPrice = salesPrice
             };
         }

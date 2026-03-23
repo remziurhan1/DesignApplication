@@ -24,6 +24,7 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public string? LinkedCostAnalysisRevisionCode { get; set; }
         public decimal? LinkedCostAnalysisTotal { get; set; }
         public decimal? EstimatedCost { get; set; }
+        public decimal? MinimumSalesPrice { get; set; }
         public decimal? ApprovedSalesPrice { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; } = SalesRequestWorkflowStatus.Submitted;
         public int DisplayOrder { get; set; }

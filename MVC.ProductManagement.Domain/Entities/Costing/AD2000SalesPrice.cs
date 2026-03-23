@@ -33,6 +33,7 @@ namespace MVC.ProductManagement.Domain.Entities.Costing
         public double FinanceCost { get; set; }
         public double GeneralManagementCost { get; set; }
         public double AraToplam2 { get; set; }
+        public double MinimumSalesPrice { get; set; }
         public double SalesPrice { get; set; }
     }
 }

@@ -12,17 +12,17 @@
         _ => "info"
     };
 
-    string? BuildAnalysisLink(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item)
+    string? BuildTechnicalLink(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item)
         => item.LinkedCalculationType switch
         {
-            SalesRequestCalculationType.AD2000 when item.LinkedCalculationId.HasValue => Url.Action("Details", "AD2000Calculation", new { area = "Admin", id = item.LinkedCalculationId.Value }),
-            SalesRequestCalculationType.EN13458 when item.LinkedCalculationId.HasValue => Url.Action("Details", "EN13458Calculation", new { area = "Admin", id = item.LinkedCalculationId.Value, costAnalysisId = item.LinkedCostAnalysisId }),
+            SalesRequestCalculationType.AD2000 when item.LinkedCalculationId.HasValue => Url.Action("Details", "AD2000Calculation", new { area = "Admin", id = item.LinkedCalculationId.Value, mode = "sales" }),
+            SalesRequestCalculationType.EN13458 when item.LinkedCalculationId.HasValue => Url.Action("Details", "EN13458Calculation", new { area = "Admin", id = item.LinkedCalculationId.Value, mode = "sales" }),
             _ => null
         };
 
     void RenderItem(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item, int depth)
     {
-        var analysisLink = BuildAnalysisLink(item);
+        var technicalLink = BuildTechnicalLink(item);
         <div class="card mb-3 ms-@Math.Min(depth * 2, 5)">
             <div class="card-body pt-3">
                 <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
@@ -41,7 +41,20 @@
                     <div class="col-12"><strong>Minimum teknik veri:</strong><div class="text-muted">@item.MinimumTechnicalNotes</div></div>
                     @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
                     {
-                        <div class="col-12"><strong>Detay mühendisliği:</strong><div class="text-muted">@item.DesignDetails</div></div>
+                        <div class="col-12"><strong>Teknik özet:</strong><div class="text-muted">@item.DesignDetails</div></div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(item.LinkedCalculationName))
+                    {
+                        <div class="col-12">
+                            <strong>Bağlı teknik hesap:</strong>
+                            <div class="text-muted">
+                                @item.LinkedCalculationType · @item.LinkedCalculationName
+                                @if (!string.IsNullOrWhiteSpace(technicalLink))
+                                {
+                                    <a href="@technicalLink" class="ms-2">Teknik hesabı aç</a>
+                                }
+                            </div>
+                        </div>
                     }
                     @if (!string.IsNullOrWhiteSpace(item.LinkedCalculationName))
                     {
@@ -58,13 +71,19 @@
                     }
                     @if (Model.IsManagerView)
                     {
-                        <div class="col-md-6"><strong>Maliyet:</strong> @(item.EstimatedCost?.ToString("N2") ?? "-") ₺</div>
-                        <div class="col-md-6"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-4"><strong>Maliyet:</strong> @(item.EstimatedCost?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-4"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-4"><strong>Tavsiye edilen satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        @if (!string.IsNullOrWhiteSpace(item.LinkedCostAnalysisRevisionCode))
+                        {
+                            <div class="col-12"><strong>Aktif revizyon:</strong> <span class="text-muted">@item.LinkedCostAnalysisRevisionCode</span></div>
+                        }
                         <div class="col-12"><strong>İç açıklama:</strong><div class="text-muted">@item.SalesEngineeringNotes</div></div>
                     }
-                    else if (item.ApprovedSalesPrice.HasValue)
+                    else
                     {
-                        <div class="col-md-6"><strong>Onaylı satış fiyatı:</strong> @item.ApprovedSalesPrice.Value.ToString("N2") ₺</div>
+                        <div class="col-md-6"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-6"><strong>Tavsiye edilen satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
                     }
                 </div>
             </div>

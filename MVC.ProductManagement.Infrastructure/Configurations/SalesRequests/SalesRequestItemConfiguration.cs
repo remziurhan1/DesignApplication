@@ -18,6 +18,7 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.SalesRequests
             builder.Property(x => x.LinkedCostAnalysisRevisionCode).HasMaxLength(32);
             builder.Property(x => x.LinkedCostAnalysisTotal).HasColumnType("decimal(18,2)");
             builder.Property(x => x.EstimatedCost).HasColumnType("decimal(18,2)");
+            builder.Property(x => x.MinimumSalesPrice).HasColumnType("decimal(18,2)");
             builder.Property(x => x.ApprovedSalesPrice).HasColumnType("decimal(18,2)");
             builder.Property(x => x.MinimumTechnicalNotes).HasMaxLength(2000);
             builder.Property(x => x.SalesEngineeringNotes).HasMaxLength(2000);

@@ -127,6 +127,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string? LinkedCostAnalysisRevisionCode { get; set; }
         public decimal? LinkedCostAnalysisTotal { get; set; }
         public decimal? EstimatedCost { get; set; }
+        public decimal? MinimumSalesPrice { get; set; }
         public decimal? ApprovedSalesPrice { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
         public List<SalesRequestDetailItemVm> Children { get; set; } = new();
@@ -164,6 +165,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string CalculationName { get; set; } = string.Empty;
         public string RevisionCode { get; set; } = string.Empty;
         public decimal TotalCost { get; set; }
+        public decimal? MinimumSalesPrice { get; set; }
+        public decimal? RecommendedSalesPrice { get; set; }
     }
 
     public class SalesRequestPricingItemVm
@@ -188,7 +191,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public decimal? LinkedCostAnalysisTotal { get; set; }
         [Display(Name = "Maliyet")]
         public decimal? EstimatedCost { get; set; }
-        [Display(Name = "Satış fiyatı")]
+        [Display(Name = "Minimum satış fiyatı")]
+        public decimal? MinimumSalesPrice { get; set; }
+        [Display(Name = "Tavsiye edilen satış fiyatı")]
         public decimal? ApprovedSalesPrice { get; set; }
         [Display(Name = "Detay mühendisliği")]
         public string? DesignDetails { get; set; }
