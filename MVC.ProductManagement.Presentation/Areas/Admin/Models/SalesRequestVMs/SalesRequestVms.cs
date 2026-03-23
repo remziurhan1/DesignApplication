@@ -67,12 +67,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public Guid ProductGroupId { get; set; }
 
         [Required]
-        [Range(typeof(decimal), "0.1", "100000")]
+        [Range(0.1d, 100000d)]
         [Display(Name = "Kapasite (m³)")]
         public decimal CapacityM3 { get; set; }
 
         [Display(Name = "Tüketim kapasitesi")]
-        [Range(typeof(decimal), "0", "100000")]
+        [Range(0d, 100000d)]
         public decimal? ConsumptionCapacity { get; set; }
 
         [Display(Name = "Tank tipi")]
