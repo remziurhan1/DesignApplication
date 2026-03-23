@@ -36,7 +36,15 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <h2 class="mb-0">EN13458 Sonuç</h2>
-    <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Hesaplama tamamlandı</span>
+    <div class="d-flex gap-2 flex-wrap">
+        <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Hesaplama tamamlandı</span>
+        @if (Model.Id != Guid.Empty)
+        {
+            <a asp-action="Specification" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-file-earmark-richtext me-1"></i>Şartname
+            </a>
+        }
+    </div>
 </div>
 
 <div class="row g-4">
