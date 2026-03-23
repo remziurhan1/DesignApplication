@@ -1,6 +1,7 @@
 using MVC.ProductManagement.Domain.Core.BaseEntities;
 using MVC.ProductManagement.Domain.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace MVC.ProductManagement.Domain.Entities
 {
@@ -46,5 +47,8 @@ namespace MVC.ProductManagement.Domain.Entities
         public double WeldLength3000 { get; set; }
         public double WeldLength4000 { get; set; }
         public double SurfaceArea { get; set; }
+
+        public virtual ICollection<AD2000CostAnalysis> CostAnalyses { get; set; } = new List<AD2000CostAnalysis>();
+        public virtual ICollection<Costing.AD2000SalesPrice> SalesPrices { get; set; } = new List<Costing.AD2000SalesPrice>();
     }
 }
