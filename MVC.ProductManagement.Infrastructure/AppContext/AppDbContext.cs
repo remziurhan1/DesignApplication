@@ -42,6 +42,9 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<BombeLaborRate> BombeLaborRates { get; set; }
         public DbSet<OverheadRate> OverheadRates { get; set; }
         public DbSet<AD2000Calculation> AD2000Calculations { get; set; }
+        public DbSet<AD2000CostAnalysis> AD2000CostAnalyses { get; set; }
+        public DbSet<AD2000CostAnalysisItem> AD2000CostAnalysisItems { get; set; }
+        public DbSet<AD2000SalesPrice> AD2000SalesPrices { get; set; }
         public DbSet<StorageTypeProperties> StorageTypeProperties { get; set; }
         public DbSet<StorageType> StorageTypes { get; set; }
         public DbSet<GasType> GasTypes { get; set; }
