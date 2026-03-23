@@ -68,6 +68,42 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return View(vm);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var calculation = await _context.AD2000Calculations
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
+
+            if (calculation == null)
+            {
+                return NotFound();
+            }
+
+            var costAnalyses = await _context.AD2000CostAnalyses
+                .Where(x => x.AD2000CalculationId == id && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            var costAnalysisIds = costAnalyses.Select(x => x.Id).ToList();
+
+            var costItems = await _context.AD2000CostAnalysisItems
+                .Where(x => costAnalysisIds.Contains(x.AD2000CostAnalysisId) && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            var salesPrices = await _context.AD2000SalesPrices
+                .Where(x => x.AD2000CalculationId == id && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            _context.AD2000CostAnalysisItems.RemoveRange(costItems);
+            _context.AD2000SalesPrices.RemoveRange(salesPrices);
+            _context.AD2000CostAnalyses.RemoveRange(costAnalyses);
+            _context.AD2000Calculations.Remove(calculation);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {

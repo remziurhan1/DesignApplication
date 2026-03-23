@@ -68,6 +68,47 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return View(vm);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var calculation = await _context.EN13458Calculations
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
+
+            if (calculation == null)
+            {
+                return NotFound();
+            }
+
+            var costAnalyses = await _context.EN13458CostAnalyses
+                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            var costAnalysisIds = costAnalyses.Select(x => x.Id).ToList();
+
+            var costItems = await _context.EN13458CostAnalysisItems
+                .Where(x => costAnalysisIds.Contains(x.EN13458CostAnalysisId) && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            var salesPrices = await _context.EN13458SalesPrices
+                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            var costDetails = await _context.EN13458CostDetails
+                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            _context.EN13458CostAnalysisItems.RemoveRange(costItems);
+            _context.EN13458SalesPrices.RemoveRange(salesPrices);
+            _context.EN13458CostDetails.RemoveRange(costDetails);
+            _context.EN13458CostAnalyses.RemoveRange(costAnalyses);
+            _context.EN13458Calculations.Remove(calculation);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Details(Guid id, Guid? costAnalysisId = null)
         {
