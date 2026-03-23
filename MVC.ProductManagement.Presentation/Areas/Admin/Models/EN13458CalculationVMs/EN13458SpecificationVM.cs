@@ -7,56 +7,34 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
     {
         public Guid Id { get; set; }
         public Guid? SelectedCostAnalysisId { get; set; }
-        public string Name { get; set; } = string.Empty;
         public string DocumentTitle { get; set; } = string.Empty;
-        public string RevisionCode { get; set; } = "Ön İzleme";
         public DateTime GeneratedAtUtc { get; set; }
+        public string FluidDisplay { get; set; } = string.Empty;
+        public string PressureDisplay { get; set; } = string.Empty;
 
-        public string ProductDescription { get; set; } = string.Empty;
-        public string IntendedService { get; set; } = string.Empty;
-        public string DesignCodeText { get; set; } = "TS EN 13458";
-        public string InsulationText { get; set; } = "Vakum + perlit izolasyon";
-        public string OrientationText { get; set; } = string.Empty;
-        public string ColdStretchText { get; set; } = string.Empty;
-
-        public double NetVolumeM3 { get; set; }
-        public double GrossVolumeM3 { get; set; }
-        public double WorkingPressureBar { get; set; }
-        public double TestPressureBar { get; set; }
-        public double StaticPressureBar { get; set; }
-        public double InnerDiameterMm { get; set; }
-        public double OuterDiameterMm { get; set; }
-        public double ShellLengthMm { get; set; }
-        public double TotalLengthMm { get; set; }
-        public double LiquidDensity { get; set; }
-        public double PerliteWeightKg { get; set; }
-        public double InnerTankWeightKg { get; set; }
-        public double OuterTankWeightKg { get; set; }
-        public double TotalWeldLengthM { get; set; }
-
-        public string InnerShellMaterial { get; set; } = string.Empty;
-        public string InnerHeadMaterial { get; set; } = string.Empty;
-        public string OuterShellMaterial { get; set; } = string.Empty;
-        public string OuterHeadMaterial { get; set; } = string.Empty;
-        public string InnerShellForm { get; set; } = string.Empty;
-        public string InnerHeadForm { get; set; } = string.Empty;
-        public string OuterShellForm { get; set; } = string.Empty;
-        public string OuterHeadForm { get; set; } = string.Empty;
-
-        public double InnerShellThicknessMm { get; set; }
-        public double InnerHeadThicknessMm { get; set; }
-        public double OuterShellThicknessMm { get; set; }
-        public double OuterHeadThicknessMm { get; set; }
-
-        public List<EN13458SpecificationItemVM> SummaryItems { get; set; } = new();
-        public List<EN13458SpecificationItemVM> MaterialItems { get; set; } = new();
-        public List<EN13458SpecificationItemVM> PerformanceItems { get; set; } = new();
+        public List<EN13458SpecificationLineVM> HeaderItems { get; set; } = new();
+        public List<string> IntroParagraphs { get; set; } = new();
+        public List<EN13458SpecificationLineVM> GeneralItems { get; set; } = new();
+        public List<EN13458SpecificationLineVM> InnerVesselItems { get; set; } = new();
+        public List<EN13458SpecificationLineVM> OuterVesselItems { get; set; } = new();
+        public List<EN13458SpecificationLineVM> InsulationItems { get; set; } = new();
+        public List<EN13458SpecificationLineVM> PipeworkItems { get; set; } = new();
         public List<EN13458AccessoryItemVM> AccessoryItems { get; set; } = new();
-        public List<string> StandardNotes { get; set; } = new();
-        public List<string> ScopeItems { get; set; } = new();
+        public List<EN13458SpecificationLineVM> SurfaceApplicationItems { get; set; } = new();
+        public List<string> VesselDocumentationItems { get; set; } = new();
+        public List<string> InspectionItems { get; set; } = new();
+        public List<string> CommercialParagraphs { get; set; } = new();
+        public List<EN13458QuotationRowVM> QuotationRows { get; set; } = new();
+        public List<string> Notes { get; set; } = new();
+        public List<string> PaymentTerms { get; set; } = new();
+        public List<string> DeliveryTerms { get; set; } = new();
+        public List<string> WarrantyTerms { get; set; } = new();
+        public List<string> StorageTerms { get; set; } = new();
+        public List<string> ValidityTerms { get; set; } = new();
+        public List<string> FooterTechnicalNotes { get; set; } = new();
     }
 
-    public class EN13458SpecificationItemVM
+    public class EN13458SpecificationLineVM
     {
         public string Label { get; set; } = string.Empty;
         public string Value { get; set; } = string.Empty;
@@ -71,3 +49,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458Calculati
         public double Quantity { get; set; }
         public string Unit { get; set; } = string.Empty;
     }
+
+    public class EN13458QuotationRowVM
+    {
+        public string No { get; set; } = string.Empty;
+        public string Product { get; set; } = string.Empty;
+        public string UnitPrice { get; set; } = string.Empty;
+        public string Quantity { get; set; } = string.Empty;
+        public string TotalPrice { get; set; } = string.Empty;
+    }
+}
