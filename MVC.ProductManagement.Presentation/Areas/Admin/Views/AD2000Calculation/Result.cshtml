@@ -1,125 +1,126 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs.AD2000ResultVM
+@using System
 @using System.Globalization
+@using System.Linq
 @using System.Collections.Generic
 @{
     ViewData["Title"] = "AD2000 Result";
 }
 
-<h2>AD2000 Sonuç</h2>
-<div class="card">
-    <div class="card-body">
-        <h5 class="mb-3">Giriş Değerleri</h5>
-        <div class="row">
-            <div class="col-md-6">
-                <p><strong>Tank:</strong> @Model.Name</p>
-                <p><strong>Çap:</strong> @Model.Diameter.ToString("F2") mm</p>
-                <p><strong>Silindir Boyu:</strong> @Model.ShellLength.ToString("F2") mm</p>
-                <p><strong>Dizayn Basıncı:</strong> @Model.DesignPressure.ToString("F2") bar</p>
-                <p><strong>Dizayn Sıcaklığı:</strong> @Model.DesignTemperatureMin °C / @Model.DesignTemperatureMax °C</p>
-                <p><strong>Korozyon Payı:</strong> @Model.CorrosionAllowance.ToString("F2") mm</p>
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-check2-circle"></i> AD2000 sonuç ekranı</span>
+                <h2>Hesap sonucu hazır.</h2>
+                <p class="mb-0">Gövde ve bombe et kalınlıklarını, oryantasyon planını ve maliyet hazırlık verilerini kaydetmeden önce kontrol edin.</p>
             </div>
-            <div class="col-md-6">
-                <p><strong>Kaynak Faktörü (z):</strong> @Model.WeldJointFactor.ToString("F2")</p>
-                <p><strong>Beta:</strong> @Model.Beta.ToString("F2")</p>
-                <p><strong>Tank Yönelimi:</strong> @Model.TankOrientation</p>
-                <p><strong>Sıvı Yoğunluğu:</strong> @Model.LiquidDensity.ToString("F2") kg/m³</p>
-                <p><strong>Statik Basınç:</strong> @Model.StaticPressure.ToString("F3") bar</p>
-                <p><strong>Interpolasyon Sıcaklığı (Dizayn Max):</strong> @Model.DesignTemperatureMax.ToString("F2") °C</p>
-                <p><strong>Tahmini Gövde Et:</strong> @Model.EstimatedShellThickness.ToString("F2") mm</p>
-                <p><strong>Tahmini Bombe Et:</strong> @Model.EstimatedHeadThickness.ToString("F2") mm</p>
-                <p><strong>Gövde Akma Dayanımı:</strong> @Model.ShellAllowableStress.ToString("F2") MPa</p>
-                <p><strong>Bombe Akma Dayanımı:</strong> @Model.HeadAllowableStress.ToString("F2") MPa</p>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Calculate" class="btn btn-outline-light"><i class="bi bi-arrow-repeat me-1"></i>Yeni Hesap</a>
+                </div>
             </div>
         </div>
+    </section>
 
-        <hr />
-        <h5 class="mb-3">Çıkış Değerleri</h5>
-        <p><strong>Hesaplanan Gövde Et:</strong> @Model.ShellThickness.ToString("F2") mm</p>
-        <p><strong>Seçilen Gövde Et:</strong> @Model.RoundedShellThickness.ToString("F2") mm</p>
-        <p><strong>Hesaplanan Bombe Et:</strong> @Model.HeadThickness.ToString("F2") mm</p>
-        <p><strong>Seçilen Bombe Et:</strong> @Model.RoundedHeadThickness.ToString("F2") mm</p>
-        <p><strong>Test Basıncı:</strong> @Model.TestPressure.ToString("F2") bar</p>
-        <p><strong>Kaynak Metrajı (1500):</strong> @Model.WeldLength1500.ToString("F2") mm</p>
-        <p><strong>Kaynak Metrajı (2000):</strong> @Model.WeldLength2000.ToString("F2") mm</p>
-        <p><strong>Kaynak Metrajı (3000):</strong> @Model.WeldLength3000.ToString("F2") mm</p>
-        <p><strong>Kaynak Metrajı (4000):</strong> @Model.WeldLength4000.ToString("F2") mm</p>
-        <p><strong>Yüzey Alanı:</strong> @Model.SurfaceArea.ToString("F2") m²</p>
-
-
-        <hr />
-        <h5 class="mb-3">Sac Oryantasyonu (Sektör Bazlı)</h5>
-        <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered align-middle">
-                <thead>
-                    <tr>
-                        <th>Sektör Genişliği</th>
-                        <th>Parça Adedi</th>
-                        <th>Sac Açınımı</th>
-                        <th>Kesim Listesi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var sectorWidth in new[] { 1500d, 2000d, 3000d, 4000d })
-                    {
-                        var plan = BuildSectorPlan(Model.ShellLength, sectorWidth);
-                        var developedLength = Math.Round(Math.PI * Model.Diameter, 2);
-                        var cutList = string.Join(" + ", plan.Widths.Select(w => $"{Model.RoundedShellThickness.ToString("0.##", CultureInfo.InvariantCulture)} x {w.ToString("0.##", CultureInfo.InvariantCulture)} x {developedLength.ToString("0.##", CultureInfo.InvariantCulture)}"));
-
-                        <tr>
-                            <td>@sectorWidth.ToString("0", CultureInfo.InvariantCulture) mm</td>
-                            <td>@plan.PieceCount adet</td>
-                            <td>@developedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td>
-                            <td>@cutList</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        <form asp-action="Save" method="post" class="d-inline">
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(x => x.Id)
-            @Html.HiddenFor(x => x.Name)
-            @Html.HiddenFor(x => x.Diameter)
-            @Html.HiddenFor(x => x.ShellLength)
-            @Html.HiddenFor(x => x.DesignPressure)
-            @Html.HiddenFor(x => x.DesignTemperatureMin)
-            @Html.HiddenFor(x => x.DesignTemperatureMax)
-            @Html.HiddenFor(x => x.CorrosionAllowance)
-            @Html.HiddenFor(x => x.WeldJointFactor)
-            @Html.HiddenFor(x => x.AllowableStress)
-            @Html.HiddenFor(x => x.ShellAllowableStress)
-            @Html.HiddenFor(x => x.HeadAllowableStress)
-            @Html.HiddenFor(x => x.EstimatedShellThickness)
-            @Html.HiddenFor(x => x.EstimatedHeadThickness)
-            @Html.HiddenFor(x => x.Beta)
-            @Html.HiddenFor(x => x.TankOrientation)
-            @Html.HiddenFor(x => x.StorageTypeId)
-            @Html.HiddenFor(x => x.IsManualDensity)
-            @Html.HiddenFor(x => x.LiquidDensity)
-            @Html.HiddenFor(x => x.StaticPressure)
-            @Html.HiddenFor(x => x.ShellMaterialId)
-            @Html.HiddenFor(x => x.ShellMaterialFormId)
-            @Html.HiddenFor(x => x.HeadMaterialId)
-            @Html.HiddenFor(x => x.HeadMaterialFormId)
-            @Html.HiddenFor(x => x.ShellThickness)
-            @Html.HiddenFor(x => x.HeadThickness)
-            @Html.HiddenFor(x => x.RoundedShellThickness)
-            @Html.HiddenFor(x => x.RoundedHeadThickness)
-            @Html.HiddenFor(x => x.TestPressure)
-            @Html.HiddenFor(x => x.WeldLength1500)
-            @Html.HiddenFor(x => x.WeldLength2000)
-            @Html.HiddenFor(x => x.WeldLength3000)
-            @Html.HiddenFor(x => x.WeldLength4000)
-            @Html.HiddenFor(x => x.SurfaceArea)
-            <button type="submit" class="btn btn-primary">Kaydet</button>
-        </form>
-        <a asp-action="Calculate" class="btn btn-secondary">Yeni Hesap</a>
-        <a asp-action="Index" class="btn btn-outline-secondary">Kayıt Listesi</a>
+    <div class="en-metric-grid">
+        <div class="en-metric-card"><span class="en-metric-label">Gövde Et</span><div class="en-metric-value">@Model.RoundedShellThickness.ToString("N2") mm</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Bombe Et</span><div class="en-metric-value">@Model.RoundedHeadThickness.ToString("N2") mm</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Statik Basınç</span><div class="en-metric-value">@Model.StaticPressure.ToString("N3") bar</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Yüzey Alanı</span><div class="en-metric-value">@Model.SurfaceArea.ToString("N2") m²</div></div>
     </div>
-</div>
 
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="card h-100">
+                <div class="card-header bg-light">Giriş değerleri</div>
+                <div class="card-body p-0">
+                    <table class="table table-striped align-middle mb-0"><tbody>
+                        <tr><th>Tank</th><td>@Model.Name</td></tr>
+                        <tr><th>Çap</th><td>@Model.Diameter.ToString("N2") mm</td></tr>
+                        <tr><th>Silindir Boyu</th><td>@Model.ShellLength.ToString("N2") mm</td></tr>
+                        <tr><th>Dizayn Basıncı</th><td>@Model.DesignPressure.ToString("N2") bar</td></tr>
+                        <tr><th>Dizayn Sıcaklığı</th><td>@Model.DesignTemperatureMin.ToString("N2") / @Model.DesignTemperatureMax.ToString("N2") °C</td></tr>
+                        <tr><th>Tank Yönelimi</th><td>@Model.TankOrientation</td></tr>
+                        <tr><th>Sıvı</th><td>@(!string.IsNullOrWhiteSpace(Model.StorageTypeName) ? Model.StorageTypeName : "Manuel yoğunluk")</td></tr>
+                        <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity.ToString("N2") kg/m³</td></tr>
+                        <tr><th>Gövde Malzemesi</th><td>@Model.ShellMaterialName / @Model.ShellMaterialFormName</td></tr>
+                        <tr><th>Bombe Malzemesi</th><td>@Model.HeadMaterialName / @Model.HeadMaterialFormName</td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card h-100">
+                <div class="card-header bg-light">Çıkış değerleri</div>
+                <div class="card-body p-0">
+                    <table class="table table-striped align-middle mb-0"><tbody>
+                        <tr><th>Hesaplanan Gövde Et</th><td>@Model.ShellThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Seçilen Gövde Et</th><td>@Model.RoundedShellThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Hesaplanan Bombe Et</th><td>@Model.HeadThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Seçilen Bombe Et</th><td>@Model.RoundedHeadThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Test Basıncı</th><td>@Model.TestPressure.ToString("N2") bar</td></tr>
+                        <tr><th>Kaynak Metrajı (1500)</th><td>@Model.WeldLength1500.ToString("N2") mm</td></tr>
+                        <tr><th>Kaynak Metrajı (2000)</th><td>@Model.WeldLength2000.ToString("N2") mm</td></tr>
+                        <tr><th>Kaynak Metrajı (3000)</th><td>@Model.WeldLength3000.ToString("N2") mm</td></tr>
+                        <tr><th>Kaynak Metrajı (4000)</th><td>@Model.WeldLength4000.ToString("N2") mm</td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header bg-light">Sac oryantasyonu</div>
+        <div class="card-body">
+            <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead>
+                        <tr>
+                            <th>Sektör Genişliği</th>
+                            <th>Parça Adedi</th>
+                            <th>Sac Açınımı</th>
+                            <th>Kesim Listesi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sectorWidth in new[] { 1500d, 2000d, 3000d, 4000d })
+                        {
+                            var plan = BuildSectorPlan(Model.ShellLength, sectorWidth);
+                            var developedLength = Math.Round(Math.PI * Model.Diameter, 2);
+                            var cutList = string.Join(" + ", plan.Widths.Select(w => $"{Model.RoundedShellThickness.ToString("0.##", CultureInfo.InvariantCulture)} x {w.ToString("0.##", CultureInfo.InvariantCulture)} x {developedLength.ToString("0.##", CultureInfo.InvariantCulture)}"));
+                            <tr>
+                                <td>@sectorWidth.ToString("0", CultureInfo.InvariantCulture) mm</td>
+                                <td>@plan.PieceCount adet</td>
+                                <td>@developedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td>
+                                <td>@cutList</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Save" method="post" class="mt-4 mb-5 pb-2 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
+        @Html.AntiForgeryToken()
+        @foreach (var p in ViewData.ModelMetadata.Properties)
+        {
+            <input type="hidden" name="@p.PropertyName" value="@ViewData.ModelExplorer.GetExplorerForProperty(p.PropertyName).Model" />
+        }
+        <button type="submit" class="btn btn-success px-4"><i class="bi bi-check2-circle me-1"></i>Kaydet</button>
+        @if (Model.Id != Guid.Empty)
+        {
+            <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-primary px-4"><i class="bi bi-cash-stack me-1"></i>Maliyet Görünümü</a>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary px-4"><i class="bi bi-list-ul me-1"></i>Kayıt Listesi</a>
+    </form>
+</div>
 
 @functions {
     private static (int PieceCount, List<double> Widths) BuildSectorPlan(double shellLength, double sectorWidth)
