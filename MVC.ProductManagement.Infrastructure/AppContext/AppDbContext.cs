@@ -10,6 +10,7 @@ using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Entities.StockCodes.S;
+using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.Configurations;
 using MVC.ProductManagement.Infrastructure.Seeds;
@@ -54,6 +55,10 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<CapacityGroup> CapacityGroups { get; set; }
         public DbSet<CapacityOption> CapacityOptions { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<SalesRequestProductGroup> SalesRequestProductGroups { get; set; }
+        public DbSet<SalesRequest> SalesRequests { get; set; }
+        public DbSet<SalesRequestItem> SalesRequestItems { get; set; }
+        public DbSet<SalesRequestAttachment> SalesRequestAttachments { get; set; }
         public DbSet<ThermodynamicProperty> ThermodynamicProperties { get; set; }
         public DbSet<Fluid> Fluids { get; set; }
         public DbSet<SProductGroup> SProductGroups { get; set; }
@@ -93,6 +98,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());
             builder.Entity<StorageType>().HasData(StorageTypeSeed.Get());
             builder.Entity<StorageTypeProperties>().HasData(StorageTypePropertiesSeed.Get());
+            builder.Entity<SalesRequestProductGroup>().HasData(SalesRequestProductGroupSeed.Get());
         //    builder.Entity<ThermodynamicProperty>().HasData(ThermodynamicPropertySeed.Get());
 
 
