@@ -1,0 +1,124 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using MVC.ProductManagement.Domain.Enums
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestCreateVm
+@{
+    ViewData["Title"] = "Yeni Satış Talebi";
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Yeni Satış Talebi</h1>
+        <p class="text-muted mb-0">Satışçı, müşteri ve minimum teknik bilgileri girerek bir veya birden fazla talep satırı oluşturabilir.</p>
+    </div>
+    <a asp-controller="Customer" asp-action="Create" class="btn btn-outline-primary">Müşteri ekle</a>
+</div>
+
+<section class="section mt-4">
+    <div class="card">
+        <div class="card-body pt-4">
+            <form method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label asp-for="CustomerId" class="form-label"></label>
+                        <select asp-for="CustomerId" asp-items="Model.Customers" class="form-select">
+                            <option value="">Müşteri seçin</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="RequestedByName" class="form-label"></label>
+                        <input asp-for="RequestedByName" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="RequestedByDepartment" class="form-label"></label>
+                        <input asp-for="RequestedByDepartment" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="RequestedByEmail" class="form-label"></label>
+                        <input asp-for="RequestedByEmail" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Attachments" class="form-label"></label>
+                        <input asp-for="Attachments" type="file" class="form-control" multiple accept=".pdf,.xls,.xlsx,.doc,.docx,.msg,.eml,.png,.jpg,.jpeg" />
+                        <small class="text-muted">Mail, PDF, Excel ve Word eklerini aynı talep içine yükleyebilirsiniz.</small>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="SummaryNotes" class="form-label"></label>
+                        <textarea asp-for="SummaryNotes" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+                <h5>Talep Satırları</h5>
+                <div class="text-muted small mb-3">İlk satır ana talep olur. Gerekirse aynı talebin altında farklı satırlar açabilirsiniz.</div>
+
+                <div id="request-items">
+                @for (var i = 0; i < Model.Items.Count; i++)
+                {
+                    <div class="border rounded p-3 mb-3 request-item">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Akışkan grubu</label>
+                                <select asp-for="Items[i].ProductGroupId" asp-items="Model.ProductGroups" class="form-select"><option value="">Seçin</option></select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Kapasite (m³)</label>
+                                <input asp-for="Items[i].CapacityM3" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Tank tipi</label>
+                                <select asp-for="Items[i].TankOrientation" asp-items="Html.GetEnumSelectList<RequestTankOrientation>()" class="form-select"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Kurulum</label>
+                                <select asp-for="Items[i].PlacementType" asp-items="Html.GetEnumSelectList<PlacementType>()" class="form-select"></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Tüketim kapasitesi</label>
+                                <input asp-for="Items[i].ConsumptionCapacity" class="form-control" />
+                                <small class="text-muted">Tank altı buharlaştırıcı hesabı için referans veri.</small>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label">Minimum teknik bilgiler</label>
+                                <textarea asp-for="Items[i].MinimumTechnicalNotes" class="form-control" rows="2" placeholder="Basınç, standart, vana isteği, özel saha şartı vb."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                }
+                </div>
+
+                <button type="button" class="btn btn-outline-secondary" id="add-item">+ Satır ekle</button>
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Talebi oluştur</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script>
+        const productOptions = `@Html.Raw(string.Join("", Model.ProductGroups.Select(x => $"<option value=\"{x.Value}\">{x.Text}</option>")))`;
+        const orientationOptions = `@Html.Raw(string.Join("", Html.GetEnumSelectList<RequestTankOrientation>().Select(x => $"<option value=\"{x.Value}\">{x.Text}</option>")))`;
+        const placementOptions = `@Html.Raw(string.Join("", Html.GetEnumSelectList<PlacementType>().Select(x => $"<option value=\"{x.Value}\">{x.Text}</option>")))`;
+        document.getElementById('add-item').addEventListener('click', function () {
+            const container = document.getElementById('request-items');
+            const index = container.querySelectorAll('.request-item').length;
+            const html = `
+                <div class="border rounded p-3 mb-3 request-item">
+                    <div class="row g-3">
+                        <div class="col-md-4"><label class="form-label">Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select"><option value="">Seçin</option>${productOptions}</select></div>
+                        <div class="col-md-2"><label class="form-label">Kapasite (m³)</label><input name="Items[${index}].CapacityM3" class="form-control" /></div>
+                        <div class="col-md-3"><label class="form-label">Tank tipi</label><select name="Items[${index}].TankOrientation" class="form-select">${orientationOptions}</select></div>
+                        <div class="col-md-3"><label class="form-label">Kurulum</label><select name="Items[${index}].PlacementType" class="form-select">${placementOptions}</select></div>
+                        <div class="col-md-4"><label class="form-label">Tüketim kapasitesi</label><input name="Items[${index}].ConsumptionCapacity" class="form-control" /></div>
+                        <div class="col-md-8"><label class="form-label">Minimum teknik bilgiler</label><textarea name="Items[${index}].MinimumTechnicalNotes" class="form-control" rows="2"></textarea></div>
+                    </div>
+                </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    </script>
+}
