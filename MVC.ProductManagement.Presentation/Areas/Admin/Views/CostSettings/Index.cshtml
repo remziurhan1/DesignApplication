@@ -104,8 +104,8 @@
                         <input type="hidden" name="Name" value="@item.Name" />
                         <div class="col-md-3">
                             <select name="MaterialType" class="form-select form-select-sm">
-                                <option value="Paslanmaz" @(item.MaterialType == "Paslanmaz" ? "selected" : null)>Paslanmaz</option>
-                                <option value="Karbon Çelik" @(item.MaterialType == "Karbon Çelik" ? "selected" : null)>Karbon Çelik</option>
+                                <option value="Paslanmaz" selected="@(item.MaterialType == "Paslanmaz")">Paslanmaz</option>
+                                <option value="Karbon Çelik" selected="@(item.MaterialType == "Karbon Çelik")">Karbon Çelik</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -199,8 +199,8 @@
                                         <input type="hidden" name="Name" value="@item.Name" />
                                         <div class="col-md-3">
                                             <select name="OverheadType" class="form-select form-select-sm">
-                                                <option value="Finance" @(item.OverheadType == "Finance" ? "selected" : null)>Finans</option>
-                                                <option value="GeneralManagement" @(item.OverheadType == "GeneralManagement" ? "selected" : null)>Genel Yönetim</option>
+                                                    <option value="Finance" selected="@(item.OverheadType == "Finance")">Finans</option>
+                                                    <option value="GeneralManagement" selected="@(item.OverheadType == "GeneralManagement")">Genel Yönetim</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
