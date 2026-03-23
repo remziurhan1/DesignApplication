@@ -1,39 +1,100 @@
 @model List<MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458ListVM>
+@using System.Globalization
 @{
     ViewData["Title"] = "EN13458 Index";
+    var totalCount = Model.Count;
+    var avgPressure = totalCount > 0 ? Model.Average(x => x.Pressure) : 0;
+    var maxDiameter = totalCount > 0 ? Model.Max(x => x.OuterDiameter) : 0;
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>EN13458 Hesapları</h2>
-    <a asp-action="Calculate" class="btn btn-primary">Yeni Hesap</a>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Ad</th>
-            <th>İç Tank Çapı</th>
-            <th>Dış Tank Çapı</th>
-            <th>Silindirik Boy</th>
-            <th>Basınç</th>
-            <th>İç/Dış Gövde Yuvarlanmış T</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Name</td>
-            <td>@item.OuterDiameter</td>
-            <td>@item.OuterTankDiameter</td>
-            <td>@item.ShellLength</td>
-            <td>@item.Pressure</td>
-            <td>@item.RoundedInnerShellThickness / @item.RoundedOuterShellThickness</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detay</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-bezier2"></i> EN 13458 mühendislik merkezi</span>
+                <h2>EN13458 hesap kayıtları tek ekranda.</h2>
+                <p class="mb-0">Mühendislik ekipleri için sade, okunabilir ve profesyonel bir görünümle hesap kayıtlarını, kritik çapları ve basınç seviyelerini hızlıca yönetin.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Calculate" class="btn btn-light btn-lg"><i class="bi bi-plus-circle me-1"></i>Yeni Hesap</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="en-metric-grid">
+        <div class="en-metric-card">
+            <span class="en-metric-label">Toplam Kayıt</span>
+            <div class="en-metric-value">@totalCount</div>
+        </div>
+        <div class="en-metric-card">
+            <span class="en-metric-label">Ortalama Basınç</span>
+            <div class="en-metric-value">@avgPressure.ToString("N2", CultureInfo.InvariantCulture)</div>
+        </div>
+        <div class="en-metric-card">
+            <span class="en-metric-label">Maks. İç Çap</span>
+            <div class="en-metric-value">@maxDiameter.ToString("N0", CultureInfo.InvariantCulture) mm</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2 bg-light">
+            <span>Hesap listesi</span>
+            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle">@totalCount kayıt</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Ad</th>
+                            <th>İç Tank Çapı</th>
+                            <th>Dış Tank Çapı</th>
+                            <th>Silindirik Boy</th>
+                            <th>Basınç</th>
+                            <th>İç / Dış Kalınlık</th>
+                            <th class="text-end">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@item.Name</div>
+                                    <div class="small text-muted">Kayıt: @item.Id</div>
+                                </td>
+                                <td>@item.OuterDiameter.ToString("N0", CultureInfo.InvariantCulture) mm</td>
+                                <td>@item.OuterTankDiameter.ToString("N0", CultureInfo.InvariantCulture) mm</td>
+                                <td>@item.ShellLength.ToString("N0", CultureInfo.InvariantCulture) mm</td>
+                                <td>@item.Pressure.ToString("N2", CultureInfo.InvariantCulture)</td>
+                                <td>@item.RoundedInnerShellThickness.ToString("N2", CultureInfo.InvariantCulture) / @item.RoundedOuterShellThickness.ToString("N2", CultureInfo.InvariantCulture) mm</td>
+                                <td class="text-end">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-arrow-right-circle me-1"></i>Detay
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="en-empty d-inline-block">Henüz EN13458 hesabı bulunmuyor. İlk hesabı oluşturmak için “Yeni Hesap” butonunu kullanın.</div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

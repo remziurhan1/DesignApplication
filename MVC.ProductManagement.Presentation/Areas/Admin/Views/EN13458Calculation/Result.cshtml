@@ -7,6 +7,33 @@
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+<div class="en-hero">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <span class="en-kicker"><i class="bi bi-check2-circle"></i> Hesap sonucu</span>
+            <h2>EN13458 sonuç seti hazır.</h2>
+            <p class="mb-0">Kaydetmeden önce ana ölçüleri, malzeme kalınlıklarını ve oryantasyon çıktısını profesyonel bir görünümle gözden geçirin.</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="en-hero-actions">
+                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Hesaplama tamamlandı</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="en-metric-grid">
+    <div class="en-metric-card"><span class="en-metric-label">İç Gövde T</span><div class="en-metric-value">@Model.RoundedInnerShellThickness.ToString("N2") mm</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Dış Gövde T</span><div class="en-metric-value">@Model.RoundedOuterShellThickness.ToString("N2") mm</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Toplam Kaynak</span><div class="en-metric-value">@Model.TotalWeldLength.ToString("N2")</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Perlit Ağırlığı</span><div class="en-metric-value">@Model.PerliteWeight.ToString("N2") kg</div></div>
+</div>
+
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <h2 class="mb-0">EN13458 Sonuç</h2>
     <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Hesaplama tamamlandı</span>
@@ -249,3 +276,5 @@
         return cutList.Split(" + ", StringSplitOptions.RemoveEmptyEntries).Length;
     }
 }
+
+</div>
