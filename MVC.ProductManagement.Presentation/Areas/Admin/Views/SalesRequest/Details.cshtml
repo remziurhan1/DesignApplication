@@ -1,0 +1,170 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using MVC.ProductManagement.Domain.Enums
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailVm
+@{
+    ViewData["Title"] = Model.IsManagerView ? "Talep Yönetici Detayı" : "Talep Satışçı Detayı";
+
+    string StatusClass(SalesRequestWorkflowStatus status) => status switch
+    {
+        SalesRequestWorkflowStatus.Approved => "success",
+        SalesRequestWorkflowStatus.Rejected => "danger",
+        SalesRequestWorkflowStatus.PricingInProgress => "warning",
+        _ => "info"
+    };
+
+    void RenderItem(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item, int depth)
+    {
+        <div class="card mb-3 ms-@Math.Min(depth * 2, 5)">
+            <div class="card-body pt-3">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                    <div>
+                        <span class="badge bg-secondary">@item.ItemCode</span>
+                        <h5 class="mt-2 mb-1">@item.ItemTitle</h5>
+                        <div class="text-muted">@item.ProductGroupName</div>
+                    </div>
+                    <span class="badge bg-@StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span>
+                </div>
+                <div class="row mt-3 g-3">
+                    <div class="col-md-3"><strong>Kapasite:</strong> @item.CapacityM3 m³</div>
+                    <div class="col-md-3"><strong>Tank tipi:</strong> @item.TankOrientation</div>
+                    <div class="col-md-3"><strong>Kurulum:</strong> @item.PlacementType</div>
+                    <div class="col-md-3"><strong>Tüketim:</strong> @(item.ConsumptionCapacity?.ToString("0.##") ?? "-")</div>
+                    <div class="col-12"><strong>Minimum teknik veri:</strong><div class="text-muted">@item.MinimumTechnicalNotes</div></div>
+                    @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
+                    {
+                        <div class="col-12"><strong>Detay mühendisliği:</strong><div class="text-muted">@item.DesignDetails</div></div>
+                    }
+                    @if (Model.IsManagerView)
+                    {
+                        <div class="col-md-6"><strong>Maliyet:</strong> @(item.EstimatedCost?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-6"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-12"><strong>İç açıklama:</strong><div class="text-muted">@item.SalesEngineeringNotes</div></div>
+                    }
+                    else if (item.ApprovedSalesPrice.HasValue)
+                    {
+                        <div class="col-md-6"><strong>Onaylı satış fiyatı:</strong> @item.ApprovedSalesPrice.Value.ToString("N2") ₺</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        foreach (var child in item.Children)
+        {
+            RenderItem(child, depth + 1);
+        }
+    }
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@Model.RequestNo</h1>
+        <p class="text-muted mb-0">@Model.Title</p>
+    </div>
+    <div class="d-flex gap-2">
+        @if (Model.IsManagerView)
+        {
+            <a asp-action="Pricing" asp-route-id="@Model.Id" class="btn btn-primary">Fiyatlandırma ekranı</a>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
+    </div>
+</div>
+
+<section class="section mt-4">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body pt-4">
+                    <div class="row g-3">
+                        <div class="col-md-4"><strong>Müşteri:</strong><div>@Model.CustomerName</div></div>
+                        <div class="col-md-4"><strong>Yetkili:</strong><div>@Model.CustomerContact</div></div>
+                        <div class="col-md-4"><strong>İletişim:</strong><div>@Model.CustomerEmail<br />@Model.CustomerPhone</div></div>
+                        <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
+                        <div class="col-md-4"><strong>Departman:</strong><div>@Model.RequestedByDepartment</div></div>
+                        <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span></div></div>
+                        <div class="col-12"><strong>Özet:</strong><div class="text-muted">@Model.SummaryNotes</div></div>
+                    </div>
+                </div>
+            </div>
+
+            @foreach (var item in Model.Items)
+            {
+                RenderItem(item, 0);
+            }
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Ekler</h5>
+                    @if (Model.Attachments.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                        @foreach (var file in Model.Attachments)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <a href="@file.RelativePath" target="_blank">@file.OriginalFileName</a>
+                                <small class="text-muted">@(file.FileSize / 1024) KB</small>
+                            </li>
+                        }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Ek dosya yok.</p>
+                    }
+                </div>
+            </div>
+
+            @if (Model.IsManagerView)
+            {
+                <div class="card mt-4">
+                    <div class="card-body pt-4">
+                        <h5 class="card-title">Alt talep ekle</h5>
+                        <form asp-action="AddSubItem" method="post">
+                            @Html.AntiForgeryToken()
+                            <input asp-for="NewSubItem.SalesRequestId" type="hidden" />
+                            <div class="mb-3">
+                                <label class="form-label">Bağlı olduğu üst satır</label>
+                                <select asp-for="NewSubItem.ParentSalesRequestItemId" class="form-select">
+                                    <option value="">Ana talep seviyesinde ekle</option>
+                                    @foreach (var root in Model.Items)
+                                    {
+                                        <option value="@root.Id">@root.ItemCode - @root.ItemTitle</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="NewSubItem.ProductGroupId" class="form-label"></label>
+                                <select asp-for="NewSubItem.ProductGroupId" class="form-select" asp-items="Model.NewSubItem.ProductGroups">
+                                    <option value="">Akışkan seçin</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="NewSubItem.CapacityM3" class="form-label"></label>
+                                <input asp-for="NewSubItem.CapacityM3" class="form-control" />
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <label asp-for="NewSubItem.TankOrientation" class="form-label"></label>
+                                    <select asp-for="NewSubItem.TankOrientation" asp-items="Html.GetEnumSelectList<RequestTankOrientation>()" class="form-select"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="NewSubItem.PlacementType" class="form-label"></label>
+                                    <select asp-for="NewSubItem.PlacementType" asp-items="Html.GetEnumSelectList<PlacementType>()" class="form-select"></select>
+                                </div>
+                            </div>
+                            <div class="mb-3 mt-3">
+                                <label asp-for="NewSubItem.ConsumptionCapacity" class="form-label"></label>
+                                <input asp-for="NewSubItem.ConsumptionCapacity" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="NewSubItem.MinimumTechnicalNotes" class="form-label"></label>
+                                <textarea asp-for="NewSubItem.MinimumTechnicalNotes" class="form-control" rows="3"></textarea>
+                            </div>
+                            <button class="btn btn-outline-primary w-100" type="submit">Alt talep ekle</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
