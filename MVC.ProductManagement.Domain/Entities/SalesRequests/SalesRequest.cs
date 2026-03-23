@@ -19,8 +19,8 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public DateTime? PricingCompletedAt { get; set; }
         public DateTime? ApprovedAt { get; set; }
 
-        public Customer Customer { get; set; } = default!;
-        public ICollection<SalesRequestItem> Items { get; set; } = new List<SalesRequestItem>();
-        public ICollection<SalesRequestAttachment> Attachments { get; set; } = new List<SalesRequestAttachment>();
+        public virtual Customer Customer { get; set; } = default!;
+        public virtual ICollection<SalesRequestItem> Items { get; set; } = new List<SalesRequestItem>();
+        public virtual ICollection<SalesRequestAttachment> Attachments { get; set; } = new List<SalesRequestAttachment>();
     }
 }

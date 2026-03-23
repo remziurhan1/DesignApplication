@@ -10,6 +10,6 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public int DisplayOrder { get; set; }
         public bool IsActive { get; set; } = true;
 
-        public ICollection<SalesRequestItem> RequestItems { get; set; } = new List<SalesRequestItem>();
+        public virtual ICollection<SalesRequestItem> RequestItems { get; set; } = new List<SalesRequestItem>();
     }
 }

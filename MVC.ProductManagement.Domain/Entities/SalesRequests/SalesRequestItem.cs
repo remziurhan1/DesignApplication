@@ -22,9 +22,9 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; } = SalesRequestWorkflowStatus.Submitted;
         public int DisplayOrder { get; set; }
 
-        public SalesRequest SalesRequest { get; set; } = default!;
-        public SalesRequestProductGroup ProductGroup { get; set; } = default!;
-        public SalesRequestItem? ParentItem { get; set; }
-        public ICollection<SalesRequestItem> ChildItems { get; set; } = new List<SalesRequestItem>();
+        public virtual SalesRequest SalesRequest { get; set; } = default!;
+        public virtual SalesRequestProductGroup ProductGroup { get; set; } = default!;
+        public virtual SalesRequestItem? ParentItem { get; set; }
+        public virtual ICollection<SalesRequestItem> ChildItems { get; set; } = new List<SalesRequestItem>();
     }
 }

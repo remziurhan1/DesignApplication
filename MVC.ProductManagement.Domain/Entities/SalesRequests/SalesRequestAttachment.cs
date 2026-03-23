@@ -11,6 +11,6 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public string? ContentType { get; set; }
         public long FileSize { get; set; }
 
-        public SalesRequest SalesRequest { get; set; } = default!;
+        public virtual SalesRequest SalesRequest { get; set; } = default!;
     }
 }
