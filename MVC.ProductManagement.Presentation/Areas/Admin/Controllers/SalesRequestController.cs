@@ -373,16 +373,19 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var validFiles = files?.Where(x => x.Length > 0).ToList() ?? new List<IFormFile>();
             if (!validFiles.Any()) return;
 
+            _context.Entry(request).State = EntityState.Unchanged;
+
             var root = Path.Combine(_environment.WebRootPath, "uploads", "sales-requests", request.Id.ToString());
             Directory.CreateDirectory(root);
 
+            var attachments = new List<SalesRequestAttachment>();
             foreach (var file in validFiles)
             {
                 var storedFileName = $"{Guid.NewGuid():N}{Path.GetExtension(file.FileName)}";
                 var fullPath = Path.Combine(root, storedFileName);
                 await using var stream = System.IO.File.Create(fullPath);
                 await file.CopyToAsync(stream);
-                request.Attachments.Add(new SalesRequestAttachment
+                attachments.Add(new SalesRequestAttachment
                 {
                     SalesRequestId = request.Id,
                     OriginalFileName = Path.GetFileName(file.FileName),
@@ -393,6 +396,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 });
             }
 
+            await _context.SalesRequestAttachments.AddRangeAsync(attachments);
             await _context.SaveChangesAsync();
         }
     }
