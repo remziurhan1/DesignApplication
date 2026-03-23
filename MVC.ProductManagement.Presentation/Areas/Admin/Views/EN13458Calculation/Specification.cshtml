@@ -1,0 +1,192 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458SpecificationVM
+@using System.Globalization
+@{
+    ViewData["Title"] = "EN13458 Şartname";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-file-earmark-richtext"></i> Teknik şartname görünümü</span>
+                <h2>@Model.DocumentTitle</h2>
+                <p class="mb-0">Hesaptan gelen değişken değerler ile standart metinler birleştirilerek oluşturulan teklif/şartname ön izleme ekranı.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-arrow-left me-1"></i>Detay</a>
+                    <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@Model.SelectedCostAnalysisId" class="btn btn-outline-light"><i class="bi bi-cash-coin me-1"></i>Maliyet</a>
+                    <a asp-action="ExportSpecificationWord" asp-route-id="@Model.Id" asp-route-costAnalysisId="@Model.SelectedCostAnalysisId" class="btn btn-outline-light"><i class="bi bi-file-earmark-word me-1"></i>Word İndir</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="en-metric-grid">
+        <div class="en-metric-card"><span class="en-metric-label">Net Hacim</span><div class="en-metric-value">@Model.NetVolumeM3.ToString("N2", CultureInfo.InvariantCulture) m³</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Tasarım Basıncı</span><div class="en-metric-value">@Model.WorkingPressureBar.ToString("N2", CultureInfo.InvariantCulture) bar</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Toplam Boy</span><div class="en-metric-value">@Model.TotalLengthMm.ToString("N0", CultureInfo.InvariantCulture) mm</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Revizyon</span><div class="en-metric-value">@Model.RevisionCode</div></div>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+            <h2 class="mb-0">Şartname Ön İzleme</h2>
+            <div class="small text-muted">Doküman tarihi: @Model.GeneratedAtUtc.ToString("dd.MM.yyyy HH:mm") UTC</div>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a asp-action="ExportSpecificationWord" asp-route-id="@Model.Id" asp-route-costAnalysisId="@Model.SelectedCostAnalysisId" class="btn btn-primary">
+                <i class="bi bi-download me-1"></i>Word Olarak İndir
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light fw-semibold">1. Ürün Tanımı</div>
+        <div class="card-body">
+            <p class="mb-2"><strong>Ürün:</strong> @Model.ProductDescription</p>
+            <p class="mb-2"><strong>Kullanım amacı:</strong> @Model.IntendedService</p>
+            <p class="mb-2"><strong>Tasarım yaklaşımı:</strong> @Model.DesignCodeText</p>
+            <p class="mb-0"><strong>İzolasyon tipi:</strong> @Model.InsulationText</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-xl-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light fw-semibold">2. Genel Teknik Bilgiler</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle mb-0">
+                            <tbody>
+                            @foreach (var item in Model.SummaryItems)
+                            {
+                                <tr>
+                                    <th class="w-50">@item.Label</th>
+                                    <td>@item.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light fw-semibold">3. Malzeme ve Konstrüksiyon</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle mb-0">
+                            <tbody>
+                            @foreach (var item in Model.MaterialItems)
+                            {
+                                <tr>
+                                    <th class="w-50">@item.Label</th>
+                                    <td>@item.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light fw-semibold">4. Hesap Sonuçları ve Performans</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <tbody>
+                    @foreach (var item in Model.PerformanceItems)
+                    {
+                        <tr>
+                            <th class="w-50">@item.Label</th>
+                            <td>@item.Value</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4 border-warning-subtle">
+        <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold">5. Aksesuar Grubu</div>
+        <div class="card-body">
+            <p class="text-muted">Maliyet ekranından eklenen ürünler burada stok kodları ile birlikte aksesuar grubu altında listelenir.</p>
+
+            @if (Model.AccessoryItems.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Grup</th>
+                                <th>Ürün</th>
+                                <th>Stok Kodu</th>
+                                <th>Açıklama</th>
+                                <th class="text-end">Miktar</th>
+                                <th>Birim</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.AccessoryItems)
+                        {
+                            <tr>
+                                <td>@item.GroupName</td>
+                                <td>@item.ItemName</td>
+                                <td><span class="badge text-bg-light border">@item.StockCode</span></td>
+                                <td>@item.Description</td>
+                                <td class="text-end">@item.Quantity.ToString("N2", CultureInfo.InvariantCulture)</td>
+                                <td>@item.Unit</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-secondary mb-0">Seçili revizyonda eklenmiş aksesuar bulunmuyor.</div>
+            }
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-12 col-xl-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light fw-semibold">6. Kapsam</div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        @foreach (var item in Model.ScopeItems)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light fw-semibold">7. Standart Notlar</div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        @foreach (var item in Model.StandardNotes)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
