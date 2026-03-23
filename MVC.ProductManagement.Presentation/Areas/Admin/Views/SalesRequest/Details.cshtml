@@ -56,6 +56,19 @@
                             </div>
                         </div>
                     }
+                    @if (!string.IsNullOrWhiteSpace(item.LinkedCalculationName))
+                    {
+                        <div class="col-12">
+                            <strong>Bağlı maliyet çalışması:</strong>
+                            <div class="text-muted">
+                                @item.LinkedCalculationType · @item.LinkedCalculationName · @item.LinkedCostAnalysisRevisionCode · @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "0,00") ₺
+                                @if (!string.IsNullOrWhiteSpace(analysisLink))
+                                {
+                                    <a href="@analysisLink" class="ms-2">Hesap detayını aç</a>
+                                }
+                            </div>
+                        </div>
+                    }
                     @if (Model.IsManagerView)
                     {
                         <div class="col-md-4"><strong>Maliyet:</strong> @(item.EstimatedCost?.ToString("N2") ?? "-") ₺</div>
