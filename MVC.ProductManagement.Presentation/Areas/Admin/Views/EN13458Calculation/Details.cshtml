@@ -5,6 +5,8 @@
     ViewData["Title"] = "EN13458 Details";
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
+    var innerTankWeldLength = Model.InnerTankHeadWeldLength + Model.InnerTankCircumferenceWeldLength;
+    var outerTankWeldLength = Model.OuterTankHeadWeldLength + Model.OuterTankCircumferenceWeldLength;
 }
 
 @section Styles {
@@ -94,6 +96,7 @@
                         <tr><th>Silindirik Boy</th><td>@Model.ShellLength</td><th>Basınç</th><td>@Model.Pressure</td><th>Depolanacak Ürün</th><td>@Model.StorageTypeName</td></tr>
                         <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td><th>Tank Yönelimi</th><td>@Model.TankOrientation</td><th>Cold Stretch</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
                         <tr><th>Kaynak metrajları</th><td colspan="5">1500: @Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m | 2000: @Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m | 2500: @Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m | 3000: @Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td></tr>
+                        <tr><th>İç Tank Kaynak Metrajı</th><td>@innerTankWeldLength.ToString("0.##", CultureInfo.InvariantCulture) m</td><th>Dış Tank Kaynak Metrajı</th><td>@outerTankWeldLength.ToString("0.##", CultureInfo.InvariantCulture) m</td><th>Toplam Kaynak</th><td>@Model.TotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) m</td></tr>
                     </tbody>
                 </table>
             </div>

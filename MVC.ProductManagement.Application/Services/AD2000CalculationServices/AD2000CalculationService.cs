@@ -33,6 +33,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
         private const string ManualGroupCostGroupName = "Ek Stok Grupları";
         private const string BombeLaborCostGroupCode = "BOMBE";
         private const string BombeLaborCostGroupName = "Bombe İşçilik";
+        private const double FilmLengthDivisor = 450d;
 
         public AD2000CalculationService(
             IAD2000Repository repository,
@@ -501,10 +502,12 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             rows.Add(await BuildMaterialRowAsync("HEAD", 20, "SAC", "Sac Maliyeti", "Bombe Sacı", result.HeadMaterialId, result.HeadMaterialFormId, result.HeadThickness, result.RoundedHeadThickness, result.Diameter, result.ShellLength, true, previousCalculatedItems));
             rows.Add(await BuildBombeLaborRowAsync(result, previousAnalysis?.HeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-HEAD")));
 
-            rows.Add(await BuildServiceRowAsync("WELD-1500", 30, "KAYNAK", "Kaynak İşçilik", "1500 Kaynak Metrajı", string.Empty, result.WeldLength1500 / 1000d, "m", previousCalculatedItems));
-            rows.Add(await BuildServiceRowAsync("WELD-2000", 40, "KAYNAK", "Kaynak İşçilik", "2000 Kaynak Metrajı", string.Empty, result.WeldLength2000 / 1000d, "m", previousCalculatedItems));
-            rows.Add(await BuildServiceRowAsync("WELD-3000", 50, "KAYNAK", "Kaynak İşçilik", "3000 Kaynak Metrajı", string.Empty, result.WeldLength3000 / 1000d, "m", previousCalculatedItems));
-            rows.Add(await BuildServiceRowAsync("WELD-4000", 60, "KAYNAK", "Kaynak İşçilik", "4000 Kaynak Metrajı", string.Empty, result.WeldLength4000 / 1000d, "m", previousCalculatedItems));
+            var filmCountRow = await BuildFilmCountRowAsync(result.WeldLength1500, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
+            if (filmCountRow is not null)
+            {
+                rows.Add(filmCountRow);
+            }
+
             rows.Add(await BuildServiceRowAsync("SURFACE", 70, "YUZ", "Yüzey / Boya", "Yüzey Alanı", string.Empty, result.SurfaceArea, "m²", previousCalculatedItems));
 
             if (previousItems != null)
@@ -550,6 +553,41 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             };
 
             return await ApplyPreviousPricingAsync(row, previous, 0);
+        }
+
+        private async Task<AD2000MaterialCostRowDTO?> BuildFilmCountRowAsync(double weldLength1500, AD2000CostAnalysisItem? previous)
+        {
+            var totalFilmCount = CalculateFilmCount(weldLength1500);
+            if (totalFilmCount <= 0)
+            {
+                return null;
+            }
+
+            var row = new AD2000MaterialCostRowDTO
+            {
+                SortOrder = 30,
+                ItemKey = "FILM-COUNT",
+                ItemSourceType = CalculatedSourceType,
+                CostGroupCode = "FILM",
+                CostGroupName = "Film Maliyeti",
+                ItemName = "Toplam Film Sayısı (1500 Kaynak)",
+                MaterialName = "Film",
+                FormType = "Hizmet",
+                Quantity = totalFilmCount,
+                Unit = "adet"
+            };
+
+            return await ApplyPreviousPricingAsync(row, previous, 0);
+        }
+
+        private static double CalculateFilmCount(double weldLength1500)
+        {
+            if (weldLength1500 <= 0)
+            {
+                return 0d;
+            }
+
+            return Math.Ceiling(weldLength1500 / FilmLengthDivisor);
         }
 
         private async Task<AD2000MaterialCostRowDTO> BuildBombeLaborRowAsync(AD2000ResultDTO result, Guid? selectedRateId, AD2000CostAnalysisItem? previous)
