@@ -62,7 +62,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = await _calculationService.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
-            return View(MapResultVm(dto));
+            var vm = MapResultVm(dto);
+            await PopulateDisplayNamesAsync(vm);
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Cost(Guid id)
+        {
+            var dto = await _calculationService.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            var vm = MapResultVm(dto);
+            await PopulateDisplayNamesAsync(vm);
+            return View(vm);
         }
 
         [HttpGet]
@@ -174,7 +187,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 SurfaceArea = vm.SurfaceArea
             });
 
-            return View("Result", MapResultVm(result));
+            var resultVm = MapResultVm(result);
+            await PopulateDisplayNamesAsync(resultVm);
+            return View("Result", resultVm);
         }
 
         [HttpPost]
@@ -260,6 +275,23 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             WeldLength4000 = result.WeldLength4000,
             SurfaceArea = result.SurfaceArea
         };
+
+        private async Task PopulateDisplayNamesAsync(AD2000ResultVM vm)
+        {
+            var materials = await _materialService.GetAllAsync() ?? new List<MaterialListDto>();
+            var materialForms = await _materialFormService.GetAllAsync() ?? new List<MaterialFormListDto>();
+            var storageTypes = await _storageTypeService.GetAllAsync();
+            var storageTypeList = storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
+
+            vm.StorageTypeName = vm.StorageTypeId.HasValue
+                ? storageTypeList.FirstOrDefault(x => x.Id == vm.StorageTypeId.Value)?.Name ?? string.Empty
+                : string.Empty;
+
+            vm.ShellMaterialName = materials.FirstOrDefault(x => x.Id == vm.ShellMaterialId)?.Name ?? string.Empty;
+            vm.HeadMaterialName = materials.FirstOrDefault(x => x.Id == vm.HeadMaterialId)?.Name ?? string.Empty;
+            vm.ShellMaterialFormName = materialForms.FirstOrDefault(x => x.Id == vm.ShellMaterialFormId)?.FormType.ToString() ?? string.Empty;
+            vm.HeadMaterialFormName = materialForms.FirstOrDefault(x => x.Id == vm.HeadMaterialFormId)?.FormType.ToString() ?? string.Empty;
+        }
 
         private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)
         {

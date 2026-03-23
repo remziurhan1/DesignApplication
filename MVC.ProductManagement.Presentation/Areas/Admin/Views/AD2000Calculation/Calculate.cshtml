@@ -3,66 +3,96 @@
     ViewData["Title"] = "AD2000 Calculate";
 }
 
-<h2>AD2000 Hesapla (Tek Cidar)</h2>
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
 
-<form asp-action="Calculate" method="post">
-    @Html.AntiForgeryToken()
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="row g-3">
-        <div class="col-md-4"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="Diameter" class="form-label"></label><input asp-for="Diameter" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="ShellLength" class="form-label"></label><input asp-for="ShellLength" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="DesignPressure" class="form-label"></label><input asp-for="DesignPressure" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="DesignTemperatureMin" class="form-label"></label><input asp-for="DesignTemperatureMin" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="DesignTemperatureMax" class="form-label"></label><input asp-for="DesignTemperatureMax" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="CorrosionAllowance" class="form-label"></label><input asp-for="CorrosionAllowance" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="WeldJointFactor" class="form-label"></label><input asp-for="WeldJointFactor" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="TankOrientation" class="form-label"></label><select asp-for="TankOrientation" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.TankOrientation>()" class="form-select"></select></div>
-        <div class="col-md-4"><label asp-for="EstimatedShellThickness" class="form-label"></label><input asp-for="EstimatedShellThickness" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="EstimatedHeadThickness" class="form-label"></label><input asp-for="EstimatedHeadThickness" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="Beta" class="form-label"></label><input asp-for="Beta" class="form-control" /></div>
-    </div>
-
-    <hr />
-    <h5>Sıvı / Yoğunluk</h5>
-    <div class="row g-3 align-items-end">
-        <div class="col-md-4">
-            <label asp-for="StorageTypeId" class="form-label">Tanımlı Sıvı</label>
-            <select asp-for="StorageTypeId" asp-items="ViewBag.StorageTypes" class="form-select" id="StorageTypeId">
-                <option value="">Seçiniz</option>
-            </select>
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-calculator"></i> AD2000 hesap girişi</span>
+                <h2>AD2000 tek cidar hesaplarını profesyonel akışta hazırlayın.</h2>
+                <p class="mb-0">Basınç, sıcaklık, yoğunluk ve malzeme seçimlerini sade bir arayüzle yönetin; sonuç ekranında detay ve maliyet odaklı görünümü doğrudan alın.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Index" class="btn btn-outline-light"><i class="bi bi-list-ul me-1"></i>Listeye Dön</a>
+                </div>
+            </div>
         </div>
-        <div class="col-md-4">
-            <label asp-for="LiquidDensity" class="form-label"></label>
-            <input asp-for="LiquidDensity" class="form-control" id="LiquidDensity" />
+    </section>
+
+    <form asp-action="Calculate" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-light">Temel tasarım parametreleri</div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-lg-4"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="Diameter" class="form-label"></label><input asp-for="Diameter" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="ShellLength" class="form-label"></label><input asp-for="ShellLength" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="DesignPressure" class="form-label"></label><input asp-for="DesignPressure" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="DesignTemperatureMin" class="form-label"></label><input asp-for="DesignTemperatureMin" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="DesignTemperatureMax" class="form-label"></label><input asp-for="DesignTemperatureMax" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="CorrosionAllowance" class="form-label"></label><input asp-for="CorrosionAllowance" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="WeldJointFactor" class="form-label"></label><input asp-for="WeldJointFactor" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="TankOrientation" class="form-label"></label><select asp-for="TankOrientation" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.TankOrientation>()" class="form-select"></select></div>
+                    <div class="col-lg-4"><label asp-for="EstimatedShellThickness" class="form-label"></label><input asp-for="EstimatedShellThickness" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="EstimatedHeadThickness" class="form-label"></label><input asp-for="EstimatedHeadThickness" class="form-control" /></div>
+                    <div class="col-lg-4"><label asp-for="Beta" class="form-label"></label><input asp-for="Beta" class="form-control" /></div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-4 form-check mt-4 ps-5">
-            <input asp-for="IsManualDensity" class="form-check-input" id="IsManualDensity" />
-            <label asp-for="IsManualDensity" class="form-check-label"></label>
+
+        <div class="card mb-4">
+            <div class="card-header bg-info-subtle text-info-emphasis">Sıvı / yoğunluk bilgisi</div>
+            <div class="card-body">
+                <div class="row g-3 align-items-end">
+                    <div class="col-lg-4">
+                        <label asp-for="StorageTypeId" class="form-label">Tanımlı Sıvı</label>
+                        <select asp-for="StorageTypeId" asp-items="ViewBag.StorageTypes" class="form-select" id="StorageTypeId">
+                            <option value="">Seçiniz</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="LiquidDensity" class="form-label"></label>
+                        <input asp-for="LiquidDensity" class="form-control" id="LiquidDensity" />
+                    </div>
+                    <div class="col-lg-4 d-flex align-items-end">
+                        <div class="form-check ps-0 w-100 en-surface px-4 py-3">
+                            <input asp-for="IsManualDensity" class="form-check-input ms-0 me-2" id="IsManualDensity" />
+                            <label asp-for="IsManualDensity" class="form-check-label ms-4"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <hr />
-    <h5>Malzeme Seçimi</h5>
-    <div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Gövde Malzeme Sınıfı</label><select id="ShellMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
-        <div class="col-md-6"><label class="form-label">Bombe Malzeme Sınıfı</label><select id="HeadMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+        <div class="card mb-4">
+            <div class="card-header bg-primary-subtle text-primary-emphasis">Malzeme seçimi</div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label">Gövde Malzeme Sınıfı</label><select id="ShellMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label class="form-label">Bombe Malzeme Sınıfı</label><select id="HeadMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label asp-for="ShellMaterialId" class="form-label">Gövde Malzemesi</label><select asp-for="ShellMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label asp-for="HeadMaterialId" class="form-label">Bombe Malzemesi</label><select asp-for="HeadMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label class="form-label">Gövde Form Tipi</label><select id="ShellMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label class="form-label">Bombe Form Tipi</label><select id="HeadMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label asp-for="ShellMaterialFormId" class="form-label">Gövde Formu</label><select asp-for="ShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label asp-for="HeadMaterialFormId" class="form-label">Bombe Formu</label><select asp-for="HeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
+                </div>
+            </div>
+        </div>
 
-        <div class="col-md-6"><label asp-for="ShellMaterialId" class="form-label">Gövde Malzemesi</label><select asp-for="ShellMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
-        <div class="col-md-6"><label asp-for="HeadMaterialId" class="form-label">Bombe Malzemesi</label><select asp-for="HeadMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
-
-        <div class="col-md-6"><label class="form-label">Gövde Form Tipi</label><select id="ShellMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
-        <div class="col-md-6"><label class="form-label">Bombe Form Tipi</label><select id="HeadMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
-
-        <div class="col-md-6"><label asp-for="ShellMaterialFormId" class="form-label">Gövde Formu</label><select asp-for="ShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
-        <div class="col-md-6"><label asp-for="HeadMaterialFormId" class="form-label">Bombe Formu</label><select asp-for="HeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
-    </div>
-
-    <div class="mt-4">
-        <button type="submit" class="btn btn-primary">Hesapla</button>
-    </div>
-</form>
+        <div class="d-flex flex-wrap gap-2 justify-content-end pb-2 mb-5">
+            <a asp-action="Index" class="btn btn-outline-secondary">Liste</a>
+            <button type="submit" class="btn btn-primary btn-lg px-4">Hesabı Oluştur</button>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <script>
@@ -75,19 +105,16 @@
             if (!selectElement) return;
             const current = selectElement.value;
             selectElement.innerHTML = '';
-
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
             defaultOption.text = placeholder;
             selectElement.appendChild(defaultOption);
-
             (options || []).forEach(item => {
                 const opt = document.createElement('option');
                 opt.value = item.value;
                 opt.text = item.text;
                 selectElement.appendChild(opt);
             });
-
             if ([...selectElement.options].some(x => x.value === current)) {
                 selectElement.value = current;
             }
@@ -119,17 +146,13 @@
                 const selectedMaterialId = materialSelect.value;
                 const selectedFormType = formTypeSelect.value;
                 const baseForms = formsByMaterial[selectedMaterialId] || [];
-                const filtered = selectedFormType
-                    ? baseForms.filter(x => x.formType === selectedFormType)
-                    : baseForms;
-
+                const filtered = selectedFormType ? baseForms.filter(x => x.formType === selectedFormType) : baseForms;
                 fillOptions(formSelect, filtered);
             };
 
             groupSelect.addEventListener('change', refillMaterials);
             materialSelect.addEventListener('change', refillFormTypes);
             formTypeSelect.addEventListener('change', refillForms);
-
             refillMaterials();
         }
 
@@ -137,14 +160,12 @@
             const manualCheckbox = document.getElementById('IsManualDensity');
             const storageSelect = document.getElementById('StorageTypeId');
             const densityInput = document.getElementById('LiquidDensity');
-
             if (!manualCheckbox || !storageSelect || !densityInput) return;
 
             const updateDensity = () => {
                 const isManual = manualCheckbox.checked;
                 storageSelect.disabled = isManual;
                 densityInput.readOnly = !isManual;
-
                 if (!isManual) {
                     const selectedStorageTypeId = storageSelect.value;
                     const density = storageTypeDensities[selectedStorageTypeId];

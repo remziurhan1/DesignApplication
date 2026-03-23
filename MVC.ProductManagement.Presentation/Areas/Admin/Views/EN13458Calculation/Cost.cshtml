@@ -18,12 +18,33 @@
     double ResolveInputPrice(double stockUnitPrice, bool useManualUnitPrice, double? manualUnitPrice) => useManualUnitPrice ? (manualUnitPrice ?? 0) : stockUnitPrice;
 }
 
-<style>
-    .section-title { letter-spacing: .04em; font-size: .78rem; }
-    .detail-table th { width: 52%; color: #5b6472; }
-    .input-table th { width: 20%; background: #f8f9fa; color: #5b6472; }
-    .group-card { border: 1px solid #dbe7ff; background: #f9fbff; }
-</style>
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+<section class="en-hero">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <span class="en-kicker"><i class="bi bi-cash-stack"></i> Maliyet ve satış fiyatı merkezi</span>
+            <h2>EN13458 maliyet yönetimi</h2>
+            <p class="mb-0">Malzeme gruplarını, revizyonları ve satış fiyatı parametrelerini DE benzeri kayıt mantığıyla daha net ve profesyonel bir akışta yönetin.</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="en-hero-actions">
+                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Maliyet ekranı</span>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-arrow-left me-1"></i>Detay Sayfası</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="en-metric-grid">
+    <div class="en-metric-card"><span class="en-metric-label">Toplam Profil</span><div class="en-metric-value">@totalProfileLengthM.ToString("N2", CultureInfo.InvariantCulture) m</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Perlit</span><div class="en-metric-value">@Model.PerliteWeight.ToString("N2", CultureInfo.InvariantCulture) kg</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Gaz Azot</span><div class="en-metric-value">@Model.GasNitrogenVolume.ToString("N2", CultureInfo.InvariantCulture)</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Aktif Revizyon</span><div class="en-metric-value">@(costTable?.RevisionCode ?? "PREVIEW")</div></div>
+</div>
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <div>
@@ -722,3 +743,5 @@
         })();
     </script>
 }
+
+</div>
