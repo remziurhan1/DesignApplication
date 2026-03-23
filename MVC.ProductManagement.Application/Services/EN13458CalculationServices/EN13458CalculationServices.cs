@@ -28,6 +28,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string PerliteStockCode = "ZA000464";
         private const string ProfileWeldStockCode = "";
         private const double FilmLengthDivisor = 450d;
+        private const double FilmSourceLength = 1500d;
+        private const double HeadPulDiameterCoefficient = 1.17d;
+        private const double HeadWeldDivisor = 1.15d;
         private const string DefaultAnalysisName = "Maliyet Analizi";
         private const string CalculatedSourceType = "Calculated";
         private const string ManualSourceType = "Manual";
@@ -865,7 +868,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
         private async Task<EN13458MaterialCostRowDTO?> BuildFilmCountCostRowAsync(EN13458ResultDTO result, EN13458CostAnalysisItem? previous)
         {
-            var totalFilmCount = CalculateFilmCount(result.WeldLength1500);
+            var totalFilmCount = CalculateFilmCount(CalculateInnerTankWeldLength1500(result));
             if (totalFilmCount <= 0)
             {
                 return null;
@@ -889,14 +892,29 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: await ResolveUnitPriceAsync(ProfileWeldStockCode, null));
         }
 
-        private static double CalculateFilmCount(double weldLength1500)
+        private static double CalculateFilmCount(double weldLength)
         {
-            if (weldLength1500 <= 0)
+            if (weldLength <= 0)
             {
                 return 0d;
             }
 
-            return Math.Ceiling(weldLength1500 / FilmLengthDivisor);
+            return Math.Ceiling(weldLength / FilmLengthDivisor);
+        }
+
+        private static double CalculateInnerTankWeldLength1500(EN13458ResultDTO result)
+        {
+            if (result.ShellLength <= 0 || result.OuterDiameter <= 0)
+            {
+                return 0d;
+            }
+
+            var sectionCount = result.ShellLength / FilmSourceLength;
+            var circumferenceWeld = (sectionCount * result.OuterDiameter * Math.PI) + (Math.PI * result.OuterDiameter);
+            var headPulDiameter = HeadPulDiameterCoefficient * result.OuterDiameter;
+            var headWeld = ((headPulDiameter / FilmSourceLength) * (headPulDiameter / HeadWeldDivisor) * 2d);
+
+            return circumferenceWeld + headWeld;
         }
 
         private async Task<EN13458MaterialCostRowDTO> ApplyPreviousPricingAsync(EN13458MaterialCostRowDTO row, EN13458CostAnalysisItem? previous, double fallbackUnitPrice)
