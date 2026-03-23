@@ -12,8 +12,17 @@
         _ => "info"
     };
 
+    string? BuildAnalysisLink(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item)
+        => item.LinkedCalculationType switch
+        {
+            SalesRequestCalculationType.AD2000 when item.LinkedCalculationId.HasValue => Url.Action("Details", "AD2000Calculation", new { area = "Admin", id = item.LinkedCalculationId.Value }),
+            SalesRequestCalculationType.EN13458 when item.LinkedCalculationId.HasValue => Url.Action("Details", "EN13458Calculation", new { area = "Admin", id = item.LinkedCalculationId.Value, costAnalysisId = item.LinkedCostAnalysisId }),
+            _ => null
+        };
+
     void RenderItem(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item, int depth)
     {
+        var analysisLink = BuildAnalysisLink(item);
         <div class="card mb-3 ms-@Math.Min(depth * 2, 5)">
             <div class="card-body pt-3">
                 <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
@@ -33,6 +42,19 @@
                     @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
                     {
                         <div class="col-12"><strong>Detay mühendisliği:</strong><div class="text-muted">@item.DesignDetails</div></div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(item.LinkedCalculationName))
+                    {
+                        <div class="col-12">
+                            <strong>Bağlı maliyet çalışması:</strong>
+                            <div class="text-muted">
+                                @item.LinkedCalculationType · @item.LinkedCalculationName · @item.LinkedCostAnalysisRevisionCode · @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "0,00") ₺
+                                @if (!string.IsNullOrWhiteSpace(analysisLink))
+                                {
+                                    <a href="@analysisLink" class="ms-2">Hesap detayını aç</a>
+                                }
+                            </div>
+                        </div>
                     }
                     @if (Model.IsManagerView)
                     {

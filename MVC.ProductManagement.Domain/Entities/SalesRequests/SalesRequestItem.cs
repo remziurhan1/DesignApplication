@@ -17,6 +17,12 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public string? MinimumTechnicalNotes { get; set; }
         public string? SalesEngineeringNotes { get; set; }
         public string? DesignDetails { get; set; }
+        public SalesRequestCalculationType? LinkedCalculationType { get; set; }
+        public Guid? LinkedCalculationId { get; set; }
+        public Guid? LinkedCostAnalysisId { get; set; }
+        public string? LinkedCalculationName { get; set; }
+        public string? LinkedCostAnalysisRevisionCode { get; set; }
+        public decimal? LinkedCostAnalysisTotal { get; set; }
         public decimal? EstimatedCost { get; set; }
         public decimal? ApprovedSalesPrice { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; } = SalesRequestWorkflowStatus.Submitted;
