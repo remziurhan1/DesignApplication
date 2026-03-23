@@ -1094,16 +1094,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private static EN13458SpecificationItemVM CreateSpecItem(string label, string value)
             => new() { Label = label, Value = value };
 
-        private static Paragraph CreateParagraph(string text, bool bold = false, int fontSize = 22, JustificationValues justification = JustificationValues.Left)
+        private static Paragraph CreateParagraph(string text, bool bold = false, int fontSize = 22, JustificationValues? justification = null)
         {
-            var runProperties = new RunProperties(new FontSize { Val = fontSize.ToString() });
+            var runProperties = new RunProperties(new DocumentFormat.OpenXml.Wordprocessing.FontSize { Val = fontSize.ToString() });
             if (bold)
             {
                 runProperties.Append(new Bold());
             }
 
+            var effectiveJustification = justification ?? JustificationValues.Left;
+
             return new Paragraph(
-                new ParagraphProperties(new Justification { Val = justification }),
+                new ParagraphProperties(new Justification { Val = effectiveJustification }),
                 new Run(runProperties, new Text(text ?? string.Empty) { Space = SpaceProcessingModeValues.Preserve }));
         }
 
@@ -1189,7 +1191,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         private static TableCell CreateTableCell(string text, bool bold = false)
         {
-            var runProperties = new RunProperties(new FontSize { Val = "20" });
+            var runProperties = new RunProperties(new DocumentFormat.OpenXml.Wordprocessing.FontSize { Val = "20" });
             if (bold)
             {
                 runProperties.Append(new Bold());
