@@ -116,7 +116,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id, Guid? costAnalysisId = null)
+        public async Task<IActionResult> Details(Guid id, Guid? costAnalysisId = null, string mode = "manager")
         {
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
@@ -124,6 +124,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var vm = MapDetailsVm(dto);
             await PopulateResultDisplayNamesAsync(vm);
             vm.CostAnalyses = await _service.GetCostAnalysesAsync(id);
+            ViewBag.IsSalesView = string.Equals(mode, "sales", StringComparison.OrdinalIgnoreCase);
 
             return View(vm);
         }

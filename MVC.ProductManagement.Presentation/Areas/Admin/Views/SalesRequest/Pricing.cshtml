@@ -1,7 +1,7 @@
 @using MVC.ProductManagement.Domain.Enums
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestPricingVm
 @{
-    ViewData["Title"] = "Maliyet ve Satış Fiyatı Onayı";
+    ViewData["Title"] = "Talep Fiyatlandırma";
 }
 
 <div class="pagetitle d-flex justify-content-between align-items-center">
@@ -15,6 +15,9 @@
 <section class="section mt-4">
     <div class="card">
         <div class="card-body pt-4">
+            <div class="alert alert-info" role="alert">
+                Talep satırını bir teknik hesap / maliyet revizyonuna bağladığınızda satışçı tarafında <strong>maliyet görünmez</strong>; sadece <strong>minimum</strong> ve <strong>tavsiye edilen satış fiyatı</strong> gösterilir. Yeni revizyon üretildiğinde talep fiyatları son revizyona göre otomatik güncellenir.
+            </div>
             <form method="post">
                 @Html.AntiForgeryToken()
                 <input asp-for="SalesRequestId" type="hidden" />
@@ -33,6 +36,12 @@
                     <input asp-for="Items[i].TankOrientation" type="hidden" />
                     <input asp-for="Items[i].PlacementType" type="hidden" />
                     <input asp-for="Items[i].MinimumTechnicalNotes" type="hidden" />
+                    <input asp-for="Items[i].LinkedCalculationType" type="hidden" />
+                    <input asp-for="Items[i].LinkedCalculationId" type="hidden" />
+                    <input asp-for="Items[i].LinkedCostAnalysisId" type="hidden" />
+                    <input asp-for="Items[i].LinkedCalculationName" type="hidden" />
+                    <input asp-for="Items[i].LinkedCostAnalysisRevisionCode" type="hidden" />
+                    <input asp-for="Items[i].LinkedCostAnalysisTotal" type="hidden" />
 
                     <div class="border rounded p-3 mb-4">
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
@@ -47,17 +56,37 @@
                             </div>
                         </div>
                         <div class="row g-3 mt-1">
+                            <div class="col-12">
+                                <label asp-for="Items[i].LinkedAnalysisKey" class="form-label"></label>
+                                <select asp-for="Items[i].LinkedAnalysisKey" class="form-select">
+                                    <option value="">Analiz bağlantısı kurmadan manuel fiyat gir</option>
+                                    @foreach (var analysis in Model.AvailableAnalyses)
+                                    {
+                                        <option value="@analysis.Key">@analysis.Label</option>
+                                    }
+                                </select>
+                                @if (!string.IsNullOrWhiteSpace(Model.Items[i].LinkedCalculationName))
+                                {
+                                    <div class="form-text">
+                                        Aktif bağlantı: @Model.Items[i].LinkedCalculationType · @Model.Items[i].LinkedCalculationName · @Model.Items[i].LinkedCostAnalysisRevisionCode
+                                    </div>
+                                }
+                            </div>
                             <div class="col-md-3">
                                 <label asp-for="Items[i].EstimatedCost" class="form-label"></label>
                                 <input asp-for="Items[i].EstimatedCost" class="form-control" />
                             </div>
                             <div class="col-md-3">
+                                <label asp-for="Items[i].MinimumSalesPrice" class="form-label"></label>
+                                <input asp-for="Items[i].MinimumSalesPrice" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
                                 <label asp-for="Items[i].ApprovedSalesPrice" class="form-label"></label>
                                 <input asp-for="Items[i].ApprovedSalesPrice" class="form-control" />
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <label asp-for="Items[i].DesignDetails" class="form-label"></label>
-                                <textarea asp-for="Items[i].DesignDetails" class="form-control" rows="2" placeholder="Satışçıya görünecek detay mühendisliği özeti"></textarea>
+                                <textarea asp-for="Items[i].DesignDetails" class="form-control" rows="2" placeholder="Satışçıya görünecek teknik özet"></textarea>
                             </div>
                             <div class="col-12">
                                 <label asp-for="Items[i].SalesEngineeringNotes" class="form-label"></label>

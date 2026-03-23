@@ -21,6 +21,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await RefreshLinkedPricingAsync();
+
             var requests = await _context.SalesRequests
                 .AsNoTracking()
                 .Include(x => x.Customer)
@@ -124,6 +126,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id, string mode = "sales")
         {
+            await RefreshLinkedPricingAsync(id);
+
             var entity = await LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
@@ -135,14 +139,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Pricing(Guid id)
         {
+            await RefreshLinkedPricingAsync(id);
+
             var entity = await LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
+            var availableAnalyses = await GetAvailableAnalysesAsync();
             var vm = new SalesRequestPricingVm
             {
                 SalesRequestId = entity.Id,
                 RequestNo = entity.RequestNo,
                 Title = entity.Title,
+                AvailableAnalyses = availableAnalyses,
                 Items = entity.Items
                     .OrderBy(x => x.DisplayOrder)
                     .Select(x => new SalesRequestPricingItemVm
@@ -157,7 +165,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         TankOrientation = x.TankOrientation,
                         PlacementType = x.PlacementType,
                         MinimumTechnicalNotes = x.MinimumTechnicalNotes,
+                        LinkedAnalysisKey = BuildAnalysisKey(x.LinkedCalculationType, x.LinkedCalculationId, x.LinkedCostAnalysisId),
+                        LinkedCalculationType = x.LinkedCalculationType,
+                        LinkedCalculationId = x.LinkedCalculationId,
+                        LinkedCostAnalysisId = x.LinkedCostAnalysisId,
+                        LinkedCalculationName = x.LinkedCalculationName,
+                        LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
+                        LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal,
                         EstimatedCost = x.EstimatedCost,
+                        MinimumSalesPrice = x.MinimumSalesPrice,
                         ApprovedSalesPrice = x.ApprovedSalesPrice,
                         DesignDetails = x.DesignDetails,
                         SalesEngineeringNotes = x.SalesEngineeringNotes,
@@ -172,18 +188,55 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Pricing(SalesRequestPricingVm vm)
         {
+            vm.AvailableAnalyses = await GetAvailableAnalysesAsync();
+
             var entity = await _context.SalesRequests
                 .Include(x => x.Items)
                 .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted);
             if (entity == null) return NotFound();
+
+            var analysisMap = vm.AvailableAnalyses.ToDictionary(x => x.Key, StringComparer.OrdinalIgnoreCase);
 
             foreach (var itemVm in vm.Items)
             {
                 var entityItem = entity.Items.FirstOrDefault(x => x.Id == itemVm.Id);
                 if (entityItem == null) continue;
 
-                entityItem.EstimatedCost = itemVm.EstimatedCost;
-                entityItem.ApprovedSalesPrice = itemVm.ApprovedSalesPrice;
+                if (!string.IsNullOrWhiteSpace(itemVm.LinkedAnalysisKey) && analysisMap.TryGetValue(itemVm.LinkedAnalysisKey, out var analysis))
+                {
+                    entityItem.LinkedCalculationType = analysis.CalculationType;
+                    entityItem.LinkedCalculationId = analysis.CalculationId;
+                    entityItem.LinkedCostAnalysisId = analysis.CostAnalysisId;
+                    entityItem.LinkedCalculationName = analysis.CalculationName;
+                    entityItem.LinkedCostAnalysisRevisionCode = analysis.RevisionCode;
+                    entityItem.LinkedCostAnalysisTotal = analysis.TotalCost;
+                    entityItem.EstimatedCost = analysis.TotalCost;
+                    entityItem.MinimumSalesPrice = analysis.MinimumSalesPrice ?? analysis.TotalCost;
+                    entityItem.ApprovedSalesPrice = analysis.RecommendedSalesPrice ?? analysis.MinimumSalesPrice ?? analysis.TotalCost;
+
+                    itemVm.LinkedCalculationType = analysis.CalculationType;
+                    itemVm.LinkedCalculationId = analysis.CalculationId;
+                    itemVm.LinkedCostAnalysisId = analysis.CostAnalysisId;
+                    itemVm.LinkedCalculationName = analysis.CalculationName;
+                    itemVm.LinkedCostAnalysisRevisionCode = analysis.RevisionCode;
+                    itemVm.LinkedCostAnalysisTotal = analysis.TotalCost;
+                    itemVm.EstimatedCost = entityItem.EstimatedCost;
+                    itemVm.MinimumSalesPrice = entityItem.MinimumSalesPrice;
+                    itemVm.ApprovedSalesPrice = entityItem.ApprovedSalesPrice;
+                }
+                else
+                {
+                    entityItem.LinkedCalculationType = null;
+                    entityItem.LinkedCalculationId = null;
+                    entityItem.LinkedCostAnalysisId = null;
+                    entityItem.LinkedCalculationName = null;
+                    entityItem.LinkedCostAnalysisRevisionCode = null;
+                    entityItem.LinkedCostAnalysisTotal = null;
+                    entityItem.EstimatedCost = itemVm.EstimatedCost;
+                    entityItem.MinimumSalesPrice = itemVm.MinimumSalesPrice;
+                    entityItem.ApprovedSalesPrice = itemVm.ApprovedSalesPrice;
+                }
+
                 entityItem.DesignDetails = itemVm.DesignDetails;
                 entityItem.SalesEngineeringNotes = itemVm.SalesEngineeringNotes;
                 entityItem.WorkflowStatus = itemVm.WorkflowStatus;
@@ -196,6 +249,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.ApprovedAt = entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved ? DateTime.UtcNow : null;
 
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Talep kalemleri güncellendi. Satışçı artık sadece minimum ve tavsiye edilen fiyatları görecek.";
             return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
         }
 
@@ -294,7 +348,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         MinimumTechnicalNotes = x.MinimumTechnicalNotes,
                         SalesEngineeringNotes = x.SalesEngineeringNotes,
                         DesignDetails = x.DesignDetails,
+                        LinkedCalculationType = x.LinkedCalculationType,
+                        LinkedCalculationId = x.LinkedCalculationId,
+                        LinkedCostAnalysisId = x.LinkedCostAnalysisId,
+                        LinkedCalculationName = x.LinkedCalculationName,
+                        LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
+                        LinkedCostAnalysisTotal = isManagerView ? x.LinkedCostAnalysisTotal : null,
                         EstimatedCost = isManagerView ? x.EstimatedCost : null,
+                        MinimumSalesPrice = x.MinimumSalesPrice,
                         ApprovedSalesPrice = x.ApprovedSalesPrice,
                         WorkflowStatus = x.WorkflowStatus
                     });
@@ -338,6 +399,184 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             };
         }
 
+        private async Task<List<SalesRequestPricingAnalysisOptionVm>> GetAvailableAnalysesAsync()
+        {
+            var ad2000Analyses = await _context.AD2000CostAnalyses
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted && x.AD2000Calculation.Status != Status.Deleted)
+                .Select(x => new
+                {
+                    CalculationType = SalesRequestCalculationType.AD2000,
+                    CalculationId = x.AD2000CalculationId,
+                    CostAnalysisId = x.Id,
+                    CalculationName = x.AD2000Calculation.Name,
+                    RevisionCode = x.RevisionCode,
+                    TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d,
+                    MinimumSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.MinimumSalesPrice).FirstOrDefault(),
+                    RecommendedSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.SalesPrice).FirstOrDefault()
+                })
+                .ToListAsync();
+
+            var en13458Analyses = await _context.EN13458CostAnalyses
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted && x.EN13458Calculation.Status != Status.Deleted)
+                .Select(x => new
+                {
+                    CalculationType = SalesRequestCalculationType.EN13458,
+                    CalculationId = x.EN13458CalculationId,
+                    CostAnalysisId = x.Id,
+                    CalculationName = x.EN13458Calculation.Name,
+                    RevisionCode = x.RevisionCode,
+                    TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d,
+                    MinimumSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.MinimumSalesPrice).FirstOrDefault(),
+                    RecommendedSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.SalesPrice).FirstOrDefault()
+                })
+                .ToListAsync();
+
+            return ad2000Analyses
+                .Concat(en13458Analyses)
+                .OrderByDescending(x => x.RevisionCode)
+                .ThenBy(x => x.CalculationName)
+                .Select(x =>
+                {
+                    var totalCost = Convert.ToDecimal(x.TotalCost);
+                    var minimumSalesPrice = x.MinimumSalesPrice.HasValue ? Convert.ToDecimal(x.MinimumSalesPrice.Value) : (decimal?)null;
+                    var recommendedSalesPrice = x.RecommendedSalesPrice.HasValue ? Convert.ToDecimal(x.RecommendedSalesPrice.Value) : (decimal?)null;
+                    return new SalesRequestPricingAnalysisOptionVm
+                    {
+                        Key = BuildAnalysisKey(x.CalculationType, x.CalculationId, x.CostAnalysisId) ?? string.Empty,
+                        Label = recommendedSalesPrice.HasValue
+                            ? $"{x.CalculationType} · {x.CalculationName} · {x.RevisionCode} · Min {minimumSalesPrice.GetValueOrDefault(totalCost):N2} ₺ / Tavsiye {recommendedSalesPrice.Value:N2} ₺"
+                            : $"{x.CalculationType} · {x.CalculationName} · {x.RevisionCode} · Min {minimumSalesPrice.GetValueOrDefault(totalCost):N2} ₺ / Tavsiye hesaplanmadı",
+                        CalculationType = x.CalculationType,
+                        CalculationId = x.CalculationId,
+                        CostAnalysisId = x.CostAnalysisId,
+                        CalculationName = x.CalculationName,
+                        RevisionCode = x.RevisionCode,
+                        TotalCost = totalCost,
+                        MinimumSalesPrice = minimumSalesPrice,
+                        RecommendedSalesPrice = recommendedSalesPrice
+                    };
+                })
+                .ToList();
+        }
+
+        private async Task RefreshLinkedPricingAsync(Guid? requestId = null)
+        {
+            var query = _context.SalesRequests
+                .Include(x => x.Items)
+                .Where(x => x.Status != Status.Deleted);
+
+            if (requestId.HasValue)
+            {
+                query = query.Where(x => x.Id == requestId.Value);
+            }
+
+            var requests = await query.ToListAsync();
+            var hasChanges = false;
+
+            foreach (var request in requests)
+            {
+                foreach (var item in request.Items.Where(x => x.LinkedCalculationType.HasValue && x.LinkedCalculationId.HasValue))
+                {
+                    var snapshot = await GetLatestLinkedSnapshotAsync(item.LinkedCalculationType.Value, item.LinkedCalculationId.Value);
+                    if (snapshot == null)
+                    {
+                        continue;
+                    }
+
+                    var minimumSalesPrice = snapshot.MinimumSalesPrice ?? snapshot.TotalCost;
+                    var recommendedSalesPrice = snapshot.RecommendedSalesPrice ?? minimumSalesPrice;
+
+                    if (item.LinkedCostAnalysisId == snapshot.CostAnalysisId
+                        && item.LinkedCostAnalysisRevisionCode == snapshot.RevisionCode
+                        && item.LinkedCalculationName == snapshot.CalculationName
+                        && item.LinkedCostAnalysisTotal == snapshot.TotalCost
+                        && item.EstimatedCost == snapshot.TotalCost
+                        && item.MinimumSalesPrice == minimumSalesPrice
+                        && item.ApprovedSalesPrice == recommendedSalesPrice)
+                    {
+                        continue;
+                    }
+
+                    item.LinkedCostAnalysisId = snapshot.CostAnalysisId;
+                    item.LinkedCalculationName = snapshot.CalculationName;
+                    item.LinkedCostAnalysisRevisionCode = snapshot.RevisionCode;
+                    item.LinkedCostAnalysisTotal = snapshot.TotalCost;
+                    item.EstimatedCost = snapshot.TotalCost;
+                    item.MinimumSalesPrice = minimumSalesPrice;
+                    item.ApprovedSalesPrice = recommendedSalesPrice;
+                    hasChanges = true;
+                }
+            }
+
+            if (hasChanges)
+            {
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task<LinkedPricingSnapshot?> GetLatestLinkedSnapshotAsync(SalesRequestCalculationType calculationType, Guid calculationId)
+        {
+            if (calculationType == SalesRequestCalculationType.AD2000)
+            {
+                var snapshot = await _context.AD2000CostAnalyses
+                    .AsNoTracking()
+                    .Where(x => x.AD2000CalculationId == calculationId && x.Status != Status.Deleted)
+                    .OrderByDescending(x => x.RevisionNo)
+                    .Select(x => new
+                    {
+                        CalculationName = x.AD2000Calculation.Name,
+                        CostAnalysisId = x.Id,
+                        RevisionCode = x.RevisionCode,
+                        TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d,
+                        MinimumSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.MinimumSalesPrice).FirstOrDefault(),
+                        RecommendedSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.SalesPrice).FirstOrDefault()
+                    })
+                    .FirstOrDefaultAsync();
+
+                return snapshot == null ? null : new LinkedPricingSnapshot
+                {
+                    CalculationName = snapshot.CalculationName,
+                    CostAnalysisId = snapshot.CostAnalysisId,
+                    RevisionCode = snapshot.RevisionCode,
+                    TotalCost = Convert.ToDecimal(snapshot.TotalCost),
+                    MinimumSalesPrice = snapshot.MinimumSalesPrice.HasValue ? Convert.ToDecimal(snapshot.MinimumSalesPrice.Value) : (decimal?)null,
+                    RecommendedSalesPrice = snapshot.RecommendedSalesPrice.HasValue ? Convert.ToDecimal(snapshot.RecommendedSalesPrice.Value) : (decimal?)null
+                };
+            }
+
+            if (calculationType == SalesRequestCalculationType.EN13458)
+            {
+                var snapshot = await _context.EN13458CostAnalyses
+                    .AsNoTracking()
+                    .Where(x => x.EN13458CalculationId == calculationId && x.Status != Status.Deleted)
+                    .OrderByDescending(x => x.RevisionNo)
+                    .Select(x => new
+                    {
+                        CalculationName = x.EN13458Calculation.Name,
+                        CostAnalysisId = x.Id,
+                        RevisionCode = x.RevisionCode,
+                        TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d,
+                        MinimumSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.MinimumSalesPrice).FirstOrDefault(),
+                        RecommendedSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.SalesPrice).FirstOrDefault()
+                    })
+                    .FirstOrDefaultAsync();
+
+                return snapshot == null ? null : new LinkedPricingSnapshot
+                {
+                    CalculationName = snapshot.CalculationName,
+                    CostAnalysisId = snapshot.CostAnalysisId,
+                    RevisionCode = snapshot.RevisionCode,
+                    TotalCost = Convert.ToDecimal(snapshot.TotalCost),
+                    MinimumSalesPrice = snapshot.MinimumSalesPrice.HasValue ? Convert.ToDecimal(snapshot.MinimumSalesPrice.Value) : (decimal?)null,
+                    RecommendedSalesPrice = snapshot.RecommendedSalesPrice.HasValue ? Convert.ToDecimal(snapshot.RecommendedSalesPrice.Value) : (decimal?)null
+                };
+            }
+
+            return null;
+        }
+
         private async Task<string> GenerateRequestNoAsync()
         {
             var prefix = $"TR-{DateTime.UtcNow:yyyyMMdd}";
@@ -366,6 +605,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var capacity = item.CapacityM3.ToString("0.##").Replace(",", string.Empty).Replace(".", string.Empty);
             var consumption = item.ConsumptionCapacity.HasValue ? $"-{item.ConsumptionCapacity:0.##}".Replace(",", string.Empty).Replace(".", string.Empty) : string.Empty;
             return $"CVS-{groupCode}{orientation}{placement}-{capacity}{consumption}-{order:000}";
+        }
+
+        private static string? BuildAnalysisKey(SalesRequestCalculationType? type, Guid? calculationId, Guid? costAnalysisId)
+        {
+            if (!type.HasValue || !calculationId.HasValue || !costAnalysisId.HasValue)
+            {
+                return null;
+            }
+
+            return $"{(int)type.Value}|{calculationId.Value:D}|{costAnalysisId.Value:D}";
         }
 
         private async Task SaveAttachmentsAsync(SalesRequest request, IEnumerable<IFormFile> files)
@@ -398,6 +647,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             await _context.SalesRequestAttachments.AddRangeAsync(attachments);
             await _context.SaveChangesAsync();
+        }
+
+        private sealed class LinkedPricingSnapshot
+        {
+            public string CalculationName { get; set; } = string.Empty;
+            public Guid CostAnalysisId { get; set; }
+            public string RevisionCode { get; set; } = string.Empty;
+            public decimal TotalCost { get; set; }
+            public decimal? MinimumSalesPrice { get; set; }
+            public decimal? RecommendedSalesPrice { get; set; }
         }
     }
 }

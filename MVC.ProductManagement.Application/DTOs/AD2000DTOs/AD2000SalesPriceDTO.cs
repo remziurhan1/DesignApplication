@@ -24,6 +24,7 @@ namespace MVC.ProductManagement.Application.DTOs.AD2000DTOs
         public double FinanceCost { get; set; }
         public double GeneralManagementCost { get; set; }
         public double AraToplam2 { get; set; }
+        public double MinimumSalesPrice { get; set; }
         public double SalesPrice { get; set; }
     }
 }

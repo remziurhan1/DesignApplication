@@ -3,6 +3,7 @@
 @using System.Globalization
 @{
     ViewData["Title"] = "EN13458 Details";
+    var isSalesView = ViewBag.IsSalesView is bool flag && flag;
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
     var innerTankWeldLength = Model.InnerTankHeadWeldLength + Model.InnerTankCircumferenceWeldLength;
@@ -23,8 +24,11 @@
             </div>
             <div class="col-lg-4">
                 <div class="en-hero-actions">
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-pencil-square me-1"></i>Tankı Güncelle</a>
-                    <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-cash-coin me-1"></i>Maliyet</a>
+                    @if (!isSalesView)
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-pencil-square me-1"></i>Tankı Güncelle</a>
+                        <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-cash-coin me-1"></i>Maliyet</a>
+                    }
                     <a asp-action="Specification" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-file-earmark-richtext me-1"></i>Şartname</a>
                     <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-file-earmark-excel me-1"></i>Excel</a>
                 </div>
@@ -55,37 +59,40 @@
         </div>
     }
 
-    <div class="card shadow-sm mb-4 border-warning-subtle">
-        <div class="card-header bg-warning-subtle text-warning-emphasis d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <span>Maliyet durumu</span>
-            <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Maliyet ekranına git</a>
-        </div>
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-12 col-md-4"><div class="en-metric-card h-100"><span class="en-metric-label">Kayıtlı revizyon sayısı</span><div class="en-metric-value">@Model.CostAnalyses.Count</div></div></div>
-                <div class="col-12 col-md-8">
-                    <div class="en-surface p-3 h-100">
-                        <div class="section-title">Son revizyonlar</div>
-                        @if (Model.CostAnalyses.Any())
-                        {
-                            <div class="d-flex flex-wrap gap-2">
-                                @foreach (var analysis in Model.CostAnalyses.Take(5))
-                                {
-                                    <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id" class="btn btn-outline-warning btn-sm">
-                                        @analysis.RevisionCode - @analysis.GrandTotalCost.ToString("N2")
-                                    </a>
-                                }
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="en-empty">Henüz maliyet revizyonu oluşturulmadı.</div>
-                        }
+    @if (!isSalesView)
+    {
+        <div class="card shadow-sm mb-4 border-warning-subtle">
+            <div class="card-header bg-warning-subtle text-warning-emphasis d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <span>Maliyet durumu</span>
+                <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Maliyet ekranına git</a>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12 col-md-4"><div class="en-metric-card h-100"><span class="en-metric-label">Kayıtlı revizyon sayısı</span><div class="en-metric-value">@Model.CostAnalyses.Count</div></div></div>
+                    <div class="col-12 col-md-8">
+                        <div class="en-surface p-3 h-100">
+                            <div class="section-title">Son revizyonlar</div>
+                            @if (Model.CostAnalyses.Any())
+                            {
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var analysis in Model.CostAnalyses.Take(5))
+                                    {
+                                        <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id" class="btn btn-outline-warning btn-sm">
+                                            @analysis.RevisionCode - @analysis.GrandTotalCost.ToString("N2")
+                                        </a>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="en-empty">Henüz maliyet revizyonu oluşturulmadı.</div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-light">Giriş verileri</div>
