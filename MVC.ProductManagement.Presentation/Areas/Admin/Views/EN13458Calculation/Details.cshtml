@@ -7,193 +7,173 @@
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
 }
 
-<style>
-    .detail-table th { width: 52%; color: #5b6472; }
-    .input-table th { width: 20%; background: #f8f9fa; color: #5b6472; }
-</style>
-
-<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-    <div>
-        <h2 class="mb-0">EN13458 Detay</h2>
-        <div class="text-muted small">Kayıt Id: @Model.Id</div>
-    </div>
-    <div class="d-flex gap-2 flex-wrap">
-        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-3 py-2">Kayıt detayı</span>
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">
-            <i class="bi bi-pencil-square me-1"></i>Tankı Güncelle
-        </a>
-        <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-warning">
-            <i class="bi bi-cash-coin me-1"></i>Maliyet Sayfası
-        </a>
-        <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
-            <i class="bi bi-file-earmark-excel me-1"></i>Excel
-        </a>
-    </div>
-</div>
-
-@if (TempData["SuccessMessage"] is string successMessage)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @successMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
 }
 
-@if (TempData["ErrorMessage"] is string errorMessage)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @errorMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
-<div class="card shadow-sm mb-4 border-warning-subtle">
-    <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <span>Maliyet Durumu</span>
-        <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Maliyet Ekranına Git</a>
-    </div>
-    <div class="card-body">
-        <div class="row g-3">
-            <div class="col-12 col-md-4">
-                <div class="border rounded p-3 h-100">
-                    <div class="small text-muted">Kayıtlı Revizyon Sayısı</div>
-                    <div class="fs-4 fw-semibold">@Model.CostAnalyses.Count</div>
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-file-earmark-bar-graph"></i> Kayıt detayı</span>
+                <h2>@Model.Name</h2>
+                <p class="mb-0">Tank geometrisi, malzeme kararları ve maliyet revizyonlarını tek sayfada görüntüleyin. Kayıt kimliği: @Model.Id</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-pencil-square me-1"></i>Tankı Güncelle</a>
+                    <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-cash-coin me-1"></i>Maliyet</a>
+                    <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-file-earmark-excel me-1"></i>Excel</a>
                 </div>
             </div>
-            <div class="col-12 col-md-8">
-                <div class="border rounded p-3 h-100">
-                    <div class="small text-muted mb-2">Son Revizyonlar</div>
-                    @if (Model.CostAnalyses.Any())
-                    {
-                        <div class="d-flex flex-wrap gap-2">
-                            @foreach (var analysis in Model.CostAnalyses.Take(5))
-                            {
-                                <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id" class="btn btn-sm btn-outline-warning">
-                                    @analysis.RevisionCode - @analysis.GrandTotalCost.ToString("N2")
-                                </a>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-muted small">Henüz maliyet revizyonu oluşturulmadı.</div>
-                    }
+        </div>
+    </section>
+
+    <div class="en-metric-grid">
+        <div class="en-metric-card"><span class="en-metric-label">İç Tank Ağırlığı</span><div class="en-metric-value">@Model.InnerTankWeight.ToString("N2") kg</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Dış Tank Ağırlığı</span><div class="en-metric-value">@Model.OuterTankWeight.ToString("N2") kg</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Toplam Kaynak</span><div class="en-metric-value">@Model.TotalWeldLength.ToString("N2")</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Kayıtlı Revizyon</span><div class="en-metric-value">@Model.CostAnalyses.Count</div></div>
+    </div>
+
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @successMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @errorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm mb-4 border-warning-subtle">
+        <div class="card-header bg-warning-subtle text-warning-emphasis d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span>Maliyet durumu</span>
+            <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Maliyet ekranına git</a>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12 col-md-4"><div class="en-metric-card h-100"><span class="en-metric-label">Kayıtlı revizyon sayısı</span><div class="en-metric-value">@Model.CostAnalyses.Count</div></div></div>
+                <div class="col-12 col-md-8">
+                    <div class="en-surface p-3 h-100">
+                        <div class="section-title">Son revizyonlar</div>
+                        @if (Model.CostAnalyses.Any())
+                        {
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var analysis in Model.CostAnalyses.Take(5))
+                                {
+                                    <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id" class="btn btn-outline-warning btn-sm">
+                                        @analysis.RevisionCode - @analysis.GrandTotalCost.ToString("N2")
+                                    </a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="en-empty">Henüz maliyet revizyonu oluşturulmadı.</div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="card shadow-sm mb-4">
-    <div class="card-header bg-light fw-semibold">Giriş Verileri</div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-bordered table-sm align-middle mb-0 input-table">
-                <tbody>
-                    <tr>
-                        <th>Ad</th><td>@Model.Name</td>
-                        <th>İç Tank Çapı</th><td>@Model.OuterDiameter</td>
-                        <th>Dış Tank Çapı</th><td>@Model.OuterTankDiameter</td>
-                    </tr>
-                    <tr>
-                        <th>Silindirik Boy</th><td>@Model.ShellLength</td>
-                        <th>Basınç</th><td>@Model.Pressure</td>
-                        <th>Depolanacak Ürün</th><td>@Model.StorageTypeName</td>
-                    </tr>
-                    <tr>
-                        <th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td>
-                        <th>Tank Yönelimi</th><td>@Model.TankOrientation</td>
-                        <th>Cold Stretch</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td>
-                    </tr>
-                    <tr>
-                        <th>Kaynak Metrajları</th>
-                        <td colspan="5">1500: @Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m | 2000: @Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m | 2500: @Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m | 3000: @Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div class="row g-4">
-    <div class="col-12 col-xxl-6">
-        <div class="card shadow-sm h-100 border-primary-subtle">
-            <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">İç Tank</div>
-            <div class="card-body">
-                <table class="table table-sm table-striped align-middle mb-0 detail-table">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">Giriş verileri</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle mb-0">
                     <tbody>
-                    <tr><th>Gövde Malzemesi</th><td>@Model.InnerShellMaterialName</td></tr>
-                    <tr><th>Gövde Malzeme Formu</th><td>@Model.InnerShellMaterialFormName</td></tr>
-                    <tr><th>Bombe Malzemesi</th><td>@Model.InnerHeadMaterialName</td></tr>
-                    <tr><th>Bombe Malzeme Formu</th><td>@Model.InnerHeadMaterialFormName</td></tr>
-                    <tr><th>Gövde Akma Dayanımı (MPa)</th><td>@Model.InnerShellMaterialStrength</td></tr>
-                    <tr><th>Bombe Akma Dayanımı (MPa)</th><td>@Model.InnerHeadMaterialStrength</td></tr>
-                    <tr><th>Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
-                    <tr><th>Bombe Kalınlığı</th><td>@Model.InnerHeadThickness</td></tr>
-                    <tr><th>Yuvarlanmış Gövde Kalınlığı</th><td>@Model.RoundedInnerShellThickness</td></tr>
-                    <tr><th>Yuvarlanmış Bombe Kalınlığı</th><td>@Model.RoundedInnerHeadThickness</td></tr>
-                    <tr><th>Bombe Pulu Çapı</th><td>@Model.InnerTankHeadPulDiameter</td></tr>
-                    <tr><th>Toplam Uzunluk</th><td>@Model.InnerTankTotalLength</td></tr>
-                    <tr><th>İç Hacim</th><td>@Model.InnerVolume</td></tr>
-                    <tr><th>İç Yüzey Alanı</th><td>@Model.InnerSurfaceArea</td></tr>
-                    <tr><th>Bombe Ağırlığı</th><td>@Model.InnerTankHeadWeight</td></tr>
-                    <tr><th>Tank Ağırlığı</th><td>@Model.InnerTankWeight</td></tr>
+                        <tr><th>Ad</th><td>@Model.Name</td><th>İç Tank Çapı</th><td>@Model.OuterDiameter</td><th>Dış Tank Çapı</th><td>@Model.OuterTankDiameter</td></tr>
+                        <tr><th>Silindirik Boy</th><td>@Model.ShellLength</td><th>Basınç</th><td>@Model.Pressure</td><th>Depolanacak Ürün</th><td>@Model.StorageTypeName</td></tr>
+                        <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td><th>Tank Yönelimi</th><td>@Model.TankOrientation</td><th>Cold Stretch</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
+                        <tr><th>Kaynak metrajları</th><td colspan="5">1500: @Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m | 2000: @Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m | 2500: @Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m | 3000: @Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-xxl-6">
-        <div class="card shadow-sm h-100 border-secondary-subtle">
-            <div class="card-header bg-secondary-subtle text-secondary-emphasis fw-semibold">Dış Tank</div>
-            <div class="card-body">
-                <table class="table table-sm table-striped align-middle mb-0 detail-table">
-                    <tbody>
-                    <tr><th>Gövde Malzemesi</th><td>@Model.OuterShellMaterialName</td></tr>
-                    <tr><th>Gövde Malzeme Formu</th><td>@Model.OuterShellMaterialFormName</td></tr>
-                    <tr><th>Bombe Malzemesi</th><td>@Model.OuterHeadMaterialName</td></tr>
-                    <tr><th>Bombe Malzeme Formu</th><td>@Model.OuterHeadMaterialFormName</td></tr>
-                    <tr><th>Gövde Akma Dayanımı (MPa)</th><td>@Model.OuterShellMaterialStrength</td></tr>
-                    <tr><th>Bombe Akma Dayanımı (MPa)</th><td>@Model.OuterHeadMaterialStrength</td></tr>
-                    <tr><th>Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
-                    <tr><th>Bombe Kalınlığı</th><td>@Model.OuterHeadThickness</td></tr>
-                    <tr><th>Yuvarlanmış Gövde Kalınlığı</th><td>@Model.RoundedOuterShellThickness</td></tr>
-                    <tr><th>Yuvarlanmış Bombe Kalınlığı</th><td>@Model.RoundedOuterHeadThickness</td></tr>
-                    <tr><th>Bombe Pulu Çapı</th><td>@Model.OuterTankHeadPulDiameter</td></tr>
-                    <tr><th>Toplam Uzunluk</th><td>@Model.OuterTankTotalLength</td></tr>
-                    <tr><th>Dış Hacim</th><td>@Model.OuterVolume</td></tr>
-                    <tr><th>Dış Yüzey Alanı</th><td>@Model.OuterSurfaceArea</td></tr>
-                    <tr><th>Bombe Ağırlığı</th><td>@Model.OuterTankHeadWeight</td></tr>
-                    <tr><th>Tank Ağırlığı</th><td>@Model.OuterTankWeight</td></tr>
-                    </tbody>
-                </table>
+    <div class="row g-4">
+        <div class="col-12 col-xxl-6">
+            <div class="card h-100 border-primary-subtle">
+                <div class="card-header bg-primary-subtle text-primary-emphasis">İç tank</div>
+                <div class="card-body">
+                    <table class="table table-sm table-striped align-middle mb-0"><tbody>
+                        <tr><th>Gövde Malzemesi</th><td>@Model.InnerShellMaterialName</td></tr>
+                        <tr><th>Gövde Malzeme Formu</th><td>@Model.InnerShellMaterialFormName</td></tr>
+                        <tr><th>Bombe Malzemesi</th><td>@Model.InnerHeadMaterialName</td></tr>
+                        <tr><th>Bombe Malzeme Formu</th><td>@Model.InnerHeadMaterialFormName</td></tr>
+                        <tr><th>Gövde Akma Dayanımı (MPa)</th><td>@Model.InnerShellMaterialStrength</td></tr>
+                        <tr><th>Bombe Akma Dayanımı (MPa)</th><td>@Model.InnerHeadMaterialStrength</td></tr>
+                        <tr><th>Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
+                        <tr><th>Bombe Kalınlığı</th><td>@Model.InnerHeadThickness</td></tr>
+                        <tr><th>Yuvarlanmış Gövde Kalınlığı</th><td>@Model.RoundedInnerShellThickness</td></tr>
+                        <tr><th>Yuvarlanmış Bombe Kalınlığı</th><td>@Model.RoundedInnerHeadThickness</td></tr>
+                        <tr><th>Bombe Pulu Çapı</th><td>@Model.InnerTankHeadPulDiameter</td></tr>
+                        <tr><th>Toplam Uzunluk</th><td>@Model.InnerTankTotalLength</td></tr>
+                        <tr><th>İç Hacim</th><td>@Model.InnerVolume</td></tr>
+                        <tr><th>İç Yüzey Alanı</th><td>@Model.InnerSurfaceArea</td></tr>
+                        <tr><th>Bombe Ağırlığı</th><td>@Model.InnerTankHeadWeight</td></tr>
+                        <tr><th>Tank Ağırlığı</th><td>@Model.InnerTankWeight</td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xxl-6">
+            <div class="card h-100 border-secondary-subtle">
+                <div class="card-header bg-secondary-subtle text-secondary-emphasis">Dış tank</div>
+                <div class="card-body">
+                    <table class="table table-sm table-striped align-middle mb-0"><tbody>
+                        <tr><th>Gövde Malzemesi</th><td>@Model.OuterShellMaterialName</td></tr>
+                        <tr><th>Gövde Malzeme Formu</th><td>@Model.OuterShellMaterialFormName</td></tr>
+                        <tr><th>Bombe Malzemesi</th><td>@Model.OuterHeadMaterialName</td></tr>
+                        <tr><th>Bombe Malzeme Formu</th><td>@Model.OuterHeadMaterialFormName</td></tr>
+                        <tr><th>Gövde Akma Dayanımı (MPa)</th><td>@Model.OuterShellMaterialStrength</td></tr>
+                        <tr><th>Bombe Akma Dayanımı (MPa)</th><td>@Model.OuterHeadMaterialStrength</td></tr>
+                        <tr><th>Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
+                        <tr><th>Bombe Kalınlığı</th><td>@Model.OuterHeadThickness</td></tr>
+                        <tr><th>Yuvarlanmış Gövde Kalınlığı</th><td>@Model.RoundedOuterShellThickness</td></tr>
+                        <tr><th>Yuvarlanmış Bombe Kalınlığı</th><td>@Model.RoundedOuterHeadThickness</td></tr>
+                        <tr><th>Bombe Pulu Çapı</th><td>@Model.OuterTankHeadPulDiameter</td></tr>
+                        <tr><th>Toplam Uzunluk</th><td>@Model.OuterTankTotalLength</td></tr>
+                        <tr><th>Dış Hacim</th><td>@Model.OuterVolume</td></tr>
+                        <tr><th>Dış Yüzey Alanı</th><td>@Model.OuterSurfaceArea</td></tr>
+                        <tr><th>Bombe Ağırlığı</th><td>@Model.OuterTankHeadWeight</td></tr>
+                        <tr><th>Tank Ağırlığı</th><td>@Model.OuterTankWeight</td></tr>
+                    </tbody></table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light fw-semibold">Ortak Sonuçlar</div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped table-hover table-sm align-middle mb-0">
-                <tbody>
-                <tr><th class="w-50">Design Pressure</th><td>@Model.DesignPressure</td></tr>
-                <tr><th>Test Pressure</th><td>@Model.TestPressure</td></tr>
-                <tr><th>Static Pressure</th><td>@Model.StaticPressure</td></tr>
-                <tr><th>Toplam Kaynak Uzunluğu</th><td>@Model.TotalWeldLength</td></tr>
-                <tr><th>Gerekli Profil Adedi</th><td>@Model.RequiredProfileCount</td></tr>
-                <tr><th>Profil Açınım Uzunluğu (mm)</th><td>@Model.ProfileDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                <tr><th>Toplam Profil Metrajı (m)</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                <tr><th>Toplam Profil Boyu (mm)</th><td>@totalProfileLengthMm.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                <tr><th>Profil Kaynak Metrajı (mm)</th><td>@Model.ProfileWeldLength.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                <tr><th>Perlit Hacmi</th><td>@Model.PerliteVolume</td></tr>
-                <tr><th>Perlit Ağırlığı (kg)</th><td>@Model.PerliteWeight</td></tr>
-                <tr><th>Gaz Azot Hacmi</th><td>@Model.GasNitrogenVolume</td></tr>
-                <tr><th>Sıvı Azot Hacmi</th><td>@Model.LiquidNitrogenVolume</td></tr>
-                </tbody>
-            </table>
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light">Ortak sonuçlar</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0"><tbody>
+                    <tr><th class="w-50">Design Pressure</th><td>@Model.DesignPressure</td></tr>
+                    <tr><th>Test Pressure</th><td>@Model.TestPressure</td></tr>
+                    <tr><th>Static Pressure</th><td>@Model.StaticPressure</td></tr>
+                    <tr><th>Toplam Kaynak Uzunluğu</th><td>@Model.TotalWeldLength</td></tr>
+                    <tr><th>Gerekli Profil Adedi</th><td>@Model.RequiredProfileCount</td></tr>
+                    <tr><th>Profil Açınım Uzunluğu (mm)</th><td>@Model.ProfileDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                    <tr><th>Toplam Profil Metrajı (m)</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                    <tr><th>Toplam Profil Boyu (mm)</th><td>@totalProfileLengthMm.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                    <tr><th>Profil Kaynak Metrajı (mm)</th><td>@Model.ProfileWeldLength.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                    <tr><th>Perlit Hacmi</th><td>@Model.PerliteVolume</td></tr>
+                    <tr><th>Perlit Ağırlığı (kg)</th><td>@Model.PerliteWeight</td></tr>
+                    <tr><th>Gaz Azot Hacmi</th><td>@Model.GasNitrogenVolume</td></tr>
+                    <tr><th>Sıvı Azot Hacmi</th><td>@Model.LiquidNitrogenVolume</td></tr>
+                </tbody></table>
+            </div>
         </div>
     </div>
 </div>

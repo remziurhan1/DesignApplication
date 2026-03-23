@@ -137,6 +137,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             _context.EN13458CostAnalyses.Add(analysis);
             await _context.SaveChangesAsync();
 
+            if (latest != null)
+            {
+                var latestSalesPrice = await _context.EN13458SalesPrices
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.EN13458CalculationId == calculationId && x.EN13458CostAnalysisId == latest.Id && x.Status != Status.Deleted);
+
+                await CloneSalesPriceAsync(calculationId, analysis.Id, latestSalesPrice, rows.Sum(x => x.ItemCost), createdBy);
+            }
+
             return await GetCostAnalysisAsync(calculation.Id, analysis.Id) ?? BuildCostTableFromItems(analysis, rows);
         }
 
@@ -174,6 +183,12 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
             _context.EN13458CostAnalyses.Add(analysis);
             await _context.SaveChangesAsync();
+
+            var sourceSalesPrice = await _context.EN13458SalesPrices
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.EN13458CalculationId == calculationId && x.EN13458CostAnalysisId == source.Id && x.Status != Status.Deleted);
+
+            await CloneSalesPriceAsync(calculationId, analysis.Id, sourceSalesPrice, rows.Sum(x => x.ItemCost), createdBy);
 
             return await GetCostAnalysisAsync(calculationId, analysis.Id) ?? BuildCostTableFromItems(analysis, rows);
         }
@@ -526,6 +541,57 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 TotalFilmCost = rows.Where(x => x.CostGroupCode == "FILM").Sum(x => x.ItemCost),
                 GrandTotalCost = rows.Sum(x => x.ItemCost)
             };
+        }
+
+        private async Task CloneSalesPriceAsync(Guid calculationId, Guid targetCostAnalysisId, EN13458SalesPrice? sourceSalesPrice, double immCost, string modifiedBy)
+        {
+            if (sourceSalesPrice == null)
+            {
+                return;
+            }
+
+            var laborRate = await _context.LaborRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sourceSalesPrice.LaborRateId && x.Status != Status.Deleted);
+            var gugRate = await _context.GugHourlyRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sourceSalesPrice.GugHourlyRateId && x.Status != Status.Deleted);
+            var financeRate = await _context.OverheadRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sourceSalesPrice.FinanceOverheadRateId && x.Status != Status.Deleted);
+            var generalManagementRate = await _context.OverheadRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sourceSalesPrice.GeneralManagementOverheadRateId && x.Status != Status.Deleted);
+
+            if (laborRate == null || gugRate == null || financeRate == null || generalManagementRate == null)
+            {
+                return;
+            }
+
+            var calculation = CalculateSalesPrice(
+                immCost,
+                sourceSalesPrice.LaborHours,
+                laborRate.HourlyRate,
+                gugRate.HourlyRate,
+                financeRate.Percentage,
+                generalManagementRate.Percentage,
+                sourceSalesPrice.ProfitPercentage);
+
+            _context.EN13458SalesPrices.Add(new EN13458SalesPrice
+            {
+                EN13458CalculationId = calculationId,
+                EN13458CostAnalysisId = targetCostAnalysisId,
+                LaborRateId = laborRate.Id,
+                GugHourlyRateId = gugRate.Id,
+                FinanceOverheadRateId = financeRate.Id,
+                GeneralManagementOverheadRateId = generalManagementRate.Id,
+                LaborHours = sourceSalesPrice.LaborHours,
+                ProfitPercentage = sourceSalesPrice.ProfitPercentage,
+                LaborCost = calculation.LaborCost,
+                GugCost = calculation.GugCost,
+                ImmCost = calculation.ImmCost,
+                AraToplam1 = calculation.AraToplam1,
+                FinanceCost = calculation.FinanceCost,
+                GeneralManagementCost = calculation.GeneralManagementCost,
+                AraToplam2 = calculation.AraToplam2,
+                SalesPrice = calculation.SalesPrice,
+                CreatedBy = modifiedBy,
+                CreatedDate = DateTime.UtcNow
+            });
+
+            await _context.SaveChangesAsync();
         }
 
         private async Task<EN13458Calculation> GetRequiredCalculationAsync(Guid calculationId)
