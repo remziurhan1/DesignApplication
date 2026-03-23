@@ -59,6 +59,9 @@
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
             <i class="bi bi-pencil-square me-1"></i>Tankı Güncelle
         </a>
+        <a asp-action="Specification" asp-route-id="@Model.Id" asp-route-costAnalysisId="@costTable?.CostAnalysisId" class="btn btn-outline-secondary">
+            <i class="bi bi-file-earmark-richtext me-1"></i>Şartname
+        </a>
         <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" asp-route-costAnalysisId="@costTable?.CostAnalysisId" class="btn btn-outline-secondary">
             <i class="bi bi-file-earmark-excel me-1"></i>Excel
         </a>

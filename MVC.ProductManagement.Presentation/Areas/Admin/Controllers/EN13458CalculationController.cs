@@ -18,6 +18,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -30,6 +33,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IGeneratedStockCodeService _generatedStockCodeService;
         private readonly IStockProductGroupService _stockProductGroupService;
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public EN13458CalculationController(
             IEN13458CalculationServices service,
@@ -38,7 +42,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             IStorageTypeService storageTypeService,
             IGeneratedStockCodeService generatedStockCodeService,
             IStockProductGroupService stockProductGroupService,
-            AppDbContext context)
+            AppDbContext context,
+            IWebHostEnvironment webHostEnvironment)
         {
             _service = service;
             _materialService = materialService;
@@ -47,6 +52,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             _generatedStockCodeService = generatedStockCodeService;
             _stockProductGroupService = stockProductGroupService;
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -141,6 +147,48 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.CostTable = costTable;
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Specification(Guid id, Guid? costAnalysisId = null)
+        {
+            var specification = await BuildSpecificationVmAsync(id, costAnalysisId);
+            if (specification == null)
+            {
+                return NotFound();
+            }
+
+            return View(specification);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportSpecificationWord(Guid id, Guid? costAnalysisId = null)
+        {
+            var specification = await BuildSpecificationVmAsync(id, costAnalysisId);
+            if (specification == null)
+            {
+                return NotFound();
+            }
+
+            var templatePath = GetSpecificationTemplatePath();
+            if (!System.IO.File.Exists(templatePath))
+            {
+                throw new FileNotFoundException("Şartname şablon dosyası bulunamadı.", templatePath);
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(templatePath);
+            using var stream = new MemoryStream();
+            await stream.WriteAsync(bytes, 0, bytes.Length);
+            stream.Position = 0;
+
+            using (var document = WordprocessingDocument.Open(stream, true))
+            {
+                ApplySpecificationTemplate(document, specification);
+            }
+
+            var fileName = $"LLL_Storage_Tank_Quotation_{DateTime.UtcNow:yyyyMMddHHmmss}.docx";
+
+            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
 
         [HttpGet]
@@ -870,6 +918,327 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             ViewBag.InnerBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
             ViewBag.OuterBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
+        }
+
+        private async Task<EN13458SpecificationVM?> BuildSpecificationVmAsync(Guid id, Guid? costAnalysisId)
+        {
+            var dto = await _service.GetByIdAsync(id);
+            if (dto == null)
+            {
+                return null;
+            }
+
+            var resultVm = MapResultVm(dto);
+            await PopulateResultDisplayNamesAsync(resultVm);
+
+            var costTable = await _service.GetCostAnalysisAsync(id, costAnalysisId) ?? await _service.BuildMaterialCostTableAsync(dto);
+            var accessoryItems = costTable.Items
+                .Where(x => x.IsManual && !x.IsBombeLabor)
+                .OrderBy(x => x.CostGroupCode)
+                .ThenBy(x => x.ItemName)
+                .Select(x => new EN13458AccessoryItemVM
+                {
+                    GroupName = string.IsNullOrWhiteSpace(x.CostGroupName) ? "Aksesuar" : x.CostGroupName,
+                    ItemName = string.IsNullOrWhiteSpace(x.ItemName) ? x.StockCodeName : x.ItemName,
+                    StockCode = x.StockCode,
+                    Description = string.IsNullOrWhiteSpace(x.StockCodeName) ? x.MaterialName : x.StockCodeName,
+                    Quantity = x.Quantity,
+                    Unit = string.IsNullOrWhiteSpace(x.Unit) ? "adet" : x.Unit
+                })
+                .ToList();
+
+            return new EN13458SpecificationVM
+            {
+                Id = resultVm.Id,
+                SelectedCostAnalysisId = costTable.CostAnalysisId,
+                GeneratedAtUtc = DateTime.UtcNow,
+                DocumentTitle = "Quotation for Cryogenic storage tank",
+                FluidDisplay = resultVm.StorageTypeName,
+                PressureDisplay = $"{(resultVm.DesignPressure > 0 ? resultVm.DesignPressure : resultVm.Pressure):N0} Bar",
+                HeaderItems = BuildSpecificationHeaderItems(),
+                IntroParagraphs = BuildSpecificationIntroParagraphs(),
+                GeneralItems = new List<EN13458SpecificationLineVM>
+                {
+                    CreateSpecItem("Type", "Vacuum Insulated Storage Tank"),
+                    CreateSpecItem("Design Code", "EN 13458"),
+                    CreateSpecItem("Approval", "2014/68/EU CE Marked"),
+                    CreateSpecItem("Fluid", resultVm.StorageTypeName),
+                    CreateSpecItem("Inner Vessel", "Stainless Steel (Acc. To EN 10028-7)"),
+                    CreateSpecItem("Outer Vessel", "Carbon Steel    (Acc. To EN 10025/10028)"),
+                    CreateSpecItem("Earthquake", "Seismic Zone 1 in accordance with UBC1997"),
+                    CreateSpecItem("Wind Load", "45 m/s Acc. To EN 1991-2-4")
+                },
+                InnerVesselItems = new List<EN13458SpecificationLineVM>
+                {
+                    CreateSpecItem("Gross Capacity", "20.810 Liters"),
+                    CreateSpecItem("Net Capacity(95% ratio)", "19.770 Liters"),
+                    CreateSpecItem("MAWP", $"{(resultVm.DesignPressure > 0 ? resultVm.DesignPressure : resultVm.Pressure):N0} Bar"),
+                    CreateSpecItem("Design Code", "EN 13458 ANNEX C"),
+                    CreateSpecItem("Design Temperature", "-196 °C / +50 °C"),
+                    CreateSpecItem("Material", "SS 1,4306 & 1,4307 or equivalent (Acc. To EN 10028-7)"),
+                    CreateSpecItem("Radiographic Control", "%100"),
+                    CreateSpecItem("Cleaning", "will be cleaned suitable to oxygen use.")
+                },
+                OuterVesselItems = new List<EN13458SpecificationLineVM>
+                {
+                    CreateSpecItem("Design Pressure", "1 barg"),
+                    CreateSpecItem("Design Code", "EN 13458 / EN 13445"),
+                    CreateSpecItem("Design Temperature", "-20 °C / +50 °C"),
+                    CreateSpecItem("Material", "Carbon Steel S355 or equivalent  (Acc. To EN 10025/10028)")
+                },
+                InsulationItems = new List<EN13458SpecificationLineVM>
+                {
+                    CreateSpecItem("Type", "Perlite + Vacuum Insulation"),
+                    CreateSpecItem("Perlite Density", "90-100 kg/m3"),
+                    CreateSpecItem("Vacuum Value", "5 x 10-2")
+                },
+                PipeworkItems = new List<EN13458SpecificationLineVM>
+                {
+                    CreateSpecItem("Pipe Material", "Seamless pipe AISI 304/304L min. sch10"),
+                    CreateSpecItem("Pipework testing", "Welds and pressure test"),
+                    CreateSpecItem("Valves", "See Accessories List below"),
+                    CreateSpecItem("Safety Valves", "See Accessories List below"),
+                    CreateSpecItem("Level Gauges", "See Accessories List below"),
+                    CreateSpecItem("Pressure Gauges", "See Accessories List below"),
+                    CreateSpecItem("PBUC", "Aluminum finned type"),
+                    CreateSpecItem(string.Empty, "(Acc. to Max. 300 Nm3/h LIN discharge capacity with standard pressure building coil at 0,7 x MAWP and 8 hours operating time)"),
+                    CreateSpecItem("Flow schematic", "See P&ID below")
+                },
+                AccessoryItems = accessoryItems,
+                SurfaceApplicationItems = new List<EN13458SpecificationLineVM>
+                {
+                    CreateSpecItem("Sandblasting", "Outer tank will be shot blasted with sa 2,5 screen quality"),
+                    CreateSpecItem("Painting", "Primer epoxy grey (120 µ)"),
+                    CreateSpecItem(string.Empty, "Topcoat polyurethane white (80 µ)"),
+                    CreateSpecItem("Logo", "Logo application price will be given optionally.")
+                },
+                VesselDocumentationItems = new List<string>
+                {
+                    "Inspection Test Plan (ITP)",
+                    "Hydrostatic test certificate",
+                    "Final inspection report",
+                    "Manufacturer’s name plate",
+                    "Tank approval certificate",
+                    "Third party inspection reports",
+                    "Welding procedures and applications",
+                    "Radiographic reports",
+                    "Dye-penetrant reports",
+                    "Material certification"
+                },
+                InspectionItems = new List<string>
+                {
+                    "Inspection and certification to be carried out by BV or TUV etc."
+                },
+                CommercialParagraphs = new List<string>
+                {
+                    "Our prices are net in EURO (€), for delivery Exw. GEBZE/KOCAELİ/TURKEY.",
+                    "Standard packing for open transport and export customs clearance are included.",
+                    "Seaworthy packing, transport, customs duties and any other charges are excluded."
+                },
+                QuotationRows = new List<EN13458QuotationRowVM>
+                {
+                    new EN13458QuotationRowVM
+                    {
+                        No = "1",
+                        Product = "20 m³ LLL Storage Tank",
+                        UnitPrice = "€",
+                        Quantity = "1",
+                        TotalPrice = "€"
+                    }
+                },
+                Notes = new List<string>
+                {
+                    "Local certificates are not included in our offer.",
+                    "Template, anchor and bolts are not included in our offer.",
+                    "All connection (FC,C etc.) will be PN40 DN40 standard flange according to EN."
+                },
+                PaymentTerms = new List<string>
+                {
+                    "%50 Advance payment",
+                    "%50 Before shipment"
+                },
+                DeliveryTerms = new List<string>
+                {
+                    "14-16 weeks after receiving down payment",
+                    "Exact delivery date to be agreed at time of order"
+                },
+                WarrantyTerms = new List<string>
+                {
+                    "12 months after final inspection report prepared by Quality Department",
+                    "All resale products and components only carry the warranty offered by their original manufacturer."
+                },
+                StorageTerms = new List<string>
+                {
+                    "Cryocan provide 2 weeks free storage after completion excluding handling cost if any",
+                    "storage fee will be 150$/day after."
+                },
+                ValidityTerms = new List<string>
+                {
+                    "Our quotation is valid for 30 days",
+                    "This quotation letter is valid with Cryocan General Terms & Conditions of Sales"
+                },
+                FooterTechnicalNotes = new List<string>
+                {
+                    $"SV: Inner vessel safety valves set pressure will be {(resultVm.DesignPressure > 0 ? resultVm.DesignPressure : resultVm.Pressure):N0} bar.",
+                    "PCV : Pressure regulator set point range will be 8-25 bar."
+                }
+            };
+        }
+
+        private static List<EN13458SpecificationLineVM> BuildSpecificationHeaderItems()
+        {
+            return new List<EN13458SpecificationLineVM>
+            {
+                CreateSpecItem("Company Name", "Representative :"),
+                CreateSpecItem("Attention", "Tel :"),
+                CreateSpecItem("Tel", "E-mail  :"),
+                CreateSpecItem("E-mail", "Date:"),
+                CreateSpecItem("Country", "Offer Ref. No:"),
+                CreateSpecItem("Project ID (end user)", ":")
+            };
+        }
+
+        private static List<string> BuildSpecificationIntroParagraphs()
+        {
+            return new List<string>
+            {
+                "You may find our proposal along with technical specification as below for Cryogenic Storage tank.",
+                "We hope you will find everything satisfactory and please do not hesitate to contact us should you or any of your team members have any questions and/or comments regarding our proposal.",
+                "Sincerely yours,"
+            };
+        }
+
+        private static EN13458SpecificationLineVM CreateSpecItem(string label, string value)
+            => new() { Label = label, Value = value };
+
+        private string GetSpecificationTemplatePath()
+        {
+            var contentTemplatePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Templates", "LLL_17 Bar Storage Tank Quotation_(20m3).docx");
+            if (System.IO.File.Exists(contentTemplatePath))
+            {
+                return contentTemplatePath;
+            }
+
+            var repoRootTemplatePath = Path.GetFullPath(Path.Combine(_webHostEnvironment.ContentRootPath, "..", "LLL_17 Bar Storage Tank Quotation_(20m3).docx"));
+            if (System.IO.File.Exists(repoRootTemplatePath))
+            {
+                return repoRootTemplatePath;
+            }
+
+            return Path.Combine(AppContext.BaseDirectory, "Templates", "LLL_17 Bar Storage Tank Quotation_(20m3).docx");
+        }
+
+        private static void ApplySpecificationTemplate(WordprocessingDocument document, EN13458SpecificationVM specification)
+        {
+            var body = document.MainDocumentPart?.Document?.Body;
+            if (body == null)
+            {
+                throw new InvalidOperationException("Şablon Word doküman gövdesi okunamadı.");
+            }
+
+            foreach (var paragraph in body.Descendants<Paragraph>().ToList())
+            {
+                var paragraphText = paragraph.InnerText?.Trim();
+                if (string.IsNullOrWhiteSpace(paragraphText))
+                {
+                    continue;
+                }
+
+                if (paragraphText.StartsWith("Fluid:", StringComparison.OrdinalIgnoreCase))
+                {
+                    ReplaceParagraphText(paragraph, $"Fluid: {specification.FluidDisplay}");
+                }
+                else if (paragraphText.StartsWith("MAWP:", StringComparison.OrdinalIgnoreCase))
+                {
+                    ReplaceParagraphText(paragraph, $"MAWP: {specification.PressureDisplay}");
+                }
+                else if (paragraphText.StartsWith("SV:", StringComparison.OrdinalIgnoreCase))
+                {
+                    ReplaceParagraphText(paragraph, $"SV: Inner vessel safety valves set pressure will be {specification.PressureDisplay.ToLowerInvariant()}.");
+                }
+            }
+
+            InsertAccessoryTable(body, specification.AccessoryItems);
+            document.MainDocumentPart?.Document?.Save();
+        }
+
+        private static void ReplaceParagraphText(Paragraph paragraph, string newText)
+        {
+            paragraph.RemoveAllChildren<Run>();
+            paragraph.Append(new Run(new Text(newText) { Space = SpaceProcessingModeValues.Preserve }));
+        }
+
+        private static void InsertAccessoryTable(Body body, IReadOnlyCollection<EN13458AccessoryItemVM> accessoryItems)
+        {
+            var anchorParagraph = body.Descendants<Paragraph>()
+                .FirstOrDefault(x => string.Equals(x.InnerText?.Trim(), "Flow schematic: See P&ID below", StringComparison.OrdinalIgnoreCase));
+
+            if (anchorParagraph == null)
+            {
+                return;
+            }
+
+            OpenXmlElement insertAfter = anchorParagraph;
+            var heading = new Paragraph(new Run(new RunProperties(new Bold()), new Text("Accessories List")));
+            insertAfter.InsertAfterSelf(heading);
+            insertAfter = heading;
+
+            if (accessoryItems.Count == 0)
+            {
+                var emptyParagraph = new Paragraph(new Run(new Text("No accessory added.")));
+                insertAfter.InsertAfterSelf(emptyParagraph);
+                return;
+            }
+
+            var table = new Table(
+                new TableProperties(
+                    new TableBorders(
+                        new TopBorder { Val = BorderValues.Single, Size = 6 },
+                        new BottomBorder { Val = BorderValues.Single, Size = 6 },
+                        new LeftBorder { Val = BorderValues.Single, Size = 6 },
+                        new RightBorder { Val = BorderValues.Single, Size = 6 },
+                        new InsideHorizontalBorder { Val = BorderValues.Single, Size = 4 },
+                        new InsideVerticalBorder { Val = BorderValues.Single, Size = 4 })));
+
+            table.Append(
+                CreateAccessoryRow("Group", "Item", "Stock Code", "Description", "Qty", "Unit", true));
+
+            foreach (var item in accessoryItems)
+            {
+                table.Append(CreateAccessoryRow(
+                    item.GroupName,
+                    item.ItemName,
+                    item.StockCode,
+                    item.Description,
+                    item.Quantity.ToString("N2", CultureInfo.InvariantCulture),
+                    item.Unit,
+                    false));
+            }
+
+            insertAfter.InsertAfterSelf(table);
+        }
+
+        private static TableRow CreateAccessoryRow(string group, string item, string stockCode, string description, string quantity, string unit, bool isHeader)
+        {
+            return new TableRow(
+                CreateAccessoryCell(group, isHeader),
+                CreateAccessoryCell(item, isHeader),
+                CreateAccessoryCell(stockCode, isHeader),
+                CreateAccessoryCell(description, isHeader),
+                CreateAccessoryCell(quantity, isHeader),
+                CreateAccessoryCell(unit, isHeader));
+        }
+
+        private static TableCell CreateAccessoryCell(string text, bool bold)
+        {
+            var runProperties = new RunProperties();
+            if (bold)
+            {
+                runProperties.Append(new Bold());
+            }
+
+            return new TableCell(
+                new Paragraph(new Run(runProperties, new Text(text ?? string.Empty) { Space = SpaceProcessingModeValues.Preserve })));
         }
 
         private double? ReadLocalizedDoubleFromForm(string key, double? fallback = null)
