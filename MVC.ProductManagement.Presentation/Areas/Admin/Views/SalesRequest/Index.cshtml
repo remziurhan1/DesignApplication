@@ -1,0 +1,92 @@
+@using MVC.ProductManagement.Domain.Enums
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestIndexVm
+@{
+    ViewData["Title"] = "Satış Talepleri";
+
+    string StatusClass(SalesRequestWorkflowStatus status) => status switch
+    {
+        SalesRequestWorkflowStatus.Approved => "bg-success",
+        SalesRequestWorkflowStatus.Rejected => "bg-danger",
+        SalesRequestWorkflowStatus.PricingInProgress => "bg-warning text-dark",
+        _ => "bg-info text-dark"
+    };
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Satış Talep Akışı</h1>
+        <p class="text-muted mb-0">Satış talebi açma, maliyetlendirme ve satışçının göreceği onaylı detay akışını tek ekranda yönetin.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="Customer" asp-action="Index" class="btn btn-outline-primary">Müşteriler</a>
+        <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>Yeni talep</a>
+    </div>
+</div>
+
+<section class="section mt-4">
+    <div class="row g-3">
+        <div class="col-md-3"><div class="card info-card"><div class="card-body"><h5 class="card-title">Toplam Talep</h5><h3>@Model.TotalRequestCount</h3></div></div></div>
+        <div class="col-md-3"><div class="card info-card"><div class="card-body"><h5 class="card-title">Maliyet Bekleyen</h5><h3>@Model.WaitingPricingCount</h3></div></div></div>
+        <div class="col-md-3"><div class="card info-card"><div class="card-body"><h5 class="card-title">Onaylı</h5><h3>@Model.ApprovedCount</h3></div></div></div>
+        <div class="col-md-3"><div class="card info-card"><div class="card-body"><h5 class="card-title">Ek Dosya</h5><h3>@Model.AttachmentCount</h3></div></div></div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body pt-4">
+            <ul class="nav nav-tabs" id="requestTabs" role="tablist">
+                <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sales-view" type="button">Satışçı Görünümü</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#manager-view" type="button">Yönetici Görünümü</button></li>
+            </ul>
+            <div class="tab-content pt-4">
+                <div class="tab-pane fade show active" id="sales-view">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr><th>Talep No</th><th>Başlık</th><th>Müşteri</th><th>Satışçı</th><th>Durum</th><th>Onaylı Satış Fiyatı</th><th class="text-end">İşlem</th></tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in Model.Requests)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@item.RequestNo</td>
+                                    <td>@item.Title <div><small class="text-muted">@item.ItemCount satır / @item.AttachmentCount ek</small></div></td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.RequestedByName</td>
+                                    <td><span class="badge @StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span></td>
+                                    <td>@(item.ApprovedSalesPriceTotal.HasValue ? item.ApprovedSalesPriceTotal.Value.ToString("N2") + " ₺" : "Henüz yok")</td>
+                                    <td class="text-end"><a asp-action="Details" asp-route-id="@item.Id" asp-route-mode="sales" class="btn btn-sm btn-outline-primary">Satış ekranı</a></td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="manager-view">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr><th>Talep No</th><th>Müşteri</th><th>Açılış</th><th>Durum</th><th>Ekler</th><th class="text-end">İşlem</th></tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in Model.Requests)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@item.RequestNo<div><small class="text-muted">@item.Title</small></div></td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td><span class="badge @StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span></td>
+                                    <td>@item.AttachmentCount</td>
+                                    <td class="text-end d-flex justify-content-end gap-2">
+                                        <a asp-action="Pricing" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Fiyatlandır</a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" asp-route-mode="manager" class="btn btn-sm btn-outline-secondary">Detay</a>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,77 @@
+@using MVC.ProductManagement.Domain.Enums
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestPricingVm
+@{
+    ViewData["Title"] = "Maliyet ve Satış Fiyatı Onayı";
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@Model.RequestNo</h1>
+        <p class="text-muted mb-0">@Model.Title</p>
+    </div>
+    <a asp-action="Details" asp-route-id="@Model.SalesRequestId" asp-route-mode="manager" class="btn btn-outline-secondary">Detaya dön</a>
+</div>
+
+<section class="section mt-4">
+    <div class="card">
+        <div class="card-body pt-4">
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <input asp-for="SalesRequestId" type="hidden" />
+                <input asp-for="RequestNo" type="hidden" />
+                <input asp-for="Title" type="hidden" />
+
+                @for (var i = 0; i < Model.Items.Count; i++)
+                {
+                    <input asp-for="Items[i].Id" type="hidden" />
+                    <input asp-for="Items[i].ParentSalesRequestItemId" type="hidden" />
+                    <input asp-for="Items[i].ItemCode" type="hidden" />
+                    <input asp-for="Items[i].ItemTitle" type="hidden" />
+                    <input asp-for="Items[i].ProductGroupName" type="hidden" />
+                    <input asp-for="Items[i].CapacityM3" type="hidden" />
+                    <input asp-for="Items[i].ConsumptionCapacity" type="hidden" />
+                    <input asp-for="Items[i].TankOrientation" type="hidden" />
+                    <input asp-for="Items[i].PlacementType" type="hidden" />
+                    <input asp-for="Items[i].MinimumTechnicalNotes" type="hidden" />
+
+                    <div class="border rounded p-3 mb-4">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                            <div>
+                                <span class="badge bg-secondary">@Model.Items[i].ItemCode</span>
+                                <h5 class="mt-2 mb-1">@Model.Items[i].ItemTitle</h5>
+                                <small class="text-muted">@Model.Items[i].ProductGroupName · @Model.Items[i].CapacityM3 m³ · @Model.Items[i].TankOrientation · @Model.Items[i].PlacementType</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label asp-for="Items[i].WorkflowStatus" class="form-label"></label>
+                                <select asp-for="Items[i].WorkflowStatus" asp-items="Html.GetEnumSelectList<SalesRequestWorkflowStatus>()" class="form-select"></select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-3">
+                                <label asp-for="Items[i].EstimatedCost" class="form-label"></label>
+                                <input asp-for="Items[i].EstimatedCost" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="Items[i].ApprovedSalesPrice" class="form-label"></label>
+                                <input asp-for="Items[i].ApprovedSalesPrice" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Items[i].DesignDetails" class="form-label"></label>
+                                <textarea asp-for="Items[i].DesignDetails" class="form-control" rows="2" placeholder="Satışçıya görünecek detay mühendisliği özeti"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Items[i].SalesEngineeringNotes" class="form-label"></label>
+                                <textarea asp-for="Items[i].SalesEngineeringNotes" class="form-control" rows="2" placeholder="İç kullanım notu - satışçı bu alanı görmez"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Kaydet ve onay akışını güncelle</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
