@@ -18,6 +18,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -141,6 +144,61 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.CostTable = costTable;
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Specification(Guid id, Guid? costAnalysisId = null)
+        {
+            var specification = await BuildSpecificationVmAsync(id, costAnalysisId);
+            if (specification == null)
+            {
+                return NotFound();
+            }
+
+            return View(specification);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportSpecificationWord(Guid id, Guid? costAnalysisId = null)
+        {
+            var specification = await BuildSpecificationVmAsync(id, costAnalysisId);
+            if (specification == null)
+            {
+                return NotFound();
+            }
+
+            using var stream = new MemoryStream();
+            using (var document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document, true))
+            {
+                var mainPart = document.AddMainDocumentPart();
+                mainPart.Document = new Document(new Body());
+
+                var body = mainPart.Document.Body;
+                if (body == null)
+                {
+                    throw new InvalidOperationException("Word dokümanı oluşturulamadı.");
+                }
+
+                body.Append(
+                    CreateParagraph(specification.DocumentTitle, true, 30, JustificationValues.Center),
+                    CreateParagraph($"Doküman Tarihi: {specification.GeneratedAtUtc:dd.MM.yyyy HH:mm} UTC", false, 20, JustificationValues.Center),
+                    CreateParagraph($"Revizyon: {specification.RevisionCode}", false, 20, JustificationValues.Center),
+                    CreateParagraph(string.Empty));
+
+                AppendWordTable(body, "Genel Bilgiler", specification.SummaryItems);
+                AppendWordTable(body, "Malzeme ve Konstrüksiyon", specification.MaterialItems);
+                AppendWordTable(body, "Performans ve Hesap Sonuçları", specification.PerformanceItems);
+                AppendAccessoryTable(body, specification.AccessoryItems);
+                AppendBulletList(body, "Kapsam", specification.ScopeItems);
+                AppendBulletList(body, "Standart Notlar", specification.StandardNotes);
+
+                mainPart.Document.Save();
+            }
+
+            var safeName = string.Concat((specification.Name ?? "EN13458_Sartname").Where(ch => !Path.GetInvalidFileNameChars().Contains(ch)));
+            var fileName = $"EN13458_Sartname_{safeName}_{DateTime.UtcNow:yyyyMMddHHmmss}.docx";
+
+            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
 
         [HttpGet]
@@ -870,6 +928,276 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             ViewBag.InnerBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
             ViewBag.OuterBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
+        }
+
+        private async Task<EN13458SpecificationVM?> BuildSpecificationVmAsync(Guid id, Guid? costAnalysisId)
+        {
+            var dto = await _service.GetByIdAsync(id);
+            if (dto == null)
+            {
+                return null;
+            }
+
+            var resultVm = MapResultVm(dto);
+            await PopulateResultDisplayNamesAsync(resultVm);
+
+            var costTable = await _service.GetCostAnalysisAsync(id, costAnalysisId) ?? await _service.BuildMaterialCostTableAsync(dto);
+            var totalLengthMm = Math.Max(resultVm.InnerTankTotalLength, resultVm.OuterTankTotalLength);
+            var accessoryItems = costTable.Items
+                .Where(x => x.IsManual && !x.IsBombeLabor)
+                .OrderBy(x => x.CostGroupCode)
+                .ThenBy(x => x.ItemName)
+                .Select(x => new EN13458AccessoryItemVM
+                {
+                    GroupName = string.IsNullOrWhiteSpace(x.CostGroupName) ? "Aksesuar" : x.CostGroupName,
+                    ItemName = string.IsNullOrWhiteSpace(x.ItemName) ? x.StockCodeName : x.ItemName,
+                    StockCode = x.StockCode,
+                    Description = string.IsNullOrWhiteSpace(x.StockCodeName) ? x.MaterialName : x.StockCodeName,
+                    Quantity = x.Quantity,
+                    Unit = string.IsNullOrWhiteSpace(x.Unit) ? "adet" : x.Unit
+                })
+                .ToList();
+
+            return new EN13458SpecificationVM
+            {
+                Id = resultVm.Id,
+                SelectedCostAnalysisId = costTable.CostAnalysisId,
+                Name = resultVm.Name,
+                DocumentTitle = $"{resultVm.StorageTypeName} Depolama Tankı Teknik Şartnamesi",
+                RevisionCode = string.IsNullOrWhiteSpace(costTable.RevisionCode) ? "Ön İzleme" : costTable.RevisionCode,
+                GeneratedAtUtc = DateTime.UtcNow,
+                ProductDescription = $"{resultVm.StorageTypeName} servisinde kullanılmak üzere EN 13458 standardına göre tasarlanan, vakum-perlit izolasyonlu kriyojenik depolama tankı.",
+                IntendedService = $"{resultVm.StorageTypeName} depolama ve sevk operasyonları",
+                DesignCodeText = "TS EN 13458 / EN 13445 tasarım yaklaşımı",
+                InsulationText = "Çift cidar, yüksek vakum ve perlit dolgu izolasyon",
+                OrientationText = resultVm.TankOrientation == TankOrientation.Horizontal ? "Yatay" : "Dikey",
+                ColdStretchText = resultVm.IsColdStretchApplied ? "Uygulanmıştır" : "Uygulanmamıştır",
+                NetVolumeM3 = resultVm.InnerVolume / 1000d,
+                GrossVolumeM3 = resultVm.OuterVolume / 1000d,
+                WorkingPressureBar = resultVm.DesignPressure > 0 ? resultVm.DesignPressure : resultVm.Pressure,
+                TestPressureBar = resultVm.TestPressure,
+                StaticPressureBar = resultVm.StaticPressure,
+                InnerDiameterMm = resultVm.OuterDiameter,
+                OuterDiameterMm = resultVm.OuterTankDiameter,
+                ShellLengthMm = resultVm.ShellLength,
+                TotalLengthMm = totalLengthMm,
+                LiquidDensity = resultVm.LiquidDensity,
+                PerliteWeightKg = resultVm.PerliteWeight,
+                InnerTankWeightKg = resultVm.InnerTankWeight,
+                OuterTankWeightKg = resultVm.OuterTankWeight,
+                TotalWeldLengthM = resultVm.TotalWeldLength,
+                InnerShellMaterial = resultVm.InnerShellMaterialName,
+                InnerHeadMaterial = resultVm.InnerHeadMaterialName,
+                OuterShellMaterial = resultVm.OuterShellMaterialName,
+                OuterHeadMaterial = resultVm.OuterHeadMaterialName,
+                InnerShellForm = resultVm.InnerShellMaterialFormName,
+                InnerHeadForm = resultVm.InnerHeadMaterialFormName,
+                OuterShellForm = resultVm.OuterShellMaterialFormName,
+                OuterHeadForm = resultVm.OuterHeadMaterialFormName,
+                InnerShellThicknessMm = resultVm.RoundedInnerShellThickness,
+                InnerHeadThicknessMm = resultVm.RoundedInnerHeadThickness,
+                OuterShellThicknessMm = resultVm.RoundedOuterShellThickness,
+                OuterHeadThicknessMm = resultVm.RoundedOuterHeadThickness,
+                SummaryItems = BuildSpecificationSummaryItems(resultVm, costTable, totalLengthMm),
+                MaterialItems = BuildSpecificationMaterialItems(resultVm),
+                PerformanceItems = BuildSpecificationPerformanceItems(resultVm),
+                AccessoryItems = accessoryItems,
+                ScopeItems = BuildSpecificationScopeItems(resultVm),
+                StandardNotes = BuildSpecificationStandardNotes(costTable)
+            };
+        }
+
+        private static List<EN13458SpecificationItemVM> BuildSpecificationSummaryItems(EN13458ResultVM resultVm, EN13458MaterialCostTableDTO costTable, double totalLengthMm)
+        {
+            return new List<EN13458SpecificationItemVM>
+            {
+                CreateSpecItem("Tank adı", resultVm.Name),
+                CreateSpecItem("Depolanan akışkan", resultVm.StorageTypeName),
+                CreateSpecItem("Tasarım standardı", "TS EN 13458"),
+                CreateSpecItem("Tank yönelimi", resultVm.TankOrientation.ToString()),
+                CreateSpecItem("Net hacim", $"{resultVm.InnerVolume / 1000d:N2} m³"),
+                CreateSpecItem("Brüt hacim", $"{resultVm.OuterVolume / 1000d:N2} m³"),
+                CreateSpecItem("İç tank çapı", $"{resultVm.OuterDiameter:N2} mm"),
+                CreateSpecItem("Dış tank çapı", $"{resultVm.OuterTankDiameter:N2} mm"),
+                CreateSpecItem("Silindirik boy", $"{resultVm.ShellLength:N2} mm"),
+                CreateSpecItem("Toplam boy", $"{totalLengthMm:N2} mm"),
+                CreateSpecItem("Çalışma/tasarım basıncı", $"{(resultVm.DesignPressure > 0 ? resultVm.DesignPressure : resultVm.Pressure):N2} bar"),
+                CreateSpecItem("Test basıncı", $"{resultVm.TestPressure:N2} bar"),
+                CreateSpecItem("Sıvı yoğunluğu", $"{resultVm.LiquidDensity:N2} kg/m³"),
+                CreateSpecItem("İzolasyon tipi", "Vakum + perlit"),
+                CreateSpecItem("Revizyon", string.IsNullOrWhiteSpace(costTable.RevisionCode) ? "Ön İzleme" : costTable.RevisionCode)
+            };
+        }
+
+        private static List<EN13458SpecificationItemVM> BuildSpecificationMaterialItems(EN13458ResultVM resultVm)
+        {
+            return new List<EN13458SpecificationItemVM>
+            {
+                CreateSpecItem("İç gövde malzemesi", $"{resultVm.InnerShellMaterialName} / {resultVm.InnerShellMaterialFormName}"),
+                CreateSpecItem("İç bombe malzemesi", $"{resultVm.InnerHeadMaterialName} / {resultVm.InnerHeadMaterialFormName}"),
+                CreateSpecItem("Dış gövde malzemesi", $"{resultVm.OuterShellMaterialName} / {resultVm.OuterShellMaterialFormName}"),
+                CreateSpecItem("Dış bombe malzemesi", $"{resultVm.OuterHeadMaterialName} / {resultVm.OuterHeadMaterialFormName}"),
+                CreateSpecItem("İç gövde kalınlığı", $"{resultVm.RoundedInnerShellThickness:N2} mm"),
+                CreateSpecItem("İç bombe kalınlığı", $"{resultVm.RoundedInnerHeadThickness:N2} mm"),
+                CreateSpecItem("Dış gövde kalınlığı", $"{resultVm.RoundedOuterShellThickness:N2} mm"),
+                CreateSpecItem("Dış bombe kalınlığı", $"{resultVm.RoundedOuterHeadThickness:N2} mm"),
+                CreateSpecItem("İç gövde akma dayanımı", $"{resultVm.InnerShellMaterialStrength:N2} MPa"),
+                CreateSpecItem("İç bombe akma dayanımı", $"{resultVm.InnerHeadMaterialStrength:N2} MPa"),
+                CreateSpecItem("Dış gövde akma dayanımı", $"{resultVm.OuterShellMaterialStrength:N2} MPa"),
+                CreateSpecItem("Dış bombe akma dayanımı", $"{resultVm.OuterHeadMaterialStrength:N2} MPa")
+            };
+        }
+
+        private static List<EN13458SpecificationItemVM> BuildSpecificationPerformanceItems(EN13458ResultVM resultVm)
+        {
+            var totalProfileLengthMm = resultVm.TotalProfileLength > 0 ? resultVm.TotalProfileLength : resultVm.RequiredProfileCount * resultVm.ProfileDevelopedLength;
+
+            return new List<EN13458SpecificationItemVM>
+            {
+                CreateSpecItem("Toplam kaynak uzunluğu", $"{resultVm.TotalWeldLength:N2} m"),
+                CreateSpecItem("Perlit hacmi", $"{resultVm.PerliteVolume:N2}"),
+                CreateSpecItem("Perlit ağırlığı", $"{resultVm.PerliteWeight:N2} kg"),
+                CreateSpecItem("Gaz azot hacmi", $"{resultVm.GasNitrogenVolume:N2}"),
+                CreateSpecItem("Sıvı azot hacmi", $"{resultVm.LiquidNitrogenVolume:N2}"),
+                CreateSpecItem("İç tank ağırlığı", $"{resultVm.InnerTankWeight:N2} kg"),
+                CreateSpecItem("Dış tank ağırlığı", $"{resultVm.OuterTankWeight:N2} kg"),
+                CreateSpecItem("Profil adedi", $"{resultVm.RequiredProfileCount}"),
+                CreateSpecItem("Toplam profil boyu", $"{totalProfileLengthMm:N2} mm"),
+                CreateSpecItem("Head collapse pressure", $"{resultVm.HeadCollapsePressure:N2} bar"),
+                CreateSpecItem("Destek ring gereksinimi", resultVm.SupportRingRequired ? "Gerekli" : "Gerekli değil"),
+                CreateSpecItem("Destek ring yeterlilik", resultVm.SupportRingAdequate ? "Yeterli" : "Yetersiz")
+            };
+        }
+
+        private static List<string> BuildSpecificationScopeItems(EN13458ResultVM resultVm)
+        {
+            return new List<string>
+            {
+                $"{resultVm.StorageTypeName} servisinde kullanılacak kriyojenik depolama tankı tasarımı, üretimi ve fonksiyon testleri.",
+                "İç ve dış tank, destek profilleri, perlit izolasyon ve ilgili kaynaklı imalat operasyonları.",
+                "Malzeme sertifikaları, imalat izlenebilirliği ve sevk öncesi kalite kontrol dokümantasyonu.",
+                "Müşteri tarafından sonradan eklenen ekipmanların aksesuar grubu altında stok kodları ile birlikte listelenmesi."
+            };
+        }
+
+        private static List<string> BuildSpecificationStandardNotes(EN13458MaterialCostTableDTO costTable)
+        {
+            return new List<string>
+            {
+                "Bu şartname görünümünde yer alan hesap verileri sistemdeki kayıtlı EN13458 hesabından otomatik alınır; standart açıklama metinleri sabittir.",
+                "İmalat öncesi nihai genel yerleşim, nozzle detayı ve kalite planı üretici tarafından onaya sunulmalıdır.",
+                "Malzeme ve aksesuar listesi seçilen maliyet revizyonuna göre hazırlanır.",
+                $"Bu doküman oluşturulurken kullanılan maliyet revizyonu: {(string.IsNullOrWhiteSpace(costTable.RevisionCode) ? "Ön İzleme" : costTable.RevisionCode)}."
+            };
+        }
+
+        private static EN13458SpecificationItemVM CreateSpecItem(string label, string value)
+            => new() { Label = label, Value = value };
+
+        private static Paragraph CreateParagraph(string text, bool bold = false, int fontSize = 22, JustificationValues justification = JustificationValues.Left)
+        {
+            var runProperties = new RunProperties(new FontSize { Val = fontSize.ToString() });
+            if (bold)
+            {
+                runProperties.Append(new Bold());
+            }
+
+            return new Paragraph(
+                new ParagraphProperties(new Justification { Val = justification }),
+                new Run(runProperties, new Text(text ?? string.Empty) { Space = SpaceProcessingModeValues.Preserve }));
+        }
+
+        private static void AppendWordTable(Body body, string title, IEnumerable<EN13458SpecificationItemVM> items)
+        {
+            body.Append(CreateParagraph(title, true, 24));
+
+            var table = new Table(
+                new TableProperties(
+                    new TableBorders(
+                        new TopBorder { Val = BorderValues.Single, Size = 8 },
+                        new BottomBorder { Val = BorderValues.Single, Size = 8 },
+                        new LeftBorder { Val = BorderValues.Single, Size = 8 },
+                        new RightBorder { Val = BorderValues.Single, Size = 8 },
+                        new InsideHorizontalBorder { Val = BorderValues.Single, Size = 4 },
+                        new InsideVerticalBorder { Val = BorderValues.Single, Size = 4 })));
+
+            foreach (var item in items)
+            {
+                table.Append(new TableRow(
+                    CreateTableCell(item.Label, true),
+                    CreateTableCell(item.Value)));
+            }
+
+            body.Append(table);
+            body.Append(CreateParagraph(string.Empty));
+        }
+
+        private static void AppendAccessoryTable(Body body, IReadOnlyCollection<EN13458AccessoryItemVM> accessoryItems)
+        {
+            body.Append(CreateParagraph("Aksesuar Grubu", true, 24));
+
+            if (accessoryItems.Count == 0)
+            {
+                body.Append(CreateParagraph("Seçili revizyonda eklenmiş aksesuar bulunmuyor."));
+                body.Append(CreateParagraph(string.Empty));
+                return;
+            }
+
+            var table = new Table(
+                new TableProperties(
+                    new TableBorders(
+                        new TopBorder { Val = BorderValues.Single, Size = 8 },
+                        new BottomBorder { Val = BorderValues.Single, Size = 8 },
+                        new LeftBorder { Val = BorderValues.Single, Size = 8 },
+                        new RightBorder { Val = BorderValues.Single, Size = 8 },
+                        new InsideHorizontalBorder { Val = BorderValues.Single, Size = 4 },
+                        new InsideVerticalBorder { Val = BorderValues.Single, Size = 4 })));
+
+            table.Append(new TableRow(
+                CreateTableCell("Grup", true),
+                CreateTableCell("Ürün", true),
+                CreateTableCell("Stok Kodu", true),
+                CreateTableCell("Açıklama", true),
+                CreateTableCell("Miktar", true),
+                CreateTableCell("Birim", true)));
+
+            foreach (var item in accessoryItems)
+            {
+                table.Append(new TableRow(
+                    CreateTableCell(item.GroupName),
+                    CreateTableCell(item.ItemName),
+                    CreateTableCell(item.StockCode),
+                    CreateTableCell(item.Description),
+                    CreateTableCell(item.Quantity.ToString("N2")),
+                    CreateTableCell(item.Unit)));
+            }
+
+            body.Append(table);
+            body.Append(CreateParagraph(string.Empty));
+        }
+
+        private static void AppendBulletList(Body body, string title, IEnumerable<string> items)
+        {
+            body.Append(CreateParagraph(title, true, 24));
+            foreach (var item in items)
+            {
+                body.Append(CreateParagraph($"• {item}"));
+            }
+
+            body.Append(CreateParagraph(string.Empty));
+        }
+
+        private static TableCell CreateTableCell(string text, bool bold = false)
+        {
+            var runProperties = new RunProperties(new FontSize { Val = "20" });
+            if (bold)
+            {
+                runProperties.Append(new Bold());
+            }
+
+            return new TableCell(
+                new TableCellProperties(new TableCellWidth { Type = TableWidthUnitValues.Auto }),
+                new Paragraph(new Run(runProperties, new Text(text ?? string.Empty) { Space = SpaceProcessingModeValues.Preserve })));
         }
 
         private double? ReadLocalizedDoubleFromForm(string key, double? fallback = null)
