@@ -138,11 +138,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var entity = await LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
+            var availableAnalyses = await GetAvailableAnalysesAsync();
             var vm = new SalesRequestPricingVm
             {
                 SalesRequestId = entity.Id,
                 RequestNo = entity.RequestNo,
                 Title = entity.Title,
+                AvailableAnalyses = availableAnalyses,
                 Items = entity.Items
                     .OrderBy(x => x.DisplayOrder)
                     .Select(x => new SalesRequestPricingItemVm
@@ -157,6 +159,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         TankOrientation = x.TankOrientation,
                         PlacementType = x.PlacementType,
                         MinimumTechnicalNotes = x.MinimumTechnicalNotes,
+                        LinkedAnalysisKey = BuildAnalysisKey(x.LinkedCalculationType, x.LinkedCalculationId, x.LinkedCostAnalysisId),
+                        LinkedCalculationType = x.LinkedCalculationType,
+                        LinkedCalculationId = x.LinkedCalculationId,
+                        LinkedCostAnalysisId = x.LinkedCostAnalysisId,
+                        LinkedCalculationName = x.LinkedCalculationName,
+                        LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
+                        LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal,
                         EstimatedCost = x.EstimatedCost,
                         ApprovedSalesPrice = x.ApprovedSalesPrice,
                         DesignDetails = x.DesignDetails,
@@ -172,18 +181,52 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Pricing(SalesRequestPricingVm vm)
         {
+            vm.AvailableAnalyses = await GetAvailableAnalysesAsync();
+
             var entity = await _context.SalesRequests
                 .Include(x => x.Items)
                 .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted);
             if (entity == null) return NotFound();
+
+            var analysisMap = vm.AvailableAnalyses.ToDictionary(x => x.Key, StringComparer.OrdinalIgnoreCase);
 
             foreach (var itemVm in vm.Items)
             {
                 var entityItem = entity.Items.FirstOrDefault(x => x.Id == itemVm.Id);
                 if (entityItem == null) continue;
 
-                entityItem.EstimatedCost = itemVm.EstimatedCost;
-                entityItem.ApprovedSalesPrice = itemVm.ApprovedSalesPrice;
+                if (!string.IsNullOrWhiteSpace(itemVm.LinkedAnalysisKey) && analysisMap.TryGetValue(itemVm.LinkedAnalysisKey, out var analysis))
+                {
+                    entityItem.LinkedCalculationType = analysis.CalculationType;
+                    entityItem.LinkedCalculationId = analysis.CalculationId;
+                    entityItem.LinkedCostAnalysisId = analysis.CostAnalysisId;
+                    entityItem.LinkedCalculationName = analysis.CalculationName;
+                    entityItem.LinkedCostAnalysisRevisionCode = analysis.RevisionCode;
+                    entityItem.LinkedCostAnalysisTotal = analysis.TotalCost;
+                    entityItem.EstimatedCost = analysis.TotalCost;
+                    entityItem.ApprovedSalesPrice = analysis.TotalCost;
+
+                    itemVm.LinkedCalculationType = analysis.CalculationType;
+                    itemVm.LinkedCalculationId = analysis.CalculationId;
+                    itemVm.LinkedCostAnalysisId = analysis.CostAnalysisId;
+                    itemVm.LinkedCalculationName = analysis.CalculationName;
+                    itemVm.LinkedCostAnalysisRevisionCode = analysis.RevisionCode;
+                    itemVm.LinkedCostAnalysisTotal = analysis.TotalCost;
+                    itemVm.EstimatedCost = analysis.TotalCost;
+                    itemVm.ApprovedSalesPrice = analysis.TotalCost;
+                }
+                else
+                {
+                    entityItem.LinkedCalculationType = null;
+                    entityItem.LinkedCalculationId = null;
+                    entityItem.LinkedCostAnalysisId = null;
+                    entityItem.LinkedCalculationName = null;
+                    entityItem.LinkedCostAnalysisRevisionCode = null;
+                    entityItem.LinkedCostAnalysisTotal = null;
+                    entityItem.EstimatedCost = itemVm.EstimatedCost;
+                    entityItem.ApprovedSalesPrice = itemVm.ApprovedSalesPrice;
+                }
+
                 entityItem.DesignDetails = itemVm.DesignDetails;
                 entityItem.SalesEngineeringNotes = itemVm.SalesEngineeringNotes;
                 entityItem.WorkflowStatus = itemVm.WorkflowStatus;
@@ -196,6 +239,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.ApprovedAt = entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved ? DateTime.UtcNow : null;
 
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Talep kalemleri maliyet analizleriyle eşleştirildi ve fiyatlar güncellendi.";
             return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
         }
 
@@ -294,6 +338,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         MinimumTechnicalNotes = x.MinimumTechnicalNotes,
                         SalesEngineeringNotes = x.SalesEngineeringNotes,
                         DesignDetails = x.DesignDetails,
+                        LinkedCalculationType = x.LinkedCalculationType,
+                        LinkedCalculationId = x.LinkedCalculationId,
+                        LinkedCostAnalysisId = x.LinkedCostAnalysisId,
+                        LinkedCalculationName = x.LinkedCalculationName,
+                        LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
+                        LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal,
                         EstimatedCost = isManagerView ? x.EstimatedCost : null,
                         ApprovedSalesPrice = x.ApprovedSalesPrice,
                         WorkflowStatus = x.WorkflowStatus
@@ -338,6 +388,55 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             };
         }
 
+        private async Task<List<SalesRequestPricingAnalysisOptionVm>> GetAvailableAnalysesAsync()
+        {
+            var ad2000Analyses = await _context.AD2000CostAnalyses
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted && x.AD2000Calculation.Status != Status.Deleted)
+                .Select(x => new
+                {
+                    x.CreatedDate,
+                    CalculationType = SalesRequestCalculationType.AD2000,
+                    CalculationId = x.AD2000CalculationId,
+                    CostAnalysisId = x.Id,
+                    CalculationName = x.AD2000Calculation.Name,
+                    RevisionCode = x.RevisionCode,
+                    TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d
+                })
+                .ToListAsync();
+
+            var en13458Analyses = await _context.EN13458CostAnalyses
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted && x.EN13458Calculation.Status != Status.Deleted)
+                .Select(x => new
+                {
+                    x.CreatedDate,
+                    CalculationType = SalesRequestCalculationType.EN13458,
+                    CalculationId = x.EN13458CalculationId,
+                    CostAnalysisId = x.Id,
+                    CalculationName = x.EN13458Calculation.Name,
+                    RevisionCode = x.RevisionCode,
+                    TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d
+                })
+                .ToListAsync();
+
+            return ad2000Analyses
+                .Concat(en13458Analyses)
+                .OrderByDescending(x => x.CreatedDate)
+                .Select(x => new SalesRequestPricingAnalysisOptionVm
+                {
+                    Key = BuildAnalysisKey(x.CalculationType, x.CalculationId, x.CostAnalysisId) ?? string.Empty,
+                    Label = $"{x.CalculationType} · {x.CalculationName} · {x.RevisionCode} · {x.TotalCost:N2} ₺",
+                    CalculationType = x.CalculationType,
+                    CalculationId = x.CalculationId,
+                    CostAnalysisId = x.CostAnalysisId,
+                    CalculationName = x.CalculationName,
+                    RevisionCode = x.RevisionCode,
+                    TotalCost = Convert.ToDecimal(x.TotalCost)
+                })
+                .ToList();
+        }
+
         private async Task<string> GenerateRequestNoAsync()
         {
             var prefix = $"TR-{DateTime.UtcNow:yyyyMMdd}";
@@ -366,6 +465,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var capacity = item.CapacityM3.ToString("0.##").Replace(",", string.Empty).Replace(".", string.Empty);
             var consumption = item.ConsumptionCapacity.HasValue ? $"-{item.ConsumptionCapacity:0.##}".Replace(",", string.Empty).Replace(".", string.Empty) : string.Empty;
             return $"CVS-{groupCode}{orientation}{placement}-{capacity}{consumption}-{order:000}";
+        }
+
+        private static string? BuildAnalysisKey(SalesRequestCalculationType? type, Guid? calculationId, Guid? costAnalysisId)
+        {
+            if (!type.HasValue || !calculationId.HasValue || !costAnalysisId.HasValue)
+            {
+                return null;
+            }
+
+            return $"{(int)type.Value}|{calculationId.Value:D}|{costAnalysisId.Value:D}";
         }
 
         private async Task SaveAttachmentsAsync(SalesRequest request, IEnumerable<IFormFile> files)

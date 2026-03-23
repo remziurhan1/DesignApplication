@@ -15,6 +15,9 @@
 <section class="section mt-4">
     <div class="card">
         <div class="card-body pt-4">
+            <div class="alert alert-info" role="alert">
+                Her talep satırını bir maliyet analizine bağlayabilirsiniz. Analiz seçildiğinde ilgili revizyonun toplam maliyeti hem <strong>maliyet</strong> hem de <strong>satış fiyatı</strong> alanına uygulanır.
+            </div>
             <form method="post">
                 @Html.AntiForgeryToken()
                 <input asp-for="SalesRequestId" type="hidden" />
@@ -33,6 +36,12 @@
                     <input asp-for="Items[i].TankOrientation" type="hidden" />
                     <input asp-for="Items[i].PlacementType" type="hidden" />
                     <input asp-for="Items[i].MinimumTechnicalNotes" type="hidden" />
+                    <input asp-for="Items[i].LinkedCalculationType" type="hidden" />
+                    <input asp-for="Items[i].LinkedCalculationId" type="hidden" />
+                    <input asp-for="Items[i].LinkedCostAnalysisId" type="hidden" />
+                    <input asp-for="Items[i].LinkedCalculationName" type="hidden" />
+                    <input asp-for="Items[i].LinkedCostAnalysisRevisionCode" type="hidden" />
+                    <input asp-for="Items[i].LinkedCostAnalysisTotal" type="hidden" />
 
                     <div class="border rounded p-3 mb-4">
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
@@ -47,6 +56,22 @@
                             </div>
                         </div>
                         <div class="row g-3 mt-1">
+                            <div class="col-12">
+                                <label asp-for="Items[i].LinkedAnalysisKey" class="form-label"></label>
+                                <select asp-for="Items[i].LinkedAnalysisKey" class="form-select">
+                                    <option value="">Analiz bağlantısı kurmadan manuel fiyat gir</option>
+                                    @foreach (var analysis in Model.AvailableAnalyses)
+                                    {
+                                        <option value="@analysis.Key">@analysis.Label</option>
+                                    }
+                                </select>
+                                @if (!string.IsNullOrWhiteSpace(Model.Items[i].LinkedCalculationName))
+                                {
+                                    <div class="form-text">
+                                        Aktif bağlantı: @Model.Items[i].LinkedCalculationType · @Model.Items[i].LinkedCalculationName · @Model.Items[i].LinkedCostAnalysisRevisionCode · @(Model.Items[i].LinkedCostAnalysisTotal?.ToString("N2") ?? "0,00") ₺
+                                    </div>
+                                }
+                            </div>
                             <div class="col-md-3">
                                 <label asp-for="Items[i].EstimatedCost" class="form-label"></label>
                                 <input asp-for="Items[i].EstimatedCost" class="form-control" />

@@ -120,6 +120,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string? MinimumTechnicalNotes { get; set; }
         public string? SalesEngineeringNotes { get; set; }
         public string? DesignDetails { get; set; }
+        public SalesRequestCalculationType? LinkedCalculationType { get; set; }
+        public Guid? LinkedCalculationId { get; set; }
+        public Guid? LinkedCostAnalysisId { get; set; }
+        public string? LinkedCalculationName { get; set; }
+        public string? LinkedCostAnalysisRevisionCode { get; set; }
+        public decimal? LinkedCostAnalysisTotal { get; set; }
         public decimal? EstimatedCost { get; set; }
         public decimal? ApprovedSalesPrice { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
@@ -144,7 +150,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public Guid SalesRequestId { get; set; }
         public string RequestNo { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
+        public List<SalesRequestPricingAnalysisOptionVm> AvailableAnalyses { get; set; } = new();
         public List<SalesRequestPricingItemVm> Items { get; set; } = new();
+    }
+
+    public class SalesRequestPricingAnalysisOptionVm
+    {
+        public string Key { get; set; } = string.Empty;
+        public string Label { get; set; } = string.Empty;
+        public SalesRequestCalculationType CalculationType { get; set; }
+        public Guid CalculationId { get; set; }
+        public Guid CostAnalysisId { get; set; }
+        public string CalculationName { get; set; } = string.Empty;
+        public string RevisionCode { get; set; } = string.Empty;
+        public decimal TotalCost { get; set; }
     }
 
     public class SalesRequestPricingItemVm
@@ -159,6 +178,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public RequestTankOrientation TankOrientation { get; set; }
         public PlacementType PlacementType { get; set; }
         public string? MinimumTechnicalNotes { get; set; }
+        [Display(Name = "Bağlı maliyet analizi")]
+        public string? LinkedAnalysisKey { get; set; }
+        public SalesRequestCalculationType? LinkedCalculationType { get; set; }
+        public Guid? LinkedCalculationId { get; set; }
+        public Guid? LinkedCostAnalysisId { get; set; }
+        public string? LinkedCalculationName { get; set; }
+        public string? LinkedCostAnalysisRevisionCode { get; set; }
+        public decimal? LinkedCostAnalysisTotal { get; set; }
         [Display(Name = "Maliyet")]
         public decimal? EstimatedCost { get; set; }
         [Display(Name = "Satış fiyatı")]
