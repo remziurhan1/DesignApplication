@@ -194,6 +194,138 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             return View(vm);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> TechnicalDetails(Guid requestId, Guid itemId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+            var vm = await BuildTechnicalDetailsVmAsync(requestId, itemId);
+            if (vm == null)
+            {
+                return NotFound();
+            }
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Specification(Guid requestId, Guid itemId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var vm = await BuildTechnicalDetailsVmAsync(requestId, itemId);
+            if (vm == null || !vm.HasSpecification)
+            {
+                return NotFound();
+            }
+            return View(vm);
+        }
+
+        private async Task<SalesRequestTechnicalDetailsVm?> BuildTechnicalDetailsVmAsync(Guid requestId, Guid itemId)
+        {
+            var request = await LoadRequestAsync(requestId);
+            if (request == null)
+            {
+                return null;
+            }
+
+            var item = request.Items.FirstOrDefault(x => x.Id == itemId);
+            if (item == null || !item.LinkedCalculationType.HasValue || !item.LinkedCalculationId.HasValue)
+            {
+                return null;
+            }
+
+            var vm = new SalesRequestTechnicalDetailsVm
+            {
+                RequestId = request.Id,
+                RequestNo = request.RequestNo,
+                ItemId = item.Id,
+                ItemCode = item.ItemCode,
+                ItemTitle = item.ItemTitle,
+                CalculationName = item.LinkedCalculationName ?? "-",
+                CalculationType = item.LinkedCalculationType.Value.ToString(),
+                RevisionCode = item.LinkedCostAnalysisRevisionCode,
+                DesignDetails = item.DesignDetails,
+                HasSpecification = item.LinkedCalculationType == SalesRequestCalculationType.EN13458
+            };
+
+            if (item.LinkedCalculationType == SalesRequestCalculationType.EN13458)
+            {
+                var calculation = await _context.EN13458Calculations
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+
+                if (calculation == null)
+                {
+                    return null;
+                }
+
+                vm.MAWP = $"{(calculation.DesignPressure > 0 ? calculation.DesignPressure : calculation.Pressure):N2} bar";
+                vm.DesignPressure = $"{calculation.DesignPressure:N2} bar";
+                vm.TestPressure = $"{calculation.TestPressure:N2} bar";
+                vm.RoundedShellThickness = $"İç: {calculation.RoundedInnerShellThickness:N2} mm / Dış: {calculation.RoundedOuterShellThickness:N2} mm";
+                vm.RoundedHeadThickness = $"İç: {calculation.RoundedInnerHeadThickness:N2} mm / Dış: {calculation.RoundedOuterHeadThickness:N2} mm";
+                vm.InnerTankLength = $"{calculation.InnerTankTotalLength:N2} mm";
+                vm.TankDiameter = $"İç: {calculation.OuterDiameter:N2} mm / Dış: {calculation.OuterTankDiameter:N2} mm";
+
+                vm.TankDetailFields = new List<SalesRequestTechnicalFieldVm>
+                {
+                    new() { Label = "Hesap Adı", Value = calculation.Name },
+                    new() { Label = "İç Tank Çapı", Value = $"{calculation.OuterDiameter:N2} mm" },
+                    new() { Label = "Dış Tank Çapı", Value = $"{calculation.OuterTankDiameter:N2} mm" },
+                    new() { Label = "Silindirik Boy", Value = $"{calculation.ShellLength:N2} mm" },
+                    new() { Label = "Design Pressure", Value = $"{calculation.DesignPressure:N2} bar" },
+                    new() { Label = "Test Pressure", Value = $"{calculation.TestPressure:N2} bar" },
+                    new() { Label = "Static Pressure", Value = $"{calculation.StaticPressure:N2} bar" },
+                    new() { Label = "Yuvarlanmış İç Gövde Et", Value = $"{calculation.RoundedInnerShellThickness:N2} mm" },
+                    new() { Label = "Yuvarlanmış İç Bombe Et", Value = $"{calculation.RoundedInnerHeadThickness:N2} mm" },
+                    new() { Label = "Yuvarlanmış Dış Gövde Et", Value = $"{calculation.RoundedOuterShellThickness:N2} mm" },
+                    new() { Label = "Yuvarlanmış Dış Bombe Et", Value = $"{calculation.RoundedOuterHeadThickness:N2} mm" },
+                    new() { Label = "İç Tank Toplam Uzunluk", Value = $"{calculation.InnerTankTotalLength:N2} mm" },
+                    new() { Label = "Dış Tank Toplam Uzunluk", Value = $"{calculation.OuterTankTotalLength:N2} mm" },
+                    new() { Label = "Toplam Kaynak Uzunluğu", Value = $"{calculation.TotalWeldLength:N2} m" }
+                };
+                return vm;
+            }
+
+            var adCalculation = await _context.AD2000Calculations
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+
+            if (adCalculation == null)
+            {
+                return null;
+            }
+
+            vm.MAWP = $"{adCalculation.DesignPressure:N2} bar";
+            vm.DesignPressure = $"{adCalculation.DesignPressure:N2} bar";
+            vm.TestPressure = $"{adCalculation.TestPressure:N2} bar";
+            vm.RoundedShellThickness = $"{adCalculation.RoundedShellThickness:N2} mm";
+            vm.RoundedHeadThickness = $"{adCalculation.RoundedHeadThickness:N2} mm";
+            vm.InnerTankLength = $"{adCalculation.ShellLength:N2} mm";
+            vm.TankDiameter = $"{adCalculation.Diameter:N2} mm";
+            vm.TankDetailFields = new List<SalesRequestTechnicalFieldVm>
+            {
+                new() { Label = "Hesap Adı", Value = adCalculation.Name },
+                new() { Label = "Çap", Value = $"{adCalculation.Diameter:N2} mm" },
+                new() { Label = "Gövde Boyu", Value = $"{adCalculation.ShellLength:N2} mm" },
+                new() { Label = "Design Pressure", Value = $"{adCalculation.DesignPressure:N2} bar" },
+                new() { Label = "Test Pressure", Value = $"{adCalculation.TestPressure:N2} bar" },
+                new() { Label = "Static Pressure", Value = $"{adCalculation.StaticPressure:N3} bar" },
+                new() { Label = "Yuvarlanmış Gövde Et", Value = $"{adCalculation.RoundedShellThickness:N2} mm" },
+                new() { Label = "Yuvarlanmış Bombe Et", Value = $"{adCalculation.RoundedHeadThickness:N2} mm" },
+                new() { Label = "Korozyon Payı", Value = $"{adCalculation.CorrosionAllowance:N2} mm" },
+                new() { Label = "Kaynak Faktörü", Value = adCalculation.WeldJointFactor.ToString("N2") },
+                new() { Label = "Sıvı Yoğunluğu", Value = $"{adCalculation.LiquidDensity:N2} kg/m³" }
+            };
+
+            return vm;
+        }
+
         private async Task<SalesRequest?> LoadRequestAsync(Guid id)
         {
             return await _context.SalesRequests
