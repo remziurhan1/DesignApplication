@@ -43,7 +43,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 })
                 .ToListAsync();
 
-            return View("~/Areas/Admin/Views/Customer/Index.cshtml", customers);
+            return View(customers);
         }
 
         [HttpGet]
@@ -54,7 +54,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 return Forbid();
             }
 
-            return View("~/Areas/Admin/Views/Customer/Create.cshtml", new CustomerFormVm());
+            return View(new CustomerFormVm());
         }
 
         [HttpPost]
@@ -68,7 +68,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View("~/Areas/Admin/Views/Customer/Create.cshtml", vm);
+                return View(vm);
             }
 
             var entity = new Domain.Entities.Customer
