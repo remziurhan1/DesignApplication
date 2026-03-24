@@ -194,6 +194,106 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             return View(vm);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> TechnicalDetails(Guid requestId, Guid itemId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+            var vm = await BuildTechnicalDetailsVmAsync(requestId, itemId);
+            if (vm == null)
+            {
+                return NotFound();
+            }
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Specification(Guid requestId, Guid itemId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var vm = await BuildTechnicalDetailsVmAsync(requestId, itemId);
+            if (vm == null || !vm.HasSpecification)
+            {
+                return NotFound();
+            }
+            return View(vm);
+        }
+
+        private async Task<SalesRequestTechnicalDetailsVm?> BuildTechnicalDetailsVmAsync(Guid requestId, Guid itemId)
+        {
+            var request = await LoadRequestAsync(requestId);
+            if (request == null)
+            {
+                return null;
+            }
+
+            var item = request.Items.FirstOrDefault(x => x.Id == itemId);
+            if (item == null || !item.LinkedCalculationType.HasValue || !item.LinkedCalculationId.HasValue)
+            {
+                return null;
+            }
+
+            var vm = new SalesRequestTechnicalDetailsVm
+            {
+                RequestId = request.Id,
+                RequestNo = request.RequestNo,
+                ItemId = item.Id,
+                ItemCode = item.ItemCode,
+                ItemTitle = item.ItemTitle,
+                CalculationName = item.LinkedCalculationName ?? "-",
+                CalculationType = item.LinkedCalculationType.Value.ToString(),
+                RevisionCode = item.LinkedCostAnalysisRevisionCode,
+                DesignDetails = item.DesignDetails,
+                HasSpecification = item.LinkedCalculationType == SalesRequestCalculationType.EN13458
+            };
+
+            if (item.LinkedCalculationType == SalesRequestCalculationType.EN13458)
+            {
+                var calculation = await _context.EN13458Calculations
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+
+                if (calculation == null)
+                {
+                    return null;
+                }
+
+                vm.MAWP = $"{(calculation.DesignPressure > 0 ? calculation.DesignPressure : calculation.Pressure):N2} bar";
+                vm.DesignPressure = $"{calculation.DesignPressure:N2} bar";
+                vm.TestPressure = $"{calculation.TestPressure:N2} bar";
+                vm.RoundedShellThickness = $"İç: {calculation.RoundedInnerShellThickness:N2} mm / Dış: {calculation.RoundedOuterShellThickness:N2} mm";
+                vm.RoundedHeadThickness = $"İç: {calculation.RoundedInnerHeadThickness:N2} mm / Dış: {calculation.RoundedOuterHeadThickness:N2} mm";
+                vm.InnerTankLength = $"{calculation.InnerTankTotalLength:N2} mm";
+                vm.TankDiameter = $"İç: {calculation.OuterDiameter:N2} mm / Dış: {calculation.OuterTankDiameter:N2} mm";
+                return vm;
+            }
+
+            var adCalculation = await _context.AD2000Calculations
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+
+            if (adCalculation == null)
+            {
+                return null;
+            }
+
+            vm.MAWP = $"{adCalculation.DesignPressure:N2} bar";
+            vm.DesignPressure = $"{adCalculation.DesignPressure:N2} bar";
+            vm.TestPressure = $"{adCalculation.TestPressure:N2} bar";
+            vm.RoundedShellThickness = $"{adCalculation.RoundedShellThickness:N2} mm";
+            vm.RoundedHeadThickness = $"{adCalculation.RoundedHeadThickness:N2} mm";
+            vm.InnerTankLength = $"{adCalculation.ShellLength:N2} mm";
+            vm.TankDiameter = $"{adCalculation.Diameter:N2} mm";
+
+            return vm;
+        }
+
         private async Task<SalesRequest?> LoadRequestAsync(Guid id)
         {
             return await _context.SalesRequests

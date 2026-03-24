@@ -1,0 +1,44 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestTechnicalDetailsVm
+@{
+    ViewData["Title"] = "Teknik Şartname";
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@Model.ItemCode - Teknik Şartname</h1>
+        <p class="text-muted mb-0">@Model.RequestNo · @Model.ItemTitle</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="TechnicalDetails" asp-route-requestId="@Model.RequestId" asp-route-itemId="@Model.ItemId" class="btn btn-outline-primary">Teknik Detay</a>
+        <a asp-action="Details" asp-route-id="@Model.RequestId" class="btn btn-outline-secondary">Talebe dön</a>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-body pt-4">
+        <h5 class="mb-3">Vessel Technical Specification</h5>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <tbody>
+                    <tr><th style="width:40%">Calculation</th><td>@Model.CalculationType - @Model.CalculationName</td></tr>
+                    <tr><th>Revision</th><td>@(Model.RevisionCode ?? "-")</td></tr>
+                    <tr><th>MAWP</th><td>@Model.MAWP</td></tr>
+                    <tr><th>Design Pressure</th><td>@Model.DesignPressure</td></tr>
+                    <tr><th>Test Pressure</th><td>@Model.TestPressure</td></tr>
+                    <tr><th>Rounded Shell Thickness</th><td>@Model.RoundedShellThickness</td></tr>
+                    <tr><th>Rounded Head Thickness</th><td>@Model.RoundedHeadThickness</td></tr>
+                    <tr><th>Inner Tank Length</th><td>@Model.InnerTankLength</td></tr>
+                    <tr><th>Tank Diameter</th><td>@Model.TankDiameter</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.DesignDetails))
+        {
+            <div class="mt-3">
+                <h6>Ek Teknik Açıklama</h6>
+                <div class="text-muted">@Model.DesignDetails</div>
+            </div>
+        }
+    </div>
+</div>
