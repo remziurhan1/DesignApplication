@@ -3,22 +3,19 @@
 @{
     ViewData["Title"] = "Satış Sorumlusu Talepleri";
 
-    string CustomerStatusText(SalesRequestWorkflowStatus status) => status switch
+    string CustomerStatusText(SalesCustomerQuoteStatus status) => status switch
     {
-        SalesRequestWorkflowStatus.Draft => "Talep Alındı",
-        SalesRequestWorkflowStatus.Submitted => "Şartname Hazırlanıyor",
-        SalesRequestWorkflowStatus.PricingInProgress => "Şartname Hazırlanıyor",
-        SalesRequestWorkflowStatus.Approved => "Teklif Gönderildi",
-        SalesRequestWorkflowStatus.Rejected => "Teklif İptal",
+        SalesCustomerQuoteStatus.NotShared => "Teklif Müşteriye İletilmedi",
+        SalesCustomerQuoteStatus.PreparingSpecification => "Şartname Hazırlanıyor",
+        SalesCustomerQuoteStatus.SharedWithCustomer => "Teklif Müşteriye İletildi",
         _ => "İşlemde"
     };
 
-    string StatusClass(SalesRequestWorkflowStatus status) => status switch
+    string StatusClass(SalesCustomerQuoteStatus status) => status switch
     {
-        SalesRequestWorkflowStatus.Approved => "bg-success",
-        SalesRequestWorkflowStatus.Rejected => "bg-danger",
-        SalesRequestWorkflowStatus.PricingInProgress => "bg-warning text-dark",
-        _ => "bg-info"
+        SalesCustomerQuoteStatus.SharedWithCustomer => "bg-success",
+        SalesCustomerQuoteStatus.NotShared => "bg-secondary",
+        _ => "bg-warning text-dark"
     };
 }
 
@@ -67,7 +64,7 @@
                                 <td>@item.CustomerName</td>
                                 <td>@item.RequestedByName</td>
                                 <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
-                                <td><span class="badge @StatusClass(item.WorkflowStatus)">@CustomerStatusText(item.WorkflowStatus)</span></td>
+                                <td><span class="badge @StatusClass(item.CustomerQuoteStatus)">@CustomerStatusText(item.CustomerQuoteStatus)</span></td>
                                 <td>@item.CustomerQuoteStatus</td>
                                 <td>@item.RevisionCode</td>
                                 <td>@((item.ApprovedSalesPriceTotal ?? 0).ToString("N2")) ₺</td>

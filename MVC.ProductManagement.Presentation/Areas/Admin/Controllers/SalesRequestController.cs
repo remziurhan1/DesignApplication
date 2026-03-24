@@ -272,6 +272,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.SummaryNotes = vm.SummaryNotes;
             entity.Title = await BuildRequestTitleAsync(vm.Items.First());
             entity.WorkflowStatus = SalesRequestWorkflowStatus.Submitted;
+            entity.CustomerQuoteStatus = SalesCustomerQuoteStatus.PreparingSpecification;
             entity.PricingCompletedAt = null;
             entity.ApprovedAt = null;
 
