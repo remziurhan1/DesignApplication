@@ -53,6 +53,13 @@
     <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
 </div>
 
+@if (ViewBag.WaitingManagerApproval is bool waiting && waiting)
+{
+    <div class="alert alert-warning mt-3 mb-0">
+        Bu talep admin/satış yöneticisi onayında. Onay sonrası minimum ve tavsiye fiyatlar netleşecektir.
+    </div>
+}
+
 <section class="section mt-4">
     <div class="row g-4">
         <div class="col-lg-8">

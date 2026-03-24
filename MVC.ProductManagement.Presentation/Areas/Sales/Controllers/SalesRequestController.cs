@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
@@ -10,10 +12,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
     public class SalesRequestController : SalesBaseController
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public SalesRequestController(AppDbContext context)
+        public SalesRequestController(AppDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -24,15 +28,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .Include(x => x.Customer)
                 .Include(x => x.Items)
                 .Include(x => x.Attachments)
-                .Where(x => x.Status != Status.Deleted && x.WorkflowStatus == SalesRequestWorkflowStatus.Approved)
-                .OrderByDescending(x => x.ApprovedAt ?? x.CreatedDate)
+                .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales)
+                .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
 
             var vm = new SalesRequestIndexVm
             {
                 TotalRequestCount = requests.Count,
-                WaitingPricingCount = 0,
-                ApprovedCount = requests.Count,
+                WaitingPricingCount = requests.Count(x => x.WorkflowStatus != SalesRequestWorkflowStatus.Approved),
+                ApprovedCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved),
                 AttachmentCount = requests.Sum(x => x.Attachments.Count),
                 Requests = requests.Select(x => new SalesRequestListVm
                 {
@@ -55,18 +59,117 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var vm = new SalesRequestCreateVm
+            {
+                RequestSource = SalesRequestSource.Sales,
+                Items = new List<SalesRequestItemInputVm> { new() }
+            };
+
+            await PopulateFormAsync(vm);
+            return View("~/Areas/Admin/Views/SalesRequest/Create.cshtml", vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
+        public async Task<IActionResult> Create(SalesRequestCreateVm vm)
+        {
+            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
+            if (!vm.Items.Any())
+            {
+                ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await PopulateFormAsync(vm);
+                return View("~/Areas/Admin/Views/SalesRequest/Create.cshtml", vm);
+            }
+
+            var requestNo = await GenerateRequestNoAsync();
+            var title = await BuildRequestTitleAsync(vm.Items.First());
+
+            var entity = new SalesRequest
+            {
+                RequestNo = requestNo,
+                Title = title,
+                CustomerId = vm.CustomerId,
+                RequestedByName = vm.RequestedByName,
+                RequestedByEmail = vm.RequestedByEmail,
+                RequestedByDepartment = vm.RequestedByDepartment,
+                NeededByDate = vm.NeededByDate.Date,
+                RequestSource = SalesRequestSource.Sales,
+                ShipmentCountry = vm.ShipmentCountry,
+                InstallationCountry = vm.InstallationCountry,
+                IsTransportByCustomer = vm.IsTransportByCustomer,
+                SummaryNotes = vm.SummaryNotes,
+                WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
+                SalesOpenedAt = DateTime.UtcNow
+            };
+
+            var groups = await _context.SalesRequestProductGroups.AsNoTracking().ToDictionaryAsync(x => x.Id);
+            var itemOrder = 1;
+            foreach (var itemVm in vm.Items)
+            {
+                var group = groups[itemVm.ProductGroupId];
+                entity.Items.Add(new SalesRequestItem
+                {
+                    ProductGroupId = itemVm.ProductGroupId,
+                    CapacityM3 = itemVm.CapacityM3,
+                    ConsumptionCapacity = itemVm.ConsumptionCapacity,
+                    RequestCategory = itemVm.RequestCategory,
+                    ProductCode = itemVm.ProductCode,
+                    DesignStandardCode = itemVm.DesignStandardCode,
+                    DesignPressureBar = itemVm.DesignPressureBar,
+                    DesignTemperatureMin = itemVm.DesignTemperatureMin,
+                    DesignTemperatureMax = itemVm.DesignTemperatureMax,
+                    TankType = itemVm.TankType,
+                    StorageOption = itemVm.StorageOption,
+                    TransportOption = itemVm.TransportOption,
+                    StdOpsSelection = itemVm.StdOpsSelection,
+                    SpcTechnicalDetails = itemVm.SpcTechnicalDetails,
+                    AmbientTemperatureMin = itemVm.AmbientTemperatureMin,
+                    AmbientTemperatureMax = itemVm.AmbientTemperatureMax,
+                    FacilityType = itemVm.FacilityType,
+                    FacilityInletPressureBar = itemVm.FacilityInletPressureBar,
+                    FacilityOutletPressureBar = itemVm.FacilityOutletPressureBar,
+                    FacilityInletTemperature = itemVm.FacilityInletTemperature,
+                    FacilityOutletTemperature = itemVm.FacilityOutletTemperature,
+                    FacilityCapacityNm3h = itemVm.FacilityCapacityNm3h,
+                    HasPump = itemVm.HasPump,
+                    PumpDetails = itemVm.PumpDetails,
+                    HasElectricHeater = itemVm.HasElectricHeater,
+                    ElectricHeaterDetails = itemVm.ElectricHeaterDetails,
+                    HasTankConsumptionCapacity = itemVm.HasTankConsumptionCapacity,
+                    AdditionalQuestionsJson = itemVm.AdditionalQuestionsJson,
+                    TankOrientation = itemVm.TankOrientation,
+                    PlacementType = itemVm.PlacementType,
+                    MinimumTechnicalNotes = itemVm.MinimumTechnicalNotes,
+                    ItemCode = GenerateItemCode(group.Code, itemVm, itemOrder),
+                    ItemTitle = BuildItemTitle(group.ShortCode, itemVm),
+                    WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
+                    DisplayOrder = itemOrder++
+                });
+            }
+
+            _context.SalesRequests.Add(entity);
+            await _context.SaveChangesAsync();
+            await SaveAttachmentsAsync(entity, vm.Attachments);
+
+            TempData["SuccessMessage"] = "Talep oluşturuldu. Talep artık admin tarafında fiyatlandırma/onay sürecine girebilir.";
+            return RedirectToAction(nameof(Details), new { id = entity.Id });
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
             var entity = await LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
-            if (entity.WorkflowStatus != SalesRequestWorkflowStatus.Approved)
-            {
-                TempData["ErrorMessage"] = "Bu talep henüz satış yöneticisi tarafından onaylanmamış.";
-                return RedirectToAction(nameof(Index));
-            }
-
             var vm = MapDetailVm(entity);
+            ViewBag.WaitingManagerApproval = entity.WorkflowStatus != SalesRequestWorkflowStatus.Approved;
             return View(vm);
         }
 
@@ -78,7 +181,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .Include(x => x.Attachments)
                 .Include(x => x.Items)
                     .ThenInclude(x => x.ProductGroup)
-                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
         }
 
         private static SalesRequestDetailVm MapDetailVm(SalesRequest entity)
@@ -183,6 +286,85 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     })
                     .ToList()
             };
+        }
+
+        private async Task PopulateFormAsync(SalesRequestCreateVm vm)
+        {
+            vm.Customers = await _context.Customers
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted && x.IsActive)
+                .OrderBy(x => x.CompanyName)
+                .Select(x => new SelectListItem(x.CompanyName, x.Id.ToString()))
+                .ToListAsync();
+
+            vm.ProductGroups = await _context.SalesRequestProductGroups
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted && x.IsActive)
+                .OrderBy(x => x.DisplayOrder)
+                .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
+                .ToListAsync();
+        }
+
+        private async Task<string> GenerateRequestNoAsync()
+        {
+            var prefix = $"TR-{DateTime.UtcNow:yyyyMMdd}";
+            var todayCount = await _context.SalesRequests.CountAsync(x => x.RequestNo.StartsWith(prefix));
+            return $"{prefix}-{todayCount + 1:000}";
+        }
+
+        private async Task<string> BuildRequestTitleAsync(SalesRequestItemInputVm item)
+        {
+            var group = await _context.SalesRequestProductGroups.AsNoTracking().FirstAsync(x => x.Id == item.ProductGroupId);
+            return BuildItemTitle(group.ShortCode, item);
+        }
+
+        private static string BuildItemTitle(string shortCode, SalesRequestItemInputVm item)
+        {
+            var orientation = item.TankOrientation == RequestTankOrientation.Vertical ? "DİK" : "YATAY";
+            var placement = item.PlacementType == PlacementType.Aboveground ? "YER ÜSTÜ" : "YER ALTI";
+            var consumption = item.ConsumptionCapacity.HasValue ? $"-{item.ConsumptionCapacity:0.##}Nm³/h" : string.Empty;
+            return $"{item.CapacityM3:0.##}m3-{shortCode}-{orientation}-DEPOLAMA-{placement}{consumption}";
+        }
+
+        private static string GenerateItemCode(string groupCode, SalesRequestItemInputVm item, int order)
+        {
+            var orientation = item.TankOrientation == RequestTankOrientation.Vertical ? "D" : "Y";
+            var placement = item.PlacementType == PlacementType.Aboveground ? "A" : "U";
+            var capacity = item.CapacityM3.ToString("0.##").Replace(",", string.Empty).Replace(".", string.Empty);
+            var consumption = item.ConsumptionCapacity.HasValue ? $"-{item.ConsumptionCapacity:0.##}".Replace(",", string.Empty).Replace(".", string.Empty) : string.Empty;
+            return $"CVS-{groupCode}{orientation}{placement}-{capacity}{consumption}-{order:000}";
+        }
+
+        private async Task SaveAttachmentsAsync(SalesRequest request, IEnumerable<IFormFile> files)
+        {
+            var validFiles = files?.Where(x => x.Length > 0).ToList() ?? new List<IFormFile>();
+            if (!validFiles.Any()) return;
+
+            _context.Entry(request).State = EntityState.Unchanged;
+
+            var root = Path.Combine(_environment.WebRootPath, "uploads", "sales-requests", request.Id.ToString());
+            Directory.CreateDirectory(root);
+
+            var attachments = new List<SalesRequestAttachment>();
+            foreach (var file in validFiles)
+            {
+                var storedFileName = $"{Guid.NewGuid():N}{Path.GetExtension(file.FileName)}";
+                var fullPath = Path.Combine(root, storedFileName);
+                await using var stream = System.IO.File.Create(fullPath);
+                await file.CopyToAsync(stream);
+                attachments.Add(new SalesRequestAttachment
+                {
+                    SalesRequestId = request.Id,
+                    OriginalFileName = Path.GetFileName(file.FileName),
+                    StoredFileName = storedFileName,
+                    RelativePath = $"/uploads/sales-requests/{request.Id}/{storedFileName}",
+                    ContentType = file.ContentType,
+                    FileSize = file.Length
+                });
+            }
+
+            await _context.SalesRequestAttachments.AddRangeAsync(attachments);
+            await _context.SaveChangesAsync();
         }
     }
 }
