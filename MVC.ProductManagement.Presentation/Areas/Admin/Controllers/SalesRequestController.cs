@@ -994,6 +994,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             if (item.RequestCategory == SalesRequestCategory.Tank)
             {
+                item.SparePartDetails = null;
                 item.FacilityType = null;
                 item.FacilityInletPressureBar = null;
                 item.FacilityOutletPressureBar = null;
@@ -1007,6 +1008,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
             else if (item.RequestCategory == SalesRequestCategory.Evaporator)
             {
+                item.SparePartDetails = null;
                 item.TankType = null;
                 item.StorageOption = null;
                 item.TransportOption = null;
@@ -1033,6 +1035,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
             else if (item.RequestCategory == SalesRequestCategory.Facility)
             {
+                item.SparePartDetails = null;
                 item.TankType = null;
                 item.StorageOption = null;
                 item.TransportOption = null;
@@ -1071,6 +1074,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     item.FacilityInletTemperature.Value == item.FacilityOutletTemperature.Value)
                 {
                     ModelState.AddModelError($"{keyPrefix}.FacilityOutletTemperature", "Tesis giriş/çıkış sıcaklıkları aynı olamaz.");
+                }
+            }
+            else if (item.RequestCategory == SalesRequestCategory.SparePart)
+            {
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.StdOpsSelection = null;
+                item.SpcTechnicalDetails = null;
+                item.AmbientTemperatureMin = null;
+                item.AmbientTemperatureMax = null;
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+
+                if (string.IsNullOrWhiteSpace(item.SparePartDetails))
+                {
+                    ModelState.AddModelError($"{keyPrefix}.SparePartDetails", "Yedek parça talebi için açıklama zorunludur.");
                 }
             }
         }
