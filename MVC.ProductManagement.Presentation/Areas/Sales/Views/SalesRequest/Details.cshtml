@@ -21,7 +21,23 @@
                         <h5 class="mt-2 mb-1">@item.ItemTitle</h5>
                         <div class="text-muted">@item.ProductGroupName</div>
                     </div>
-                    <span class="badge bg-@StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span>
+                    <div class="d-flex flex-column align-items-end gap-2">
+                        <span class="badge bg-@StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span>
+                        @if (item.LinkedCalculationType.HasValue && item.LinkedCalculationId.HasValue)
+                        {
+                            <div class="d-flex flex-wrap gap-2 justify-content-end">
+                                <a href="@Url.Action("TechnicalDetails", "SalesRequest", new { area = "Sales", requestId = Model.Id, itemId = item.Id })" class="btn btn-sm btn-outline-primary">
+                                    Teknik Detay
+                                </a>
+                                @if (item.LinkedCalculationType == SalesRequestCalculationType.EN13458)
+                                {
+                                    <a href="@Url.Action("Specification", "SalesRequest", new { area = "Sales", requestId = Model.Id, itemId = item.Id })" class="btn btn-sm btn-outline-secondary">
+                                        Şartname
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
                 </div>
 
                 <div class="row mt-3 g-3">
