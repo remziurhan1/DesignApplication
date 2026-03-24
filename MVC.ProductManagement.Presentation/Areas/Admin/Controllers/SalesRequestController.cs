@@ -275,16 +275,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.PricingCompletedAt = null;
             entity.ApprovedAt = null;
 
-            _context.SalesRequestItems.RemoveRange(entity.Items);
-            entity.Items.Clear();
+            var existingItems = entity.Items.ToList();
+            if (existingItems.Count > 0)
+            {
+                _context.SalesRequestItems.RemoveRange(existingItems);
+            }
 
             var groups = await _context.SalesRequestProductGroups.AsNoTracking().ToDictionaryAsync(x => x.Id);
             var itemOrder = 1;
             foreach (var itemVm in vm.Items)
             {
                 var group = groups[itemVm.ProductGroupId];
-                entity.Items.Add(new SalesRequestItem
+                _context.SalesRequestItems.Add(new SalesRequestItem
                 {
+                    SalesRequestId = entity.Id,
                     ProductGroupId = itemVm.ProductGroupId,
                     CapacityM3 = itemVm.CapacityM3,
                     ConsumptionCapacity = itemVm.ConsumptionCapacity,
