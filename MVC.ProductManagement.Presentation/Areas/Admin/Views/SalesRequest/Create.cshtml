@@ -11,7 +11,7 @@
         <h1>@(isEdit ? "Satış Talebi Güncelle" : "Yeni Satış Talebi")</h1>
         <p class="text-muted mb-0">Satışçı, müşteri ve minimum teknik bilgileri girerek bir veya birden fazla talep satırı oluşturabilir.</p>
     </div>
-    <a asp-controller="Customer" asp-action="Create" class="btn btn-outline-primary">Müşteri ekle</a>
+    <a asp-area="Admin" asp-controller="Customer" asp-action="Create" class="btn btn-outline-primary">Müşteri ekle</a>
 </div>
 
 <section class="section mt-4">

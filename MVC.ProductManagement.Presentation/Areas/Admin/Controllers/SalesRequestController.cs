@@ -450,7 +450,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.ApprovedAt = entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved ? DateTime.UtcNow : null;
 
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Talep kalemleri güncellendi. Satışçı artık sadece minimum ve tavsiye edilen fiyatları görecek.";
+            TempData["SuccessMessage"] = "Talep kalemleri güncellendi. Satış yöneticisi onayı sonrası satış sorumlusu ekranına gönderildi.";
+
+            if (entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved)
+            {
+                return RedirectToAction("Details", "SalesRequest", new { area = "Sales", id = vm.SalesRequestId });
+            }
+
             return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
         }
 

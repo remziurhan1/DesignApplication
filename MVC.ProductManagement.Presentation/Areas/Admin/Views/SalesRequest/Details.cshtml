@@ -147,6 +147,10 @@
         {
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Talebi güncelle</a>
             <a asp-action="Pricing" asp-route-id="@Model.Id" class="btn btn-primary">Fiyatlandırma ekranı</a>
+            @if (Model.WorkflowStatus == SalesRequestWorkflowStatus.Approved)
+            {
+                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-success">Satış sorumlusu ekranına git</a>
+            }
         }
         <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
     </div>
