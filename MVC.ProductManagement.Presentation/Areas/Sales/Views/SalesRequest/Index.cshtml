@@ -48,6 +48,8 @@
                             <th>Satışçı</th>
                             <th>İhtiyaç Tarihi</th>
                             <th>Durum</th>
+                            <th>Müşteri Bildirimi</th>
+                            <th>Revizyon</th>
                             <th>Onaylı Toplam</th>
                             <th></th>
                         </tr>
@@ -66,6 +68,8 @@
                                 <td>@item.RequestedByName</td>
                                 <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
                                 <td><span class="badge @StatusClass(item.WorkflowStatus)">@CustomerStatusText(item.WorkflowStatus)</span></td>
+                                <td>@item.CustomerQuoteStatus</td>
+                                <td>@item.RevisionCode</td>
                                 <td>@((item.ApprovedSalesPriceTotal ?? 0).ToString("N2")) ₺</td>
                                 <td class="text-end">
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Detay</a>
@@ -76,7 +80,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">Henüz talep bulunmuyor.</td>
+                            <td colspan="9" class="text-center text-muted py-4">Henüz talep bulunmuyor.</td>
                         </tr>
                     }
                     </tbody>

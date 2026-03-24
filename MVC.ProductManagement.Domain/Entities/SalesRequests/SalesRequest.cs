@@ -20,6 +20,8 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public string? SummaryNotes { get; set; }
         public string? InternalNotes { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; } = SalesRequestWorkflowStatus.Submitted;
+        public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; } = SalesCustomerQuoteStatus.NotShared;
+        public int RevisionNo { get; set; } = 1;
         public DateTime SalesOpenedAt { get; set; } = DateTime.UtcNow;
         public DateTime? PricingCompletedAt { get; set; }
         public DateTime? ApprovedAt { get; set; }
@@ -27,5 +29,6 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public virtual Customer Customer { get; set; } = default!;
         public virtual ICollection<SalesRequestItem> Items { get; set; } = new List<SalesRequestItem>();
         public virtual ICollection<SalesRequestAttachment> Attachments { get; set; } = new List<SalesRequestAttachment>();
+        public virtual ICollection<SalesRequestRevision> Revisions { get; set; } = new List<SalesRequestRevision>();
     }
 }

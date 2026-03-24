@@ -60,6 +60,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<SalesRequest> SalesRequests { get; set; }
         public DbSet<SalesRequestItem> SalesRequestItems { get; set; }
         public DbSet<SalesRequestAttachment> SalesRequestAttachments { get; set; }
+        public DbSet<SalesRequestRevision> SalesRequestRevisions { get; set; }
         public DbSet<ThermodynamicProperty> ThermodynamicProperties { get; set; }
         public DbSet<Fluid> Fluids { get; set; }
         public DbSet<SProductGroup> SProductGroups { get; set; }
