@@ -66,7 +66,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests))
+            if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests || x.CanAccessSalesArea))
             {
                 return Forbid();
             }
@@ -86,7 +86,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
         public async Task<IActionResult> Create(SalesRequestCreateVm vm)
         {
-            if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests))
+            if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests || x.CanAccessSalesArea))
             {
                 return Forbid();
             }
