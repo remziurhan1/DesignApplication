@@ -4,6 +4,7 @@ namespace MVC.ProductManagement.Domain.Enums
     {
         Tank = 1,
         Evaporator = 2,
-        Facility = 3
+        Facility = 3,
+        SparePart = 4
     }
 }
