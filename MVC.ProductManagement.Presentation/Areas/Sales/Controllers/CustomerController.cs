@@ -16,7 +16,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
         public async Task<IActionResult> Index()
         {
-            if (!await HasSalesPermissionAsync(x => x.CanManageSalesCustomers))
+            if (!await HasSalesPermissionAsync(x => x.CanManageSalesCustomers || x.CanAccessSalesArea))
             {
                 return Forbid();
             }
@@ -49,7 +49,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            if (!await HasSalesPermissionAsync(x => x.CanManageSalesCustomers))
+            if (!await HasSalesPermissionAsync(x => x.CanManageSalesCustomers || x.CanAccessSalesArea))
             {
                 return Forbid();
             }
@@ -61,7 +61,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CustomerFormVm vm)
         {
-            if (!await HasSalesPermissionAsync(x => x.CanManageSalesCustomers))
+            if (!await HasSalesPermissionAsync(x => x.CanManageSalesCustomers || x.CanAccessSalesArea))
             {
                 return Forbid();
             }
