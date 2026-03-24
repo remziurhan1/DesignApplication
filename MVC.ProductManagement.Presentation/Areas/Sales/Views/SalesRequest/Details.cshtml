@@ -3,17 +3,32 @@
 @{
     ViewData["Title"] = "Satış Talep Detayı";
 
-    string CustomerStatusText(SalesRequestWorkflowStatus status) => status switch
+    string CustomerStatusText(SalesCustomerQuoteStatus status) => status switch
+    {
+        SalesCustomerQuoteStatus.NotShared => "Teklif Müşteriye İletilmedi",
+        SalesCustomerQuoteStatus.PreparingSpecification => "Şartname Hazırlanıyor",
+        SalesCustomerQuoteStatus.SharedWithCustomer => "Teklif Müşteriye İletildi",
+        _ => "İşlemde"
+    };
+
+    string StatusClass(SalesCustomerQuoteStatus status) => status switch
+    {
+        SalesCustomerQuoteStatus.SharedWithCustomer => "success",
+        SalesCustomerQuoteStatus.NotShared => "secondary",
+        _ => "warning"
+    };
+
+    string ItemStatusText(SalesRequestWorkflowStatus status) => status switch
     {
         SalesRequestWorkflowStatus.Draft => "Talep Alındı",
         SalesRequestWorkflowStatus.Submitted => "Şartname Hazırlanıyor",
-        SalesRequestWorkflowStatus.PricingInProgress => "Şartname Hazırlanıyor",
-        SalesRequestWorkflowStatus.Approved => "Teklif Gönderildi",
+        SalesRequestWorkflowStatus.PricingInProgress => "Fiyatlandırma Devam Ediyor",
+        SalesRequestWorkflowStatus.Approved => "Yönetici Onaylı",
         SalesRequestWorkflowStatus.Rejected => "Teklif İptal",
         _ => "İşlemde"
     };
 
-    string StatusClass(SalesRequestWorkflowStatus status) => status switch
+    string ItemStatusClass(SalesRequestWorkflowStatus status) => status switch
     {
         SalesRequestWorkflowStatus.Approved => "success",
         SalesRequestWorkflowStatus.Rejected => "danger",
@@ -32,7 +47,7 @@
                         <div class="text-muted">@item.ProductGroupName</div>
                     </div>
                     <div class="d-flex flex-column align-items-end gap-2">
-                        <span class="badge bg-@StatusClass(item.WorkflowStatus)">@CustomerStatusText(item.WorkflowStatus)</span>
+                        <span class="badge bg-@ItemStatusClass(item.WorkflowStatus)">@ItemStatusText(item.WorkflowStatus)</span>
                         @if (item.LinkedCalculationType.HasValue && item.LinkedCalculationId.HasValue)
                         {
                             <div class="d-flex flex-wrap gap-2 justify-content-end">
@@ -97,7 +112,7 @@
                     <div class="row g-3">
                         <div class="col-md-4"><strong>Müşteri:</strong><div>@Model.CustomerName</div></div>
                         <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
-                        <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@CustomerStatusText(Model.WorkflowStatus)</span></div></div>
+                        <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.CustomerQuoteStatus)">@CustomerStatusText(Model.CustomerQuoteStatus)</span></div></div>
                         <div class="col-md-4"><strong>Revizyon:</strong><div>@Model.RevisionCode</div></div>
                         <div class="col-md-4"><strong>Müşteri Bildirim Durumu:</strong><div>@Model.CustomerQuoteStatus</div></div>
                         <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
