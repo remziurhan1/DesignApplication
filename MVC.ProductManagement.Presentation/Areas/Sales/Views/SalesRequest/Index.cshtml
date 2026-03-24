@@ -3,6 +3,16 @@
 @{
     ViewData["Title"] = "Satış Sorumlusu Talepleri";
 
+    string CustomerStatusText(SalesRequestWorkflowStatus status) => status switch
+    {
+        SalesRequestWorkflowStatus.Draft => "Talep Alındı",
+        SalesRequestWorkflowStatus.Submitted => "Şartname Hazırlanıyor",
+        SalesRequestWorkflowStatus.PricingInProgress => "Şartname Hazırlanıyor",
+        SalesRequestWorkflowStatus.Approved => "Teklif Gönderildi",
+        SalesRequestWorkflowStatus.Rejected => "Teklif İptal",
+        _ => "İşlemde"
+    };
+
     string StatusClass(SalesRequestWorkflowStatus status) => status switch
     {
         SalesRequestWorkflowStatus.Approved => "bg-success",
@@ -55,7 +65,7 @@
                                 <td>@item.CustomerName</td>
                                 <td>@item.RequestedByName</td>
                                 <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
-                                <td><span class="badge @StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span></td>
+                                <td><span class="badge @StatusClass(item.WorkflowStatus)">@CustomerStatusText(item.WorkflowStatus)</span></td>
                                 <td>@((item.ApprovedSalesPriceTotal ?? 0).ToString("N2")) ₺</td>
                                 <td class="text-end">
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Detay</a>
