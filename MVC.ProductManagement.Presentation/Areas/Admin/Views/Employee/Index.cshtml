@@ -1,0 +1,54 @@
+@model List<MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs.EmployeeListVm>
+@{
+    ViewData["Title"] = "Çalışan Yönetimi";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Çalışanlar</h2>
+    <a asp-action="Create" class="btn btn-primary">Yeni Çalışan</a>
+</div>
+
+<div class="card">
+    <div class="card-body pt-3">
+        <div class="table-responsive">
+            <table class="table table-striped table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th>İsim Soyisim</th>
+                        <th>Departman</th>
+                        <th>Birim</th>
+                        <th>Title</th>
+                        <th>Numara</th>
+                        <th>Mail</th>
+                        <th>Lokasyon</th>
+                        <th>Satış Erişimi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.FullName</td>
+                            <td>@item.Department</td>
+                            <td>@item.DepartmentRole</td>
+                            <td>@item.Title</td>
+                            <td>@item.Number</td>
+                            <td>@item.Email</td>
+                            <td>@item.Location</td>
+                            <td>
+                                @if (item.CanAccessSalesArea)
+                                {
+                                    <span class="badge bg-success">Açık</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Kapalı</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

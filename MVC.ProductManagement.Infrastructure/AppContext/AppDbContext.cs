@@ -55,6 +55,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<CapacityGroup> CapacityGroups { get; set; }
         public DbSet<CapacityOption> CapacityOptions { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<EmployeeProfile> EmployeeProfiles { get; set; }
         public DbSet<SalesRequestProductGroup> SalesRequestProductGroups { get; set; }
         public DbSet<SalesRequest> SalesRequests { get; set; }
         public DbSet<SalesRequestItem> SalesRequestItems { get; set; }
@@ -99,6 +100,17 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<StorageType>().HasData(StorageTypeSeed.Get());
             builder.Entity<StorageTypeProperties>().HasData(StorageTypePropertiesSeed.Get());
             builder.Entity<SalesRequestProductGroup>().HasData(SalesRequestProductGroupSeed.Get());
+            builder.Entity<EmployeeProfile>(entity =>
+            {
+                entity.HasIndex(x => x.UserId).IsUnique();
+                entity.Property(x => x.FullName).HasMaxLength(150);
+                entity.Property(x => x.Department).HasMaxLength(100);
+                entity.Property(x => x.DepartmentRole).HasMaxLength(100);
+                entity.Property(x => x.Title).HasMaxLength(50);
+                entity.Property(x => x.Number).HasMaxLength(25);
+                entity.Property(x => x.Email).HasMaxLength(256);
+                entity.Property(x => x.Location).HasMaxLength(100);
+            });
         //    builder.Entity<ThermodynamicProperty>().HasData(ThermodynamicPropertySeed.Get());
 
 

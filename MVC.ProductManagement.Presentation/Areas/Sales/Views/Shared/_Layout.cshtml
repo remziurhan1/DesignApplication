@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Satış Portalı</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        :root {
+            --sales-pink: #d63384;
+            --sales-pink-soft: #f8d7e7;
+            --sales-bg: #fff5fa;
+            --sales-dark: #7a1f4f;
+        }
+
+        body {
+            background: var(--sales-bg);
+        }
+
+        .sales-topbar {
+            height: 64px;
+            background: linear-gradient(90deg, #c21874, #ec4899);
+            color: #fff;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,.12);
+        }
+
+        .sales-shell {
+            display: flex;
+            min-height: calc(100vh - 64px);
+        }
+
+        .sales-sidebar {
+            width: 270px;
+            background: #fff;
+            border-right: 1px solid #f0c2da;
+            padding: 1rem;
+        }
+
+        .sales-sidebar .nav-link {
+            color: var(--sales-dark);
+            border-radius: .6rem;
+            margin-bottom: .35rem;
+            font-weight: 600;
+        }
+
+        .sales-sidebar .nav-link:hover,
+        .sales-sidebar .nav-link.active {
+            background: var(--sales-pink-soft);
+            color: var(--sales-pink);
+        }
+
+        .quick-actions {
+            background: var(--sales-pink-soft);
+            border-radius: .75rem;
+            padding: .75rem;
+            margin-top: 1rem;
+        }
+
+        .quick-actions .btn {
+            width: 100%;
+            margin-bottom: .5rem;
+        }
+
+        .sales-content {
+            flex: 1;
+            padding: 1.25rem;
+        }
+
+        .sales-card {
+            border: 1px solid #f2b8d7;
+            border-radius: .75rem;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(214, 51, 132, 0.08);
+        }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header class="sales-topbar">
+        <div class="fw-bold fs-5">💗 Satış Portalı</div>
+        <div>
+            <a asp-area="Sales" asp-controller="Home" asp-action="Index" class="btn btn-sm btn-light">Anasayfa</a>
+            <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-light">Çıkış</a>
+        </div>
+    </header>
+
+    <div class="sales-shell">
+        <aside class="sales-sidebar">
+            <h6 class="text-uppercase text-secondary mb-3">Menü</h6>
+            <nav class="nav flex-column">
+                <a asp-area="Sales" asp-controller="Home" asp-action="Index" class="nav-link">Dashboard</a>
+                <a asp-area="Sales" asp-controller="Customer" asp-action="Index" class="nav-link">Müşteriler</a>
+                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="nav-link">Talepler</a>
+            </nav>
+
+            <div class="quick-actions mt-3">
+                <div class="small fw-bold mb-2 text-dark">Hızlı İşlemler</div>
+                <a asp-area="Sales" asp-controller="Customer" asp-action="Create" class="btn btn-sm btn-outline-danger">+ Müşteri Oluştur</a>
+                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Create" class="btn btn-sm btn-danger">+ Talep Oluştur</a>
+            </div>
+        </aside>
+
+        <main class="sales-content">
+            <div class="sales-card p-3 p-md-4">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

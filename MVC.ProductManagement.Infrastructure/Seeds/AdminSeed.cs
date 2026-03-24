@@ -24,6 +24,34 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
             dbContextBuilder.UseSqlServer(configuration.GetConnectionString("AppConnectionString"));
             AppDbContext context = new AppDbContext(dbContextBuilder.Options);
 
+            await context.Database.ExecuteSqlRawAsync(@"
+IF OBJECT_ID('EmployeeProfiles', 'U') IS NULL
+BEGIN
+    CREATE TABLE [EmployeeProfiles](
+        [Id] uniqueidentifier NOT NULL PRIMARY KEY,
+        [UserId] nvarchar(450) NOT NULL,
+        [FullName] nvarchar(150) NOT NULL,
+        [Department] nvarchar(100) NOT NULL,
+        [DepartmentRole] nvarchar(100) NOT NULL,
+        [Title] nvarchar(50) NOT NULL,
+        [Number] nvarchar(25) NOT NULL,
+        [Email] nvarchar(256) NOT NULL,
+        [Location] nvarchar(100) NOT NULL,
+        [CanAccessSalesArea] bit NOT NULL,
+        [CanManageSalesCustomers] bit NOT NULL,
+        [CanCreateSalesRequests] bit NOT NULL,
+        [CanViewSalesPricing] bit NOT NULL,
+        [Status] int NOT NULL,
+        [CreatedDate] datetime2 NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [ModifiedDate] datetime2 NULL,
+        [ModifiedBy] nvarchar(max) NULL,
+        [DeletedDate] datetime2 NULL,
+        [DeletedBy] nvarchar(max) NULL
+    );
+    CREATE UNIQUE INDEX [IX_EmployeeProfiles_UserId] ON [EmployeeProfiles]([UserId]);
+END");
+
             if (!context.Roles.Any())
             {
                 await AddRolesAsync(context);

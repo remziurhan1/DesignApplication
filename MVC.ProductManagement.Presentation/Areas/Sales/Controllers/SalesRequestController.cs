@@ -23,6 +23,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
             var requests = await _context.SalesRequests
                 .AsNoTracking()
                 .Include(x => x.Customer)
@@ -61,6 +66,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests))
+            {
+                return Forbid();
+            }
+
             var vm = new SalesRequestCreateVm
             {
                 RequestSource = SalesRequestSource.Sales,
@@ -76,6 +86,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
         public async Task<IActionResult> Create(SalesRequestCreateVm vm)
         {
+            if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests))
+            {
+                return Forbid();
+            }
+
             vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
             if (!vm.Items.Any())
             {
@@ -165,10 +180,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
             var entity = await LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
-            var vm = MapDetailVm(entity);
+            var canViewPricing = await HasSalesPermissionAsync(x => x.CanViewSalesPricing);
+            var vm = MapDetailVm(entity, canViewPricing);
             ViewBag.WaitingManagerApproval = entity.WorkflowStatus != SalesRequestWorkflowStatus.Approved;
             return View(vm);
         }
@@ -184,7 +205,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
         }
 
-        private static SalesRequestDetailVm MapDetailVm(SalesRequest entity)
+        private static SalesRequestDetailVm MapDetailVm(SalesRequest entity, bool canViewPricing)
         {
             var itemMap = entity.Items
                 .OrderBy(x => x.DisplayOrder)
@@ -233,8 +254,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         LinkedCostAnalysisId = x.LinkedCostAnalysisId,
                         LinkedCalculationName = x.LinkedCalculationName,
                         LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
-                        MinimumSalesPrice = x.MinimumSalesPrice,
-                        ApprovedSalesPrice = x.ApprovedSalesPrice,
+                        MinimumSalesPrice = canViewPricing ? x.MinimumSalesPrice : null,
+                        ApprovedSalesPrice = canViewPricing ? x.ApprovedSalesPrice : null,
                         WorkflowStatus = x.WorkflowStatus
                     });
 
