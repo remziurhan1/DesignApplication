@@ -20,9 +20,20 @@
             _ => null
         };
 
+    string? BuildAnalysisLink(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item)
+        => item.LinkedCalculationType switch
+        {
+            SalesRequestCalculationType.AD2000 when item.LinkedCalculationId.HasValue && item.LinkedCostAnalysisId.HasValue
+                => Url.Action("Cost", "AD2000Calculation", new { area = "Admin", id = item.LinkedCalculationId.Value, costAnalysisId = item.LinkedCostAnalysisId.Value }),
+            SalesRequestCalculationType.EN13458 when item.LinkedCalculationId.HasValue && item.LinkedCostAnalysisId.HasValue
+                => Url.Action("Cost", "EN13458Calculation", new { area = "Admin", id = item.LinkedCalculationId.Value, costAnalysisId = item.LinkedCostAnalysisId.Value }),
+            _ => null
+        };
+
     void RenderItem(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item, int depth)
     {
         var technicalLink = BuildTechnicalLink(item);
+        var analysisLink = BuildAnalysisLink(item);
         <div class="card mb-3 ms-@Math.Min(depth * 2, 5)">
             <div class="card-body pt-3">
                 <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
