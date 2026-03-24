@@ -31,6 +31,22 @@
                         <input asp-for="Phone" class="form-control" />
                     </div>
                     <div class="col-md-4">
+                        <label asp-for="Sector" class="form-label"></label>
+                        <input asp-for="Sector" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="ContactPersons" class="form-label"></label>
+                        <textarea asp-for="ContactPersons" class="form-control" rows="2" placeholder="Her satıra bir kişi"></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="ContactPhones" class="form-label"></label>
+                        <textarea asp-for="ContactPhones" class="form-control" rows="2" placeholder="Her satıra bir telefon"></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="ContactEmails" class="form-label"></label>
+                        <textarea asp-for="ContactEmails" class="form-control" rows="2" placeholder="Her satıra bir e-posta"></textarea>
+                    </div>
+                    <div class="col-md-4">
                         <label asp-for="TaxNumber" class="form-label"></label>
                         <input asp-for="TaxNumber" class="form-control" />
                     </div>
@@ -45,6 +61,14 @@
                     <div class="col-md-3">
                         <label asp-for="Country" class="form-label"></label>
                         <input asp-for="Country" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="MainDealerCountry" class="form-label"></label>
+                        <input asp-for="MainDealerCountry" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Region" class="form-label"></label>
+                        <input asp-for="Region" class="form-control" />
                     </div>
                     <div class="col-12">
                         <label asp-for="Address" class="form-label"></label>

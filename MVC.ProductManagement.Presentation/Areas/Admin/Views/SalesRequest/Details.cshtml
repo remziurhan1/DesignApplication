@@ -46,9 +46,30 @@
                 </div>
                 <div class="row mt-3 g-3">
                     <div class="col-md-3"><strong>Kapasite:</strong> @item.CapacityM3 m³</div>
+                    <div class="col-md-3"><strong>Talep grubu:</strong> @item.RequestCategory</div>
                     <div class="col-md-3"><strong>Tank tipi:</strong> @item.TankOrientation</div>
                     <div class="col-md-3"><strong>Kurulum:</strong> @item.PlacementType</div>
                     <div class="col-md-3"><strong>Tüketim:</strong> @(item.ConsumptionCapacity?.ToString("0.##") ?? "-")</div>
+                    <div class="col-md-3"><strong>Ürün:</strong> @item.ProductCode</div>
+                    <div class="col-md-3"><strong>Dizayn standardı:</strong> @item.DesignStandardCode</div>
+                    <div class="col-md-3"><strong>Dizayn basıncı:</strong> @item.DesignPressureBar</div>
+                    <div class="col-md-3"><strong>Dizayn sıcaklık:</strong> @item.DesignTemperatureMin / @item.DesignTemperatureMax</div>
+                    <div class="col-md-3"><strong>Tank tipi:</strong> @item.TankType</div>
+                    <div class="col-md-3"><strong>Depolama:</strong> @item.StorageOption</div>
+                    <div class="col-md-3"><strong>Transport:</strong> @item.TransportOption</div>
+                    <div class="col-md-3"><strong>STD/OPS/SPC:</strong> @item.StdOpsSelection</div>
+                    <div class="col-md-6"><strong>SPC detay:</strong> @item.SpcTechnicalDetails</div>
+                    <div class="col-md-3"><strong>Ortam sıcaklık:</strong> @item.AmbientTemperatureMin / @item.AmbientTemperatureMax</div>
+                    <div class="col-md-3"><strong>Tesis tipi:</strong> @item.FacilityType</div>
+                    <div class="col-md-3"><strong>Basınç (G/Ç):</strong> @item.FacilityInletPressureBar / @item.FacilityOutletPressureBar</div>
+                    <div class="col-md-3"><strong>Sıcaklık (G/Ç):</strong> @item.FacilityInletTemperature / @item.FacilityOutletTemperature</div>
+                    <div class="col-md-3"><strong>Tesis kapasitesi:</strong> @item.FacilityCapacityNm3h</div>
+                    <div class="col-md-3"><strong>Pompa:</strong> @(item.HasPump ? "Var" : "Yok")</div>
+                    <div class="col-md-3"><strong>Pompa detay:</strong> @item.PumpDetails</div>
+                    <div class="col-md-3"><strong>Elektrikli ısıtıcı:</strong> @(item.HasElectricHeater ? "Var" : "Yok")</div>
+                    <div class="col-md-3"><strong>Isıtıcı detay:</strong> @item.ElectricHeaterDetails</div>
+                    <div class="col-md-3"><strong>Tank tüketim:</strong> @(item.HasTankConsumptionCapacity ? "Aktif" : "Pasif")</div>
+                    <div class="col-12"><strong>Ek sorular/cevaplar:</strong><div class="text-muted">@item.AdditionalQuestionsJson</div></div>
                     <div class="col-12"><strong>Minimum teknik veri:</strong><div class="text-muted">@item.MinimumTechnicalNotes</div></div>
                     @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
                     {
@@ -133,6 +154,15 @@
                         <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
                         <div class="col-md-4"><strong>Departman:</strong><div>@Model.RequestedByDepartment</div></div>
                         <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span></div></div>
+                        <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
+                        <div class="col-md-4"><strong>İhtiyaç tarihi:</strong><div>@Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</div></div>
+                        <div class="col-md-4"><strong>Talep kaynağı:</strong><div>@Model.RequestSource</div></div>
+                        <div class="col-md-4"><strong>Sevk ülkesi:</strong><div>@Model.ShipmentCountry</div></div>
+                        <div class="col-md-4"><strong>Kurulum ülkesi:</strong><div>@Model.InstallationCountry</div></div>
+                        <div class="col-md-4"><strong>Nakliye:</strong><div>@(Model.IsTransportByCustomer ? "Müşteri" : "Biz")</div></div>
+                        <div class="col-md-4"><strong>Müşteri sektörü:</strong><div>@Model.CustomerSector</div></div>
+                        <div class="col-md-4"><strong>Ana bayi ülkesi:</strong><div>@Model.CustomerMainDealerCountry</div></div>
+                        <div class="col-md-4"><strong>Bölge:</strong><div>@Model.CustomerRegion</div></div>
                         <div class="col-12"><strong>Özet:</strong><div class="text-muted">@Model.SummaryNotes</div></div>
                     </div>
                 </div>

@@ -21,6 +21,7 @@
                             <th>Firma</th>
                             <th>Yetkili</th>
                             <th>İletişim</th>
+                            <th>Sektör</th>
                             <th>Lokasyon</th>
                             <th>Durum</th>
                             <th class="text-end">İşlem</th>
@@ -35,8 +36,10 @@
                             <td>
                                 <div>@item.Email</div>
                                 <small class="text-muted">@item.Phone</small>
+                                <div><small class="text-muted">@item.ContactPersons</small></div>
                             </td>
-                            <td>@item.City / @item.Country</td>
+                            <td>@item.Sector</td>
+                            <td>@item.City / @item.Country<div><small class="text-muted">@item.MainDealerCountry · @item.Region</small></div></td>
                             <td>
                                 <span class="badge @(item.IsActive ? "bg-success" : "bg-secondary")">@(item.IsActive ? "Aktif" : "Pasif")</span>
                             </td>
