@@ -211,7 +211,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             }
 
             await ApplyCostAnalysisItemUpdateAsync(item, generatedStockCodeId, quantity, useManualUnitPrice, manualUnitPrice, modifiedBy);
-
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, modifiedBy);
             await _context.SaveChangesAsync();
         }
 
@@ -247,6 +247,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 await ApplyCostAnalysisItemUpdateAsync(item, request.GeneratedStockCodeId, request.Quantity, request.UseManualUnitPrice, request.ManualUnitPrice, modifiedBy);
             }
 
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, modifiedBy);
             await _context.SaveChangesAsync();
         }
 
@@ -299,6 +300,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 CreatedDate = DateTime.UtcNow
             });
 
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, createdBy);
             await _context.SaveChangesAsync();
         }
 
@@ -371,6 +373,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             }).ToList();
 
             _context.EN13458CostAnalysisItems.AddRange(details);
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, createdBy);
             await _context.SaveChangesAsync();
         }
 
@@ -410,6 +413,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             }
 
             _context.EN13458CostAnalysisItems.Remove(item);
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, "System");
             await _context.SaveChangesAsync();
         }
 
@@ -449,6 +453,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 item.ModifiedDate = DateTime.UtcNow;
             }
 
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, modifiedBy);
             await _context.SaveChangesAsync();
         }
 
@@ -598,6 +603,42 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             });
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task RefreshSalesPriceFromLatestCostAsync(Guid calculationId, Guid costAnalysisId, string modifiedBy)
+        {
+            var salesPrice = await _context.EN13458SalesPrices
+                .FirstOrDefaultAsync(x => x.EN13458CalculationId == calculationId && x.EN13458CostAnalysisId == costAnalysisId && x.Status != Status.Deleted);
+            if (salesPrice == null)
+            {
+                return;
+            }
+
+            var laborRate = await _context.LaborRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == salesPrice.LaborRateId && x.Status != Status.Deleted);
+            var gugRate = await _context.GugHourlyRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == salesPrice.GugHourlyRateId && x.Status != Status.Deleted);
+            var financeRate = await _context.OverheadRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == salesPrice.FinanceOverheadRateId && x.Status != Status.Deleted);
+            var generalManagementRate = await _context.OverheadRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == salesPrice.GeneralManagementOverheadRateId && x.Status != Status.Deleted);
+            if (laborRate == null || gugRate == null || financeRate == null || generalManagementRate == null)
+            {
+                return;
+            }
+
+            var immCost = await _context.EN13458CostAnalysisItems
+                .Where(x => x.EN13458CostAnalysisId == costAnalysisId && x.Status != Status.Deleted)
+                .SumAsync(x => (double?)x.ItemCost) ?? 0d;
+            var calculation = CalculateSalesPrice(immCost, salesPrice.LaborHours, laborRate.HourlyRate, gugRate.HourlyRate, financeRate.Percentage, generalManagementRate.Percentage, salesPrice.ProfitPercentage);
+
+            salesPrice.LaborCost = calculation.LaborCost;
+            salesPrice.GugCost = calculation.GugCost;
+            salesPrice.ImmCost = calculation.ImmCost;
+            salesPrice.AraToplam1 = calculation.AraToplam1;
+            salesPrice.FinanceCost = calculation.FinanceCost;
+            salesPrice.GeneralManagementCost = calculation.GeneralManagementCost;
+            salesPrice.AraToplam2 = calculation.AraToplam2;
+            salesPrice.MinimumSalesPrice = calculation.MinimumSalesPrice;
+            salesPrice.SalesPrice = calculation.SalesPrice;
+            salesPrice.ModifiedBy = modifiedBy;
+            salesPrice.ModifiedDate = DateTime.UtcNow;
         }
 
         private async Task<EN13458Calculation> GetRequiredCalculationAsync(Guid calculationId)
