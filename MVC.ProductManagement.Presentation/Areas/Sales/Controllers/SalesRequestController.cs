@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
@@ -201,17 +202,42 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             {
                 return Forbid();
             }
+            var vm = await BuildTechnicalDetailsVmAsync(requestId, itemId);
+            if (vm == null)
+            {
+                return NotFound();
+            }
+            return View(vm);
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> Specification(Guid requestId, Guid itemId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var vm = await BuildTechnicalDetailsVmAsync(requestId, itemId);
+            if (vm == null || !vm.HasSpecification)
+            {
+                return NotFound();
+            }
+            return View(vm);
+        }
+
+        private async Task<SalesRequestTechnicalDetailsVm?> BuildTechnicalDetailsVmAsync(Guid requestId, Guid itemId)
+        {
             var request = await LoadRequestAsync(requestId);
             if (request == null)
             {
-                return NotFound();
+                return null;
             }
 
             var item = request.Items.FirstOrDefault(x => x.Id == itemId);
             if (item == null || !item.LinkedCalculationType.HasValue || !item.LinkedCalculationId.HasValue)
             {
-                return NotFound();
+                return null;
             }
 
             var vm = new SalesRequestTechnicalDetailsVm
@@ -236,7 +262,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
                 if (calculation == null)
                 {
-                    return NotFound();
+                    return null;
                 }
 
                 vm.MAWP = $"{(calculation.DesignPressure > 0 ? calculation.DesignPressure : calculation.Pressure):N2} bar";
@@ -246,51 +272,27 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 vm.RoundedHeadThickness = $"İç: {calculation.RoundedInnerHeadThickness:N2} mm / Dış: {calculation.RoundedOuterHeadThickness:N2} mm";
                 vm.InnerTankLength = $"{calculation.InnerTankTotalLength:N2} mm";
                 vm.TankDiameter = $"İç: {calculation.OuterDiameter:N2} mm / Dış: {calculation.OuterTankDiameter:N2} mm";
+                return vm;
             }
-            else
+
+            var adCalculation = await _context.AD2000Calculations
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+
+            if (adCalculation == null)
             {
-                var calculation = await _context.AD2000Calculations
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
-
-                if (calculation == null)
-                {
-                    return NotFound();
-                }
-
-                vm.MAWP = $"{calculation.DesignPressure:N2} bar";
-                vm.DesignPressure = $"{calculation.DesignPressure:N2} bar";
-                vm.TestPressure = $"{calculation.TestPressure:N2} bar";
-                vm.RoundedShellThickness = $"{calculation.RoundedShellThickness:N2} mm";
-                vm.RoundedHeadThickness = $"{calculation.RoundedHeadThickness:N2} mm";
-                vm.InnerTankLength = $"{calculation.ShellLength:N2} mm";
-                vm.TankDiameter = $"{calculation.Diameter:N2} mm";
+                return null;
             }
 
-            return View(vm);
-        }
+            vm.MAWP = $"{adCalculation.DesignPressure:N2} bar";
+            vm.DesignPressure = $"{adCalculation.DesignPressure:N2} bar";
+            vm.TestPressure = $"{adCalculation.TestPressure:N2} bar";
+            vm.RoundedShellThickness = $"{adCalculation.RoundedShellThickness:N2} mm";
+            vm.RoundedHeadThickness = $"{adCalculation.RoundedHeadThickness:N2} mm";
+            vm.InnerTankLength = $"{adCalculation.ShellLength:N2} mm";
+            vm.TankDiameter = $"{adCalculation.Diameter:N2} mm";
 
-        [HttpGet]
-        public async Task<IActionResult> Specification(Guid requestId, Guid itemId)
-        {
-            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
-            {
-                return Forbid();
-            }
-
-            var request = await LoadRequestAsync(requestId);
-            if (request == null)
-            {
-                return NotFound();
-            }
-
-            var item = request.Items.FirstOrDefault(x => x.Id == itemId);
-            if (item == null || item.LinkedCalculationType != SalesRequestCalculationType.EN13458 || !item.LinkedCalculationId.HasValue)
-            {
-                return NotFound();
-            }
-
-            return RedirectToAction(nameof(TechnicalDetails), new { requestId, itemId });
+            return vm;
         }
 
         private async Task<SalesRequest?> LoadRequestAsync(Guid id)
@@ -423,6 +425,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .OrderBy(x => x.DisplayOrder)
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToListAsync();
+        }
+
+        private Task<bool> HasSalesPermissionAsync(Func<EmployeeProfile, bool> permissionSelector)
+        {
+            return base.HasSalesPermissionAsync(permissionSelector);
         }
 
         private async Task<string> GenerateRequestNoAsync()
