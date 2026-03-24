@@ -240,6 +240,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             }
 
             await ApplyCostAnalysisItemUpdateAsync(item, generatedStockCodeId, quantity, useManualUnitPrice, manualUnitPrice, modifiedBy);
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, modifiedBy);
             await _context.SaveChangesAsync();
         }
 
@@ -267,6 +268,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 await ApplyCostAnalysisItemUpdateAsync(item, request.GeneratedStockCodeId, request.Quantity, request.UseManualUnitPrice, request.ManualUnitPrice, modifiedBy);
             }
 
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, modifiedBy);
             await _context.SaveChangesAsync();
         }
 
@@ -313,6 +315,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 CreatedDate = DateTime.UtcNow
             });
 
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, createdBy);
             await _context.SaveChangesAsync();
         }
 
@@ -372,6 +375,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             }).ToList();
 
             _context.AddRange(details);
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, createdBy);
             await _context.SaveChangesAsync();
         }
 
@@ -387,6 +391,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             }
 
             _context.Remove(item);
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, "System");
             await _context.SaveChangesAsync();
         }
 
@@ -420,6 +425,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 bombeRow.ModifiedDate = DateTime.UtcNow;
             }
 
+            await RefreshSalesPriceFromLatestCostAsync(calculationId, costAnalysisId, modifiedBy);
             await _context.SaveChangesAsync();
         }
 
@@ -823,6 +829,42 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 CreatedDate = DateTime.UtcNow
             });
             await _context.SaveChangesAsync();
+        }
+
+        private async Task RefreshSalesPriceFromLatestCostAsync(Guid calculationId, Guid costAnalysisId, string modifiedBy)
+        {
+            var salesPrice = await _context.Set<AD2000SalesPrice>()
+                .FirstOrDefaultAsync(x => x.AD2000CalculationId == calculationId && x.AD2000CostAnalysisId == costAnalysisId && x.Status != Status.Deleted);
+            if (salesPrice == null)
+            {
+                return;
+            }
+
+            var laborRate = await _context.LaborRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == salesPrice.LaborRateId && x.Status != Status.Deleted);
+            var gugRate = await _context.GugHourlyRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == salesPrice.GugHourlyRateId && x.Status != Status.Deleted);
+            var financeRate = await _context.OverheadRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == salesPrice.FinanceOverheadRateId && x.Status != Status.Deleted);
+            var gmRate = await _context.OverheadRates.AsNoTracking().FirstOrDefaultAsync(x => x.Id == salesPrice.GeneralManagementOverheadRateId && x.Status != Status.Deleted);
+            if (laborRate == null || gugRate == null || financeRate == null || gmRate == null)
+            {
+                return;
+            }
+
+            var immCost = await _context.Set<AD2000CostAnalysisItem>()
+                .Where(x => x.AD2000CostAnalysisId == costAnalysisId && x.Status != Status.Deleted)
+                .SumAsync(x => (double?)x.ItemCost) ?? 0d;
+            var calculation = CalculateSalesPrice(immCost, salesPrice.LaborHours, laborRate.HourlyRate, gugRate.HourlyRate, financeRate.Percentage, gmRate.Percentage, salesPrice.ProfitPercentage);
+
+            salesPrice.LaborCost = calculation.LaborCost;
+            salesPrice.GugCost = calculation.GugCost;
+            salesPrice.ImmCost = calculation.ImmCost;
+            salesPrice.AraToplam1 = calculation.AraToplam1;
+            salesPrice.FinanceCost = calculation.FinanceCost;
+            salesPrice.GeneralManagementCost = calculation.GeneralManagementCost;
+            salesPrice.AraToplam2 = calculation.AraToplam2;
+            salesPrice.MinimumSalesPrice = calculation.MinimumSalesPrice;
+            salesPrice.SalesPrice = calculation.SalesPrice;
+            salesPrice.ModifiedBy = modifiedBy;
+            salesPrice.ModifiedDate = DateTime.UtcNow;
         }
 
         private AD2000CostAnalysisItem ToEntity(AD2000MaterialCostRowDTO item, string createdBy)

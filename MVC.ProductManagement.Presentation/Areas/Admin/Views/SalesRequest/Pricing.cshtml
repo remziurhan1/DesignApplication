@@ -1,7 +1,17 @@
+@using System.Text.Json
 @using MVC.ProductManagement.Domain.Enums
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestPricingVm
 @{
     ViewData["Title"] = "Talep Fiyatlandırma";
+    var analysisJson = JsonSerializer.Serialize(
+        Model.AvailableAnalyses.ToDictionary(
+            x => x.Key,
+            x => new
+            {
+                totalCost = x.TotalCost,
+                minimumSalesPrice = x.MinimumSalesPrice ?? x.TotalCost,
+                approvedSalesPrice = x.RecommendedSalesPrice ?? x.MinimumSalesPrice ?? x.TotalCost
+            }));
 }
 
 <div class="pagetitle d-flex justify-content-between align-items-center">
@@ -104,3 +114,40 @@
         </div>
     </div>
 </section>
+
+<script>
+    (() => {
+        const analysisMap = @Html.Raw(analysisJson);
+
+        function setIfPresent(input, value) {
+            if (!input || value === undefined || value === null) return;
+            input.value = value;
+        }
+
+        function getRowIndexFromName(name) {
+            const match = name ? name.match(/\[(\d+)\]/) : null;
+            return match ? match[1] : null;
+        }
+
+        function applyLinkedAnalysisToRow(selectEl) {
+            const rowIndex = getRowIndexFromName(selectEl.name);
+            if (rowIndex === null) return;
+
+            const selectedKey = selectEl.value;
+            if (!selectedKey || !analysisMap[selectedKey]) return;
+
+            const analysis = analysisMap[selectedKey];
+            setIfPresent(document.getElementById(`Items_${rowIndex}__EstimatedCost`), analysis.totalCost);
+            setIfPresent(document.getElementById(`Items_${rowIndex}__MinimumSalesPrice`), analysis.minimumSalesPrice);
+            setIfPresent(document.getElementById(`Items_${rowIndex}__ApprovedSalesPrice`), analysis.approvedSalesPrice);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const selects = document.querySelectorAll('select[name$=".LinkedAnalysisKey"]');
+            selects.forEach(selectEl => {
+                applyLinkedAnalysisToRow(selectEl);
+                selectEl.addEventListener('change', () => applyLinkedAnalysisToRow(selectEl));
+            });
+        });
+    })();
+</script>
