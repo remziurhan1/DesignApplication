@@ -13,16 +13,16 @@
 
 <div class="card mt-4">
     <div class="card-body pt-4">
-        <h5 class="mb-3">İlgili hesap tank detay bilgileri</h5>
-        @if (Model.TankDetailFields.Any())
+        @if (Model.InputFields.Any())
         {
+            <h5 class="mb-3">Giriş verileri</h5>
             <div class="table-responsive mb-4">
-                <table class="table table-striped align-middle mb-0">
+                <table class="table table-bordered table-striped align-middle mb-0">
                     <tbody>
-                    @foreach (var field in Model.TankDetailFields)
+                    @foreach (var field in Model.InputFields)
                     {
                         <tr>
-                            <th style="width:40%">@field.Label</th>
+                            <th style="width:35%">@field.Label</th>
                             <td>@field.Value</td>
                         </tr>
                     }
@@ -30,6 +30,46 @@
                 </table>
             </div>
         }
+
+        <div class="row g-3 mb-4">
+            <div class="col-lg-6">
+                <div class="card h-100 border-primary-subtle">
+                    <div class="card-header bg-primary-subtle">İç tank</div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm table-striped align-middle mb-0">
+                            <tbody>
+                            @foreach (var field in Model.InnerTankFields)
+                            {
+                                <tr>
+                                    <th style="width:55%">@field.Label</th>
+                                    <td>@field.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card h-100 border-secondary-subtle">
+                    <div class="card-header bg-secondary-subtle">Dış tank</div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm table-striped align-middle mb-0">
+                            <tbody>
+                            @foreach (var field in Model.OuterTankFields)
+                            {
+                                <tr>
+                                    <th style="width:55%">@field.Label</th>
+                                    <td>@field.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row g-3">
             <div class="col-md-6"><strong>Bağlı hesap:</strong> @Model.CalculationType - @Model.CalculationName</div>

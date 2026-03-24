@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MVC.ProductManagement.Domain.Entities;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
@@ -226,6 +228,51 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             return View(vm);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DownloadSpecificationWord(Guid requestId, Guid itemId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var vm = await BuildTechnicalDetailsVmAsync(requestId, itemId);
+            if (vm == null || !vm.HasSpecification)
+            {
+                return NotFound();
+            }
+
+            using var stream = new MemoryStream();
+            using (var document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document, true))
+            {
+                var mainPart = document.AddMainDocumentPart();
+                mainPart.Document = new Document(new Body());
+                var body = mainPart.Document.Body!;
+
+                body.Append(CreateParagraph($"TECHNICAL SPECIFICATION - {vm.ItemCode}", true, JustificationValues.Center));
+                body.Append(CreateParagraph($"{vm.CalculationName} / Rev: {vm.RevisionCode ?? "-"}", false, JustificationValues.Center));
+                body.Append(CreateParagraph(string.Empty));
+
+                body.Append(CreateParagraph("General", true));
+                AppendFieldTable(body, vm.InputFields);
+
+                body.Append(CreateParagraph("Inner Tank", true));
+                AppendFieldTable(body, vm.InnerTankFields);
+
+                body.Append(CreateParagraph("Outer Tank", true));
+                AppendFieldTable(body, vm.OuterTankFields);
+
+                body.Append(CreateParagraph("Standard Notes", true));
+                body.Append(CreateParagraph("• Design and manufacturing according to selected applicable standard."));
+                body.Append(CreateParagraph("• Material certificates, pressure test certificate and final inspection report are included."));
+                body.Append(CreateParagraph("• Surface preparation, painting, and insulation shall be as standard company practice."));
+                body.Append(CreateParagraph("• Warranty and commercial clauses are subject to final quotation terms."));
+            }
+
+            var fileName = $"Specification_{vm.ItemCode}_{DateTime.UtcNow:yyyyMMddHHmmss}.docx";
+            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+
         private async Task<SalesRequestTechnicalDetailsVm?> BuildTechnicalDetailsVmAsync(Guid requestId, Guid itemId)
         {
             var request = await LoadRequestAsync(requestId);
@@ -258,6 +305,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             {
                 var calculation = await _context.EN13458Calculations
                     .AsNoTracking()
+                    .Include(x => x.StorageService)
+                    .Include(x => x.InnerShellMaterial)
+                    .Include(x => x.InnerShellMaterialForm)
+                    .Include(x => x.InnerHeadMaterial)
+                    .Include(x => x.InnerHeadMaterialForm)
+                    .Include(x => x.OuterShellMaterial)
+                    .Include(x => x.OuterShellMaterialForm)
+                    .Include(x => x.OuterHeadMaterial)
+                    .Include(x => x.OuterHeadMaterialForm)
                     .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
 
                 if (calculation == null)
@@ -289,6 +345,62 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     new() { Label = "İç Tank Toplam Uzunluk", Value = $"{calculation.InnerTankTotalLength:N2} mm" },
                     new() { Label = "Dış Tank Toplam Uzunluk", Value = $"{calculation.OuterTankTotalLength:N2} mm" },
                     new() { Label = "Toplam Kaynak Uzunluğu", Value = $"{calculation.TotalWeldLength:N2} m" }
+                };
+
+                vm.InputFields = new List<SalesRequestTechnicalFieldVm>
+                {
+                    new() { Label = "Ad", Value = calculation.Name },
+                    new() { Label = "İç Tank Çapı", Value = $"{calculation.OuterDiameter:N0}" },
+                    new() { Label = "Dış Tank Çapı", Value = $"{calculation.OuterTankDiameter:N0}" },
+                    new() { Label = "Silindirik Boy", Value = $"{calculation.ShellLength:N0}" },
+                    new() { Label = "Basınç", Value = $"{calculation.Pressure:N2}" },
+                    new() { Label = "Depolanacak Ürün", Value = calculation.StorageService?.Name ?? "-" },
+                    new() { Label = "Sıvı Yoğunluğu", Value = $"{calculation.LiquidDensity:N2}" },
+                    new() { Label = "Tank Yönelimi", Value = "Horizontal" },
+                    new() { Label = "Kaynak metrajları", Value = $"1500: {calculation.WeldLength1500:N2} m | 2000: {calculation.WeldLength2000:N2} m | 2500: {calculation.WeldLength2500:N2} m | 3000: {calculation.WeldLength3000:N2} m" },
+                    new() { Label = "İç Tank Kaynak Metrajı", Value = $"{(calculation.InnerTankHeadWeldLength + calculation.InnerTankCircumferenceWeldLength):N2} m" },
+                    new() { Label = "Dış Tank Kaynak Metrajı", Value = $"{(calculation.OuterTankHeadWeldLength + calculation.OuterTankCircumferenceWeldLength):N2} m" },
+                    new() { Label = "Toplam Kaynak", Value = $"{calculation.TotalWeldLength:N2} m" }
+                };
+
+                vm.InnerTankFields = new List<SalesRequestTechnicalFieldVm>
+                {
+                    new() { Label = "Gövde Malzemesi", Value = calculation.InnerShellMaterial?.Name ?? "-" },
+                    new() { Label = "Gövde Malzeme Formu", Value = calculation.InnerShellMaterialForm?.Name ?? "-" },
+                    new() { Label = "Bombe Malzemesi", Value = calculation.InnerHeadMaterial?.Name ?? "-" },
+                    new() { Label = "Bombe Malzeme Formu", Value = calculation.InnerHeadMaterialForm?.Name ?? "-" },
+                    new() { Label = "Gövde Akma Dayanımı (MPa)", Value = $"{calculation.InnerShellMaterialStrength:N2}" },
+                    new() { Label = "Bombe Akma Dayanımı (MPa)", Value = $"{calculation.InnerHeadMaterialStrength:N2}" },
+                    new() { Label = "Gövde Kalınlığı", Value = $"{calculation.InnerShellThickness:N2}" },
+                    new() { Label = "Bombe Kalınlığı", Value = $"{calculation.InnerHeadThickness:N2}" },
+                    new() { Label = "Yuvarlanmış Gövde Kalınlığı", Value = $"{calculation.RoundedInnerShellThickness:N2}" },
+                    new() { Label = "Yuvarlanmış Bombe Kalınlığı", Value = $"{calculation.RoundedInnerHeadThickness:N2}" },
+                    new() { Label = "Bombe Pulu Çapı", Value = $"{calculation.InnerTankHeadPulDiameter:N2}" },
+                    new() { Label = "Toplam Uzunluk", Value = $"{calculation.InnerTankTotalLength:N2}" },
+                    new() { Label = "İç Hacim", Value = $"{calculation.InnerVolume:N2}" },
+                    new() { Label = "İç Yüzey Alanı", Value = $"{calculation.InnerSurfaceArea:N2}" },
+                    new() { Label = "Bombe Ağırlığı", Value = $"{calculation.InnerTankHeadWeight:N2}" },
+                    new() { Label = "Tank Ağırlığı", Value = $"{calculation.InnerTankWeight:N2}" }
+                };
+
+                vm.OuterTankFields = new List<SalesRequestTechnicalFieldVm>
+                {
+                    new() { Label = "Gövde Malzemesi", Value = calculation.OuterShellMaterial?.Name ?? "-" },
+                    new() { Label = "Gövde Malzeme Formu", Value = calculation.OuterShellMaterialForm?.Name ?? "-" },
+                    new() { Label = "Bombe Malzemesi", Value = calculation.OuterHeadMaterial?.Name ?? "-" },
+                    new() { Label = "Bombe Malzeme Formu", Value = calculation.OuterHeadMaterialForm?.Name ?? "-" },
+                    new() { Label = "Gövde Akma Dayanımı (MPa)", Value = $"{calculation.OuterShellMaterialStrength:N2}" },
+                    new() { Label = "Bombe Akma Dayanımı (MPa)", Value = $"{calculation.OuterHeadMaterialStrength:N2}" },
+                    new() { Label = "Gövde Kalınlığı", Value = $"{calculation.OuterShellThickness:N2}" },
+                    new() { Label = "Bombe Kalınlığı", Value = $"{calculation.OuterHeadThickness:N2}" },
+                    new() { Label = "Yuvarlanmış Gövde Kalınlığı", Value = $"{calculation.RoundedOuterShellThickness:N2}" },
+                    new() { Label = "Yuvarlanmış Bombe Kalınlığı", Value = $"{calculation.RoundedOuterHeadThickness:N2}" },
+                    new() { Label = "Bombe Pulu Çapı", Value = $"{calculation.OuterTankHeadPulDiameter:N2}" },
+                    new() { Label = "Toplam Uzunluk", Value = $"{calculation.OuterTankTotalLength:N2}" },
+                    new() { Label = "Dış Hacim", Value = $"{calculation.OuterVolume:N2}" },
+                    new() { Label = "Dış Yüzey Alanı", Value = $"{calculation.OuterSurfaceArea:N2}" },
+                    new() { Label = "Bombe Ağırlığı", Value = $"{calculation.OuterTankHeadWeight:N2}" },
+                    new() { Label = "Tank Ağırlığı", Value = $"{calculation.OuterTankWeight:N2}" }
                 };
                 return vm;
             }
@@ -325,6 +437,43 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             };
 
             return vm;
+        }
+
+        private static Paragraph CreateParagraph(string text, bool bold = false, JustificationValues justification = JustificationValues.Left)
+        {
+            var runProps = new RunProperties();
+            if (bold)
+            {
+                runProps.Append(new Bold());
+            }
+
+            var paragraph = new Paragraph(
+                new ParagraphProperties(new Justification { Val = justification }),
+                new Run(runProps, new Text(text) { Space = SpaceProcessingModeValues.Preserve }));
+            return paragraph;
+        }
+
+        private static void AppendFieldTable(Body body, IEnumerable<SalesRequestTechnicalFieldVm> fields)
+        {
+            var table = new Table(
+                new TableProperties(
+                    new TableBorders(
+                        new TopBorder { Val = BorderValues.Single, Size = 4 },
+                        new BottomBorder { Val = BorderValues.Single, Size = 4 },
+                        new LeftBorder { Val = BorderValues.Single, Size = 4 },
+                        new RightBorder { Val = BorderValues.Single, Size = 4 },
+                        new InsideHorizontalBorder { Val = BorderValues.Single, Size = 4 },
+                        new InsideVerticalBorder { Val = BorderValues.Single, Size = 4 })));
+
+            foreach (var field in fields)
+            {
+                table.Append(new TableRow(
+                    new TableCell(new Paragraph(new Run(new Text(field.Label)))),
+                    new TableCell(new Paragraph(new Run(new Text(field.Value))))));
+            }
+
+            body.Append(table);
+            body.Append(CreateParagraph(string.Empty));
         }
 
         private async Task<SalesRequest?> LoadRequestAsync(Guid id)

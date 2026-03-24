@@ -290,6 +290,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string? DesignDetails { get; set; }
         public bool HasSpecification { get; set; }
         public List<SalesRequestTechnicalFieldVm> TankDetailFields { get; set; } = new();
+        public List<SalesRequestTechnicalFieldVm> InputFields { get; set; } = new();
+        public List<SalesRequestTechnicalFieldVm> InnerTankFields { get; set; } = new();
+        public List<SalesRequestTechnicalFieldVm> OuterTankFields { get; set; } = new();
     }
 
     public class SalesRequestTechnicalFieldVm

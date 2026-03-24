@@ -9,6 +9,7 @@
         <p class="text-muted mb-0">@Model.RequestNo · @Model.ItemTitle</p>
     </div>
     <div class="d-flex gap-2">
+        <a asp-action="DownloadSpecificationWord" asp-route-requestId="@Model.RequestId" asp-route-itemId="@Model.ItemId" class="btn btn-primary">Word İndir</a>
         <a asp-action="TechnicalDetails" asp-route-requestId="@Model.RequestId" asp-route-itemId="@Model.ItemId" class="btn btn-outline-primary">Teknik Detay</a>
         <a asp-action="Details" asp-route-id="@Model.RequestId" class="btn btn-outline-secondary">Talebe dön</a>
     </div>
@@ -50,6 +51,14 @@
                 </table>
             </div>
         }
+
+        <h6 class="mt-4">Standart şartname notları</h6>
+        <ul class="mb-0">
+            <li>Design and manufacturing according to selected applicable standard.</li>
+            <li>Material certificates, hydrostatic test certificate and final inspection report are included.</li>
+            <li>Surface treatment and insulation are applied per standard company practice.</li>
+            <li>Warranty and commercial clauses are valid as per quotation terms.</li>
+        </ul>
 
         @if (!string.IsNullOrWhiteSpace(Model.DesignDetails))
         {
