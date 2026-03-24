@@ -25,10 +25,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     Id = x.Id,
                     CompanyName = x.CompanyName,
                     ContactName = x.ContactName,
+                    ContactPersons = x.ContactPersons,
+                    ContactPhones = x.ContactPhones,
+                    ContactEmails = x.ContactEmails,
                     Email = x.Email,
                     Phone = x.Phone,
                     City = x.City,
                     Country = x.Country,
+                    Sector = x.Sector,
+                    MainDealerCountry = x.MainDealerCountry,
+                    Region = x.Region,
                     IsActive = x.IsActive
                 })
                 .ToListAsync();
@@ -38,6 +44,35 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         [HttpGet]
         public IActionResult Create() => View(new CustomerFormVm());
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var customer = await _context.Customers
+                .AsNoTracking()
+                .Where(x => x.Id == id && x.Status != Domain.Enums.Status.Deleted)
+                .Select(x => new CustomerListVm
+                {
+                    Id = x.Id,
+                    CompanyName = x.CompanyName,
+                    ContactName = x.ContactName,
+                    ContactPersons = x.ContactPersons,
+                    ContactPhones = x.ContactPhones,
+                    ContactEmails = x.ContactEmails,
+                    Email = x.Email,
+                    Phone = x.Phone,
+                    City = x.City,
+                    Country = x.Country,
+                    Sector = x.Sector,
+                    MainDealerCountry = x.MainDealerCountry,
+                    Region = x.Region,
+                    IsActive = x.IsActive
+                })
+                .FirstOrDefaultAsync();
+
+            if (customer == null) return NotFound();
+            return View(customer);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -49,11 +84,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 CompanyName = vm.CompanyName,
                 ContactName = vm.ContactName,
+                ContactPersons = vm.ContactPersons,
+                ContactPhones = vm.ContactPhones,
+                ContactEmails = vm.ContactEmails,
                 Email = vm.Email,
                 Phone = vm.Phone,
                 Address = vm.Address,
                 City = vm.City,
                 Country = vm.Country,
+                Sector = vm.Sector,
+                MainDealerCountry = vm.MainDealerCountry,
+                Region = vm.Region,
                 TaxNumber = vm.TaxNumber,
                 TaxOffice = vm.TaxOffice,
                 Notes = vm.Notes,
@@ -76,11 +117,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = entity.Id,
                 CompanyName = entity.CompanyName,
                 ContactName = entity.ContactName,
+                ContactPersons = entity.ContactPersons,
+                ContactPhones = entity.ContactPhones,
+                ContactEmails = entity.ContactEmails,
                 Email = entity.Email,
                 Phone = entity.Phone,
                 Address = entity.Address,
                 City = entity.City,
                 Country = entity.Country,
+                Sector = entity.Sector,
+                MainDealerCountry = entity.MainDealerCountry,
+                Region = entity.Region,
                 TaxNumber = entity.TaxNumber,
                 TaxOffice = entity.TaxOffice,
                 Notes = entity.Notes,
@@ -100,11 +147,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             entity.CompanyName = vm.CompanyName;
             entity.ContactName = vm.ContactName;
+            entity.ContactPersons = vm.ContactPersons;
+            entity.ContactPhones = vm.ContactPhones;
+            entity.ContactEmails = vm.ContactEmails;
             entity.Email = vm.Email;
             entity.Phone = vm.Phone;
             entity.Address = vm.Address;
             entity.City = vm.City;
             entity.Country = vm.Country;
+            entity.Sector = vm.Sector;
+            entity.MainDealerCountry = vm.MainDealerCountry;
+            entity.Region = vm.Region;
             entity.TaxNumber = vm.TaxNumber;
             entity.TaxOffice = vm.TaxOffice;
             entity.Notes = vm.Notes;

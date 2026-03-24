@@ -17,11 +17,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
     public class SalesRequestListVm
     {
         public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         public string RequestNo { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string CustomerName { get; set; } = string.Empty;
         public string RequestedByName { get; set; } = string.Empty;
         public DateTime SalesOpenedAt { get; set; }
+        public DateTime NeededByDate { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
         public int ItemCount { get; set; }
         public int AttachmentCount { get; set; }
@@ -45,6 +47,24 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         [StringLength(100)]
         [Display(Name = "Departman")]
         public string? RequestedByDepartment { get; set; }
+
+        [Display(Name = "Teklif ihtiyaç tarihi")]
+        [DataType(DataType.Date)]
+        public DateTime NeededByDate { get; set; } = DateTime.UtcNow.Date.AddDays(7);
+
+        [Display(Name = "Talep kaynağı")]
+        public SalesRequestSource RequestSource { get; set; } = SalesRequestSource.Sales;
+
+        [Display(Name = "Sevk edilecek ülke")]
+        [StringLength(100)]
+        public string? ShipmentCountry { get; set; }
+
+        [Display(Name = "Kurulum ülkesi")]
+        [StringLength(100)]
+        public string? InstallationCountry { get; set; }
+
+        [Display(Name = "Nakliye müşteride mi?")]
+        public bool IsTransportByCustomer { get; set; }
 
         [StringLength(2000)]
         [Display(Name = "Satış özeti")]
@@ -75,6 +95,79 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         [Range(0d, 100000d)]
         public decimal? ConsumptionCapacity { get; set; }
 
+        [Display(Name = "Talep grubu")]
+        public SalesRequestCategory RequestCategory { get; set; } = SalesRequestCategory.Tank;
+
+        [Display(Name = "Ürün")]
+        [StringLength(40)]
+        public string? ProductCode { get; set; }
+
+        [Display(Name = "Dizayn standardı")]
+        [StringLength(40)]
+        public string? DesignStandardCode { get; set; }
+
+        [Display(Name = "Dizayn basıncı (bar)")]
+        public decimal? DesignPressureBar { get; set; }
+
+        [Display(Name = "Dizayn sıcaklığı min (°C)")]
+        public decimal? DesignTemperatureMin { get; set; }
+
+        [Display(Name = "Dizayn sıcaklığı max (°C)")]
+        public decimal? DesignTemperatureMax { get; set; }
+
+        [Display(Name = "Tank tipi")]
+        public RequestTankType? TankType { get; set; }
+
+        [Display(Name = "Depolama tipi")]
+        public RequestStorageOption? StorageOption { get; set; }
+
+        [Display(Name = "Transport tipi")]
+        public RequestTransportOption? TransportOption { get; set; }
+
+        [Display(Name = "STD/OPS/SPC")]
+        public RequestStdOpsSelection? StdOpsSelection { get; set; }
+
+        [Display(Name = "SPC teknik bilgileri")]
+        public string? SpcTechnicalDetails { get; set; }
+
+        [Display(Name = "Ortam sıcaklığı min (°C)")]
+        public decimal? AmbientTemperatureMin { get; set; }
+
+        [Display(Name = "Ortam sıcaklığı max (°C)")]
+        public decimal? AmbientTemperatureMax { get; set; }
+
+        [Display(Name = "Tesis tipi")]
+        public string? FacilityType { get; set; }
+
+        [Display(Name = "Giriş basıncı (bar)")]
+        public decimal? FacilityInletPressureBar { get; set; }
+
+        [Display(Name = "Çıkış basıncı (bar)")]
+        public decimal? FacilityOutletPressureBar { get; set; }
+
+        [Display(Name = "Giriş sıcaklığı (°C)")]
+        public decimal? FacilityInletTemperature { get; set; }
+
+        [Display(Name = "Çıkış sıcaklığı (°C)")]
+        public decimal? FacilityOutletTemperature { get; set; }
+
+        [Display(Name = "Tesis kapasitesi (Nm3/h)")]
+        public decimal? FacilityCapacityNm3h { get; set; }
+
+        [Display(Name = "Pompa var mı?")]
+        public bool HasPump { get; set; }
+        public string? PumpDetails { get; set; }
+
+        [Display(Name = "Elektrikli ısıtıcı var mı?")]
+        public bool HasElectricHeater { get; set; }
+        public string? ElectricHeaterDetails { get; set; }
+
+        [Display(Name = "Tank tüketim kapasitesi aktif")]
+        public bool HasTankConsumptionCapacity { get; set; }
+
+        [Display(Name = "Ek sorular / cevaplar (JSON)")]
+        public string? AdditionalQuestionsJson { get; set; }
+
         [Display(Name = "Tank tipi")]
         public RequestTankOrientation TankOrientation { get; set; } = RequestTankOrientation.Vertical;
 
@@ -89,6 +182,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
     public class SalesRequestDetailVm
     {
         public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         public string RequestNo { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string CustomerName { get; set; } = string.Empty;
@@ -98,6 +192,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string RequestedByName { get; set; } = string.Empty;
         public string? RequestedByEmail { get; set; }
         public string? RequestedByDepartment { get; set; }
+        public DateTime SalesOpenedAt { get; set; }
+        public DateTime NeededByDate { get; set; }
+        public SalesRequestSource RequestSource { get; set; }
+        public string? ShipmentCountry { get; set; }
+        public string? InstallationCountry { get; set; }
+        public bool IsTransportByCustomer { get; set; }
+        public string? CustomerSector { get; set; }
+        public string? CustomerMainDealerCountry { get; set; }
+        public string? CustomerRegion { get; set; }
         public string? SummaryNotes { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
         public bool IsManagerView { get; set; }
@@ -115,6 +218,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string ProductGroupName { get; set; } = string.Empty;
         public decimal CapacityM3 { get; set; }
         public decimal? ConsumptionCapacity { get; set; }
+        public SalesRequestCategory RequestCategory { get; set; }
+        public string? ProductCode { get; set; }
+        public string? DesignStandardCode { get; set; }
+        public decimal? DesignPressureBar { get; set; }
+        public decimal? DesignTemperatureMin { get; set; }
+        public decimal? DesignTemperatureMax { get; set; }
+        public RequestTankType? TankType { get; set; }
+        public RequestStorageOption? StorageOption { get; set; }
+        public RequestTransportOption? TransportOption { get; set; }
+        public RequestStdOpsSelection? StdOpsSelection { get; set; }
+        public string? SpcTechnicalDetails { get; set; }
+        public decimal? AmbientTemperatureMin { get; set; }
+        public decimal? AmbientTemperatureMax { get; set; }
+        public string? FacilityType { get; set; }
+        public decimal? FacilityInletPressureBar { get; set; }
+        public decimal? FacilityOutletPressureBar { get; set; }
+        public decimal? FacilityInletTemperature { get; set; }
+        public decimal? FacilityOutletTemperature { get; set; }
+        public decimal? FacilityCapacityNm3h { get; set; }
+        public bool HasPump { get; set; }
+        public string? PumpDetails { get; set; }
+        public bool HasElectricHeater { get; set; }
+        public string? ElectricHeaterDetails { get; set; }
+        public bool HasTankConsumptionCapacity { get; set; }
+        public string? AdditionalQuestionsJson { get; set; }
         public RequestTankOrientation TankOrientation { get; set; }
         public PlacementType PlacementType { get; set; }
         public string? MinimumTechnicalNotes { get; set; }

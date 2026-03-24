@@ -65,7 +65,7 @@
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead>
-                                <tr><th>Talep No</th><th>Müşteri</th><th>Açılış</th><th>Durum</th><th>Ekler</th><th class="text-end">İşlem</th></tr>
+                                <tr><th>Talep No</th><th>Müşteri</th><th>Açılış</th><th>İhtiyaç</th><th>Durum</th><th>Ekler</th><th class="text-end">İşlem</th></tr>
                             </thead>
                             <tbody>
                             @foreach (var item in Model.Requests)
@@ -73,7 +73,8 @@
                                 <tr>
                                     <td class="fw-semibold">@item.RequestNo<div><small class="text-muted">@item.Title</small></div></td>
                                     <td>@item.CustomerName</td>
-                                    <td>@item.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td class="@((DateTime.UtcNow - item.SalesOpenedAt).TotalDays >= 7 ? "text-danger fw-bold" : string.Empty)">@item.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
                                     <td><span class="badge @StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span></td>
                                     <td>@item.AttachmentCount</td>
                                     <td class="text-end d-flex justify-content-end gap-2">

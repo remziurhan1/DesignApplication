@@ -41,11 +41,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Requests = requests.Select(x => new SalesRequestListVm
                 {
                     Id = x.Id,
+                    CustomerId = x.CustomerId,
                     RequestNo = x.RequestNo,
                     Title = x.Title,
                     CustomerName = x.Customer.CompanyName,
                     RequestedByName = x.RequestedByName,
                     SalesOpenedAt = x.SalesOpenedAt,
+                    NeededByDate = x.NeededByDate,
                     WorkflowStatus = x.WorkflowStatus,
                     ItemCount = x.Items.Count,
                     AttachmentCount = x.Attachments.Count,
@@ -75,6 +77,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
             }
 
+            for (var i = 0; i < vm.Items.Count; i++)
+            {
+                NormalizeAndValidateItem(vm.Items[i], $"Items[{i}]");
+            }
+
             if (!ModelState.IsValid)
             {
                 await PopulateFormAsync(vm);
@@ -92,6 +99,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RequestedByName = vm.RequestedByName,
                 RequestedByEmail = vm.RequestedByEmail,
                 RequestedByDepartment = vm.RequestedByDepartment,
+                NeededByDate = vm.NeededByDate.Date,
+                RequestSource = vm.RequestSource,
+                ShipmentCountry = vm.ShipmentCountry,
+                InstallationCountry = vm.InstallationCountry,
+                IsTransportByCustomer = vm.IsTransportByCustomer,
                 SummaryNotes = vm.SummaryNotes,
                 WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
                 SalesOpenedAt = DateTime.UtcNow
@@ -107,6 +119,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     ProductGroupId = itemVm.ProductGroupId,
                     CapacityM3 = itemVm.CapacityM3,
                     ConsumptionCapacity = itemVm.ConsumptionCapacity,
+                    RequestCategory = itemVm.RequestCategory,
+                    ProductCode = itemVm.ProductCode,
+                    DesignStandardCode = itemVm.DesignStandardCode,
+                    DesignPressureBar = itemVm.DesignPressureBar,
+                    DesignTemperatureMin = itemVm.DesignTemperatureMin,
+                    DesignTemperatureMax = itemVm.DesignTemperatureMax,
+                    TankType = itemVm.TankType,
+                    StorageOption = itemVm.StorageOption,
+                    TransportOption = itemVm.TransportOption,
+                    StdOpsSelection = itemVm.StdOpsSelection,
+                    SpcTechnicalDetails = itemVm.SpcTechnicalDetails,
+                    AmbientTemperatureMin = itemVm.AmbientTemperatureMin,
+                    AmbientTemperatureMax = itemVm.AmbientTemperatureMax,
+                    FacilityType = itemVm.FacilityType,
+                    FacilityInletPressureBar = itemVm.FacilityInletPressureBar,
+                    FacilityOutletPressureBar = itemVm.FacilityOutletPressureBar,
+                    FacilityInletTemperature = itemVm.FacilityInletTemperature,
+                    FacilityOutletTemperature = itemVm.FacilityOutletTemperature,
+                    FacilityCapacityNm3h = itemVm.FacilityCapacityNm3h,
+                    HasPump = itemVm.HasPump,
+                    PumpDetails = itemVm.PumpDetails,
+                    HasElectricHeater = itemVm.HasElectricHeater,
+                    ElectricHeaterDetails = itemVm.ElectricHeaterDetails,
+                    HasTankConsumptionCapacity = itemVm.HasTankConsumptionCapacity,
+                    AdditionalQuestionsJson = itemVm.AdditionalQuestionsJson,
                     TankOrientation = itemVm.TankOrientation,
                     PlacementType = itemVm.PlacementType,
                     MinimumTechnicalNotes = itemVm.MinimumTechnicalNotes,
@@ -257,6 +294,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddSubItem(SalesRequestAddSubItemVm vm)
         {
+            NormalizeAndValidateItem(vm, nameof(vm));
             if (!ModelState.IsValid)
             {
                 return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
@@ -274,6 +312,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ProductGroupId = vm.ProductGroupId,
                 CapacityM3 = vm.CapacityM3,
                 ConsumptionCapacity = vm.ConsumptionCapacity,
+                RequestCategory = vm.RequestCategory,
+                ProductCode = vm.ProductCode,
+                DesignStandardCode = vm.DesignStandardCode,
+                DesignPressureBar = vm.DesignPressureBar,
+                DesignTemperatureMin = vm.DesignTemperatureMin,
+                DesignTemperatureMax = vm.DesignTemperatureMax,
+                TankType = vm.TankType,
+                StorageOption = vm.StorageOption,
+                TransportOption = vm.TransportOption,
+                StdOpsSelection = vm.StdOpsSelection,
+                SpcTechnicalDetails = vm.SpcTechnicalDetails,
+                AmbientTemperatureMin = vm.AmbientTemperatureMin,
+                AmbientTemperatureMax = vm.AmbientTemperatureMax,
+                FacilityType = vm.FacilityType,
+                FacilityInletPressureBar = vm.FacilityInletPressureBar,
+                FacilityOutletPressureBar = vm.FacilityOutletPressureBar,
+                FacilityInletTemperature = vm.FacilityInletTemperature,
+                FacilityOutletTemperature = vm.FacilityOutletTemperature,
+                FacilityCapacityNm3h = vm.FacilityCapacityNm3h,
+                HasPump = vm.HasPump,
+                PumpDetails = vm.PumpDetails,
+                HasElectricHeater = vm.HasElectricHeater,
+                ElectricHeaterDetails = vm.ElectricHeaterDetails,
+                HasTankConsumptionCapacity = vm.HasTankConsumptionCapacity,
+                AdditionalQuestionsJson = vm.AdditionalQuestionsJson,
                 TankOrientation = vm.TankOrientation,
                 PlacementType = vm.PlacementType,
                 MinimumTechnicalNotes = vm.MinimumTechnicalNotes,
@@ -343,6 +406,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         ProductGroupName = x.ProductGroup.Name,
                         CapacityM3 = x.CapacityM3,
                         ConsumptionCapacity = x.ConsumptionCapacity,
+                        RequestCategory = x.RequestCategory,
+                        ProductCode = x.ProductCode,
+                        DesignStandardCode = x.DesignStandardCode,
+                        DesignPressureBar = x.DesignPressureBar,
+                        DesignTemperatureMin = x.DesignTemperatureMin,
+                        DesignTemperatureMax = x.DesignTemperatureMax,
+                        TankType = x.TankType,
+                        StorageOption = x.StorageOption,
+                        TransportOption = x.TransportOption,
+                        StdOpsSelection = x.StdOpsSelection,
+                        SpcTechnicalDetails = x.SpcTechnicalDetails,
+                        AmbientTemperatureMin = x.AmbientTemperatureMin,
+                        AmbientTemperatureMax = x.AmbientTemperatureMax,
+                        FacilityType = x.FacilityType,
+                        FacilityInletPressureBar = x.FacilityInletPressureBar,
+                        FacilityOutletPressureBar = x.FacilityOutletPressureBar,
+                        FacilityInletTemperature = x.FacilityInletTemperature,
+                        FacilityOutletTemperature = x.FacilityOutletTemperature,
+                        FacilityCapacityNm3h = x.FacilityCapacityNm3h,
+                        HasPump = x.HasPump,
+                        PumpDetails = x.PumpDetails,
+                        HasElectricHeater = x.HasElectricHeater,
+                        ElectricHeaterDetails = x.ElectricHeaterDetails,
+                        HasTankConsumptionCapacity = x.HasTankConsumptionCapacity,
+                        AdditionalQuestionsJson = x.AdditionalQuestionsJson,
                         TankOrientation = x.TankOrientation,
                         PlacementType = x.PlacementType,
                         MinimumTechnicalNotes = x.MinimumTechnicalNotes,
@@ -376,15 +464,25 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return new SalesRequestDetailVm
             {
                 Id = entity.Id,
+                CustomerId = entity.CustomerId,
                 RequestNo = entity.RequestNo,
                 Title = entity.Title,
                 CustomerName = entity.Customer.CompanyName,
                 CustomerContact = entity.Customer.ContactName,
                 CustomerEmail = entity.Customer.Email,
                 CustomerPhone = entity.Customer.Phone,
+                CustomerSector = entity.Customer.Sector,
+                CustomerMainDealerCountry = entity.Customer.MainDealerCountry,
+                CustomerRegion = entity.Customer.Region,
                 RequestedByName = entity.RequestedByName,
                 RequestedByEmail = entity.RequestedByEmail,
                 RequestedByDepartment = entity.RequestedByDepartment,
+                SalesOpenedAt = entity.SalesOpenedAt,
+                NeededByDate = entity.NeededByDate,
+                RequestSource = entity.RequestSource,
+                ShipmentCountry = entity.ShipmentCountry,
+                InstallationCountry = entity.InstallationCountry,
+                IsTransportByCustomer = entity.IsTransportByCustomer,
                 SummaryNotes = entity.SummaryNotes,
                 WorkflowStatus = entity.WorkflowStatus,
                 IsManagerView = isManagerView,
@@ -657,6 +755,75 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             public decimal TotalCost { get; set; }
             public decimal? MinimumSalesPrice { get; set; }
             public decimal? RecommendedSalesPrice { get; set; }
+        }
+
+        private void NormalizeAndValidateItem(SalesRequestItemInputVm item, string keyPrefix)
+        {
+            if (item.TankType == RequestTankType.Storage)
+            {
+                item.TransportOption = null;
+            }
+            else if (item.TankType == RequestTankType.Transport)
+            {
+                item.StorageOption = null;
+            }
+
+            if (item.TankType == RequestTankType.Storage && item.TransportOption.HasValue)
+            {
+                ModelState.AddModelError($"{keyPrefix}.TransportOption", "Depolama seçiliyse transport seçilemez.");
+            }
+
+            if (item.TankType == RequestTankType.Transport && item.StorageOption.HasValue)
+            {
+                ModelState.AddModelError($"{keyPrefix}.StorageOption", "Transport seçiliyse depolama tipi seçilemez.");
+            }
+
+            if (item.StdOpsSelection != RequestStdOpsSelection.SPC)
+            {
+                item.SpcTechnicalDetails = null;
+            }
+            else if (string.IsNullOrWhiteSpace(item.SpcTechnicalDetails))
+            {
+                ModelState.AddModelError($"{keyPrefix}.SpcTechnicalDetails", "SPC seçildiğinde teknik bilgi girilmelidir.");
+            }
+
+            if (item.RequestCategory == SalesRequestCategory.Tank)
+            {
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+            }
+            else if (item.RequestCategory == SalesRequestCategory.Evaporator)
+            {
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+            }
+            else if (item.RequestCategory == SalesRequestCategory.Facility)
+            {
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.StdOpsSelection = null;
+                item.SpcTechnicalDetails = null;
+            }
         }
     }
 }

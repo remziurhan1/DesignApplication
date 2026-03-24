@@ -21,6 +21,9 @@ namespace MVC.ProductManagement.Domain.Entities
         /// Yetkili kişi adı
         /// </summary>
         public string ContactName { get; set; } = string.Empty;
+        public string? ContactPersons { get; set; }
+        public string? ContactPhones { get; set; }
+        public string? ContactEmails { get; set; }
 
         /// <summary>
         /// E-posta
@@ -46,6 +49,9 @@ namespace MVC.ProductManagement.Domain.Entities
         /// Ülke
         /// </summary>
         public string? Country { get; set; }
+        public string? Sector { get; set; }
+        public string? MainDealerCountry { get; set; }
+        public string? Region { get; set; }
 
         /// <summary>
         /// Vergi numarası
