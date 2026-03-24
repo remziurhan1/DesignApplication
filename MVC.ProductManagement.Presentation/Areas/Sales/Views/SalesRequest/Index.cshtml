@@ -1,0 +1,74 @@
+@using MVC.ProductManagement.Domain.Enums
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestIndexVm
+@{
+    ViewData["Title"] = "Satış Sorumlusu Talepleri";
+
+    string StatusClass(SalesRequestWorkflowStatus status) => status switch
+    {
+        SalesRequestWorkflowStatus.Approved => "bg-success",
+        SalesRequestWorkflowStatus.Rejected => "bg-danger",
+        SalesRequestWorkflowStatus.PricingInProgress => "bg-warning text-dark",
+        _ => "bg-info"
+    };
+}
+
+<div class="pagetitle">
+    <h1>Satış Sorumlusu Ekranı</h1>
+    <p class="text-muted">Yalnızca satış yöneticisi tarafından onaylanmış fiyatlar listelenir.</p>
+</div>
+
+<section class="section">
+    <div class="row g-3 mb-4">
+        <div class="col-md-4"><div class="card info-card"><div class="card-body"><h5 class="card-title">Onaylı Talep</h5><h3>@Model.ApprovedCount</h3></div></div></div>
+        <div class="col-md-4"><div class="card info-card"><div class="card-body"><h5 class="card-title">Toplam Kalem</h5><h3>@Model.Requests.Sum(x => x.ItemCount)</h3></div></div></div>
+        <div class="col-md-4"><div class="card info-card"><div class="card-body"><h5 class="card-title">Toplam Onaylı Fiyat</h5><h3>@Model.Requests.Sum(x => x.ApprovedSalesPriceTotal ?? 0).ToString("N2") ₺</h3></div></div></div>
+    </div>
+
+    <div class="card">
+        <div class="card-body pt-3">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Talep No</th>
+                            <th>Müşteri</th>
+                            <th>Satışçı</th>
+                            <th>İhtiyaç Tarihi</th>
+                            <th>Durum</th>
+                            <th>Toplam Fiyat</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.Requests.Any())
+                    {
+                        @foreach (var item in Model.Requests)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@item.RequestNo</div>
+                                    <small class="text-muted">@item.Title</small>
+                                </td>
+                                <td>@item.CustomerName</td>
+                                <td>@item.RequestedByName</td>
+                                <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
+                                <td><span class="badge @StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span></td>
+                                <td>@((item.ApprovedSalesPriceTotal ?? 0).ToString("N2")) ₺</td>
+                                <td class="text-end">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Detay</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">Henüz satış yöneticisi tarafından onaylanan talep bulunmuyor.</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
