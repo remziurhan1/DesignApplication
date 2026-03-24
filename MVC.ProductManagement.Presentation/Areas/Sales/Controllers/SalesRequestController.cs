@@ -10,6 +10,7 @@ using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 {
@@ -58,6 +59,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     SalesOpenedAt = x.SalesOpenedAt,
                     NeededByDate = x.NeededByDate,
                     WorkflowStatus = x.WorkflowStatus,
+                    CustomerQuoteStatus = x.CustomerQuoteStatus,
+                    RevisionNo = x.RevisionNo,
                     ItemCount = x.Items.Count,
                     AttachmentCount = x.Attachments.Count,
                     ApprovedSalesPriceTotal = x.Items.Where(i => i.ApprovedSalesPrice.HasValue).Sum(i => i.ApprovedSalesPrice)
@@ -101,6 +104,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
+            }
+
+            for (var i = 0; i < vm.Items.Count; i++)
+            {
+                NormalizeAndValidateItem(vm.Items[i], $"Items[{i}]");
             }
 
             if (!ModelState.IsValid)
@@ -195,9 +203,219 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             if (entity == null) return NotFound();
 
             var canViewPricing = await HasSalesPermissionAsync(x => x.CanViewSalesPricing);
-            var vm = MapDetailVm(entity, canViewPricing);
+            var revisions = await _context.SalesRequestRevisions
+                .AsNoTracking()
+                .Where(x => x.SalesRequestId == id && x.Status != Status.Deleted)
+                .OrderByDescending(x => x.RevisionNo)
+                .ToListAsync();
+
+            var vm = MapDetailVm(entity, revisions, canViewPricing);
             ViewBag.WaitingManagerApproval = entity.WorkflowStatus != SalesRequestWorkflowStatus.Approved;
             return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Revise(Guid id)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests || x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var entity = await _context.SalesRequests
+                .AsNoTracking()
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (entity == null) return NotFound();
+
+            var vm = new SalesRequestCreateVm
+            {
+                Id = entity.Id,
+                CustomerId = entity.CustomerId,
+                RequestedByName = entity.RequestedByName,
+                RequestedByEmail = entity.RequestedByEmail,
+                RequestedByDepartment = entity.RequestedByDepartment,
+                NeededByDate = entity.NeededByDate,
+                RequestSource = entity.RequestSource,
+                ShipmentCountry = entity.ShipmentCountry,
+                InstallationCountry = entity.InstallationCountry,
+                IsTransportByCustomer = entity.IsTransportByCustomer,
+                SummaryNotes = entity.SummaryNotes,
+                Items = entity.Items
+                    .OrderBy(x => x.DisplayOrder)
+                    .Select(x => new SalesRequestItemInputVm
+                    {
+                        ParentSalesRequestItemId = x.ParentSalesRequestItemId,
+                        ProductGroupId = x.ProductGroupId,
+                        CapacityM3 = x.CapacityM3,
+                        ConsumptionCapacity = x.ConsumptionCapacity,
+                        RequestCategory = x.RequestCategory,
+                        ProductCode = x.ProductCode,
+                        DesignStandardCode = x.DesignStandardCode,
+                        DesignPressureBar = x.DesignPressureBar,
+                        DesignTemperatureMin = x.DesignTemperatureMin,
+                        DesignTemperatureMax = x.DesignTemperatureMax,
+                        TankType = x.TankType,
+                        StorageOption = x.StorageOption,
+                        TransportOption = x.TransportOption,
+                        StdOpsSelection = x.StdOpsSelection,
+                        SpcTechnicalDetails = x.SpcTechnicalDetails,
+                        AmbientTemperatureMin = x.AmbientTemperatureMin,
+                        AmbientTemperatureMax = x.AmbientTemperatureMax,
+                        FacilityType = x.FacilityType,
+                        FacilityInletPressureBar = x.FacilityInletPressureBar,
+                        FacilityOutletPressureBar = x.FacilityOutletPressureBar,
+                        FacilityInletTemperature = x.FacilityInletTemperature,
+                        FacilityOutletTemperature = x.FacilityOutletTemperature,
+                        FacilityCapacityNm3h = x.FacilityCapacityNm3h,
+                        HasPump = x.HasPump,
+                        PumpDetails = x.PumpDetails,
+                        HasElectricHeater = x.HasElectricHeater,
+                        ElectricHeaterDetails = x.ElectricHeaterDetails,
+                        HasTankConsumptionCapacity = x.HasTankConsumptionCapacity,
+                        AdditionalQuestionsJson = x.AdditionalQuestionsJson,
+                        TankOrientation = x.TankOrientation,
+                        PlacementType = x.PlacementType,
+                        MinimumTechnicalNotes = x.MinimumTechnicalNotes
+                    }).ToList()
+            };
+
+            await PopulateFormAsync(vm);
+            ViewBag.IsEdit = true;
+            ViewBag.IsRevision = true;
+            return View("~/Areas/Admin/Views/SalesRequest/Create.cshtml", vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
+        public async Task<IActionResult> Revise(Guid id, SalesRequestCreateVm vm)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests || x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            vm.Id = id;
+            await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
+            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
+            if (!vm.Items.Any())
+            {
+                ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.RevisionReason))
+            {
+                ModelState.AddModelError(nameof(vm.RevisionReason), "Revizyon açıklaması zorunludur.");
+            }
+
+            var entity = await _context.SalesRequests
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (entity == null) return NotFound();
+
+            if (!ModelState.IsValid)
+            {
+                await PopulateFormAsync(vm);
+                ViewBag.IsEdit = true;
+                ViewBag.IsRevision = true;
+                return View("~/Areas/Admin/Views/SalesRequest/Create.cshtml", vm);
+            }
+
+            await AddRevisionSnapshotAsync(entity, vm.RevisionReason!);
+
+            entity.CustomerId = vm.CustomerId;
+            entity.RequestedByName = vm.RequestedByName;
+            entity.RequestedByEmail = vm.RequestedByEmail;
+            entity.RequestedByDepartment = vm.RequestedByDepartment;
+            entity.NeededByDate = vm.NeededByDate.Date;
+            entity.RequestSource = SalesRequestSource.Sales;
+            entity.ShipmentCountry = vm.ShipmentCountry;
+            entity.InstallationCountry = vm.InstallationCountry;
+            entity.IsTransportByCustomer = vm.IsTransportByCustomer;
+            entity.SummaryNotes = vm.SummaryNotes;
+            entity.Title = await BuildRequestTitleAsync(vm.Items.First());
+            entity.WorkflowStatus = SalesRequestWorkflowStatus.Submitted;
+            entity.CustomerQuoteStatus = SalesCustomerQuoteStatus.PreparingSpecification;
+            entity.PricingCompletedAt = null;
+            entity.ApprovedAt = null;
+            entity.RevisionNo += 1;
+
+            _context.SalesRequestItems.RemoveRange(entity.Items);
+            entity.Items.Clear();
+
+            var groups = await _context.SalesRequestProductGroups.AsNoTracking().ToDictionaryAsync(x => x.Id);
+            var itemOrder = 1;
+            foreach (var itemVm in vm.Items)
+            {
+                var group = groups[itemVm.ProductGroupId];
+                entity.Items.Add(new SalesRequestItem
+                {
+                    ProductGroupId = itemVm.ProductGroupId,
+                    CapacityM3 = itemVm.CapacityM3,
+                    ConsumptionCapacity = itemVm.ConsumptionCapacity,
+                    RequestCategory = itemVm.RequestCategory,
+                    ProductCode = group.ShortCode,
+                    DesignStandardCode = itemVm.DesignStandardCode,
+                    DesignPressureBar = itemVm.DesignPressureBar,
+                    DesignTemperatureMin = itemVm.DesignTemperatureMin,
+                    DesignTemperatureMax = itemVm.DesignTemperatureMax,
+                    TankType = itemVm.TankType,
+                    StorageOption = itemVm.StorageOption,
+                    TransportOption = itemVm.TransportOption,
+                    StdOpsSelection = itemVm.StdOpsSelection,
+                    SpcTechnicalDetails = itemVm.SpcTechnicalDetails,
+                    AmbientTemperatureMin = itemVm.AmbientTemperatureMin,
+                    AmbientTemperatureMax = itemVm.AmbientTemperatureMax,
+                    FacilityType = itemVm.FacilityType,
+                    FacilityInletPressureBar = itemVm.FacilityInletPressureBar,
+                    FacilityOutletPressureBar = itemVm.FacilityOutletPressureBar,
+                    FacilityInletTemperature = itemVm.FacilityInletTemperature,
+                    FacilityOutletTemperature = itemVm.FacilityOutletTemperature,
+                    FacilityCapacityNm3h = itemVm.FacilityCapacityNm3h,
+                    HasPump = itemVm.HasPump,
+                    PumpDetails = itemVm.PumpDetails,
+                    HasElectricHeater = itemVm.HasElectricHeater,
+                    ElectricHeaterDetails = itemVm.ElectricHeaterDetails,
+                    HasTankConsumptionCapacity = itemVm.HasTankConsumptionCapacity,
+                    AdditionalQuestionsJson = itemVm.AdditionalQuestionsJson,
+                    TankOrientation = itemVm.TankOrientation,
+                    PlacementType = itemVm.PlacementType,
+                    MinimumTechnicalNotes = itemVm.MinimumTechnicalNotes,
+                    ItemCode = GenerateItemCode(group.Code, itemVm, itemOrder),
+                    ItemTitle = BuildItemTitle(group.ShortCode, itemVm),
+                    WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
+                    DisplayOrder = itemOrder++
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            await SaveAttachmentsAsync(entity, vm.Attachments);
+
+            TempData["SuccessMessage"] = $"Talep revize edildi (R{entity.RevisionNo:00}).";
+            return RedirectToAction(nameof(Details), new { id = entity.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateCustomerQuoteStatus(Guid id, SalesCustomerQuoteStatus customerQuoteStatus)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var entity = await _context.SalesRequests
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            entity.CustomerQuoteStatus = customerQuoteStatus;
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Müşteri teklif durumu güncellendi.";
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         [HttpGet]
@@ -490,7 +708,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
         }
 
-        private static SalesRequestDetailVm MapDetailVm(SalesRequest entity, bool canViewPricing)
+        private static SalesRequestDetailVm MapDetailVm(SalesRequest entity, List<SalesRequestRevision> revisions, bool canViewPricing)
         {
             var itemMap = entity.Items
                 .OrderBy(x => x.DisplayOrder)
@@ -581,7 +799,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 CustomerRegion = entity.Customer.Region,
                 SummaryNotes = entity.SummaryNotes,
                 WorkflowStatus = entity.WorkflowStatus,
+                CustomerQuoteStatus = entity.CustomerQuoteStatus,
+                RevisionNo = entity.RevisionNo,
                 IsManagerView = false,
+                RevisionHistory = revisions.Select(x => new SalesRequestRevisionHistoryVm
+                {
+                    RevisionNo = x.RevisionNo,
+                    RevisionReason = x.RevisionReason,
+                    RevisedBy = x.RevisedByName,
+                    RevisedAt = x.RevisedAt
+                }).ToList(),
                 Items = roots,
                 Attachments = entity.Attachments
                     .Select(a => new SalesRequestAttachmentVm
@@ -592,6 +819,75 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     })
                     .ToList()
             };
+        }
+
+        private async Task AddRevisionSnapshotAsync(SalesRequest entity, string revisionReason)
+        {
+            var requestorName = User.Identity?.Name ?? entity.RequestedByName;
+            var snapshot = new
+            {
+                entity.CustomerId,
+                entity.RequestedByName,
+                entity.RequestedByEmail,
+                entity.RequestedByDepartment,
+                entity.NeededByDate,
+                entity.RequestSource,
+                entity.ShipmentCountry,
+                entity.InstallationCountry,
+                entity.IsTransportByCustomer,
+                entity.SummaryNotes,
+                entity.WorkflowStatus,
+                entity.CustomerQuoteStatus,
+                entity.RevisionNo,
+                Items = entity.Items
+                    .OrderBy(x => x.DisplayOrder)
+                    .Select(x => new
+                    {
+                        x.ProductGroupId,
+                        x.CapacityM3,
+                        x.ConsumptionCapacity,
+                        x.RequestCategory,
+                        x.ProductCode,
+                        x.DesignStandardCode,
+                        x.DesignPressureBar,
+                        x.DesignTemperatureMin,
+                        x.DesignTemperatureMax,
+                        x.TankType,
+                        x.StorageOption,
+                        x.TransportOption,
+                        x.StdOpsSelection,
+                        x.SpcTechnicalDetails,
+                        x.AmbientTemperatureMin,
+                        x.AmbientTemperatureMax,
+                        x.FacilityType,
+                        x.FacilityInletPressureBar,
+                        x.FacilityOutletPressureBar,
+                        x.FacilityInletTemperature,
+                        x.FacilityOutletTemperature,
+                        x.FacilityCapacityNm3h,
+                        x.HasPump,
+                        x.PumpDetails,
+                        x.HasElectricHeater,
+                        x.ElectricHeaterDetails,
+                        x.HasTankConsumptionCapacity,
+                        x.AdditionalQuestionsJson,
+                        x.TankOrientation,
+                        x.PlacementType,
+                        x.MinimumTechnicalNotes
+                    })
+            };
+
+            var revision = new SalesRequestRevision
+            {
+                SalesRequestId = entity.Id,
+                RevisionNo = entity.RevisionNo,
+                RevisionReason = revisionReason,
+                SnapshotJson = JsonSerializer.Serialize(snapshot),
+                RevisedByName = requestorName,
+                RevisedAt = DateTime.UtcNow
+            };
+
+            await _context.SalesRequestRevisions.AddAsync(revision);
         }
 
         private async Task PopulateFormAsync(SalesRequestCreateVm vm)
@@ -609,6 +905,161 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .OrderBy(x => x.DisplayOrder)
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToListAsync();
+        }
+
+        private void NormalizeAndValidateItem(SalesRequestItemInputVm item, string keyPrefix)
+        {
+            if (item.TankType == RequestTankType.Storage)
+            {
+                item.TransportOption = null;
+            }
+            else if (item.TankType == RequestTankType.Transport)
+            {
+                item.StorageOption = null;
+            }
+
+            if (item.TankType == RequestTankType.Storage && item.TransportOption.HasValue)
+            {
+                ModelState.AddModelError($"{keyPrefix}.TransportOption", "Depolama seçiliyse transport seçilemez.");
+            }
+
+            if (item.TankType == RequestTankType.Transport && item.StorageOption.HasValue)
+            {
+                ModelState.AddModelError($"{keyPrefix}.StorageOption", "Transport seçiliyse depolama tipi seçilemez.");
+            }
+
+            if (item.StdOpsSelection != RequestStdOpsSelection.SPC)
+            {
+                item.SpcTechnicalDetails = null;
+            }
+            else if (string.IsNullOrWhiteSpace(item.SpcTechnicalDetails))
+            {
+                ModelState.AddModelError($"{keyPrefix}.SpcTechnicalDetails", "SPC seçildiğinde teknik bilgi girilmelidir.");
+            }
+
+            if (item.RequestCategory == SalesRequestCategory.Tank)
+            {
+                if (item.CapacityM3 <= 0)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.CapacityM3", "Tank talebi için kapasite zorunludur.");
+                }
+
+                item.SparePartDetails = null;
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+            }
+            else if (item.RequestCategory == SalesRequestCategory.Evaporator)
+            {
+                item.CapacityM3 = 0;
+                item.TankOrientation = RequestTankOrientation.Vertical;
+                item.PlacementType = PlacementType.Aboveground;
+                item.SparePartDetails = null;
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+
+                if (!item.AmbientTemperatureMin.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.AmbientTemperatureMin", "Evap talebi için ortam min sıcaklığı zorunludur.");
+                }
+
+                if (!item.AmbientTemperatureMax.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.AmbientTemperatureMax", "Evap talebi için ortam max sıcaklığı zorunludur.");
+                }
+            }
+            else if (item.RequestCategory == SalesRequestCategory.Facility)
+            {
+                item.CapacityM3 = 0;
+                item.TankOrientation = RequestTankOrientation.Vertical;
+                item.PlacementType = PlacementType.Aboveground;
+                item.SparePartDetails = null;
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.StdOpsSelection = null;
+                item.SpcTechnicalDetails = null;
+
+                if (!item.FacilityInletPressureBar.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityInletPressureBar", "Tesis talebi için giriş basıncı zorunludur.");
+                }
+
+                if (!item.FacilityOutletPressureBar.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityOutletPressureBar", "Tesis talebi için çıkış basıncı zorunludur.");
+                }
+
+                if (item.FacilityInletPressureBar.HasValue &&
+                    item.FacilityOutletPressureBar.HasValue &&
+                    item.FacilityInletPressureBar.Value == item.FacilityOutletPressureBar.Value)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityOutletPressureBar", "Tesis giriş/çıkış basınçları aynı olamaz.");
+                }
+
+                if (!item.FacilityInletTemperature.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityInletTemperature", "Tesis talebi için giriş sıcaklığı zorunludur.");
+                }
+
+                if (!item.FacilityOutletTemperature.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityOutletTemperature", "Tesis talebi için çıkış sıcaklığı zorunludur.");
+                }
+
+                if (item.FacilityInletTemperature.HasValue &&
+                    item.FacilityOutletTemperature.HasValue &&
+                    item.FacilityInletTemperature.Value == item.FacilityOutletTemperature.Value)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityOutletTemperature", "Tesis giriş/çıkış sıcaklıkları aynı olamaz.");
+                }
+            }
+            else if (item.RequestCategory == SalesRequestCategory.SparePart)
+            {
+                item.CapacityM3 = 0;
+                item.TankOrientation = RequestTankOrientation.Vertical;
+                item.PlacementType = PlacementType.Aboveground;
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.StdOpsSelection = null;
+                item.SpcTechnicalDetails = null;
+                item.AmbientTemperatureMin = null;
+                item.AmbientTemperatureMax = null;
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+
+                if (string.IsNullOrWhiteSpace(item.SparePartDetails))
+                {
+                    ModelState.AddModelError($"{keyPrefix}.SparePartDetails", "Yedek parça talebi için açıklama zorunludur.");
+                }
+            }
         }
 
         private async Task PopulateRequesterInfoAsync(SalesRequestCreateVm vm, bool overwriteExisting)

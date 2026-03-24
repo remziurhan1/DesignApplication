@@ -168,6 +168,8 @@
                         <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
                         <div class="col-md-4"><strong>Departman:</strong><div>@Model.RequestedByDepartment</div></div>
                         <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span></div></div>
+                        <div class="col-md-4"><strong>Müşteri bildirimi:</strong><div>@Model.CustomerQuoteStatus</div></div>
+                        <div class="col-md-4"><strong>Revizyon:</strong><div>@Model.RevisionCode</div></div>
                         <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
                         <div class="col-md-4"><strong>İhtiyaç tarihi:</strong><div>@Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</div></div>
                         <div class="col-md-4"><strong>Talep kaynağı:</strong><div>@Model.RequestSource</div></div>

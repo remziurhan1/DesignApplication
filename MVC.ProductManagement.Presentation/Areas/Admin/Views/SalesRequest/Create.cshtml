@@ -3,6 +3,7 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestCreateVm
 @{
     var isEdit = ViewBag.IsEdit is true;
+    var isRevision = ViewBag.IsRevision is true;
     var currentArea = (ViewContext.RouteData.Values["area"]?.ToString() ?? "Admin");
     ViewData["Title"] = isEdit ? "Satış Talebi Güncelle" : "Yeni Satış Talebi";
 }
@@ -18,7 +19,7 @@
 <section class="section mt-4">
     <div class="card">
         <div class="card-body pt-4">
-            <form method="post" enctype="multipart/form-data" asp-area="@currentArea" asp-controller="SalesRequest" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.Id : null)">
+            <form method="post" enctype="multipart/form-data" asp-area="@currentArea" asp-controller="SalesRequest" asp-action="@(isRevision ? "Revise" : isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.Id : null)">
                 @Html.AntiForgeryToken()
                 @if (isEdit)
                 {
@@ -74,6 +75,14 @@
                         <label asp-for="SummaryNotes" class="form-label"></label>
                         <textarea asp-for="SummaryNotes" class="form-control" rows="3"></textarea>
                     </div>
+                    @if (isRevision)
+                    {
+                        <div class="col-12">
+                            <label asp-for="RevisionReason" class="form-label"></label>
+                            <textarea asp-for="RevisionReason" class="form-control" rows="2" required placeholder="Revizyon nedeni zorunludur (örn: müşteri kapasiteyi 10m³'ten 20m³'e çıkardı)."></textarea>
+                            <span asp-validation-for="RevisionReason" class="text-danger"></span>
+                        </div>
+                    }
                 </div>
 
                 <hr class="my-4" />
@@ -250,7 +259,7 @@
 
                 <button type="button" class="btn btn-outline-secondary" id="add-item">+ Satır ekle</button>
                 <div class="mt-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">@(isEdit ? "Talebi güncelle" : "Talebi oluştur")</button>
+                    <button type="submit" class="btn btn-primary">@(isRevision ? "Revizyonu kaydet" : isEdit ? "Talebi güncelle" : "Talebi oluştur")</button>
                     <a asp-area="@currentArea" asp-controller="SalesRequest" asp-action="Index" class="btn btn-outline-secondary">İptal</a>
                 </div>
             </form>
