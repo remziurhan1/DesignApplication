@@ -1,0 +1,102 @@
+@using MVC.ProductManagement.Domain.Enums
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailVm
+@{
+    ViewData["Title"] = "Satış Talep Detayı";
+
+    string StatusClass(SalesRequestWorkflowStatus status) => status switch
+    {
+        SalesRequestWorkflowStatus.Approved => "success",
+        SalesRequestWorkflowStatus.Rejected => "danger",
+        SalesRequestWorkflowStatus.PricingInProgress => "warning",
+        _ => "info"
+    };
+
+    void RenderItem(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item, int depth)
+    {
+        <div class="card mb-3 ms-@Math.Min(depth * 2, 5)">
+            <div class="card-body pt-3">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                    <div>
+                        <span class="badge bg-secondary">@item.ItemCode</span>
+                        <h5 class="mt-2 mb-1">@item.ItemTitle</h5>
+                        <div class="text-muted">@item.ProductGroupName</div>
+                    </div>
+                    <span class="badge bg-@StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span>
+                </div>
+
+                <div class="row mt-3 g-3">
+                    <div class="col-md-4"><strong>Kapasite:</strong> @item.CapacityM3 m³</div>
+                    <div class="col-md-4"><strong>Talep grubu:</strong> @item.RequestCategory</div>
+                    <div class="col-md-4"><strong>Kurulum:</strong> @item.PlacementType</div>
+                    <div class="col-md-6"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                    <div class="col-md-6"><strong>Tavsiye edilen satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                    @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
+                    {
+                        <div class="col-12"><strong>Teknik özet:</strong><div class="text-muted">@item.DesignDetails</div></div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        foreach (var child in item.Children)
+        {
+            RenderItem(child, depth + 1);
+        }
+    }
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@Model.RequestNo</h1>
+        <p class="text-muted mb-0">@Model.Title</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
+</div>
+
+<section class="section mt-4">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body pt-4">
+                    <div class="row g-3">
+                        <div class="col-md-4"><strong>Müşteri:</strong><div>@Model.CustomerName</div></div>
+                        <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
+                        <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span></div></div>
+                        <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
+                        <div class="col-md-4"><strong>İhtiyaç tarihi:</strong><div>@Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</div></div>
+                        <div class="col-md-4"><strong>Talep kaynağı:</strong><div>@Model.RequestSource</div></div>
+                    </div>
+                </div>
+            </div>
+
+            @foreach (var item in Model.Items)
+            {
+                RenderItem(item, 0);
+            }
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Ekler</h5>
+                    @if (Model.Attachments.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var file in Model.Attachments)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <a href="@file.RelativePath" target="_blank">@file.OriginalFileName</a>
+                                    <small class="text-muted">@(file.FileSize / 1024) KB</small>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Ek dosya yok.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
