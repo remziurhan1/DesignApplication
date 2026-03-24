@@ -608,6 +608,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .ToListAsync();
         }
 
+        private Task<bool> HasSalesPermissionAsync(Func<EmployeeProfile, bool> permissionSelector)
+        {
+            return base.HasSalesPermissionAsync(permissionSelector);
+        }
+
         private async Task<string> GenerateRequestNoAsync()
         {
             var prefix = $"TR-{DateTime.UtcNow:yyyyMMdd}";
