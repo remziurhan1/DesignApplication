@@ -204,6 +204,13 @@
             <li class="nav-heading">Hesaplar</li>
 
             <li class="nav-item">
+                <a asp-area="Admin" asp-controller="Employee" asp-action="Index" class="nav-link collapsed">
+                    <i class="bi bi-people"></i>
+                    <span>Çalışan Yönetimi</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link collapsed"
                    data-bs-target="#calculation-nav"
                    data-bs-toggle="collapse"
@@ -224,6 +231,13 @@
                 <a asp-area="Admin" asp-controller="SalesRequest" asp-action="Index" class="nav-link collapsed">
                     <i class="bi bi-kanban"></i>
                     <span>Talep Akışı</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-area="Sales" asp-controller="Home" asp-action="Index" class="nav-link collapsed">
+                    <i class="bi bi-shop"></i>
+                    <span>Satış Ekranı</span>
                 </a>
             </li>
 

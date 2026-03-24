@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Satış Ekranı";
+}
+
+<div class="card">
+    <div class="card-body p-4">
+        <h3>Satış Ekranı</h3>
+        <p class="text-muted">Bu ekranda satış kullanıcıları müşteri ve talep süreçlerini yönetir.</p>
+        <div class="d-flex gap-2">
+            <a asp-area="Sales" asp-controller="Customer" asp-action="Index" class="btn btn-outline-primary">Müşteriler</a>
+            <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="btn btn-primary">Talepler</a>
+        </div>
+    </div>
+</div>
