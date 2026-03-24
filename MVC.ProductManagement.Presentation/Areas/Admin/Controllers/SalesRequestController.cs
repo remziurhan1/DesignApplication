@@ -5,6 +5,7 @@ using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
+using System.Security.Claims;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -62,6 +63,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             var vm = new SalesRequestCreateVm();
+            await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
             await PopulateFormAsync(vm);
             return View(vm);
         }
@@ -71,6 +73,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
         public async Task<IActionResult> Create(SalesRequestCreateVm vm)
         {
+            await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
             vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
             if (!vm.Items.Any())
             {
@@ -120,7 +123,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     CapacityM3 = itemVm.CapacityM3,
                     ConsumptionCapacity = itemVm.ConsumptionCapacity,
                     RequestCategory = itemVm.RequestCategory,
-                    ProductCode = itemVm.ProductCode,
+                    ProductCode = group.ShortCode,
                     DesignStandardCode = itemVm.DesignStandardCode,
                     DesignPressureBar = itemVm.DesignPressureBar,
                     DesignTemperatureMin = itemVm.DesignTemperatureMin,
@@ -284,7 +287,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     CapacityM3 = itemVm.CapacityM3,
                     ConsumptionCapacity = itemVm.ConsumptionCapacity,
                     RequestCategory = itemVm.RequestCategory,
-                    ProductCode = itemVm.ProductCode,
+                    ProductCode = group.ShortCode,
                     DesignStandardCode = itemVm.DesignStandardCode,
                     DesignPressureBar = itemVm.DesignPressureBar,
                     DesignTemperatureMin = itemVm.DesignTemperatureMin,
@@ -536,6 +539,38 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .OrderBy(x => x.DisplayOrder)
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToListAsync();
+        }
+
+        private async Task PopulateRequesterInfoAsync(SalesRequestCreateVm vm, bool overwriteExisting)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return;
+            }
+
+            var profile = await _context.EmployeeProfiles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserId == userId);
+
+            var requestName = profile?.FullName ?? User.Identity?.Name;
+            var requestDepartment = profile?.Department;
+            var requestEmail = profile?.Email ?? User.FindFirstValue(ClaimTypes.Email);
+
+            if (overwriteExisting || string.IsNullOrWhiteSpace(vm.RequestedByName))
+            {
+                vm.RequestedByName = requestName ?? string.Empty;
+            }
+
+            if (overwriteExisting || string.IsNullOrWhiteSpace(vm.RequestedByDepartment))
+            {
+                vm.RequestedByDepartment = requestDepartment;
+            }
+
+            if (overwriteExisting || string.IsNullOrWhiteSpace(vm.RequestedByEmail))
+            {
+                vm.RequestedByEmail = requestEmail;
+            }
         }
 
         private async Task PopulateSubItemAsync(SalesRequestAddSubItemVm vm, Guid requestId)
@@ -985,6 +1020,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 item.PumpDetails = null;
                 item.HasElectricHeater = false;
                 item.ElectricHeaterDetails = null;
+
+                if (!item.AmbientTemperatureMin.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.AmbientTemperatureMin", "Evap talebi için ortam min sıcaklığı zorunludur.");
+                }
+
+                if (!item.AmbientTemperatureMax.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.AmbientTemperatureMax", "Evap talebi için ortam max sıcaklığı zorunludur.");
+                }
             }
             else if (item.RequestCategory == SalesRequestCategory.Facility)
             {
@@ -993,6 +1038,40 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 item.TransportOption = null;
                 item.StdOpsSelection = null;
                 item.SpcTechnicalDetails = null;
+
+                if (!item.FacilityInletPressureBar.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityInletPressureBar", "Tesis talebi için giriş basıncı zorunludur.");
+                }
+
+                if (!item.FacilityOutletPressureBar.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityOutletPressureBar", "Tesis talebi için çıkış basıncı zorunludur.");
+                }
+
+                if (item.FacilityInletPressureBar.HasValue &&
+                    item.FacilityOutletPressureBar.HasValue &&
+                    item.FacilityInletPressureBar.Value == item.FacilityOutletPressureBar.Value)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityOutletPressureBar", "Tesis giriş/çıkış basınçları aynı olamaz.");
+                }
+
+                if (!item.FacilityInletTemperature.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityInletTemperature", "Tesis talebi için giriş sıcaklığı zorunludur.");
+                }
+
+                if (!item.FacilityOutletTemperature.HasValue)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityOutletTemperature", "Tesis talebi için çıkış sıcaklığı zorunludur.");
+                }
+
+                if (item.FacilityInletTemperature.HasValue &&
+                    item.FacilityOutletTemperature.HasValue &&
+                    item.FacilityInletTemperature.Value == item.FacilityOutletTemperature.Value)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.FacilityOutletTemperature", "Tesis giriş/çıkış sıcaklıkları aynı olamaz.");
+                }
             }
         }
     }

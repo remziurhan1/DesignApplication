@@ -34,15 +34,16 @@
                     </div>
                     <div class="col-md-4">
                         <label asp-for="RequestedByName" class="form-label"></label>
-                        <input asp-for="RequestedByName" class="form-control" />
+                        <input asp-for="RequestedByName" class="form-control" readonly />
                     </div>
                     <div class="col-md-4">
                         <label asp-for="RequestedByDepartment" class="form-label"></label>
-                        <input asp-for="RequestedByDepartment" class="form-control" />
+                        <input asp-for="RequestedByDepartment" class="form-control" readonly />
                     </div>
                     <div class="col-md-6">
                         <label asp-for="RequestedByEmail" class="form-label"></label>
-                        <input asp-for="RequestedByEmail" class="form-control" />
+                        <input asp-for="RequestedByEmail" class="form-control" readonly />
+                        <small class="text-muted">Talebi açan satışçı bilgileri giriş yapan kullanıcı profilinden otomatik doldurulur.</small>
                     </div>
                     <div class="col-md-3">
                         <label asp-for="NeededByDate" class="form-label"></label>
@@ -90,11 +91,12 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Akışkan grubu</label>
-                                <select asp-for="Items[i].ProductGroupId" asp-items="Model.ProductGroups" class="form-select"><option value="">Seçin</option></select>
+                                <select asp-for="Items[i].ProductGroupId" asp-items="Model.ProductGroups" class="form-select product-group"><option value="">Seçin</option></select>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Ürün</label>
-                                <input asp-for="Items[i].ProductCode" class="form-control" placeholder="LIN/LOX/LAR/LNG" />
+                                <label class="form-label">Ürün adı</label>
+                                <input type="text" class="form-control product-name-display" readonly value="@Model.Items[i].ProductCode" placeholder="Akışkan grubundan otomatik gelir" />
+                                <input asp-for="Items[i].ProductCode" type="hidden" class="product-code" />
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label">Kapasite (m³)</label>
@@ -124,25 +126,32 @@
                                 <label class="form-label">Max sıcaklık</label>
                                 <input asp-for="Items[i].DesignTemperatureMax" class="form-control" />
                             </div>
-                            <div class="col-md-2 tank-fields">
-                                <label class="form-label">Tank tipi</label>
-                                <select asp-for="Items[i].TankType" asp-items="Html.GetEnumSelectList<RequestTankType>()" class="form-select tank-type"></select>
-                            </div>
-                            <div class="col-md-2 tank-fields">
-                                <label class="form-label">Depolama tipi</label>
-                                <select asp-for="Items[i].StorageOption" asp-items="Html.GetEnumSelectList<RequestStorageOption>()" class="form-select storage-option"></select>
-                            </div>
-                            <div class="col-md-2 tank-fields">
-                                <label class="form-label">Transport tipi</label>
-                                <select asp-for="Items[i].TransportOption" asp-items="Html.GetEnumSelectList<RequestTransportOption>()" class="form-select transport-option"></select>
-                            </div>
-                            <div class="col-md-2 tank-fields">
-                                <label class="form-label">STD/OPS/SPC</label>
-                                <select asp-for="Items[i].StdOpsSelection" asp-items="Html.GetEnumSelectList<RequestStdOpsSelection>()" class="form-select std-ops"></select>
-                            </div>
-                            <div class="col-md-4 tank-fields spc-details">
-                                <label class="form-label">SPC teknik bilgileri</label>
-                                <input asp-for="Items[i].SpcTechnicalDetails" class="form-control" />
+                            <div class="col-12 tank-fields">
+                                <div class="border rounded p-3 bg-light-subtle">
+                                    <h6 class="mb-3">Tank giriş bilgileri</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Tank tipi</label>
+                                            <select asp-for="Items[i].TankType" asp-items="Html.GetEnumSelectList<RequestTankType>()" class="form-select tank-type"></select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Depolama tipi</label>
+                                            <select asp-for="Items[i].StorageOption" asp-items="Html.GetEnumSelectList<RequestStorageOption>()" class="form-select storage-option"></select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Transport tipi</label>
+                                            <select asp-for="Items[i].TransportOption" asp-items="Html.GetEnumSelectList<RequestTransportOption>()" class="form-select transport-option"></select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">STD/OPS/SPC</label>
+                                            <select asp-for="Items[i].StdOpsSelection" asp-items="Html.GetEnumSelectList<RequestStdOpsSelection>()" class="form-select std-ops"></select>
+                                        </div>
+                                        <div class="col-12 spc-details">
+                                            <label class="form-label">SPC teknik bilgileri</label>
+                                            <input asp-for="Items[i].SpcTechnicalDetails" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">Tüketim kapasitesi</label>
@@ -153,53 +162,67 @@
                                 <input asp-for="Items[i].HasTankConsumptionCapacity" class="form-check-input" />
                                 <label asp-for="Items[i].HasTankConsumptionCapacity" class="form-check-label"></label>
                             </div>
-                            <div class="col-md-2 evap-fields">
-                                <label class="form-label">Ortam min</label>
-                                <input asp-for="Items[i].AmbientTemperatureMin" class="form-control" />
+                            <div class="col-12 evap-fields">
+                                <div class="border rounded p-3 bg-info-subtle">
+                                    <h6 class="mb-3">Evap giriş bilgileri</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Ortam min sıcaklık (°C)</label>
+                                            <input asp-for="Items[i].AmbientTemperatureMin" class="form-control" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Ortam max sıcaklık (°C)</label>
+                                            <input asp-for="Items[i].AmbientTemperatureMax" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-2 evap-fields">
-                                <label class="form-label">Ortam max</label>
-                                <input asp-for="Items[i].AmbientTemperatureMax" class="form-control" />
-                            </div>
-                            <div class="col-md-4 facility-fields">
-                                <label class="form-label">Tesis tipi</label>
-                                <input asp-for="Items[i].FacilityType" class="form-control" />
-                            </div>
-                            <div class="col-md-2 facility-fields">
-                                <label class="form-label">Giriş P</label>
-                                <input asp-for="Items[i].FacilityInletPressureBar" class="form-control" />
-                            </div>
-                            <div class="col-md-2 facility-fields">
-                                <label class="form-label">Çıkış P</label>
-                                <input asp-for="Items[i].FacilityOutletPressureBar" class="form-control" />
-                            </div>
-                            <div class="col-md-2 facility-fields">
-                                <label class="form-label">Giriş T</label>
-                                <input asp-for="Items[i].FacilityInletTemperature" class="form-control" />
-                            </div>
-                            <div class="col-md-2 facility-fields">
-                                <label class="form-label">Çıkış T</label>
-                                <input asp-for="Items[i].FacilityOutletTemperature" class="form-control" />
-                            </div>
-                            <div class="col-md-2 facility-fields">
-                                <label class="form-label">Tesis Nm3/h</label>
-                                <input asp-for="Items[i].FacilityCapacityNm3h" class="form-control" />
-                            </div>
-                            <div class="col-md-3 form-check ms-2 mt-4 facility-fields">
-                                <input asp-for="Items[i].HasPump" class="form-check-input" />
-                                <label asp-for="Items[i].HasPump" class="form-check-label"></label>
-                            </div>
-                            <div class="col-md-3 facility-fields">
-                                <label class="form-label">Pompa detay</label>
-                                <input asp-for="Items[i].PumpDetails" class="form-control" />
-                            </div>
-                            <div class="col-md-3 form-check ms-2 mt-4 facility-fields">
-                                <input asp-for="Items[i].HasElectricHeater" class="form-check-input" />
-                                <label asp-for="Items[i].HasElectricHeater" class="form-check-label"></label>
-                            </div>
-                            <div class="col-md-3 facility-fields">
-                                <label class="form-label">Isıtıcı detay</label>
-                                <input asp-for="Items[i].ElectricHeaterDetails" class="form-control" />
+                            <div class="col-12 facility-fields">
+                                <div class="border rounded p-3 bg-warning-subtle">
+                                    <h6 class="mb-3">Tesis giriş bilgileri</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Tesis tipi</label>
+                                            <input asp-for="Items[i].FacilityType" class="form-control" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Giriş P (bar)</label>
+                                            <input asp-for="Items[i].FacilityInletPressureBar" class="form-control" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Çıkış P (bar)</label>
+                                            <input asp-for="Items[i].FacilityOutletPressureBar" class="form-control" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Giriş T (°C)</label>
+                                            <input asp-for="Items[i].FacilityInletTemperature" class="form-control" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Çıkış T (°C)</label>
+                                            <input asp-for="Items[i].FacilityOutletTemperature" class="form-control" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Tesis Nm3/h</label>
+                                            <input asp-for="Items[i].FacilityCapacityNm3h" class="form-control" />
+                                        </div>
+                                        <div class="col-md-3 form-check ms-2 mt-4">
+                                            <input asp-for="Items[i].HasPump" class="form-check-input" />
+                                            <label asp-for="Items[i].HasPump" class="form-check-label"></label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Pompa detay</label>
+                                            <input asp-for="Items[i].PumpDetails" class="form-control" />
+                                        </div>
+                                        <div class="col-md-3 form-check ms-2 mt-4">
+                                            <input asp-for="Items[i].HasElectricHeater" class="form-check-input" />
+                                            <label asp-for="Items[i].HasElectricHeater" class="form-check-label"></label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Isıtıcı detay</label>
+                                            <input asp-for="Items[i].ElectricHeaterDetails" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Ek sorular/cevaplar (JSON)</label>
@@ -276,9 +299,25 @@
         function wireItemEvents(item) {
             const category = item.querySelector('.request-category');
             const tankType = item.querySelector('.tank-type');
+            const productGroup = item.querySelector('.product-group');
             if (category) category.addEventListener('change', () => toggleCategoryFields(item));
             if (tankType) tankType.addEventListener('change', () => toggleTankTypeFields(item));
+            if (productGroup) productGroup.addEventListener('change', () => syncProductCode(item));
+            syncProductCode(item);
             toggleCategoryFields(item);
+        }
+
+        function syncProductCode(item) {
+            const groupSelect = item.querySelector('.product-group');
+            const productCodeInput = item.querySelector('.product-code');
+            const productDisplay = item.querySelector('.product-name-display');
+            if (!groupSelect || !productCodeInput || !productDisplay) return;
+
+            const selectedText = groupSelect.selectedOptions.length ? groupSelect.selectedOptions[0].text.trim() : '';
+            const normalized = selectedText && selectedText !== 'Seçin' ? selectedText : '';
+
+            productCodeInput.value = normalized;
+            productDisplay.value = normalized;
         }
 
         document.getElementById('add-item').addEventListener('click', function () {
@@ -288,8 +327,8 @@
                 <div class="border rounded p-3 mb-3 request-item">
                     <div class="row g-3">
                         <div class="col-md-4"><label class="form-label">Talep grubu</label><select name="Items[${index}].RequestCategory" class="form-select request-category">${categoryOptions}</select></div>
-                        <div class="col-md-4"><label class="form-label">Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select"><option value="">Seçin</option>${productOptions}</select></div>
-                        <div class="col-md-4"><label class="form-label">Ürün</label><input name="Items[${index}].ProductCode" class="form-control" /></div>
+                        <div class="col-md-4"><label class="form-label">Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select product-group"><option value="">Seçin</option>${productOptions}</select></div>
+                        <div class="col-md-4"><label class="form-label">Ürün adı</label><input class="form-control product-name-display" readonly placeholder="Akışkan grubundan otomatik gelir" /><input name="Items[${index}].ProductCode" type="hidden" class="product-code" /></div>
                         <div class="col-md-2"><label class="form-label">Kapasite (m³)</label><input name="Items[${index}].CapacityM3" class="form-control" /></div>
                         <div class="col-md-3"><label class="form-label">Tank tipi</label><select name="Items[${index}].TankOrientation" class="form-select">${orientationOptions}</select></div>
                         <div class="col-md-3"><label class="form-label">Kurulum</label><select name="Items[${index}].PlacementType" class="form-select">${placementOptions}</select></div>
@@ -297,18 +336,13 @@
                         <div class="col-md-2"><label class="form-label">Dizayn basıncı</label><input name="Items[${index}].DesignPressureBar" class="form-control" /></div>
                         <div class="col-md-2"><label class="form-label">Min sıcaklık</label><input name="Items[${index}].DesignTemperatureMin" class="form-control" /></div>
                         <div class="col-md-2"><label class="form-label">Max sıcaklık</label><input name="Items[${index}].DesignTemperatureMax" class="form-control" /></div>
-                        <div class="col-md-2 tank-fields"><label class="form-label">Tank tipi</label><select name="Items[${index}].TankType" class="form-select tank-type">${tankTypeOptions}</select></div>
-                        <div class="col-md-2 tank-fields"><label class="form-label">Depolama</label><select name="Items[${index}].StorageOption" class="form-select storage-option">${storageOptions}</select></div>
-                        <div class="col-md-2 tank-fields"><label class="form-label">Transport</label><select name="Items[${index}].TransportOption" class="form-select transport-option">${transportOptions}</select></div>
-                        <div class="col-md-2 tank-fields"><label class="form-label">STD/OPS/SPC</label><select name="Items[${index}].StdOpsSelection" class="form-select">${stdOpsOptions}</select></div>
-                        <div class="col-md-4 tank-fields"><label class="form-label">SPC teknik bilgileri</label><input name="Items[${index}].SpcTechnicalDetails" class="form-control" /></div>
-                        <div class="col-md-4"><label class="form-label">Tüketim kapasitesi</label><input name="Items[${index}].ConsumptionCapacity" class="form-control" /></div>
-                        <div class="col-md-2 evap-fields"><label class="form-label">Ortam min</label><input name="Items[${index}].AmbientTemperatureMin" class="form-control" /></div>
-                        <div class="col-md-2 evap-fields"><label class="form-label">Ortam max</label><input name="Items[${index}].AmbientTemperatureMax" class="form-control" /></div>
-                        <div class="col-md-4 facility-fields"><label class="form-label">Tesis tipi</label><input name="Items[${index}].FacilityType" class="form-control" /></div>
-                        <div class="col-md-2 facility-fields"><label class="form-label">Giriş P</label><input name="Items[${index}].FacilityInletPressureBar" class="form-control" /></div>
-                        <div class="col-md-2 facility-fields"><label class="form-label">Çıkış P</label><input name="Items[${index}].FacilityOutletPressureBar" class="form-control" /></div>
-                        <div class="col-md-8"><label class="form-label">Minimum teknik bilgiler</label><textarea name="Items[${index}].MinimumTechnicalNotes" class="form-control" rows="2"></textarea></div>
+                        <div class="col-12 tank-fields"><div class="border rounded p-3 bg-light-subtle"><h6 class="mb-3">Tank giriş bilgileri</h6><div class="row g-3"><div class="col-md-3"><label class="form-label">Tank tipi</label><select name="Items[${index}].TankType" class="form-select tank-type">${tankTypeOptions}</select></div><div class="col-md-3"><label class="form-label">Depolama</label><select name="Items[${index}].StorageOption" class="form-select storage-option">${storageOptions}</select></div><div class="col-md-3"><label class="form-label">Transport</label><select name="Items[${index}].TransportOption" class="form-select transport-option">${transportOptions}</select></div><div class="col-md-3"><label class="form-label">STD/OPS/SPC</label><select name="Items[${index}].StdOpsSelection" class="form-select">${stdOpsOptions}</select></div><div class="col-12"><label class="form-label">SPC teknik bilgileri</label><input name="Items[${index}].SpcTechnicalDetails" class="form-control" /></div></div></div></div>
+                        <div class="col-md-3"><label class="form-label">Tüketim kapasitesi</label><input name="Items[${index}].ConsumptionCapacity" class="form-control" /></div>
+                        <div class="col-md-3 form-check ms-2 mt-4"><input name="Items[${index}].HasTankConsumptionCapacity" type="checkbox" class="form-check-input" /><label class="form-check-label">Tank tüketim kapasitesi aktif</label></div>
+                        <div class="col-12 evap-fields"><div class="border rounded p-3 bg-info-subtle"><h6 class="mb-3">Evap giriş bilgileri</h6><div class="row g-3"><div class="col-md-3"><label class="form-label">Ortam min sıcaklık (°C)</label><input name="Items[${index}].AmbientTemperatureMin" class="form-control" /></div><div class="col-md-3"><label class="form-label">Ortam max sıcaklık (°C)</label><input name="Items[${index}].AmbientTemperatureMax" class="form-control" /></div></div></div></div>
+                        <div class="col-12 facility-fields"><div class="border rounded p-3 bg-warning-subtle"><h6 class="mb-3">Tesis giriş bilgileri</h6><div class="row g-3"><div class="col-md-4"><label class="form-label">Tesis tipi</label><input name="Items[${index}].FacilityType" class="form-control" /></div><div class="col-md-2"><label class="form-label">Giriş P (bar)</label><input name="Items[${index}].FacilityInletPressureBar" class="form-control" /></div><div class="col-md-2"><label class="form-label">Çıkış P (bar)</label><input name="Items[${index}].FacilityOutletPressureBar" class="form-control" /></div><div class="col-md-2"><label class="form-label">Giriş T (°C)</label><input name="Items[${index}].FacilityInletTemperature" class="form-control" /></div><div class="col-md-2"><label class="form-label">Çıkış T (°C)</label><input name="Items[${index}].FacilityOutletTemperature" class="form-control" /></div><div class="col-md-3"><label class="form-label">Tesis Nm3/h</label><input name="Items[${index}].FacilityCapacityNm3h" class="form-control" /></div><div class="col-md-3 form-check ms-2 mt-4"><input name="Items[${index}].HasPump" type="checkbox" class="form-check-input" /><label class="form-check-label">Pompa var mı?</label></div><div class="col-md-3"><label class="form-label">Pompa detay</label><input name="Items[${index}].PumpDetails" class="form-control" /></div><div class="col-md-3 form-check ms-2 mt-4"><input name="Items[${index}].HasElectricHeater" type="checkbox" class="form-check-input" /><label class="form-check-label">Elektrikli ısıtıcı var mı?</label></div><div class="col-md-3"><label class="form-label">Isıtıcı detay</label><input name="Items[${index}].ElectricHeaterDetails" class="form-control" /></div></div></div></div>
+                        <div class="col-md-6"><label class="form-label">Ek sorular/cevaplar (JSON)</label><textarea name="Items[${index}].AdditionalQuestionsJson" class="form-control" rows="2"></textarea></div>
+                        <div class="col-md-6"><label class="form-label">Minimum teknik bilgiler</label><textarea name="Items[${index}].MinimumTechnicalNotes" class="form-control" rows="2"></textarea></div>
                     </div>
                 </div>`;
             container.insertAdjacentHTML('beforeend', html);
