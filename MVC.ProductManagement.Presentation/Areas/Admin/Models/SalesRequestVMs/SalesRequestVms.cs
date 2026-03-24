@@ -32,6 +32,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
 
     public class SalesRequestCreateVm
     {
+        public Guid? Id { get; set; }
+
         [Required]
         [Display(Name = "Müşteri")]
         public Guid CustomerId { get; set; }

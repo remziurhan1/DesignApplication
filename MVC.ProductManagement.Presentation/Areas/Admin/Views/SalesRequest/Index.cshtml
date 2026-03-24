@@ -33,60 +33,30 @@
 
     <div class="card mt-4">
         <div class="card-body pt-4">
-            <ul class="nav nav-tabs" id="requestTabs" role="tablist">
-                <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sales-view" type="button">Satışçı Görünümü</button></li>
-                <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#manager-view" type="button">Yönetici Görünümü</button></li>
-            </ul>
-            <div class="tab-content pt-4">
-                <div class="tab-pane fade show active" id="sales-view">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead>
-                                <tr><th>Talep No</th><th>Başlık</th><th>Müşteri</th><th>Satışçı</th><th>Durum</th><th>Onaylı Satış Fiyatı</th><th class="text-end">İşlem</th></tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var item in Model.Requests)
-                            {
-                                <tr>
-                                    <td class="fw-semibold">@item.RequestNo</td>
-                                    <td>@item.Title <div><small class="text-muted">@item.ItemCount satır / @item.AttachmentCount ek</small></div></td>
-                                    <td>@item.CustomerName</td>
-                                    <td>@item.RequestedByName</td>
-                                    <td><span class="badge @StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span></td>
-                                    <td>@(item.ApprovedSalesPriceTotal.HasValue ? item.ApprovedSalesPriceTotal.Value.ToString("N2") + " ₺" : "Henüz yok")</td>
-                                    <td class="text-end"><a asp-action="Details" asp-route-id="@item.Id" asp-route-mode="sales" class="btn btn-sm btn-outline-primary">Satış ekranı</a></td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="manager-view">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead>
-                                <tr><th>Talep No</th><th>Müşteri</th><th>Açılış</th><th>İhtiyaç</th><th>Durum</th><th>Ekler</th><th class="text-end">İşlem</th></tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var item in Model.Requests)
-                            {
-                                <tr>
-                                    <td class="fw-semibold">@item.RequestNo<div><small class="text-muted">@item.Title</small></div></td>
-                                    <td>@item.CustomerName</td>
-                                    <td class="@((DateTime.UtcNow - item.SalesOpenedAt).TotalDays >= 7 ? "text-danger fw-bold" : string.Empty)">@item.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                                    <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
-                                    <td><span class="badge @StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span></td>
-                                    <td>@item.AttachmentCount</td>
-                                    <td class="text-end d-flex justify-content-end gap-2">
-                                        <a asp-action="Pricing" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Fiyatlandır</a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" asp-route-mode="manager" class="btn btn-sm btn-outline-secondary">Detay</a>
-                                    </td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr><th>Talep No</th><th>Müşteri</th><th>Açılış</th><th>İhtiyaç</th><th>Durum</th><th>Ekler</th><th class="text-end">İşlem</th></tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Requests)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@item.RequestNo<div><small class="text-muted">@item.Title</small></div></td>
+                            <td>@item.CustomerName</td>
+                            <td class="@((DateTime.UtcNow - item.SalesOpenedAt).TotalDays >= 7 ? "text-danger fw-bold" : string.Empty)">@item.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
+                            <td><span class="badge @StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span></td>
+                            <td>@item.AttachmentCount</td>
+                            <td class="text-end d-flex justify-content-end gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Güncelle</a>
+                                <a asp-action="Pricing" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Fiyatlandır</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" asp-route-mode="manager" class="btn btn-sm btn-outline-secondary">Detay</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
