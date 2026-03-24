@@ -289,6 +289,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string TankDiameter { get; set; } = "-";
         public string? DesignDetails { get; set; }
         public bool HasSpecification { get; set; }
+        public List<SalesRequestTechnicalFieldVm> TankDetailFields { get; set; } = new();
+    }
+
+    public class SalesRequestTechnicalFieldVm
+    {
+        public string Label { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
     }
 
     public class SalesRequestAddSubItemVm : SalesRequestItemInputVm

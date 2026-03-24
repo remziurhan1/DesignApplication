@@ -33,6 +33,24 @@
             </table>
         </div>
 
+        @if (Model.TankDetailFields.Any())
+        {
+            <h6 class="mt-4">Tank detay sayfası verileri</h6>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle mb-0">
+                    <tbody>
+                    @foreach (var field in Model.TankDetailFields)
+                    {
+                        <tr>
+                            <th style="width:40%">@field.Label</th>
+                            <td>@field.Value</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+
         @if (!string.IsNullOrWhiteSpace(Model.DesignDetails))
         {
             <div class="mt-3">

@@ -272,6 +272,24 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 vm.RoundedHeadThickness = $"İç: {calculation.RoundedInnerHeadThickness:N2} mm / Dış: {calculation.RoundedOuterHeadThickness:N2} mm";
                 vm.InnerTankLength = $"{calculation.InnerTankTotalLength:N2} mm";
                 vm.TankDiameter = $"İç: {calculation.OuterDiameter:N2} mm / Dış: {calculation.OuterTankDiameter:N2} mm";
+
+                vm.TankDetailFields = new List<SalesRequestTechnicalFieldVm>
+                {
+                    new() { Label = "Hesap Adı", Value = calculation.Name },
+                    new() { Label = "İç Tank Çapı", Value = $"{calculation.OuterDiameter:N2} mm" },
+                    new() { Label = "Dış Tank Çapı", Value = $"{calculation.OuterTankDiameter:N2} mm" },
+                    new() { Label = "Silindirik Boy", Value = $"{calculation.ShellLength:N2} mm" },
+                    new() { Label = "Design Pressure", Value = $"{calculation.DesignPressure:N2} bar" },
+                    new() { Label = "Test Pressure", Value = $"{calculation.TestPressure:N2} bar" },
+                    new() { Label = "Static Pressure", Value = $"{calculation.StaticPressure:N2} bar" },
+                    new() { Label = "Yuvarlanmış İç Gövde Et", Value = $"{calculation.RoundedInnerShellThickness:N2} mm" },
+                    new() { Label = "Yuvarlanmış İç Bombe Et", Value = $"{calculation.RoundedInnerHeadThickness:N2} mm" },
+                    new() { Label = "Yuvarlanmış Dış Gövde Et", Value = $"{calculation.RoundedOuterShellThickness:N2} mm" },
+                    new() { Label = "Yuvarlanmış Dış Bombe Et", Value = $"{calculation.RoundedOuterHeadThickness:N2} mm" },
+                    new() { Label = "İç Tank Toplam Uzunluk", Value = $"{calculation.InnerTankTotalLength:N2} mm" },
+                    new() { Label = "Dış Tank Toplam Uzunluk", Value = $"{calculation.OuterTankTotalLength:N2} mm" },
+                    new() { Label = "Toplam Kaynak Uzunluğu", Value = $"{calculation.TotalWeldLength:N2} m" }
+                };
                 return vm;
             }
 
@@ -291,6 +309,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             vm.RoundedHeadThickness = $"{adCalculation.RoundedHeadThickness:N2} mm";
             vm.InnerTankLength = $"{adCalculation.ShellLength:N2} mm";
             vm.TankDiameter = $"{adCalculation.Diameter:N2} mm";
+            vm.TankDetailFields = new List<SalesRequestTechnicalFieldVm>
+            {
+                new() { Label = "Hesap Adı", Value = adCalculation.Name },
+                new() { Label = "Çap", Value = $"{adCalculation.Diameter:N2} mm" },
+                new() { Label = "Gövde Boyu", Value = $"{adCalculation.ShellLength:N2} mm" },
+                new() { Label = "Design Pressure", Value = $"{adCalculation.DesignPressure:N2} bar" },
+                new() { Label = "Test Pressure", Value = $"{adCalculation.TestPressure:N2} bar" },
+                new() { Label = "Static Pressure", Value = $"{adCalculation.StaticPressure:N3} bar" },
+                new() { Label = "Yuvarlanmış Gövde Et", Value = $"{adCalculation.RoundedShellThickness:N2} mm" },
+                new() { Label = "Yuvarlanmış Bombe Et", Value = $"{adCalculation.RoundedHeadThickness:N2} mm" },
+                new() { Label = "Korozyon Payı", Value = $"{adCalculation.CorrosionAllowance:N2} mm" },
+                new() { Label = "Kaynak Faktörü", Value = adCalculation.WeldJointFactor.ToString("N2") },
+                new() { Label = "Sıvı Yoğunluğu", Value = $"{adCalculation.LiquidDensity:N2} kg/m³" }
+            };
 
             return vm;
         }

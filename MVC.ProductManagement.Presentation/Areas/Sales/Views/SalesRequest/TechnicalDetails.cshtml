@@ -13,6 +13,24 @@
 
 <div class="card mt-4">
     <div class="card-body pt-4">
+        <h5 class="mb-3">İlgili hesap tank detay bilgileri</h5>
+        @if (Model.TankDetailFields.Any())
+        {
+            <div class="table-responsive mb-4">
+                <table class="table table-striped align-middle mb-0">
+                    <tbody>
+                    @foreach (var field in Model.TankDetailFields)
+                    {
+                        <tr>
+                            <th style="width:40%">@field.Label</th>
+                            <td>@field.Value</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+
         <div class="row g-3">
             <div class="col-md-6"><strong>Bağlı hesap:</strong> @Model.CalculationType - @Model.CalculationName</div>
             <div class="col-md-6"><strong>Revizyon:</strong> @(Model.RevisionCode ?? "-")</div>
