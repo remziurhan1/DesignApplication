@@ -145,6 +145,7 @@
     <div class="d-flex gap-2">
         @if (Model.IsManagerView)
         {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Talebi güncelle</a>
             <a asp-action="Pricing" asp-route-id="@Model.Id" class="btn btn-primary">Fiyatlandırma ekranı</a>
         }
         <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
