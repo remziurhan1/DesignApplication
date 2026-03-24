@@ -3,6 +3,7 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestCreateVm
 @{
     var isEdit = ViewBag.IsEdit is true;
+    var currentArea = (ViewContext.RouteData.Values["area"]?.ToString() ?? "Admin");
     ViewData["Title"] = isEdit ? "Satış Talebi Güncelle" : "Yeni Satış Talebi";
 }
 
@@ -11,13 +12,13 @@
         <h1>@(isEdit ? "Satış Talebi Güncelle" : "Yeni Satış Talebi")</h1>
         <p class="text-muted mb-0">Satışçı, müşteri ve minimum teknik bilgileri girerek bir veya birden fazla talep satırı oluşturabilir.</p>
     </div>
-    <a asp-area="Admin" asp-controller="Customer" asp-action="Create" class="btn btn-outline-primary">Müşteri ekle</a>
+    <a asp-area="@currentArea" asp-controller="Customer" asp-action="Create" class="btn btn-outline-primary">Müşteri ekle</a>
 </div>
 
 <section class="section mt-4">
     <div class="card">
         <div class="card-body pt-4">
-            <form method="post" enctype="multipart/form-data" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.Id : null)">
+            <form method="post" enctype="multipart/form-data" asp-area="@currentArea" asp-controller="SalesRequest" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.Id : null)">
                 @Html.AntiForgeryToken()
                 @if (isEdit)
                 {
@@ -216,7 +217,7 @@
                 <button type="button" class="btn btn-outline-secondary" id="add-item">+ Satır ekle</button>
                 <div class="mt-4 d-flex gap-2">
                     <button type="submit" class="btn btn-primary">@(isEdit ? "Talebi güncelle" : "Talebi oluştur")</button>
-                    <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+                    <a asp-area="@currentArea" asp-controller="SalesRequest" asp-action="Index" class="btn btn-outline-secondary">İptal</a>
                 </div>
             </form>
         </div>
