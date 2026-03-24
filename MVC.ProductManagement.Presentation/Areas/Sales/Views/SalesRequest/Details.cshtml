@@ -26,12 +26,12 @@
                         @if (item.LinkedCalculationType.HasValue && item.LinkedCalculationId.HasValue)
                         {
                             <div class="d-flex flex-wrap gap-2 justify-content-end">
-                                <a asp-action="TechnicalDetails" asp-route-requestId="@Model.Id" asp-route-itemId="@item.Id" class="btn btn-sm btn-outline-primary">
+                                <a href="@Url.Action("TechnicalDetails", "SalesRequest", new { area = "Sales", requestId = Model.Id, itemId = item.Id })" class="btn btn-sm btn-outline-primary">
                                     Teknik Detay
                                 </a>
                                 @if (item.LinkedCalculationType == SalesRequestCalculationType.EN13458)
                                 {
-                                    <a asp-action="Specification" asp-route-requestId="@Model.Id" asp-route-itemId="@item.Id" class="btn btn-sm btn-outline-secondary">
+                                    <a href="@Url.Action("Specification", "SalesRequest", new { area = "Sales", requestId = Model.Id, itemId = item.Id })" class="btn btn-sm btn-outline-secondary">
                                         Şartname
                                     </a>
                                 }
