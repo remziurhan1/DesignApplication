@@ -366,9 +366,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 vm.InnerTankFields = new List<SalesRequestTechnicalFieldVm>
                 {
                     new() { Label = "Gövde Malzemesi", Value = calculation.InnerShellMaterial?.Name ?? "-" },
-                    new() { Label = "Gövde Malzeme Formu", Value = calculation.InnerShellMaterialForm?.Name ?? "-" },
+                    new() { Label = "Gövde Malzeme Formu", Value = calculation.InnerShellMaterialForm?.FormType.ToString() ?? "-" },
                     new() { Label = "Bombe Malzemesi", Value = calculation.InnerHeadMaterial?.Name ?? "-" },
-                    new() { Label = "Bombe Malzeme Formu", Value = calculation.InnerHeadMaterialForm?.Name ?? "-" },
+                    new() { Label = "Bombe Malzeme Formu", Value = calculation.InnerHeadMaterialForm?.FormType.ToString() ?? "-" },
                     new() { Label = "Gövde Akma Dayanımı (MPa)", Value = $"{calculation.InnerShellMaterialStrength:N2}" },
                     new() { Label = "Bombe Akma Dayanımı (MPa)", Value = $"{calculation.InnerHeadMaterialStrength:N2}" },
                     new() { Label = "Gövde Kalınlığı", Value = $"{calculation.InnerShellThickness:N2}" },
@@ -386,9 +386,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 vm.OuterTankFields = new List<SalesRequestTechnicalFieldVm>
                 {
                     new() { Label = "Gövde Malzemesi", Value = calculation.OuterShellMaterial?.Name ?? "-" },
-                    new() { Label = "Gövde Malzeme Formu", Value = calculation.OuterShellMaterialForm?.Name ?? "-" },
+                    new() { Label = "Gövde Malzeme Formu", Value = calculation.OuterShellMaterialForm?.FormType.ToString() ?? "-" },
                     new() { Label = "Bombe Malzemesi", Value = calculation.OuterHeadMaterial?.Name ?? "-" },
-                    new() { Label = "Bombe Malzeme Formu", Value = calculation.OuterHeadMaterialForm?.Name ?? "-" },
+                    new() { Label = "Bombe Malzeme Formu", Value = calculation.OuterHeadMaterialForm?.FormType.ToString() ?? "-" },
                     new() { Label = "Gövde Akma Dayanımı (MPa)", Value = $"{calculation.OuterShellMaterialStrength:N2}" },
                     new() { Label = "Bombe Akma Dayanımı (MPa)", Value = $"{calculation.OuterHeadMaterialStrength:N2}" },
                     new() { Label = "Gövde Kalınlığı", Value = $"{calculation.OuterShellThickness:N2}" },
@@ -439,7 +439,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             return vm;
         }
 
-        private static Paragraph CreateParagraph(string text, bool bold = false, JustificationValues justification = JustificationValues.Left)
+        private static Paragraph CreateParagraph(string text, bool bold = false, JustificationValues? justification = null)
         {
             var runProps = new RunProperties();
             if (bold)
@@ -448,7 +448,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             var paragraph = new Paragraph(
-                new ParagraphProperties(new Justification { Val = justification }),
+                new ParagraphProperties(new Justification { Val = justification ?? JustificationValues.Left }),
                 new Run(runProps, new Text(text) { Space = SpaceProcessingModeValues.Preserve }));
             return paragraph;
         }
@@ -606,11 +606,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .OrderBy(x => x.DisplayOrder)
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToListAsync();
-        }
-
-        private Task<bool> HasSalesPermissionAsync(Func<EmployeeProfile, bool> permissionSelector)
-        {
-            return base.HasSalesPermissionAsync(permissionSelector);
         }
 
         private async Task<string> GenerateRequestNoAsync()
