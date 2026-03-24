@@ -45,6 +45,35 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create() => View(new CustomerFormVm());
 
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var customer = await _context.Customers
+                .AsNoTracking()
+                .Where(x => x.Id == id && x.Status != Domain.Enums.Status.Deleted)
+                .Select(x => new CustomerListVm
+                {
+                    Id = x.Id,
+                    CompanyName = x.CompanyName,
+                    ContactName = x.ContactName,
+                    ContactPersons = x.ContactPersons,
+                    ContactPhones = x.ContactPhones,
+                    ContactEmails = x.ContactEmails,
+                    Email = x.Email,
+                    Phone = x.Phone,
+                    City = x.City,
+                    Country = x.Country,
+                    Sector = x.Sector,
+                    MainDealerCountry = x.MainDealerCountry,
+                    Region = x.Region,
+                    IsActive = x.IsActive
+                })
+                .FirstOrDefaultAsync();
+
+            if (customer == null) return NotFound();
+            return View(customer);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CustomerFormVm vm)

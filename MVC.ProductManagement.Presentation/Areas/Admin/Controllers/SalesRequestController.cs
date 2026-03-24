@@ -41,6 +41,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Requests = requests.Select(x => new SalesRequestListVm
                 {
                     Id = x.Id,
+                    CustomerId = x.CustomerId,
                     RequestNo = x.RequestNo,
                     Title = x.Title,
                     CustomerName = x.Customer.CompanyName,
@@ -74,6 +75,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
+            }
+
+            for (var i = 0; i < vm.Items.Count; i++)
+            {
+                NormalizeAndValidateItem(vm.Items[i], $"Items[{i}]");
             }
 
             if (!ModelState.IsValid)
@@ -288,6 +294,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddSubItem(SalesRequestAddSubItemVm vm)
         {
+            NormalizeAndValidateItem(vm, nameof(vm));
             if (!ModelState.IsValid)
             {
                 return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
@@ -457,6 +464,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return new SalesRequestDetailVm
             {
                 Id = entity.Id,
+                CustomerId = entity.CustomerId,
                 RequestNo = entity.RequestNo,
                 Title = entity.Title,
                 CustomerName = entity.Customer.CompanyName,
@@ -747,6 +755,75 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             public decimal TotalCost { get; set; }
             public decimal? MinimumSalesPrice { get; set; }
             public decimal? RecommendedSalesPrice { get; set; }
+        }
+
+        private void NormalizeAndValidateItem(SalesRequestItemInputVm item, string keyPrefix)
+        {
+            if (item.TankType == RequestTankType.Storage)
+            {
+                item.TransportOption = null;
+            }
+            else if (item.TankType == RequestTankType.Transport)
+            {
+                item.StorageOption = null;
+            }
+
+            if (item.TankType == RequestTankType.Storage && item.TransportOption.HasValue)
+            {
+                ModelState.AddModelError($"{keyPrefix}.TransportOption", "Depolama seçiliyse transport seçilemez.");
+            }
+
+            if (item.TankType == RequestTankType.Transport && item.StorageOption.HasValue)
+            {
+                ModelState.AddModelError($"{keyPrefix}.StorageOption", "Transport seçiliyse depolama tipi seçilemez.");
+            }
+
+            if (item.StdOpsSelection != RequestStdOpsSelection.SPC)
+            {
+                item.SpcTechnicalDetails = null;
+            }
+            else if (string.IsNullOrWhiteSpace(item.SpcTechnicalDetails))
+            {
+                ModelState.AddModelError($"{keyPrefix}.SpcTechnicalDetails", "SPC seçildiğinde teknik bilgi girilmelidir.");
+            }
+
+            if (item.RequestCategory == SalesRequestCategory.Tank)
+            {
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+            }
+            else if (item.RequestCategory == SalesRequestCategory.Evaporator)
+            {
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+            }
+            else if (item.RequestCategory == SalesRequestCategory.Facility)
+            {
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.StdOpsSelection = null;
+                item.SpcTechnicalDetails = null;
+            }
         }
     }
 }

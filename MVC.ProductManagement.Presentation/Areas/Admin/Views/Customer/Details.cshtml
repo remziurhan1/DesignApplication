@@ -1,0 +1,36 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.CustomerListVm
+@{
+    ViewData["Title"] = "Müşteri Detayı";
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@Model.CompanyName</h1>
+        <p class="text-muted mb-0">Müşteri kartı detay bilgileri</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Düzenle</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
+    </div>
+</div>
+
+<section class="section mt-4">
+    <div class="card">
+        <div class="card-body pt-4">
+            <div class="row g-3">
+                <div class="col-md-4"><strong>Firma:</strong><div>@Model.CompanyName</div></div>
+                <div class="col-md-4"><strong>Ana yetkili:</strong><div>@Model.ContactName</div></div>
+                <div class="col-md-4"><strong>Durum:</strong><div>@(Model.IsActive ? "Aktif" : "Pasif")</div></div>
+                <div class="col-md-4"><strong>E-posta:</strong><div>@Model.Email</div></div>
+                <div class="col-md-4"><strong>Telefon:</strong><div>@Model.Phone</div></div>
+                <div class="col-md-4"><strong>Sektör:</strong><div>@Model.Sector</div></div>
+                <div class="col-md-4"><strong>Şehir / Ülke:</strong><div>@Model.City / @Model.Country</div></div>
+                <div class="col-md-4"><strong>Ana bayi ülkesi:</strong><div>@Model.MainDealerCountry</div></div>
+                <div class="col-md-4"><strong>Bölge/Kıta:</strong><div>@Model.Region</div></div>
+                <div class="col-md-4"><strong>İletişim kişileri:</strong><div class="text-muted" style="white-space:pre-line">@Model.ContactPersons</div></div>
+                <div class="col-md-4"><strong>İletişim telefonları:</strong><div class="text-muted" style="white-space:pre-line">@Model.ContactPhones</div></div>
+                <div class="col-md-4"><strong>İletişim e-postaları:</strong><div class="text-muted" style="white-space:pre-line">@Model.ContactEmails</div></div>
+            </div>
+        </div>
+    </div>
+</section>

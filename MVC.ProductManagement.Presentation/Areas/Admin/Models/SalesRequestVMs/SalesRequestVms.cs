@@ -17,6 +17,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
     public class SalesRequestListVm
     {
         public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         public string RequestNo { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string CustomerName { get; set; } = string.Empty;
@@ -181,6 +182,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
     public class SalesRequestDetailVm
     {
         public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         public string RequestNo { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string CustomerName { get; set; } = string.Empty;
