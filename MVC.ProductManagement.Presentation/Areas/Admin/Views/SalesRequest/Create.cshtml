@@ -177,6 +177,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-12">
+                                <div class="border rounded p-3 bg-secondary-subtle">
+                                    <h6 class="mb-3">Yedek parça</h6>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label">Yedek parça bilgisi</label>
+                                            <input asp-for="Items[i].SparePartDetails" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-12 facility-fields">
                                 <div class="border rounded p-3 bg-warning-subtle">
                                     <h6 class="mb-3">Tesis giriş bilgileri</h6>
@@ -341,6 +352,7 @@
                         <div class="col-md-3 form-check ms-2 mt-4"><input name="Items[${index}].HasTankConsumptionCapacity" type="checkbox" class="form-check-input" /><label class="form-check-label">Tank tüketim kapasitesi aktif</label></div>
                         <div class="col-12 evap-fields"><div class="border rounded p-3 bg-info-subtle"><h6 class="mb-3">Evap giriş bilgileri</h6><div class="row g-3"><div class="col-md-3"><label class="form-label">Ortam min sıcaklık (°C)</label><input name="Items[${index}].AmbientTemperatureMin" class="form-control" /></div><div class="col-md-3"><label class="form-label">Ortam max sıcaklık (°C)</label><input name="Items[${index}].AmbientTemperatureMax" class="form-control" /></div></div></div></div>
                         <div class="col-12 facility-fields"><div class="border rounded p-3 bg-warning-subtle"><h6 class="mb-3">Tesis giriş bilgileri</h6><div class="row g-3"><div class="col-md-4"><label class="form-label">Tesis tipi</label><input name="Items[${index}].FacilityType" class="form-control" /></div><div class="col-md-2"><label class="form-label">Giriş P (bar)</label><input name="Items[${index}].FacilityInletPressureBar" class="form-control" /></div><div class="col-md-2"><label class="form-label">Çıkış P (bar)</label><input name="Items[${index}].FacilityOutletPressureBar" class="form-control" /></div><div class="col-md-2"><label class="form-label">Giriş T (°C)</label><input name="Items[${index}].FacilityInletTemperature" class="form-control" /></div><div class="col-md-2"><label class="form-label">Çıkış T (°C)</label><input name="Items[${index}].FacilityOutletTemperature" class="form-control" /></div><div class="col-md-3"><label class="form-label">Tesis Nm3/h</label><input name="Items[${index}].FacilityCapacityNm3h" class="form-control" /></div><div class="col-md-3 form-check ms-2 mt-4"><input name="Items[${index}].HasPump" type="checkbox" class="form-check-input" /><label class="form-check-label">Pompa var mı?</label></div><div class="col-md-3"><label class="form-label">Pompa detay</label><input name="Items[${index}].PumpDetails" class="form-control" /></div><div class="col-md-3 form-check ms-2 mt-4"><input name="Items[${index}].HasElectricHeater" type="checkbox" class="form-check-input" /><label class="form-check-label">Elektrikli ısıtıcı var mı?</label></div><div class="col-md-3"><label class="form-label">Isıtıcı detay</label><input name="Items[${index}].ElectricHeaterDetails" class="form-control" /></div></div></div></div>
+                        <div class="col-12"><div class="border rounded p-3 bg-secondary-subtle"><h6 class="mb-3">Yedek parça</h6><div class="row g-3"><div class="col-12"><label class="form-label">Yedek parça bilgisi</label><input name="Items[${index}].SparePartDetails" class="form-control" /></div></div></div></div>
                         <div class="col-md-6"><label class="form-label">Ek sorular/cevaplar (JSON)</label><textarea name="Items[${index}].AdditionalQuestionsJson" class="form-control" rows="2"></textarea></div>
                         <div class="col-md-6"><label class="form-label">Minimum teknik bilgiler</label><textarea name="Items[${index}].MinimumTechnicalNotes" class="form-control" rows="2"></textarea></div>
                     </div>

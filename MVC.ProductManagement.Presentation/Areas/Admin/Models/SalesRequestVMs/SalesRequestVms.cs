@@ -167,6 +167,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         [Display(Name = "Tank tüketim kapasitesi aktif")]
         public bool HasTankConsumptionCapacity { get; set; }
 
+        [Display(Name = "Yedek parça bilgisi")]
+        public string? SparePartDetails { get; set; }
+
         [Display(Name = "Ek sorular / cevaplar (JSON)")]
         public string? AdditionalQuestionsJson { get; set; }
 
