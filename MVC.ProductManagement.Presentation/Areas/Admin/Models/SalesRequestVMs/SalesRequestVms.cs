@@ -270,6 +270,27 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public long FileSize { get; set; }
     }
 
+    public class SalesRequestTechnicalDetailsVm
+    {
+        public Guid RequestId { get; set; }
+        public Guid ItemId { get; set; }
+        public string RequestNo { get; set; } = string.Empty;
+        public string ItemCode { get; set; } = string.Empty;
+        public string ItemTitle { get; set; } = string.Empty;
+        public string CalculationName { get; set; } = string.Empty;
+        public string CalculationType { get; set; } = string.Empty;
+        public string? RevisionCode { get; set; }
+        public string MAWP { get; set; } = "-";
+        public string DesignPressure { get; set; } = "-";
+        public string TestPressure { get; set; } = "-";
+        public string RoundedShellThickness { get; set; } = "-";
+        public string RoundedHeadThickness { get; set; } = "-";
+        public string InnerTankLength { get; set; } = "-";
+        public string TankDiameter { get; set; } = "-";
+        public string? DesignDetails { get; set; }
+        public bool HasSpecification { get; set; }
+    }
+
     public class SalesRequestAddSubItemVm : SalesRequestItemInputVm
     {
         public Guid SalesRequestId { get; set; }
