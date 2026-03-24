@@ -12,6 +12,31 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public string ItemTitle { get; set; } = string.Empty;
         public decimal CapacityM3 { get; set; }
         public decimal? ConsumptionCapacity { get; set; }
+        public SalesRequestCategory RequestCategory { get; set; } = SalesRequestCategory.Tank;
+        public string? ProductCode { get; set; }
+        public string? DesignStandardCode { get; set; }
+        public decimal? DesignPressureBar { get; set; }
+        public decimal? DesignTemperatureMin { get; set; }
+        public decimal? DesignTemperatureMax { get; set; }
+        public RequestTankType? TankType { get; set; }
+        public RequestStorageOption? StorageOption { get; set; }
+        public RequestTransportOption? TransportOption { get; set; }
+        public RequestStdOpsSelection? StdOpsSelection { get; set; }
+        public string? SpcTechnicalDetails { get; set; }
+        public decimal? AmbientTemperatureMin { get; set; }
+        public decimal? AmbientTemperatureMax { get; set; }
+        public string? FacilityType { get; set; }
+        public decimal? FacilityInletPressureBar { get; set; }
+        public decimal? FacilityOutletPressureBar { get; set; }
+        public decimal? FacilityInletTemperature { get; set; }
+        public decimal? FacilityOutletTemperature { get; set; }
+        public decimal? FacilityCapacityNm3h { get; set; }
+        public bool HasPump { get; set; }
+        public string? PumpDetails { get; set; }
+        public bool HasElectricHeater { get; set; }
+        public string? ElectricHeaterDetails { get; set; }
+        public bool HasTankConsumptionCapacity { get; set; }
+        public string? AdditionalQuestionsJson { get; set; }
         public RequestTankOrientation TankOrientation { get; set; }
         public PlacementType PlacementType { get; set; }
         public string? MinimumTechnicalNotes { get; set; }
