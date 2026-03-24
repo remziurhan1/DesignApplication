@@ -50,6 +50,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     SalesOpenedAt = x.SalesOpenedAt,
                     NeededByDate = x.NeededByDate,
                     WorkflowStatus = x.WorkflowStatus,
+                    CustomerQuoteStatus = x.CustomerQuoteStatus,
+                    RevisionNo = x.RevisionNo,
                     ItemCount = x.Items.Count,
                     AttachmentCount = x.Attachments.Count,
                     ApprovedSalesPriceTotal = x.Items.Where(i => i.ApprovedSalesPrice.HasValue).Sum(i => i.ApprovedSalesPrice)
@@ -690,6 +692,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 IsTransportByCustomer = entity.IsTransportByCustomer,
                 SummaryNotes = entity.SummaryNotes,
                 WorkflowStatus = entity.WorkflowStatus,
+                CustomerQuoteStatus = entity.CustomerQuoteStatus,
+                RevisionNo = entity.RevisionNo,
                 IsManagerView = isManagerView,
                 Items = roots,
                 Attachments = entity.Attachments.Select(x => new SalesRequestAttachmentVm

@@ -25,6 +25,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public DateTime SalesOpenedAt { get; set; }
         public DateTime NeededByDate { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
+        public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
+        public int RevisionNo { get; set; }
+        public string RevisionCode => $"R{RevisionNo:00}";
         public int ItemCount { get; set; }
         public int AttachmentCount { get; set; }
         public decimal? ApprovedSalesPriceTotal { get; set; }
@@ -71,6 +74,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         [StringLength(2000)]
         [Display(Name = "Satış özeti")]
         public string? SummaryNotes { get; set; }
+
+        [StringLength(1000)]
+        [Display(Name = "Revizyon açıklaması")]
+        public string? RevisionReason { get; set; }
 
         [Display(Name = "Ek dokümanlar")]
         public List<IFormFile> Attachments { get; set; } = new();
@@ -206,10 +213,23 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string? CustomerRegion { get; set; }
         public string? SummaryNotes { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
+        public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
+        public int RevisionNo { get; set; }
+        public string RevisionCode => $"R{RevisionNo:00}";
         public bool IsManagerView { get; set; }
+        public List<SalesRequestRevisionHistoryVm> RevisionHistory { get; set; } = new();
         public List<SalesRequestDetailItemVm> Items { get; set; } = new();
         public List<SalesRequestAttachmentVm> Attachments { get; set; } = new();
         public SalesRequestAddSubItemVm NewSubItem { get; set; } = new();
+    }
+
+    public class SalesRequestRevisionHistoryVm
+    {
+        public int RevisionNo { get; set; }
+        public string RevisionCode => $"R{RevisionNo:00}";
+        public string RevisionReason { get; set; } = string.Empty;
+        public string RevisedBy { get; set; } = string.Empty;
+        public DateTime RevisedAt { get; set; }
     }
 
     public class SalesRequestDetailItemVm
