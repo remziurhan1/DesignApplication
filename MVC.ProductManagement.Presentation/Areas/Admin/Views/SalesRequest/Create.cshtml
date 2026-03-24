@@ -34,15 +34,16 @@
                     </div>
                     <div class="col-md-4">
                         <label asp-for="RequestedByName" class="form-label"></label>
-                        <input asp-for="RequestedByName" class="form-control" />
+                        <input asp-for="RequestedByName" class="form-control" readonly />
                     </div>
                     <div class="col-md-4">
                         <label asp-for="RequestedByDepartment" class="form-label"></label>
-                        <input asp-for="RequestedByDepartment" class="form-control" />
+                        <input asp-for="RequestedByDepartment" class="form-control" readonly />
                     </div>
                     <div class="col-md-6">
                         <label asp-for="RequestedByEmail" class="form-label"></label>
-                        <input asp-for="RequestedByEmail" class="form-control" />
+                        <input asp-for="RequestedByEmail" class="form-control" readonly />
+                        <small class="text-muted">Talebi açan satışçı bilgileri giriş yapan kullanıcı profilinden otomatik doldurulur.</small>
                     </div>
                     <div class="col-md-3">
                         <label asp-for="NeededByDate" class="form-label"></label>

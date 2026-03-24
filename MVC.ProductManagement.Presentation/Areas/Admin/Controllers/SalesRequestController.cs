@@ -5,6 +5,7 @@ using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
+using System.Security.Claims;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -62,6 +63,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             var vm = new SalesRequestCreateVm();
+            await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
             await PopulateFormAsync(vm);
             return View(vm);
         }
@@ -71,6 +73,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
         public async Task<IActionResult> Create(SalesRequestCreateVm vm)
         {
+            await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
             vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
             if (!vm.Items.Any())
             {
@@ -536,6 +539,38 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .OrderBy(x => x.DisplayOrder)
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToListAsync();
+        }
+
+        private async Task PopulateRequesterInfoAsync(SalesRequestCreateVm vm, bool overwriteExisting)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return;
+            }
+
+            var profile = await _context.EmployeeProfiles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserId == userId);
+
+            var requestName = profile?.FullName ?? User.Identity?.Name;
+            var requestDepartment = profile?.Department;
+            var requestEmail = profile?.Email ?? User.FindFirstValue(ClaimTypes.Email);
+
+            if (overwriteExisting || string.IsNullOrWhiteSpace(vm.RequestedByName))
+            {
+                vm.RequestedByName = requestName ?? string.Empty;
+            }
+
+            if (overwriteExisting || string.IsNullOrWhiteSpace(vm.RequestedByDepartment))
+            {
+                vm.RequestedByDepartment = requestDepartment;
+            }
+
+            if (overwriteExisting || string.IsNullOrWhiteSpace(vm.RequestedByEmail))
+            {
+                vm.RequestedByEmail = requestEmail;
+            }
         }
 
         private async Task PopulateSubItemAsync(SalesRequestAddSubItemVm vm, Guid requestId)
