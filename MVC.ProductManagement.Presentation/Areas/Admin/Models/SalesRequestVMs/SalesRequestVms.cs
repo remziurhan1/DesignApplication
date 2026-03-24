@@ -88,8 +88,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         [Display(Name = "Akışkan grubu")]
         public Guid ProductGroupId { get; set; }
 
-        [Required]
-        [Range(0.1d, 100000d)]
         [Display(Name = "Kapasite (m³)")]
         public decimal CapacityM3 { get; set; }
 
