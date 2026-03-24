@@ -74,7 +74,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Create(SalesRequestCreateVm vm)
         {
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
+            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
@@ -235,7 +235,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(Guid id, SalesRequestCreateVm vm)
         {
             vm.Id = id;
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
+            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
@@ -994,6 +994,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             if (item.RequestCategory == SalesRequestCategory.Tank)
             {
+                if (item.CapacityM3 <= 0)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.CapacityM3", "Tank talebi için kapasite zorunludur.");
+                }
+
+                item.SparePartDetails = null;
                 item.FacilityType = null;
                 item.FacilityInletPressureBar = null;
                 item.FacilityOutletPressureBar = null;
@@ -1007,6 +1013,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
             else if (item.RequestCategory == SalesRequestCategory.Evaporator)
             {
+                item.CapacityM3 = 0;
+                item.TankOrientation = RequestTankOrientation.Vertical;
+                item.PlacementType = PlacementType.Aboveground;
+                item.SparePartDetails = null;
                 item.TankType = null;
                 item.StorageOption = null;
                 item.TransportOption = null;
@@ -1033,6 +1043,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
             else if (item.RequestCategory == SalesRequestCategory.Facility)
             {
+                item.CapacityM3 = 0;
+                item.TankOrientation = RequestTankOrientation.Vertical;
+                item.PlacementType = PlacementType.Aboveground;
+                item.SparePartDetails = null;
                 item.TankType = null;
                 item.StorageOption = null;
                 item.TransportOption = null;
@@ -1071,6 +1085,34 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     item.FacilityInletTemperature.Value == item.FacilityOutletTemperature.Value)
                 {
                     ModelState.AddModelError($"{keyPrefix}.FacilityOutletTemperature", "Tesis giriş/çıkış sıcaklıkları aynı olamaz.");
+                }
+            }
+            else if (item.RequestCategory == SalesRequestCategory.SparePart)
+            {
+                item.CapacityM3 = 0;
+                item.TankOrientation = RequestTankOrientation.Vertical;
+                item.PlacementType = PlacementType.Aboveground;
+                item.TankType = null;
+                item.StorageOption = null;
+                item.TransportOption = null;
+                item.StdOpsSelection = null;
+                item.SpcTechnicalDetails = null;
+                item.AmbientTemperatureMin = null;
+                item.AmbientTemperatureMax = null;
+                item.FacilityType = null;
+                item.FacilityInletPressureBar = null;
+                item.FacilityOutletPressureBar = null;
+                item.FacilityInletTemperature = null;
+                item.FacilityOutletTemperature = null;
+                item.FacilityCapacityNm3h = null;
+                item.HasPump = false;
+                item.PumpDetails = null;
+                item.HasElectricHeater = false;
+                item.ElectricHeaterDetails = null;
+
+                if (string.IsNullOrWhiteSpace(item.SparePartDetails))
+                {
+                    ModelState.AddModelError($"{keyPrefix}.SparePartDetails", "Yedek parça talebi için açıklama zorunludur.");
                 }
             }
         }
