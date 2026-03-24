@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
@@ -424,6 +425,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .OrderBy(x => x.DisplayOrder)
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
                 .ToListAsync();
+        }
+
+        private Task<bool> HasSalesPermissionAsync(Func<EmployeeProfile, bool> permissionSelector)
+        {
+            return base.HasSalesPermissionAsync(permissionSelector);
         }
 
         private async Task<string> GenerateRequestNoAsync()
