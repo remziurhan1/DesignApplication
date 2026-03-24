@@ -194,6 +194,105 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             return View(vm);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> TechnicalDetails(Guid requestId, Guid itemId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var request = await LoadRequestAsync(requestId);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            var item = request.Items.FirstOrDefault(x => x.Id == itemId);
+            if (item == null || !item.LinkedCalculationType.HasValue || !item.LinkedCalculationId.HasValue)
+            {
+                return NotFound();
+            }
+
+            var vm = new SalesRequestTechnicalDetailsVm
+            {
+                RequestId = request.Id,
+                RequestNo = request.RequestNo,
+                ItemId = item.Id,
+                ItemCode = item.ItemCode,
+                ItemTitle = item.ItemTitle,
+                CalculationName = item.LinkedCalculationName ?? "-",
+                CalculationType = item.LinkedCalculationType.Value.ToString(),
+                RevisionCode = item.LinkedCostAnalysisRevisionCode,
+                DesignDetails = item.DesignDetails,
+                HasSpecification = item.LinkedCalculationType == SalesRequestCalculationType.EN13458
+            };
+
+            if (item.LinkedCalculationType == SalesRequestCalculationType.EN13458)
+            {
+                var calculation = await _context.EN13458Calculations
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+
+                if (calculation == null)
+                {
+                    return NotFound();
+                }
+
+                vm.MAWP = $"{(calculation.DesignPressure > 0 ? calculation.DesignPressure : calculation.Pressure):N2} bar";
+                vm.DesignPressure = $"{calculation.DesignPressure:N2} bar";
+                vm.TestPressure = $"{calculation.TestPressure:N2} bar";
+                vm.RoundedShellThickness = $"İç: {calculation.RoundedInnerShellThickness:N2} mm / Dış: {calculation.RoundedOuterShellThickness:N2} mm";
+                vm.RoundedHeadThickness = $"İç: {calculation.RoundedInnerHeadThickness:N2} mm / Dış: {calculation.RoundedOuterHeadThickness:N2} mm";
+                vm.InnerTankLength = $"{calculation.InnerTankTotalLength:N2} mm";
+                vm.TankDiameter = $"İç: {calculation.OuterDiameter:N2} mm / Dış: {calculation.OuterTankDiameter:N2} mm";
+            }
+            else
+            {
+                var calculation = await _context.AD2000Calculations
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+
+                if (calculation == null)
+                {
+                    return NotFound();
+                }
+
+                vm.MAWP = $"{calculation.DesignPressure:N2} bar";
+                vm.DesignPressure = $"{calculation.DesignPressure:N2} bar";
+                vm.TestPressure = $"{calculation.TestPressure:N2} bar";
+                vm.RoundedShellThickness = $"{calculation.RoundedShellThickness:N2} mm";
+                vm.RoundedHeadThickness = $"{calculation.RoundedHeadThickness:N2} mm";
+                vm.InnerTankLength = $"{calculation.ShellLength:N2} mm";
+                vm.TankDiameter = $"{calculation.Diameter:N2} mm";
+            }
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Specification(Guid requestId, Guid itemId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var request = await LoadRequestAsync(requestId);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            var item = request.Items.FirstOrDefault(x => x.Id == itemId);
+            if (item == null || item.LinkedCalculationType != SalesRequestCalculationType.EN13458 || !item.LinkedCalculationId.HasValue)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(TechnicalDetails), new { requestId, itemId });
+        }
+
         private async Task<SalesRequest?> LoadRequestAsync(Guid id)
         {
             return await _context.SalesRequests
