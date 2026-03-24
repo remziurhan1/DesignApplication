@@ -38,14 +38,24 @@ namespace MVC.ProductManagement.Presentation.Controllers
                 return View(model);
             }
 
-            var userRole = await _userManager.GetRolesAsync(user);
-            if (userRole == null)
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles == null || !userRoles.Any())
             {
                 await Console.Out.WriteLineAsync("Login işlemi başarısız");
                 return View(model);
             }
 
-            return RedirectToAction("Index","Home",new {Area = userRole[0].ToString() });
+            if (userRoles.Contains("Admin"))
+            {
+                return RedirectToAction("Index", "Home", new { Area = "Admin" });
+            }
+
+            if (userRoles.Contains("Sales"))
+            {
+                return RedirectToAction("Index", "Home", new { Area = "Sales" });
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
