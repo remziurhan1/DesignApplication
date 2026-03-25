@@ -12,6 +12,32 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
     [Authorize(Roles = "Sales,Admin")]
     public abstract class SalesBaseController : BaseController
     {
+        protected async Task<bool> CanAccessSalesManagerPanelAsync()
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return true;
+            }
+
+            var profile = await GetCurrentSalesProfileAsync();
+            if (profile == null || !profile.CanViewSalesPricing)
+            {
+                return false;
+            }
+
+            return HasManagerTitle(profile);
+        }
+
+        private static bool HasManagerTitle(Domain.Entities.EmployeeProfile profile)
+        {
+            return (!string.IsNullOrWhiteSpace(profile.DepartmentRole)
+                    && (profile.DepartmentRole.Contains("müdür", StringComparison.OrdinalIgnoreCase)
+                        || profile.DepartmentRole.Contains("manager", StringComparison.OrdinalIgnoreCase)))
+                   || (!string.IsNullOrWhiteSpace(profile.Title)
+                       && (profile.Title.Contains("müdür", StringComparison.OrdinalIgnoreCase)
+                           || profile.Title.Contains("manager", StringComparison.OrdinalIgnoreCase)));
+        }
+
         protected async Task<bool> HasSalesPermissionAsync(Func<Domain.Entities.EmployeeProfile, bool> permissionSelector)
         {
             if (User.IsInRole("Admin"))
