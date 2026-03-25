@@ -29,5 +29,22 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             var profile = await context.EmployeeProfiles.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
             return profile != null && permissionSelector(profile);
         }
+
+        protected async Task<Domain.Entities.EmployeeProfile?> GetCurrentSalesProfileAsync()
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return null;
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return null;
+            }
+
+            var context = HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+            return await context.EmployeeProfiles.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
+        }
     }
 }
