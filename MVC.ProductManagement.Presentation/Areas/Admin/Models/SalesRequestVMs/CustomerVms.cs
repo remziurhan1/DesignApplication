@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
 {
@@ -72,6 +73,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         [StringLength(100)]
         [Display(Name = "Bulunduğu kıta/bölge")]
         public string? Region { get; set; }
+
+        public List<SelectListItem> RegionOptions { get; set; } = new();
+        public List<SelectListItem> CountryOptions { get; set; } = new();
 
         [StringLength(50)]
         [Display(Name = "Vergi numarası")]

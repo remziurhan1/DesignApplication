@@ -60,7 +60,9 @@
                     </div>
                     <div class="col-md-3">
                         <label asp-for="Country" class="form-label"></label>
-                        <input asp-for="Country" class="form-control" />
+                        <select asp-for="Country" asp-items="Model.CountryOptions" class="form-select">
+                            <option value="">Seçiniz</option>
+                        </select>
                     </div>
                     <div class="col-md-3">
                         <label asp-for="MainDealerCountry" class="form-label"></label>
@@ -68,7 +70,9 @@
                     </div>
                     <div class="col-md-3">
                         <label asp-for="Region" class="form-label"></label>
-                        <input asp-for="Region" class="form-control" />
+                        <select asp-for="Region" asp-items="Model.RegionOptions" class="form-select">
+                            <option value="">Otomatik belirle</option>
+                        </select>
                     </div>
                     <div class="col-12">
                         <label asp-for="Address" class="form-label"></label>
