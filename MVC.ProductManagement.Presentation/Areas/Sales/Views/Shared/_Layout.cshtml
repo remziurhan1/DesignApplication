@@ -8,109 +8,144 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         :root {
-            --sales-pink: #d63384;
-            --sales-pink-soft: #f8d7e7;
-            --sales-bg: #fff5fa;
-            --sales-dark: #7a1f4f;
+            --sales-primary: #b91c7c;
+            --sales-primary-dark: #861657;
+            --sales-soft: #ffe8f5;
+            --sales-bg: #fff9fc;
+            --sales-text: #3d2340;
         }
 
         body {
             background: var(--sales-bg);
         }
 
-        .sales-topbar {
-            height: 64px;
-            background: linear-gradient(90deg, #c21874, #ec4899);
+        .sales-header {
+            background: linear-gradient(90deg, var(--sales-primary-dark), var(--sales-primary));
             color: #fff;
-            padding: 0 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,.12);
+            box-shadow: 0 6px 18px rgba(67, 7, 48, 0.25);
         }
 
-        .sales-shell {
-            display: flex;
-            min-height: calc(100vh - 64px);
+        .sales-brand-row {
+            min-height: 64px;
         }
 
-        .sales-sidebar {
-            width: 270px;
-            background: #fff;
-            border-right: 1px solid #f0c2da;
-            padding: 1rem;
+        .sales-top-nav {
+            background: rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255,255,255,.18);
         }
 
-        .sales-sidebar .nav-link {
-            color: var(--sales-dark);
-            border-radius: .6rem;
-            margin-bottom: .35rem;
-            font-weight: 600;
-        }
-
-        .sales-sidebar .nav-link:hover,
-        .sales-sidebar .nav-link.active {
-            background: var(--sales-pink-soft);
-            color: var(--sales-pink);
-        }
-
-        .quick-actions {
-            background: var(--sales-pink-soft);
+        .sales-top-nav .nav-link {
+            color: #ffe7f6;
             border-radius: .75rem;
-            padding: .75rem;
-            margin-top: 1rem;
+            padding: .55rem .95rem;
+            font-weight: 600;
+            margin-right: .4rem;
         }
 
-        .quick-actions .btn {
-            width: 100%;
-            margin-bottom: .5rem;
+        .sales-top-nav .nav-link:hover,
+        .sales-top-nav .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.18);
         }
 
-        .sales-content {
-            flex: 1;
+        .sales-main {
             padding: 1.25rem;
         }
 
-        .sales-card {
-            border: 1px solid #f2b8d7;
-            border-radius: .75rem;
+        .sales-price-table {
+            border: 1px solid #f5c7e5;
+            border-radius: 1rem;
             background: #fff;
-            box-shadow: 0 1px 4px rgba(214, 51, 132, 0.08);
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(116, 23, 79, 0.08);
+        }
+
+        .sales-price-table .table {
+            margin-bottom: 0;
+        }
+
+        .sales-body-card {
+            border: 1px solid #f2d6e8;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 10px 24px rgba(40, 17, 39, 0.06);
+            padding: 1rem 1.1rem;
         }
     </style>
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <header class="sales-topbar">
-        <div class="fw-bold fs-5">💗 Satış Portalı</div>
-        <div>
-            <a asp-area="Sales" asp-controller="Home" asp-action="Index" class="btn btn-sm btn-light">Anasayfa</a>
-            <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-light">Çıkış</a>
+    @{
+        var currentController = (ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty);
+    }
+
+    <header class="sales-header">
+        <div class="container-fluid">
+            <div class="sales-brand-row d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="fw-bold fs-5">Satış Portalı</div>
+                    <div class="small opacity-75">Teklif, müşteri ve fiyat sürecini üst menüden hızlı yönetin</div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-light">Çıkış</a>
+                </div>
+            </div>
+
+            <div class="sales-top-nav pb-2 pt-2">
+                <nav class="nav">
+                    <a asp-area="Sales" asp-controller="Home" asp-action="Index" class="nav-link @(currentController == "Home" ? "active" : "")">Dashboard</a>
+                    <a asp-area="Sales" asp-controller="Customer" asp-action="Index" class="nav-link @(currentController == "Customer" ? "active" : "")">Müşteriler</a>
+                    <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="nav-link @(currentController == "SalesRequest" ? "active" : "")">Satış Talepleri</a>
+                    <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Create" class="nav-link">+ Yeni Talep</a>
+                </nav>
+            </div>
         </div>
     </header>
 
-    <div class="sales-shell">
-        <aside class="sales-sidebar">
-            <h6 class="text-uppercase text-secondary mb-3">Menü</h6>
-            <nav class="nav flex-column">
-                <a asp-area="Sales" asp-controller="Home" asp-action="Index" class="nav-link">Dashboard</a>
-                <a asp-area="Sales" asp-controller="Customer" asp-action="Index" class="nav-link">Müşteriler</a>
-                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="nav-link">Talepler</a>
-            </nav>
-
-            <div class="quick-actions mt-3">
-                <div class="small fw-bold mb-2 text-dark">Hızlı İşlemler</div>
-                <a asp-area="Sales" asp-controller="Customer" asp-action="Create" class="btn btn-sm btn-outline-danger">+ Müşteri Oluştur</a>
-                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Create" class="btn btn-sm btn-danger">+ Talep Oluştur</a>
+    <main class="sales-main container-fluid">
+        <section class="sales-price-table mb-3">
+            <div class="px-3 py-2 d-flex justify-content-between align-items-center" style="background:#fff3fb;">
+                <strong style="color:var(--sales-text);">Satış - Fiyat Tablosu</strong>
+                <span class="small text-muted">Hızlı referans</span>
             </div>
-        </aside>
-
-        <main class="sales-content">
-            <div class="sales-card p-3 p-md-4">
-                @RenderBody()
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Seviye</th>
+                            <th>Marj Aralığı</th>
+                            <th>Fiyat Durumu</th>
+                            <th>Önerilen Aksiyon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge text-bg-success">A</span></td>
+                            <td>%20 ve üzeri</td>
+                            <td>Güçlü teklif</td>
+                            <td>Teklifi hızlı onaya gönder</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge text-bg-warning">B</span></td>
+                            <td>%12 - %19</td>
+                            <td>Denge seviyesi</td>
+                            <td>Satış müdürü notu ile ilerlet</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge text-bg-danger">C</span></td>
+                            <td>%0 - %11</td>
+                            <td>Düşük marj</td>
+                            <td>Maliyet/fiyat revizyonu iste</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </main>
-    </div>
+        </section>
+
+        <section class="sales-body-card">
+            @RenderBody()
+        </section>
+    </main>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
