@@ -27,6 +27,7 @@
                     <thead>
                     <tr>
                         <th>Satışçı</th>
+                        <th>Bölge</th>
                         <th class="text-end">Toplam</th>
                         <th class="text-end">Açık</th>
                         <th class="text-end">Kapalı</th>
@@ -41,6 +42,7 @@
                         {
                             <tr>
                                 <td>@row.SalespersonName</td>
+                                <td>@(row.Region ?? "-")</td>
                                 <td class="text-end">@row.TotalRequestCount</td>
                                 <td class="text-end">@row.OpenRequestCount</td>
                                 <td class="text-end">@row.ClosedRequestCount</td>
@@ -52,7 +54,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted">Henüz satış talebi bulunmuyor.</td>
+                            <td colspan="7" class="text-center text-muted">Henüz satış talebi bulunmuyor.</td>
                         </tr>
                     }
                     </tbody>

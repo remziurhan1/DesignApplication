@@ -43,6 +43,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
 
+            var profile = await GetCurrentSalesProfileAsync();
+            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location))
+            {
+                requests = requests
+                    .Where(x => string.Equals(x.Customer.Region, profile.Location, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
             var vm = new SalesRequestIndexVm
             {
                 TotalRequestCount = requests.Count,

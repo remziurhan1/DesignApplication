@@ -6,6 +6,12 @@
 <div class="p-2">
     <h3 class="mb-2">Satış Ekranı</h3>
     <p class="text-muted">Bu ekranda satış kullanıcıları müşteri ve talep süreçlerini yönetir.</p>
+    @if (!string.IsNullOrWhiteSpace(Model.CurrentRegion))
+    {
+        <div class="alert alert-info py-2 mb-2">
+            Bölge filtresi aktif: <strong>@Model.CurrentRegion</strong>
+        </div>
+    }
 
     <div class="row g-3 mt-1">
         <div class="col-12">
@@ -39,5 +45,38 @@
                 </div>
             </div>
         </div>
+        @if (Model.IsManagerView && Model.SalespersonStats.Any())
+        {
+            <div class="col-12">
+                <div class="border rounded-3 p-3">
+                    <h5 class="mb-2">Takım Dağılımı</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Satışçı</th>
+                                    <th class="text-end">Toplam</th>
+                                    <th class="text-end">Açık</th>
+                                    <th class="text-end">Kapalı</th>
+                                    <th class="text-end">Teklif Verildi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in Model.SalespersonStats)
+                                {
+                                    <tr>
+                                        <td>@row.SalespersonName</td>
+                                        <td class="text-end">@row.TotalRequestCount</td>
+                                        <td class="text-end">@row.OpenRequestCount</td>
+                                        <td class="text-end">@row.ClosedRequestCount</td>
+                                        <td class="text-end">@row.QuoteSharedCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>

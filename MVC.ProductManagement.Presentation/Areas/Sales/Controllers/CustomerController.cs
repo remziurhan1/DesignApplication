@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
+using System;
 
 namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 {
@@ -42,6 +43,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     IsActive = x.IsActive
                 })
                 .ToListAsync();
+
+            var profile = await GetCurrentSalesProfileAsync();
+            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location))
+            {
+                customers = customers
+                    .Where(x => string.Equals(x.Region, profile.Location, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
 
             return View(customers);
         }

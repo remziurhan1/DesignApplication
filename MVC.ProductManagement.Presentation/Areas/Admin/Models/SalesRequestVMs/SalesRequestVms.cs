@@ -255,6 +255,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
 
     public class SalesDashboardVm
     {
+        public bool IsManagerView { get; set; }
+        public string? CurrentRegion { get; set; }
         public int TotalRequestCount { get; set; }
         public int OpenRequestCount { get; set; }
         public int ClosedRequestCount { get; set; }
@@ -267,6 +269,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
     public class SalespersonRequestStatVm
     {
         public string SalespersonName { get; set; } = string.Empty;
+        public string? Region { get; set; }
         public int TotalRequestCount { get; set; }
         public int OpenRequestCount { get; set; }
         public int ClosedRequestCount { get; set; }

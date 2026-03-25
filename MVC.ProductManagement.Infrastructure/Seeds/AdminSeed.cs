@@ -20,6 +20,8 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
         private const string salesEmail = "mehmet.okur@cryocan.com";
         private const string salesPassword = "password+0";
         private const string salesPhoneNumber = "123456789";
+        private const string secondSalesEmail = "sarp.yilmaz@cryocan.com";
+        private const string secondSalesPhoneNumber = "987654321";
         private const string seedCustomerCompany = "Cryocan Seed Müşteri";
         private const string seedCustomerEmail = "seed.customer@cryocan.com";
 
@@ -67,7 +69,11 @@ END");
             }
             if (!context.Users.Any(user => user.Email == salesEmail))
             {
-                await AddSalesEngineerAsync(context);
+                await AddSalesEngineerAsync(context, salesEmail, "Mehmet Okur", salesPhoneNumber, "Europe");
+            }
+            if (!context.Users.Any(user => user.Email == secondSalesEmail))
+            {
+                await AddSalesEngineerAsync(context, secondSalesEmail, "Sarp Yılmaz", secondSalesPhoneNumber, "MiddleEast");
             }
             if (!context.Customers.Any(x => x.CompanyName == seedCustomerCompany))
             {
@@ -133,16 +139,16 @@ END");
 
         }
 
-        private static async Task AddSalesEngineerAsync(AppDbContext context)
+        private static async Task AddSalesEngineerAsync(AppDbContext context, string email, string fullName, string phoneNumber, string region)
         {
             var user = new IdentityUser
             {
-                Email = salesEmail,
+                Email = email,
                 EmailConfirmed = true,
-                NormalizedEmail = salesEmail.ToUpperInvariant(),
-                UserName = salesEmail,
-                NormalizedUserName = salesEmail.ToUpperInvariant(),
-                PhoneNumber = salesPhoneNumber,
+                NormalizedEmail = email.ToUpperInvariant(),
+                UserName = email,
+                NormalizedUserName = email.ToUpperInvariant(),
+                PhoneNumber = phoneNumber,
                 PhoneNumberConfirmed = true
             };
             user.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(user, salesPassword);
@@ -161,13 +167,13 @@ END");
             await context.EmployeeProfiles.AddAsync(new EmployeeProfile
             {
                 UserId = user.Id,
-                FullName = "Mehmet Okur",
+                FullName = fullName,
                 Department = "Satış Bölümü",
                 DepartmentRole = "Satış Mühendisi",
                 Title = "Satış Mühendisi",
-                Number = salesPhoneNumber,
-                Email = salesEmail,
-                Location = "Merkez",
+                Number = phoneNumber,
+                Email = email,
+                Location = region,
                 CanAccessSalesArea = true,
                 CanManageSalesCustomers = true,
                 CanCreateSalesRequests = true,

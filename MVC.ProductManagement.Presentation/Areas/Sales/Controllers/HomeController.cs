@@ -26,8 +26,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var requests = await _context.SalesRequests
                 .AsNoTracking()
+                .Include(x => x.Customer)
                 .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales)
                 .ToListAsync();
+
+            var profile = await GetCurrentSalesProfileAsync();
+            var region = profile?.Location;
+            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(region))
+            {
+                requests = requests.Where(x => x.Customer.Region == region).ToList();
+            }
 
             var currentUserName = User.Identity?.Name;
             var currentUserEmail = User.FindFirstValue(ClaimTypes.Email);
@@ -36,21 +44,37 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     (!string.IsNullOrWhiteSpace(currentUserName) && x.RequestedByName == currentUserName))
                 .ToList();
 
-            var vm = BuildDashboardVm(myRequests);
+            var canViewTeamDashboard = User.IsInRole("Admin") || await HasSalesPermissionAsync(x => x.CanViewSalesPricing);
+            var vm = BuildDashboardVm(canViewTeamDashboard ? requests : myRequests, canViewTeamDashboard, region);
             return View(vm);
         }
 
-        private static SalesDashboardVm BuildDashboardVm(List<SalesRequest> requests)
+        private static SalesDashboardVm BuildDashboardVm(List<SalesRequest> requests, bool isManagerView, string? region)
         {
             return new SalesDashboardVm
             {
+                IsManagerView = isManagerView,
+                CurrentRegion = region,
                 TotalRequestCount = requests.Count,
                 OpenRequestCount = requests.Count(IsOpenRequest),
                 ClosedRequestCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected),
                 QuoteSharedCount = requests.Count(x => x.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer),
                 ApprovedCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved),
                 WaitingPricingCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Submitted || x.WorkflowStatus == SalesRequestWorkflowStatus.PricingInProgress),
-                SalespersonStats = new List<SalespersonRequestStatVm>()
+                SalespersonStats = isManagerView
+                    ? requests.GroupBy(x => x.RequestedByName)
+                        .Select(g => new SalespersonRequestStatVm
+                        {
+                            SalespersonName = string.IsNullOrWhiteSpace(g.Key) ? "Belirtilmemiş" : g.Key,
+                            TotalRequestCount = g.Count(),
+                            OpenRequestCount = g.Count(IsOpenRequest),
+                            ClosedRequestCount = g.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected),
+                            QuoteSharedCount = g.Count(x => x.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer),
+                            ApprovedCount = g.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved)
+                        })
+                        .OrderByDescending(x => x.TotalRequestCount)
+                        .ToList()
+                    : new List<SalespersonRequestStatVm>()
             };
         }
 

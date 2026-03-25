@@ -20,6 +20,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             var requests = await _context.SalesRequests
                 .AsNoTracking()
+                .Include(x => x.Customer)
                 .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales)
                 .ToListAsync();
 
@@ -36,6 +37,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     .Select(g => new SalespersonRequestStatVm
                     {
                         SalespersonName = g.Key,
+                        Region = g.Select(x => x.Customer.Region).FirstOrDefault(),
                         TotalRequestCount = g.Count(),
                         OpenRequestCount = g.Count(IsOpenRequest),
                         ClosedRequestCount = g.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected),
