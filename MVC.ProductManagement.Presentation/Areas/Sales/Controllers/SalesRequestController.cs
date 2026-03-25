@@ -58,7 +58,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         (!string.IsNullOrWhiteSpace(currentUserName) && string.Equals(x.RequestedByName, currentUserName, StringComparison.OrdinalIgnoreCase)))
                     .ToList();
             }
-            else if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location))
+            else if (!User.IsInRole("Admin") && !isManagerUser && !string.IsNullOrWhiteSpace(profile?.Location))
             {
                 requests = requests
                     .Where(x => string.Equals(x.Customer.Region, profile.Location, StringComparison.OrdinalIgnoreCase))
@@ -104,6 +104,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var profile = await GetCurrentSalesProfileAsync();
             var region = profile?.Location;
+            var isManagerUser = await CanAccessSalesManagerPanelAsync();
 
             var requestsQuery = _context.SalesRequests
                 .AsNoTracking()
@@ -111,7 +112,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .Include(x => x.Items)
                 .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
 
-            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(region))
+            if (!User.IsInRole("Admin") && !isManagerUser && !string.IsNullOrWhiteSpace(region))
             {
                 requestsQuery = requestsQuery.Where(x => x.Customer.Region == region);
             }
@@ -164,7 +165,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             var profile = await GetCurrentSalesProfileAsync();
-            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location)
+            var isManagerUser = await CanAccessSalesManagerPanelAsync();
+            if (!User.IsInRole("Admin") && !isManagerUser && !string.IsNullOrWhiteSpace(profile?.Location)
                 && !string.Equals(entity.Customer.Region, profile.Location, StringComparison.OrdinalIgnoreCase))
             {
                 return Forbid();
