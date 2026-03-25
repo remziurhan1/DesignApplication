@@ -42,6 +42,10 @@
                 <div class="d-flex gap-2">
                     <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="btn btn-outline-danger">Talepler</a>
                     <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Create" class="btn btn-danger">+ Talep Ekle</a>
+                    @if (Model.IsManagerView)
+                    {
+                        <a asp-area="Sales" asp-controller="SalesRequest" asp-action="ManagerPanel" class="btn btn-outline-primary">Müdür Paneli</a>
+                    }
                 </div>
             </div>
         </div>

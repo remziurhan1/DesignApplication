@@ -277,6 +277,29 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public int ApprovedCount { get; set; }
     }
 
+    public class SalesManagerReviewVm
+    {
+        public int IncomingCount { get; set; }
+        public int ApprovedTodayCount { get; set; }
+        public int RejectedTodayCount { get; set; }
+        public List<SalesManagerReviewRowVm> Requests { get; set; } = new();
+    }
+
+    public class SalesManagerReviewRowVm
+    {
+        public Guid Id { get; set; }
+        public string RequestNo { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string CustomerName { get; set; } = string.Empty;
+        public string SalespersonName { get; set; } = string.Empty;
+        public string? Region { get; set; }
+        public string RevisionCode { get; set; } = string.Empty;
+        public DateTime SalesOpenedAt { get; set; }
+        public int ItemCount { get; set; }
+        public decimal? LinkedCostTotal { get; set; }
+        public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
+    }
+
     public class SalesRequestDetailItemVm
     {
         public Guid Id { get; set; }

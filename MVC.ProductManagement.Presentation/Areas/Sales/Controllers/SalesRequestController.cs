@@ -80,6 +80,107 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> ManagerPanel()
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanViewSalesPricing))
+            {
+                return Forbid();
+            }
+
+            var profile = await GetCurrentSalesProfileAsync();
+            var region = profile?.Location;
+
+            var requestsQuery = _context.SalesRequests
+                .AsNoTracking()
+                .Include(x => x.Customer)
+                .Include(x => x.Items)
+                .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+
+            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(region))
+            {
+                requestsQuery = requestsQuery.Where(x => x.Customer.Region == region);
+            }
+
+            var requests = await requestsQuery
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+
+            var today = DateTime.UtcNow.Date;
+            var vm = new SalesManagerReviewVm
+            {
+                IncomingCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.PricingInProgress || x.WorkflowStatus == SalesRequestWorkflowStatus.Submitted),
+                ApprovedTodayCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved && x.ModifiedDate.HasValue && x.ModifiedDate.Value.Date == today),
+                RejectedTodayCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected && x.ModifiedDate.HasValue && x.ModifiedDate.Value.Date == today),
+                Requests = requests.Select(x => new SalesManagerReviewRowVm
+                {
+                    Id = x.Id,
+                    RequestNo = x.RequestNo,
+                    Title = x.Title,
+                    CustomerName = x.Customer.CompanyName,
+                    SalespersonName = x.RequestedByName,
+                    Region = x.Customer.Region,
+                    RevisionCode = $"R{x.RevisionNo:00}",
+                    SalesOpenedAt = x.SalesOpenedAt,
+                    ItemCount = x.Items.Count,
+                    LinkedCostTotal = x.Items.Where(i => i.LinkedCostAnalysisTotal.HasValue).Sum(i => i.LinkedCostAnalysisTotal),
+                    WorkflowStatus = x.WorkflowStatus
+                }).ToList()
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManagerDecision(Guid id, bool approve)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanViewSalesPricing))
+            {
+                return Forbid();
+            }
+
+            var entity = await _context.SalesRequests
+                .Include(x => x.Items)
+                .Include(x => x.Customer)
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            var profile = await GetCurrentSalesProfileAsync();
+            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location)
+                && !string.Equals(entity.Customer.Region, profile.Location, StringComparison.OrdinalIgnoreCase))
+            {
+                return Forbid();
+            }
+
+            if (approve)
+            {
+                entity.WorkflowStatus = SalesRequestWorkflowStatus.Approved;
+                entity.ApprovedAt = DateTime.UtcNow;
+                foreach (var item in entity.Items.Where(x => x.WorkflowStatus != SalesRequestWorkflowStatus.Rejected))
+                {
+                    item.WorkflowStatus = SalesRequestWorkflowStatus.Approved;
+                }
+                TempData["SuccessMessage"] = $"{entity.RequestNo} satış müdürü tarafından onaylandı.";
+            }
+            else
+            {
+                entity.WorkflowStatus = SalesRequestWorkflowStatus.Rejected;
+                entity.ApprovedAt = null;
+                foreach (var item in entity.Items)
+                {
+                    item.WorkflowStatus = SalesRequestWorkflowStatus.Rejected;
+                }
+                TempData["SuccessMessage"] = $"{entity.RequestNo} satış müdürü tarafından reddedildi.";
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ManagerPanel));
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             if (!await HasSalesPermissionAsync(x => x.CanCreateSalesRequests || x.CanAccessSalesArea))

@@ -1,0 +1,91 @@
+@using MVC.ProductManagement.Domain.Enums
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesManagerReviewVm
+@{
+    ViewData["Title"] = "Satış Müdürü Paneli";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h4 class="mb-1">Satış Müdürü Paneli</h4>
+        <p class="text-muted mb-0">Gelen maliyet çalışmalarını gözden geçirip onay/red verebilirsiniz.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Talep Listesi</a>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-4">
+        <div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Gelen Çalışma</small><h4 class="mb-0">@Model.IncomingCount</h4></div></div>
+    </div>
+    <div class="col-md-4">
+        <div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Bugün Onaylanan</small><h4 class="mb-0 text-success">@Model.ApprovedTodayCount</h4></div></div>
+    </div>
+    <div class="col-md-4">
+        <div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Bugün Reddedilen</small><h4 class="mb-0 text-danger">@Model.RejectedTodayCount</h4></div></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body pt-4">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Talep No</th>
+                        <th>Müşteri</th>
+                        <th>Satışçı</th>
+                        <th>Bölge</th>
+                        <th>Revizyon</th>
+                        <th>Durum</th>
+                        <th class="text-end">Maliyet Toplamı</th>
+                        <th class="text-end">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Requests.Any())
+                    {
+                        @foreach (var row in Model.Requests)
+                        {
+                            var canDecide = row.WorkflowStatus == SalesRequestWorkflowStatus.Submitted || row.WorkflowStatus == SalesRequestWorkflowStatus.PricingInProgress;
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@row.RequestNo</div>
+                                    <small class="text-muted">@row.Title</small>
+                                </td>
+                                <td>@row.CustomerName</td>
+                                <td>@row.SalespersonName</td>
+                                <td>@(row.Region ?? "-")</td>
+                                <td>@row.RevisionCode</td>
+                                <td>@row.WorkflowStatus</td>
+                                <td class="text-end">@(row.LinkedCostTotal?.ToString("N2") ?? "-") ₺</td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <a asp-action="Details" asp-route-id="@row.Id" class="btn btn-sm btn-outline-secondary">Detay</a>
+                                        @if (canDecide)
+                                        {
+                                            <form asp-action="ManagerDecision" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@row.Id" />
+                                                <input type="hidden" name="approve" value="true" />
+                                                <button type="submit" class="btn btn-sm btn-success">Onayla</button>
+                                            </form>
+                                            <form asp-action="ManagerDecision" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@row.Id" />
+                                                <input type="hidden" name="approve" value="false" />
+                                                <button type="submit" class="btn btn-sm btn-danger">Reddet</button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="8" class="text-center text-muted">Gösterilecek maliyet çalışması yok.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
