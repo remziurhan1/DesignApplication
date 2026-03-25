@@ -336,6 +336,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var vm = MapDetailVm(entity, revisions, canViewPricing);
             vm.DocumentUpload.SalesRequestId = id;
+            var isManagerUser = await CanAccessSalesManagerPanelAsync();
+            vm.CanUploadPidDocument = isManagerUser;
+            vm.CanDownloadDocuments = entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved;
             ViewBag.WaitingManagerApproval = entity.WorkflowStatus != SalesRequestWorkflowStatus.Approved;
             return View(vm);
         }
@@ -551,7 +554,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
         public async Task<IActionResult> UploadDocument(SalesRequestDocumentUploadVm vm)
         {
-            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            if (!await CanAccessSalesManagerPanelAsync())
             {
                 return Forbid();
             }
@@ -567,6 +570,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             if (vm.File == null || vm.File.Length == 0 || string.IsNullOrWhiteSpace(vm.RevisionCode))
             {
                 TempData["ErrorMessage"] = "Doküman yüklemek için dosya ve revizyon kodu zorunludur.";
+                return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
+            }
+
+            if (vm.DocumentType != SalesDocumentType.PID)
+            {
+                TempData["ErrorMessage"] = "Bu akışta yalnızca PID dokümanı satış müdürü tarafından yüklenebilir.";
                 return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
             }
 
@@ -603,6 +612,44 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Doküman revizyonu yüklendi.";
             return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadDocument(Guid requestId, Guid documentId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var request = await _context.SalesRequests
+                .AsNoTracking()
+                .Include(x => x.Documents)
+                .FirstOrDefaultAsync(x => x.Id == requestId && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            if (request.WorkflowStatus != SalesRequestWorkflowStatus.Approved)
+            {
+                return Forbid();
+            }
+
+            var document = request.Documents.FirstOrDefault(x => x.Id == documentId);
+            if (document == null)
+            {
+                return NotFound();
+            }
+
+            var relativePath = document.FilePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+            var fullPath = Path.Combine(_environment.WebRootPath, relativePath);
+            if (!System.IO.File.Exists(fullPath))
+            {
+                return NotFound();
+            }
+
+            return PhysicalFile(fullPath, "application/octet-stream", document.OriginalFileName);
         }
 
         [HttpGet]
@@ -1004,6 +1051,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     .Select(x => new SalesRequestDocumentVm
                     {
                         Id = x.Id,
+                        DocumentTypeCode = x.DocumentType,
                         DocumentType = x.DocumentType.ToString(),
                         RevisionCode = x.RevisionCode,
                         OriginalFileName = x.OriginalFileName,
