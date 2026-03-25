@@ -6,6 +6,7 @@ using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
 using System.Security.Claims;
+using System.Text.Json.Nodes;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -342,7 +343,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var entity = await LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
-            var vm = MapDetailVm(entity, string.Equals(mode, "manager", StringComparison.OrdinalIgnoreCase));
+            var revisions = await _context.SalesRequestRevisions
+                .AsNoTracking()
+                .Where(x => x.SalesRequestId == id && x.Status != Status.Deleted)
+                .OrderByDescending(x => x.RevisionNo)
+                .ToListAsync();
+
+            var vm = MapDetailVm(entity, revisions, string.Equals(mode, "manager", StringComparison.OrdinalIgnoreCase));
             await PopulateSubItemAsync(vm.NewSubItem, id);
             return View(vm);
         }
@@ -603,7 +610,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .FirstOrDefaultAsync();
         }
 
-        private SalesRequestDetailVm MapDetailVm(SalesRequest entity, bool isManagerView)
+        private SalesRequestDetailVm MapDetailVm(SalesRequest entity, List<SalesRequestRevision> revisions, bool isManagerView)
         {
             var itemMap = entity.Items
                 .OrderBy(x => x.DisplayOrder)
@@ -700,6 +707,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CustomerQuoteStatus = entity.CustomerQuoteStatus,
                 RevisionNo = entity.RevisionNo,
                 IsManagerView = isManagerView,
+                RevisionHistory = revisions.Select(x => new SalesRequestRevisionHistoryVm
+                {
+                    RevisionNo = x.RevisionNo,
+                    RevisionReason = x.RevisionReason,
+                    RevisedBy = x.RevisedByName,
+                    RevisedAt = x.RevisedAt
+                }).ToList(),
+                RevisionCosts = BuildRevisionCosts(entity, revisions),
                 Items = roots,
                 Attachments = entity.Attachments.Select(x => new SalesRequestAttachmentVm
                 {
@@ -709,6 +724,91 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 }).ToList(),
                 NewSubItem = new SalesRequestAddSubItemVm { SalesRequestId = entity.Id }
             };
+        }
+
+        private static List<SalesRequestRevisionCostVm> BuildRevisionCosts(SalesRequest entity, List<SalesRequestRevision> revisions)
+        {
+            var revisionCosts = new List<SalesRequestRevisionCostVm>();
+
+            foreach (var revision in revisions.OrderByDescending(x => x.RevisionNo))
+            {
+                var items = ParseSnapshotItems(revision.SnapshotJson);
+                revisionCosts.Add(new SalesRequestRevisionCostVm
+                {
+                    RevisionNo = revision.RevisionNo,
+                    RevisionReason = revision.RevisionReason,
+                    RevisedBy = revision.RevisedByName,
+                    RevisedAt = revision.RevisedAt,
+                    Items = items,
+                    TotalCost = items.Where(x => x.LinkedCostAnalysisTotal.HasValue).Sum(x => x.LinkedCostAnalysisTotal)
+                });
+            }
+
+            var currentItems = entity.Items
+                .OrderBy(x => x.DisplayOrder)
+                .Select(x => new SalesRequestRevisionCostItemVm
+                {
+                    ItemCode = x.ItemCode,
+                    ItemTitle = x.ItemTitle,
+                    CapacityM3 = x.CapacityM3,
+                    LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
+                    LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal
+                })
+                .ToList();
+
+            revisionCosts.Insert(0, new SalesRequestRevisionCostVm
+            {
+                RevisionNo = entity.RevisionNo,
+                RevisionReason = "Aktif revizyon",
+                RevisedBy = entity.RequestedByName,
+                RevisedAt = entity.ModifiedDate ?? entity.CreatedDate,
+                Items = currentItems,
+                TotalCost = currentItems.Where(x => x.LinkedCostAnalysisTotal.HasValue).Sum(x => x.LinkedCostAnalysisTotal)
+            });
+
+            return revisionCosts
+                .GroupBy(x => x.RevisionNo)
+                .Select(x => x.First())
+                .OrderByDescending(x => x.RevisionNo)
+                .ToList();
+        }
+
+        private static List<SalesRequestRevisionCostItemVm> ParseSnapshotItems(string snapshotJson)
+        {
+            var result = new List<SalesRequestRevisionCostItemVm>();
+            if (string.IsNullOrWhiteSpace(snapshotJson))
+            {
+                return result;
+            }
+
+            try
+            {
+                var root = JsonNode.Parse(snapshotJson);
+                var items = root?["Items"]?.AsArray();
+                if (items == null)
+                {
+                    return result;
+                }
+
+                foreach (var item in items)
+                {
+                    if (item == null) continue;
+                    result.Add(new SalesRequestRevisionCostItemVm
+                    {
+                        ItemCode = item["ItemCode"]?.GetValue<string?>() ?? "-",
+                        ItemTitle = item["ItemTitle"]?.GetValue<string?>() ?? "-",
+                        CapacityM3 = item["CapacityM3"]?.GetValue<decimal?>() ?? 0,
+                        LinkedCostAnalysisRevisionCode = item["LinkedCostAnalysisRevisionCode"]?.GetValue<string?>(),
+                        LinkedCostAnalysisTotal = item["LinkedCostAnalysisTotal"]?.GetValue<decimal?>()
+                    });
+                }
+            }
+            catch
+            {
+                return result;
+            }
+
+            return result;
         }
 
         private async Task<List<SalesRequestPricingAnalysisOptionVm>> GetAvailableAnalysesAsync()
