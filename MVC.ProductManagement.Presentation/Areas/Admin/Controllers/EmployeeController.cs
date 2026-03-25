@@ -115,5 +115,67 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var profile = await _context.EmployeeProfiles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new EmployeeUpdateVm
+            {
+                Id = profile.Id,
+                FullName = profile.FullName,
+                Department = profile.Department,
+                DepartmentRole = profile.DepartmentRole,
+                Title = profile.Title,
+                Number = profile.Number,
+                Email = profile.Email,
+                Location = profile.Location,
+                CanAccessSalesArea = profile.CanAccessSalesArea,
+                CanManageSalesCustomers = profile.CanManageSalesCustomers,
+                CanCreateSalesRequests = profile.CanCreateSalesRequests,
+                CanViewSalesPricing = profile.CanViewSalesPricing
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EmployeeUpdateVm vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            var profile = await _context.EmployeeProfiles.FirstOrDefaultAsync(x => x.Id == vm.Id && x.Status != Status.Deleted);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            profile.FullName = vm.FullName;
+            profile.Department = vm.Department;
+            profile.DepartmentRole = vm.DepartmentRole;
+            profile.Title = vm.Title;
+            profile.Number = vm.Number;
+            profile.Email = vm.Email;
+            profile.Location = vm.Location;
+            profile.CanAccessSalesArea = vm.CanAccessSalesArea;
+            profile.CanManageSalesCustomers = vm.CanManageSalesCustomers;
+            profile.CanCreateSalesRequests = vm.CanCreateSalesRequests;
+            profile.CanViewSalesPricing = vm.CanViewSalesPricing;
+
+            await _context.SaveChangesAsync();
+            SuccesNotyf("Satışçı bilgileri güncellendi.");
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

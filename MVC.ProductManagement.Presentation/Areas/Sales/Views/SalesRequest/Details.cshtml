@@ -113,6 +113,7 @@
                         <div class="col-md-4"><strong>Müşteri:</strong><div>@Model.CustomerName</div></div>
                         <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
                         <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.CustomerQuoteStatus)">@CustomerStatusText(Model.CustomerQuoteStatus)</span></div></div>
+                        <div class="col-md-4"><strong>Teklif durumu:</strong><div>@Model.OfferStatus</div></div>
                         <div class="col-md-4"><strong>Revizyon:</strong><div>@Model.RevisionCode</div></div>
                         <div class="col-md-4"><strong>Müşteri Bildirim Durumu:</strong><div>@Model.CustomerQuoteStatus</div></div>
                         <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
@@ -138,6 +139,16 @@
                         <div class="input-group">
                             <select asp-for="CustomerQuoteStatus" name="customerQuoteStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesCustomerQuoteStatus>()"></select>
                             <button type="submit" class="btn btn-primary">Güncelle</button>
+                        </div>
+                    </form>
+
+                    <h5 class="card-title">Teklif Durumu</h5>
+                    <form asp-action="UpdateOfferStatus" method="post" class="mb-4">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="input-group">
+                            <select asp-for="OfferStatus" name="offerStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()"></select>
+                            <button type="submit" class="btn btn-outline-primary">Güncelle</button>
                         </div>
                     </form>
 
@@ -186,25 +197,37 @@
             <div class="card mt-3">
                 <div class="card-body pt-4">
                     <h5 class="card-title">Dokümanlar (GAD / P&ID / Datasheet)</h5>
-                    <form asp-action="UploadDocument" method="post" enctype="multipart/form-data" class="row g-2 mb-3">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="SalesRequestId" value="@Model.Id" />
-                        <div class="col-4">
-                            <select name="DocumentType" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<SalesDocumentType>()"></select>
-                        </div>
-                        <div class="col-4">
-                            <input name="RevisionCode" class="form-control form-control-sm" placeholder="Revizyon (D01)" />
-                        </div>
-                        <div class="col-4">
-                            <input type="file" name="File" class="form-control form-control-sm" />
-                        </div>
-                        <div class="col-8">
-                            <input name="LinkedCostAnalysisRevisionCode" class="form-control form-control-sm" placeholder="Bağlı maliyet revizyonu (opsiyonel)" />
-                        </div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-sm btn-primary w-100">Doküman Yükle</button>
-                        </div>
-                    </form>
+                    <div class="alert alert-info py-2 small">
+                        Maliyet analizi ile birlikte şartname ve datasheet otomatik oluşturulur. GAD otomatik oluşturma planlandı (henüz geliştirilmedi).
+                    </div>
+
+                    @if (Model.CanUploadPidDocument)
+                    {
+                        <form asp-action="UploadDocument" method="post" enctype="multipart/form-data" class="row g-2 mb-3">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="SalesRequestId" value="@Model.Id" />
+                            <input type="hidden" name="DocumentType" value="@SalesDocumentType.PID" />
+                            <div class="col-4">
+                                <input class="form-control form-control-sm" value="PID" disabled />
+                            </div>
+                            <div class="col-4">
+                                <input name="RevisionCode" class="form-control form-control-sm" placeholder="Revizyon (P01)" />
+                            </div>
+                            <div class="col-4">
+                                <input type="file" name="File" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-8">
+                                <input name="LinkedCostAnalysisRevisionCode" class="form-control form-control-sm" placeholder="Bağlı maliyet revizyonu (opsiyonel)" />
+                            </div>
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-sm btn-primary w-100">PID Yükle</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="text-muted small mb-3">PID yükleme sadece satış müdürü tarafından yapılabilir.</div>
+                    }
 
                     @if (Model.Documents.Any())
                     {
@@ -221,7 +244,14 @@
                                                 <span class="badge bg-warning text-dark">Aktif Revizyon</span>
                                             }
                                             <div class="mt-1">
-                                                <a href="@document.FilePath" target="_blank">@document.OriginalFileName</a>
+                                                @if (Model.CanDownloadDocuments)
+                                                {
+                                                    <a href="@Url.Action("DownloadDocument", "SalesRequest", new { area = "Sales", requestId = Model.Id, documentId = document.Id })">@document.OriginalFileName</a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">@document.OriginalFileName (Onay sonrası indirilebilir)</span>
+                                                }
                                             </div>
                                         </div>
                                         <small class="text-muted text-end">

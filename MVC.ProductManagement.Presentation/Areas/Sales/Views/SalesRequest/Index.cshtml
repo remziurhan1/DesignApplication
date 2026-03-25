@@ -60,6 +60,7 @@
                             <th>İhtiyaç Tarihi</th>
                             <th>Durum</th>
                             <th>Müşteri Bildirimi</th>
+                            <th>Teklif Durumu</th>
                             <th>Revizyon</th>
                             <th>Onaylı Toplam</th>
                             <th></th>
@@ -80,6 +81,7 @@
                                 <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
                                 <td><span class="badge @CostingStatusClass(item)">@CostingStatusText(item)</span></td>
                                 <td><span class="badge @StatusClass(item.CustomerQuoteStatus)">@CustomerStatusText(item.CustomerQuoteStatus)</span></td>
+                                <td>@item.OfferStatus</td>
                                 <td>@item.RevisionCode</td>
                                 <td>@((item.ApprovedSalesPriceTotal ?? 0).ToString("N2")) ₺</td>
                                 <td class="text-end">
@@ -91,7 +93,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="9" class="text-center text-muted py-4">Henüz talep bulunmuyor.</td>
+                            <td colspan="10" class="text-center text-muted py-4">Henüz talep bulunmuyor.</td>
                         </tr>
                     }
                     </tbody>

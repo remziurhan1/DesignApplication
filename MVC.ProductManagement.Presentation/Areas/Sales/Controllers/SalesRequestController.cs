@@ -58,7 +58,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         (!string.IsNullOrWhiteSpace(currentUserName) && string.Equals(x.RequestedByName, currentUserName, StringComparison.OrdinalIgnoreCase)))
                     .ToList();
             }
-            else if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location))
+            else if (!User.IsInRole("Admin") && !isManagerUser && !string.IsNullOrWhiteSpace(profile?.Location))
             {
                 requests = requests
                     .Where(x => string.Equals(x.Customer.Region, profile.Location, StringComparison.OrdinalIgnoreCase))
@@ -83,6 +83,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     NeededByDate = x.NeededByDate,
                     WorkflowStatus = x.WorkflowStatus,
                     CustomerQuoteStatus = x.CustomerQuoteStatus,
+                    OfferStatus = x.OfferStatus,
                     RevisionNo = x.RevisionNo,
                     ItemCount = x.Items.Count,
                     AttachmentCount = x.Attachments.Count,
@@ -104,6 +105,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var profile = await GetCurrentSalesProfileAsync();
             var region = profile?.Location;
+            var isManagerUser = await CanAccessSalesManagerPanelAsync();
 
             var requestsQuery = _context.SalesRequests
                 .AsNoTracking()
@@ -111,7 +113,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .Include(x => x.Items)
                 .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
 
-            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(region))
+            if (!User.IsInRole("Admin") && !isManagerUser && !string.IsNullOrWhiteSpace(region))
             {
                 requestsQuery = requestsQuery.Where(x => x.Customer.Region == region);
             }
@@ -164,7 +166,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             var profile = await GetCurrentSalesProfileAsync();
-            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location)
+            var isManagerUser = await CanAccessSalesManagerPanelAsync();
+            if (!User.IsInRole("Admin") && !isManagerUser && !string.IsNullOrWhiteSpace(profile?.Location)
                 && !string.Equals(entity.Customer.Region, profile.Location, StringComparison.OrdinalIgnoreCase))
             {
                 return Forbid();
@@ -206,6 +209,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             var vm = new SalesRequestCreateVm
             {
                 RequestSource = SalesRequestSource.Sales,
+                OfferStatus = SalesOfferStatus.F,
                 Items = new List<SalesRequestItemInputVm> { new() }
             };
 
@@ -260,6 +264,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 IsTransportByCustomer = vm.IsTransportByCustomer,
                 SummaryNotes = vm.SummaryNotes,
                 WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
+                OfferStatus = vm.OfferStatus,
                 SalesOpenedAt = DateTime.UtcNow
             };
 
@@ -336,6 +341,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var vm = MapDetailVm(entity, revisions, canViewPricing);
             vm.DocumentUpload.SalesRequestId = id;
+            var isManagerUser = await CanAccessSalesManagerPanelAsync();
+            vm.CanUploadPidDocument = isManagerUser;
+            vm.CanDownloadDocuments = entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved;
             ViewBag.WaitingManagerApproval = entity.WorkflowStatus != SalesRequestWorkflowStatus.Approved;
             return View(vm);
         }
@@ -366,6 +374,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 ShipmentCountry = entity.ShipmentCountry,
                 InstallationCountry = entity.InstallationCountry,
                 IsTransportByCustomer = entity.IsTransportByCustomer,
+                OfferStatus = entity.OfferStatus,
                 SummaryNotes = entity.SummaryNotes,
                 Items = entity.Items
                     .OrderBy(x => x.DisplayOrder)
@@ -464,6 +473,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             entity.Title = await BuildRequestTitleAsync(vm.Items.First());
             entity.WorkflowStatus = SalesRequestWorkflowStatus.Submitted;
             entity.CustomerQuoteStatus = SalesCustomerQuoteStatus.PreparingSpecification;
+            entity.OfferStatus = vm.OfferStatus;
             entity.PricingCompletedAt = null;
             entity.ApprovedAt = null;
             entity.RevisionNo += 1;
@@ -548,10 +558,32 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateOfferStatus(Guid id, SalesOfferStatus offerStatus)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var entity = await _context.SalesRequests
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            entity.OfferStatus = offerStatus;
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Teklif durumu güncellendi.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
         public async Task<IActionResult> UploadDocument(SalesRequestDocumentUploadVm vm)
         {
-            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            if (!await CanAccessSalesManagerPanelAsync())
             {
                 return Forbid();
             }
@@ -567,6 +599,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             if (vm.File == null || vm.File.Length == 0 || string.IsNullOrWhiteSpace(vm.RevisionCode))
             {
                 TempData["ErrorMessage"] = "Doküman yüklemek için dosya ve revizyon kodu zorunludur.";
+                return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
+            }
+
+            if (vm.DocumentType != SalesDocumentType.PID)
+            {
+                TempData["ErrorMessage"] = "Bu akışta yalnızca PID dokümanı satış müdürü tarafından yüklenebilir.";
                 return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
             }
 
@@ -603,6 +641,44 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Doküman revizyonu yüklendi.";
             return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadDocument(Guid requestId, Guid documentId)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var request = await _context.SalesRequests
+                .AsNoTracking()
+                .Include(x => x.Documents)
+                .FirstOrDefaultAsync(x => x.Id == requestId && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            if (request.WorkflowStatus != SalesRequestWorkflowStatus.Approved)
+            {
+                return Forbid();
+            }
+
+            var document = request.Documents.FirstOrDefault(x => x.Id == documentId);
+            if (document == null)
+            {
+                return NotFound();
+            }
+
+            var relativePath = document.FilePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+            var fullPath = Path.Combine(_environment.WebRootPath, relativePath);
+            if (!System.IO.File.Exists(fullPath))
+            {
+                return NotFound();
+            }
+
+            return PhysicalFile(fullPath, "application/octet-stream", document.OriginalFileName);
         }
 
         [HttpGet]
@@ -988,6 +1064,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 SummaryNotes = entity.SummaryNotes,
                 WorkflowStatus = entity.WorkflowStatus,
                 CustomerQuoteStatus = entity.CustomerQuoteStatus,
+                OfferStatus = entity.OfferStatus,
                 RevisionNo = entity.RevisionNo,
                 IsManagerView = false,
                 RevisionHistory = revisions.Select(x => new SalesRequestRevisionHistoryVm
@@ -1004,6 +1081,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     .Select(x => new SalesRequestDocumentVm
                     {
                         Id = x.Id,
+                        DocumentTypeCode = x.DocumentType,
                         DocumentType = x.DocumentType.ToString(),
                         RevisionCode = x.RevisionCode,
                         OriginalFileName = x.OriginalFileName,

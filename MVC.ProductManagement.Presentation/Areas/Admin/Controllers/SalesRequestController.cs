@@ -65,7 +65,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var vm = new SalesRequestCreateVm();
+            var vm = new SalesRequestCreateVm { OfferStatus = SalesOfferStatus.F };
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
             await PopulateFormAsync(vm);
             return View(vm);
@@ -112,6 +112,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 IsTransportByCustomer = vm.IsTransportByCustomer,
                 SummaryNotes = vm.SummaryNotes,
                 WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
+                OfferStatus = vm.OfferStatus,
                 SalesOpenedAt = DateTime.UtcNow
             };
 
@@ -184,6 +185,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RequestedByDepartment = entity.RequestedByDepartment,
                 NeededByDate = entity.NeededByDate,
                 RequestSource = entity.RequestSource,
+                OfferStatus = entity.OfferStatus,
                 ShipmentCountry = entity.ShipmentCountry,
                 InstallationCountry = entity.InstallationCountry,
                 IsTransportByCustomer = entity.IsTransportByCustomer,
@@ -274,6 +276,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.Title = await BuildRequestTitleAsync(vm.Items.First());
             entity.WorkflowStatus = SalesRequestWorkflowStatus.Submitted;
             entity.CustomerQuoteStatus = SalesCustomerQuoteStatus.PreparingSpecification;
+            entity.OfferStatus = vm.OfferStatus;
             entity.PricingCompletedAt = null;
             entity.ApprovedAt = null;
 
@@ -705,6 +708,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 SummaryNotes = entity.SummaryNotes,
                 WorkflowStatus = entity.WorkflowStatus,
                 CustomerQuoteStatus = entity.CustomerQuoteStatus,
+                OfferStatus = entity.OfferStatus,
                 RevisionNo = entity.RevisionNo,
                 IsManagerView = isManagerView,
                 RevisionHistory = revisions.Select(x => new SalesRequestRevisionHistoryVm
