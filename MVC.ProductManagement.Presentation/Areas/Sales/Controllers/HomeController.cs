@@ -24,7 +24,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 return Forbid();
             }
 
-            var requests = await _context.SalesRequests
+            var allRequests = await _context.SalesRequests
                 .AsNoTracking()
                 .Include(x => x.Customer)
                 .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales)
@@ -32,22 +32,26 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var profile = await GetCurrentSalesProfileAsync();
             var region = profile?.Location;
-            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(region))
-            {
-                requests = requests.Where(x => x.Customer.Region == region).ToList();
-            }
 
             var currentUserName = User.Identity?.Name;
             var currentUserEmail = User.FindFirstValue(ClaimTypes.Email);
-            var myRequests = requests.Where(x =>
-                    (!string.IsNullOrWhiteSpace(currentUserEmail) && x.RequestedByEmail == currentUserEmail) ||
-                    (!string.IsNullOrWhiteSpace(currentUserName) && x.RequestedByName == currentUserName))
+            var myRequests = allRequests.Where(x =>
+                    (!string.IsNullOrWhiteSpace(profile?.Email) && string.Equals(x.RequestedByEmail, profile.Email, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrWhiteSpace(currentUserEmail) && string.Equals(x.RequestedByEmail, currentUserEmail, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrWhiteSpace(profile?.FullName) && string.Equals(x.RequestedByName, profile.FullName, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrWhiteSpace(currentUserName) && string.Equals(x.RequestedByName, currentUserName, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
             var canAccessManagerPanel = await CanAccessSalesManagerPanelAsync();
             var canViewTeamDashboard = canAccessManagerPanel;
+            var managerRequests = allRequests;
+            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(region))
+            {
+                managerRequests = allRequests.Where(x => x.Customer.Region == region).ToList();
+            }
+
             var vm = BuildDashboardVm(
-                canViewTeamDashboard ? requests : myRequests,
+                canViewTeamDashboard ? managerRequests : myRequests,
                 canViewTeamDashboard,
                 canAccessManagerPanel,
                 region,

@@ -17,6 +17,20 @@
         SalesCustomerQuoteStatus.NotShared => "bg-secondary",
         _ => "bg-warning text-dark"
     };
+
+    string CostingStatusText(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestListVm request) => request.WorkflowStatus switch
+    {
+        SalesRequestWorkflowStatus.Approved => "Fiyat Onaylandı",
+        _ when request.HasCostAnalysis => "Maliyet Onayı Bekleniyor",
+        _ => "Maliyet Çalışması Bekleniyor"
+    };
+
+    string CostingStatusClass(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestListVm request) => request.WorkflowStatus switch
+    {
+        SalesRequestWorkflowStatus.Approved => "bg-success",
+        _ when request.HasCostAnalysis => "bg-warning text-dark",
+        _ => "bg-secondary"
+    };
 }
 
 <div class="pagetitle d-flex justify-content-between align-items-center">
@@ -64,8 +78,8 @@
                                 <td>@item.CustomerName</td>
                                 <td>@item.RequestedByName</td>
                                 <td>@item.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
+                                <td><span class="badge @CostingStatusClass(item)">@CostingStatusText(item)</span></td>
                                 <td><span class="badge @StatusClass(item.CustomerQuoteStatus)">@CustomerStatusText(item.CustomerQuoteStatus)</span></td>
-                                <td>@item.CustomerQuoteStatus</td>
                                 <td>@item.RevisionCode</td>
                                 <td>@((item.ApprovedSalesPriceTotal ?? 0).ToString("N2")) ₺</td>
                                 <td class="text-end">

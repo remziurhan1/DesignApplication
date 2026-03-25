@@ -31,6 +31,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public int ItemCount { get; set; }
         public int AttachmentCount { get; set; }
         public decimal? ApprovedSalesPriceTotal { get; set; }
+        public bool HasCostAnalysis { get; set; }
     }
 
     public class SalesRequestCreateVm
