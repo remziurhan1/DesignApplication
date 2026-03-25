@@ -5,7 +5,7 @@
     var departments = new[] { "Satış", "Dizayn", "Planlama", "Kalite", "Satın Alma", "Üretim", "Proje", "Teklif Hazırlama" };
     var departmentRoles = new[] { "Satış Mühendisi", "Dizayn Mühendisi", "Planlama Mühendisi", "Kalite Mühendisi", "Satın Alma Mühendisi", "Üretim Mühendisi", "Proje Mühendisi", "Teklif Hazırlama" };
     var titles = new[] { "Mühendis", "Şef", "Müdür" };
-    var locations = new[] { "İdari Bina", "Teknik Ofis" };
+    var locations = new[] { "Europe", "MiddleEast", "Turkey", "CIS", "Africa", "AsiaPacific", "Americas", "Other" };
 }
 
 <h2 class="mb-3">Yeni Çalışan Oluştur</h2>
@@ -42,7 +42,7 @@
                     <input asp-for="Number" class="form-control" />
                 </div>
                 <div class="col-md-4">
-                    <label asp-for="Location" class="form-label">Lokasyon</label>
+                    <label asp-for="Location" class="form-label">Bölge</label>
                     <select asp-for="Location" class="form-select" asp-items="@(new SelectList(locations))"></select>
                 </div>
                 <div class="col-md-4">

@@ -219,8 +219,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public bool IsManagerView { get; set; }
         public List<SalesRequestRevisionHistoryVm> RevisionHistory { get; set; } = new();
         public List<SalesRequestRevisionCostVm> RevisionCosts { get; set; } = new();
+        public List<SalesRequestDocumentVm> Documents { get; set; } = new();
         public List<SalesRequestDetailItemVm> Items { get; set; } = new();
         public List<SalesRequestAttachmentVm> Attachments { get; set; } = new();
+        public SalesRequestDocumentUploadVm DocumentUpload { get; set; } = new();
         public SalesRequestAddSubItemVm NewSubItem { get; set; } = new();
     }
 
@@ -357,6 +359,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string OriginalFileName { get; set; } = string.Empty;
         public string RelativePath { get; set; } = string.Empty;
         public long FileSize { get; set; }
+    }
+
+    public class SalesRequestDocumentVm
+    {
+        public Guid Id { get; set; }
+        public string DocumentType { get; set; } = string.Empty;
+        public string RevisionCode { get; set; } = string.Empty;
+        public string OriginalFileName { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
+        public bool IsCurrent { get; set; }
+        public string? LinkedCostAnalysisRevisionCode { get; set; }
+        public DateTime UploadedAt { get; set; }
+        public string UploadedBy { get; set; } = string.Empty;
+    }
+
+    public class SalesRequestDocumentUploadVm
+    {
+        public Guid SalesRequestId { get; set; }
+        public SalesDocumentType DocumentType { get; set; }
+        public string RevisionCode { get; set; } = string.Empty;
+        public Guid? SalesRequestItemId { get; set; }
+        public Guid? LinkedCostAnalysisId { get; set; }
+        public string? LinkedCostAnalysisRevisionCode { get; set; }
+        public string? Notes { get; set; }
+        public IFormFile? File { get; set; }
     }
 
     public class SalesRequestTechnicalDetailsVm

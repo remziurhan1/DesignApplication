@@ -410,6 +410,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             var entity = await _context.SalesRequests
                 .Include(x => x.Items)
+                .Include(x => x.Documents)
                 .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted);
             if (entity == null) return NotFound();
 
@@ -465,6 +466,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 : SalesRequestWorkflowStatus.PricingInProgress;
             entity.PricingCompletedAt = DateTime.UtcNow;
             entity.ApprovedAt = entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved ? DateTime.UtcNow : null;
+            await EnsureAutoTechnicalDocumentsAsync(entity);
 
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Talep kalemleri güncellendi. Satış yöneticisi onayı sonrası satış sorumlusu ekranına gönderildi.";
@@ -475,6 +477,80 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
 
             return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
+        }
+
+        private async Task EnsureAutoTechnicalDocumentsAsync(SalesRequest request)
+        {
+            var requestFolder = Path.Combine(_environment.WebRootPath, "uploads", "sales-documents", request.Id.ToString("N"));
+            Directory.CreateDirectory(requestFolder);
+
+            foreach (var item in request.Items.Where(x => x.LinkedCostAnalysisId.HasValue))
+            {
+                var revisionCode = item.LinkedCostAnalysisRevisionCode ?? $"R{request.RevisionNo:00}";
+
+                foreach (var oldCurrent in request.Documents.Where(x => x.SalesRequestItemId == item.Id && x.DocumentType != SalesDocumentType.PID && x.IsCurrent))
+                {
+                    oldCurrent.IsCurrent = false;
+                }
+
+                var datasheetPath = $"/Sales/SalesRequest/DownloadSpecificationWord?requestId={request.Id}&itemId={item.Id}";
+                UpsertAutoDocument(request, item, SalesDocumentType.Datasheet, revisionCode, datasheetPath, $"{item.ItemCode}_Datasheet_{revisionCode}.docx");
+
+                var gadFileName = $"GAD_{item.ItemCode}_{revisionCode}.txt";
+                var gadDiskPath = Path.Combine(requestFolder, gadFileName);
+                if (!System.IO.File.Exists(gadDiskPath))
+                {
+                    await System.IO.File.WriteAllTextAsync(
+                        gadDiskPath,
+                        $"GAD otomatik taslak dosyası. Item: {item.ItemCode}, Revizyon: {revisionCode}, Tarih: {DateTime.UtcNow:O}");
+                }
+
+                var gadRelativePath = $"/uploads/sales-documents/{request.Id:N}/{gadFileName}";
+                UpsertAutoDocument(request, item, SalesDocumentType.GAD, revisionCode, gadRelativePath, gadFileName);
+            }
+        }
+
+        private static void UpsertAutoDocument(
+            SalesRequest request,
+            SalesRequestItem item,
+            SalesDocumentType documentType,
+            string revisionCode,
+            string filePath,
+            string originalFileName)
+        {
+            var existing = request.Documents.FirstOrDefault(x =>
+                x.SalesRequestItemId == item.Id &&
+                x.DocumentType == documentType &&
+                x.RevisionCode == revisionCode);
+
+            if (existing != null)
+            {
+                existing.FilePath = filePath;
+                existing.OriginalFileName = originalFileName;
+                existing.IsCurrent = true;
+                existing.UploadedAt = DateTime.UtcNow;
+                existing.UploadedBy = "System-Auto";
+                existing.LinkedCostAnalysisId = item.LinkedCostAnalysisId;
+                existing.LinkedCostAnalysisRevisionCode = item.LinkedCostAnalysisRevisionCode;
+                existing.Notes = "Maliyet analizi bağlantısından otomatik üretildi.";
+                return;
+            }
+
+            request.Documents.Add(new SalesRequestDocument
+            {
+                SalesRequestId = request.Id,
+                SalesRequestItemId = item.Id,
+                DocumentType = documentType,
+                RevisionCode = revisionCode,
+                FilePath = filePath,
+                OriginalFileName = originalFileName,
+                UploadedBy = "System-Auto",
+                UploadedAt = DateTime.UtcNow,
+                IsCurrent = true,
+                LinkedCostAnalysisId = item.LinkedCostAnalysisId,
+                LinkedCostAnalysisRevisionCode = item.LinkedCostAnalysisRevisionCode,
+                Notes = "Maliyet analizi bağlantısından otomatik üretildi."
+            });
         }
 
         [HttpPost]

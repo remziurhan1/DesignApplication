@@ -185,6 +185,61 @@
 
             <div class="card mt-3">
                 <div class="card-body pt-4">
+                    <h5 class="card-title">Dokümanlar (GAD / P&ID / Datasheet)</h5>
+                    <div class="alert alert-info py-2 small">
+                        Datasheet ve GAD, maliyet analizi bağlandığında sistem tarafından otomatik oluşturulur.
+                        P&amp;ID dokümanı sadece satış müdürü tarafından yüklenebilir.
+                    </div>
+                    @if (ViewBag.CanUploadPid is bool canUploadPid && canUploadPid)
+                    {
+                        <form asp-action="UploadDocument" method="post" enctype="multipart/form-data" class="row g-2 mb-3">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="SalesRequestId" value="@Model.Id" />
+                            <input type="hidden" name="DocumentType" value="@SalesDocumentType.PID" />
+                            <div class="col-4">
+                                <input name="RevisionCode" class="form-control form-control-sm" placeholder="P&ID Revizyonu (P01)" />
+                            </div>
+                            <div class="col-4">
+                                <input type="file" name="File" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-sm btn-primary w-100">P&ID Yükle</button>
+                            </div>
+                        </form>
+                    }
+
+                    @if (Model.Documents.Any())
+                    {
+                        <ul class="list-group list-group-flush mb-3">
+                            @foreach (var document in Model.Documents)
+                            {
+                                <li class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between align-items-start gap-2">
+                                        <div>
+                                            <span class="badge bg-dark">@document.DocumentType</span>
+                                            <span class="badge bg-@(document.IsCurrent ? "success" : "secondary")">@document.RevisionCode</span>
+                                            @if (document.IsCurrent)
+                                            {
+                                                <span class="badge bg-warning text-dark">Aktif Revizyon</span>
+                                            }
+                                            <div class="mt-1">
+                                                <a href="@document.FilePath" target="_blank">@document.OriginalFileName</a>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted text-end">
+                                            @document.UploadedBy <br />
+                                            @document.UploadedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                        </small>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Henüz doküman yüklenmedi.</p>
+                    }
+
                     <h5 class="card-title">Revizyon / Maliyet Geçmişi</h5>
                     @if (Model.RevisionCosts.Any())
                     {
