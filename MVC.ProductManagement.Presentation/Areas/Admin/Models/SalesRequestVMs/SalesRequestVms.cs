@@ -225,6 +225,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public List<SalesRequestAttachmentVm> Attachments { get; set; } = new();
         public SalesRequestDocumentUploadVm DocumentUpload { get; set; } = new();
         public SalesRequestAddSubItemVm NewSubItem { get; set; } = new();
+        public bool CanUploadPidDocument { get; set; }
+        public bool CanDownloadDocuments { get; set; }
     }
 
     public class SalesRequestRevisionHistoryVm
@@ -378,6 +380,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
     public class SalesRequestDocumentVm
     {
         public Guid Id { get; set; }
+        public SalesDocumentType DocumentTypeCode { get; set; }
         public string DocumentType { get; set; } = string.Empty;
         public string RevisionCode { get; set; } = string.Empty;
         public string OriginalFileName { get; set; } = string.Empty;
