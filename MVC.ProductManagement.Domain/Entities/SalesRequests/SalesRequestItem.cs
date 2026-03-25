@@ -58,5 +58,6 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public virtual SalesRequestProductGroup ProductGroup { get; set; } = default!;
         public virtual SalesRequestItem? ParentItem { get; set; }
         public virtual ICollection<SalesRequestItem> ChildItems { get; set; } = new List<SalesRequestItem>();
+        public virtual ICollection<SalesRequestDocument> Documents { get; set; } = new List<SalesRequestDocument>();
     }
 }

@@ -235,17 +235,20 @@
             </li>
 
             <li class="nav-item">
-                <a asp-area="Sales" asp-controller="Home" asp-action="Index" class="nav-link collapsed">
-                    <i class="bi bi-shop"></i>
-                    <span>Satış Ekranı</span>
+                <a class="nav-link collapsed"
+                   data-bs-target="#sales-org-nav"
+                   data-bs-toggle="collapse"
+                   href="#">
+                    <i class="bi bi-diagram-3"></i>
+                    <span>Satış Organizasyonu</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-            </li>
-
-            <li class="nav-item">
-                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="nav-link collapsed">
-                    <i class="bi bi-person-badge"></i>
-                    <span>Satış Sorumlusu</span>
-                </a>
+                <ul id="sales-org-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li><a asp-area="Sales" asp-controller="Home" asp-action="Index"><i class="bi bi-circle"></i><span>Satış Dashboard</span></a></li>
+                    <li><a asp-area="Sales" asp-controller="SalesRequest" asp-action="ManagerPanel"><i class="bi bi-circle"></i><span>Satış Müdürü</span></a></li>
+                    <li><a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index"><i class="bi bi-circle"></i><span>Satış Sorumlusu</span></a></li>
+                    <li><a asp-area="Admin" asp-controller="Employee" asp-action="Index"><i class="bi bi-circle"></i><span>Roller ve Yetkiler</span></a></li>
+                </ul>
             </li>
 
             <li class="nav-item">

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
 using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Presentation.Helpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -43,7 +45,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create() => View(new CustomerFormVm());
+        public IActionResult Create()
+        {
+            var vm = new CustomerFormVm();
+            PopulateSelections(vm);
+            return View(vm);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
@@ -78,7 +85,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CustomerFormVm vm)
         {
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                PopulateSelections(vm);
+                return View(vm);
+            }
 
             var entity = new Customer
             {
@@ -94,7 +105,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Country = vm.Country,
                 Sector = vm.Sector,
                 MainDealerCountry = vm.MainDealerCountry,
-                Region = vm.Region,
+                Region = SalesRegionHelper.ResolveRegion(vm.Country, vm.Region),
                 TaxNumber = vm.TaxNumber,
                 TaxOffice = vm.TaxOffice,
                 Notes = vm.Notes,
@@ -112,7 +123,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var entity = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id && x.Status != Domain.Enums.Status.Deleted);
             if (entity == null) return NotFound();
 
-            return View(new CustomerFormVm
+            var vm = new CustomerFormVm
             {
                 Id = entity.Id,
                 CompanyName = entity.CompanyName,
@@ -132,14 +143,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TaxOffice = entity.TaxOffice,
                 Notes = entity.Notes,
                 IsActive = entity.IsActive
-            });
+            };
+            PopulateSelections(vm);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CustomerFormVm vm)
         {
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                PopulateSelections(vm);
+                return View(vm);
+            }
             if (vm.Id == null) return BadRequest();
 
             var entity = await _context.Customers.FirstOrDefaultAsync(x => x.Id == vm.Id && x.Status != Domain.Enums.Status.Deleted);
@@ -157,7 +174,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.Country = vm.Country;
             entity.Sector = vm.Sector;
             entity.MainDealerCountry = vm.MainDealerCountry;
-            entity.Region = vm.Region;
+            entity.Region = SalesRegionHelper.ResolveRegion(vm.Country, vm.Region);
             entity.TaxNumber = vm.TaxNumber;
             entity.TaxOffice = vm.TaxOffice;
             entity.Notes = vm.Notes;
@@ -186,6 +203,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private static void PopulateSelections(CustomerFormVm vm)
+        {
+            var countries = new[]
+            {
+                "Turkey", "Germany", "France", "Italy", "Spain", "United Kingdom",
+                "Iraq", "Saudi Arabia", "United Arab Emirates", "Qatar", "Kuwait",
+                "Azerbaijan", "Kazakhstan", "Uzbekistan"
+            };
+
+            vm.CountryOptions = countries.Select(x => new SelectListItem(x, x)).ToList();
+            vm.RegionOptions = SalesRegionHelper.RegionOptions
+                .Select(x => new SelectListItem(x.Text, x.Value))
+                .ToList();
         }
     }
 }

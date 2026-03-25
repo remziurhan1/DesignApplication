@@ -320,6 +320,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .ToListAsync();
 
             var vm = MapDetailVm(entity, revisions, canViewPricing);
+            vm.DocumentUpload.SalesRequestId = id;
             ViewBag.WaitingManagerApproval = entity.WorkflowStatus != SalesRequestWorkflowStatus.Approved;
             return View(vm);
         }
@@ -421,6 +422,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var entity = await _context.SalesRequests
                 .Include(x => x.Items)
+                .Include(x => x.Documents)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (entity == null) return NotFound();
 
@@ -527,6 +529,65 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Müşteri teklif durumu güncellendi.";
             return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
+        public async Task<IActionResult> UploadDocument(SalesRequestDocumentUploadVm vm)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var request = await _context.SalesRequests
+                .Include(x => x.Documents)
+                .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            if (vm.File == null || vm.File.Length == 0 || string.IsNullOrWhiteSpace(vm.RevisionCode))
+            {
+                TempData["ErrorMessage"] = "Doküman yüklemek için dosya ve revizyon kodu zorunludur.";
+                return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
+            }
+
+            var uploadsRoot = Path.Combine(_environment.WebRootPath, "uploads", "sales-documents", request.Id.ToString("N"));
+            Directory.CreateDirectory(uploadsRoot);
+            var fileName = $"{Guid.NewGuid():N}_{Path.GetFileName(vm.File.FileName)}";
+            var fullPath = Path.Combine(uploadsRoot, fileName);
+            await using (var fs = new FileStream(fullPath, FileMode.Create))
+            {
+                await vm.File.CopyToAsync(fs);
+            }
+
+            foreach (var previous in request.Documents.Where(x => x.DocumentType == vm.DocumentType && x.IsCurrent))
+            {
+                previous.IsCurrent = false;
+            }
+
+            request.Documents.Add(new SalesRequestDocument
+            {
+                SalesRequestId = request.Id,
+                SalesRequestItemId = vm.SalesRequestItemId,
+                DocumentType = vm.DocumentType,
+                RevisionCode = vm.RevisionCode.Trim().ToUpperInvariant(),
+                FilePath = $"/uploads/sales-documents/{request.Id:N}/{fileName}",
+                OriginalFileName = vm.File.FileName,
+                UploadedBy = User.Identity?.Name ?? "System",
+                UploadedAt = DateTime.UtcNow,
+                IsCurrent = true,
+                LinkedCostAnalysisId = vm.LinkedCostAnalysisId,
+                LinkedCostAnalysisRevisionCode = vm.LinkedCostAnalysisRevisionCode,
+                Notes = vm.Notes
+            });
+
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Doküman revizyonu yüklendi.";
+            return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
         }
 
         [HttpGet]
@@ -816,6 +877,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .Include(x => x.Attachments)
                 .Include(x => x.Items)
                     .ThenInclude(x => x.ProductGroup)
+                .Include(x => x.Documents)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
         }
 
@@ -921,6 +983,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     RevisedAt = x.RevisedAt
                 }).ToList(),
                 RevisionCosts = BuildRevisionCosts(entity, revisions),
+                Documents = entity.Documents
+                    .OrderByDescending(x => x.DocumentType)
+                    .ThenByDescending(x => x.UploadedAt)
+                    .Select(x => new SalesRequestDocumentVm
+                    {
+                        Id = x.Id,
+                        DocumentType = x.DocumentType.ToString(),
+                        RevisionCode = x.RevisionCode,
+                        OriginalFileName = x.OriginalFileName,
+                        FilePath = x.FilePath,
+                        IsCurrent = x.IsCurrent,
+                        LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
+                        UploadedAt = x.UploadedAt,
+                        UploadedBy = x.UploadedBy
+                    }).ToList(),
                 Items = roots,
                 Attachments = entity.Attachments
                     .Select(a => new SalesRequestAttachmentVm
@@ -1038,6 +1115,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 entity.WorkflowStatus,
                 entity.CustomerQuoteStatus,
                 entity.RevisionNo,
+                Documents = entity.Documents
+                    .OrderByDescending(x => x.UploadedAt)
+                    .Select(x => new
+                    {
+                        x.DocumentType,
+                        x.RevisionCode,
+                        x.FilePath,
+                        x.LinkedCostAnalysisRevisionCode,
+                        x.IsCurrent
+                    }),
                 Items = entity.Items
                     .OrderBy(x => x.DisplayOrder)
                     .Select(x => new
