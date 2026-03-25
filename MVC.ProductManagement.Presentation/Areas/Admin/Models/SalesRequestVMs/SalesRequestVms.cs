@@ -218,6 +218,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string RevisionCode => $"R{RevisionNo:00}";
         public bool IsManagerView { get; set; }
         public List<SalesRequestRevisionHistoryVm> RevisionHistory { get; set; } = new();
+        public List<SalesRequestRevisionCostVm> RevisionCosts { get; set; } = new();
         public List<SalesRequestDetailItemVm> Items { get; set; } = new();
         public List<SalesRequestAttachmentVm> Attachments { get; set; } = new();
         public SalesRequestAddSubItemVm NewSubItem { get; set; } = new();
@@ -230,6 +231,47 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string RevisionReason { get; set; } = string.Empty;
         public string RevisedBy { get; set; } = string.Empty;
         public DateTime RevisedAt { get; set; }
+    }
+
+    public class SalesRequestRevisionCostVm
+    {
+        public int RevisionNo { get; set; }
+        public string RevisionCode => $"R{RevisionNo:00}";
+        public string RevisionReason { get; set; } = string.Empty;
+        public string RevisedBy { get; set; } = string.Empty;
+        public DateTime RevisedAt { get; set; }
+        public decimal? TotalCost { get; set; }
+        public List<SalesRequestRevisionCostItemVm> Items { get; set; } = new();
+    }
+
+    public class SalesRequestRevisionCostItemVm
+    {
+        public string ItemCode { get; set; } = string.Empty;
+        public string ItemTitle { get; set; } = string.Empty;
+        public decimal CapacityM3 { get; set; }
+        public string? LinkedCostAnalysisRevisionCode { get; set; }
+        public decimal? LinkedCostAnalysisTotal { get; set; }
+    }
+
+    public class SalesDashboardVm
+    {
+        public int TotalRequestCount { get; set; }
+        public int OpenRequestCount { get; set; }
+        public int ClosedRequestCount { get; set; }
+        public int QuoteSharedCount { get; set; }
+        public int ApprovedCount { get; set; }
+        public int WaitingPricingCount { get; set; }
+        public List<SalespersonRequestStatVm> SalespersonStats { get; set; } = new();
+    }
+
+    public class SalespersonRequestStatVm
+    {
+        public string SalespersonName { get; set; } = string.Empty;
+        public int TotalRequestCount { get; set; }
+        public int OpenRequestCount { get; set; }
+        public int ClosedRequestCount { get; set; }
+        public int QuoteSharedCount { get; set; }
+        public int ApprovedCount { get; set; }
     }
 
     public class SalesRequestDetailItemVm

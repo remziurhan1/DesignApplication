@@ -17,6 +17,11 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
     {
         private const string adminEmail = "admin@admin.com";
         private const string adminPassword = "password+0";
+        private const string salesEmail = "mehmet.okur@cryocan.com";
+        private const string salesPassword = "password+0";
+        private const string salesPhoneNumber = "123456789";
+        private const string seedCustomerCompany = "Cryocan Seed Müşteri";
+        private const string seedCustomerEmail = "seed.customer@cryocan.com";
 
         public static async Task AdminSeedAsync(IConfiguration configuration)
         {
@@ -59,6 +64,14 @@ END");
             if (!context.Users.Any(user => user.Email == adminEmail))
             {
                 await AddAdminAsync(context);
+            }
+            if (!context.Users.Any(user => user.Email == salesEmail))
+            {
+                await AddSalesEngineerAsync(context);
+            }
+            if (!context.Customers.Any(x => x.CompanyName == seedCustomerCompany))
+            {
+                await AddSeedCustomerAsync(context);
             }
 
 
@@ -118,6 +131,76 @@ END");
 
             }
 
+        }
+
+        private static async Task AddSalesEngineerAsync(AppDbContext context)
+        {
+            var user = new IdentityUser
+            {
+                Email = salesEmail,
+                EmailConfirmed = true,
+                NormalizedEmail = salesEmail.ToUpperInvariant(),
+                UserName = salesEmail,
+                NormalizedUserName = salesEmail.ToUpperInvariant(),
+                PhoneNumber = salesPhoneNumber,
+                PhoneNumberConfirmed = true
+            };
+            user.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(user, salesPassword);
+            await context.Users.AddAsync(user);
+
+            var salesRoleId = context.Roles.FirstOrDefault(role => role.Name == Roles.Sales.ToString())?.Id;
+            if (!string.IsNullOrWhiteSpace(salesRoleId))
+            {
+                await context.UserRoles.AddAsync(new IdentityUserRole<string>
+                {
+                    RoleId = salesRoleId,
+                    UserId = user.Id
+                });
+            }
+
+            await context.EmployeeProfiles.AddAsync(new EmployeeProfile
+            {
+                UserId = user.Id,
+                FullName = "Mehmet Okur",
+                Department = "Satış Bölümü",
+                DepartmentRole = "Satış Mühendisi",
+                Title = "Satış Mühendisi",
+                Number = salesPhoneNumber,
+                Email = salesEmail,
+                Location = "Merkez",
+                CanAccessSalesArea = true,
+                CanManageSalesCustomers = true,
+                CanCreateSalesRequests = true,
+                CanViewSalesPricing = true,
+                Status = Status.Added,
+                CreatedBy = "SeedData",
+                CreatedDate = DateTime.UtcNow
+            });
+
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task AddSeedCustomerAsync(AppDbContext context)
+        {
+            await context.Customers.AddAsync(new Customer
+            {
+                CompanyName = seedCustomerCompany,
+                ContactName = "Seed Contact",
+                Email = seedCustomerEmail,
+                Phone = salesPhoneNumber,
+                Address = "İstanbul",
+                City = "İstanbul",
+                Country = "Türkiye",
+                Sector = "Endüstriyel Gaz",
+                MainDealerCountry = "Türkiye",
+                Region = "Marmara",
+                IsActive = true,
+                Status = Status.Added,
+                CreatedBy = "SeedData",
+                CreatedDate = DateTime.UtcNow
+            });
+
+            await context.SaveChangesAsync();
         }
     }
 }
