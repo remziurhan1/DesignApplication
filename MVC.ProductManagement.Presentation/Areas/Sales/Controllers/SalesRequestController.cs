@@ -44,7 +44,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .ToListAsync();
 
             var profile = await GetCurrentSalesProfileAsync();
-            if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location))
+            var currentUserName = User.Identity?.Name;
+            var currentUserEmail = User.FindFirstValue(ClaimTypes.Email);
+            var isManagerUser = await CanAccessSalesManagerPanelAsync();
+
+            if (!User.IsInRole("Admin") && !isManagerUser)
+            {
+                requests = requests
+                    .Where(x =>
+                        (!string.IsNullOrWhiteSpace(profile?.Email) && string.Equals(x.RequestedByEmail, profile.Email, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrWhiteSpace(currentUserEmail) && string.Equals(x.RequestedByEmail, currentUserEmail, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrWhiteSpace(profile?.FullName) && string.Equals(x.RequestedByName, profile.FullName, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrWhiteSpace(currentUserName) && string.Equals(x.RequestedByName, currentUserName, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+            }
+            else if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(profile?.Location))
             {
                 requests = requests
                     .Where(x => string.Equals(x.Customer.Region, profile.Location, StringComparison.OrdinalIgnoreCase))
@@ -72,7 +86,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     RevisionNo = x.RevisionNo,
                     ItemCount = x.Items.Count,
                     AttachmentCount = x.Attachments.Count,
-                    ApprovedSalesPriceTotal = x.Items.Where(i => i.ApprovedSalesPrice.HasValue).Sum(i => i.ApprovedSalesPrice)
+                    ApprovedSalesPriceTotal = x.Items.Where(i => i.ApprovedSalesPrice.HasValue).Sum(i => i.ApprovedSalesPrice),
+                    HasCostAnalysis = x.Items.Any(i => i.LinkedCostAnalysisTotal.HasValue)
                 }).ToList()
             };
 
@@ -82,7 +97,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [HttpGet]
         public async Task<IActionResult> ManagerPanel()
         {
-            if (!await HasSalesPermissionAsync(x => x.CanViewSalesPricing))
+            if (!await CanAccessSalesManagerPanelAsync())
             {
                 return Forbid();
             }
@@ -134,7 +149,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManagerDecision(Guid id, bool approve)
         {
-            if (!await HasSalesPermissionAsync(x => x.CanViewSalesPricing))
+            if (!await CanAccessSalesManagerPanelAsync())
             {
                 return Forbid();
             }
