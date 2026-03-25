@@ -113,6 +113,7 @@
                         <div class="col-md-4"><strong>Müşteri:</strong><div>@Model.CustomerName</div></div>
                         <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
                         <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.CustomerQuoteStatus)">@CustomerStatusText(Model.CustomerQuoteStatus)</span></div></div>
+                        <div class="col-md-4"><strong>Teklif durumu:</strong><div>@Model.OfferStatus</div></div>
                         <div class="col-md-4"><strong>Revizyon:</strong><div>@Model.RevisionCode</div></div>
                         <div class="col-md-4"><strong>Müşteri Bildirim Durumu:</strong><div>@Model.CustomerQuoteStatus</div></div>
                         <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
@@ -138,6 +139,16 @@
                         <div class="input-group">
                             <select asp-for="CustomerQuoteStatus" name="customerQuoteStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesCustomerQuoteStatus>()"></select>
                             <button type="submit" class="btn btn-primary">Güncelle</button>
+                        </div>
+                    </form>
+
+                    <h5 class="card-title">Teklif Durumu</h5>
+                    <form asp-action="UpdateOfferStatus" method="post" class="mb-4">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="input-group">
+                            <select asp-for="OfferStatus" name="offerStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()"></select>
+                            <button type="submit" class="btn btn-outline-primary">Güncelle</button>
                         </div>
                     </form>
 

@@ -26,6 +26,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public DateTime NeededByDate { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
         public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
+        public SalesOfferStatus OfferStatus { get; set; }
         public int RevisionNo { get; set; }
         public string RevisionCode => $"R{RevisionNo:00}";
         public int ItemCount { get; set; }
@@ -60,6 +61,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
 
         [Display(Name = "Talep kaynağı")]
         public SalesRequestSource RequestSource { get; set; } = SalesRequestSource.Sales;
+
+        [Display(Name = "Teklif durumu")]
+        public SalesOfferStatus OfferStatus { get; set; } = SalesOfferStatus.F;
 
         [Display(Name = "Sevk edilecek ülke")]
         [StringLength(100)]
@@ -215,6 +219,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string? SummaryNotes { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
         public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
+        public SalesOfferStatus OfferStatus { get; set; }
         public int RevisionNo { get; set; }
         public string RevisionCode => $"R{RevisionNo:00}";
         public bool IsManagerView { get; set; }

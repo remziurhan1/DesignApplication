@@ -7,6 +7,9 @@ namespace MVC.ProductManagement.Presentation.Helpers
         private static readonly Dictionary<string, SalesRegion> CountryMap = new(StringComparer.OrdinalIgnoreCase)
         {
             ["Germany"] = SalesRegion.Europe,
+            ["Almanya"] = SalesRegion.Europe,
+            ["Switzerland"] = SalesRegion.Europe,
+            ["İsviçre"] = SalesRegion.Europe,
             ["France"] = SalesRegion.Europe,
             ["Italy"] = SalesRegion.Europe,
             ["Spain"] = SalesRegion.Europe,
@@ -16,7 +19,8 @@ namespace MVC.ProductManagement.Presentation.Helpers
             ["United Arab Emirates"] = SalesRegion.MiddleEast,
             ["Qatar"] = SalesRegion.MiddleEast,
             ["Kuwait"] = SalesRegion.MiddleEast,
-            ["Turkey"] = SalesRegion.Turkey,
+            ["Turkey"] = SalesRegion.MiddleEast,
+            ["Türkiye"] = SalesRegion.MiddleEast,
             ["Azerbaijan"] = SalesRegion.CIS,
             ["Kazakhstan"] = SalesRegion.CIS,
             ["Uzbekistan"] = SalesRegion.CIS

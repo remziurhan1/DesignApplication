@@ -1,0 +1,73 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs.EmployeeUpdateVm
+@{
+    ViewData["Title"] = "Çalışan Güncelle";
+    var departments = new[] { "Satış", "Dizayn", "Planlama", "Kalite", "Satın Alma", "Üretim", "Proje", "Teklif Hazırlama" };
+    var departmentRoles = new[] { "Satış Mühendisi", "Satış Müdürü", "Dizayn Mühendisi", "Planlama Mühendisi", "Kalite Mühendisi", "Satın Alma Mühendisi", "Üretim Mühendisi", "Proje Mühendisi", "Teklif Hazırlama" };
+    var titles = new[] { "Mühendis", "Şef", "Müdür" };
+    var locations = new[] { "Europe", "MiddleEast", "Turkey", "CIS", "Africa", "AsiaPacific", "Americas", "Other" };
+}
+
+<h2 class="mb-3">Çalışan Bilgisi Güncelle</h2>
+
+<div class="card">
+    <div class="card-body pt-3">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="FullName" class="form-label"></label>
+                    <input asp-for="FullName" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label">Mail</label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Department" class="form-label">Departman</label>
+                    <select asp-for="Department" class="form-select" asp-items="@(new SelectList(departments))"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="DepartmentRole" class="form-label">Birim</label>
+                    <select asp-for="DepartmentRole" class="form-select" asp-items="@(new SelectList(departmentRoles))"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Title" class="form-label"></label>
+                    <select asp-for="Title" class="form-select" asp-items="@(new SelectList(titles))"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Number" class="form-label">Numara</label>
+                    <input asp-for="Number" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Location" class="form-label">Bölge</label>
+                    <select asp-for="Location" class="form-select" asp-items="@(new SelectList(locations))"></select>
+                </div>
+            </div>
+
+            <hr />
+            <h5>Satış Yetkileri</h5>
+            <div class="form-check">
+                <input asp-for="CanAccessSalesArea" class="form-check-input" />
+                <label asp-for="CanAccessSalesArea" class="form-check-label"></label>
+            </div>
+            <div class="form-check">
+                <input asp-for="CanManageSalesCustomers" class="form-check-input" />
+                <label asp-for="CanManageSalesCustomers" class="form-check-label"></label>
+            </div>
+            <div class="form-check">
+                <input asp-for="CanCreateSalesRequests" class="form-check-input" />
+                <label asp-for="CanCreateSalesRequests" class="form-check-label"></label>
+            </div>
+            <div class="form-check mb-3">
+                <input asp-for="CanViewSalesPricing" class="form-check-input" />
+                <label asp-for="CanViewSalesPricing" class="form-check-label"></label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Güncelle</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </form>
+    </div>
+</div>

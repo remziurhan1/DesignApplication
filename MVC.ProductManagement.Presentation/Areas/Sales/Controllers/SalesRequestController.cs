@@ -83,6 +83,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     NeededByDate = x.NeededByDate,
                     WorkflowStatus = x.WorkflowStatus,
                     CustomerQuoteStatus = x.CustomerQuoteStatus,
+                    OfferStatus = x.OfferStatus,
                     RevisionNo = x.RevisionNo,
                     ItemCount = x.Items.Count,
                     AttachmentCount = x.Attachments.Count,
@@ -208,6 +209,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             var vm = new SalesRequestCreateVm
             {
                 RequestSource = SalesRequestSource.Sales,
+                OfferStatus = SalesOfferStatus.F,
                 Items = new List<SalesRequestItemInputVm> { new() }
             };
 
@@ -262,6 +264,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 IsTransportByCustomer = vm.IsTransportByCustomer,
                 SummaryNotes = vm.SummaryNotes,
                 WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
+                OfferStatus = vm.OfferStatus,
                 SalesOpenedAt = DateTime.UtcNow
             };
 
@@ -371,6 +374,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 ShipmentCountry = entity.ShipmentCountry,
                 InstallationCountry = entity.InstallationCountry,
                 IsTransportByCustomer = entity.IsTransportByCustomer,
+                OfferStatus = entity.OfferStatus,
                 SummaryNotes = entity.SummaryNotes,
                 Items = entity.Items
                     .OrderBy(x => x.DisplayOrder)
@@ -469,6 +473,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             entity.Title = await BuildRequestTitleAsync(vm.Items.First());
             entity.WorkflowStatus = SalesRequestWorkflowStatus.Submitted;
             entity.CustomerQuoteStatus = SalesCustomerQuoteStatus.PreparingSpecification;
+            entity.OfferStatus = vm.OfferStatus;
             entity.PricingCompletedAt = null;
             entity.ApprovedAt = null;
             entity.RevisionNo += 1;
@@ -548,6 +553,28 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             entity.CustomerQuoteStatus = customerQuoteStatus;
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Müşteri teklif durumu güncellendi.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateOfferStatus(Guid id, SalesOfferStatus offerStatus)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            var entity = await _context.SalesRequests
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            entity.OfferStatus = offerStatus;
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Teklif durumu güncellendi.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -1037,6 +1064,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 SummaryNotes = entity.SummaryNotes,
                 WorkflowStatus = entity.WorkflowStatus,
                 CustomerQuoteStatus = entity.CustomerQuoteStatus,
+                OfferStatus = entity.OfferStatus,
                 RevisionNo = entity.RevisionNo,
                 IsManagerView = false,
                 RevisionHistory = revisions.Select(x => new SalesRequestRevisionHistoryVm
