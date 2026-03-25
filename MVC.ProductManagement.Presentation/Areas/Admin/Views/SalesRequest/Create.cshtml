@@ -8,6 +8,50 @@
     ViewData["Title"] = isEdit ? "Satış Talebi Güncelle" : "Yeni Satış Talebi";
 }
 
+<style>
+    .sales-request-hero {
+        background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 45%, #1f2a44 100%);
+        color: #fff;
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        box-shadow: 0 12px 30px rgba(31, 42, 68, 0.18);
+    }
+
+    .sales-request-hero .hero-chip {
+        background-color: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 999px;
+        padding: .35rem .75rem;
+        font-size: .8rem;
+    }
+
+    .form-section-title {
+        font-weight: 700;
+        margin-bottom: .25rem;
+    }
+
+    .form-section-subtitle {
+        color: #6c757d;
+        margin-bottom: .9rem;
+        font-size: .9rem;
+    }
+
+    .request-item {
+        border: 1px solid #dfe6f1 !important;
+        border-radius: 1rem !important;
+        background-color: #fff;
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+    }
+
+    .request-item-head {
+        background: #f7faff;
+        border: 1px solid #d9e8ff;
+        border-radius: .75rem;
+        padding: .6rem .9rem;
+        margin-bottom: .9rem;
+    }
+</style>
+
 <div class="pagetitle d-flex justify-content-between align-items-center">
     <div>
         <h1>@(isEdit ? "Satış Talebi Güncelle" : "Yeni Satış Talebi")</h1>
@@ -17,6 +61,20 @@
 </div>
 
 <section class="section mt-4">
+    <div class="sales-request-hero mb-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div>
+                <h5 class="mb-1">Satış Talep Akışı</h5>
+                <p class="mb-0 opacity-75">Müşteri bilgisi + teknik ihtiyaç + ek dosyaları tek formda girin, sistem talebi fiyatlandırma ve onay akışına otomatik taşısın.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="hero-chip">1) Müşteri Seçimi</span>
+                <span class="hero-chip">2) Teknik Girdi</span>
+                <span class="hero-chip">3) Satır Bazlı Talep</span>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-body pt-4">
             <form method="post" enctype="multipart/form-data" asp-area="@currentArea" asp-controller="SalesRequest" asp-action="@(isRevision ? "Revise" : isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.Id : null)">
@@ -26,6 +84,8 @@
                     <input asp-for="Id" type="hidden" />
                 }
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="form-section-title">1) Talep sahibi ve müşteri bilgisi</div>
+                <div class="form-section-subtitle">Talep sahibi alanları kullanıcı profiline göre otomatik dolar. Müşteri ve ihtiyaç tarihini seçerek süreci başlatın.</div>
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label asp-for="CustomerId" class="form-label"></label>
@@ -86,13 +146,20 @@
                 </div>
 
                 <hr class="my-4" />
-                <h5>Talep Satırları</h5>
-                <div class="text-muted small mb-3">İlk satır ana talep olur. Gerekirse aynı talebin altında farklı satırlar açabilirsiniz.</div>
+                <h5 class="mb-1">2) Talep Satırları</h5>
+                <div class="text-muted small mb-3">Her satır bağımsız bir teknik ihtiyaçtır. İlk satır ana talep kabul edilir; ek satırlar aynı teklif altında ilerler.</div>
 
                 <div id="request-items">
                 @for (var i = 0; i < Model.Items.Count; i++)
                 {
-                    <div class="border rounded p-3 mb-3 request-item">
+                    <div class="p-3 mb-3 request-item">
+                        <div class="request-item-head d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <div>
+                                <strong>Talep Satırı #@(i + 1)</strong>
+                                <div class="small text-muted">Talep kategorisini seçtikten sonra ilgili teknik alanlar otomatik açılır.</div>
+                            </div>
+                            <span class="badge bg-primary-subtle text-primary-emphasis">Teknik Girdi</span>
+                        </div>
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label">Talep grubu</label>
@@ -257,7 +324,7 @@
                 }
                 </div>
 
-                <button type="button" class="btn btn-outline-secondary" id="add-item">+ Satır ekle</button>
+                <button type="button" class="btn btn-outline-secondary" id="add-item">+ Yeni Talep Satırı Ekle</button>
                 <div class="mt-4 d-flex gap-2">
                     <button type="submit" class="btn btn-primary">@(isRevision ? "Revizyonu kaydet" : isEdit ? "Talebi güncelle" : "Talebi oluştur")</button>
                     <a asp-area="@currentArea" asp-controller="SalesRequest" asp-action="Index" class="btn btn-outline-secondary">İptal</a>
@@ -348,7 +415,14 @@
             const container = document.getElementById('request-items');
             const index = container.querySelectorAll('.request-item').length;
             const html = `
-                <div class="border rounded p-3 mb-3 request-item">
+                <div class="p-3 mb-3 request-item">
+                    <div class="request-item-head d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div>
+                            <strong>Talep Satırı #${index + 1}</strong>
+                            <div class="small text-muted">Talep kategorisini seçtikten sonra ilgili teknik alanlar otomatik açılır.</div>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary-emphasis">Teknik Girdi</span>
+                    </div>
                     <div class="row g-3">
                         <div class="col-md-4"><label class="form-label">Talep grubu</label><select name="Items[${index}].RequestCategory" class="form-select request-category">${categoryOptions}</select></div>
                         <div class="col-md-4"><label class="form-label">Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select product-group"><option value="">Seçin</option>${productOptions}</select></div>
