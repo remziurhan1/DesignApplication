@@ -44,16 +44,28 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     (!string.IsNullOrWhiteSpace(currentUserName) && x.RequestedByName == currentUserName))
                 .ToList();
 
-            var canViewTeamDashboard = User.IsInRole("Admin") || await HasSalesPermissionAsync(x => x.CanViewSalesPricing);
-            var vm = BuildDashboardVm(canViewTeamDashboard ? requests : myRequests, canViewTeamDashboard, region);
+            var canAccessManagerPanel = await CanAccessSalesManagerPanelAsync();
+            var canViewTeamDashboard = canAccessManagerPanel;
+            var vm = BuildDashboardVm(
+                canViewTeamDashboard ? requests : myRequests,
+                canViewTeamDashboard,
+                canAccessManagerPanel,
+                region,
+                myRequests);
             return View(vm);
         }
 
-        private static SalesDashboardVm BuildDashboardVm(List<SalesRequest> requests, bool isManagerView, string? region)
+        private static SalesDashboardVm BuildDashboardVm(
+            List<SalesRequest> requests,
+            bool isManagerView,
+            bool canAccessManagerPanel,
+            string? region,
+            List<SalesRequest> myRequests)
         {
             return new SalesDashboardVm
             {
                 IsManagerView = isManagerView,
+                CanAccessManagerPanel = canAccessManagerPanel,
                 CurrentRegion = region,
                 TotalRequestCount = requests.Count,
                 OpenRequestCount = requests.Count(IsOpenRequest),
@@ -74,7 +86,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         })
                         .OrderByDescending(x => x.TotalRequestCount)
                         .ToList()
-                    : new List<SalespersonRequestStatVm>()
+                    : new List<SalespersonRequestStatVm>(),
+                MyRequests = myRequests
+                    .OrderByDescending(x => x.SalesOpenedAt)
+                    .Take(10)
+                    .Select(x => new SalesDashboardRequestVm
+                    {
+                        Id = x.Id,
+                        RequestNo = x.RequestNo,
+                        Title = x.Title,
+                        CustomerName = x.Customer.CompanyName,
+                        SalesOpenedAt = x.SalesOpenedAt,
+                        WorkflowStatus = x.WorkflowStatus,
+                        CustomerQuoteStatus = x.CustomerQuoteStatus
+                    })
+                    .ToList()
             };
         }
 

@@ -82,7 +82,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [HttpGet]
         public async Task<IActionResult> ManagerPanel()
         {
-            if (!await HasSalesPermissionAsync(x => x.CanViewSalesPricing))
+            if (!await CanAccessSalesManagerPanelAsync())
             {
                 return Forbid();
             }
@@ -134,7 +134,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManagerDecision(Guid id, bool approve)
         {
-            if (!await HasSalesPermissionAsync(x => x.CanViewSalesPricing))
+            if (!await CanAccessSalesManagerPanelAsync())
             {
                 return Forbid();
             }

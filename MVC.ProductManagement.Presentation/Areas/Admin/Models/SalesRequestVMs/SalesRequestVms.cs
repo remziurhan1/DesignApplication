@@ -258,6 +258,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
     public class SalesDashboardVm
     {
         public bool IsManagerView { get; set; }
+        public bool CanAccessManagerPanel { get; set; }
         public string? CurrentRegion { get; set; }
         public int TotalRequestCount { get; set; }
         public int OpenRequestCount { get; set; }
@@ -266,6 +267,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public int ApprovedCount { get; set; }
         public int WaitingPricingCount { get; set; }
         public List<SalespersonRequestStatVm> SalespersonStats { get; set; } = new();
+        public List<SalesDashboardRequestVm> MyRequests { get; set; } = new();
+    }
+
+    public class SalesDashboardRequestVm
+    {
+        public Guid Id { get; set; }
+        public string RequestNo { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string CustomerName { get; set; } = string.Empty;
+        public DateTime SalesOpenedAt { get; set; }
+        public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
+        public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
     }
 
     public class SalespersonRequestStatVm

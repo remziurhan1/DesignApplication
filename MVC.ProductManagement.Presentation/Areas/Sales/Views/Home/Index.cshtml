@@ -42,13 +42,53 @@
                 <div class="d-flex gap-2">
                     <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="btn btn-outline-danger">Talepler</a>
                     <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Create" class="btn btn-danger">+ Talep Ekle</a>
-                    @if (Model.IsManagerView)
+                    @if (Model.CanAccessManagerPanel)
                     {
                         <a asp-area="Sales" asp-controller="SalesRequest" asp-action="ManagerPanel" class="btn btn-outline-primary">Müdür Paneli</a>
                     }
                 </div>
             </div>
         </div>
+        @if (Model.MyRequests.Any())
+        {
+            <div class="col-12">
+                <div class="border rounded-3 p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0">Açtığım Talepler</h5>
+                        <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="btn btn-sm btn-outline-danger">Tümünü Gör</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Talep No</th>
+                                    <th>Başlık</th>
+                                    <th>Müşteri</th>
+                                    <th>Açılış</th>
+                                    <th>Durum</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var request in Model.MyRequests)
+                                {
+                                    <tr>
+                                        <td>@request.RequestNo</td>
+                                        <td>@request.Title</td>
+                                        <td>@request.CustomerName</td>
+                                        <td>@request.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                        <td>@request.WorkflowStatus</td>
+                                        <td class="text-end">
+                                            <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Details" asp-route-id="@request.Id" class="btn btn-sm btn-outline-secondary">Detay</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
         @if (Model.IsManagerView && Model.SalespersonStats.Any())
         {
             <div class="col-12">
