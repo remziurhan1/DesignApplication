@@ -58,7 +58,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
 
         [Display(Name = "Talep alma tarihi")]
         [DataType(DataType.Date)]
-        public DateTime? RequestReceivedAt { get; set; }
+        public DateTime? RequestReceivedAt { get; set; } = DateTime.UtcNow.Date;
 
         [Display(Name = "Teklif ihtiyaç tarihi")]
         [DataType(DataType.Date)]

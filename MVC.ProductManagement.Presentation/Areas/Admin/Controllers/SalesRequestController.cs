@@ -66,7 +66,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var vm = new SalesRequestCreateVm { OfferStatus = SalesOfferStatus.F };
+            var vm = new SalesRequestCreateVm
+            {
+                OfferStatus = SalesOfferStatus.F,
+                RequestReceivedAt = DateTime.UtcNow.Date
+            };
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
             await PopulateFormAsync(vm);
             return View(vm);
@@ -89,6 +93,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 NormalizeAndValidateItem(vm.Items[i], $"Items[{i}]");
             }
 
+            var salesOpenedAt = DateTime.UtcNow;
+            if (vm.RequestReceivedAt.HasValue && vm.RequestReceivedAt.Value.Date > salesOpenedAt.Date)
+            {
+                ModelState.AddModelError(nameof(vm.RequestReceivedAt), "Talep alma tarihi, talep giriş tarihinden büyük olamaz.");
+            }
+
             if (!ModelState.IsValid)
             {
                 await PopulateFormAsync(vm);
@@ -106,7 +116,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RequestedByName = vm.RequestedByName,
                 RequestedByEmail = vm.RequestedByEmail,
                 RequestedByDepartment = vm.RequestedByDepartment,
-                RequestReceivedAt = vm.RequestReceivedAt?.Date,
+                RequestReceivedAt = vm.RequestReceivedAt?.Date ?? salesOpenedAt.Date,
                 NeededByDate = vm.NeededByDate.Date,
                 RequestSource = vm.RequestSource,
                 ShipmentCountry = vm.ShipmentCountry,
@@ -115,7 +125,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 SummaryNotes = vm.SummaryNotes,
                 WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
                 OfferStatus = vm.OfferStatus,
-                SalesOpenedAt = DateTime.UtcNow
+                SalesOpenedAt = salesOpenedAt
             };
 
             var groups = await _context.SalesRequestProductGroups.AsNoTracking().ToDictionaryAsync(x => x.Id);
@@ -258,6 +268,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .Include(x => x.Items)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
             if (entity == null) return NotFound();
+
+            if (vm.RequestReceivedAt.HasValue && vm.RequestReceivedAt.Value.Date > entity.SalesOpenedAt.Date)
+            {
+                ModelState.AddModelError(nameof(vm.RequestReceivedAt), "Talep alma tarihi, talep giriş tarihinden büyük olamaz.");
+            }
 
             if (!ModelState.IsValid)
             {
