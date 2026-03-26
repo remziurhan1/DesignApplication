@@ -88,6 +88,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
             }
 
+            if (vm.Items.Any(x => x.RequestCategory == SalesRequestCategory.SparePart) &&
+                (vm.Attachments == null || vm.Attachments.Count == 0))
+            {
+                ModelState.AddModelError(nameof(vm.Attachments), "Yedek parça talebi için en az bir ek yüklemelisiniz.");
+            }
+
             for (var i = 0; i < vm.Items.Count; i++)
             {
                 NormalizeAndValidateItem(vm.Items[i], $"Items[{i}]");

@@ -231,10 +231,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
+            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
+            }
+
+            if (vm.Items.Any(x => x.RequestCategory == SalesRequestCategory.SparePart) &&
+                (vm.Attachments == null || vm.Attachments.Count == 0))
+            {
+                ModelState.AddModelError(nameof(vm.Attachments), "Yedek parça talebi için en az bir ek yüklemelisiniz.");
             }
 
             for (var i = 0; i < vm.Items.Count; i++)
@@ -443,7 +449,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             vm.Id = id;
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
+            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
