@@ -49,6 +49,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     CustomerName = x.Customer.CompanyName,
                     RequestedByName = x.RequestedByName,
                     SalesOpenedAt = x.SalesOpenedAt,
+                    RequestReceivedAt = x.RequestReceivedAt,
                     NeededByDate = x.NeededByDate,
                     WorkflowStatus = x.WorkflowStatus,
                     CustomerQuoteStatus = x.CustomerQuoteStatus,
@@ -65,7 +66,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var vm = new SalesRequestCreateVm { OfferStatus = SalesOfferStatus.F };
+            var vm = new SalesRequestCreateVm
+            {
+                OfferStatus = SalesOfferStatus.F,
+                RequestReceivedAt = DateTime.UtcNow.Date
+            };
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
             await PopulateFormAsync(vm);
             return View(vm);
@@ -83,9 +88,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
             }
 
+            if (vm.Items.Any(x => x.RequestCategory == SalesRequestCategory.SparePart) &&
+                (vm.Attachments == null || vm.Attachments.Count == 0))
+            {
+                ModelState.AddModelError(nameof(vm.Attachments), "Yedek parça talebi için en az bir ek yüklemelisiniz.");
+            }
+
             for (var i = 0; i < vm.Items.Count; i++)
             {
                 NormalizeAndValidateItem(vm.Items[i], $"Items[{i}]");
+            }
+
+            var salesOpenedAt = DateTime.UtcNow;
+            if (vm.RequestReceivedAt.HasValue && vm.RequestReceivedAt.Value.Date > salesOpenedAt.Date)
+            {
+                ModelState.AddModelError(nameof(vm.RequestReceivedAt), "Talep alma tarihi, talep giriş tarihinden büyük olamaz.");
             }
 
             if (!ModelState.IsValid)
@@ -105,6 +122,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RequestedByName = vm.RequestedByName,
                 RequestedByEmail = vm.RequestedByEmail,
                 RequestedByDepartment = vm.RequestedByDepartment,
+                RequestReceivedAt = vm.RequestReceivedAt?.Date ?? salesOpenedAt.Date,
                 NeededByDate = vm.NeededByDate.Date,
                 RequestSource = vm.RequestSource,
                 ShipmentCountry = vm.ShipmentCountry,
@@ -113,7 +131,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 SummaryNotes = vm.SummaryNotes,
                 WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
                 OfferStatus = vm.OfferStatus,
-                SalesOpenedAt = DateTime.UtcNow
+                SalesOpenedAt = salesOpenedAt
             };
 
             var groups = await _context.SalesRequestProductGroups.AsNoTracking().ToDictionaryAsync(x => x.Id);
@@ -183,6 +201,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RequestedByName = entity.RequestedByName,
                 RequestedByEmail = entity.RequestedByEmail,
                 RequestedByDepartment = entity.RequestedByDepartment,
+                RequestReceivedAt = entity.RequestReceivedAt,
                 NeededByDate = entity.NeededByDate,
                 RequestSource = entity.RequestSource,
                 OfferStatus = entity.OfferStatus,
@@ -256,6 +275,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
             if (entity == null) return NotFound();
 
+            if (vm.RequestReceivedAt.HasValue && vm.RequestReceivedAt.Value.Date > entity.SalesOpenedAt.Date)
+            {
+                ModelState.AddModelError(nameof(vm.RequestReceivedAt), "Talep alma tarihi, talep giriş tarihinden büyük olamaz.");
+            }
+
             if (!ModelState.IsValid)
             {
                 await PopulateFormAsync(vm);
@@ -267,6 +291,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.RequestedByName = vm.RequestedByName;
             entity.RequestedByEmail = vm.RequestedByEmail;
             entity.RequestedByDepartment = vm.RequestedByDepartment;
+            entity.RequestReceivedAt = vm.RequestReceivedAt?.Date;
             entity.NeededByDate = vm.NeededByDate.Date;
             entity.RequestSource = vm.RequestSource;
             entity.ShipmentCountry = vm.ShipmentCountry;
@@ -434,6 +459,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     entityItem.EstimatedCost = analysis.TotalCost;
                     entityItem.MinimumSalesPrice = analysis.MinimumSalesPrice ?? analysis.TotalCost;
                     entityItem.ApprovedSalesPrice = analysis.RecommendedSalesPrice ?? analysis.MinimumSalesPrice ?? analysis.TotalCost;
+                    entityItem.SharedSalesPrice = entityItem.ApprovedSalesPrice;
+                    entityItem.SoldSalesPrice = entityItem.ApprovedSalesPrice;
 
                     itemVm.LinkedCalculationType = analysis.CalculationType;
                     itemVm.LinkedCalculationId = analysis.CalculationId;
@@ -456,6 +483,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     entityItem.EstimatedCost = itemVm.EstimatedCost;
                     entityItem.MinimumSalesPrice = itemVm.MinimumSalesPrice;
                     entityItem.ApprovedSalesPrice = itemVm.ApprovedSalesPrice;
+                    entityItem.SharedSalesPrice = itemVm.ApprovedSalesPrice;
+                    entityItem.SoldSalesPrice = itemVm.ApprovedSalesPrice;
                 }
 
                 entityItem.DesignDetails = itemVm.DesignDetails;
@@ -700,6 +729,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RequestedByEmail = entity.RequestedByEmail,
                 RequestedByDepartment = entity.RequestedByDepartment,
                 SalesOpenedAt = entity.SalesOpenedAt,
+                RequestReceivedAt = entity.RequestReceivedAt,
                 NeededByDate = entity.NeededByDate,
                 RequestSource = entity.RequestSource,
                 ShipmentCountry = entity.ShipmentCountry,
@@ -756,7 +786,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     ItemTitle = x.ItemTitle,
                     CapacityM3 = x.CapacityM3,
                     LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
-                    LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal
+                    LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal,
+                    SharedSalesPrice = x.SharedSalesPrice ?? x.ApprovedSalesPrice,
+                    SoldSalesPrice = x.SoldSalesPrice ?? x.ApprovedSalesPrice
                 })
                 .ToList();
 
@@ -803,7 +835,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         ItemTitle = item["ItemTitle"]?.GetValue<string?>() ?? "-",
                         CapacityM3 = item["CapacityM3"]?.GetValue<decimal?>() ?? 0,
                         LinkedCostAnalysisRevisionCode = item["LinkedCostAnalysisRevisionCode"]?.GetValue<string?>(),
-                        LinkedCostAnalysisTotal = item["LinkedCostAnalysisTotal"]?.GetValue<decimal?>()
+                        LinkedCostAnalysisTotal = item["LinkedCostAnalysisTotal"]?.GetValue<decimal?>(),
+                        SharedSalesPrice = item["SharedSalesPrice"]?.GetValue<decimal?>() ?? item["MinimumSalesPrice"]?.GetValue<decimal?>(),
+                        SoldSalesPrice = item["SoldSalesPrice"]?.GetValue<decimal?>() ?? item["ApprovedSalesPrice"]?.GetValue<decimal?>()
                     });
                 }
             }

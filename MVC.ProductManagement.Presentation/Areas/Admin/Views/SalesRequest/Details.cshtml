@@ -114,7 +114,7 @@
                     {
                         <div class="col-md-4"><strong>Maliyet:</strong> @(item.EstimatedCost?.ToString("N2") ?? "-") ₺</div>
                         <div class="col-md-4"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                        <div class="col-md-4"><strong>Tavsiye edilen satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-4"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
                         @if (!string.IsNullOrWhiteSpace(item.LinkedCostAnalysisRevisionCode))
                         {
                             <div class="col-12"><strong>Aktif revizyon:</strong> <span class="text-muted">@item.LinkedCostAnalysisRevisionCode</span></div>
@@ -124,7 +124,7 @@
                     else
                     {
                         <div class="col-md-6"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                        <div class="col-md-6"><strong>Tavsiye edilen satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-6"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
                     }
                 </div>
             </div>
@@ -170,7 +170,8 @@
                         <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span></div></div>
                         <div class="col-md-4"><strong>Müşteri bildirimi:</strong><div>@Model.CustomerQuoteStatus</div></div>
                         <div class="col-md-4"><strong>Revizyon:</strong><div>@Model.RevisionCode</div></div>
-                        <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
+                        <div class="col-md-4"><strong>Talep oluşturma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
+                        <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@(Model.RequestReceivedAt.HasValue ? Model.RequestReceivedAt.Value.ToString("dd.MM.yyyy") : "-")</div></div>
                         <div class="col-md-4"><strong>İhtiyaç tarihi:</strong><div>@Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</div></div>
                         <div class="col-md-4"><strong>Talep kaynağı:</strong><div>@Model.RequestSource</div></div>
                         <div class="col-md-4"><strong>Sevk ülkesi:</strong><div>@Model.ShipmentCountry</div></div>
@@ -229,7 +230,7 @@
                                     @foreach (var item in revision.Items)
                                     {
                                         <div class="small text-muted">
-                                            @item.ItemCode · @item.CapacityM3 m³ · @(item.LinkedCostAnalysisRevisionCode ?? "-") · @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺
+                                            @item.ItemCode · @item.CapacityM3 m³ · @(item.LinkedCostAnalysisRevisionCode ?? "-") · Maliyet: @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺ · İletilen: @(item.SharedSalesPrice?.ToString("N2") ?? "-") ₺ · Satılan: @(item.SoldSalesPrice?.ToString("N2") ?? "-") ₺
                                         </div>
                                     }
                                 </div>
