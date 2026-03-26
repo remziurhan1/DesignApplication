@@ -114,7 +114,7 @@
                     {
                         <div class="col-md-4"><strong>Maliyet:</strong> @(item.EstimatedCost?.ToString("N2") ?? "-") ₺</div>
                         <div class="col-md-4"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                        <div class="col-md-4"><strong>Tavsiye edilen satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-4"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
                         @if (!string.IsNullOrWhiteSpace(item.LinkedCostAnalysisRevisionCode))
                         {
                             <div class="col-12"><strong>Aktif revizyon:</strong> <span class="text-muted">@item.LinkedCostAnalysisRevisionCode</span></div>
@@ -124,7 +124,7 @@
                     else
                     {
                         <div class="col-md-6"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                        <div class="col-md-6"><strong>Tavsiye edilen satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-6"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
                     }
                 </div>
             </div>

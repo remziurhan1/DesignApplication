@@ -70,7 +70,7 @@
                     <div class="col-md-4"><strong>Talep grubu:</strong> @item.RequestCategory</div>
                     <div class="col-md-4"><strong>Kurulum:</strong> @item.PlacementType</div>
                     <div class="col-md-6"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                    <div class="col-md-6"><strong>Tavsiye edilen satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                    <div class="col-md-6"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
                     @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
                     {
                         <div class="col-12"><strong>Teknik özet:</strong><div class="text-muted">@item.DesignDetails</div></div>

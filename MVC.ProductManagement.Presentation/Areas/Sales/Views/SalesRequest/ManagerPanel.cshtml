@@ -24,6 +24,33 @@
     </div>
 </div>
 
+<div class="card mb-3">
+    <div class="card-body pt-3">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label">Bölge</label>
+                <select asp-for="RegionFilter" asp-items="Model.RegionOptions" class="form-select">
+                    <option value="">Tümü</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Satışçı</label>
+                <select asp-for="SalespersonFilter" asp-items="Model.SalespersonOptions" class="form-select">
+                    <option value="">Tümü</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Ürün</label>
+                <input asp-for="ProductFilter" class="form-control" placeholder="Ürün kodu / ürün adı" />
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+                <a asp-action="ManagerPanel" class="btn btn-outline-secondary w-100">Temizle</a>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-body pt-4">
         <div class="table-responsive">
@@ -34,9 +61,12 @@
                         <th>Müşteri</th>
                         <th>Satışçı</th>
                         <th>Bölge</th>
+                        <th>Müşteriye İletim</th>
                         <th>Revizyon</th>
                         <th>Durum</th>
                         <th class="text-end">Maliyet Toplamı</th>
+                        <th class="text-end">Min Satış Toplamı</th>
+                        <th class="text-end">Satış Fiyatı Toplamı</th>
                         <th class="text-end">İşlem</th>
                     </tr>
                 </thead>
@@ -54,9 +84,21 @@
                                 <td>@row.CustomerName</td>
                                 <td>@row.SalespersonName</td>
                                 <td>@(row.Region ?? "-")</td>
+                                <td>@row.CustomerQuoteStatus</td>
                                 <td>@row.RevisionCode</td>
                                 <td>@row.WorkflowStatus</td>
                                 <td class="text-end">@(row.LinkedCostTotal?.ToString("N2") ?? "-") ₺</td>
+                                <td class="text-end">@(row.MinimumSalesPriceTotal?.ToString("N2") ?? "-") ₺</td>
+                                <td class="text-end">
+                                    @if (row.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer)
+                                    {
+                                        <span class="fw-semibold text-success">@(row.ApprovedSalesPriceTotal?.ToString("N2") ?? "-") ₺</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@(row.ApprovedSalesPriceTotal?.ToString("N2") ?? "-") ₺</span>
+                                    }
+                                </td>
                                 <td class="text-end">
                                     <div class="d-flex justify-content-end gap-1">
                                         <a asp-action="Details" asp-route-id="@row.Id" class="btn btn-sm btn-outline-secondary">Detay</a>
@@ -82,7 +124,7 @@
                     }
                     else
                     {
-                        <tr><td colspan="8" class="text-center text-muted">Gösterilecek maliyet çalışması yok.</td></tr>
+                        <tr><td colspan="11" class="text-center text-muted">Gösterilecek maliyet çalışması yok.</td></tr>
                     }
                 </tbody>
             </table>

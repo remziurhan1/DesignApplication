@@ -97,7 +97,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManagerPanel()
+        public async Task<IActionResult> ManagerPanel(string? regionFilter, string? salespersonFilter, string? productFilter)
         {
             if (!await CanAccessSalesManagerPanelAsync())
             {
@@ -119,16 +119,55 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 requestsQuery = requestsQuery.Where(x => x.Customer.Region == region);
             }
 
+            if (!string.IsNullOrWhiteSpace(regionFilter))
+            {
+                requestsQuery = requestsQuery.Where(x => x.Customer.Region == regionFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(salespersonFilter))
+            {
+                requestsQuery = requestsQuery.Where(x => x.RequestedByName == salespersonFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(productFilter))
+            {
+                var normalizedProduct = productFilter.Trim();
+                requestsQuery = requestsQuery.Where(x => x.Items.Any(i =>
+                    (!string.IsNullOrWhiteSpace(i.ProductCode) && i.ProductCode.Contains(normalizedProduct)) ||
+                    (!string.IsNullOrWhiteSpace(i.ItemTitle) && i.ItemTitle.Contains(normalizedProduct))));
+            }
+
             var requests = await requestsQuery
                 .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
 
             var today = DateTime.UtcNow.Date;
+            var regionOptions = requests
+                .Select(x => x.Customer.Region)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem(x!, x!))
+                .ToList();
+
+            var salespersonOptions = requests
+                .Select(x => x.RequestedByName)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem(x, x))
+                .ToList();
+
             var vm = new SalesManagerReviewVm
             {
                 IncomingCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.PricingInProgress || x.WorkflowStatus == SalesRequestWorkflowStatus.Submitted),
                 ApprovedTodayCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved && x.ModifiedDate.HasValue && x.ModifiedDate.Value.Date == today),
                 RejectedTodayCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected && x.ModifiedDate.HasValue && x.ModifiedDate.Value.Date == today),
+                RegionFilter = regionFilter,
+                SalespersonFilter = salespersonFilter,
+                ProductFilter = productFilter,
+                RegionOptions = regionOptions,
+                SalespersonOptions = salespersonOptions,
                 Requests = requests.Select(x => new SalesManagerReviewRowVm
                 {
                     Id = x.Id,
@@ -141,6 +180,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     SalesOpenedAt = x.SalesOpenedAt,
                     ItemCount = x.Items.Count,
                     LinkedCostTotal = x.Items.Where(i => i.LinkedCostAnalysisTotal.HasValue).Sum(i => i.LinkedCostAnalysisTotal),
+                    MinimumSalesPriceTotal = x.Items.Where(i => i.MinimumSalesPrice.HasValue).Sum(i => i.MinimumSalesPrice),
+                    ApprovedSalesPriceTotal = x.Items.Where(i => i.ApprovedSalesPrice.HasValue).Sum(i => i.ApprovedSalesPrice),
+                    CustomerQuoteStatus = x.CustomerQuoteStatus,
                     WorkflowStatus = x.WorkflowStatus
                 }).ToList()
             };
