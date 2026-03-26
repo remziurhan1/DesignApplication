@@ -459,6 +459,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     entityItem.EstimatedCost = analysis.TotalCost;
                     entityItem.MinimumSalesPrice = analysis.MinimumSalesPrice ?? analysis.TotalCost;
                     entityItem.ApprovedSalesPrice = analysis.RecommendedSalesPrice ?? analysis.MinimumSalesPrice ?? analysis.TotalCost;
+                    entityItem.SharedSalesPrice = entityItem.ApprovedSalesPrice;
+                    entityItem.SoldSalesPrice = entityItem.ApprovedSalesPrice;
 
                     itemVm.LinkedCalculationType = analysis.CalculationType;
                     itemVm.LinkedCalculationId = analysis.CalculationId;
@@ -481,6 +483,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     entityItem.EstimatedCost = itemVm.EstimatedCost;
                     entityItem.MinimumSalesPrice = itemVm.MinimumSalesPrice;
                     entityItem.ApprovedSalesPrice = itemVm.ApprovedSalesPrice;
+                    entityItem.SharedSalesPrice = itemVm.ApprovedSalesPrice;
+                    entityItem.SoldSalesPrice = itemVm.ApprovedSalesPrice;
                 }
 
                 entityItem.DesignDetails = itemVm.DesignDetails;
@@ -783,8 +787,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     CapacityM3 = x.CapacityM3,
                     LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
                     LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal,
-                    SharedSalesPrice = x.MinimumSalesPrice,
-                    SoldSalesPrice = x.ApprovedSalesPrice
+                    SharedSalesPrice = x.SharedSalesPrice ?? x.ApprovedSalesPrice,
+                    SoldSalesPrice = x.SoldSalesPrice ?? x.ApprovedSalesPrice
                 })
                 .ToList();
 

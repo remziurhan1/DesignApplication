@@ -97,7 +97,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManagerPanel(string? regionFilter, string? salespersonFilter, string? productFilter)
+        public async Task<IActionResult> ManagerPanel(string? regionFilter, string? customerFilter, string? salespersonFilter, string? productFilter)
         {
             if (!await CanAccessSalesManagerPanelAsync())
             {
@@ -122,6 +122,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             if (!string.IsNullOrWhiteSpace(regionFilter))
             {
                 requestsQuery = requestsQuery.Where(x => x.Customer.Region == regionFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(customerFilter))
+            {
+                requestsQuery = requestsQuery.Where(x => x.Customer.CompanyName == customerFilter);
             }
 
             if (!string.IsNullOrWhiteSpace(salespersonFilter))
@@ -158,15 +163,25 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .Select(x => new SelectListItem(x, x))
                 .ToList();
 
+            var customerOptions = requests
+                .Select(x => x.Customer.CompanyName)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem(x, x))
+                .ToList();
+
             var vm = new SalesManagerReviewVm
             {
                 IncomingCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.PricingInProgress || x.WorkflowStatus == SalesRequestWorkflowStatus.Submitted),
                 ApprovedTodayCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved && x.ModifiedDate.HasValue && x.ModifiedDate.Value.Date == today),
                 RejectedTodayCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected && x.ModifiedDate.HasValue && x.ModifiedDate.Value.Date == today),
                 RegionFilter = regionFilter,
+                CustomerFilter = customerFilter,
                 SalespersonFilter = salespersonFilter,
                 ProductFilter = productFilter,
                 RegionOptions = regionOptions,
+                CustomerOptions = customerOptions,
                 SalespersonOptions = salespersonOptions,
                 Requests = requests.Select(x => new SalesManagerReviewRowVm
                 {
@@ -608,6 +623,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             var entity = await _context.SalesRequests
+                .Include(x => x.Items)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (entity == null)
             {
@@ -615,6 +631,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             entity.CustomerQuoteStatus = customerQuoteStatus;
+            if (customerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer)
+            {
+                foreach (var item in entity.Items)
+                {
+                    item.SharedSalesPrice ??= item.ApprovedSalesPrice;
+                }
+            }
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Müşteri teklif durumu güncellendi.";
             return RedirectToAction(nameof(Details), new { id });
@@ -1195,8 +1218,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     CapacityM3 = x.CapacityM3,
                     LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
                     LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal,
-                    SharedSalesPrice = x.MinimumSalesPrice,
-                    SoldSalesPrice = x.ApprovedSalesPrice
+                    SharedSalesPrice = x.SharedSalesPrice ?? x.ApprovedSalesPrice,
+                    SoldSalesPrice = x.SoldSalesPrice ?? x.ApprovedSalesPrice
                 })
                 .ToList();
 
@@ -1326,8 +1349,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         x.ItemTitle,
                         x.LinkedCostAnalysisRevisionCode,
                         x.LinkedCostAnalysisTotal,
-                        SharedSalesPrice = x.MinimumSalesPrice,
-                        SoldSalesPrice = x.ApprovedSalesPrice
+                        SharedSalesPrice = x.SharedSalesPrice ?? x.ApprovedSalesPrice,
+                        SoldSalesPrice = x.SoldSalesPrice ?? x.ApprovedSalesPrice
                     })
             };
 

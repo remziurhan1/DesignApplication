@@ -314,9 +314,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public int ApprovedTodayCount { get; set; }
         public int RejectedTodayCount { get; set; }
         public string? RegionFilter { get; set; }
+        public string? CustomerFilter { get; set; }
         public string? SalespersonFilter { get; set; }
         public string? ProductFilter { get; set; }
         public List<SelectListItem> RegionOptions { get; set; } = new();
+        public List<SelectListItem> CustomerOptions { get; set; } = new();
         public List<SelectListItem> SalespersonOptions { get; set; } = new();
         public List<SalesManagerReviewRowVm> Requests { get; set; } = new();
     }

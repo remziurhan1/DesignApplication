@@ -51,6 +51,8 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public decimal? EstimatedCost { get; set; }
         public decimal? MinimumSalesPrice { get; set; }
         public decimal? ApprovedSalesPrice { get; set; }
+        public decimal? SharedSalesPrice { get; set; }
+        public decimal? SoldSalesPrice { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; } = SalesRequestWorkflowStatus.Submitted;
         public int DisplayOrder { get; set; }
 

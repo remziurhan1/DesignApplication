@@ -34,16 +34,22 @@
                 </select>
             </div>
             <div class="col-md-3">
+                <label class="form-label">Müşteri</label>
+                <select asp-for="CustomerFilter" asp-items="Model.CustomerOptions" class="form-select">
+                    <option value="">Tümü</option>
+                </select>
+            </div>
+            <div class="col-md-2">
                 <label class="form-label">Satışçı</label>
                 <select asp-for="SalespersonFilter" asp-items="Model.SalespersonOptions" class="form-select">
                     <option value="">Tümü</option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="form-label">Ürün</label>
                 <input asp-for="ProductFilter" class="form-control" placeholder="Ürün kodu / ürün adı" />
             </div>
-            <div class="col-md-3 d-flex gap-2">
+            <div class="col-md-2 d-flex gap-2">
                 <button type="submit" class="btn btn-primary w-100">Filtrele</button>
                 <a asp-action="ManagerPanel" class="btn btn-outline-secondary w-100">Temizle</a>
             </div>
