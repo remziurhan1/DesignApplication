@@ -267,6 +267,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public decimal CapacityM3 { get; set; }
         public string? LinkedCostAnalysisRevisionCode { get; set; }
         public decimal? LinkedCostAnalysisTotal { get; set; }
+        public decimal? SharedSalesPrice { get; set; }
+        public decimal? SoldSalesPrice { get; set; }
     }
 
     public class SalesDashboardVm

@@ -230,7 +230,7 @@
                                     @foreach (var item in revision.Items)
                                     {
                                         <div class="small text-muted">
-                                            @item.ItemCode · @item.CapacityM3 m³ · @(item.LinkedCostAnalysisRevisionCode ?? "-") · @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺
+                                            @item.ItemCode · @item.CapacityM3 m³ · @(item.LinkedCostAnalysisRevisionCode ?? "-") · Maliyet: @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺ · İletilen: @(item.SharedSalesPrice?.ToString("N2") ?? "-") ₺ · Satılan: @(item.SoldSalesPrice?.ToString("N2") ?? "-") ₺
                                         </div>
                                     }
                                 </div>

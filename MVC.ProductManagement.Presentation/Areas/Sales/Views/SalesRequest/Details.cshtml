@@ -288,6 +288,8 @@
                                                 <th>Kapasite</th>
                                                 <th>Maliyet Revizyonu</th>
                                                 <th class="text-end">Maliyet</th>
+                                                <th class="text-end">İletilen Fiyat</th>
+                                                <th class="text-end">Satılan Fiyat</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -298,6 +300,8 @@
                                                 <td>@item.CapacityM3 m³</td>
                                                 <td>@(item.LinkedCostAnalysisRevisionCode ?? "-")</td>
                                                 <td class="text-end">@(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺</td>
+                                                <td class="text-end">@(item.SharedSalesPrice?.ToString("N2") ?? "-") ₺</td>
+                                                <td class="text-end">@(item.SoldSalesPrice?.ToString("N2") ?? "-") ₺</td>
                                             </tr>
                                         }
                                         </tbody>

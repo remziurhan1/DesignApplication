@@ -1194,7 +1194,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     ItemTitle = x.ItemTitle,
                     CapacityM3 = x.CapacityM3,
                     LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
-                    LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal
+                    LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal,
+                    SharedSalesPrice = x.MinimumSalesPrice,
+                    SoldSalesPrice = x.ApprovedSalesPrice
                 })
                 .ToList();
 
@@ -1243,7 +1245,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         ItemTitle = item["ItemTitle"]?.GetValue<string?>() ?? "-",
                         CapacityM3 = item["CapacityM3"]?.GetValue<decimal?>() ?? 0,
                         LinkedCostAnalysisRevisionCode = item["LinkedCostAnalysisRevisionCode"]?.GetValue<string?>(),
-                        LinkedCostAnalysisTotal = item["LinkedCostAnalysisTotal"]?.GetValue<decimal?>()
+                        LinkedCostAnalysisTotal = item["LinkedCostAnalysisTotal"]?.GetValue<decimal?>(),
+                        SharedSalesPrice = item["SharedSalesPrice"]?.GetValue<decimal?>() ?? item["MinimumSalesPrice"]?.GetValue<decimal?>(),
+                        SoldSalesPrice = item["SoldSalesPrice"]?.GetValue<decimal?>() ?? item["ApprovedSalesPrice"]?.GetValue<decimal?>()
                     });
                 }
             }
@@ -1321,7 +1325,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         x.ItemCode,
                         x.ItemTitle,
                         x.LinkedCostAnalysisRevisionCode,
-                        x.LinkedCostAnalysisTotal
+                        x.LinkedCostAnalysisTotal,
+                        SharedSalesPrice = x.MinimumSalesPrice,
+                        SoldSalesPrice = x.ApprovedSalesPrice
                     })
             };
 
