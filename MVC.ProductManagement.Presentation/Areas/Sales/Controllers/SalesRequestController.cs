@@ -80,6 +80,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     CustomerName = x.Customer.CompanyName,
                     RequestedByName = x.RequestedByName,
                     SalesOpenedAt = x.SalesOpenedAt,
+                    RequestReceivedAt = x.RequestReceivedAt,
                     NeededByDate = x.NeededByDate,
                     WorkflowStatus = x.WorkflowStatus,
                     CustomerQuoteStatus = x.CustomerQuoteStatus,
@@ -257,6 +258,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 RequestedByName = vm.RequestedByName,
                 RequestedByEmail = vm.RequestedByEmail,
                 RequestedByDepartment = vm.RequestedByDepartment,
+                RequestReceivedAt = vm.RequestReceivedAt?.Date,
                 NeededByDate = vm.NeededByDate.Date,
                 RequestSource = SalesRequestSource.Sales,
                 ShipmentCountry = vm.ShipmentCountry,
@@ -369,6 +371,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 RequestedByName = entity.RequestedByName,
                 RequestedByEmail = entity.RequestedByEmail,
                 RequestedByDepartment = entity.RequestedByDepartment,
+                RequestReceivedAt = entity.RequestReceivedAt,
                 NeededByDate = entity.NeededByDate,
                 RequestSource = entity.RequestSource,
                 ShipmentCountry = entity.ShipmentCountry,
@@ -464,6 +467,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             entity.RequestedByName = vm.RequestedByName;
             entity.RequestedByEmail = vm.RequestedByEmail;
             entity.RequestedByDepartment = vm.RequestedByDepartment;
+            entity.RequestReceivedAt = vm.RequestReceivedAt?.Date;
             entity.NeededByDate = vm.NeededByDate.Date;
             entity.RequestSource = SalesRequestSource.Sales;
             entity.ShipmentCountry = vm.ShipmentCountry;
@@ -1053,6 +1057,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 RequestedByEmail = entity.RequestedByEmail,
                 RequestedByDepartment = entity.RequestedByDepartment,
                 SalesOpenedAt = entity.SalesOpenedAt,
+                RequestReceivedAt = entity.RequestReceivedAt,
                 NeededByDate = entity.NeededByDate,
                 RequestSource = entity.RequestSource,
                 ShipmentCountry = entity.ShipmentCountry,

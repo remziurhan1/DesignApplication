@@ -128,6 +128,10 @@
                         <small class="text-muted">Talebi açan satışçı bilgileri giriş yapan kullanıcı profilinden otomatik doldurulur.</small>
                     </div>
                     <div class="col-md-3">
+                        <label asp-for="RequestReceivedAt" class="form-label"></label>
+                        <input asp-for="RequestReceivedAt" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
                         <label asp-for="NeededByDate" class="form-label"></label>
                         <input asp-for="NeededByDate" type="date" class="form-control" />
                     </div>

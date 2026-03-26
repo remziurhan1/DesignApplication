@@ -23,6 +23,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string CustomerName { get; set; } = string.Empty;
         public string RequestedByName { get; set; } = string.Empty;
         public DateTime SalesOpenedAt { get; set; }
+        public DateTime? RequestReceivedAt { get; set; }
         public DateTime NeededByDate { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
         public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
@@ -54,6 +55,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         [StringLength(100)]
         [Display(Name = "Departman")]
         public string? RequestedByDepartment { get; set; }
+
+        [Display(Name = "Talep alma tarihi")]
+        [DataType(DataType.Date)]
+        public DateTime? RequestReceivedAt { get; set; }
 
         [Display(Name = "Teklif ihtiyaç tarihi")]
         [DataType(DataType.Date)]
@@ -208,6 +213,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string? RequestedByEmail { get; set; }
         public string? RequestedByDepartment { get; set; }
         public DateTime SalesOpenedAt { get; set; }
+        public DateTime? RequestReceivedAt { get; set; }
         public DateTime NeededByDate { get; set; }
         public SalesRequestSource RequestSource { get; set; }
         public string? ShipmentCountry { get; set; }

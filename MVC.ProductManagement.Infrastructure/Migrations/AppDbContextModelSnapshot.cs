@@ -2276,6 +2276,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<int>("RequestSource")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("RequestReceivedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("RequestedByDepartment")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
