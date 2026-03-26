@@ -2276,6 +2276,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<int>("RequestSource")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("RequestReceivedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("RequestedByDepartment")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -2486,6 +2489,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<decimal?>("ApprovedSalesPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal?>("SharedSalesPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("CapacityM3")
                         .HasColumnType("decimal(18,2)");
 
@@ -2588,6 +2594,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("MinimumSalesPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("SoldSalesPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("MinimumTechnicalNotes")

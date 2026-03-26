@@ -23,6 +23,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string CustomerName { get; set; } = string.Empty;
         public string RequestedByName { get; set; } = string.Empty;
         public DateTime SalesOpenedAt { get; set; }
+        public DateTime? RequestReceivedAt { get; set; }
         public DateTime NeededByDate { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
         public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
@@ -54,6 +55,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         [StringLength(100)]
         [Display(Name = "Departman")]
         public string? RequestedByDepartment { get; set; }
+
+        [Display(Name = "Talep alma tarihi")]
+        [DataType(DataType.Date)]
+        public DateTime? RequestReceivedAt { get; set; } = DateTime.UtcNow.Date;
 
         [Display(Name = "Teklif ihtiyaç tarihi")]
         [DataType(DataType.Date)]
@@ -208,6 +213,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public string? RequestedByEmail { get; set; }
         public string? RequestedByDepartment { get; set; }
         public DateTime SalesOpenedAt { get; set; }
+        public DateTime? RequestReceivedAt { get; set; }
         public DateTime NeededByDate { get; set; }
         public SalesRequestSource RequestSource { get; set; }
         public string? ShipmentCountry { get; set; }
@@ -261,6 +267,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public decimal CapacityM3 { get; set; }
         public string? LinkedCostAnalysisRevisionCode { get; set; }
         public decimal? LinkedCostAnalysisTotal { get; set; }
+        public decimal? SharedSalesPrice { get; set; }
+        public decimal? SoldSalesPrice { get; set; }
     }
 
     public class SalesDashboardVm
@@ -305,6 +313,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public int IncomingCount { get; set; }
         public int ApprovedTodayCount { get; set; }
         public int RejectedTodayCount { get; set; }
+        public string? RegionFilter { get; set; }
+        public string? CustomerFilter { get; set; }
+        public string? SalespersonFilter { get; set; }
+        public string? ProductFilter { get; set; }
+        public List<SelectListItem> RegionOptions { get; set; } = new();
+        public List<SelectListItem> CustomerOptions { get; set; } = new();
+        public List<SelectListItem> SalespersonOptions { get; set; } = new();
         public List<SalesManagerReviewRowVm> Requests { get; set; } = new();
     }
 
@@ -320,6 +335,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public DateTime SalesOpenedAt { get; set; }
         public int ItemCount { get; set; }
         public decimal? LinkedCostTotal { get; set; }
+        public decimal? MinimumSalesPriceTotal { get; set; }
+        public decimal? ApprovedSalesPriceTotal { get; set; }
+        public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
     }
 

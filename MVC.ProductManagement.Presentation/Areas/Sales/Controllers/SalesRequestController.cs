@@ -80,6 +80,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     CustomerName = x.Customer.CompanyName,
                     RequestedByName = x.RequestedByName,
                     SalesOpenedAt = x.SalesOpenedAt,
+                    RequestReceivedAt = x.RequestReceivedAt,
                     NeededByDate = x.NeededByDate,
                     WorkflowStatus = x.WorkflowStatus,
                     CustomerQuoteStatus = x.CustomerQuoteStatus,
@@ -96,7 +97,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ManagerPanel()
+        public async Task<IActionResult> ManagerPanel(string? regionFilter, string? customerFilter, string? salespersonFilter, string? productFilter)
         {
             if (!await CanAccessSalesManagerPanelAsync())
             {
@@ -118,16 +119,70 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 requestsQuery = requestsQuery.Where(x => x.Customer.Region == region);
             }
 
+            if (!string.IsNullOrWhiteSpace(regionFilter))
+            {
+                requestsQuery = requestsQuery.Where(x => x.Customer.Region == regionFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(customerFilter))
+            {
+                requestsQuery = requestsQuery.Where(x => x.Customer.CompanyName == customerFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(salespersonFilter))
+            {
+                requestsQuery = requestsQuery.Where(x => x.RequestedByName == salespersonFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(productFilter))
+            {
+                var normalizedProduct = productFilter.Trim();
+                requestsQuery = requestsQuery.Where(x => x.Items.Any(i =>
+                    (!string.IsNullOrWhiteSpace(i.ProductCode) && i.ProductCode.Contains(normalizedProduct)) ||
+                    (!string.IsNullOrWhiteSpace(i.ItemTitle) && i.ItemTitle.Contains(normalizedProduct))));
+            }
+
             var requests = await requestsQuery
                 .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
 
             var today = DateTime.UtcNow.Date;
+            var regionOptions = requests
+                .Select(x => x.Customer.Region)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem(x!, x!))
+                .ToList();
+
+            var salespersonOptions = requests
+                .Select(x => x.RequestedByName)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem(x, x))
+                .ToList();
+
+            var customerOptions = requests
+                .Select(x => x.Customer.CompanyName)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem(x, x))
+                .ToList();
+
             var vm = new SalesManagerReviewVm
             {
                 IncomingCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.PricingInProgress || x.WorkflowStatus == SalesRequestWorkflowStatus.Submitted),
                 ApprovedTodayCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved && x.ModifiedDate.HasValue && x.ModifiedDate.Value.Date == today),
                 RejectedTodayCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected && x.ModifiedDate.HasValue && x.ModifiedDate.Value.Date == today),
+                RegionFilter = regionFilter,
+                CustomerFilter = customerFilter,
+                SalespersonFilter = salespersonFilter,
+                ProductFilter = productFilter,
+                RegionOptions = regionOptions,
+                CustomerOptions = customerOptions,
+                SalespersonOptions = salespersonOptions,
                 Requests = requests.Select(x => new SalesManagerReviewRowVm
                 {
                     Id = x.Id,
@@ -140,6 +195,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     SalesOpenedAt = x.SalesOpenedAt,
                     ItemCount = x.Items.Count,
                     LinkedCostTotal = x.Items.Where(i => i.LinkedCostAnalysisTotal.HasValue).Sum(i => i.LinkedCostAnalysisTotal),
+                    MinimumSalesPriceTotal = x.Items.Where(i => i.MinimumSalesPrice.HasValue).Sum(i => i.MinimumSalesPrice),
+                    ApprovedSalesPriceTotal = x.Items.Where(i => i.ApprovedSalesPrice.HasValue).Sum(i => i.ApprovedSalesPrice),
+                    CustomerQuoteStatus = x.CustomerQuoteStatus,
                     WorkflowStatus = x.WorkflowStatus
                 }).ToList()
             };
@@ -210,6 +268,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             {
                 RequestSource = SalesRequestSource.Sales,
                 OfferStatus = SalesOfferStatus.F,
+                RequestReceivedAt = DateTime.UtcNow.Date,
                 Items = new List<SalesRequestItemInputVm> { new() }
             };
 
@@ -229,15 +288,27 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
+            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
             }
 
+            if (vm.Items.Any(x => x.RequestCategory == SalesRequestCategory.SparePart) &&
+                (vm.Attachments == null || vm.Attachments.Count == 0))
+            {
+                ModelState.AddModelError(nameof(vm.Attachments), "Yedek parça talebi için en az bir ek yüklemelisiniz.");
+            }
+
             for (var i = 0; i < vm.Items.Count; i++)
             {
                 NormalizeAndValidateItem(vm.Items[i], $"Items[{i}]");
+            }
+
+            var salesOpenedAt = DateTime.UtcNow;
+            if (vm.RequestReceivedAt.HasValue && vm.RequestReceivedAt.Value.Date > salesOpenedAt.Date)
+            {
+                ModelState.AddModelError(nameof(vm.RequestReceivedAt), "Talep alma tarihi, talep giriş tarihinden büyük olamaz.");
             }
 
             if (!ModelState.IsValid)
@@ -257,6 +328,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 RequestedByName = vm.RequestedByName,
                 RequestedByEmail = vm.RequestedByEmail,
                 RequestedByDepartment = vm.RequestedByDepartment,
+                RequestReceivedAt = vm.RequestReceivedAt?.Date ?? salesOpenedAt.Date,
                 NeededByDate = vm.NeededByDate.Date,
                 RequestSource = SalesRequestSource.Sales,
                 ShipmentCountry = vm.ShipmentCountry,
@@ -265,7 +337,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 SummaryNotes = vm.SummaryNotes,
                 WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
                 OfferStatus = vm.OfferStatus,
-                SalesOpenedAt = DateTime.UtcNow
+                SalesOpenedAt = salesOpenedAt
             };
 
             var groups = await _context.SalesRequestProductGroups.AsNoTracking().ToDictionaryAsync(x => x.Id);
@@ -369,6 +441,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 RequestedByName = entity.RequestedByName,
                 RequestedByEmail = entity.RequestedByEmail,
                 RequestedByDepartment = entity.RequestedByDepartment,
+                RequestReceivedAt = entity.RequestReceivedAt,
                 NeededByDate = entity.NeededByDate,
                 RequestSource = entity.RequestSource,
                 ShipmentCountry = entity.ShipmentCountry,
@@ -433,7 +506,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             vm.Id = id;
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty && x.CapacityM3 > 0).ToList();
+            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
@@ -450,6 +523,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (entity == null) return NotFound();
 
+            if (vm.RequestReceivedAt.HasValue && vm.RequestReceivedAt.Value.Date > entity.SalesOpenedAt.Date)
+            {
+                ModelState.AddModelError(nameof(vm.RequestReceivedAt), "Talep alma tarihi, talep giriş tarihinden büyük olamaz.");
+            }
+
             if (!ModelState.IsValid)
             {
                 await PopulateFormAsync(vm);
@@ -464,6 +542,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             entity.RequestedByName = vm.RequestedByName;
             entity.RequestedByEmail = vm.RequestedByEmail;
             entity.RequestedByDepartment = vm.RequestedByDepartment;
+            entity.RequestReceivedAt = vm.RequestReceivedAt?.Date;
             entity.NeededByDate = vm.NeededByDate.Date;
             entity.RequestSource = SalesRequestSource.Sales;
             entity.ShipmentCountry = vm.ShipmentCountry;
@@ -544,6 +623,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             var entity = await _context.SalesRequests
+                .Include(x => x.Items)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (entity == null)
             {
@@ -551,6 +631,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             entity.CustomerQuoteStatus = customerQuoteStatus;
+            if (customerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer)
+            {
+                foreach (var item in entity.Items)
+                {
+                    item.SharedSalesPrice ??= item.ApprovedSalesPrice;
+                }
+            }
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Müşteri teklif durumu güncellendi.";
             return RedirectToAction(nameof(Details), new { id });
@@ -1053,6 +1140,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 RequestedByEmail = entity.RequestedByEmail,
                 RequestedByDepartment = entity.RequestedByDepartment,
                 SalesOpenedAt = entity.SalesOpenedAt,
+                RequestReceivedAt = entity.RequestReceivedAt,
                 NeededByDate = entity.NeededByDate,
                 RequestSource = entity.RequestSource,
                 ShipmentCountry = entity.ShipmentCountry,
@@ -1129,7 +1217,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     ItemTitle = x.ItemTitle,
                     CapacityM3 = x.CapacityM3,
                     LinkedCostAnalysisRevisionCode = x.LinkedCostAnalysisRevisionCode,
-                    LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal
+                    LinkedCostAnalysisTotal = x.LinkedCostAnalysisTotal,
+                    SharedSalesPrice = x.SharedSalesPrice ?? x.ApprovedSalesPrice,
+                    SoldSalesPrice = x.SoldSalesPrice ?? x.ApprovedSalesPrice
                 })
                 .ToList();
 
@@ -1178,7 +1268,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         ItemTitle = item["ItemTitle"]?.GetValue<string?>() ?? "-",
                         CapacityM3 = item["CapacityM3"]?.GetValue<decimal?>() ?? 0,
                         LinkedCostAnalysisRevisionCode = item["LinkedCostAnalysisRevisionCode"]?.GetValue<string?>(),
-                        LinkedCostAnalysisTotal = item["LinkedCostAnalysisTotal"]?.GetValue<decimal?>()
+                        LinkedCostAnalysisTotal = item["LinkedCostAnalysisTotal"]?.GetValue<decimal?>(),
+                        SharedSalesPrice = item["SharedSalesPrice"]?.GetValue<decimal?>() ?? item["MinimumSalesPrice"]?.GetValue<decimal?>(),
+                        SoldSalesPrice = item["SoldSalesPrice"]?.GetValue<decimal?>() ?? item["ApprovedSalesPrice"]?.GetValue<decimal?>()
                     });
                 }
             }
@@ -1256,7 +1348,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                         x.ItemCode,
                         x.ItemTitle,
                         x.LinkedCostAnalysisRevisionCode,
-                        x.LinkedCostAnalysisTotal
+                        x.LinkedCostAnalysisTotal,
+                        SharedSalesPrice = x.SharedSalesPrice ?? x.ApprovedSalesPrice,
+                        SoldSalesPrice = x.SoldSalesPrice ?? x.ApprovedSalesPrice
                     })
             };
 

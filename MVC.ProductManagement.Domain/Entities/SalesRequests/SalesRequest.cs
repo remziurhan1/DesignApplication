@@ -12,6 +12,7 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public string RequestedByName { get; set; } = string.Empty;
         public string? RequestedByEmail { get; set; }
         public string? RequestedByDepartment { get; set; }
+        public DateTime? RequestReceivedAt { get; set; }
         public DateTime NeededByDate { get; set; }
         public SalesRequestSource RequestSource { get; set; } = SalesRequestSource.Sales;
         public string? ShipmentCountry { get; set; }
