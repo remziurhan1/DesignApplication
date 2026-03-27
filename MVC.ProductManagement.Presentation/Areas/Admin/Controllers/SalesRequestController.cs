@@ -378,6 +378,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .ToListAsync();
 
             var vm = MapDetailVm(entity, revisions, string.Equals(mode, "manager", StringComparison.OrdinalIgnoreCase));
+            vm.NewComment.SalesRequestId = id;
             await PopulateSubItemAsync(vm.NewSubItem, id);
             return View(vm);
         }
@@ -619,6 +620,36 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddComment(SalesRequestCommentCreateVm vm)
+        {
+            if (string.IsNullOrWhiteSpace(vm.CommentText))
+            {
+                TempData["ErrorMessage"] = "Yorum alanı zorunludur.";
+                return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
+            }
+
+            var request = await _context.SalesRequests
+                .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            _context.SalesRequestComments.Add(new SalesRequestComment
+            {
+                SalesRequestId = request.Id,
+                CommentText = vm.CommentText.Trim(),
+                CommentedBy = User.Identity?.Name ?? "System"
+            });
+
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Yorum kaydedildi.";
+            return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
+        }
+
         private async Task PopulateSubItemAsync(SalesRequestAddSubItemVm vm, Guid requestId)
         {
             vm.SalesRequestId = requestId;
@@ -638,6 +669,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .Include(x => x.Attachments)
                 .Include(x => x.Items)
                     .ThenInclude(x => x.ProductGroup)
+                .Include(x => x.Comments)
                 .Where(x => x.Id == id && x.Status != Status.Deleted)
                 .FirstOrDefaultAsync();
         }
@@ -749,6 +781,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     RevisedAt = x.RevisedAt
                 }).ToList(),
                 RevisionCosts = BuildRevisionCosts(entity, revisions),
+                Comments = entity.Comments
+                    .Where(x => x.Status != Status.Deleted)
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Select(x => new SalesRequestCommentVm
+                    {
+                        Id = x.Id,
+                        CommentText = x.CommentText,
+                        CommentedBy = x.CommentedBy,
+                        CommentedAt = x.CreatedDate
+                    }).ToList(),
                 Items = roots,
                 Attachments = entity.Attachments.Select(x => new SalesRequestAttachmentVm
                 {

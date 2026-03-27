@@ -413,6 +413,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var vm = MapDetailVm(entity, revisions, canViewPricing);
             vm.DocumentUpload.SalesRequestId = id;
+            vm.NewComment.SalesRequestId = id;
             var isManagerUser = await CanAccessSalesManagerPanelAsync();
             vm.CanUploadPidDocument = isManagerUser;
             vm.CanDownloadDocuments = entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved;
@@ -520,6 +521,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             var entity = await _context.SalesRequests
                 .Include(x => x.Items)
                 .Include(x => x.Documents)
+                .Include(x => x.Comments)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (entity == null) return NotFound();
 
@@ -659,10 +661,51 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 return NotFound();
             }
 
+            if (entity.CustomerQuoteStatus != SalesCustomerQuoteStatus.SharedWithCustomer)
+            {
+                TempData["ErrorMessage"] = "Teklif durumu sadece teklif müşteriye iletildikten sonra güncellenebilir.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
             entity.OfferStatus = offerStatus;
             await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Teklif durumu güncellendi.";
             return RedirectToAction(nameof(Details), new { id });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddComment(SalesRequestCommentCreateVm vm)
+        {
+            if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
+            {
+                return Forbid();
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.CommentText))
+            {
+                TempData["ErrorMessage"] = "Yorum alanı zorunludur.";
+                return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
+            }
+
+            var request = await _context.SalesRequests
+                .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            _context.SalesRequestComments.Add(new SalesRequestComment
+            {
+                SalesRequestId = request.Id,
+                CommentText = vm.CommentText.Trim(),
+                CommentedBy = User.Identity?.Name ?? "System"
+            });
+
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Yorum kaydedildi.";
+            return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId });
         }
 
         [HttpPost]
@@ -677,6 +720,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             var request = await _context.SalesRequests
                 .Include(x => x.Documents)
+                .Include(x => x.Comments)
                 .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (request == null)
             {
@@ -741,6 +785,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             var request = await _context.SalesRequests
                 .AsNoTracking()
                 .Include(x => x.Documents)
+                .Include(x => x.Comments)
                 .FirstOrDefaultAsync(x => x.Id == requestId && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (request == null)
             {
@@ -1056,6 +1101,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 .Include(x => x.Items)
                     .ThenInclude(x => x.ProductGroup)
                 .Include(x => x.Documents)
+                .Include(x => x.Comments)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
         }
 
@@ -1163,6 +1209,16 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     RevisedAt = x.RevisedAt
                 }).ToList(),
                 RevisionCosts = BuildRevisionCosts(entity, revisions),
+                Comments = entity.Comments
+                    .Where(x => x.Status != Status.Deleted)
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Select(x => new SalesRequestCommentVm
+                    {
+                        Id = x.Id,
+                        CommentText = x.CommentText,
+                        CommentedBy = x.CommentedBy,
+                        CommentedAt = x.CreatedDate
+                    }).ToList(),
                 Documents = entity.Documents
                     .OrderByDescending(x => x.DocumentType)
                     .ThenByDescending(x => x.UploadedAt)
