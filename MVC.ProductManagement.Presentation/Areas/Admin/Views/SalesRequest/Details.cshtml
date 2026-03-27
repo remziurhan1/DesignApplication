@@ -215,6 +215,35 @@
 
             <div class="card mt-3">
                 <div class="card-body pt-4">
+                    <h5 class="card-title">Talep Yorumları</h5>
+                    <form asp-action="AddComment" method="post" class="mb-3">
+                        @Html.AntiForgeryToken()
+                        <input asp-for="NewComment.SalesRequestId" type="hidden" />
+                        <textarea asp-for="NewComment.CommentText" class="form-control" rows="3" placeholder="Yönetici yorumu ekleyin"></textarea>
+                        <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Yorum Ekle</button>
+                    </form>
+
+                    @if (Model.Comments.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <li class="list-group-item px-0">
+                                    <div class="small text-muted">@comment.CommentedBy · @comment.CommentedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                                    <div>@comment.CommentText</div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Henüz yorum bulunmuyor.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body pt-4">
                     <h5 class="card-title">Revizyon / Maliyet Geçmişi</h5>
                     @if (Model.RevisionCosts.Any())
                     {

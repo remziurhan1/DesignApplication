@@ -34,6 +34,11 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.SalesRequests
                 .WithOne(x => x.SalesRequest)
                 .HasForeignKey(x => x.SalesRequestId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(x => x.Comments)
+                .WithOne(x => x.SalesRequest)
+                .HasForeignKey(x => x.SalesRequestId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
