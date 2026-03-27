@@ -218,8 +218,8 @@
                     <h5 class="card-title">Talep Yorumları</h5>
                     <form asp-action="AddComment" method="post" class="mb-3">
                         @Html.AntiForgeryToken()
-                        <input asp-for="NewComment.SalesRequestId" type="hidden" />
-                        <textarea asp-for="NewComment.CommentText" class="form-control" rows="3" placeholder="Yönetici yorumu ekleyin"></textarea>
+                        <input type="hidden" name="SalesRequestId" value="@Model.NewComment.SalesRequestId" />
+                        <textarea name="CommentText" class="form-control" rows="3" placeholder="Yönetici yorumu ekleyin"></textarea>
                         <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Yorum Ekle</button>
                     </form>
 
