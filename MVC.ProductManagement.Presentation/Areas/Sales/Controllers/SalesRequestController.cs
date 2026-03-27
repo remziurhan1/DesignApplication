@@ -288,6 +288,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
+            vm.OfferStatus = SalesOfferStatus.F;
             vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
             if (!vm.Items.Any())
             {
@@ -336,7 +337,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 IsTransportByCustomer = vm.IsTransportByCustomer,
                 SummaryNotes = vm.SummaryNotes,
                 WorkflowStatus = SalesRequestWorkflowStatus.Submitted,
-                OfferStatus = vm.OfferStatus,
+                OfferStatus = SalesOfferStatus.F,
                 SalesOpenedAt = salesOpenedAt
             };
 
@@ -554,7 +555,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             entity.Title = await BuildRequestTitleAsync(vm.Items.First());
             entity.WorkflowStatus = SalesRequestWorkflowStatus.Submitted;
             entity.CustomerQuoteStatus = SalesCustomerQuoteStatus.PreparingSpecification;
-            entity.OfferStatus = vm.OfferStatus;
             entity.PricingCompletedAt = null;
             entity.ApprovedAt = null;
             entity.RevisionNo += 1;

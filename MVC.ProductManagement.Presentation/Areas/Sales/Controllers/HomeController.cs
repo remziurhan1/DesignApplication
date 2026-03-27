@@ -24,6 +24,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 return Forbid();
             }
 
+            var canAccessManagerPanel = await CanAccessSalesManagerPanelAsync();
+            if (canAccessManagerPanel)
+            {
+                return RedirectToAction("ManagerPanel", "SalesRequest");
+            }
+
             var allRequests = await _context.SalesRequests
                 .AsNoTracking()
                 .Include(x => x.Customer)
@@ -42,7 +48,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     (!string.IsNullOrWhiteSpace(currentUserName) && string.Equals(x.RequestedByName, currentUserName, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
-            var canAccessManagerPanel = await CanAccessSalesManagerPanelAsync();
             var canViewTeamDashboard = canAccessManagerPanel;
             var managerRequests = allRequests;
             if (!User.IsInRole("Admin") && !string.IsNullOrWhiteSpace(region))
