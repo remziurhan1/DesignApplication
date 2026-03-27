@@ -133,6 +133,16 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-body pt-4">
+                    <h5 class="card-title">Satış Akış Sırası</h5>
+                    <ol class="small text-muted ps-3 mb-3">
+                        <li>Talep</li>
+                        <li>Maliyet</li>
+                        <li>Min/Max fiyat</li>
+                        <li>Yönetici onayı</li>
+                        <li>Teklif müşteriye iletildi</li>
+                        <li>Teklif durumu</li>
+                    </ol>
+
                     <h5 class="card-title">Müşteri Bilgilendirme Durumu</h5>
                     <form asp-action="UpdateCustomerQuoteStatus" method="post" class="mb-4">
                         @Html.AntiForgeryToken()
@@ -143,14 +153,18 @@
                         </div>
                     </form>
 
-                    <h5 class="card-title">Teklif Durumu</h5>
+                    <h5 class="card-title">Teklif Durumu (Müşteriye iletim sonrası)</h5>
                     <form asp-action="UpdateOfferStatus" method="post" class="mb-4">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.Id" />
                         <div class="input-group">
-                            <select asp-for="OfferStatus" name="offerStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()"></select>
-                            <button type="submit" class="btn btn-outline-primary">Güncelle</button>
+                            <select asp-for="OfferStatus" name="offerStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()" @(Model.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer ? null : "disabled")></select>
+                            <button type="submit" class="btn btn-outline-primary" @(Model.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer ? null : "disabled")>Güncelle</button>
                         </div>
+                        @if (Model.CustomerQuoteStatus != SalesCustomerQuoteStatus.SharedWithCustomer)
+                        {
+                            <small class="text-warning">Önce "Teklif Müşteriye İletildi" adımı seçilmelidir.</small>
+                        }
                     </form>
 
                     <h5 class="card-title">Ekler</h5>
@@ -169,6 +183,36 @@
                     else
                     {
                         <p class="text-muted mb-0">Ek dosya yok.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Talep Yorumları</h5>
+                    <form asp-action="AddComment" method="post" class="mb-3">
+                        @Html.AntiForgeryToken()
+                        <input asp-for="NewComment.SalesRequestId" type="hidden" />
+                        <textarea asp-for="NewComment.CommentText" class="form-control" rows="3" placeholder="Müşteri geri bildirimi veya satış notu yazın"></textarea>
+                        <span asp-validation-for="NewComment.CommentText" class="text-danger"></span>
+                        <button type="submit" class="btn btn-sm btn-primary mt-2">Yorumu Kaydet</button>
+                    </form>
+
+                    @if (Model.Comments.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <li class="list-group-item px-0">
+                                    <div class="small text-muted">@comment.CommentedBy · @comment.CommentedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                                    <div>@comment.CommentText</div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Henüz yorum yok.</p>
                     }
                 </div>
             </div>

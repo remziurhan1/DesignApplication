@@ -33,5 +33,6 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public virtual ICollection<SalesRequestAttachment> Attachments { get; set; } = new List<SalesRequestAttachment>();
         public virtual ICollection<SalesRequestRevision> Revisions { get; set; } = new List<SalesRequestRevision>();
         public virtual ICollection<SalesRequestDocument> Documents { get; set; } = new List<SalesRequestDocument>();
+        public virtual ICollection<SalesRequestComment> Comments { get; set; } = new List<SalesRequestComment>();
     }
 }

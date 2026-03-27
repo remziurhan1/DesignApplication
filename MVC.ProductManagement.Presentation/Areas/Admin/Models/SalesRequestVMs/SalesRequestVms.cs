@@ -236,8 +236,28 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public List<SalesRequestAttachmentVm> Attachments { get; set; } = new();
         public SalesRequestDocumentUploadVm DocumentUpload { get; set; } = new();
         public SalesRequestAddSubItemVm NewSubItem { get; set; } = new();
+        public SalesRequestCommentCreateVm NewComment { get; set; } = new();
+        public List<SalesRequestCommentVm> Comments { get; set; } = new();
         public bool CanUploadPidDocument { get; set; }
         public bool CanDownloadDocuments { get; set; }
+    }
+
+    public class SalesRequestCommentVm
+    {
+        public Guid Id { get; set; }
+        public string CommentText { get; set; } = string.Empty;
+        public string CommentedBy { get; set; } = string.Empty;
+        public DateTime CommentedAt { get; set; }
+    }
+
+    public class SalesRequestCommentCreateVm
+    {
+        public Guid SalesRequestId { get; set; }
+
+        [Required(ErrorMessage = "Yorum alanı zorunludur.")]
+        [StringLength(2000)]
+        [Display(Name = "Yorum")]
+        public string CommentText { get; set; } = string.Empty;
     }
 
     public class SalesRequestRevisionHistoryVm
