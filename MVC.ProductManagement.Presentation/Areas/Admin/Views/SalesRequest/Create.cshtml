@@ -5,6 +5,7 @@
     var isEdit = ViewBag.IsEdit is true;
     var isRevision = ViewBag.IsRevision is true;
     var currentArea = (ViewContext.RouteData.Values["area"]?.ToString() ?? "Admin");
+    var isSalesArea = string.Equals(currentArea, "Sales", StringComparison.OrdinalIgnoreCase);
     ViewData["Title"] = isEdit ? "Satış Talebi Güncelle" : "Yeni Satış Talebi";
 }
 
@@ -140,10 +141,13 @@
                         <label asp-for="RequestSource" class="form-label"></label>
                         <select asp-for="RequestSource" asp-items="Html.GetEnumSelectList<SalesRequestSource>()" class="form-select"></select>
                     </div>
-                    <div class="col-md-3">
-                        <label asp-for="OfferStatus" class="form-label"></label>
-                        <select asp-for="OfferStatus" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()" class="form-select"></select>
-                    </div>
+                    @if (!isSalesArea)
+                    {
+                        <div class="col-md-3">
+                            <label asp-for="OfferStatus" class="form-label"></label>
+                            <select asp-for="OfferStatus" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()" class="form-select"></select>
+                        </div>
+                    }
                     <div class="col-md-3">
                         <label asp-for="ShipmentCountry" class="form-label"></label>
                         <input asp-for="ShipmentCountry" class="form-control" />

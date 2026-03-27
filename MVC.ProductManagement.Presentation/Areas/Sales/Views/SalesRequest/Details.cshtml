@@ -86,14 +86,51 @@
     }
 }
 
+<style>
+    .sales-detail-hero {
+        border-radius: 1rem;
+        background: linear-gradient(135deg, #1f3c88 0%, #2155cd 50%, #0b2447 100%);
+        color: #fff;
+        box-shadow: 0 12px 26px rgba(13, 33, 72, .2);
+    }
+
+    .sales-detail-hero .muted-light {
+        color: rgba(255,255,255,.82);
+    }
+
+    .sales-summary-card {
+        border: 1px solid #dbe4ff;
+        border-radius: .8rem;
+        background: #f8faff;
+        padding: .85rem 1rem;
+    }
+
+    .sales-summary-card .label {
+        font-size: .78rem;
+        text-transform: uppercase;
+        color: #6b7280;
+        letter-spacing: .04em;
+    }
+
+    .sales-summary-card .value {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+</style>
+
 <div class="pagetitle d-flex justify-content-between align-items-center">
-    <div>
-        <h1>@Model.RequestNo</h1>
-        <p class="text-muted mb-0">@Model.Title · @Model.RevisionCode</p>
-    </div>
-    <div class="d-flex gap-2">
-        <a asp-action="Revise" asp-route-id="@Model.Id" class="btn btn-outline-primary">Talebi revize et</a>
-        <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
+    <div class="sales-detail-hero p-3 p-md-4 w-100 mb-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div>
+                <h1 class="mb-1">@Model.RequestNo</h1>
+                <p class="mb-0 muted-light">@Model.Title · @Model.RevisionCode</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a asp-action="Revise" asp-route-id="@Model.Id" class="btn btn-light btn-sm">Talebi revize et</a>
+                <a asp-action="Index" class="btn btn-outline-light btn-sm">Listeye dön</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -110,16 +147,15 @@
             <div class="card">
                 <div class="card-body pt-4">
                     <div class="row g-3">
-                        <div class="col-md-4"><strong>Müşteri:</strong><div>@Model.CustomerName</div></div>
-                        <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
-                        <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.CustomerQuoteStatus)">@CustomerStatusText(Model.CustomerQuoteStatus)</span></div></div>
-                        <div class="col-md-4"><strong>Teklif durumu:</strong><div>@Model.OfferStatus</div></div>
-                        <div class="col-md-4"><strong>Revizyon:</strong><div>@Model.RevisionCode</div></div>
-                        <div class="col-md-4"><strong>Müşteri Bildirim Durumu:</strong><div>@Model.CustomerQuoteStatus</div></div>
-                        <div class="col-md-4"><strong>Talep oluşturma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
-                        <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@(Model.RequestReceivedAt.HasValue ? Model.RequestReceivedAt.Value.ToString("dd.MM.yyyy") : "-")</div></div>
-                        <div class="col-md-4"><strong>İhtiyaç tarihi:</strong><div>@Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</div></div>
-                        <div class="col-md-4"><strong>Talep kaynağı:</strong><div>@Model.RequestSource</div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Müşteri</div><div class="value">@Model.CustomerName</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Satışçı</div><div class="value">@Model.RequestedByName</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Müşteri durumu</div><div class="value"><span class="badge bg-@StatusClass(Model.CustomerQuoteStatus)">@CustomerStatusText(Model.CustomerQuoteStatus)</span></div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Teklif durumu</div><div class="value">@Model.OfferStatus</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Revizyon</div><div class="value">@Model.RevisionCode</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Talep kaynağı</div><div class="value">@Model.RequestSource</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Talep oluşturma</div><div class="value">@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Talep alma tarihi</div><div class="value">@(Model.RequestReceivedAt.HasValue ? Model.RequestReceivedAt.Value.ToString("dd.MM.yyyy") : "-")</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">İhtiyaç tarihi</div><div class="value">@Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</div></div></div>
                     </div>
                 </div>
             </div>
@@ -135,12 +171,11 @@
                 <div class="card-body pt-4">
                     <h5 class="card-title">Satış Akış Sırası</h5>
                     <ol class="small text-muted ps-3 mb-3">
-                        <li>Talep</li>
-                        <li>Maliyet</li>
-                        <li>Min/Max fiyat</li>
-                        <li>Yönetici onayı</li>
+                        <li>Talep oluşturuldu</li>
+                        <li>Teknik/maliyet çalışması tamamlandı</li>
+                        <li>Yönetici onayı alındı</li>
                         <li>Teklif müşteriye iletildi</li>
-                        <li>Teklif durumu</li>
+                        <li>Teklif durumu güncellendi</li>
                     </ol>
 
                     <h5 class="card-title">Müşteri Bilgilendirme Durumu</h5>
