@@ -625,11 +625,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddComment(SalesRequestCommentCreateVm vm)
         {
-            if (!await HasManagerScopePermissionAsync())
-            {
-                return Forbid();
-            }
-
             if (string.IsNullOrWhiteSpace(vm.CommentText))
             {
                 TempData["ErrorMessage"] = "Yorum alanı zorunludur.";
