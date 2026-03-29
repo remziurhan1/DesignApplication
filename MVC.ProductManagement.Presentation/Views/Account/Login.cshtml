@@ -48,10 +48,9 @@
         }
 
         .brand-block img {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+            width: min(100%, 340px);
+            height: auto;
+            filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.25));
             margin-bottom: .65rem;
         }
 
@@ -137,7 +136,7 @@
 <body>
     <main class="login-shell">
         <div class="brand-block">
-            <img src="~/assets/img/logo.png" alt="Cryocan Logo">
+            <img src="~/assets/img/cryocan-logo.svg" alt="Cryocan Logo">
             <h1>Cryocan Yönetim Paneli</h1>
             <p>Yönetici hesabınızla güvenli giriş yapın</p>
         </div>
