@@ -1,0 +1,20 @@
+<svg width="560" height="150" viewBox="0 0 560 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="560" height="150" fill="transparent"/>
+  <g transform="translate(8,18)">
+    <path d="M88 55L16 72L32 53L88 55Z" fill="#5CC7D1"/>
+    <path d="M91 58L20 88L33 65L91 58Z" fill="#56C3CE"/>
+    <path d="M94 62L30 106L38 79L94 62Z" fill="#4FBFCC"/>
+    <path d="M98 67L44 122L46 93L98 67Z" fill="#49BBC8"/>
+    <path d="M101 72L60 130L56 101L101 72Z" fill="#42B7C5"/>
+    <path d="M105 77L76 132L70 106L105 77Z" fill="#3BB3C2"/>
+    <path d="M108 82L91 130L83 108L108 82Z" fill="#35AFBF"/>
+    <path d="M111 87L104 128L96 110L111 87Z" fill="#2FAABC"/>
+    <path d="M90 53L38 14L60 16L90 53Z" fill="#64CCD6"/>
+    <path d="M95 53L56 8L75 14L95 53Z" fill="#5CC7D1"/>
+    <path d="M100 53L74 4L88 12L100 53Z" fill="#56C3CE"/>
+    <path d="M105 54L91 2L102 11L105 54Z" fill="#4FBFCC"/>
+    <path d="M110 55L106 4L114 15L110 55Z" fill="#49BBC8"/>
+    <circle cx="112" cy="57" r="12" fill="#E9F9FB"/>
+  </g>
+  <text x="150" y="102" fill="#17151B" font-family="Poppins, Arial, sans-serif" font-size="96" font-style="italic" font-weight="500" letter-spacing="1">cryocan</text>
+</svg>
