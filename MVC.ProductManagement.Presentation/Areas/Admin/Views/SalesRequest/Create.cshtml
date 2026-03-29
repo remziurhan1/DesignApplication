@@ -197,11 +197,11 @@
                                 <label class="form-label">Talep grubu</label>
                                 <select asp-for="Items[i].RequestCategory" asp-items="Html.GetEnumSelectList<SalesRequestCategory>()" class="form-select request-category"></select>
                             </div>
-                            <div class="col-12 flow-l3">
-                                <label class="form-label">3. Akışkan grubu</label>
+                            <div class="col-md-6 flow-l2">
+                                <label class="form-label">2. Akışkan grubu</label>
                                 <select asp-for="Items[i].ProductGroupId" asp-items="Model.ProductGroups" class="form-select product-group"><option value="">Seçin</option></select>
                             </div>
-                            <div class="col-12 flow-l2 non-spare-fields">
+                            <div class="col-md-6 flow-l2 non-spare-fields">
                                 <label class="form-label">2. Akışkan</label>
                                 <input type="text" class="form-control product-name-display" readonly value="@Model.Items[i].ProductCode" placeholder="Akışkan grubundan otomatik gelir" />
                                 <input asp-for="Items[i].ProductCode" type="hidden" class="product-code" />
@@ -473,8 +473,8 @@
                     </div>
                     <div class="row g-3">
                         <div class="col-md-4 flow-l5"><label class="form-label">Talep grubu</label><select name="Items[${index}].RequestCategory" class="form-select request-category">${categoryOptions}</select></div>
-                        <div class="col-12 flow-l3"><label class="form-label">3. Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select product-group"><option value="">Seçin</option>${productOptions}</select></div>
-                        <div class="col-12 flow-l2 non-spare-fields"><label class="form-label">2. Akışkan</label><input class="form-control product-name-display" readonly placeholder="Akışkan grubundan otomatik gelir" /><input name="Items[${index}].ProductCode" type="hidden" class="product-code" /></div>
+                        <div class="col-md-6 flow-l2"><label class="form-label">2. Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select product-group"><option value="">Seçin</option>${productOptions}</select></div>
+                        <div class="col-md-6 flow-l2 non-spare-fields"><label class="form-label">2. Akışkan</label><input class="form-control product-name-display" readonly placeholder="Akışkan grubundan otomatik gelir" /><input name="Items[${index}].ProductCode" type="hidden" class="product-code" /></div>
                         <input name="Items[${index}].TankOrientation" type="hidden" value="@((int)RequestTankOrientation.Vertical)" />
                         <div class="col-12 tank-only-fields flow-l5"><label class="form-label">5. Kurulum</label><select name="Items[${index}].PlacementType" class="form-select">${placementOptions}</select></div>
                         <div class="col-12 flow-l8 non-spare-fields"><label class="form-label">9. Dizayn standardı</label><input name="Items[${index}].DesignStandardCode" class="form-control" /></div>
