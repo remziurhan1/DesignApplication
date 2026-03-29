@@ -1,9 +1,8 @@
 @model MVC.ProductManagement.Presentation.Models.AccountVMs.LoginVM
 
 @{
-    ViewData["Title"] = "Yönetici Girişi";
+    ViewData["Title"] = "Cryocan Giriş";
     Layout = null;
-    string atSign = "@";
 }
 
 <!DOCTYPE html>
@@ -12,171 +11,184 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>@ViewData["Title"] - Cryocan</title>
-    <meta content="Cryocan yönetici giriş ekranı" name="description">
+    <title>@ViewData["Title"]</title>
+    <meta content="Cryocan kullanıcı giriş ekranı" name="description">
 
     <link href="~/assets/img/favicon.png" rel="icon">
-    <link href="~/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:400,500,600,700" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="~/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="~/assets/css/style.css" rel="stylesheet">
 
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #2563eb 100%);
-            font-family: "Open Sans", sans-serif;
-        }
-
-        .login-shell {
-            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(140deg, #03162b 0%, #0b4f8a 52%, #1b7fcb 100%);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1rem;
+            padding: 1rem;
         }
 
-        .brand-block {
+        .login-wrapper {
+            width: 100%;
+            max-width: 980px;
+            border-radius: 22px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            box-shadow: 0 18px 44px rgba(2, 14, 28, 0.4);
+            border: 1px solid rgba(255, 255, 255, .2);
+            background-color: #fff;
+        }
+
+        .login-brand {
+            background: linear-gradient(165deg, #022445 0%, #0b4f8a 55%, #1693dc 100%);
             color: #fff;
-            text-align: center;
-            margin-bottom: 1.25rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .brand-block img {
-            width: min(100%, 340px);
+        .login-brand img {
+            width: min(260px, 100%);
             height: auto;
-            filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.25));
-            margin-bottom: .65rem;
+            margin-bottom: 1.3rem;
+            filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.2));
         }
 
-        .brand-block h1 {
-            margin: 0;
-            font-size: 1.45rem;
-            font-weight: 700;
-            letter-spacing: .2px;
+        .login-brand h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-bottom: .9rem;
+            line-height: 1.35;
         }
 
-        .brand-block p {
-            margin: .35rem 0 0;
-            font-size: .94rem;
-            opacity: .88;
+        .login-brand p {
+            color: rgba(255,255,255,.9);
+            margin-bottom: 0;
+            line-height: 1.7;
+            font-size: .93rem;
         }
 
         .login-card {
-            width: 100%;
-            max-width: 430px;
-            border: 0;
-            border-radius: 18px;
-            box-shadow: 0 18px 45px rgba(2, 8, 23, 0.35);
-            overflow: hidden;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .login-card .card-body {
-            padding: 2rem;
+        .page-link-back {
+            color: #0b4f8a;
+            text-decoration: none;
+            font-size: .9rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
         }
+
+        .page-link-back:hover { color: #083c70; }
 
         .login-title {
-            font-family: "Poppins", sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #0f172a;
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #0d2b47;
             margin-bottom: .35rem;
         }
 
         .login-subtitle {
-            color: #64748b;
-            margin-bottom: 1.4rem;
-            font-size: .92rem;
+            color: #5f7388;
+            margin-bottom: 1.35rem;
+            font-size: .93rem;
         }
 
-        .input-group-text {
-            background-color: #eff6ff;
-            border-color: #dbeafe;
-            color: #1d4ed8;
-            font-weight: 700;
+        .form-label {
+            font-weight: 600;
+            color: #0d2b47;
+            font-size: .9rem;
         }
 
         .form-control {
-            border-color: #dbeafe;
             min-height: 44px;
+            border-radius: 10px;
+            border: 1px solid #cfe0f0;
         }
 
         .form-control:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 .16rem rgba(59, 130, 246, .2);
+            border-color: #1982d1;
+            box-shadow: 0 0 0 .17rem rgba(25,130,209,.17);
         }
 
         .btn-login {
-            background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+            margin-top: .25rem;
+            background: linear-gradient(90deg, #0b4f8a 0%, #0f74bf 100%);
             border: none;
-            min-height: 44px;
-            font-weight: 600;
+            min-height: 45px;
+            border-radius: 10px;
+            font-weight: 700;
             letter-spacing: .2px;
         }
 
         .btn-login:hover,
         .btn-login:focus {
-            background: linear-gradient(90deg, #1e40af 0%, #1d4ed8 100%);
+            background: linear-gradient(90deg, #083d6a 0%, #0b5f9f 100%);
         }
 
-        .copyright-note {
-            margin-top: 1rem;
-            text-align: center;
-            color: rgba(255, 255, 255, .9);
-            font-size: .85rem;
+        @@media (max-width: 900px) {
+            .login-wrapper {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-
 <body>
-    <main class="login-shell">
-        <div class="brand-block">
+    <main class="login-wrapper">
+        <section class="login-brand">
             <img src="~/assets/img/Cryocan logo.JPG" alt="Cryocan Logo">
-            <h1>Cryocan Yönetim Paneli</h1>
-            <p>Yönetici hesabınızla güvenli giriş yapın</p>
-        </div>
+            <h1>Kriyojenik sistem yönetimi için güvenli kullanıcı girişi</h1>
+            <p>
+                Cryocan iç süreçlerine erişim için kullanıcı bilgilerinizi girin.
+                Rolünüze göre yönetim, satış ve teknik modüllere yönlendirileceksiniz.
+            </p>
+        </section>
 
-        <div class="card login-card">
-            <div class="card-body">
-                <h5 class="login-title">Yönetici Girişi</h5>
-                <p class="login-subtitle">Kullanıcı adı ve şifrenizi girerek devam edin.</p>
+        <section class="login-card">
+            <a asp-controller="Home" asp-action="Index" class="page-link-back">
+                <i class="bi bi-arrow-left"></i> Bilgi sayfasına dön
+            </a>
 
-                <form asp-action="Login" method="post" class="row g-3 needs-validation" novalidate>
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h2 class="login-title">Hesabınıza Giriş Yapın</h2>
+            <p class="login-subtitle">Devam etmek için e-posta ve şifrenizi giriniz.</p>
 
-                    <div class="col-12">
-                        <label for="userEmail" class="form-label">Kullanıcı Adı</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text" id="usernamePrefix">@atSign</span>
-                            <input asp-for="Email" type="text" class="form-control" id="userEmail" required autocomplete="username" aria-describedby="usernamePrefix">
-                            <div class="invalid-feedback">Lütfen kullanıcı adınızı girin.</div>
-                        </div>
-                    </div>
+            <form asp-action="Login" method="post" class="row g-3" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                    <div class="col-12">
-                        <label for="userPassword" class="form-label">Şifre</label>
-                        <input asp-for="Password" type="password" class="form-control" id="userPassword" required autocomplete="current-password">
-                        <div class="invalid-feedback">Lütfen şifrenizi girin.</div>
-                    </div>
+                <div class="col-12">
+                    <label asp-for="Email" class="form-label">E-posta</label>
+                    <input asp-for="Email" type="email" class="form-control" autocomplete="username" required>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
 
-                    <div class="col-12 mt-1">
-                        <button class="btn btn-primary btn-login w-100" type="submit">
-                            <i class="bi bi-box-arrow-in-right me-1"></i> Giriş Yap
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                <div class="col-12">
+                    <label asp-for="Password" class="form-label">Şifre</label>
+                    <input asp-for="Password" type="password" class="form-control" autocomplete="current-password" required>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
 
-        <div class="copyright-note">Tüm hakları Cryocan firmasına aittir.</div>
+                <div class="col-12">
+                    <button class="btn btn-primary btn-login w-100" type="submit">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Giriş Yap
+                    </button>
+                </div>
+            </form>
+        </section>
     </main>
 
+    <partial name="_ValidationScriptsPartial" />
     <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/assets/js/main.js"></script>
 </body>
 </html>

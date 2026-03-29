@@ -1,8 +1,192 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Cryocan Bilgi Sayfası";
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>@ViewData["Title"]</title>
+
+    <link href="~/assets/img/favicon.png" rel="icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="~/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --brand-dark: #06203d;
+            --brand-blue: #0b4f8a;
+            --brand-light: #e9f3ff;
+            --accent: #00a3ff;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #021427 0%, #083c70 55%, #0f5da1 100%);
+            color: #fff;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        .brand img {
+            width: 170px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .btn-login {
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.5);
+            color: #fff;
+            padding: .55rem 1.15rem;
+            font-weight: 600;
+            transition: all .2s ease;
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-login:hover {
+            border-color: #fff;
+            color: #fff;
+            background-color: rgba(255,255,255,.12);
+        }
+
+        .hero {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1.3fr 1fr;
+            align-items: center;
+            padding: 1.5rem 1.25rem 2.5rem;
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 3.2vw, 3rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.03rem;
+            color: rgba(255,255,255,.9);
+            line-height: 1.8;
+            margin-bottom: 0;
+            max-width: 680px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 18px;
+            padding: 1.2rem;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 12px 30px rgba(2, 14, 28, .35);
+        }
+
+        .feature-item {
+            display: flex;
+            gap: .75rem;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-item i {
+            color: #8fd7ff;
+            font-size: 1.25rem;
+            margin-top: .1rem;
+        }
+
+        .feature-item h5 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .feature-item p {
+            margin: .2rem 0 0;
+            color: rgba(255,255,255,.85);
+            font-size: .9rem;
+            line-height: 1.5;
+        }
+
+        @@media (max-width: 992px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: .5rem;
+            }
+
+            .brand img {
+                width: 145px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-nav">
+        <div class="brand">
+            <img src="~/assets/img/Cryocan logo.JPG" alt="Cryocan Logo">
+        </div>
+        <a asp-controller="Account" asp-action="Login" class="btn-login">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Giriş
+        </a>
+    </header>
+
+    <main class="hero">
+        <section>
+            <h1>Kriyojenik depolama teknolojilerinde Cryocan deneyimiyle güvenli üretim yönetimi</h1>
+            <p>
+                Bu platform, Cryocan süreçlerine uygun olarak stok, malzeme ve operasyon verilerinin tek merkezden takip edilmesini sağlar.
+                Sisteme giriş yaptıktan sonra ilgili yetkinize göre üretim ve satış ekranlarına erişebilir, talepleri ve teknik verileri güvenli şekilde yönetebilirsiniz.
+            </p>
+        </section>
+
+        <aside class="feature-card">
+            <div class="feature-item">
+                <i class="bi bi-shield-check"></i>
+                <div>
+                    <h5>Güvenli Yetkilendirme</h5>
+                    <p>Rol bazlı erişim ile kullanıcılar yalnızca yetkili oldukları ekranları görüntüler.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <i class="bi bi-diagram-3"></i>
+                <div>
+                    <h5>Merkezi Süreç Yönetimi</h5>
+                    <p>Satış, malzeme ve teknik hesap süreçleri aynı sistemde birleştirilir.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <i class="bi bi-graph-up-arrow"></i>
+                <div>
+                    <h5>Operasyonel İzlenebilirlik</h5>
+                    <p>Kayıtlar düzenli olarak takip edilir, raporlar ve talepler kontrol altında tutulur.</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+</body>
+</html>
