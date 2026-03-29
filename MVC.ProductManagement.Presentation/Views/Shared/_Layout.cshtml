@@ -76,14 +76,18 @@
 </head>
 
 <body>
+    @{
+        var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+        var isAdminArea = string.Equals(currentArea, "Admin", StringComparison.OrdinalIgnoreCase);
+    }
 
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
             <a href="index.html" class="logo d-flex align-items-center">
-                <img src="~/assets/img/logo.png" alt="Cryocan Logo" style="height:40px;width:auto;max-width:220px;">
-                <span class="d-none d-lg-block">Stok Yönetim</span>
+                <img src="@(isAdminArea ? Url.Content("~/assets/img/cryocan-logo.svg") : Url.Content("~/assets/img/logo.png"))" alt="Cryocan Logo" style="height:40px;width:auto;max-width:220px;">
+                <span class="d-none d-lg-block">@(isAdminArea ? "Teknik Yönetim" : "Stok Yönetim")</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
@@ -104,49 +108,61 @@
                     </a>
                 </li><!-- End Search Icon-->
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                        <i class="bi bi-bell"></i>
-                        <span class="badge bg-primary badge-number">4</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                        <li class="dropdown-header">
-                            4 yeni bildirim
-                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Tümünü Gör</span></a>
-                        </li>
-                    </ul>
-                </li><!-- End Notification Nav -->
+                @if (isAdminArea)
+                {
+                    <li class="nav-item pe-3">
+                        <a asp-area="" asp-controller="Account" asp-action="Logout" class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Çıkış Yap</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-primary badge-number">4</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                            <li class="dropdown-header">
+                                4 yeni bildirim
+                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Tümünü Gör</span></a>
+                            </li>
+                        </ul>
+                    </li>
 
-                <li class="nav-item dropdown pe-3">
-                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="~/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                        <li class="dropdown-header">
-                            <h6>Yönetici</h6>
-                            <span>Admin</span>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-person"></i>
-                                <span>Profilim</span>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Çıkış Yap</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Profile Nav -->
+                    <li class="nav-item dropdown pe-3">
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img src="~/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6>Yönetici</h6>
+                                <span>Admin</span>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <i class="bi bi-person"></i>
+                                    <span>Profilim</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Çıkış Yap</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
 
             </ul>
         </nav><!-- End Icons Navigation -->
