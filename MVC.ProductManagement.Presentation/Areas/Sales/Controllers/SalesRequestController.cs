@@ -1667,10 +1667,27 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
         private static string BuildItemTitle(string shortCode, SalesRequestItemInputVm item)
         {
-            var orientation = item.TankOrientation == RequestTankOrientation.Vertical ? "DİK" : "YATAY";
+            if (item.RequestCategory != SalesRequestCategory.Tank)
+            {
+                var fallbackPlacement = item.PlacementType == PlacementType.Aboveground ? "YER ÜSTÜ" : "YER ALTI";
+                return $"{item.CapacityM3:0.##}m3-{shortCode}-{fallbackPlacement}";
+            }
+
+            var fluid = string.IsNullOrWhiteSpace(item.ProductCode) ? shortCode : item.ProductCode.Trim().ToUpperInvariant();
+            var group = shortCode.ToUpperInvariant();
+            var tankType = item.TankType == RequestTankType.Transport ? "TRANSPORT" : "DEPOLAMA";
             var placement = item.PlacementType == PlacementType.Aboveground ? "YER ÜSTÜ" : "YER ALTI";
-            var consumption = item.ConsumptionCapacity.HasValue ? $"-{item.ConsumptionCapacity:0.##}Nm³/h" : string.Empty;
-            return $"{item.CapacityM3:0.##}m3-{shortCode}-{orientation}-DEPOLAMA-{placement}{consumption}";
+            var pressure = item.DesignPressureBar.HasValue ? $"{item.DesignPressureBar:0.##}bar" : "-";
+            var stdOps = item.StdOpsSelection?.ToString()?.ToUpperInvariant() ?? "-";
+            var designStd = string.IsNullOrWhiteSpace(item.DesignStandardCode) ? "-" : item.DesignStandardCode.Trim().ToUpperInvariant();
+            var minMaxTemp = item.DesignTemperatureMin.HasValue || item.DesignTemperatureMax.HasValue
+                ? $"{item.DesignTemperatureMin:0.##}/{item.DesignTemperatureMax:0.##}°C"
+                : "-";
+            var consumption = item.HasTankConsumptionCapacity && item.ConsumptionCapacity.HasValue
+                ? $"-{item.ConsumptionCapacity:0.##}Nm3/h"
+                : string.Empty;
+
+            return $"{item.CapacityM3:0.##}m3-{fluid}-{group}-{tankType}-{placement}-{pressure}-{stdOps}-{designStd}-{minMaxTemp}{consumption}";
         }
 
         private static string GenerateItemCode(string groupCode, SalesRequestItemInputVm item, int order)
@@ -1678,8 +1695,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             var orientation = item.TankOrientation == RequestTankOrientation.Vertical ? "D" : "Y";
             var placement = item.PlacementType == PlacementType.Aboveground ? "A" : "U";
             var capacity = item.CapacityM3.ToString("0.##").Replace(",", string.Empty).Replace(".", string.Empty);
-            var consumption = item.ConsumptionCapacity.HasValue ? $"-{item.ConsumptionCapacity:0.##}".Replace(",", string.Empty).Replace(".", string.Empty) : string.Empty;
-            return $"CVS-{groupCode}{orientation}{placement}-{capacity}{consumption}-{order:000}";
+            return $"CVS-{groupCode}{orientation}{placement}-{capacity}-{order:000}";
         }
 
         private async Task SaveAttachmentsAsync(SalesRequest request, IEnumerable<IFormFile> files)
