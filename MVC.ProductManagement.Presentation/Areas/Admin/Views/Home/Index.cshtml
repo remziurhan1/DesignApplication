@@ -1,65 +1,41 @@
-@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesDashboardVm
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.Home.TechnicalDashboardVm
 @{
-    ViewData["Title"] = "Satış Talep İstatistikleri";
+    ViewData["Title"] = "Teknik Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="pagetitle">
-    <h1>Satış Talep İstatistikleri</h1>
-    <p class="text-muted mb-0">Tüm satışçıların talep, revizyon ve teklif ilerleme durumları.</p>
+    <h1>Teknik Dashboard</h1>
+    <p class="text-muted mb-0">Satışçı bilgileri yerine teknik hesap ve referans veri özetleri.</p>
 </div>
 
 <section class="section mt-3">
     <div class="row g-3 mb-3">
-        <div class="col-md-2"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Toplam Talep</small><h4 class="mb-0">@Model.TotalRequestCount</h4></div></div></div>
-        <div class="col-md-2"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Açık</small><h4 class="mb-0 text-primary">@Model.OpenRequestCount</h4></div></div></div>
-        <div class="col-md-2"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Kapalı</small><h4 class="mb-0 text-danger">@Model.ClosedRequestCount</h4></div></div></div>
-        <div class="col-md-2"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Teklif Verildi</small><h4 class="mb-0 text-success">@Model.QuoteSharedCount</h4></div></div></div>
-        <div class="col-md-2"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Onaylı</small><h4 class="mb-0 text-success">@Model.ApprovedCount</h4></div></div></div>
-        <div class="col-md-2"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Fiyat Bekleyen</small><h4 class="mb-0 text-warning">@Model.WaitingPricingCount</h4></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Toplam Teknik Kayıt</small><h4 class="mb-0">@Model.TotalTechnicalRecordCount</h4></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">EN 13458 Hesap</small><h4 class="mb-0 text-primary">@Model.En13458CalculationCount</h4></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">AD 2000 Hesap</small><h4 class="mb-0 text-primary">@Model.Ad2000CalculationCount</h4></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Malzeme</small><h4 class="mb-0 text-success">@Model.MaterialCount</h4></div></div></div>
     </div>
 
-    <div class="card">
+    <div class="row g-3">
+        <div class="col-md-3"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Malzeme Formu</small><h4 class="mb-0">@Model.MaterialFormCount</h4></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Yield Strength</small><h4 class="mb-0">@Model.YieldStrengthCount</h4></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Allowable Stress</small><h4 class="mb-0">@Model.AllowableStressCount</h4></div></div></div>
+        <div class="col-md-3"><div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Storage Type</small><h4 class="mb-0">@Model.StorageTypeCount</h4></div></div></div>
+    </div>
+
+    <div class="card mt-3">
         <div class="card-body pt-4">
-            <h5 class="card-title">Satışçı Bazlı Dağılım</h5>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm align-middle">
-                    <thead>
-                    <tr>
-                        <th>Satışçı</th>
-                        <th>Bölge</th>
-                        <th class="text-end">Toplam</th>
-                        <th class="text-end">Açık</th>
-                        <th class="text-end">Kapalı</th>
-                        <th class="text-end">Teklif Verildi</th>
-                        <th class="text-end">Onaylı</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if (Model.SalespersonStats.Any())
-                    {
-                        @foreach (var row in Model.SalespersonStats)
-                        {
-                            <tr>
-                                <td>@row.SalespersonName</td>
-                                <td>@(row.Region ?? "-")</td>
-                                <td class="text-end">@row.TotalRequestCount</td>
-                                <td class="text-end">@row.OpenRequestCount</td>
-                                <td class="text-end">@row.ClosedRequestCount</td>
-                                <td class="text-end">@row.QuoteSharedCount</td>
-                                <td class="text-end">@row.ApprovedCount</td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="7" class="text-center text-muted">Henüz satış talebi bulunmuyor.</td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-            </div>
+            <h5 class="card-title">Teknik Veri Özeti</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Termodinamik Özellik Satırı</span>
+                    <span class="badge bg-secondary rounded-pill">@Model.ThermodynamicPropertyCount</span>
+                </li>
+                <li class="list-group-item text-muted small">
+                    Bu panel yalnızca teknik modüllerin özetini gösterir; satışçı dağılım tablosu kaldırılmıştır.
+                </li>
+            </ul>
         </div>
     </div>
 </section>
