@@ -200,7 +200,7 @@
                                 <label class="form-label">Talep grubu</label>
                                 <select asp-for="Items[i].RequestCategory" asp-items="Html.GetEnumSelectList<SalesRequestCategory>()" class="form-select request-category"></select>
                             </div>
-                            <div class="col-md-4 flow-l5 non-spare-fields">
+                            <div class="col-md-4 flow-l5">
                                 <label class="form-label">Akışkan grubu</label>
                                 <select asp-for="Items[i].ProductGroupId" asp-items="Model.ProductGroups" class="form-select product-group"><option value="">Seçin</option></select>
                             </div>
@@ -466,7 +466,7 @@
                     </div>
                     <div class="row g-3">
                         <div class="col-md-4 flow-l5"><label class="form-label">Talep grubu</label><select name="Items[${index}].RequestCategory" class="form-select request-category">${categoryOptions}</select></div>
-                        <div class="col-md-4 flow-l5 non-spare-fields"><label class="form-label">Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select product-group"><option value="">Seçin</option>${productOptions}</select></div>
+                        <div class="col-md-4 flow-l5"><label class="form-label">Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select product-group"><option value="">Seçin</option>${productOptions}</select></div>
                         <div class="col-md-4 flow-l5 non-spare-fields"><label class="form-label">Ürün adı</label><input class="form-control product-name-display" readonly placeholder="Akışkan grubundan otomatik gelir" /><input name="Items[${index}].ProductCode" type="hidden" class="product-code" /></div>
                         <div class="col-md-2 tank-only-fields flow-l4"><label class="form-label">Kapasite (m³)</label><input name="Items[${index}].CapacityM3" class="form-control" /></div>
                         <div class="col-md-3 tank-only-fields flow-l4"><label class="form-label">Tank tipi</label><select name="Items[${index}].TankOrientation" class="form-select">${orientationOptions}</select></div>

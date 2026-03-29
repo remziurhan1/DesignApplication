@@ -82,10 +82,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Create(SalesRequestCreateVm vm)
         {
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
+            vm.Items = vm.Items
+                .Where(x => x.ProductGroupId != Guid.Empty || !string.IsNullOrWhiteSpace(x.SparePartDetails))
+                .ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
+            }
+
+            for (var i = 0; i < vm.Items.Count; i++)
+            {
+                if (vm.Items[i].ProductGroupId == Guid.Empty)
+                {
+                    ModelState.AddModelError($"Items[{i}].ProductGroupId", "Akışkan grubu seçimi zorunludur.");
+                }
             }
 
             if (vm.Items.Any(x => x.RequestCategory == SalesRequestCategory.SparePart) &&
@@ -259,10 +269,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(Guid id, SalesRequestCreateVm vm)
         {
             vm.Id = id;
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
+            vm.Items = vm.Items
+                .Where(x => x.ProductGroupId != Guid.Empty || !string.IsNullOrWhiteSpace(x.SparePartDetails))
+                .ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
+            }
+
+            for (var i = 0; i < vm.Items.Count; i++)
+            {
+                if (vm.Items[i].ProductGroupId == Guid.Empty)
+                {
+                    ModelState.AddModelError($"Items[{i}].ProductGroupId", "Akışkan grubu seçimi zorunludur.");
+                }
             }
 
             for (var i = 0; i < vm.Items.Count; i++)

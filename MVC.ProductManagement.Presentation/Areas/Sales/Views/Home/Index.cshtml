@@ -6,6 +6,25 @@
 <div class="p-2">
     <h3 class="mb-2">Satış Ekranı</h3>
     <p class="text-muted">Bu ekranda satış kullanıcıları müşteri ve talep süreçlerini yönetir.</p>
+    <div class="border rounded-3 p-3 mb-3 bg-light">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h6 class="mb-1">Giriş Yapan Satışçı</h6>
+                <div><strong>@Model.SalespersonName</strong></div>
+                <div class="small text-muted">@Model.SalespersonEmail</div>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <a asp-area="Sales" asp-controller="Customer" asp-action="Index" class="btn btn-outline-danger">Müşteriler</a>
+                <a asp-area="Sales" asp-controller="Customer" asp-action="Create" class="btn btn-danger">+ Müşteri Ekle</a>
+                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="btn btn-outline-danger">Talepler</a>
+                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Create" class="btn btn-danger">+ Talep Ekle</a>
+                @if (Model.CanAccessManagerPanel)
+                {
+                    <a asp-area="Sales" asp-controller="SalesRequest" asp-action="ManagerPanel" class="btn btn-outline-primary">Müdür Paneli</a>
+                }
+            </div>
+        </div>
+    </div>
     @if (!string.IsNullOrWhiteSpace(Model.CurrentRegion))
     {
         <div class="alert alert-info py-2 mb-2">
@@ -25,30 +44,6 @@
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="border rounded-3 p-3 h-100">
-                <h5 class="mb-2">Müşteri Yönetimi</h5>
-                <p class="text-muted small">Mevcut müşterileri görüntüleyin veya yeni müşteri oluşturun.</p>
-                <div class="d-flex gap-2">
-                    <a asp-area="Sales" asp-controller="Customer" asp-action="Index" class="btn btn-outline-danger">Müşteriler</a>
-                    <a asp-area="Sales" asp-controller="Customer" asp-action="Create" class="btn btn-danger">+ Müşteri Ekle</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="border rounded-3 p-3 h-100">
-                <h5 class="mb-2">Talep Yönetimi</h5>
-                <p class="text-muted small">Satış taleplerini takip edin ve yeni talep oluşturun.</p>
-                <div class="d-flex gap-2">
-                    <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Index" class="btn btn-outline-danger">Talepler</a>
-                    <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Create" class="btn btn-danger">+ Talep Ekle</a>
-                    @if (Model.CanAccessManagerPanel)
-                    {
-                        <a asp-area="Sales" asp-controller="SalesRequest" asp-action="ManagerPanel" class="btn btn-outline-primary">Müdür Paneli</a>
-                    }
-                </div>
-            </div>
-        </div>
         @if (Model.MyRequests.Any())
         {
             <div class="col-12">

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
-using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
+using MVC.ProductManagement.Presentation.Areas.Admin.Models.Home;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -18,44 +17,35 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var requests = await _context.SalesRequests
-                .AsNoTracking()
-                .Include(x => x.Customer)
-                .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales)
-                .ToListAsync();
-
-            var vm = new SalesDashboardVm
+            var vm = new TechnicalDashboardVm
             {
-                TotalRequestCount = requests.Count,
-                OpenRequestCount = requests.Count(IsOpenRequest),
-                ClosedRequestCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected),
-                QuoteSharedCount = requests.Count(x => x.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer),
-                ApprovedCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved),
-                WaitingPricingCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Submitted || x.WorkflowStatus == SalesRequestWorkflowStatus.PricingInProgress),
-                SalespersonStats = requests
-                    .GroupBy(x => string.IsNullOrWhiteSpace(x.RequestedByName) ? "Belirtilmemiş" : x.RequestedByName)
-                    .Select(g => new SalespersonRequestStatVm
-                    {
-                        SalespersonName = g.Key,
-                        Region = g.Select(x => x.Customer.Region).FirstOrDefault(),
-                        TotalRequestCount = g.Count(),
-                        OpenRequestCount = g.Count(IsOpenRequest),
-                        ClosedRequestCount = g.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected),
-                        QuoteSharedCount = g.Count(x => x.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer),
-                        ApprovedCount = g.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved)
-                    })
-                    .OrderByDescending(x => x.TotalRequestCount)
-                    .ThenBy(x => x.SalespersonName)
-                    .ToList()
+                En13458CalculationCount = await _context.EN13458Calculations
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                Ad2000CalculationCount = await _context.AD2000Calculations
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                MaterialCount = await _context.Materials
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                MaterialFormCount = await _context.MaterialForms
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                YieldStrengthCount = await _context.YieldStrengths
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                AllowableStressCount = await _context.AllowableStresses
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                StorageTypeCount = await _context.StorageTypes
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                ThermodynamicPropertyCount = await _context.ThermodynamicProperties
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted)
             };
 
             return View(vm);
-        }
-
-        private static bool IsOpenRequest(SalesRequest request)
-        {
-            return request.WorkflowStatus != SalesRequestWorkflowStatus.Rejected
-                   && request.CustomerQuoteStatus != SalesCustomerQuoteStatus.SharedWithCustomer;
         }
     }
 }
