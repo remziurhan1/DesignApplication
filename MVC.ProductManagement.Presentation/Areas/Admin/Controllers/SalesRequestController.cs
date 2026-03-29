@@ -1208,6 +1208,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     ModelState.AddModelError($"{keyPrefix}.CapacityM3", "Tank talebi için kapasite zorunludur.");
                 }
 
+                if (!item.HasTankConsumptionCapacity)
+                {
+                    item.ConsumptionCapacity = null;
+                }
+                else if (!item.ConsumptionCapacity.HasValue || item.ConsumptionCapacity <= 0)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.ConsumptionCapacity", "Tüketim kapasitesi aktifse pozitif bir değer girmelisiniz.");
+                }
+
                 item.SparePartDetails = null;
                 item.FacilityType = null;
                 item.FacilityInletPressureBar = null;
@@ -1223,6 +1232,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             else if (item.RequestCategory == SalesRequestCategory.Evaporator)
             {
                 item.CapacityM3 = 0;
+                item.ConsumptionCapacity = null;
+                item.HasTankConsumptionCapacity = false;
                 item.TankOrientation = RequestTankOrientation.Vertical;
                 item.PlacementType = PlacementType.Aboveground;
                 item.SparePartDetails = null;
@@ -1253,6 +1264,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             else if (item.RequestCategory == SalesRequestCategory.Facility)
             {
                 item.CapacityM3 = 0;
+                item.ConsumptionCapacity = null;
+                item.HasTankConsumptionCapacity = false;
                 item.TankOrientation = RequestTankOrientation.Vertical;
                 item.PlacementType = PlacementType.Aboveground;
                 item.SparePartDetails = null;
@@ -1299,6 +1312,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             else if (item.RequestCategory == SalesRequestCategory.SparePart)
             {
                 item.CapacityM3 = 0;
+                item.ConsumptionCapacity = null;
+                item.HasTankConsumptionCapacity = false;
                 item.TankOrientation = RequestTankOrientation.Vertical;
                 item.PlacementType = PlacementType.Aboveground;
                 item.TankType = null;
