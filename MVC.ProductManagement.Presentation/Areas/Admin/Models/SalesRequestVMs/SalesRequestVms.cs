@@ -296,6 +296,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public bool IsManagerView { get; set; }
         public bool CanAccessManagerPanel { get; set; }
         public string? CurrentRegion { get; set; }
+        public string SalespersonName { get; set; } = string.Empty;
+        public string SalespersonEmail { get; set; } = string.Empty;
         public int TotalRequestCount { get; set; }
         public int OpenRequestCount { get; set; }
         public int ClosedRequestCount { get; set; }

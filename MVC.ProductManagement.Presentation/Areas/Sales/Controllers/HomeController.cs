@@ -60,7 +60,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 canViewTeamDashboard,
                 canAccessManagerPanel,
                 region,
-                myRequests);
+                myRequests,
+                profile?.FullName ?? currentUserName ?? "Satış Sorumlusu",
+                profile?.Email ?? currentUserEmail ?? "-");
             return View(vm);
         }
 
@@ -69,13 +71,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             bool isManagerView,
             bool canAccessManagerPanel,
             string? region,
-            List<SalesRequest> myRequests)
+            List<SalesRequest> myRequests,
+            string salespersonName,
+            string salespersonEmail)
         {
             return new SalesDashboardVm
             {
                 IsManagerView = isManagerView,
                 CanAccessManagerPanel = canAccessManagerPanel,
                 CurrentRegion = region,
+                SalespersonName = salespersonName,
+                SalespersonEmail = salespersonEmail,
                 TotalRequestCount = requests.Count,
                 OpenRequestCount = requests.Count(IsOpenRequest),
                 ClosedRequestCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected),
