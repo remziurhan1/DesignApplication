@@ -193,7 +193,7 @@
                             <span class="badge bg-primary-subtle text-primary-emphasis">Teknik Girdi</span>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4 flow-l5">
+                            <div class="col-md-4 flow-l1">
                                 <label class="form-label">Talep grubu</label>
                                 <select asp-for="Items[i].RequestCategory" asp-items="Html.GetEnumSelectList<SalesRequestCategory>()" class="form-select request-category"></select>
                             </div>
@@ -260,7 +260,7 @@
                             </div>
                             <div class="col-12 tank-only-fields flow-l7">
                                 <label class="form-label">8. Varsa tüketim kapasitesi</label>
-                                <input asp-for="Items[i].ConsumptionCapacity" class="form-control consumption-input" @(Model.Items[i].HasTankConsumptionCapacity ? "" : "disabled") />
+                                <input asp-for="Items[i].ConsumptionCapacity" class="form-control consumption-input" @@(Model.Items[i].HasTankConsumptionCapacity ? "" : "disabled") />
                                 <small class="text-muted">Tank altı buharlaştırıcı hesabı için referans veri.</small>
                             </div>
                             <div class="col-12 form-check ms-2 mt-2 tank-only-fields flow-l7">
