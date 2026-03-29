@@ -52,18 +52,6 @@
             padding: 1.25rem;
         }
 
-        .sales-price-table {
-            border: 1px solid #f5c7e5;
-            border-radius: 1rem;
-            background: #fff;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(116, 23, 79, 0.08);
-        }
-
-        .sales-price-table .table {
-            margin-bottom: 0;
-        }
-
         .sales-body-card {
             border: 1px solid #f2d6e8;
             border-radius: 1rem;
@@ -103,45 +91,6 @@
     </header>
 
     <main class="sales-main container-fluid">
-        <section class="sales-price-table mb-3">
-            <div class="px-3 py-2 d-flex justify-content-between align-items-center" style="background:#fff3fb;">
-                <strong style="color:var(--sales-text);">Satış - Fiyat Tablosu</strong>
-                <span class="small text-muted">Hızlı referans</span>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-sm align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Seviye</th>
-                            <th>Marj Aralığı</th>
-                            <th>Fiyat Durumu</th>
-                            <th>Önerilen Aksiyon</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="badge text-bg-success">A</span></td>
-                            <td>%20 ve üzeri</td>
-                            <td>Güçlü teklif</td>
-                            <td>Teklifi hızlı onaya gönder</td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge text-bg-warning">B</span></td>
-                            <td>%12 - %19</td>
-                            <td>Denge seviyesi</td>
-                            <td>Satış müdürü notu ile ilerlet</td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge text-bg-danger">C</span></td>
-                            <td>%0 - %11</td>
-                            <td>Düşük marj</td>
-                            <td>Maliyet/fiyat revizyonu iste</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
         <section class="sales-body-card">
             @RenderBody()
         </section>

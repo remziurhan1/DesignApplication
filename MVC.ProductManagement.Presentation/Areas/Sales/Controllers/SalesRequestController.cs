@@ -289,10 +289,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             await PopulateRequesterInfoAsync(vm, overwriteExisting: true);
             vm.OfferStatus = SalesOfferStatus.F;
-            vm.Items = vm.Items.Where(x => x.ProductGroupId != Guid.Empty).ToList();
+            vm.Items = vm.Items
+                .Where(x => x.ProductGroupId != Guid.Empty || !string.IsNullOrWhiteSpace(x.SparePartDetails))
+                .ToList();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
+            }
+
+            for (var i = 0; i < vm.Items.Count; i++)
+            {
+                if (vm.Items[i].ProductGroupId == Guid.Empty)
+                {
+                    ModelState.AddModelError($"Items[{i}].ProductGroupId", "Akışkan grubu seçimi zorunludur.");
+                }
             }
 
             if (vm.Items.Any(x => x.RequestCategory == SalesRequestCategory.SparePart) &&
@@ -1477,6 +1487,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     ModelState.AddModelError($"{keyPrefix}.CapacityM3", "Tank talebi için kapasite zorunludur.");
                 }
 
+                if (!item.HasTankConsumptionCapacity)
+                {
+                    item.ConsumptionCapacity = null;
+                }
+                else if (!item.ConsumptionCapacity.HasValue || item.ConsumptionCapacity <= 0)
+                {
+                    ModelState.AddModelError($"{keyPrefix}.ConsumptionCapacity", "Tüketim kapasitesi aktifse pozitif bir değer girmelisiniz.");
+                }
+
                 item.SparePartDetails = null;
                 item.FacilityType = null;
                 item.FacilityInletPressureBar = null;
@@ -1492,6 +1511,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             else if (item.RequestCategory == SalesRequestCategory.Evaporator)
             {
                 item.CapacityM3 = 0;
+                item.ConsumptionCapacity = null;
+                item.HasTankConsumptionCapacity = false;
                 item.TankOrientation = RequestTankOrientation.Vertical;
                 item.PlacementType = PlacementType.Aboveground;
                 item.SparePartDetails = null;
@@ -1522,6 +1543,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             else if (item.RequestCategory == SalesRequestCategory.Facility)
             {
                 item.CapacityM3 = 0;
+                item.ConsumptionCapacity = null;
+                item.HasTankConsumptionCapacity = false;
                 item.TankOrientation = RequestTankOrientation.Vertical;
                 item.PlacementType = PlacementType.Aboveground;
                 item.SparePartDetails = null;
@@ -1568,6 +1591,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             else if (item.RequestCategory == SalesRequestCategory.SparePart)
             {
                 item.CapacityM3 = 0;
+                item.ConsumptionCapacity = null;
+                item.HasTankConsumptionCapacity = false;
                 item.TankOrientation = RequestTankOrientation.Vertical;
                 item.PlacementType = PlacementType.Aboveground;
                 item.TankType = null;
@@ -1642,10 +1667,19 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
         private static string BuildItemTitle(string shortCode, SalesRequestItemInputVm item)
         {
-            var orientation = item.TankOrientation == RequestTankOrientation.Vertical ? "DİK" : "YATAY";
-            var placement = item.PlacementType == PlacementType.Aboveground ? "YER ÜSTÜ" : "YER ALTI";
-            var consumption = item.ConsumptionCapacity.HasValue ? $"-{item.ConsumptionCapacity:0.##}Nm³/h" : string.Empty;
-            return $"{item.CapacityM3:0.##}m3-{shortCode}-{orientation}-DEPOLAMA-{placement}{consumption}";
+            if (item.RequestCategory != SalesRequestCategory.Tank)
+            {
+                var fallbackPlacement = item.PlacementType == PlacementType.Aboveground ? "YER ÜSTÜ" : "YER ALTI";
+                return $"{item.CapacityM3:0.##}m3-{shortCode}-{fallbackPlacement}";
+            }
+
+            var fluid = shortCode.ToUpperInvariant();
+            var tankType = item.TankType == RequestTankType.Transport ? "Transport" : "Depolama";
+            var placement = item.PlacementType == PlacementType.Aboveground ? "Yer Üstü" : "Yer Altı";
+            var pressure = item.DesignPressureBar.HasValue ? $"{item.DesignPressureBar:0.##} Bar" : "-";
+            var stdOps = item.StdOpsSelection?.ToString()?.ToUpperInvariant() ?? "-";
+
+            return $"{item.CapacityM3:0.##}m3-{fluid}-{tankType}-{placement} - {pressure} - {stdOps}";
         }
 
         private static string GenerateItemCode(string groupCode, SalesRequestItemInputVm item, int order)
@@ -1653,8 +1687,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             var orientation = item.TankOrientation == RequestTankOrientation.Vertical ? "D" : "Y";
             var placement = item.PlacementType == PlacementType.Aboveground ? "A" : "U";
             var capacity = item.CapacityM3.ToString("0.##").Replace(",", string.Empty).Replace(".", string.Empty);
-            var consumption = item.ConsumptionCapacity.HasValue ? $"-{item.ConsumptionCapacity:0.##}".Replace(",", string.Empty).Replace(".", string.Empty) : string.Empty;
-            return $"CVS-{groupCode}{orientation}{placement}-{capacity}{consumption}-{order:000}";
+            return $"CVS-{groupCode}{orientation}{placement}-{capacity}-{order:000}";
         }
 
         private async Task SaveAttachmentsAsync(SalesRequest request, IEnumerable<IFormFile> files)
