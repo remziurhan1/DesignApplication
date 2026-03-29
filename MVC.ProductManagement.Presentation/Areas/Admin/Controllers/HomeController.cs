@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
-using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
+using MVC.ProductManagement.Presentation.Areas.Admin.Models.Home;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -18,44 +17,38 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var requests = await _context.SalesRequests
-                .AsNoTracking()
-                .Include(x => x.Customer)
-                .Where(x => x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales)
-                .ToListAsync();
+            var en13458CountTask = _context.EN13458Calculations.AsNoTracking().CountAsync(x => x.Status != Status.Deleted);
+            var ad2000CountTask = _context.AD2000Calculations.AsNoTracking().CountAsync(x => x.Status != Status.Deleted);
+            var materialCountTask = _context.Materials.AsNoTracking().CountAsync(x => x.Status != Status.Deleted);
+            var materialFormCountTask = _context.MaterialForms.AsNoTracking().CountAsync(x => x.Status != Status.Deleted);
+            var yieldStrengthCountTask = _context.YieldStrengths.AsNoTracking().CountAsync(x => x.Status != Status.Deleted);
+            var allowableStressCountTask = _context.AllowableStresses.AsNoTracking().CountAsync(x => x.Status != Status.Deleted);
+            var storageTypeCountTask = _context.StorageTypes.AsNoTracking().CountAsync(x => x.Status != Status.Deleted);
+            var thermodynamicPropertyCountTask = _context.ThermodynamicProperties.AsNoTracking().CountAsync(x => x.Status != Status.Deleted);
 
-            var vm = new SalesDashboardVm
+            await Task.WhenAll(
+                en13458CountTask,
+                ad2000CountTask,
+                materialCountTask,
+                materialFormCountTask,
+                yieldStrengthCountTask,
+                allowableStressCountTask,
+                storageTypeCountTask,
+                thermodynamicPropertyCountTask);
+
+            var vm = new TechnicalDashboardVm
             {
-                TotalRequestCount = requests.Count,
-                OpenRequestCount = requests.Count(IsOpenRequest),
-                ClosedRequestCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected),
-                QuoteSharedCount = requests.Count(x => x.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer),
-                ApprovedCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved),
-                WaitingPricingCount = requests.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Submitted || x.WorkflowStatus == SalesRequestWorkflowStatus.PricingInProgress),
-                SalespersonStats = requests
-                    .GroupBy(x => string.IsNullOrWhiteSpace(x.RequestedByName) ? "Belirtilmemiş" : x.RequestedByName)
-                    .Select(g => new SalespersonRequestStatVm
-                    {
-                        SalespersonName = g.Key,
-                        Region = g.Select(x => x.Customer.Region).FirstOrDefault(),
-                        TotalRequestCount = g.Count(),
-                        OpenRequestCount = g.Count(IsOpenRequest),
-                        ClosedRequestCount = g.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Rejected),
-                        QuoteSharedCount = g.Count(x => x.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer),
-                        ApprovedCount = g.Count(x => x.WorkflowStatus == SalesRequestWorkflowStatus.Approved)
-                    })
-                    .OrderByDescending(x => x.TotalRequestCount)
-                    .ThenBy(x => x.SalespersonName)
-                    .ToList()
+                En13458CalculationCount = en13458CountTask.Result,
+                Ad2000CalculationCount = ad2000CountTask.Result,
+                MaterialCount = materialCountTask.Result,
+                MaterialFormCount = materialFormCountTask.Result,
+                YieldStrengthCount = yieldStrengthCountTask.Result,
+                AllowableStressCount = allowableStressCountTask.Result,
+                StorageTypeCount = storageTypeCountTask.Result,
+                ThermodynamicPropertyCount = thermodynamicPropertyCountTask.Result
             };
 
             return View(vm);
-        }
-
-        private static bool IsOpenRequest(SalesRequest request)
-        {
-            return request.WorkflowStatus != SalesRequestWorkflowStatus.Rejected
-                   && request.CustomerQuoteStatus != SalesCustomerQuoteStatus.SharedWithCustomer;
         }
     }
 }
