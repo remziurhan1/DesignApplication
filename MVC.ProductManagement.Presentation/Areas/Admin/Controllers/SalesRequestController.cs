@@ -1110,21 +1110,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return $"{item.CapacityM3:0.##}m3-{shortCode}-{fallbackPlacement}";
             }
 
-            var fluid = string.IsNullOrWhiteSpace(item.ProductCode) ? shortCode : item.ProductCode.Trim().ToUpperInvariant();
-            var group = shortCode.ToUpperInvariant();
-            var tankType = item.TankType == RequestTankType.Transport ? "TRANSPORT" : "DEPOLAMA";
-            var placement = item.PlacementType == PlacementType.Aboveground ? "YER ÜSTÜ" : "YER ALTI";
-            var pressure = item.DesignPressureBar.HasValue ? $"{item.DesignPressureBar:0.##}bar" : "-";
+            var fluid = shortCode.ToUpperInvariant();
+            var tankType = item.TankType == RequestTankType.Transport ? "Transport" : "Depolama";
+            var placement = item.PlacementType == PlacementType.Aboveground ? "Yer Üstü" : "Yer Altı";
+            var pressure = item.DesignPressureBar.HasValue ? $"{item.DesignPressureBar:0.##} Bar" : "-";
             var stdOps = item.StdOpsSelection?.ToString()?.ToUpperInvariant() ?? "-";
-            var designStd = string.IsNullOrWhiteSpace(item.DesignStandardCode) ? "-" : item.DesignStandardCode.Trim().ToUpperInvariant();
-            var minMaxTemp = item.DesignTemperatureMin.HasValue || item.DesignTemperatureMax.HasValue
-                ? $"{item.DesignTemperatureMin:0.##}/{item.DesignTemperatureMax:0.##}°C"
-                : "-";
-            var consumption = item.HasTankConsumptionCapacity && item.ConsumptionCapacity.HasValue
-                ? $"-{item.ConsumptionCapacity:0.##}Nm3/h"
-                : string.Empty;
 
-            return $"{item.CapacityM3:0.##}m3-{fluid}-{group}-{tankType}-{placement}-{pressure}-{stdOps}-{designStd}-{minMaxTemp}{consumption}";
+            return $"{item.CapacityM3:0.##}m3-{fluid}-{tankType}-{placement} - {pressure} - {stdOps}";
         }
 
         private static string GenerateItemCode(string groupCode, SalesRequestItemInputVm item, int order)
