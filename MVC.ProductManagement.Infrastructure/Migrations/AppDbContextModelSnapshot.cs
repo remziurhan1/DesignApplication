@@ -2246,6 +2246,13 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DeliveryLeadTime")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal?>("FinalSalesPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("InstallationCountry")
                         .HasColumnType("nvarchar(max)");
 
