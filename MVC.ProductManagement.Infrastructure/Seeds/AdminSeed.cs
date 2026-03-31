@@ -63,10 +63,7 @@ BEGIN
     CREATE UNIQUE INDEX [IX_EmployeeProfiles_UserId] ON [EmployeeProfiles]([UserId]);
 END");
 
-            if (!context.Roles.Any())
-            {
-                await AddRolesAsync(context);
-            }
+            await AddRolesAsync(context);
             if (!context.Users.Any(user => user.Email == adminEmail))
             {
                 await AddAdminAsync(context);
@@ -83,10 +80,7 @@ END");
             {
                 await AddSalesManagerAsync(context);
             }
-            if (!context.Users.Any(user => user.Email == designEngineerEmail))
-            {
-                await AddDesignEngineerAsync(context);
-            }
+            await EnsureDesignEngineerAsync(context);
             if (!context.Customers.Any(x => x.CompanyName == seedCustomerCompany))
             {
                 await AddSeedCustomerAsync(context);
@@ -268,23 +262,29 @@ END");
             await context.SaveChangesAsync();
         }
 
-        private static async Task AddDesignEngineerAsync(AppDbContext context)
+        private static async Task EnsureDesignEngineerAsync(AppDbContext context)
         {
-            var user = new IdentityUser
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Email == designEngineerEmail);
+            if (user == null)
             {
-                Email = designEngineerEmail,
-                EmailConfirmed = true,
-                NormalizedEmail = designEngineerEmail.ToUpperInvariant(),
-                UserName = designEngineerEmail,
-                NormalizedUserName = designEngineerEmail.ToUpperInvariant(),
-                PhoneNumber = designEngineerPhoneNumber,
-                PhoneNumberConfirmed = true
-            };
-            user.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(user, salesPassword);
-            await context.Users.AddAsync(user);
+                user = new IdentityUser
+                {
+                    Email = designEngineerEmail,
+                    EmailConfirmed = true,
+                    NormalizedEmail = designEngineerEmail.ToUpperInvariant(),
+                    UserName = designEngineerEmail,
+                    NormalizedUserName = designEngineerEmail.ToUpperInvariant(),
+                    PhoneNumber = designEngineerPhoneNumber,
+                    PhoneNumberConfirmed = true
+                };
+                user.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(user, salesPassword);
+                await context.Users.AddAsync(user);
+                await context.SaveChangesAsync();
+            }
 
             var designRoleId = context.Roles.FirstOrDefault(role => role.Name == Roles.DesignEngineer.ToString())?.Id;
-            if (!string.IsNullOrWhiteSpace(designRoleId))
+            if (!string.IsNullOrWhiteSpace(designRoleId) &&
+                !await context.UserRoles.AnyAsync(x => x.UserId == user.Id && x.RoleId == designRoleId))
             {
                 await context.UserRoles.AddAsync(new IdentityUserRole<string>
                 {
@@ -293,24 +293,27 @@ END");
                 });
             }
 
-            await context.EmployeeProfiles.AddAsync(new EmployeeProfile
+            if (!await context.EmployeeProfiles.AnyAsync(x => x.UserId == user.Id))
             {
-                UserId = user.Id,
-                FullName = "Dizayn Mühendisi",
-                Department = "Dizayn Bölümü",
-                DepartmentRole = "Dizayn Mühendisi",
-                Title = "Dizayn Mühendisi",
-                Number = designEngineerPhoneNumber,
-                Email = designEngineerEmail,
-                Location = "Global",
-                CanAccessSalesArea = false,
-                CanManageSalesCustomers = false,
-                CanCreateSalesRequests = false,
-                CanViewSalesPricing = false,
-                Status = Status.Added,
-                CreatedBy = "SeedData",
-                CreatedDate = DateTime.UtcNow
-            });
+                await context.EmployeeProfiles.AddAsync(new EmployeeProfile
+                {
+                    UserId = user.Id,
+                    FullName = "Dizayn Mühendisi",
+                    Department = "Dizayn Bölümü",
+                    DepartmentRole = "Dizayn Mühendisi",
+                    Title = "Dizayn Mühendisi",
+                    Number = designEngineerPhoneNumber,
+                    Email = designEngineerEmail,
+                    Location = "Global",
+                    CanAccessSalesArea = false,
+                    CanManageSalesCustomers = false,
+                    CanCreateSalesRequests = false,
+                    CanViewSalesPricing = false,
+                    Status = Status.Added,
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
+                });
+            }
 
             await context.SaveChangesAsync();
         }
