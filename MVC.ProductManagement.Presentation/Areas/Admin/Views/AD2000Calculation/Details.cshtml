@@ -6,6 +6,7 @@
 @{
     ViewData["Title"] = "AD2000 Details";
     var isSalesView = ViewBag.IsSalesView is bool flag && flag;
+    var canManageCost = User.IsInRole("Admin");
 }
 
 @section Styles {
@@ -22,7 +23,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="en-hero-actions">
-                    @if (!isSalesView)
+                    @if (!isSalesView && canManageCost)
                     {
                         <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-cash-stack me-1"></i>Maliyet</a>
                     }

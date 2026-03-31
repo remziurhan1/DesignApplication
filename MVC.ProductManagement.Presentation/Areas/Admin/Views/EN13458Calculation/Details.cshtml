@@ -8,6 +8,7 @@
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
     var innerTankWeldLength = Model.InnerTankHeadWeldLength + Model.InnerTankCircumferenceWeldLength;
     var outerTankWeldLength = Model.OuterTankHeadWeldLength + Model.OuterTankCircumferenceWeldLength;
+    var canManageCost = User.IsInRole("Admin");
 }
 
 @section Styles {
@@ -24,7 +25,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="en-hero-actions">
-                    @if (!isSalesView)
+                    @if (!isSalesView && canManageCost)
                     {
                         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-pencil-square me-1"></i>Tankı Güncelle</a>
                         <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-cash-coin me-1"></i>Maliyet</a>
@@ -59,7 +60,7 @@
         </div>
     }
 
-    @if (!isSalesView)
+    @if (!isSalesView && canManageCost)
     {
         <div class="card shadow-sm mb-4 border-warning-subtle">
             <div class="card-header bg-warning-subtle text-warning-emphasis d-flex justify-content-between align-items-center flex-wrap gap-2">
