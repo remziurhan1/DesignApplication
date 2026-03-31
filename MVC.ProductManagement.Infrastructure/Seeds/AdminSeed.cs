@@ -24,6 +24,8 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
         private const string secondSalesPhoneNumber = "987654321";
         private const string managerEmail = "mudur.satis@cryocan.com";
         private const string managerPhoneNumber = "5550000000";
+        private const string designEngineerEmail = "dizayn.muhendis@cryocan.com";
+        private const string designEngineerPhoneNumber = "5551112233";
         private const string seedCustomerCompany = "Cryocan Seed Müşteri";
         private const string seedCustomerEmail = "seed.customer@cryocan.com";
 
@@ -80,6 +82,10 @@ END");
             if (!context.Users.Any(user => user.Email == managerEmail))
             {
                 await AddSalesManagerAsync(context);
+            }
+            if (!context.Users.Any(user => user.Email == designEngineerEmail))
+            {
+                await AddDesignEngineerAsync(context);
             }
             if (!context.Customers.Any(x => x.CompanyName == seedCustomerCompany))
             {
@@ -254,6 +260,53 @@ END");
                 CanManageSalesCustomers = true,
                 CanCreateSalesRequests = true,
                 CanViewSalesPricing = true,
+                Status = Status.Added,
+                CreatedBy = "SeedData",
+                CreatedDate = DateTime.UtcNow
+            });
+
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task AddDesignEngineerAsync(AppDbContext context)
+        {
+            var user = new IdentityUser
+            {
+                Email = designEngineerEmail,
+                EmailConfirmed = true,
+                NormalizedEmail = designEngineerEmail.ToUpperInvariant(),
+                UserName = designEngineerEmail,
+                NormalizedUserName = designEngineerEmail.ToUpperInvariant(),
+                PhoneNumber = designEngineerPhoneNumber,
+                PhoneNumberConfirmed = true
+            };
+            user.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(user, salesPassword);
+            await context.Users.AddAsync(user);
+
+            var designRoleId = context.Roles.FirstOrDefault(role => role.Name == Roles.DesignEngineer.ToString())?.Id;
+            if (!string.IsNullOrWhiteSpace(designRoleId))
+            {
+                await context.UserRoles.AddAsync(new IdentityUserRole<string>
+                {
+                    RoleId = designRoleId,
+                    UserId = user.Id
+                });
+            }
+
+            await context.EmployeeProfiles.AddAsync(new EmployeeProfile
+            {
+                UserId = user.Id,
+                FullName = "Dizayn Mühendisi",
+                Department = "Dizayn Bölümü",
+                DepartmentRole = "Dizayn Mühendisi",
+                Title = "Dizayn Mühendisi",
+                Number = designEngineerPhoneNumber,
+                Email = designEngineerEmail,
+                Location = "Global",
+                CanAccessSalesArea = false,
+                CanManageSalesCustomers = false,
+                CanCreateSalesRequests = false,
+                CanViewSalesPricing = false,
                 Status = Status.Added,
                 CreatedBy = "SeedData",
                 CreatedDate = DateTime.UtcNow
