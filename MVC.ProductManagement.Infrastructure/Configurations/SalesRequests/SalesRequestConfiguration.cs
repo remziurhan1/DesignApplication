@@ -17,6 +17,8 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.SalesRequests
             builder.Property(x => x.RequestedByDepartment).HasMaxLength(100);
             builder.Property(x => x.SummaryNotes).HasMaxLength(2000);
             builder.Property(x => x.InternalNotes).HasMaxLength(2000);
+            builder.Property(x => x.FinalSalesPrice).HasColumnType("decimal(18,2)");
+            builder.Property(x => x.DeliveryLeadTime).HasMaxLength(100);
             builder.Property(x => x.RevisionNo).HasDefaultValue(1);
             builder.HasIndex(x => x.RequestNo).IsUnique();
 

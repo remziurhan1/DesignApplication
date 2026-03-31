@@ -1,0 +1,45 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.DesignCalculationResultVm
+@{
+    ViewData["Title"] = "Hesap Sonuçları";
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@Model.RequestNo · @Model.ItemCode</h1>
+        <p class="text-muted mb-0">@Model.ItemTitle · @Model.CalculationType · @Model.CalculationName</p>
+    </div>
+    <a asp-action="Details" asp-route-id="@Model.RequestId" class="btn btn-outline-secondary btn-sm">Detaya Dön</a>
+</div>
+
+<section class="section mt-3">
+    <div class="card">
+        <div class="card-body pt-4">
+            @if (!Model.Fields.Any())
+            {
+                <p class="text-muted mb-0">Hesap sonucu alanı bulunamadı.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width:35%">Alan</th>
+                                <th>Değer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var field in Model.Fields)
+                            {
+                                <tr>
+                                    <td>@field.Label</td>
+                                    <td>@field.Value</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</section>
