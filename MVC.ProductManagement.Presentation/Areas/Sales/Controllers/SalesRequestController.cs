@@ -703,16 +703,24 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 entity.FinalSalesPrice = soldSalesPrice.Value;
                 entity.DeliveryLeadTime = deliveryLeadTime.Trim();
 
-                foreach (var item in entity.Items)
-                {
-                    item.SoldSalesPrice = soldSalesPrice.Value;
-                }
+                await _context.SalesRequestItems
+                    .Where(x => x.SalesRequestId == entity.Id && x.Status != Status.Deleted)
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(x => x.SoldSalesPrice, soldSalesPrice.Value));
 
-                await SaveSoldTechnicalSpecificationAsync(entity, technicalSpecificationFile);
+                await SaveSoldTechnicalSpecificationAsync(entity.Id, entity.RevisionNo, technicalSpecificationFile);
             }
 
             entity.OfferStatus = offerStatus;
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                TempData["ErrorMessage"] = "Talep başka bir kullanıcı tarafından güncellendi. Lütfen sayfayı yenileyip tekrar deneyin.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
             TempData["SuccessMessage"] = "Teklif durumu güncellendi.";
             return RedirectToAction(nameof(Details), new { id });
         }
@@ -1761,9 +1769,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             await _context.SaveChangesAsync();
         }
 
-        private async Task SaveSoldTechnicalSpecificationAsync(SalesRequest request, IFormFile file)
+        private async Task SaveSoldTechnicalSpecificationAsync(Guid salesRequestId, int revisionNo, IFormFile file)
         {
-            var uploadsRoot = Path.Combine(_environment.WebRootPath, "uploads", "sales-documents", request.Id.ToString("N"));
+            var uploadsRoot = Path.Combine(_environment.WebRootPath, "uploads", "sales-documents", salesRequestId.ToString("N"));
             Directory.CreateDirectory(uploadsRoot);
             var fileName = $"{Guid.NewGuid():N}_{Path.GetFileName(file.FileName)}";
             var fullPath = Path.Combine(uploadsRoot, fileName);
@@ -1772,17 +1780,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 await file.CopyToAsync(fs);
             }
 
-            foreach (var previous in request.Documents.Where(x => x.DocumentType == SalesDocumentType.TechnicalSpecification && x.IsCurrent))
-            {
-                previous.IsCurrent = false;
-            }
+            await _context.SalesRequestDocuments
+                .Where(x => x.SalesRequestId == salesRequestId
+                            && x.DocumentType == SalesDocumentType.TechnicalSpecification
+                            && x.IsCurrent
+                            && x.Status != Status.Deleted)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.IsCurrent, false));
 
-            request.Documents.Add(new SalesRequestDocument
+            await _context.SalesRequestDocuments.AddAsync(new SalesRequestDocument
             {
-                SalesRequestId = request.Id,
+                SalesRequestId = salesRequestId,
                 DocumentType = SalesDocumentType.TechnicalSpecification,
-                RevisionCode = $"S{request.RevisionNo:00}",
-                FilePath = $"/uploads/sales-documents/{request.Id:N}/{fileName}",
+                RevisionCode = $"S{revisionNo:00}",
+                FilePath = $"/uploads/sales-documents/{salesRequestId:N}/{fileName}",
                 OriginalFileName = file.FileName,
                 UploadedBy = User.Identity?.Name ?? "System",
                 UploadedAt = DateTime.UtcNow,
