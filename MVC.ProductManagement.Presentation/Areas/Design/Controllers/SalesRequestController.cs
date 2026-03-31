@@ -137,6 +137,71 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                     .ToList()
             };
 
+            var linkedItems = request.Items
+                .Where(x => x.LinkedCalculationId.HasValue && x.LinkedCalculationType.HasValue)
+                .OrderBy(x => x.DisplayOrder)
+                .ToList();
+
+            foreach (var item in linkedItems)
+            {
+                if (item.LinkedCalculationType == SalesRequestCalculationType.EN13458)
+                {
+                    var calc = await _context.EN13458Calculations
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId!.Value && x.Status != Status.Deleted);
+                    if (calc != null)
+                    {
+                        vm.CalculationDetails.Add(new DesignCalculationDetailVm
+                        {
+                            ItemCode = item.ItemCode,
+                            ItemTitle = item.ItemTitle,
+                            CalculationName = calc.Name,
+                            CalculationType = SalesRequestCalculationType.EN13458,
+                            Fields = new List<DesignCalculationFieldVm>
+                            {
+                                new() { Label = "Design Pressure", Value = $"{calc.DesignPressure:N2} bar" },
+                                new() { Label = "Test Pressure", Value = $"{calc.TestPressure:N2} bar" },
+                                new() { Label = "Static Pressure", Value = $"{calc.StaticPressure:N2} bar" },
+                                new() { Label = "İç Çap", Value = $"{calc.OuterDiameter:N2} mm" },
+                                new() { Label = "Dış Çap", Value = $"{calc.OuterTankDiameter:N2} mm" },
+                                new() { Label = "Silindirik Boy", Value = $"{calc.ShellLength:N2} mm" },
+                                new() { Label = "Yuvarlanmış İç Gövde Et", Value = $"{calc.RoundedInnerShellThickness:N2} mm" },
+                                new() { Label = "Yuvarlanmış İç Bombe Et", Value = $"{calc.RoundedInnerHeadThickness:N2} mm" },
+                                new() { Label = "Yuvarlanmış Dış Gövde Et", Value = $"{calc.RoundedOuterShellThickness:N2} mm" },
+                                new() { Label = "Yuvarlanmış Dış Bombe Et", Value = $"{calc.RoundedOuterHeadThickness:N2} mm" }
+                            }
+                        });
+                    }
+                }
+                else if (item.LinkedCalculationType == SalesRequestCalculationType.AD2000)
+                {
+                    var calc = await _context.AD2000Calculations
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId!.Value && x.Status != Status.Deleted);
+                    if (calc != null)
+                    {
+                        vm.CalculationDetails.Add(new DesignCalculationDetailVm
+                        {
+                            ItemCode = item.ItemCode,
+                            ItemTitle = item.ItemTitle,
+                            CalculationName = calc.Name,
+                            CalculationType = SalesRequestCalculationType.AD2000,
+                            Fields = new List<DesignCalculationFieldVm>
+                            {
+                                new() { Label = "Design Pressure", Value = $"{calc.DesignPressure:N2} bar" },
+                                new() { Label = "Test Pressure", Value = $"{calc.TestPressure:N2} bar" },
+                                new() { Label = "Static Pressure", Value = $"{calc.StaticPressure:N2} bar" },
+                                new() { Label = "Çap", Value = $"{calc.Diameter:N2} mm" },
+                                new() { Label = "Silindirik Boy", Value = $"{calc.ShellLength:N2} mm" },
+                                new() { Label = "Yuvarlanmış Gövde Et", Value = $"{calc.RoundedShellThickness:N2} mm" },
+                                new() { Label = "Yuvarlanmış Bombe Et", Value = $"{calc.RoundedHeadThickness:N2} mm" },
+                                new() { Label = "Tank Oryantasyonu", Value = calc.TankOrientation.ToString() }
+                            }
+                        });
+                    }
+                }
+            }
+
             return View(vm);
         }
 

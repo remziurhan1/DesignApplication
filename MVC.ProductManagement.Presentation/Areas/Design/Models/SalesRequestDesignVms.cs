@@ -34,8 +34,24 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Models
         public string? DeliveryLeadTime { get; set; }
         public SalesOfferStatus OfferStatus { get; set; }
         public List<DesignSalesRequestItemVm> TechnicalItems { get; set; } = new();
+        public List<DesignCalculationDetailVm> CalculationDetails { get; set; } = new();
         public List<DesignSalesCostInputItemVm> CostInputItems { get; set; } = new();
         public List<DesignSalesDocumentVm> TechnicalDocuments { get; set; } = new();
+    }
+
+    public class DesignCalculationDetailVm
+    {
+        public string ItemCode { get; set; } = string.Empty;
+        public string ItemTitle { get; set; } = string.Empty;
+        public string CalculationName { get; set; } = string.Empty;
+        public SalesRequestCalculationType CalculationType { get; set; }
+        public List<DesignCalculationFieldVm> Fields { get; set; } = new();
+    }
+
+    public class DesignCalculationFieldVm
+    {
+        public string Label { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
     }
 
     public class DesignSalesRequestItemVm

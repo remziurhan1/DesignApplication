@@ -67,6 +67,32 @@
                     }
                 </div>
             </div>
+
+            <div class="card mt-3">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Hesap Detayları (Maliyete Bağlı Tanklar)</h5>
+                    @if (!Model.CalculationDetails.Any())
+                    {
+                        <p class="text-muted mb-0">Bu talepte maliyete bağlı hesap detayı bulunamadı. Sadece fiyat girildiyse teknik şartname üzerinden ilerleyebilirsiniz.</p>
+                    }
+                    else
+                    {
+                        @foreach (var calculation in Model.CalculationDetails)
+                        {
+                            <div class="border rounded p-3 mb-3">
+                                <div class="fw-semibold">@calculation.ItemCode - @calculation.ItemTitle</div>
+                                <div class="small text-muted mb-2">@calculation.CalculationType · @calculation.CalculationName</div>
+                                <div class="row g-2 small">
+                                    @foreach (var field in calculation.Fields)
+                                    {
+                                        <div class="col-md-6"><strong>@field.Label:</strong> @field.Value</div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
         </div>
 
         <div class="col-lg-4">
