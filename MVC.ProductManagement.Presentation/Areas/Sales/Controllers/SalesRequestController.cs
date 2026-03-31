@@ -657,7 +657,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateOfferStatus(Guid id, SalesOfferStatus offerStatus)
+        [RequestFormLimits(MultipartBodyLengthLimit = 50_000_000)]
+        public async Task<IActionResult> UpdateOfferStatus(Guid id, SalesOfferStatus offerStatus, decimal? soldSalesPrice, string? deliveryLeadTime, IFormFile? technicalSpecificationFile)
         {
             if (!await HasSalesPermissionAsync(x => x.CanAccessSalesArea))
             {
@@ -665,6 +666,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             var entity = await _context.SalesRequests
+                .Include(x => x.Items)
+                .Include(x => x.Documents)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (entity == null)
             {
@@ -675,6 +678,37 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             {
                 TempData["ErrorMessage"] = "Teklif durumu sadece teklif müşteriye iletildikten sonra güncellenebilir.";
                 return RedirectToAction(nameof(Details), new { id });
+            }
+
+            if (offerStatus == SalesOfferStatus.S)
+            {
+                if (!soldSalesPrice.HasValue || soldSalesPrice.Value <= 0)
+                {
+                    TempData["ErrorMessage"] = "Satıldı işaretlemek için satış fiyatı zorunludur.";
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                if (string.IsNullOrWhiteSpace(deliveryLeadTime))
+                {
+                    TempData["ErrorMessage"] = "Satıldı işaretlemek için termin bilgisi zorunludur (örn: 14-16 hafta).";
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                if (technicalSpecificationFile == null || technicalSpecificationFile.Length == 0)
+                {
+                    TempData["ErrorMessage"] = "Satıldı işaretlemek için teknik şartname dosyası yüklenmelidir.";
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
+                entity.FinalSalesPrice = soldSalesPrice.Value;
+                entity.DeliveryLeadTime = deliveryLeadTime.Trim();
+
+                foreach (var item in entity.Items)
+                {
+                    item.SoldSalesPrice = soldSalesPrice.Value;
+                }
+
+                await SaveSoldTechnicalSpecificationAsync(entity, technicalSpecificationFile);
             }
 
             entity.OfferStatus = offerStatus;
@@ -1209,8 +1243,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 WorkflowStatus = entity.WorkflowStatus,
                 CustomerQuoteStatus = entity.CustomerQuoteStatus,
                 OfferStatus = entity.OfferStatus,
+                FinalSalesPrice = entity.FinalSalesPrice,
+                DeliveryLeadTime = entity.DeliveryLeadTime,
                 RevisionNo = entity.RevisionNo,
                 IsManagerView = false,
+                CanViewPricing = canViewPricing,
                 RevisionHistory = revisions.Select(x => new SalesRequestRevisionHistoryVm
                 {
                     RevisionNo = x.RevisionNo,
@@ -1365,6 +1402,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 entity.SummaryNotes,
                 entity.WorkflowStatus,
                 entity.CustomerQuoteStatus,
+                entity.FinalSalesPrice,
+                entity.DeliveryLeadTime,
                 entity.RevisionNo,
                 Documents = entity.Documents
                     .OrderByDescending(x => x.UploadedAt)
@@ -1720,6 +1759,36 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
 
             await _context.SalesRequestAttachments.AddRangeAsync(attachments);
             await _context.SaveChangesAsync();
+        }
+
+        private async Task SaveSoldTechnicalSpecificationAsync(SalesRequest request, IFormFile file)
+        {
+            var uploadsRoot = Path.Combine(_environment.WebRootPath, "uploads", "sales-documents", request.Id.ToString("N"));
+            Directory.CreateDirectory(uploadsRoot);
+            var fileName = $"{Guid.NewGuid():N}_{Path.GetFileName(file.FileName)}";
+            var fullPath = Path.Combine(uploadsRoot, fileName);
+            await using (var fs = new FileStream(fullPath, FileMode.Create))
+            {
+                await file.CopyToAsync(fs);
+            }
+
+            foreach (var previous in request.Documents.Where(x => x.DocumentType == SalesDocumentType.TechnicalSpecification && x.IsCurrent))
+            {
+                previous.IsCurrent = false;
+            }
+
+            request.Documents.Add(new SalesRequestDocument
+            {
+                SalesRequestId = request.Id,
+                DocumentType = SalesDocumentType.TechnicalSpecification,
+                RevisionCode = $"S{request.RevisionNo:00}",
+                FilePath = $"/uploads/sales-documents/{request.Id:N}/{fileName}",
+                OriginalFileName = file.FileName,
+                UploadedBy = User.Identity?.Name ?? "System",
+                UploadedAt = DateTime.UtcNow,
+                IsCurrent = true,
+                Notes = "Satıldı adımında yüklenen teknik şartname"
+            });
         }
     }
 }

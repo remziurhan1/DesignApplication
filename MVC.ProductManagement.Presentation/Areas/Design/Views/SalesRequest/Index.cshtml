@@ -1,0 +1,56 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.DesignSalesRequestIndexVm
+@{
+    ViewData["Title"] = "Dizayn - Satılan Talepler";
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Dizayn Talepleri (Satıldı)</h1>
+        <p class="text-muted mb-0">Toplam @Model.TotalCount kayıt</p>
+    </div>
+</div>
+
+<section class="section mt-3">
+    <div class="card">
+        <div class="card-body pt-4">
+            @if (!Model.Requests.Any())
+            {
+                <p class="text-muted mb-0">Henüz satıldı durumunda dizayna düşen talep yok.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Talep No</th>
+                                <th>Başlık</th>
+                                <th>Müşteri</th>
+                                <th>Satışçı</th>
+                                <th>Termin</th>
+                                <th>Kalem</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.Requests)
+                            {
+                                <tr>
+                                    <td>@row.RequestNo</td>
+                                    <td>@row.Title</td>
+                                    <td>@row.CustomerName</td>
+                                    <td>@row.RequestedByName</td>
+                                    <td>@(string.IsNullOrWhiteSpace(row.DeliveryLeadTime) ? "-" : row.DeliveryLeadTime)</td>
+                                    <td>@row.ItemCount</td>
+                                    <td class="text-end">
+                                        <a asp-action="Details" asp-route-id="@row.Id" class="btn btn-sm btn-primary">Detay</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</section>
