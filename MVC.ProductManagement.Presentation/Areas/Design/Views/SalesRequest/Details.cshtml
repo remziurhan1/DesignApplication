@@ -120,6 +120,7 @@
                                     <div class="small text-muted">Hesap: @(costItem.LinkedCalculationName ?? "-")</div>
                                     <div class="small text-muted">Revizyon: @(costItem.LinkedCostAnalysisRevisionCode ?? "-")</div>
                                     <div class="small text-muted">Tip: @(costItem.LinkedCalculationType?.ToString() ?? "-")</div>
+                                    <div class="small text-muted">Stok Kodları: @(costItem.LinkedStockCodes.Any() ? string.Join(", ", costItem.LinkedStockCodes) : "-")</div>
                                 </li>
                             }
                         </ul>

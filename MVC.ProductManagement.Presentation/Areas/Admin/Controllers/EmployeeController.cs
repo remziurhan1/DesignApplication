@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EmployeeController : AdminBaseController
     {
         private readonly AppDbContext _context;
@@ -90,7 +92,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             var roleName = vm.Department.Equals("Satış", StringComparison.OrdinalIgnoreCase)
                 ? Roles.Sales.ToString()
-                : Roles.Admin.ToString();
+                : vm.Department.Equals("Dizayn", StringComparison.OrdinalIgnoreCase)
+                    ? (vm.DepartmentRole.Contains("Müdür", StringComparison.OrdinalIgnoreCase)
+                        ? Roles.DesignManager.ToString()
+                        : Roles.DesignEngineer.ToString())
+                    : Roles.Admin.ToString();
 
             await _userManager.AddToRoleAsync(user, roleName);
 

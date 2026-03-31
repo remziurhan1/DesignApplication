@@ -17,6 +17,7 @@ namespace MVC.ProductManagement.Domain.Enums
         PurchasingEngineer = 7,
         ProductionEngineer = 8,
         ProjectEngineer = 9,
-        QuotationPreparation = 10
+        QuotationPreparation = 10,
+        DesignManager = 11
     }
 }
