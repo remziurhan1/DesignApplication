@@ -5,7 +5,7 @@ using MVC.ProductManagement.Presentation.Controllers;
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles ="Admin,DesignEngineer,DesignManager")]
     public class AdminBaseController : BaseController
     {
        

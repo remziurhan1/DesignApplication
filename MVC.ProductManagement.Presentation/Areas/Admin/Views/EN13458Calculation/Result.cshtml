@@ -5,6 +5,7 @@
     ViewData["Title"] = "EN13458 Result";
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
+    var canManageCost = User.IsInRole("Admin");
 }
 
 @section Styles {
@@ -196,7 +197,7 @@
 @{
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
 }
-@if (costTable != null)
+@if (costTable != null && canManageCost)
 {
     <div class="card shadow-sm mt-4">
         <div class="card-header bg-light fw-semibold">Maliyet Grupları</div>

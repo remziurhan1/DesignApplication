@@ -6,6 +6,7 @@
     var totalCount = Model.Count;
     var avgPressure = totalCount > 0 ? Model.Average(x => x.DesignPressure) : 0;
     var avgShell = totalCount > 0 ? Model.Average(x => x.RoundedShellThickness) : 0;
+    var canManageCost = User.IsInRole("Admin");
 }
 
 @section Styles {
@@ -67,10 +68,13 @@
                                 <td class="text-end">
                                     <div class="d-inline-flex gap-2">
                                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-right-circle me-1"></i>Detay</a>
-                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Bu AD2000 tank kaydını silmek istediğinize emin misiniz?');">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>Sil</button>
-                                        </form>
+                                        @if (canManageCost)
+                                        {
+                                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Bu AD2000 tank kaydını silmek istediğinize emin misiniz?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>Sil</button>
+                                            </form>
+                                        }
                                     </div>
                                 </td>
                             </tr>

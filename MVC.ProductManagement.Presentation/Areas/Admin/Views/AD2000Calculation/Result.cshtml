@@ -5,6 +5,7 @@
 @using System.Collections.Generic
 @{
     ViewData["Title"] = "AD2000 Result";
+    var canManageCost = User.IsInRole("Admin");
 }
 
 @section Styles {
@@ -114,7 +115,7 @@
             <input type="hidden" name="@p.PropertyName" value="@ViewData.ModelExplorer.GetExplorerForProperty(p.PropertyName).Model" />
         }
         <button type="submit" class="btn btn-success px-4"><i class="bi bi-check2-circle me-1"></i>Kaydet</button>
-        @if (Model.Id != Guid.Empty)
+        @if (Model.Id != Guid.Empty && canManageCost)
         {
             <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-primary px-4"><i class="bi bi-cash-stack me-1"></i>Maliyet Görünümü</a>
         }

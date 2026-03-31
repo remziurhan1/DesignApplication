@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CustomerController : AdminBaseController
     {
         private readonly AppDbContext _context;

@@ -98,6 +98,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Models
         public string? LinkedCalculationName { get; set; }
         public string? LinkedCostAnalysisRevisionCode { get; set; }
         public SalesRequestCalculationType? LinkedCalculationType { get; set; }
+        public List<string> LinkedStockCodes { get; set; } = new();
     }
 
     public class DesignSalesDocumentVm

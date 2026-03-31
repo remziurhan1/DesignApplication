@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Text.Json.Nodes;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SalesRequestController : AdminBaseController
     {
         private readonly AppDbContext _context;
