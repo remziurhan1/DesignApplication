@@ -1,0 +1,157 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.DesignSalesRequestDetailVm
+@{
+    ViewData["Title"] = "Dizayn Talep Detayı";
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@Model.RequestNo</h1>
+        <p class="text-muted mb-0">@Model.Title</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Listeye Dön</a>
+</div>
+
+<section class="section mt-3">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body pt-4">
+                    <div class="row g-3">
+                        <div class="col-md-4"><strong>Müşteri:</strong> @Model.CustomerName</div>
+                        <div class="col-md-4"><strong>Satışçı:</strong> @Model.RequestedByName</div>
+                        <div class="col-md-4"><strong>Teklif:</strong> @Model.OfferStatus</div>
+                        <div class="col-md-4"><strong>Talep alma:</strong> @(Model.RequestReceivedAt?.ToString("dd.MM.yyyy") ?? "-")</div>
+                        <div class="col-md-4"><strong>İhtiyaç tarihi:</strong> @Model.NeededByDate.ToString("dd.MM.yyyy")</div>
+                        <div class="col-md-4"><strong>Termin:</strong> @(string.IsNullOrWhiteSpace(Model.DeliveryLeadTime) ? "-" : Model.DeliveryLeadTime)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Teknik Kalemler</h5>
+                    @if (!Model.TechnicalItems.Any())
+                    {
+                        <p class="text-muted mb-0">Teknik kalem bulunamadı.</p>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.TechnicalItems)
+                        {
+                            <div class="border rounded p-3 mb-3">
+                                <div class="d-flex justify-content-between flex-wrap">
+                                    <div>
+                                        <div class="fw-semibold">@item.ItemCode - @item.ItemTitle</div>
+                                        <div class="text-muted small">@item.ProductGroupName · @item.CapacityM3 m³</div>
+                                    </div>
+                                    <span class="badge bg-info">@item.WorkflowStatus</span>
+                                </div>
+                                <div class="row mt-2 g-2 small">
+                                    <div class="col-md-4"><strong>Standart:</strong> @(item.DesignStandardCode ?? "-")</div>
+                                    <div class="col-md-4"><strong>P:</strong> @(item.DesignPressureBar?.ToString("N2") ?? "-") bar</div>
+                                    <div class="col-md-4"><strong>T:</strong> @(item.DesignTemperatureMin?.ToString("N1") ?? "-") / @(item.DesignTemperatureMax?.ToString("N1") ?? "-") °C</div>
+                                    <div class="col-md-4"><strong>Tank:</strong> @(item.TankType?.ToString() ?? "-")</div>
+                                    <div class="col-md-4"><strong>Yerleşim:</strong> @item.PlacementType</div>
+                                    <div class="col-md-4"><strong>STD/OPS:</strong> @(item.StdOpsSelection?.ToString() ?? "-")</div>
+                                </div>
+                                @if (!string.IsNullOrWhiteSpace(item.MinimumTechnicalNotes))
+                                {
+                                    <div class="mt-2"><strong>Minimum teknik not:</strong> @item.MinimumTechnicalNotes</div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
+                                {
+                                    <div class="mt-2"><strong>Teknik özet:</strong> @item.DesignDetails</div>
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Hesap Detayları (Maliyete Bağlı Tanklar)</h5>
+                    @if (!Model.CalculationDetails.Any())
+                    {
+                        <p class="text-muted mb-0">Bu talepte maliyete bağlı hesap detayı bulunamadı. Sadece fiyat girildiyse teknik şartname üzerinden ilerleyebilirsiniz.</p>
+                    }
+                    else
+                    {
+                        @foreach (var calculation in Model.CalculationDetails)
+                        {
+                            <div class="border rounded p-3 mb-3">
+                                <div class="d-flex justify-content-between flex-wrap gap-2">
+                                    <div>
+                                        <div class="fw-semibold">@calculation.ItemCode - @calculation.ItemTitle</div>
+                                        <div class="small text-muted mb-2">@calculation.CalculationType · @calculation.CalculationName</div>
+                                    </div>
+                                    <a asp-action="CalculationResult" asp-route-requestId="@Model.Id" asp-route-itemId="@calculation.ItemId" class="btn btn-sm btn-outline-primary">
+                                        Hesap Sonuçlarının Tamamı
+                                    </a>
+                                </div>
+                                <div class="row g-2 small">
+                                    @foreach (var field in calculation.Fields)
+                                    {
+                                        <div class="col-md-6"><strong>@field.Label:</strong> @field.Value</div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Maliyete Giren Kalemler (Tutar Gizli)</h5>
+                    @if (!Model.CostInputItems.Any())
+                    {
+                        <p class="text-muted mb-0">Maliyetle ilişkilendirilmiş kalem yok.</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var costItem in Model.CostInputItems)
+                            {
+                                <li class="list-group-item px-0">
+                                    <div class="fw-semibold">@costItem.ItemCode - @costItem.ItemTitle</div>
+                                    <div class="small text-muted">Hesap: @(costItem.LinkedCalculationName ?? "-")</div>
+                                    <div class="small text-muted">Revizyon: @(costItem.LinkedCostAnalysisRevisionCode ?? "-")</div>
+                                    <div class="small text-muted">Tip: @(costItem.LinkedCalculationType?.ToString() ?? "-")</div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Teknik Dokümanlar</h5>
+                    @if (!Model.TechnicalDocuments.Any())
+                    {
+                        <p class="text-muted mb-0">Yüklü teknik doküman yok.</p>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var document in Model.TechnicalDocuments)
+                            {
+                                <li class="list-group-item px-0">
+                                    <span class="badge bg-dark">@document.DocumentType</span>
+                                    <span class="badge bg-@(document.IsCurrent ? "success" : "secondary")">@document.RevisionCode</span>
+                                    <div class="mt-1">
+                                        <a asp-action="DownloadDocument" asp-route-requestId="@Model.Id" asp-route-documentId="@document.Id">@document.OriginalFileName</a>
+                                    </div>
+                                    <small class="text-muted">@document.UploadedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

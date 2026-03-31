@@ -23,6 +23,8 @@ namespace MVC.ProductManagement.Domain.Entities.SalesRequests
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; } = SalesRequestWorkflowStatus.Submitted;
         public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; } = SalesCustomerQuoteStatus.NotShared;
         public SalesOfferStatus OfferStatus { get; set; } = SalesOfferStatus.F;
+        public decimal? FinalSalesPrice { get; set; }
+        public string? DeliveryLeadTime { get; set; }
         public int RevisionNo { get; set; } = 1;
         public DateTime SalesOpenedAt { get; set; } = DateTime.UtcNow;
         public DateTime? PricingCompletedAt { get; set; }
