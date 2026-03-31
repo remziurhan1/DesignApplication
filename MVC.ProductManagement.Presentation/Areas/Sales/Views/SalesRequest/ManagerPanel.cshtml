@@ -12,6 +12,17 @@
     <a asp-action="Index" class="btn btn-outline-secondary">Talep Listesi</a>
 </div>
 
+<div class="alert alert-light border" role="alert">
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <span class="badge bg-primary">1) Talep</span>
+        <i class="bi bi-arrow-right text-muted"></i>
+        <span class="badge bg-warning text-dark">2) Maliyetlendirme</span>
+        <i class="bi bi-arrow-right text-muted"></i>
+        <span class="badge bg-success">3) Satış Müdürü Onayı</span>
+        <span class="ms-2 text-muted small">Bu ekran 3. adım karar ekranıdır.</span>
+    </div>
+</div>
+
 <div class="row g-3 mb-3">
     <div class="col-md-4">
         <div class="card"><div class="card-body py-3 text-center"><small class="text-muted d-block">Gelen Çalışma</small><h4 class="mb-0">@Model.IncomingCount</h4></div></div>

@@ -1,0 +1,113 @@
+@using MVC.ProductManagement.Domain.Enums
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestRevisionScreenVm
+@{
+    ViewData["Title"] = $"{Model.RequestNo} - {Model.SelectedRevision.RevisionCode}";
+
+    string StatusClass(SalesRequestWorkflowStatus status) => status switch
+    {
+        SalesRequestWorkflowStatus.Approved => "success",
+        SalesRequestWorkflowStatus.Rejected => "danger",
+        SalesRequestWorkflowStatus.PricingInProgress => "warning",
+        _ => "info"
+    };
+}
+
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@Model.RequestNo · @Model.SelectedRevision.RevisionCode</h1>
+        <p class="text-muted mb-0">@Model.Title</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Details" asp-route-id="@Model.SalesRequestId" asp-route-mode="@(Model.IsManagerView ? "manager" : "sales")" class="btn btn-outline-secondary">Talep ekranına dön</a>
+    </div>
+</div>
+
+<section class="section mt-4">
+    <div class="card mb-3">
+        <div class="card-body pt-4">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+                <div>
+                    <span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span>
+                    <h5 class="mt-2 mb-1">@Model.SelectedRevision.RevisionReason</h5>
+                    <small class="text-muted">@Model.SelectedRevision.RevisedBy · @Model.SelectedRevision.RevisedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+                </div>
+                <div class="text-end">
+                    <small class="text-muted d-block">Revizyon Toplam Maliyet</small>
+                    <h4 class="mb-0">@(Model.SelectedRevision.TotalCost?.ToString("N2") ?? "-") ₺</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">@Model.SelectedRevision.RevisionCode Satırları</h5>
+                    @if (Model.SelectedRevision.Items.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Kalem</th>
+                                        <th>Kapasite</th>
+                                        <th>Maliyet Revizyonu</th>
+                                        <th class="text-end">Maliyet</th>
+                                        <th class="text-end">İletilen Fiyat</th>
+                                        <th class="text-end">Satılan Fiyat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var item in Model.SelectedRevision.Items)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="fw-semibold">@item.ItemCode</div>
+                                            <small class="text-muted">@item.ItemTitle</small>
+                                        </td>
+                                        <td>@item.CapacityM3.ToString("0.##") m³</td>
+                                        <td>@(item.LinkedCostAnalysisRevisionCode ?? "-")</td>
+                                        <td class="text-end">@(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺</td>
+                                        <td class="text-end">@(item.SharedSalesPrice?.ToString("N2") ?? "-") ₺</td>
+                                        <td class="text-end">@(item.SoldSalesPrice?.ToString("N2") ?? "-") ₺</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Bu revizyonda kayıtlı satır bulunmuyor.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">Revizyon Ekranları</h5>
+                    <div class="list-group list-group-flush">
+                        @foreach (var revision in Model.Revisions)
+                        {
+                            var activeClass = revision.RevisionNo == Model.SelectedRevision.RevisionNo ? "active" : string.Empty;
+                            <a asp-action="Revision"
+                               asp-route-id="@Model.SalesRequestId"
+                               asp-route-revisionNo="@revision.RevisionNo"
+                               asp-route-mode="@(Model.IsManagerView ? "manager" : "sales")"
+                               class="list-group-item list-group-item-action @activeClass">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>@revision.RevisionCode</span>
+                                    <small>@(revision.TotalCost?.ToString("N2") ?? "-") ₺</small>
+                                </div>
+                                <small>@revision.RevisionReason</small>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

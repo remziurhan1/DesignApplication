@@ -156,6 +156,17 @@
     </div>
 </div>
 
+<div class="alert alert-light border mt-3" role="alert">
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <span class="badge bg-primary">1) Talep</span>
+        <i class="bi bi-arrow-right text-muted"></i>
+        <span class="badge bg-warning text-dark">2) Maliyetlendirme</span>
+        <i class="bi bi-arrow-right text-muted"></i>
+        <span class="badge bg-success">3) Satış Müdürü Onayı</span>
+        <span class="ms-2 text-muted small">Aktif aşama: <strong>@Model.WorkflowStatus</strong></span>
+    </div>
+</div>
+
 <section class="section mt-4">
     <div class="row g-4">
         <div class="col-lg-8">
@@ -244,7 +255,7 @@
 
             <div class="card mt-3">
                 <div class="card-body pt-4">
-                    <h5 class="card-title">Revizyon / Maliyet Geçmişi</h5>
+                    <h5 class="card-title">Revizyon Ekranları</h5>
                     @if (Model.RevisionCosts.Any())
                     {
                         @foreach (var revision in Model.RevisionCosts)
@@ -255,6 +266,15 @@
                                     <div><strong>Toplam:</strong> @(revision.TotalCost?.ToString("N2") ?? "-") ₺</div>
                                 </div>
                                 <small class="text-muted">@revision.RevisedBy · @revision.RevisedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+                                <div class="mt-2">
+                                    <a asp-action="Revision"
+                                       asp-route-id="@Model.Id"
+                                       asp-route-revisionNo="@revision.RevisionNo"
+                                       asp-route-mode="@(Model.IsManagerView ? "manager" : "sales")"
+                                       class="btn btn-sm btn-outline-primary">
+                                        @revision.RevisionCode ekranını aç
+                                    </a>
+                                </div>
                                 <div class="mt-1">
                                     @foreach (var item in revision.Items)
                                     {

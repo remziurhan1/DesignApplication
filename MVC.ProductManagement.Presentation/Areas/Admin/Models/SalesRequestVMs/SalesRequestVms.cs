@@ -283,6 +283,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public List<SalesRequestRevisionCostItemVm> Items { get; set; } = new();
     }
 
+    public class SalesRequestRevisionScreenVm
+    {
+        public Guid SalesRequestId { get; set; }
+        public string RequestNo { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public bool IsManagerView { get; set; }
+        public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
+        public List<SalesRequestRevisionCostVm> Revisions { get; set; } = new();
+        public SalesRequestRevisionCostVm SelectedRevision { get; set; } = new();
+    }
+
     public class SalesRequestRevisionCostItemVm
     {
         public string ItemCode { get; set; } = string.Empty;
