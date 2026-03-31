@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EmployeeController : AdminBaseController
     {
         private readonly AppDbContext _context;
