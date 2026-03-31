@@ -1,0 +1,100 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.DesignCatalogVm
+@{
+    ViewData["Title"] = "Dizayn Katalogları";
+}
+
+<h2 class="mb-3">Dizayn Teknik Kaynaklar</h2>
+<p class="text-muted">Bu alanda maliyet/fiyat bilgileri gösterilmez.</p>
+
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body pt-3">
+                <h5>Malzemeler</h5>
+                <ul class="small mb-0">
+                    @foreach (var row in Model.Materials)
+                    {
+                        <li><strong>@row.Name</strong> <span class="text-muted">(@row.Description)</span></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body pt-3">
+                <h5>Malzeme Formları</h5>
+                <ul class="small mb-0">
+                    @foreach (var row in Model.MaterialForms)
+                    {
+                        <li><strong>@row.Name</strong> <span class="text-muted">(@row.Description)</span></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body pt-3">
+                <h5>Akma Mukavemeti</h5>
+                <ul class="small mb-0">
+                    @foreach (var row in Model.YieldStrengths)
+                    {
+                        <li>@row.MaterialForm - T=@row.Temperature°C, Rp0.2=@row.Rp02 MPa, Rm=@row.Rm MPa</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body pt-3">
+                <h5>Depolama Tipleri</h5>
+                <ul class="small mb-0">
+                    @foreach (var row in Model.StorageTypes)
+                    {
+                        <li><strong>@row.Name</strong> <span class="text-muted">(@(row.Description ?? "-"))</span></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body pt-3">
+                <h5>EN13458 / AD2000 Hesapları</h5>
+                <ul class="small mb-0">
+                    @foreach (var row in Model.Calculations)
+                    {
+                        <li><strong>@row.Name</strong> <span class="text-muted">(@row.Description)</span></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body pt-3">
+                <h5>Stok Kodu Grupları / Kodlar</h5>
+                @if (!Model.StockGroups.Any())
+                {
+                    <p class="text-muted mb-0">Kayıt bulunamadı.</p>
+                }
+                else
+                {
+                    @foreach (var group in Model.StockGroups)
+                    {
+                        <div class="mb-2">
+                            <strong>@group.GroupName</strong>
+                            <div class="small text-muted">@string.Join(", ", group.Codes)</div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

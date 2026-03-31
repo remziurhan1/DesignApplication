@@ -26,6 +26,8 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
         private const string managerPhoneNumber = "5550000000";
         private const string designEngineerEmail = "dizayn.muhendis@cryocan.com";
         private const string designEngineerPhoneNumber = "5551112233";
+        private const string designManagerEmail = "dizayn.mudur@cryocan.com";
+        private const string designManagerPhoneNumber = "5551112244";
         private const string seedCustomerCompany = "Cryocan Seed Müşteri";
         private const string seedCustomerEmail = "seed.customer@cryocan.com";
 
@@ -81,6 +83,7 @@ END");
                 await AddSalesManagerAsync(context);
             }
             await EnsureDesignEngineerAsync(context);
+            await EnsureDesignManagerAsync(context);
             if (!context.Customers.Any(x => x.CompanyName == seedCustomerCompany))
             {
                 await AddSeedCustomerAsync(context);
@@ -317,5 +320,62 @@ END");
 
             await context.SaveChangesAsync();
         }
+
+        private static async Task EnsureDesignManagerAsync(AppDbContext context)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Email == designManagerEmail);
+            if (user == null)
+            {
+                user = new IdentityUser
+                {
+                    Email = designManagerEmail,
+                    EmailConfirmed = true,
+                    NormalizedEmail = designManagerEmail.ToUpperInvariant(),
+                    UserName = designManagerEmail,
+                    NormalizedUserName = designManagerEmail.ToUpperInvariant(),
+                    PhoneNumber = designManagerPhoneNumber,
+                    PhoneNumberConfirmed = true
+                };
+                user.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(user, salesPassword);
+                await context.Users.AddAsync(user);
+                await context.SaveChangesAsync();
+            }
+
+            var designManagerRoleId = context.Roles.FirstOrDefault(role => role.Name == Roles.DesignManager.ToString())?.Id;
+            if (!string.IsNullOrWhiteSpace(designManagerRoleId) &&
+                !await context.UserRoles.AnyAsync(x => x.UserId == user.Id && x.RoleId == designManagerRoleId))
+            {
+                await context.UserRoles.AddAsync(new IdentityUserRole<string>
+                {
+                    RoleId = designManagerRoleId,
+                    UserId = user.Id
+                });
+            }
+
+            if (!await context.EmployeeProfiles.AnyAsync(x => x.UserId == user.Id))
+            {
+                await context.EmployeeProfiles.AddAsync(new EmployeeProfile
+                {
+                    UserId = user.Id,
+                    FullName = "Dizayn Müdürü",
+                    Department = "Dizayn Bölümü",
+                    DepartmentRole = "Dizayn Müdürü",
+                    Title = "Dizayn Müdürü",
+                    Number = designManagerPhoneNumber,
+                    Email = designManagerEmail,
+                    Location = "Global",
+                    CanAccessSalesArea = false,
+                    CanManageSalesCustomers = false,
+                    CanCreateSalesRequests = false,
+                    CanViewSalesPricing = false,
+                    Status = Status.Added,
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
+                });
+            }
+
+            await context.SaveChangesAsync();
+        }
+
     }
 }

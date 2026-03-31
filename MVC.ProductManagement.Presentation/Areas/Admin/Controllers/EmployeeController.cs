@@ -90,7 +90,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             var roleName = vm.Department.Equals("Satış", StringComparison.OrdinalIgnoreCase)
                 ? Roles.Sales.ToString()
-                : Roles.Admin.ToString();
+                : vm.Department.Equals("Dizayn", StringComparison.OrdinalIgnoreCase)
+                    ? (vm.DepartmentRole.Contains("Müdür", StringComparison.OrdinalIgnoreCase)
+                        ? Roles.DesignManager.ToString()
+                        : Roles.DesignEngineer.ToString())
+                    : Roles.Admin.ToString();
 
             await _userManager.AddToRoleAsync(user, roleName);
 

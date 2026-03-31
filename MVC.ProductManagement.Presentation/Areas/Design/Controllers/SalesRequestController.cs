@@ -27,7 +27,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 .Include(x => x.Customer)
                 .Include(x => x.Items)
                 .Where(x => x.Status != Status.Deleted
-                            && x.RequestSource == SalesRequestSource.Sales
                             && x.OfferStatus == SalesOfferStatus.S)
                 .OrderByDescending(x => x.ModifiedDate ?? x.CreatedDate)
                 .Select(x => new DesignSalesRequestListVm
@@ -62,7 +61,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 .Include(x => x.Documents)
                 .FirstOrDefaultAsync(x => x.Id == id
                                           && x.Status != Status.Deleted
-                                          && x.RequestSource == SalesRequestSource.Sales
                                           && x.OfferStatus == SalesOfferStatus.S);
             if (request == null)
             {
@@ -138,6 +136,42 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                     })
                     .ToList()
             };
+
+
+            var linkedCostItemMap = request.Items
+                .Where(x => x.LinkedCostAnalysisId.HasValue && x.LinkedCalculationType.HasValue)
+                .ToDictionary(x => x.ItemCode, x => new { x.LinkedCostAnalysisId, x.LinkedCalculationType });
+
+            foreach (var costItem in vm.CostInputItems)
+            {
+                if (!linkedCostItemMap.TryGetValue(costItem.ItemCode, out var link) || !link.LinkedCostAnalysisId.HasValue)
+                {
+                    continue;
+                }
+
+                if (link.LinkedCalculationType == SalesRequestCalculationType.EN13458)
+                {
+                    costItem.LinkedStockCodes = await _context.EN13458CostAnalysisItems
+                        .AsNoTracking()
+                        .Where(x => x.EN13458CostAnalysisId == link.LinkedCostAnalysisId.Value && x.Status != Status.Deleted)
+                        .Select(x => x.StockCode)
+                        .Where(x => !string.IsNullOrWhiteSpace(x))
+                        .Distinct()
+                        .Take(20)
+                        .ToListAsync();
+                }
+                else if (link.LinkedCalculationType == SalesRequestCalculationType.AD2000)
+                {
+                    costItem.LinkedStockCodes = await _context.AD2000CostAnalysisItems
+                        .AsNoTracking()
+                        .Where(x => x.AD2000CostAnalysisId == link.LinkedCostAnalysisId.Value && x.Status != Status.Deleted)
+                        .Select(x => x.StockCode)
+                        .Where(x => !string.IsNullOrWhiteSpace(x))
+                        .Distinct()
+                        .Take(20)
+                        .ToListAsync();
+                }
+            }
 
             var linkedItems = request.Items
                 .Where(x => x.LinkedCalculationId.HasValue && x.LinkedCalculationType.HasValue)
@@ -217,7 +251,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 .Include(x => x.Items)
                 .FirstOrDefaultAsync(x => x.Id == requestId
                                           && x.Status != Status.Deleted
-                                          && x.RequestSource == SalesRequestSource.Sales
                                           && x.OfferStatus == SalesOfferStatus.S);
             if (request == null)
             {
@@ -275,7 +308,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 .Include(x => x.Documents)
                 .FirstOrDefaultAsync(x => x.Id == requestId
                                           && x.Status != Status.Deleted
-                                          && x.RequestSource == SalesRequestSource.Sales
                                           && x.OfferStatus == SalesOfferStatus.S);
             if (request == null)
             {
