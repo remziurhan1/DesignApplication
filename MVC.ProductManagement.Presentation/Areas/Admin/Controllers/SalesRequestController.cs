@@ -404,6 +404,44 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Revision(Guid id, int revisionNo, string mode = "manager")
+        {
+            await RefreshLinkedPricingAsync(id);
+
+            var entity = await LoadRequestAsync(id);
+            if (entity == null) return NotFound();
+
+            var revisions = await _context.SalesRequestRevisions
+                .AsNoTracking()
+                .Where(x => x.SalesRequestId == id && x.Status != Status.Deleted)
+                .OrderByDescending(x => x.RevisionNo)
+                .ToListAsync();
+
+            var detailVm = MapDetailVm(entity, revisions, string.Equals(mode, "manager", StringComparison.OrdinalIgnoreCase));
+            var selectedRevision = detailVm.RevisionCosts
+                .OrderByDescending(x => x.RevisionNo)
+                .FirstOrDefault(x => x.RevisionNo == revisionNo);
+
+            if (selectedRevision == null)
+            {
+                return RedirectToAction(nameof(Details), new { id, mode });
+            }
+
+            var vm = new SalesRequestRevisionScreenVm
+            {
+                SalesRequestId = entity.Id,
+                RequestNo = entity.RequestNo,
+                Title = entity.Title,
+                IsManagerView = detailVm.IsManagerView,
+                WorkflowStatus = detailVm.WorkflowStatus,
+                Revisions = detailVm.RevisionCosts.OrderByDescending(x => x.RevisionNo).ToList(),
+                SelectedRevision = selectedRevision
+            };
+
+            return View(vm);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Pricing(Guid id)
         {
             await RefreshLinkedPricingAsync(id);
