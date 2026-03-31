@@ -69,8 +69,11 @@
                     <div class="col-md-4"><strong>Kapasite:</strong> @item.CapacityM3 m³</div>
                     <div class="col-md-4"><strong>Talep grubu:</strong> @item.RequestCategory</div>
                     <div class="col-md-4"><strong>Kurulum:</strong> @item.PlacementType</div>
-                    <div class="col-md-6"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                    <div class="col-md-6"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                    @if (Model.CanViewPricing)
+                    {
+                        <div class="col-md-6"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                        <div class="col-md-6"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
+                    }
                     @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
                     {
                         <div class="col-12"><strong>Teknik özet:</strong><div class="text-muted">@item.DesignDetails</div></div>
@@ -151,6 +154,8 @@
                         <div class="col-md-4"><div class="sales-summary-card"><div class="label">Satışçı</div><div class="value">@Model.RequestedByName</div></div></div>
                         <div class="col-md-4"><div class="sales-summary-card"><div class="label">Müşteri durumu</div><div class="value"><span class="badge bg-@StatusClass(Model.CustomerQuoteStatus)">@CustomerStatusText(Model.CustomerQuoteStatus)</span></div></div></div>
                         <div class="col-md-4"><div class="sales-summary-card"><div class="label">Teklif durumu</div><div class="value">@Model.OfferStatus</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Satış fiyatı</div><div class="value">@(Model.FinalSalesPrice.HasValue ? $"{Model.FinalSalesPrice.Value:N2} ₺" : "-")</div></div></div>
+                        <div class="col-md-4"><div class="sales-summary-card"><div class="label">Termin</div><div class="value">@(string.IsNullOrWhiteSpace(Model.DeliveryLeadTime) ? "-" : Model.DeliveryLeadTime)</div></div></div>
                         <div class="col-md-4"><div class="sales-summary-card"><div class="label">Revizyon</div><div class="value">@Model.RevisionCode</div></div></div>
                         <div class="col-md-4"><div class="sales-summary-card"><div class="label">Talep kaynağı</div><div class="value">@Model.RequestSource</div></div></div>
                         <div class="col-md-4"><div class="sales-summary-card"><div class="label">Talep oluşturma</div><div class="value">@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div></div>
@@ -176,6 +181,7 @@
                         <li>Yönetici onayı alındı</li>
                         <li>Teklif müşteriye iletildi</li>
                         <li>Teklif durumu güncellendi</li>
+                        <li>Satıldı → Tasarım/Satınalma/Planlama</li>
                     </ol>
 
                     <h5 class="card-title">Müşteri Bilgilendirme Durumu</h5>
@@ -189,16 +195,34 @@
                     </form>
 
                     <h5 class="card-title">Teklif Durumu (Müşteriye iletim sonrası)</h5>
-                    <form asp-action="UpdateOfferStatus" method="post" class="mb-4">
+                    <form asp-action="UpdateOfferStatus" method="post" enctype="multipart/form-data" class="mb-4">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.Id" />
-                        <div class="input-group">
-                            <select asp-for="OfferStatus" name="offerStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()" @@(Model.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer ? null : "disabled")></select>
+                        <div class="input-group mb-2">
+                            <select asp-for="OfferStatus" id="offerStatusSelect" name="offerStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()" @@(Model.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer ? null : "disabled")></select>
                             <button type="submit" class="btn btn-outline-primary" @(Model.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer ? null : "disabled")>Güncelle</button>
+                        </div>
+                        <div id="soldFields" class="border rounded p-2 mb-2" style="display:none;">
+                            <div class="mb-2">
+                                <label class="form-label small mb-1">Satış fiyatı (₺)</label>
+                                <input type="number" min="0" step="0.01" class="form-control form-control-sm" name="soldSalesPrice" value="@(Model.FinalSalesPrice?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))" />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small mb-1">Termin</label>
+                                <input type="text" class="form-control form-control-sm" name="deliveryLeadTime" placeholder="Örn: 14-16 hafta" value="@Model.DeliveryLeadTime" />
+                            </div>
+                            <div>
+                                <label class="form-label small mb-1">Teknik şartname (zorunlu)</label>
+                                <input type="file" class="form-control form-control-sm" name="technicalSpecificationFile" />
+                            </div>
                         </div>
                         @if (Model.CustomerQuoteStatus != SalesCustomerQuoteStatus.SharedWithCustomer)
                         {
                             <small class="text-warning">Önce "Teklif Müşteriye İletildi" adımı seçilmelidir.</small>
+                        }
+                        else
+                        {
+                            <small class="text-muted">Teklif durumu "S: Satıldı" seçilirse satış fiyatı, teknik şartname ve termin zorunlu olur.</small>
                         }
                     </form>
 
@@ -348,53 +372,72 @@
                         <p class="text-muted">Henüz doküman yüklenmedi.</p>
                     }
 
-                    <h5 class="card-title">Revizyon / Maliyet Geçmişi</h5>
-                    @if (Model.RevisionCosts.Any())
+                    @if (Model.CanViewPricing)
                     {
-                        @foreach (var revision in Model.RevisionCosts)
+                        <h5 class="card-title">Revizyon / Maliyet Geçmişi</h5>
+                        @if (Model.RevisionCosts.Any())
                         {
-                            <div class="border rounded-2 p-2 mb-2">
-                                <div class="d-flex justify-content-between flex-wrap">
-                                    <div><strong>@revision.RevisionCode</strong> - @revision.RevisionReason</div>
-                                    <div><strong>Toplam Maliyet:</strong> @(revision.TotalCost?.ToString("N2") ?? "-") ₺</div>
+                            @foreach (var revision in Model.RevisionCosts)
+                            {
+                                <div class="border rounded-2 p-2 mb-2">
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <div><strong>@revision.RevisionCode</strong> - @revision.RevisionReason</div>
+                                        <div><strong>Toplam Maliyet:</strong> @(revision.TotalCost?.ToString("N2") ?? "-") ₺</div>
+                                    </div>
+                                    <small class="text-muted">@revision.RevisedBy · @revision.RevisedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+                                    <div class="table-responsive mt-2">
+                                        <table class="table table-sm mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Kalem</th>
+                                                    <th>Kapasite</th>
+                                                    <th>Maliyet Revizyonu</th>
+                                                    <th class="text-end">Maliyet</th>
+                                                    <th class="text-end">İletilen Fiyat</th>
+                                                    <th class="text-end">Satılan Fiyat</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach (var item in revision.Items)
+                                            {
+                                                <tr>
+                                                    <td>@item.ItemCode - @item.ItemTitle</td>
+                                                    <td>@item.CapacityM3 m³</td>
+                                                    <td>@(item.LinkedCostAnalysisRevisionCode ?? "-")</td>
+                                                    <td class="text-end">@(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺</td>
+                                                    <td class="text-end">@(item.SharedSalesPrice?.ToString("N2") ?? "-") ₺</td>
+                                                    <td class="text-end">@(item.SoldSalesPrice?.ToString("N2") ?? "-") ₺</td>
+                                                </tr>
+                                            }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <small class="text-muted">@revision.RevisedBy · @revision.RevisedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
-                                <div class="table-responsive mt-2">
-                                    <table class="table table-sm mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Kalem</th>
-                                                <th>Kapasite</th>
-                                                <th>Maliyet Revizyonu</th>
-                                                <th class="text-end">Maliyet</th>
-                                                <th class="text-end">İletilen Fiyat</th>
-                                                <th class="text-end">Satılan Fiyat</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach (var item in revision.Items)
-                                        {
-                                            <tr>
-                                                <td>@item.ItemCode - @item.ItemTitle</td>
-                                                <td>@item.CapacityM3 m³</td>
-                                                <td>@(item.LinkedCostAnalysisRevisionCode ?? "-")</td>
-                                                <td class="text-end">@(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺</td>
-                                                <td class="text-end">@(item.SharedSalesPrice?.ToString("N2") ?? "-") ₺</td>
-                                                <td class="text-end">@(item.SoldSalesPrice?.ToString("N2") ?? "-") ₺</td>
-                                            </tr>
-                                        }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            }
                         }
-                    }
-                    else
-                    {
-                        <p class="text-muted mb-0">Maliyet revizyon geçmişi bulunmuyor.</p>
+                        else
+                        {
+                            <p class="text-muted mb-0">Maliyet revizyon geçmişi bulunmuyor.</p>
+                        }
                     }
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    (function () {
+        const select = document.getElementById('offerStatusSelect');
+        const soldFields = document.getElementById('soldFields');
+        if (!select || !soldFields) return;
+
+        const toggleSoldFields = () => {
+            const selectedText = (select.options[select.selectedIndex]?.text || '').toUpperCase();
+            soldFields.style.display = selectedText.includes('SATILDI') ? 'block' : 'none';
+        };
+
+        select.addEventListener('change', toggleSoldFields);
+        toggleSoldFields();
+    })();
+</script>

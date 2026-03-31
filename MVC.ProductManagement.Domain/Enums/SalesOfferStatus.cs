@@ -15,6 +15,8 @@ namespace MVC.ProductManagement.Domain.Enums
         [Display(Name = "H: %50 altı")]
         H = 5,
         [Display(Name = "P: Kaybedildi")]
-        P = 6
+        P = 6,
+        [Display(Name = "S: Satıldı")]
+        S = 7
     }
 }
