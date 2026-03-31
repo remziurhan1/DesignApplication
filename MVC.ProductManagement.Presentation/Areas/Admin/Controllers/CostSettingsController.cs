@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities.Costing;
@@ -7,6 +8,7 @@ using System.Globalization;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CostSettingsController : AdminBaseController
     {
         private readonly AppDbContext _context;

@@ -55,9 +55,9 @@ namespace MVC.ProductManagement.Presentation.Controllers
                 return RedirectToAction("Index", "Home", new { Area = "Sales" });
             }
 
-            if (userRoles.Contains("DesignEngineer"))
+            if (userRoles.Contains("DesignEngineer") || userRoles.Contains("DesignManager"))
             {
-                return RedirectToAction("Index", "SalesRequest", new { Area = "Design" });
+                return RedirectToAction("Index", "Home", new { Area = "Design" });
             }
 
             return RedirectToAction("Index", "Home");
