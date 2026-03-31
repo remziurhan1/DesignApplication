@@ -41,6 +41,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Models
 
     public class DesignCalculationDetailVm
     {
+        public Guid ItemId { get; set; }
         public string ItemCode { get; set; } = string.Empty;
         public string ItemTitle { get; set; } = string.Empty;
         public string CalculationName { get; set; } = string.Empty;
@@ -52,6 +53,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Models
     {
         public string Label { get; set; } = string.Empty;
         public string Value { get; set; } = string.Empty;
+    }
+
+    public class DesignCalculationResultVm
+    {
+        public Guid RequestId { get; set; }
+        public Guid ItemId { get; set; }
+        public string RequestNo { get; set; } = string.Empty;
+        public string ItemCode { get; set; } = string.Empty;
+        public string ItemTitle { get; set; } = string.Empty;
+        public string CalculationName { get; set; } = string.Empty;
+        public SalesRequestCalculationType CalculationType { get; set; }
+        public List<DesignCalculationFieldVm> Fields { get; set; } = new();
     }
 
     public class DesignSalesRequestItemVm

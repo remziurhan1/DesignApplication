@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Presentation.Areas.Design.Models;
+using System.Globalization;
+using System.Reflection;
 
 namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
 {
@@ -153,6 +155,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                     {
                         vm.CalculationDetails.Add(new DesignCalculationDetailVm
                         {
+                            ItemId = item.Id,
                             ItemCode = item.ItemCode,
                             ItemTitle = item.ItemTitle,
                             CalculationName = calc.Name,
@@ -182,6 +185,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                     {
                         vm.CalculationDetails.Add(new DesignCalculationDetailVm
                         {
+                            ItemId = item.Id,
                             ItemCode = item.ItemCode,
                             ItemTitle = item.ItemTitle,
                             CalculationName = calc.Name,
@@ -200,6 +204,64 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                         });
                     }
                 }
+            }
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CalculationResult(Guid requestId, Guid itemId)
+        {
+            var request = await _context.SalesRequests
+                .AsNoTracking()
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync(x => x.Id == requestId
+                                          && x.Status != Status.Deleted
+                                          && x.RequestSource == SalesRequestSource.Sales
+                                          && x.OfferStatus == SalesOfferStatus.S);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            var item = request.Items.FirstOrDefault(x => x.Id == itemId);
+            if (item == null || !item.LinkedCalculationId.HasValue || !item.LinkedCalculationType.HasValue)
+            {
+                return NotFound();
+            }
+
+            var vm = new DesignCalculationResultVm
+            {
+                RequestId = request.Id,
+                ItemId = item.Id,
+                RequestNo = request.RequestNo,
+                ItemCode = item.ItemCode,
+                ItemTitle = item.ItemTitle,
+                CalculationType = item.LinkedCalculationType.Value,
+                CalculationName = item.LinkedCalculationName ?? "-"
+            };
+
+            if (item.LinkedCalculationType == SalesRequestCalculationType.EN13458)
+            {
+                var calculation = await _context.EN13458Calculations
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+                if (calculation == null) return NotFound();
+                vm.CalculationName = calculation.Name;
+                vm.Fields = BuildCalculationFields(calculation);
+            }
+            else if (item.LinkedCalculationType == SalesRequestCalculationType.AD2000)
+            {
+                var calculation = await _context.AD2000Calculations
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == item.LinkedCalculationId.Value && x.Status != Status.Deleted);
+                if (calculation == null) return NotFound();
+                vm.CalculationName = calculation.Name;
+                vm.Fields = BuildCalculationFields(calculation);
+            }
+            else
+            {
+                return NotFound();
             }
 
             return View(vm);
@@ -234,6 +296,42 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
             }
 
             return PhysicalFile(fullPath, "application/octet-stream", document.OriginalFileName);
+        }
+
+        private static List<DesignCalculationFieldVm> BuildCalculationFields<TCalculation>(TCalculation calculation)
+        {
+            var excludedTokens = new[] { "Cost", "Price", "SalesPrice" };
+            var allowedTypes = new[]
+            {
+                typeof(string), typeof(bool), typeof(int), typeof(int?), typeof(long), typeof(long?),
+                typeof(float), typeof(float?), typeof(double), typeof(double?), typeof(decimal), typeof(decimal?),
+                typeof(DateTime), typeof(DateTime?), typeof(Guid), typeof(Guid?)
+            };
+
+            return calculation!.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.CanRead)
+                .Where(p =>
+                    allowedTypes.Contains(p.PropertyType)
+                    || (Nullable.GetUnderlyingType(p.PropertyType)?.IsEnum ?? false)
+                    || p.PropertyType.IsEnum)
+                .Where(p => !excludedTokens.Any(token => p.Name.Contains(token, StringComparison.OrdinalIgnoreCase)))
+                .OrderBy(p => p.Name)
+                .Select(p => new DesignCalculationFieldVm
+                {
+                    Label = p.Name,
+                    Value = FormatPropertyValue(p.GetValue(calculation))
+                })
+                .ToList();
+        }
+
+        private static string FormatPropertyValue(object? value)
+        {
+            if (value == null) return "-";
+            if (value is DateTime dt) return dt.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+            if (value is bool b) return b ? "Evet" : "Hayır";
+            if (value is IFormattable fmt) return fmt.ToString(null, CultureInfo.InvariantCulture);
+            return value.ToString() ?? "-";
         }
     }
 }
