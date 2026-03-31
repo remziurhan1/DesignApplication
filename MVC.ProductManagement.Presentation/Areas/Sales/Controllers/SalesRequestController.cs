@@ -666,6 +666,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
             }
 
             var entity = await _context.SalesRequests
+                .Include(x => x.Items)
+                .Include(x => x.Documents)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted && x.RequestSource == SalesRequestSource.Sales);
             if (entity == null)
             {
