@@ -226,9 +226,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs
         public SalesRequestWorkflowStatus WorkflowStatus { get; set; }
         public SalesCustomerQuoteStatus CustomerQuoteStatus { get; set; }
         public SalesOfferStatus OfferStatus { get; set; }
+        public decimal? FinalSalesPrice { get; set; }
+        public string? DeliveryLeadTime { get; set; }
         public int RevisionNo { get; set; }
         public string RevisionCode => $"R{RevisionNo:00}";
         public bool IsManagerView { get; set; }
+        public bool CanViewPricing { get; set; }
         public List<SalesRequestRevisionHistoryVm> RevisionHistory { get; set; } = new();
         public List<SalesRequestRevisionCostVm> RevisionCosts { get; set; } = new();
         public List<SalesRequestDocumentVm> Documents { get; set; } = new();
