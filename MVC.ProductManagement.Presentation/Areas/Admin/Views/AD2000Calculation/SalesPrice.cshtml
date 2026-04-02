@@ -1,0 +1,53 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs.AD2000ResultVM
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@{
+    ViewData["Title"] = "AD2000 Satış Fiyatı";
+    var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.AD2000DTOs.AD2000MaterialCostTableDTO;
+    var laborRateOptions = (ViewBag.LaborRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
+    var gugRateOptions = (ViewBag.GugRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
+    var financeRateOptions = (ViewBag.FinanceRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
+    var generalManagementRateOptions = (ViewBag.GeneralManagementRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
+}
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+    <div>
+        <h2 class="mb-0">AD2000 Satış Fiyatı</h2>
+        <div class="text-muted small">Kayıt Id: @Model.Id</div>
+    </div>
+    <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@costTable?.CostAnalysisId" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Maliyet Ekranına Dön
+    </a>
+</div>
+
+@if (costTable != null)
+{
+    <div class="card shadow-sm mb-3">
+        <div class="card-header bg-light fw-semibold">Maliyet Sonucu</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="border rounded p-3">
+                        <div class="small text-muted">İMM (Maliyet)</div>
+                        <div class="fs-5 fw-semibold">@((costTable.SalesPrice?.ImmCost ?? costTable.GrandTotalCost).ToString("N2")) €</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="border rounded p-3">
+                        <div class="small text-muted">Maliyet Analizi</div>
+                        <div class="fs-6 fw-semibold">@costTable.RevisionCode - @costTable.AnalysisName</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_SalesPricePanel", costTable, new ViewDataDictionary(ViewData)
+    {
+        ["CalculationId"] = Model.Id,
+        ["LaborRateOptions"] = laborRateOptions,
+        ["GugRateOptions"] = gugRateOptions,
+        ["FinanceRateOptions"] = financeRateOptions,
+        ["GeneralManagementRateOptions"] = generalManagementRateOptions
+    })
+}
