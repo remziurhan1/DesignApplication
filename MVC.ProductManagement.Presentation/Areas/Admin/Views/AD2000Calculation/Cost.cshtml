@@ -7,10 +7,7 @@
     ViewData["Title"] = "AD2000 Cost";
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.AD2000DTOs.AD2000MaterialCostTableDTO;
     var stockCodeOptions = (ViewBag.StockCodeOptions as IEnumerable<dynamic>)?.ToList() ?? new List<dynamic>();
-    var laborRateOptions = (ViewBag.LaborRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
-    var gugRateOptions = (ViewBag.GugRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
-    var financeRateOptions = (ViewBag.FinanceRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
-    var generalManagementRateOptions = (ViewBag.GeneralManagementRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
+    var headBombeRateOptions = (ViewBag.HeadBombeRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
     string ResolveInputPriceSource(bool useManualUnitPrice) => useManualUnitPrice ? "Manuel fiyat" : "Stok fiyatı";
     double ResolveInputPrice(double stockUnitPrice, bool useManualUnitPrice, double? manualUnitPrice) => useManualUnitPrice ? (manualUnitPrice ?? 0) : stockUnitPrice;
 }
@@ -158,15 +155,6 @@
             <div class="card-body d-flex flex-column gap-4">
                 @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue)
                 {
-                    @await Html.PartialAsync("_SalesPricePanel", costTable, new ViewDataDictionary(ViewData)
-                    {
-                        ["CalculationId"] = Model.Id,
-                        ["LaborRateOptions"] = laborRateOptions,
-                        ["GugRateOptions"] = gugRateOptions,
-                        ["FinanceRateOptions"] = financeRateOptions,
-                        ["GeneralManagementRateOptions"] = generalManagementRateOptions
-                    })
-
                     <div class="card shadow-sm mt-4 border-success-subtle order-2">
                         <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">Ek Stok / Grup Maliyeti</div>
                         <div class="card-body">
@@ -237,7 +225,7 @@
                                             <td>
                                                 <input type="hidden" name="items[@itemIndex].CostAnalysisItemId" value="@item.CostAnalysisItemId" />
                                                 <div class="small fw-semibold mb-1">@(string.IsNullOrWhiteSpace(item.StockCodeName) ? "Stok seçilmedi" : $"Seçili: {item.StockCodeName}")</div>
-                                                <select name="items[@itemIndex].GeneratedStockCodeId" class="form-select form-select-sm mb-2 cost-stock-select"><option value="">Stok seçiniz</option>@foreach (var stockOption in stockCodeOptions) { if (item.GeneratedStockCodeId?.ToString() == stockOption.id.ToString()) { <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" selected>@stockOption.text</option> } else { <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">@stockOption.text</option> } }</select>
+                                                <select name="items[@itemIndex].GeneratedStockCodeId" class="form-select form-select-sm mb-2 cost-stock-select"><option value="">Stok seçiniz</option>@if (item.IsBombeLabor) { foreach (var bombeOption in headBombeRateOptions) { if (item.GeneratedStockCodeId?.ToString() == bombeOption.Value) { <option value="@bombeOption.Value" selected>@bombeOption.Text</option> } else { <option value="@bombeOption.Value">@bombeOption.Text</option> } } } else { foreach (var stockOption in stockCodeOptions) { if (item.GeneratedStockCodeId?.ToString() == stockOption.id.ToString()) { <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" selected>@stockOption.text</option> } else { <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">@stockOption.text</option> } } }</select>
                                                 <div class="form-check mb-2"><input class="form-check-input js-manual-toggle" type="checkbox" name="items[@itemIndex].UseManualUnitPrice" value="true" @(item.UseManualUnitPrice ? "checked" : null) /><input type="hidden" name="items[@itemIndex].UseManualUnitPrice" value="false" /><label class="form-check-label small">Manuel fiyat gir (€)</label></div>
                                                 <input type="text" name="items[@itemIndex].ManualUnitPrice" value="@item.ManualUnitPrice?.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-manual-price js-decimal-input" inputmode="decimal" @(!item.UseManualUnitPrice ? "disabled" : null) />
                                             </td>
@@ -257,7 +245,7 @@
                                     }
                                 }
                                 </tbody>
-                                <tfoot><tr><th colspan="9" class="text-end">Genel Toplam</th><th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th><th></th></tr><tr><td colspan="11" class="text-end"><button type="submit" class="btn btn-primary px-4"><i class="bi bi-check2-circle me-1"></i>Uygula</button></td></tr></tfoot>
+                                <tfoot><tr><th colspan="9" class="text-end">Genel Toplam</th><th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th><th></th></tr><tr><td colspan="11" class="text-end"><a asp-action="SalesPrice" asp-route-id="@Model.Id" asp-route-costAnalysisId="@costTable.CostAnalysisId" class="btn btn-outline-primary px-4 me-2"><i class="bi bi-currency-exchange me-1"></i>Satış Fiyatı Oluştur</a><button type="submit" class="btn btn-primary px-4"><i class="bi bi-check2-circle me-1"></i>Uygula</button></td></tr></tfoot>
                             </table>
                         </div>
                     </form>

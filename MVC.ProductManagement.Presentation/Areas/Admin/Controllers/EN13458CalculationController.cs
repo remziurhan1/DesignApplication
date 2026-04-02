@@ -153,6 +153,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SalesPrice(Guid id, Guid costAnalysisId)
+        {
+            var dto = await _service.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            var vm = MapDetailsVm(dto);
+            vm.SelectedCostAnalysisId = costAnalysisId;
+            await PopulateResultDisplayNamesAsync(vm);
+            vm.CostAnalyses = await _service.GetCostAnalysesAsync(id);
+
+            var costTable = await _service.GetCostAnalysisAsync(id, costAnalysisId);
+            if (costTable == null)
+            {
+                TempData["ErrorMessage"] = "Önce maliyet analizi oluşturup uygulayın.";
+                return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            }
+
+            await PopulateCostParameterLookupsAsync(costTable);
+            ViewBag.CostTable = costTable;
+
+            return View(vm);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Specification(Guid id, Guid? costAnalysisId = null)
         {
             var specification = await BuildSpecificationVmAsync(id, costAnalysisId);
@@ -471,7 +496,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            return RedirectToAction(nameof(SalesPrice), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -504,7 +529,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            return RedirectToAction(nameof(SalesPrice), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -522,7 +547,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            return RedirectToAction(nameof(SalesPrice), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -543,7 +568,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            return RedirectToAction(nameof(SalesPrice), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -928,8 +953,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.FinanceRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "Finance", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.FinanceOverheadRateId == x.Id)).ToList();
             ViewBag.GeneralManagementRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "GeneralManagement", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.GeneralManagementOverheadRateId == x.Id)).ToList();
 
-            ViewBag.InnerBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
-            ViewBag.OuterBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
+            ViewBag.InnerBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} €/kg", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
+            ViewBag.OuterBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} €/kg", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
         }
 
         private async Task<EN13458SpecificationVM?> BuildSpecificationVmAsync(Guid id, Guid? costAnalysisId)
