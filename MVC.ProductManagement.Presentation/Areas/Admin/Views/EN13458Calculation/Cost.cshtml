@@ -2,6 +2,7 @@
 @using System
 @using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
 @{
     ViewData["Title"] = "EN13458 Cost";
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
@@ -162,54 +163,16 @@
             <div class="card-body d-flex flex-column gap-4">
             @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue)
             {
-                <div class="card shadow-sm mt-4 border-primary-subtle order-1">
-                    <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">Satış Fiyatı Hesabı</div>
-                    <div class="card-body">
-                        <form asp-action="SaveSalesPrice" method="post" class="row g-3">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@Model.Id" />
-                            <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
-                            <div class="col-md-3">
-                                <label class="form-label">İşçilik Tarifesi</label>
-                                <select name="laborRateId" class="form-select" asp-items="laborRateOptions"></select>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">İşçilik Saati</label>
-                                <input type="text" name="laborHours" value="@costTable.SalesPrice?.LaborHours.ToString(CultureInfo.InvariantCulture)" class="form-control js-decimal-input" inputmode="decimal" />
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">GÜG Saatlik</label>
-                                <select name="gugHourlyRateId" class="form-select" asp-items="gugRateOptions"></select>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Finans Gideri</label>
-                                <select name="financeOverheadRateId" class="form-select" asp-items="financeRateOptions"></select>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Genel Yönetim</label>
-                                <select name="generalManagementOverheadRateId" class="form-select" asp-items="generalManagementRateOptions"></select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Kâr Oranı %</label>
-                                <input type="text" name="profitPercentage" value="@costTable.SalesPrice?.ProfitPercentage.ToString(CultureInfo.InvariantCulture)" class="form-control js-decimal-input" inputmode="decimal" />
-                            </div>
-                            <div class="col-md-9 d-flex align-items-end justify-content-end">
-                                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-currency-exchange me-1"></i>Satış Fiyatı Oluştur</button>
-                            </div>
-                        </form>
+                @await Html.PartialAsync("_SalesPricePanel", costTable, new ViewDataDictionary(ViewData)
+                {
+                    ["CalculationId"] = Model.Id,
+                    ["LaborRateOptions"] = laborRateOptions,
+                    ["GugRateOptions"] = gugRateOptions,
+                    ["FinanceRateOptions"] = financeRateOptions,
+                    ["GeneralManagementRateOptions"] = generalManagementRateOptions
+                })
 
-                        @if (costTable.SalesPrice != null)
-                        {
-                            var immBaseSalesPrice = costTable.SalesPrice.ImmCost / 0.6;
-                            <div class="row g-3 mt-2">
-                                <div class="col-md-6"><div class="border rounded p-3 h-100"><div class="small text-muted">Satış Fiyatı-1 (İMM / 0,6)</div><div class="fs-5 fw-semibold">@immBaseSalesPrice.ToString("N2") €</div></div></div>
-                                <div class="col-md-6"><div class="border rounded p-3 h-100 bg-success-subtle border-success-subtle"><div class="small text-muted">Satış Fiyatı-2 (Tabloya Göre)</div><div class="fs-5 fw-semibold">@costTable.SalesPrice.SalesPrice.ToString("N2") €</div></div></div>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <div class="card shadow-sm mt-4 border-success-subtle order-3">
+                <div class="card shadow-sm mt-4 border-success-subtle order-2">
                     <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">Ek Stok / Grup Maliyeti</div>
                     <div class="card-body">
                         <div class="row g-4">
@@ -290,7 +253,7 @@
 
             @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue)
             {
-                <form asp-action="BulkUpdateCostItems" method="post" class="mt-4 order-2">
+                <form asp-action="BulkUpdateCostItems" method="post" class="mt-4 order-3">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id" value="@Model.Id" />
                     <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
@@ -430,7 +393,7 @@
             }
             else
             {
-                <div class="table-responsive mt-4 order-2">
+                <div class="table-responsive mt-4 order-3">
                     <table class="table table-sm table-striped align-middle mb-0">
                         <thead>
                         <tr>
