@@ -20,24 +20,16 @@
             }
             else
             {
-                <div class="table-responsive">
-                    <table class="table table-sm align-middle">
-                        <thead>
-                            <tr>
-                                <th style="width:35%">Alan</th>
-                                <th>Değer</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var field in Model.Fields)
-                            {
-                                <tr>
-                                    <td>@field.Label</td>
-                                    <td>@field.Value</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="row g-3">
+                    @foreach (var field in Model.Fields)
+                    {
+                        <div class="col-12 col-md-6 col-xl-4">
+                            <div class="border rounded-3 h-100 p-3 bg-light-subtle">
+                                <div class="small text-muted mb-1">@field.Label</div>
+                                <div class="fw-semibold fs-6 text-dark text-break">@field.Value</div>
+                            </div>
+                        </div>
+                    }
                 </div>
             }
         </div>

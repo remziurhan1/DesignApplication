@@ -5,6 +5,7 @@ using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Presentation.Areas.Design.Models;
 using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
 {
@@ -333,6 +334,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
         private static List<DesignCalculationFieldVm> BuildCalculationFields<TCalculation>(TCalculation calculation)
         {
             var excludedTokens = new[] { "Cost", "Price", "SalesPrice" };
+            var excludedFieldNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "Id",
+                "Status",
+                "CreatedDate",
+                "ModifiedDate",
+                "CreatedBy",
+                "ModifiedBy",
+                "DeletedDate",
+                "DeletedBy"
+            };
             var allowedTypes = new[]
             {
                 typeof(string), typeof(bool), typeof(int), typeof(int?), typeof(long), typeof(long?),
@@ -348,13 +360,25 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                     || (Nullable.GetUnderlyingType(p.PropertyType)?.IsEnum ?? false)
                     || p.PropertyType.IsEnum)
                 .Where(p => !excludedTokens.Any(token => p.Name.Contains(token, StringComparison.OrdinalIgnoreCase)))
+                .Where(p => !excludedFieldNames.Contains(p.Name))
+                .Where(p => !p.Name.EndsWith("Id", StringComparison.OrdinalIgnoreCase))
                 .OrderBy(p => p.Name)
                 .Select(p => new DesignCalculationFieldVm
                 {
-                    Label = p.Name,
+                    Label = ToReadableLabel(p.Name),
                     Value = FormatPropertyValue(p.GetValue(calculation))
                 })
                 .ToList();
+        }
+
+        private static string ToReadableLabel(string propertyName)
+        {
+            if (string.IsNullOrWhiteSpace(propertyName))
+            {
+                return "-";
+            }
+
+            return Regex.Replace(propertyName, "(\\B[A-Z])", " $1");
         }
 
         private static string FormatPropertyValue(object? value)
