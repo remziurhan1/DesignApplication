@@ -4,8 +4,6 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 @{
     ViewData["Title"] = "EN13458 Cost";
-    var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
-    var totalProfileLengthM = totalProfileLengthMm / 1000d;
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
     var stockCodeOptions = (ViewBag.StockCodeOptions as IEnumerable<dynamic>)?.ToList() ?? new List<dynamic>();
     var laborRateOptions = (ViewBag.LaborRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
@@ -23,29 +21,6 @@
 }
 
 <div class="en-page">
-<section class="en-hero">
-    <div class="row align-items-center g-4">
-        <div class="col-lg-8">
-            <span class="en-kicker"><i class="bi bi-cash-stack"></i> Maliyet ve satış fiyatı merkezi</span>
-            <h2>EN13458 maliyet yönetimi</h2>
-            <p class="mb-0">Malzeme gruplarını, revizyonları ve satış fiyatı parametrelerini DE benzeri kayıt mantığıyla daha net ve profesyonel bir akışta yönetin.</p>
-        </div>
-        <div class="col-lg-4">
-            <div class="en-hero-actions">
-                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Maliyet ekranı</span>
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-arrow-left me-1"></i>Detay Sayfası</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<div class="en-metric-grid">
-    <div class="en-metric-card"><span class="en-metric-label">Toplam Profil</span><div class="en-metric-value">@totalProfileLengthM.ToString("N2", CultureInfo.InvariantCulture) m</div></div>
-    <div class="en-metric-card"><span class="en-metric-label">Perlit</span><div class="en-metric-value">@Model.PerliteWeight.ToString("N2", CultureInfo.InvariantCulture) kg</div></div>
-    <div class="en-metric-card"><span class="en-metric-label">Gaz Azot</span><div class="en-metric-value">@Model.GasNitrogenVolume.ToString("N2", CultureInfo.InvariantCulture)</div></div>
-    <div class="en-metric-card"><span class="en-metric-label">Aktif Revizyon</span><div class="en-metric-value">@(costTable?.RevisionCode ?? "PREVIEW")</div></div>
-</div>
-
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <div>
         <h2 class="mb-0">EN13458 Maliyet</h2>
@@ -84,78 +59,21 @@
     </div>
 }
 
-<div class="card shadow-sm mb-4">
-    <div class="card-header bg-light fw-semibold">Sonuç Özeti</div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped table-hover table-sm align-middle mb-0">
-                <tbody>
-                <tr><th class="w-50">İç Tank</th><td>@Model.RoundedInnerShellThickness.ToString("0.##", CultureInfo.InvariantCulture) mm / @Model.InnerTankWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
-                <tr><th>Dış Tank</th><td>@Model.RoundedOuterShellThickness.ToString("0.##", CultureInfo.InvariantCulture) mm / @Model.OuterTankWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
-                <tr><th>İç Bombe</th><td>@Model.RoundedInnerHeadThickness.ToString("0.##", CultureInfo.InvariantCulture) mm / @Model.InnerTankHeadWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
-                <tr><th>Dış Bombe</th><td>@Model.RoundedOuterHeadThickness.ToString("0.##", CultureInfo.InvariantCulture) mm / @Model.OuterTankHeadWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
-                <tr><th>Toplam Kaynak Uzunluğu</th><td>@Model.TotalWeldLength</td></tr>
-                <tr><th>Gerekli Profil Adedi</th><td>@Model.RequiredProfileCount</td></tr>
-                <tr><th>Toplam Profil Metrajı</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture) m</td></tr>
-                <tr><th>Perlit</th><td>@Model.PerliteWeight.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
-                <tr><th>Gaz Azot</th><td>@Model.GasNitrogenVolume.ToString("0.##", CultureInfo.InvariantCulture) Nm³</td></tr>
-                <tr><th>Sıvı Azot</th><td>@Model.LiquidNitrogenVolume.ToString("0.##", CultureInfo.InvariantCulture) kg</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
 <div class="card shadow-sm mt-4 border-warning-subtle">
     <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold">Maliyet Revizyonları</div>
     <div class="card-body">
         <div class="row g-4">
-            <div class="col-12 col-xl-4">
-                <div class="border rounded p-3 h-100 bg-light-subtle">
-                    <h6 class="fw-semibold">Yeni Maliyet Analizi</h6>
-                    <form asp-action="CreateCostAnalysis" method="post" class="row g-3 mt-1">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@Model.Id" />
-                        <div class="col-12">
-                            <label class="form-label">Analiz Adı</label>
-                            <input type="text" name="analysisName" class="form-control" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" />
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Not</label>
-                            <textarea name="notes" class="form-control" rows="2" placeholder="İlk maliyet çalışması veya açıklama"></textarea>
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-calculator me-1"></i>Yeni Analiz Oluştur
-                            </button>
-                        </div>
-                    </form>
+            <div class="col-12">
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#createCostAnalysisModal">
+                        <i class="bi bi-calculator me-1"></i>Maliyet Oluştur
+                    </button>
+                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#createCostRevisionModal" @(costTable?.CostAnalysisId == null ? "disabled" : null)>
+                        <i class="bi bi-layers me-1"></i>Yeni Revizyon Oluştur
+                    </button>
                 </div>
             </div>
-            <div class="col-12 col-xl-4">
-                <div class="border rounded p-3 h-100 bg-light-subtle">
-                    <h6 class="fw-semibold">Revizyon Oluştur</h6>
-                    <form asp-action="CreateCostAnalysisRevision" method="post" class="row g-3 mt-1">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@Model.Id" />
-                        <input type="hidden" name="sourceCostAnalysisId" value="@(costTable?.CostAnalysisId ?? Guid.Empty)" />
-                        <div class="col-12">
-                            <label class="form-label">Revizyon Adı</label>
-                            <input type="text" name="analysisName" class="form-control" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" @(costTable?.CostAnalysisId == null ? "disabled" : null) />
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Revizyon Notu</label>
-                            <textarea name="notes" class="form-control" rows="2" placeholder="Örn. 1900 çap revizyonu" @(costTable?.CostAnalysisId == null ? "disabled" : null)></textarea>
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-outline-warning" @(costTable?.CostAnalysisId == null ? "disabled" : null)>
-                                <i class="bi bi-layers me-1"></i>REV Oluştur
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-12 col-xl-4">
+            <div class="col-12">
                 <div class="border rounded p-3 h-100 bg-light-subtle">
                     <h6 class="fw-semibold">Kayıtlı Revizyonlar</h6>
                     @if (Model.CostAnalyses.Any())
@@ -185,47 +103,65 @@
     </div>
 </div>
 
+<div class="modal fade" id="createCostAnalysisModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="CreateCostAnalysis" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Maliyet Analizi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Analiz Adı</label>
+                    <input type="text" name="analysisName" class="form-control mb-3" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" />
+                    <label class="form-label">Not</label>
+                    <textarea name="notes" class="form-control" rows="3" placeholder="İlk maliyet çalışması veya açıklama"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-warning"><i class="bi bi-calculator me-1"></i>Oluştur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createCostRevisionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="CreateCostAnalysisRevision" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="sourceCostAnalysisId" value="@(costTable?.CostAnalysisId ?? Guid.Empty)" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Revizyon Oluştur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Revizyon Adı</label>
+                    <input type="text" name="analysisName" class="form-control mb-3" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" />
+                    <label class="form-label">Revizyon Açıklaması</label>
+                    <textarea name="notes" class="form-control" rows="3" placeholder="Revizyon açıklamasını yazın"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="submit" class="btn btn-outline-warning"><i class="bi bi-layers me-1"></i>Revizyon Oluştur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @if (costTable != null)
 {
-    <div class="card shadow-sm mt-4">
-        <div class="card-header bg-light fw-semibold d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <span>Maliyet Analizi @costTable.RevisionCode - @costTable.AnalysisName</span>
-            <span class="badge @(costTable.IsPreview ? "bg-secondary" : "bg-success")">@(costTable.IsPreview ? "Ön İzleme" : "Kayıtlı Revizyon")</span>
-        </div>
-        <div class="card-body">
-            <div class="row g-3 mb-4">
-                <div class="col-12 col-md-4">
-                    <div class="border rounded p-3 h-100">
-                        <div class="small text-muted">Toplam Malzeme Maliyeti</div>
-                        <div class="fs-5 fw-semibold">@costTable.TotalMaterialCost.ToString("N2")</div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4">
-                    <div class="border rounded p-3 h-100">
-                        <div class="small text-muted">Film / İzolasyon</div>
-                        <div class="fs-5 fw-semibold">@costTable.TotalFilmCost.ToString("N2")</div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4">
-                    <div class="border rounded p-3 h-100 bg-success-subtle border-success-subtle">
-                        <div class="small text-muted">Genel Toplam</div>
-                        <div class="fs-5 fw-semibold">@costTable.GrandTotalCost.ToString("N2")</div>
-                    </div>
-                </div>
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-light fw-semibold d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <span>Maliyet Analizi @costTable.RevisionCode - @costTable.AnalysisName</span>
+                <span class="badge @(costTable.IsPreview ? "bg-secondary" : "bg-success")">@(costTable.IsPreview ? "Ön İzleme" : "Kayıtlı Revizyon")</span>
             </div>
-
-            <div class="row g-3 mb-3">
-                @foreach (var group in costTable.GroupTotals)
-                {
-                    <div class="col-12 col-md-4">
-                        <div class="border rounded p-3 h-100">
-                            <div class="small text-muted">@group.CostGroupCode - @group.CostGroupName</div>
-                            <div class="fs-5 fw-semibold">@group.TotalCost.ToString("N2")</div>
-                        </div>
-                    </div>
-                }
-            </div>
-
+            <div class="card-body">
             @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue)
             {
                 <div class="card shadow-sm mt-4 border-info-subtle">
