@@ -2,6 +2,7 @@
 @using System
 @using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
 @{
     ViewData["Title"] = "EN13458 Cost";
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
@@ -324,21 +325,11 @@
                                                 {
                                                     foreach (var stockOption in stockCodeOptions)
                                                     {
-                                                        if (item.GeneratedStockCodeId?.ToString() == stockOption.id.ToString())
-                                                        {
-                                                            <option value="@stockOption.id"
-                                                                    data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)"
-                                                                    selected>
-                                                                @stockOption.text
-                                                            </option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@stockOption.id"
-                                                                    data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">
-                                                                @stockOption.text
-                                                            </option>
-                                                        }
+                                                        <option value="@stockOption.id"
+                                                                data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)"
+                                                                selected>
+                                                            @stockOption.text
+                                                        </option>
                                                     }
                                                 }
                                             </select>
