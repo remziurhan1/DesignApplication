@@ -73,6 +73,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<StockSubCodeRule> StockSubCodeRules { get; set; }
         public DbSet<GeneratedStockCode> GeneratedStockCodes { get; set; }
         public DbSet<GeneratedStockCodeRuleSelection> GeneratedStockCodeRuleSelections { get; set; }
+        public DbSet<GeneratedStockCodeInventoryMovement> GeneratedStockCodeInventoryMovements { get; set; }
         public DbSet<StockProductGroup> StockProductGroups { get; set; }
         public DbSet<StockProductGroupItem> StockProductGroupItems { get; set; }
         public DbSet<PrefixRule> PrefixRules { get; set; }

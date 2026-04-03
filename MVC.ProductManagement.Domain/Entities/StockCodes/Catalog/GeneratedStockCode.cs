@@ -21,5 +21,6 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Catalog
 
         public virtual ICollection<StockProductGroupItem> ProductGroupItems { get; set; } = new List<StockProductGroupItem>();
         public virtual ICollection<GeneratedStockCodeRuleSelection> RuleSelections { get; set; } = new List<GeneratedStockCodeRuleSelection>();
+        public virtual ICollection<GeneratedStockCodeInventoryMovement> InventoryMovements { get; set; } = new List<GeneratedStockCodeInventoryMovement>();
     }
 }

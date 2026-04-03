@@ -17,6 +17,7 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public decimal? TargetPrice { get; set; }
         public PrimaryUnitType PrimaryUnitType { get; set; }
         public decimal KgEquivalentPerPrimaryUnit { get; set; }
+        public int CurrentStock { get; set; }
     }
 
     public class GeneratedStockCodeDetailDto : GeneratedStockCodeListDto { }
@@ -55,5 +56,32 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }
         public bool IsExisting { get; set; }
+    }
+
+    public class GeneratedStockCodeInventoryMovementDto
+    {
+        public Guid Id { get; set; }
+        public Guid GeneratedStockCodeId { get; set; }
+        public string GeneratedCode { get; set; } = string.Empty;
+        public InventoryMovementType MovementType { get; set; }
+        public int Quantity { get; set; }
+        public int StockBefore { get; set; }
+        public int StockAfter { get; set; }
+        public DateTime MovementDate { get; set; }
+        public Guid? StockProductGroupId { get; set; }
+        public string? StockProductGroupName { get; set; }
+        public string? ReferenceDocument { get; set; }
+        public string? Description { get; set; }
+    }
+
+    public class GeneratedStockCodeInventoryMovementCreateDto
+    {
+        public Guid GeneratedStockCodeId { get; set; }
+        public InventoryMovementType MovementType { get; set; }
+        public int Quantity { get; set; }
+        public DateTime MovementDate { get; set; } = DateTime.UtcNow;
+        public Guid? StockProductGroupId { get; set; }
+        public string? ReferenceDocument { get; set; }
+        public string? Description { get; set; }
     }
 }

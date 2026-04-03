@@ -10,5 +10,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         Task<GeneratedStockCodeDetailDto> UpdateAsync(GeneratedStockCodeUpdateDto dto);
         Task<GeneratedStockCodeResolveDto> ResolveCodeAsync(Guid subGroupId, List<Guid>? selectedRuleIds = null);
         Task RefreshDerivedFieldsBySubGroupAsync(Guid subGroupId);
+        Task<IReadOnlyList<GeneratedStockCodeInventoryMovementDto>> GetInventoryMovementsAsync(Guid generatedStockCodeId);
+        Task<GeneratedStockCodeInventoryMovementDto> CreateInventoryMovementAsync(GeneratedStockCodeInventoryMovementCreateDto dto, string userName = "System");
     }
 }
