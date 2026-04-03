@@ -21,6 +21,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private readonly IMaterialRepository _materialRepository;
         private readonly IMaterialFormRepository _materialFormRepository;
         private readonly IEN13458CalculationManager _calculationManager;
+        private readonly IEN13458FilmQuantityService _filmQuantityService;
         private readonly AppDbContext _context;
 
         private const string GasNitrogenStockCode = "ZA001871";
@@ -45,11 +46,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             IMaterialRepository materialRepository,
             IMaterialFormRepository materialFormRepository,
             IEN13458CalculationManager calculationManager,
+            IEN13458FilmQuantityService filmQuantityService,
             AppDbContext context)
         {
             _materialRepository = materialRepository;
             _materialFormRepository = materialFormRepository;
             _calculationManager = calculationManager;
+            _filmQuantityService = filmQuantityService;
             _context = context;
         }
 
@@ -87,7 +90,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         public async Task<EN13458MaterialCostTableDTO?> GetCostAnalysisAsync(Guid calculationId, Guid? costAnalysisId = null)
         {
             var query = _context.EN13458CostAnalyses
-                .AsNoTracking()
                 .Where(x => x.EN13458CalculationId == calculationId);
 
             EN13458CostAnalysis? analysis;
@@ -107,7 +109,22 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                     .FirstOrDefaultAsync();
             }
 
-            return analysis == null ? null : BuildCostTableFromItems(analysis, analysis.Items.Where(x => x.Status != Status.Deleted).OrderBy(x => x.SortOrder).ThenBy(x => x.ItemName).Select(ToRowDto).ToList(), analysis.SalesPrices.FirstOrDefault(x => x.Status != Status.Deleted));
+            if (analysis == null)
+            {
+                return null;
+            }
+
+            var result = await GetRequiredResultAsync(calculationId);
+            await EnsureWeldAndFilmRowsAsync(analysis, result);
+
+            var rows = analysis.Items
+                .Where(x => x.Status != Status.Deleted)
+                .OrderBy(x => x.SortOrder)
+                .ThenBy(x => x.ItemName)
+                .Select(ToRowDto)
+                .ToList();
+
+            return BuildCostTableFromItems(analysis, rows, analysis.SalesPrices.FirstOrDefault(x => x.Status != Status.Deleted));
         }
 
         public async Task<EN13458MaterialCostTableDTO> CreateCostAnalysisAsync(Guid calculationId, string analysisName, string notes = "", string createdBy = "System")
@@ -1032,6 +1049,46 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             if (!exists)
             {
                 throw new InvalidOperationException("EN13458 kaydı bulunamadı.");
+            }
+        }
+
+        private async Task EnsureWeldAndFilmRowsAsync(EN13458CostAnalysis analysis, EN13458ResultDTO result)
+        {
+            var activeItems = analysis.Items.Where(x => x.Status != Status.Deleted).ToList();
+            var hasWeldRow = activeItems.Any(x => string.Equals(x.ItemKey, "WELD-CONSUMABLE", StringComparison.OrdinalIgnoreCase));
+            var hasFilmRow = activeItems.Any(x => string.Equals(x.ItemKey, "FILM-COUNT", StringComparison.OrdinalIgnoreCase));
+
+            if (hasWeldRow && hasFilmRow)
+            {
+                return;
+            }
+
+            var hasChanges = false;
+
+            if (!hasWeldRow && result.TotalWeldLength > 0)
+            {
+                var weldRow = BuildWeldConsumableRow(result.TotalWeldLength, previous: null);
+                var weldEntity = ToEntity(weldRow, "System");
+                weldEntity.EN13458CostAnalysisId = analysis.Id;
+                analysis.Items.Add(weldEntity);
+                hasChanges = true;
+            }
+
+            if (!hasFilmRow)
+            {
+                var filmRow = await BuildFilmCountCostRowAsync(result, previous: null);
+                if (filmRow != null)
+                {
+                    var filmEntity = ToEntity(filmRow, "System");
+                    filmEntity.EN13458CostAnalysisId = analysis.Id;
+                    analysis.Items.Add(filmEntity);
+                    hasChanges = true;
+                }
+            }
+
+            if (hasChanges)
+            {
+                await _context.SaveChangesAsync();
             }
         }
 
