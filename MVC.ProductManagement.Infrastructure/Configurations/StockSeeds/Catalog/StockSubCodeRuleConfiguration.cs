@@ -17,7 +17,7 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds.Catalog
             builder.Property(x => x.SortOrder);
             builder.Property(x => x.IsEnabled).IsRequired();
 
-            builder.HasIndex(x => new { x.StockSubCodeGroupId, x.RuleCode }).IsUnique();
+            builder.HasIndex(x => new { x.StockSubCodeGroupId, x.RuleCode });
 
             builder.HasOne(x => x.StockSubCodeGroup)
                 .WithMany(x => x.Rules)

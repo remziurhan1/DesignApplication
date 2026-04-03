@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using MVC.ProductManagement.Domain.Enums;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog
 {
@@ -27,5 +28,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
 
         [Range(0, 999999999)]
         public decimal? TargetPrice { get; set; }
+
+        [Required]
+        public PrimaryUnitType PrimaryUnitType { get; set; } = PrimaryUnitType.Adet;
+
+        [Range(0.0001, 999999999)]
+        public decimal KgEquivalentPerPrimaryUnit { get; set; } = 1m;
     }
 }

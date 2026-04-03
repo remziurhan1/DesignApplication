@@ -1,6 +1,8 @@
 using MVC.ProductManagement.Application.DTOs.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Catalog;
+using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Catalog;
+using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
@@ -15,17 +17,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         private readonly IStockSubCodeGroupRepository _subGroupRepository;
         private readonly IStockMainCodeGroupRepository _mainGroupRepository;
         private readonly IStockSubCodeRuleRepository _ruleRepository;
+        private readonly AppDbContext _context;
 
         public GeneratedStockCodeService(
             IGeneratedStockCodeRepository repository,
             IStockSubCodeGroupRepository subGroupRepository,
             IStockMainCodeGroupRepository mainGroupRepository,
-            IStockSubCodeRuleRepository ruleRepository)
+            IStockSubCodeRuleRepository ruleRepository,
+            AppDbContext context)
         {
             _repository = repository;
             _subGroupRepository = subGroupRepository;
             _mainGroupRepository = mainGroupRepository;
             _ruleRepository = ruleRepository;
+            _context = context;
         }
 
         public async Task<List<GeneratedStockCodeListDto>> GetAllAsync(Guid? subGroupId = null)
@@ -41,6 +46,17 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var mainGroupIds = subGroups.Select(x => x.StockMainCodeGroupId).Distinct().ToList();
             var mainGroups = await _mainGroupRepository.GetAllAsync(x => mainGroupIds.Contains(x.Id), tracking: false);
             var mainGroupsById = mainGroups.ToDictionary(x => x.Id);
+            var codeIds = entities.Select(x => x.Id).ToList();
+            var lastStocks = await _context.GeneratedStockCodeInventoryMovements
+                .AsNoTracking()
+                .Where(x => codeIds.Contains(x.GeneratedStockCodeId))
+                .GroupBy(x => x.GeneratedStockCodeId)
+                .Select(g => new
+                {
+                    GeneratedStockCodeId = g.Key,
+                    CurrentStock = g.OrderByDescending(x => x.MovementDate).ThenByDescending(x => x.CreatedDate).Select(x => x.StockAfter).FirstOrDefault()
+                })
+                .ToDictionaryAsync(x => x.GeneratedStockCodeId, x => x.CurrentStock);
 
             return entities
                 .OrderByDescending(x => x.CreatedDate)
@@ -61,7 +77,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                         RuleName = x.RuleName,
                         Description = x.Description,
                         UnitPrice = x.UnitPrice,
-                        TargetPrice = x.TargetPrice
+                        TargetPrice = x.TargetPrice,
+                        PrimaryUnitType = x.PrimaryUnitType,
+                        KgEquivalentPerPrimaryUnit = x.KgEquivalentPerPrimaryUnit,
+                        CurrentStock = lastStocks.TryGetValue(x.Id, out var currentStock) ? currentStock : 0
                     };
                 })
                 .ToList();
@@ -93,7 +112,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 RuleName = item.RuleName,
                 Description = item.Description,
                 UnitPrice = item.UnitPrice,
-                TargetPrice = item.TargetPrice
+                TargetPrice = item.TargetPrice,
+                PrimaryUnitType = item.PrimaryUnitType,
+                KgEquivalentPerPrimaryUnit = item.KgEquivalentPerPrimaryUnit
             };
         }
 
@@ -142,10 +163,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 RuleName = effectiveRuleName,
                 Description = description,
                 UnitPrice = dto.UnitPrice,
-                TargetPrice = dto.TargetPrice
+                TargetPrice = dto.TargetPrice,
+                PrimaryUnitType = dto.PrimaryUnitType,
+                KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit
             };
 
             await _repository.AddAsync(entity);
+            await SaveRuleSelectionsAsync(entity.Id, dto.SelectedRuleIds);
             await _repository.SaveChangeAsync();
 
             return (await GetAllAsync(entity.StockSubCodeGroupId)).First(x => x.Id == entity.Id);
@@ -162,8 +186,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 : dto.Description.Trim();
             entity.UnitPrice = dto.UnitPrice;
             entity.TargetPrice = dto.TargetPrice;
+            entity.PrimaryUnitType = dto.PrimaryUnitType;
+            entity.KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit;
 
             await _repository.UpdateAsync(entity);
+            await SaveRuleSelectionsAsync(entity.Id, dto.SelectedRuleIds);
             await _repository.SaveChangeAsync();
 
             return await GetByIdAsync(entity.Id) ?? throw new Exception("Generated stock code update failed");
@@ -259,6 +286,57 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             return descriptions;
         }
 
+        public async Task RefreshDerivedFieldsBySubGroupAsync(Guid subGroupId)
+        {
+            var entities = await _repository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId);
+            foreach (var entity in entities)
+            {
+                var selectedRuleIds = await _context.GeneratedStockCodeRuleSelections
+                    .AsNoTracking()
+                    .Where(x => x.GeneratedStockCodeId == entity.Id)
+                    .Select(x => x.StockSubCodeRuleId)
+                    .ToListAsync();
+
+                if (!selectedRuleIds.Any() && entity.StockSubCodeRuleId.HasValue)
+                {
+                    selectedRuleIds.Add(entity.StockSubCodeRuleId.Value);
+                }
+
+                entity.RuleName = await ComposeRuleNameAsync(subGroupId, selectedRuleIds);
+                entity.Description = await ComposeDescriptionAsync(subGroupId, selectedRuleIds, null);
+                await _repository.UpdateAsync(entity);
+            }
+
+            await _repository.SaveChangeAsync();
+        }
+
+        private async Task SaveRuleSelectionsAsync(Guid generatedStockCodeId, List<Guid>? selectedRuleIds)
+        {
+            var normalizedIds = (selectedRuleIds ?? new List<Guid>())
+                .Where(x => x != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            var existing = _context.GeneratedStockCodeRuleSelections
+                .Where(x => x.GeneratedStockCodeId == generatedStockCodeId)
+                .ToList();
+
+            if (existing.Any())
+            {
+                _context.GeneratedStockCodeRuleSelections.RemoveRange(existing);
+            }
+
+            if (normalizedIds.Any())
+            {
+                var rows = normalizedIds.Select(ruleId => new GeneratedStockCodeRuleSelection
+                {
+                    GeneratedStockCodeId = generatedStockCodeId,
+                    StockSubCodeRuleId = ruleId
+                });
+                await _context.GeneratedStockCodeRuleSelections.AddRangeAsync(rows);
+            }
+        }
+
         private static string? Normalize(string? text)
         {
             var normalized = text?.Trim();
@@ -296,6 +374,119 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             }
 
             return normalized;
+        }
+
+        public async Task<IReadOnlyList<GeneratedStockCodeInventoryMovementDto>> GetInventoryMovementsAsync(Guid generatedStockCodeId)
+        {
+            var code = await _repository.GetByIdAsync(generatedStockCodeId, tracking: false)
+                ?? throw new Exception("Generated stock code not found");
+
+            return await _context.GeneratedStockCodeInventoryMovements
+                .AsNoTracking()
+                .Where(x => x.GeneratedStockCodeId == generatedStockCodeId)
+                .OrderByDescending(x => x.MovementDate)
+                .ThenByDescending(x => x.CreatedDate)
+                .Select(x => new GeneratedStockCodeInventoryMovementDto
+                {
+                    Id = x.Id,
+                    GeneratedStockCodeId = x.GeneratedStockCodeId,
+                    GeneratedCode = code.GeneratedCode,
+                    MovementType = x.MovementType,
+                    Quantity = x.Quantity,
+                    StockBefore = x.StockBefore,
+                    StockAfter = x.StockAfter,
+                    MovementDate = x.MovementDate,
+                    StockProductGroupId = x.StockProductGroupId,
+                    StockProductGroupName = x.StockProductGroup != null ? x.StockProductGroup.Name : null,
+                    ReferenceDocument = x.ReferenceDocument,
+                    Description = x.Description
+                })
+                .ToListAsync();
+        }
+
+        public async Task<GeneratedStockCodeInventoryMovementDto> CreateInventoryMovementAsync(GeneratedStockCodeInventoryMovementCreateDto dto, string userName = "System")
+        {
+            var code = await _repository.GetByIdAsync(dto.GeneratedStockCodeId)
+                ?? throw new Exception("Generated stock code not found");
+
+            if (dto.Quantity <= 0)
+            {
+                throw new Exception("Quantity must be greater than zero.");
+            }
+
+            var lastStock = await _context.GeneratedStockCodeInventoryMovements
+                .AsNoTracking()
+                .Where(x => x.GeneratedStockCodeId == dto.GeneratedStockCodeId)
+                .OrderByDescending(x => x.MovementDate)
+                .ThenByDescending(x => x.CreatedDate)
+                .Select(x => x.StockAfter)
+                .FirstOrDefaultAsync();
+
+            var stockBefore = lastStock;
+            int stockAfter;
+            switch (dto.MovementType)
+            {
+                case Domain.Enums.InventoryMovementType.In:
+                case Domain.Enums.InventoryMovementType.InitialStock:
+                    stockAfter = stockBefore + dto.Quantity;
+                    break;
+                case Domain.Enums.InventoryMovementType.Out:
+                    if (stockBefore < dto.Quantity)
+                    {
+                        throw new Exception($"Yetersiz stok. Mevcut stok: {stockBefore}");
+                    }
+                    stockAfter = stockBefore - dto.Quantity;
+                    break;
+                case Domain.Enums.InventoryMovementType.Adjustment:
+                    stockAfter = dto.Quantity;
+                    break;
+                default:
+                    throw new Exception("Geçersiz hareket tipi.");
+            }
+
+            var movement = new GeneratedStockCodeInventoryMovement
+            {
+                GeneratedStockCodeId = dto.GeneratedStockCodeId,
+                MovementType = dto.MovementType,
+                Quantity = dto.Quantity,
+                StockBefore = stockBefore,
+                StockAfter = stockAfter,
+                MovementDate = dto.MovementDate,
+                StockProductGroupId = dto.StockProductGroupId,
+                ReferenceDocument = dto.ReferenceDocument?.Trim(),
+                Description = dto.Description?.Trim(),
+                CreatedBy = userName,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            _context.GeneratedStockCodeInventoryMovements.Add(movement);
+            await _context.SaveChangesAsync();
+
+            string? groupName = null;
+            if (movement.StockProductGroupId.HasValue)
+            {
+                groupName = await _context.StockProductGroups
+                    .AsNoTracking()
+                    .Where(x => x.Id == movement.StockProductGroupId.Value)
+                    .Select(x => x.Name)
+                    .FirstOrDefaultAsync();
+            }
+
+            return new GeneratedStockCodeInventoryMovementDto
+            {
+                Id = movement.Id,
+                GeneratedStockCodeId = movement.GeneratedStockCodeId,
+                GeneratedCode = code.GeneratedCode,
+                MovementType = movement.MovementType,
+                Quantity = movement.Quantity,
+                StockBefore = movement.StockBefore,
+                StockAfter = movement.StockAfter,
+                MovementDate = movement.MovementDate,
+                StockProductGroupId = movement.StockProductGroupId,
+                StockProductGroupName = groupName,
+                ReferenceDocument = movement.ReferenceDocument,
+                Description = movement.Description
+            };
         }
     }
 }

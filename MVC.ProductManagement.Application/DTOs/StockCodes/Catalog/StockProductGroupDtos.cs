@@ -24,6 +24,8 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
         public decimal TotalCost { get; set; }
+        public decimal KgEquivalentPerPrimaryUnit { get; set; }
+        public decimal TotalWeightKg { get; set; }
     }
 
     public class StockProductGroupCreateDto

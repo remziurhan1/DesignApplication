@@ -3282,8 +3282,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StockSubCodeGroupId", "RuleCode")
-                        .IsUnique();
+                    b.HasIndex("StockSubCodeGroupId", "RuleCode");
 
                     b.ToTable("StockSubCodeRules", (string)null);
                 });
