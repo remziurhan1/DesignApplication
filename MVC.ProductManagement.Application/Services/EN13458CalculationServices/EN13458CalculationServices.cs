@@ -27,6 +27,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string LiquidNitrogenStockCode = "ZA000216";
         private const string PerliteStockCode = "ZA000464";
         private const string ProfileWeldStockCode = "";
+        private const double DefaultWeldConsumableUnitPriceEuro = 30d;
         private const double FilmLengthDivisor = 450d;
         private const double FilmSourceLength = 1500d;
         private const double HeadPulDiameterCoefficient = 1.17d;
@@ -708,24 +709,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 rows.Add(await BuildServiceRowAsync("PERLITE", 70, "SARF", "Sarf Malzemeleri", "Perlit", PerliteStockCode, result.PerliteWeight, "kg", previousCalculatedItems));
             }
 
-            if (result.TotalFilmCost > 0)
+            if (result.TotalWeldLength > 0)
             {
-                rows.Add(ApplyPreviousSelection(new EN13458MaterialCostRowDTO
-                {
-                    SortOrder = 80,
-                    ItemKey = "WELD-CONSUMABLE",
-                    ItemSourceType = CalculatedSourceType,
-                    CostGroupCode = "WELD",
-                    CostGroupName = "Kaynak Sarf Maliyeti",
-                    ItemName = "Toplam Kaynak Sarf Maliyeti (Kaynak Teli)",
-                    MaterialName = "Kaynak Teli",
-                    FormType = "Hizmet",
-                    Quantity = 1,
-                    Unit = "lot",
-                    StockUnitPrice = result.TotalFilmCost,
-                    UnitPrice = result.TotalFilmCost,
-                    ItemCost = result.TotalFilmCost
-                }, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE")));
+                rows.Add(BuildWeldConsumableRow(result.TotalWeldLength, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE")));
             }
 
             var profileRow = await BuildProfileCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("PROFILE"));
@@ -905,7 +891,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
         private async Task<EN13458MaterialCostRowDTO?> BuildFilmCountCostRowAsync(EN13458ResultDTO result, EN13458CostAnalysisItem? previous)
         {
-            var totalFilmCount = CalculateFilmCount(CalculateInnerTankWeldLength1500(result));
+            var totalFilmCount = CalculateFilmCount(result.TotalWeldLength);
             if (totalFilmCount <= 0)
             {
                 return null;
@@ -918,7 +904,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 ItemSourceType = CalculatedSourceType,
                 CostGroupCode = "FILM",
                 CostGroupName = "Film Maliyeti",
-                ItemName = "Toplam Film Sayısı (1500 Kaynak)",
+                ItemName = "Toplam Film Sayısı (Toplam Kaynak / 450)",
                 StockCode = ProfileWeldStockCode,
                 MaterialName = "Film",
                 FormType = "Hizmet",
@@ -927,6 +913,38 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             };
 
             return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: await ResolveUnitPriceAsync(ProfileWeldStockCode, null));
+        }
+
+        private EN13458MaterialCostRowDTO BuildWeldConsumableRow(double totalWeldLengthMm, EN13458CostAnalysisItem? previous)
+        {
+            var weldLengthM = Math.Round(totalWeldLengthMm / 1000d, 2);
+
+            var row = new EN13458MaterialCostRowDTO
+            {
+                SortOrder = 80,
+                ItemKey = "WELD-CONSUMABLE",
+                ItemSourceType = CalculatedSourceType,
+                CostGroupCode = "WELD",
+                CostGroupName = "Kaynak Sarf Maliyeti",
+                ItemName = "Toplam Kaynak Miktarı",
+                MaterialName = "Kaynak Teli",
+                FormType = "Hizmet",
+                Quantity = weldLengthM,
+                Unit = "m",
+                StockUnitPrice = DefaultWeldConsumableUnitPriceEuro,
+                UnitPrice = DefaultWeldConsumableUnitPriceEuro,
+                ItemCost = weldLengthM * DefaultWeldConsumableUnitPriceEuro
+            };
+
+            if (previous != null)
+            {
+                row.UseManualUnitPrice = previous.UseManualUnitPrice;
+                row.ManualUnitPrice = previous.ManualUnitPrice;
+                row.UnitPrice = ResolveEffectiveUnitPrice(row.StockUnitPrice, row.UseManualUnitPrice, row.ManualUnitPrice);
+                row.ItemCost = row.Quantity * row.UnitPrice;
+            }
+
+            return row;
         }
 
         private static double CalculateFilmCount(double weldLength)
