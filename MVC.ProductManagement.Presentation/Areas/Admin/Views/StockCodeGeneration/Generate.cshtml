@@ -46,7 +46,7 @@
     <div class="mb-3">
         <label asp-for="GeneratedCode" class="form-label">Üretilen Kod</label>
         <input id="generated-code" asp-for="GeneratedCode" class="form-control" readonly />
-        <div id="generate-info" class="form-text">Format: ilk 4 karakter alt grup kodu + 4 haneli sıra (örn. SFC00000).</div>
+        <div id="generate-info" class="form-text">Format: ilk 4 karakter alt grup kodu + 4 haneli sıra (örn. SFCA0001).</div>
     </div>
 
     <div class="row">
@@ -57,6 +57,18 @@
         <div class="col-md-6 mb-3">
             <label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label>
             <input id="target-price" asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="PrimaryUnitType" class="form-label">1. Birim</label>
+            <select asp-for="PrimaryUnitType" class="form-select" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.PrimaryUnitType>()"></select>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="KgEquivalentPerPrimaryUnit" class="form-label">2. Birim (KG karşılığı)</label>
+            <input asp-for="KgEquivalentPerPrimaryUnit" type="number" min="0.0001" step="0.0001" class="form-control" />
+            <div class="form-text">Örn: 1 metre profil = 3.2 kg için 3.2 girin.</div>
         </div>
     </div>
 

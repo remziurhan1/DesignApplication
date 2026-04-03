@@ -16,6 +16,7 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds.Catalog
             builder.Property(x => x.Description).HasMaxLength(1000);
             builder.Property(x => x.UnitPrice).HasColumnType("decimal(18,2)");
             builder.Property(x => x.TargetPrice).HasColumnType("decimal(18,2)");
+            builder.Property(x => x.KgEquivalentPerPrimaryUnit).HasColumnType("decimal(18,4)");
 
             builder.HasOne(x => x.StockSubCodeGroup)
                 .WithMany(x => x.GeneratedCodes)
@@ -26,6 +27,11 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds.Catalog
                 .WithMany(x => x.GeneratedCodes)
                 .HasForeignKey(x => x.StockSubCodeRuleId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(x => x.RuleSelections)
+                .WithOne(x => x.GeneratedStockCode)
+                .HasForeignKey(x => x.GeneratedStockCodeId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -1,5 +1,7 @@
 namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
 {
+    using MVC.ProductManagement.Domain.Enums;
+
     public class GeneratedStockCodeListDto
     {
         public Guid Id { get; set; }
@@ -13,6 +15,8 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }
+        public PrimaryUnitType PrimaryUnitType { get; set; }
+        public decimal KgEquivalentPerPrimaryUnit { get; set; }
     }
 
     public class GeneratedStockCodeDetailDto : GeneratedStockCodeListDto { }
@@ -27,6 +31,8 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }
+        public PrimaryUnitType PrimaryUnitType { get; set; } = PrimaryUnitType.Adet;
+        public decimal KgEquivalentPerPrimaryUnit { get; set; } = 1m;
     }
 
     public class GeneratedStockCodeUpdateDto
@@ -37,6 +43,8 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }
+        public PrimaryUnitType PrimaryUnitType { get; set; } = PrimaryUnitType.Adet;
+        public decimal KgEquivalentPerPrimaryUnit { get; set; } = 1m;
     }
 
     public class GeneratedStockCodeResolveDto

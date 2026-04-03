@@ -1,4 +1,5 @@
 using MVC.ProductManagement.Domain.Core.BaseEntities;
+using MVC.ProductManagement.Domain.Enums;
 
 namespace MVC.ProductManagement.Domain.Entities.StockCodes.Catalog
 {
@@ -15,7 +16,10 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Catalog
         public string? Description { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TargetPrice { get; set; }
+        public PrimaryUnitType PrimaryUnitType { get; set; } = PrimaryUnitType.Adet;
+        public decimal KgEquivalentPerPrimaryUnit { get; set; } = 1m;
 
         public virtual ICollection<StockProductGroupItem> ProductGroupItems { get; set; } = new List<StockProductGroupItem>();
+        public virtual ICollection<GeneratedStockCodeRuleSelection> RuleSelections { get; set; } = new List<GeneratedStockCodeRuleSelection>();
     }
 }
