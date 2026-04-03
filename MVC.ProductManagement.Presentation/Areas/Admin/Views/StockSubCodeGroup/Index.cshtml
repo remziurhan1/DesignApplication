@@ -1,25 +1,63 @@
 @model IEnumerable<MVC.ProductManagement.Application.DTOs.StockCodes.Catalog.StockSubCodeGroupListDto>
 
-<h4>Alt Kod Grupları</h4>
-<a asp-action="Create" class="btn btn-primary mb-3">Yeni Alt Grup</a>
-<table class="table table-striped">
-    <thead><tr><th>Ana Grup</th><th>Alt Kod</th><th>Ad</th><th>Durum</th><th></th></tr></thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.MainGroupCode - @item.MainGroupName</td>
-            <td>@item.Code</td>
-            <td>@item.Name</td>
-            <td>@(item.IsEnabled ? "Açık" : "Kapalı")</td>
-            <td class="text-end">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>
-                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-sm btn-danger">Sil</button>
-                </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1">Alt Kod Grupları</h4>
+        <p class="text-muted mb-0">Alt kod gruplarını ana grupları ile birlikte kart görünümünde izleyin.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>Yeni Alt Grup
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-diagram-3 text-muted fs-2"></i>
+            <p class="text-muted mt-3 mb-0">Henüz kayıtlı alt kod grubu bulunmuyor.</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-lg-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <div class="text-muted small">Alt Kod</div>
+                                <h5 class="mb-0">@item.Code</h5>
+                            </div>
+                            <span class="badge @(item.IsEnabled ? "bg-success-subtle text-success-emphasis" : "bg-secondary-subtle text-secondary-emphasis")">
+                                @(item.IsEnabled ? "Açık" : "Kapalı")
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="text-muted small">Alt Grup Adı</div>
+                            <div class="fw-semibold">@item.Name</div>
+                        </div>
+
+                        <div class="mb-4 p-3 rounded bg-light-subtle border">
+                            <div class="text-muted small">Ana Grup</div>
+                            <div class="fw-semibold">@item.MainGroupCode</div>
+                            <div>@item.MainGroupName</div>
+                        </div>
+
+                        <div class="mt-auto d-flex gap-2">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning flex-grow-1">Düzenle</a>
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="flex-grow-1">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">Sil</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
