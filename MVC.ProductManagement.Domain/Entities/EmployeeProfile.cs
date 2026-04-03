@@ -18,5 +18,13 @@ namespace MVC.ProductManagement.Domain.Entities
         public bool CanManageSalesCustomers { get; set; }
         public bool CanCreateSalesRequests { get; set; }
         public bool CanViewSalesPricing { get; set; }
+
+        // Design area access flags (on/off)
+        public bool CanAccessDesignArea { get; set; }
+        public bool CanManageDesignCalculations { get; set; }
+        public bool CanCreateStockCodes { get; set; }
+        public bool CanEditStockCodes { get; set; }
+        public bool CanAccessMaterialGroups { get; set; }
+        public bool CanManageMaterials { get; set; }
     }
 }

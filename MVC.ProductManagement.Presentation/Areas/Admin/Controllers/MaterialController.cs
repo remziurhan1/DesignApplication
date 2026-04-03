@@ -28,6 +28,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         // 📌 Liste
         public async Task<IActionResult> Index()
         {
+            if (!await HasDesignPermissionAsync(x => x.CanAccessMaterialGroups || x.CanManageMaterials))
+            {
+                return Forbid();
+            }
+
             var dtos = await _materialService.GetAllAsync();
             var vms = dtos.Select(m => new MaterialListVm
             {
@@ -46,6 +51,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanAccessMaterialGroups || x.CanManageMaterials))
+            {
+                return Forbid();
+            }
+
             var dto = await _materialService.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
@@ -67,8 +77,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         // 📌 Yeni kayıt GET
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            if (!await HasDesignPermissionAsync(x => x.CanManageMaterials))
+            {
+                return Forbid();
+            }
+
             LoadMaterialGroups();
             return View();
         }
@@ -78,6 +93,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MaterialCreateVm vm)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanManageMaterials))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
                 LoadMaterialGroups();
@@ -113,6 +133,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         // 📌 Güncelleme GET
         public async Task<IActionResult> Edit(Guid id)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanManageMaterials))
+            {
+                return Forbid();
+            }
+
             var dto = await _materialService.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
@@ -140,6 +165,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MaterialUpdateVm vm)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanManageMaterials))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
                 LoadMaterialGroups();
@@ -174,6 +204,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         // 📌 Silme GET
         public async Task<IActionResult> Delete(Guid id)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanManageMaterials))
+            {
+                return Forbid();
+            }
+
             var dto = await _materialService.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
@@ -199,6 +234,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanManageMaterials))
+            {
+                return Forbid();
+            }
+
             await _materialService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }

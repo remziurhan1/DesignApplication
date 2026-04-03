@@ -4,7 +4,7 @@
 <h4>Stok Kodu Üretimi</h4>
 <p class="text-muted">Alt grup seçin, her kural grubundan uygun seçeneği belirleyin. Stok kodu ilk 4 karakter alt grup kodu + 4 haneli sayaç olarak üretilir ve açıklama seçilen özelliklerden otomatik oluşturulur.</p>
 
-<form asp-action="Generate" method="post" id="generate-form">
+<form asp-action="Generate" method="post" enctype="multipart/form-data" id="generate-form">
     @Html.AntiForgeryToken()
 
     <div class="mb-3">
@@ -73,6 +73,32 @@
     </div>
 
     <input asp-for="StockSubCodeRuleId" id="stock-sub-code-rule-id" type="hidden" />
+    <input asp-for="Step3DFilePath" type="hidden" />
+    <input asp-for="DxfFilePath1" type="hidden" />
+    <input asp-for="DxfFilePath2" type="hidden" />
+    <input asp-for="DatasheetFilePath" type="hidden" />
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Step3DFile" class="form-label">STEP (3D)</label>
+            <input asp-for="Step3DFile" type="file" class="form-control" accept=".step,.stp,.stl,.igs,.iges" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="DatasheetFile" class="form-label">Datasheet</label>
+            <input asp-for="DatasheetFile" type="file" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="DxfFile1" class="form-label">DXF 1 (Kesim)</label>
+            <input asp-for="DxfFile1" type="file" class="form-control" accept=".dxf" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="DxfFile2" class="form-label">DXF 2 (Kesim)</label>
+            <input asp-for="DxfFile2" type="file" class="form-control" accept=".dxf" />
+        </div>
+    </div>
+
     <div id="selected-rule-inputs"></div>
 
     <button type="submit" class="btn btn-success">Üretilen Kodu Kaydet</button>

@@ -38,7 +38,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     Number = x.Number,
                     Email = x.Email,
                     Location = x.Location,
-                    CanAccessSalesArea = x.CanAccessSalesArea
+                    CanAccessSalesArea = x.CanAccessSalesArea,
+                    CanAccessDesignArea = x.CanAccessDesignArea
                 })
                 .ToListAsync();
 
@@ -53,7 +54,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CanAccessSalesArea = true,
                 CanManageSalesCustomers = true,
                 CanCreateSalesRequests = true,
-                CanViewSalesPricing = true
+                CanViewSalesPricing = true,
+                CanAccessDesignArea = true,
+                CanManageDesignCalculations = true,
+                CanCreateStockCodes = true,
+                CanEditStockCodes = true,
+                CanAccessMaterialGroups = true,
+                CanManageMaterials = true
             });
         }
 
@@ -113,7 +120,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CanAccessSalesArea = vm.CanAccessSalesArea,
                 CanManageSalesCustomers = vm.CanManageSalesCustomers,
                 CanCreateSalesRequests = vm.CanCreateSalesRequests,
-                CanViewSalesPricing = vm.CanViewSalesPricing
+                CanViewSalesPricing = vm.CanViewSalesPricing,
+                CanAccessDesignArea = vm.CanAccessDesignArea,
+                CanManageDesignCalculations = vm.CanManageDesignCalculations,
+                CanCreateStockCodes = vm.CanCreateStockCodes,
+                CanEditStockCodes = vm.CanEditStockCodes,
+                CanAccessMaterialGroups = vm.CanAccessMaterialGroups,
+                CanManageMaterials = vm.CanManageMaterials
             });
 
             await _context.SaveChangesAsync();
@@ -146,7 +159,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CanAccessSalesArea = profile.CanAccessSalesArea,
                 CanManageSalesCustomers = profile.CanManageSalesCustomers,
                 CanCreateSalesRequests = profile.CanCreateSalesRequests,
-                CanViewSalesPricing = profile.CanViewSalesPricing
+                CanViewSalesPricing = profile.CanViewSalesPricing,
+                CanAccessDesignArea = profile.CanAccessDesignArea,
+                CanManageDesignCalculations = profile.CanManageDesignCalculations,
+                CanCreateStockCodes = profile.CanCreateStockCodes,
+                CanEditStockCodes = profile.CanEditStockCodes,
+                CanAccessMaterialGroups = profile.CanAccessMaterialGroups,
+                CanManageMaterials = profile.CanManageMaterials
             };
 
             return View(vm);
@@ -178,6 +197,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             profile.CanManageSalesCustomers = vm.CanManageSalesCustomers;
             profile.CanCreateSalesRequests = vm.CanCreateSalesRequests;
             profile.CanViewSalesPricing = vm.CanViewSalesPricing;
+            profile.CanAccessDesignArea = vm.CanAccessDesignArea;
+            profile.CanManageDesignCalculations = vm.CanManageDesignCalculations;
+            profile.CanCreateStockCodes = vm.CanCreateStockCodes;
+            profile.CanEditStockCodes = vm.CanEditStockCodes;
+            profile.CanAccessMaterialGroups = vm.CanAccessMaterialGroups;
+            profile.CanManageMaterials = vm.CanManageMaterials;
 
             await _context.SaveChangesAsync();
             SuccesNotyf("Satışçı bilgileri güncellendi.");

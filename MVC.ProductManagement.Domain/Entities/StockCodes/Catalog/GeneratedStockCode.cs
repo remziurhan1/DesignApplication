@@ -18,6 +18,10 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Catalog
         public decimal? TargetPrice { get; set; }
         public PrimaryUnitType PrimaryUnitType { get; set; } = PrimaryUnitType.Adet;
         public decimal KgEquivalentPerPrimaryUnit { get; set; } = 1m;
+        public string? Step3DFilePath { get; set; }
+        public string? DxfFilePath1 { get; set; }
+        public string? DxfFilePath2 { get; set; }
+        public string? DatasheetFilePath { get; set; }
 
         public virtual ICollection<StockProductGroupItem> ProductGroupItems { get; set; } = new List<StockProductGroupItem>();
         public virtual ICollection<GeneratedStockCodeRuleSelection> RuleSelections { get; set; } = new List<GeneratedStockCodeRuleSelection>();

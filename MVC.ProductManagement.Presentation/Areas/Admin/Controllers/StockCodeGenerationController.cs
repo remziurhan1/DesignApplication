@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 using MVC.ProductManagement.Application.DTOs.StockCodes.Catalog;
 using MVC.ProductManagement.Application.Services.StockCodes.Catalog;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog;
@@ -27,6 +28,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(Guid? subGroupId)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanAccessDesignArea || x.CanCreateStockCodes || x.CanEditStockCodes))
+            {
+                return Forbid();
+            }
+
             await LoadSubGroups(subGroupId);
             return View(await _generatedService.GetAllAsync(subGroupId));
         }
@@ -40,6 +46,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Generate(Guid? stockSubCodeGroupId)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanCreateStockCodes))
+            {
+                return Forbid();
+            }
+
             await LoadSubGroups(stockSubCodeGroupId);
             return View(new GeneratedStockCodeVm { StockSubCodeGroupId = stockSubCodeGroupId ?? Guid.Empty });
         }
@@ -48,8 +59,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Generate(GeneratedStockCodeVm vm)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanCreateStockCodes))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
+                await LoadSubGroups(vm.StockSubCodeGroupId);
+                return View(vm);
+            }
+
+            var attachments = await SaveAttachmentsAsync(vm);
+            if (!attachments.HasAny)
+            {
+                ModelState.AddModelError(string.Empty, "STEP / DXF / Datasheet dosyalarından en az biri zorunludur.");
                 await LoadSubGroups(vm.StockSubCodeGroupId);
                 return View(vm);
             }
@@ -65,7 +89,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 UnitPrice = vm.UnitPrice,
                 TargetPrice = vm.TargetPrice,
                 PrimaryUnitType = vm.PrimaryUnitType,
-                KgEquivalentPerPrimaryUnit = vm.KgEquivalentPerPrimaryUnit
+                KgEquivalentPerPrimaryUnit = vm.KgEquivalentPerPrimaryUnit,
+                Step3DFilePath = attachments.Step3DFilePath,
+                DxfFilePath1 = attachments.DxfFilePath1,
+                DxfFilePath2 = attachments.DxfFilePath2,
+                DatasheetFilePath = attachments.DatasheetFilePath
             });
 
             return RedirectToAction(nameof(Index));
@@ -74,6 +102,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanEditStockCodes))
+            {
+                return Forbid();
+            }
+
             var dto = await _generatedService.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
@@ -90,7 +123,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 UnitPrice = dto.UnitPrice,
                 TargetPrice = dto.TargetPrice,
                 PrimaryUnitType = dto.PrimaryUnitType,
-                KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit
+                KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit,
+                Step3DFilePath = dto.Step3DFilePath,
+                DxfFilePath1 = dto.DxfFilePath1,
+                DxfFilePath2 = dto.DxfFilePath2,
+                DatasheetFilePath = dto.DatasheetFilePath
             });
         }
 
@@ -98,8 +135,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(GeneratedStockCodeVm vm)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanEditStockCodes))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
+                await LoadSubGroups(vm.StockSubCodeGroupId);
+                return View(vm);
+            }
+
+            var attachments = await SaveAttachmentsAsync(vm);
+            if (!attachments.HasAny)
+            {
+                ModelState.AddModelError(string.Empty, "STEP / DXF / Datasheet dosyalarından en az biri zorunludur.");
                 await LoadSubGroups(vm.StockSubCodeGroupId);
                 return View(vm);
             }
@@ -113,7 +163,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 UnitPrice = vm.UnitPrice,
                 TargetPrice = vm.TargetPrice,
                 PrimaryUnitType = vm.PrimaryUnitType,
-                KgEquivalentPerPrimaryUnit = vm.KgEquivalentPerPrimaryUnit
+                KgEquivalentPerPrimaryUnit = vm.KgEquivalentPerPrimaryUnit,
+                Step3DFilePath = attachments.Step3DFilePath,
+                DxfFilePath1 = attachments.DxfFilePath1,
+                DxfFilePath2 = attachments.DxfFilePath2,
+                DatasheetFilePath = attachments.DatasheetFilePath
             });
 
             return RedirectToAction(nameof(Index), new { subGroupId = vm.StockSubCodeGroupId });
@@ -217,6 +271,44 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             var groups = await _subGroupService.GetAllAsync();
             ViewBag.SubGroups = groups.Select(x => new SelectListItem($"{x.MainGroupCode}/{x.Code} - {x.Name}", x.Id.ToString(), selectedId == x.Id)).ToList();
+        }
+
+        private async Task<(string? Step3DFilePath, string? DxfFilePath1, string? DxfFilePath2, string? DatasheetFilePath, bool HasAny)> SaveAttachmentsAsync(GeneratedStockCodeVm vm)
+        {
+            var stepPath = await SaveFileIfProvidedAsync(vm.Step3DFile, vm.Step3DFilePath);
+            var dxfPath1 = await SaveFileIfProvidedAsync(vm.DxfFile1, vm.DxfFilePath1);
+            var dxfPath2 = await SaveFileIfProvidedAsync(vm.DxfFile2, vm.DxfFilePath2);
+            var datasheetPath = await SaveFileIfProvidedAsync(vm.DatasheetFile, vm.DatasheetFilePath);
+
+            var hasAny = !string.IsNullOrWhiteSpace(stepPath)
+                         || !string.IsNullOrWhiteSpace(dxfPath1)
+                         || !string.IsNullOrWhiteSpace(dxfPath2)
+                         || !string.IsNullOrWhiteSpace(datasheetPath);
+
+            return (stepPath, dxfPath1, dxfPath2, datasheetPath, hasAny);
+        }
+
+        private async Task<string?> SaveFileIfProvidedAsync(IFormFile? file, string? existingPath)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return existingPath;
+            }
+
+            var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "stockcode-files");
+            if (!Directory.Exists(uploadsDirectory))
+            {
+                Directory.CreateDirectory(uploadsDirectory);
+            }
+
+            var extension = Path.GetExtension(file.FileName);
+            var uniqueName = $"{Guid.NewGuid():N}{extension}";
+            var fullPath = Path.Combine(uploadsDirectory, uniqueName);
+
+            await using var stream = new FileStream(fullPath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            return $"/uploads/stockcode-files/{uniqueName}";
         }
     }
 }

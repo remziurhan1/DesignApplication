@@ -22,6 +22,7 @@
                         <th>Mail</th>
                         <th>Bölge</th>
                         <th>Satış Erişimi</th>
+                        <th>Dizayn Erişimi</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -38,6 +39,16 @@
                             <td>@item.Location</td>
                             <td>
                                 @if (item.CanAccessSalesArea)
+                                {
+                                    <span class="badge bg-success">Açık</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Kapalı</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.CanAccessDesignArea)
                                 {
                                     <span class="badge bg-success">Açık</span>
                                 }
