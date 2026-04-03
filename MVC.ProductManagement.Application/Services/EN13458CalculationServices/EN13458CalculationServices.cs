@@ -26,11 +26,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string GasNitrogenStockCode = "ZA001871";
         private const string LiquidNitrogenStockCode = "ZA000216";
         private const string PerliteStockCode = "ZA000464";
-        private const string ProfileWeldStockCode = "";
-        private const double FilmLengthDivisor = 450d;
-        private const double FilmSourceLength = 1500d;
-        private const double HeadPulDiameterCoefficient = 1.17d;
-        private const double HeadWeldDivisor = 1.15d;
+        private const double DefaultWeldConsumableUnitPriceEuro = 30d;
         private const string DefaultAnalysisName = "Maliyet Analizi";
         private const string CalculatedSourceType = "Calculated";
         private const string ManualSourceType = "Manual";
@@ -689,8 +685,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             rows.Add(await BuildMaterialRowAsync("INNER-HEAD", 20, "SAC", "Sac Maliyeti", "İç Bombe", result.InnerHeadMaterialId, result.InnerHeadMaterialFormId, result.InnerHeadThickness, result.RoundedInnerHeadThickness, result.OuterDiameter, result.ShellLength, isHead: true, previousCalculatedItems));
             rows.Add(await BuildMaterialRowAsync("OUTER-SHELL", 30, "SAC", "Sac Maliyeti", "Dış Gövde", result.OuterShellMaterialId, result.OuterShellMaterialFormId, result.OuterShellThickness, result.RoundedOuterShellThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: false, previousCalculatedItems));
             rows.Add(await BuildMaterialRowAsync("OUTER-HEAD", 40, "SAC", "Sac Maliyeti", "Dış Bombe", result.OuterHeadMaterialId, result.OuterHeadMaterialFormId, result.OuterHeadThickness, result.RoundedOuterHeadThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: true, previousCalculatedItems));
-            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-INNER", 25, "İç Bombe İşçilik", result.InnerHeadMaterialId, result.InnerTankHeadWeight, previousAnalysis?.InnerHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-INNER")));
-            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-OUTER", 45, "Dış Bombe İşçilik", result.OuterHeadMaterialId, result.OuterTankHeadWeight, previousAnalysis?.OuterHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-OUTER")));
+            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-INNER", 25, "İç Bombe İşçilik", result.InnerHeadMaterialId, result.InnerTankHeadWeight * 2d, previousAnalysis?.InnerHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-INNER")));
+            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-OUTER", 45, "Dış Bombe İşçilik", result.OuterHeadMaterialId, result.OuterTankHeadWeight * 2d, previousAnalysis?.OuterHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-OUTER")));
             rows = rows.Where(x => x != null).ToList();
 
             if (result.GasNitrogenVolume > 0)
@@ -708,36 +704,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 rows.Add(await BuildServiceRowAsync("PERLITE", 70, "SARF", "Sarf Malzemeleri", "Perlit", PerliteStockCode, result.PerliteWeight, "kg", previousCalculatedItems));
             }
 
-            if (result.TotalFilmCost > 0)
+            if (result.TotalWeldLength > 0)
             {
-                rows.Add(ApplyPreviousSelection(new EN13458MaterialCostRowDTO
-                {
-                    SortOrder = 80,
-                    ItemKey = "FILM",
-                    ItemSourceType = CalculatedSourceType,
-                    CostGroupCode = "FILM",
-                    CostGroupName = "Film ve İzolasyon",
-                    ItemName = "Film Maliyeti",
-                    MaterialName = "Film/İzolasyon",
-                    FormType = "Hizmet",
-                    Quantity = 1,
-                    Unit = "lot",
-                    StockUnitPrice = result.TotalFilmCost,
-                    UnitPrice = result.TotalFilmCost,
-                    ItemCost = result.TotalFilmCost
-                }, previousCalculatedItems.GetValueOrDefault("FILM")));
+                rows.Add(BuildWeldConsumableRow(result.TotalWeldLength, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE")));
             }
 
             var profileRow = await BuildProfileCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("PROFILE"));
             if (profileRow is not null)
             {
                 rows.Add(profileRow);
-            }
-
-            var filmCountRow = await BuildFilmCountCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
-            if (filmCountRow is not null)
-            {
-                rows.Add(filmCountRow);
             }
 
             if (previousItems != null)
@@ -775,7 +750,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 ?? throw new InvalidOperationException($"MaterialForm not found: {materialFormId}");
 
             var area = isHead
-                ? GetSingleHeadAreaApproximation(diameter)
+                ? GetTwoHeadsAreaApproximation(diameter)
                 : Math.PI * diameter * shellLength;
 
             var volumeMm3 = area * usedThickness;
@@ -909,55 +884,36 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
         }
 
-        private async Task<EN13458MaterialCostRowDTO?> BuildFilmCountCostRowAsync(EN13458ResultDTO result, EN13458CostAnalysisItem? previous)
+        private EN13458MaterialCostRowDTO BuildWeldConsumableRow(double totalWeldLengthMm, EN13458CostAnalysisItem? previous)
         {
-            var totalFilmCount = CalculateFilmCount(CalculateInnerTankWeldLength1500(result));
-            if (totalFilmCount <= 0)
-            {
-                return null;
-            }
+            var weldLengthM = Math.Round(totalWeldLengthMm / 1000d, 2);
 
             var row = new EN13458MaterialCostRowDTO
             {
-                SortOrder = 100,
-                ItemKey = "FILM-COUNT",
+                SortOrder = 80,
+                ItemKey = "WELD-CONSUMABLE",
                 ItemSourceType = CalculatedSourceType,
-                CostGroupCode = "FILM",
-                CostGroupName = "Film Maliyeti",
-                ItemName = "Toplam Film Sayısı (1500 Kaynak)",
-                StockCode = ProfileWeldStockCode,
-                MaterialName = "Film",
+                CostGroupCode = "WELD",
+                CostGroupName = "Kaynak Sarf Maliyeti",
+                ItemName = "Toplam Kaynak Miktarı",
+                MaterialName = "Kaynak Teli",
                 FormType = "Hizmet",
-                Quantity = totalFilmCount,
-                Unit = "adet"
+                Quantity = weldLengthM,
+                Unit = "m",
+                StockUnitPrice = DefaultWeldConsumableUnitPriceEuro,
+                UnitPrice = DefaultWeldConsumableUnitPriceEuro,
+                ItemCost = weldLengthM * DefaultWeldConsumableUnitPriceEuro
             };
 
-            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: await ResolveUnitPriceAsync(ProfileWeldStockCode, null));
-        }
-
-        private static double CalculateFilmCount(double weldLength)
-        {
-            if (weldLength <= 0)
+            if (previous != null)
             {
-                return 0d;
+                row.UseManualUnitPrice = previous.UseManualUnitPrice;
+                row.ManualUnitPrice = previous.ManualUnitPrice;
+                row.UnitPrice = ResolveEffectiveUnitPrice(row.StockUnitPrice, row.UseManualUnitPrice, row.ManualUnitPrice);
+                row.ItemCost = row.Quantity * row.UnitPrice;
             }
 
-            return Math.Ceiling(weldLength / FilmLengthDivisor);
-        }
-
-        private static double CalculateInnerTankWeldLength1500(EN13458ResultDTO result)
-        {
-            if (result.ShellLength <= 0 || result.OuterDiameter <= 0)
-            {
-                return 0d;
-            }
-
-            var sectionCount = result.ShellLength / FilmSourceLength;
-            var circumferenceWeld = (sectionCount * result.OuterDiameter * Math.PI) + (Math.PI * result.OuterDiameter);
-            var headPulDiameter = HeadPulDiameterCoefficient * result.OuterDiameter;
-            var headWeld = ((headPulDiameter / FilmSourceLength) * (headPulDiameter / HeadWeldDivisor) * 2d);
-
-            return circumferenceWeld + headWeld;
+            return row;
         }
 
         private async Task<EN13458MaterialCostRowDTO> ApplyPreviousPricingAsync(EN13458MaterialCostRowDTO row, EN13458CostAnalysisItem? previous, double fallbackUnitPrice)
@@ -1291,5 +1247,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             var circleArea = Math.PI * Math.Pow(diameter, 2) / 4d;
             return circleArea * 1.1d;
         }
+
+        private static double GetTwoHeadsAreaApproximation(double diameter) => GetSingleHeadAreaApproximation(diameter) * 2d;
     }
 }

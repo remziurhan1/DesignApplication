@@ -93,8 +93,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             OuterTankHeadWeight = dto.OuterTankHeadWeight,
             InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength,
             InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength,
+            InnerTankShellWeldLength = dto.InnerTankShellWeldLength,
+            InnerTankBombeWeldLength = dto.InnerTankBombeWeldLength,
+            InnerTankTotalWeldLength = dto.InnerTankTotalWeldLength,
             OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength,
             OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength,
+            OuterTankShellWeldLength = dto.OuterTankShellWeldLength,
+            OuterTankBombeWeldLength = dto.OuterTankBombeWeldLength,
+            OuterTankTotalWeldLength = dto.OuterTankTotalWeldLength,
+            StiffenerRingWeldLength = dto.StiffenerRingWeldLength,
             TotalWeldLength = dto.TotalWeldLength, TotalFilmCost = dto.TotalFilmCost,
             InnerTankTotalLength = dto.InnerTankTotalLength, OuterTankTotalLength = dto.OuterTankTotalLength,
             PerliteVolume = dto.PerliteVolume, PerliteWeight = dto.PerliteWeight,
@@ -173,8 +180,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             entity.OuterTankHeadWeight = dto.OuterTankHeadWeight;
             entity.InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength;
             entity.InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength;
+            entity.InnerTankShellWeldLength = dto.InnerTankShellWeldLength;
+            entity.InnerTankBombeWeldLength = dto.InnerTankBombeWeldLength;
+            entity.InnerTankTotalWeldLength = dto.InnerTankTotalWeldLength;
             entity.OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength;
             entity.OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength;
+            entity.OuterTankShellWeldLength = dto.OuterTankShellWeldLength;
+            entity.OuterTankBombeWeldLength = dto.OuterTankBombeWeldLength;
+            entity.OuterTankTotalWeldLength = dto.OuterTankTotalWeldLength;
+            entity.StiffenerRingWeldLength = dto.StiffenerRingWeldLength;
             entity.TotalWeldLength = dto.TotalWeldLength;
             entity.TotalFilmCost = dto.TotalFilmCost;
             entity.InnerTankTotalLength = dto.InnerTankTotalLength;
@@ -243,8 +257,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             OuterTankHeadWeight = entity.OuterTankHeadWeight,
             InnerTankHeadWeldLength = entity.InnerTankHeadWeldLength,
             InnerTankCircumferenceWeldLength = entity.InnerTankCircumferenceWeldLength,
+            InnerTankShellWeldLength = entity.InnerTankShellWeldLength,
+            InnerTankBombeWeldLength = entity.InnerTankBombeWeldLength,
+            InnerTankTotalWeldLength = entity.InnerTankTotalWeldLength,
             OuterTankHeadWeldLength = entity.OuterTankHeadWeldLength,
             OuterTankCircumferenceWeldLength = entity.OuterTankCircumferenceWeldLength,
+            OuterTankShellWeldLength = entity.OuterTankShellWeldLength,
+            OuterTankBombeWeldLength = entity.OuterTankBombeWeldLength,
+            OuterTankTotalWeldLength = entity.OuterTankTotalWeldLength,
+            StiffenerRingWeldLength = entity.StiffenerRingWeldLength,
             TotalWeldLength = entity.TotalWeldLength, TotalFilmCost = entity.TotalFilmCost,
             InnerTankTotalLength = entity.InnerTankTotalLength, OuterTankTotalLength = entity.OuterTankTotalLength,
             PerliteVolume = entity.PerliteVolume, PerliteWeight = entity.PerliteWeight,
