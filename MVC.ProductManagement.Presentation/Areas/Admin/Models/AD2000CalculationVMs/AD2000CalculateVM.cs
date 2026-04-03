@@ -73,6 +73,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
         public double WeldLength2000 { get; set; }
         public double WeldLength3000 { get; set; }
         public double WeldLength4000 { get; set; }
+        public double ShellWeldLength { get; set; }
+        public double HeadWeldLength { get; set; }
+        public double CircumferenceWeldLength { get; set; }
+        public double TotalWeldLength { get; set; }
+        public double StiffenerRingWeldLength { get; set; }
+        public double WeldConsumableCost { get; set; }
         public double SurfaceArea { get; set; }
     }
 }

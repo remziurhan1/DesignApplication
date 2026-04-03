@@ -713,31 +713,25 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 rows.Add(ApplyPreviousSelection(new EN13458MaterialCostRowDTO
                 {
                     SortOrder = 80,
-                    ItemKey = "FILM",
+                    ItemKey = "WELD-CONSUMABLE",
                     ItemSourceType = CalculatedSourceType,
-                    CostGroupCode = "FILM",
-                    CostGroupName = "Film ve İzolasyon",
-                    ItemName = "Film Maliyeti",
-                    MaterialName = "Film/İzolasyon",
+                    CostGroupCode = "WELD",
+                    CostGroupName = "Kaynak Sarf Maliyeti",
+                    ItemName = "Toplam Kaynak Sarf Maliyeti (Kaynak Teli)",
+                    MaterialName = "Kaynak Teli",
                     FormType = "Hizmet",
                     Quantity = 1,
                     Unit = "lot",
                     StockUnitPrice = result.TotalFilmCost,
                     UnitPrice = result.TotalFilmCost,
                     ItemCost = result.TotalFilmCost
-                }, previousCalculatedItems.GetValueOrDefault("FILM")));
+                }, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE")));
             }
 
             var profileRow = await BuildProfileCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("PROFILE"));
             if (profileRow is not null)
             {
                 rows.Add(profileRow);
-            }
-
-            var filmCountRow = await BuildFilmCountCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
-            if (filmCountRow is not null)
-            {
-                rows.Add(filmCountRow);
             }
 
             if (previousItems != null)

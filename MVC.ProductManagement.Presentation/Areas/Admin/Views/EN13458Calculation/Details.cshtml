@@ -6,8 +6,6 @@
     var isSalesView = ViewBag.IsSalesView is bool flag && flag;
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
-    var innerTankWeldLength = Model.InnerTankHeadWeldLength + Model.InnerTankCircumferenceWeldLength;
-    var outerTankWeldLength = Model.OuterTankHeadWeldLength + Model.OuterTankCircumferenceWeldLength;
     var canManageCost = User.IsInRole("Admin");
 }
 
@@ -104,8 +102,13 @@
                         <tr><th>Ad</th><td>@Model.Name</td><th>İç Tank Çapı</th><td>@Model.OuterDiameter</td><th>Dış Tank Çapı</th><td>@Model.OuterTankDiameter</td></tr>
                         <tr><th>Silindirik Boy</th><td>@Model.ShellLength</td><th>Basınç</th><td>@Model.Pressure</td><th>Depolanacak Ürün</th><td>@Model.StorageTypeName</td></tr>
                         <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td><th>Tank Yönelimi</th><td>@Model.TankOrientation</td><th>Cold Stretch</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
-                        <tr><th>Kaynak metrajları</th><td colspan="5">1500: @Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) m | 2000: @Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) m | 2500: @Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) m | 3000: @Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) m</td></tr>
-                        <tr><th>İç Tank Kaynak Metrajı</th><td>@innerTankWeldLength.ToString("0.##", CultureInfo.InvariantCulture) m</td><th>Dış Tank Kaynak Metrajı</th><td>@outerTankWeldLength.ToString("0.##", CultureInfo.InvariantCulture) m</td><th>Toplam Kaynak</th><td>@Model.TotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) m</td></tr>
+                        <tr><th>Kaynak metrajları</th><td colspan="5">1500: @Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) mm | 2000: @Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) mm | 2500: @Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) mm | 3000: @Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th colspan="6" class="table-secondary">Kaynak Detayları</th></tr>
+                        <tr><th>İç Tank Gövde Kaynak Metrajı</th><td>@Model.InnerTankShellWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>İç Tank Bombe Kaynak Metrajı</th><td>@Model.InnerTankBombeWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>İç Tank L Kaynakları</th><td>@Model.InnerTankHeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>İç Tank Toplam (Çevre)</th><td>@Model.InnerTankCircumferenceWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>İç Tank Toplam (L)</th><td>@Model.InnerTankHeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>İç Tank Toplam Kaynak</th><td>@Model.InnerTankTotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>Dış Tank Gövde Kaynak Metrajı</th><td>@Model.OuterTankShellWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Dış Tank Bombe Kaynak Metrajı</th><td>@Model.OuterTankBombeWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Dış Tank L Kaynakları</th><td>@Model.OuterTankHeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>Dış Tank Toplam (Çevre)</th><td>@Model.OuterTankCircumferenceWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Dış Tank Toplam (L)</th><td>@Model.OuterTankHeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Dış Tank Toplam Kaynak</th><td>@Model.OuterTankTotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>Stifner Ring Kaynak Metrajı</th><td>@Model.StiffenerRingWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam Kaynak Metrajı</th><td>@Model.TotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Kaynak Sarf Maliyeti</th><td>@Model.TotalFilmCost.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
                     </tbody>
                 </table>
             </div>

@@ -241,6 +241,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldLength2000 = vm.WeldLength2000,
                 WeldLength3000 = vm.WeldLength3000,
                 WeldLength4000 = vm.WeldLength4000,
+                ShellWeldLength = vm.ShellWeldLength,
+                HeadWeldLength = vm.HeadWeldLength,
+                CircumferenceWeldLength = vm.CircumferenceWeldLength,
+                TotalWeldLength = vm.TotalWeldLength,
+                StiffenerRingWeldLength = vm.StiffenerRingWeldLength,
+                WeldConsumableCost = vm.WeldConsumableCost,
                 SurfaceArea = vm.SurfaceArea
             });
 
@@ -288,6 +294,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 WeldLength2000 = vm.WeldLength2000,
                 WeldLength3000 = vm.WeldLength3000,
                 WeldLength4000 = vm.WeldLength4000,
+                ShellWeldLength = vm.ShellWeldLength,
+                HeadWeldLength = vm.HeadWeldLength,
+                CircumferenceWeldLength = vm.CircumferenceWeldLength,
+                TotalWeldLength = vm.TotalWeldLength,
+                StiffenerRingWeldLength = vm.StiffenerRingWeldLength,
+                WeldConsumableCost = vm.WeldConsumableCost,
                 SurfaceArea = vm.SurfaceArea
             };
 
@@ -510,6 +522,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             WeldLength2000 = result.WeldLength2000,
             WeldLength3000 = result.WeldLength3000,
             WeldLength4000 = result.WeldLength4000,
+            ShellWeldLength = result.ShellWeldLength,
+            HeadWeldLength = result.HeadWeldLength,
+            CircumferenceWeldLength = result.CircumferenceWeldLength,
+            TotalWeldLength = result.TotalWeldLength,
+            StiffenerRingWeldLength = result.StiffenerRingWeldLength,
+            WeldConsumableCost = result.WeldConsumableCost,
             SurfaceArea = result.SurfaceArea
         };
 
