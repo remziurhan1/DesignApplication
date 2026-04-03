@@ -689,8 +689,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             rows.Add(await BuildMaterialRowAsync("INNER-HEAD", 20, "SAC", "Sac Maliyeti", "İç Bombe", result.InnerHeadMaterialId, result.InnerHeadMaterialFormId, result.InnerHeadThickness, result.RoundedInnerHeadThickness, result.OuterDiameter, result.ShellLength, isHead: true, previousCalculatedItems));
             rows.Add(await BuildMaterialRowAsync("OUTER-SHELL", 30, "SAC", "Sac Maliyeti", "Dış Gövde", result.OuterShellMaterialId, result.OuterShellMaterialFormId, result.OuterShellThickness, result.RoundedOuterShellThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: false, previousCalculatedItems));
             rows.Add(await BuildMaterialRowAsync("OUTER-HEAD", 40, "SAC", "Sac Maliyeti", "Dış Bombe", result.OuterHeadMaterialId, result.OuterHeadMaterialFormId, result.OuterHeadThickness, result.RoundedOuterHeadThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: true, previousCalculatedItems));
-            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-INNER", 25, "İç Bombe İşçilik", result.InnerHeadMaterialId, result.InnerTankHeadWeight, previousAnalysis?.InnerHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-INNER")));
-            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-OUTER", 45, "Dış Bombe İşçilik", result.OuterHeadMaterialId, result.OuterTankHeadWeight, previousAnalysis?.OuterHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-OUTER")));
+            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-INNER", 25, "İç Bombe İşçilik", result.InnerHeadMaterialId, result.InnerTankHeadWeight * 2d, previousAnalysis?.InnerHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-INNER")));
+            rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-OUTER", 45, "Dış Bombe İşçilik", result.OuterHeadMaterialId, result.OuterTankHeadWeight * 2d, previousAnalysis?.OuterHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-OUTER")));
             rows = rows.Where(x => x != null).ToList();
 
             if (result.GasNitrogenVolume > 0)
@@ -713,31 +713,25 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 rows.Add(ApplyPreviousSelection(new EN13458MaterialCostRowDTO
                 {
                     SortOrder = 80,
-                    ItemKey = "FILM",
+                    ItemKey = "WELD-CONSUMABLE",
                     ItemSourceType = CalculatedSourceType,
-                    CostGroupCode = "FILM",
-                    CostGroupName = "Film ve İzolasyon",
-                    ItemName = "Film Maliyeti",
-                    MaterialName = "Film/İzolasyon",
+                    CostGroupCode = "WELD",
+                    CostGroupName = "Kaynak Sarf Maliyeti",
+                    ItemName = "Toplam Kaynak Sarf Maliyeti (Kaynak Teli)",
+                    MaterialName = "Kaynak Teli",
                     FormType = "Hizmet",
                     Quantity = 1,
                     Unit = "lot",
                     StockUnitPrice = result.TotalFilmCost,
                     UnitPrice = result.TotalFilmCost,
                     ItemCost = result.TotalFilmCost
-                }, previousCalculatedItems.GetValueOrDefault("FILM")));
+                }, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE")));
             }
 
             var profileRow = await BuildProfileCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("PROFILE"));
             if (profileRow is not null)
             {
                 rows.Add(profileRow);
-            }
-
-            var filmCountRow = await BuildFilmCountCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
-            if (filmCountRow is not null)
-            {
-                rows.Add(filmCountRow);
             }
 
             if (previousItems != null)
@@ -775,7 +769,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 ?? throw new InvalidOperationException($"MaterialForm not found: {materialFormId}");
 
             var area = isHead
-                ? GetSingleHeadAreaApproximation(diameter)
+                ? GetTwoHeadsAreaApproximation(diameter)
                 : Math.PI * diameter * shellLength;
 
             var volumeMm3 = area * usedThickness;
@@ -1291,5 +1285,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             var circleArea = Math.PI * Math.Pow(diameter, 2) / 4d;
             return circleArea * 1.1d;
         }
+
+        private static double GetTwoHeadsAreaApproximation(double diameter) => GetSingleHeadAreaApproximation(diameter) * 2d;
     }
 }
