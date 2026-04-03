@@ -27,11 +27,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string GasNitrogenStockCode = "ZA001871";
         private const string LiquidNitrogenStockCode = "ZA000216";
         private const string PerliteStockCode = "ZA000464";
-        private const string ProfileWeldStockCode = "";
         private const double DefaultWeldConsumableUnitPriceEuro = 30d;
-        private const double FilmSourceLength = 1500d;
-        private const double HeadPulDiameterCoefficient = 1.17d;
-        private const double HeadWeldDivisor = 1.15d;
         private const string DefaultAnalysisName = "Maliyet Analizi";
         private const string CalculatedSourceType = "Calculated";
         private const string ManualSourceType = "Manual";
@@ -905,36 +901,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
         }
 
-        private async Task<EN13458MaterialCostRowDTO?> BuildFilmCountCostRowAsync(EN13458ResultDTO result, EN13458CostAnalysisItem? previous)
-        {
-            var weldLengthForFilmCount = result.TotalWeldLength > 0
-                ? result.TotalWeldLength
-                : CalculateInnerTankWeldLength1500(result);
-            var filmCalculation = _filmQuantityService.Calculate(weldLengthForFilmCount);
-            var totalFilmCount = filmCalculation.FilmQuantity;
-            if (totalFilmCount <= 0)
-            {
-                return null;
-            }
-
-            var row = new EN13458MaterialCostRowDTO
-            {
-                SortOrder = 100,
-                ItemKey = "FILM-COUNT",
-                ItemSourceType = CalculatedSourceType,
-                CostGroupCode = "FILM",
-                CostGroupName = "Film Maliyeti",
-                ItemName = $"Toplam Film Sayısı (Toplam Kaynak / {filmCalculation.Divisor:0})",
-                StockCode = ProfileWeldStockCode,
-                MaterialName = "Film",
-                FormType = "Hizmet",
-                Quantity = totalFilmCount,
-                Unit = "adet"
-            };
-
-            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: await ResolveUnitPriceAsync(ProfileWeldStockCode, null));
-        }
-
         private EN13458MaterialCostRowDTO BuildWeldConsumableRow(double totalWeldLengthMm, EN13458CostAnalysisItem? previous)
         {
             var weldLengthM = Math.Round(totalWeldLengthMm / 1000d, 2);
@@ -965,21 +931,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             }
 
             return row;
-        }
-
-        private static double CalculateInnerTankWeldLength1500(EN13458ResultDTO result)
-        {
-            if (result.ShellLength <= 0 || result.OuterDiameter <= 0)
-            {
-                return 0d;
-            }
-
-            var sectionCount = result.ShellLength / FilmSourceLength;
-            var circumferenceWeld = (sectionCount * result.OuterDiameter * Math.PI) + (Math.PI * result.OuterDiameter);
-            var headPulDiameter = HeadPulDiameterCoefficient * result.OuterDiameter;
-            var headWeld = ((headPulDiameter / FilmSourceLength) * (headPulDiameter / HeadWeldDivisor) * 2d);
-
-            return circumferenceWeld + headWeld;
         }
 
         private async Task<EN13458MaterialCostRowDTO> ApplyPreviousPricingAsync(EN13458MaterialCostRowDTO row, EN13458CostAnalysisItem? previous, double fallbackUnitPrice)
