@@ -8,6 +8,19 @@
     <a asp-action="Create" class="btn btn-primary">Yeni Ürün Grubu</a>
 </div>
 
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="mb-2">Satılan Tanka Göre İhtiyaç Hesabı</h6>
+        <p class="text-muted mb-2">Aşağıdaki adet ile her ürün grubundaki stok kodu ihtiyacını otomatik çarpanla görebilirsiniz.</p>
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">Satılan Tank Adedi</label>
+                <input id="sold-tank-count" type="number" min="1" step="1" class="form-control" value="1" />
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="table table-striped align-middle">
     <thead>
         <tr>
@@ -44,6 +57,9 @@
                                         <th>Stok Kodu</th>
                                         <th>Açıklama</th>
                                         <th>Adet</th>
+                                        <th>Satışa Göre İhtiyaç</th>
+                                        <th>Toplam KG</th>
+                                        <th>Satışa Göre KG</th>
                                         <th>Birim Maliyet</th>
                                         <th>Toplam</th>
                                     </tr>
@@ -54,7 +70,10 @@
                                     <tr>
                                         <td>@detail.GeneratedCode</td>
                                         <td>@detail.Description</td>
-                                        <td>@detail.Quantity</td>
+                                        <td class="base-qty">@detail.Quantity</td>
+                                        <td class="required-qty">@detail.Quantity</td>
+                                        <td class="base-kg">@detail.TotalWeightKg.ToString("N3")</td>
+                                        <td class="required-kg">@detail.TotalWeightKg.ToString("N3")</td>
                                         <td>@detail.UnitPrice.ToString("N2")</td>
                                         <td>@detail.TotalCost.ToString("N2")</td>
                                     </tr>
@@ -81,3 +100,29 @@
     }
     </tbody>
 </table>
+
+<script>
+    const soldTankCountInput = document.getElementById('sold-tank-count');
+
+    function recalculateRequiredQuantities() {
+        const multiplier = Math.max(1, Number(soldTankCountInput?.value || 1));
+
+        document.querySelectorAll('tr').forEach(row => {
+            const baseQtyCell = row.querySelector('.base-qty');
+            const requiredQtyCell = row.querySelector('.required-qty');
+            const baseKgCell = row.querySelector('.base-kg');
+            const requiredKgCell = row.querySelector('.required-kg');
+
+            if (!baseQtyCell || !requiredQtyCell || !baseKgCell || !requiredKgCell) return;
+
+            const baseQty = Number((baseQtyCell.textContent || '0').replace(',', '.'));
+            const baseKg = Number((baseKgCell.textContent || '0').replace(/\./g, '').replace(',', '.'));
+
+            requiredQtyCell.textContent = (baseQty * multiplier).toString();
+            requiredKgCell.textContent = (baseKg * multiplier).toLocaleString('tr-TR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+        });
+    }
+
+    soldTankCountInput?.addEventListener('input', recalculateRequiredQuantities);
+    recalculateRequiredQuantities();
+</script>

@@ -1,8 +1,6 @@
 using MVC.ProductManagement.Application.DTOs.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Catalog;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Catalog;
-using System.Text.RegularExpressions;
-
 namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 {
     public class StockSubCodeRuleService : IStockSubCodeRuleService
@@ -10,15 +8,18 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         private readonly IStockSubCodeRuleRepository _repository;
         private readonly IStockSubCodeGroupRepository _subGroupRepository;
         private readonly IStockMainCodeGroupRepository _mainGroupRepository;
+        private readonly IGeneratedStockCodeService _generatedStockCodeService;
 
         public StockSubCodeRuleService(
             IStockSubCodeRuleRepository repository,
             IStockSubCodeGroupRepository subGroupRepository,
-            IStockMainCodeGroupRepository mainGroupRepository)
+            IStockMainCodeGroupRepository mainGroupRepository,
+            IGeneratedStockCodeService generatedStockCodeService)
         {
             _repository = repository;
             _subGroupRepository = subGroupRepository;
             _mainGroupRepository = mainGroupRepository;
+            _generatedStockCodeService = generatedStockCodeService;
         }
 
         public async Task<List<StockSubCodeRuleListDto>> GetAllAsync(Guid? subGroupId = null)
@@ -140,7 +141,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             }
 
             var normalizedRuleCode = string.IsNullOrWhiteSpace(dto.RuleCode)
-                ? await GetNextStockCodeBySubGroupAsync(dto.StockSubCodeGroupId)
+                ? await GetRuleCodeAsync(dto.StockSubCodeGroupId, dto.RuleName)
                 : dto.RuleCode.Trim().ToUpperInvariant();
 
             var entity = new StockSubCodeRule
@@ -155,6 +156,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 
             await _repository.AddAsync(entity);
             await _repository.SaveChangeAsync();
+            await _generatedStockCodeService.RefreshDerivedFieldsBySubGroupAsync(dto.StockSubCodeGroupId);
             return await GetByIdAsync(entity.Id) ?? throw new Exception("Rule create failed");
         }
 
@@ -166,7 +168,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 
             entity.StockSubCodeGroupId = dto.StockSubCodeGroupId;
             entity.RuleCode = string.IsNullOrWhiteSpace(dto.RuleCode)
-                ? await GetNextStockCodeBySubGroupAsync(dto.StockSubCodeGroupId)
+                ? await GetRuleCodeAsync(dto.StockSubCodeGroupId, dto.RuleName)
                 : dto.RuleCode.Trim().ToUpperInvariant();
             entity.RuleName = dto.RuleName.Trim();
             entity.Description = dto.Description?.Trim();
@@ -175,27 +177,42 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
 
             await _repository.UpdateAsync(entity);
             await _repository.SaveChangeAsync();
+            await _generatedStockCodeService.RefreshDerivedFieldsBySubGroupAsync(dto.StockSubCodeGroupId);
             return await GetByIdAsync(entity.Id) ?? throw new Exception("Rule update failed");
         }
 
         public async Task<string> GetNextStockCodeBySubGroupAsync(Guid subGroupId)
         {
-            var subGroup = await _subGroupRepository.GetByIdAsync(subGroupId, tracking: false)
-                ?? throw new Exception("Sub group not found");
-
-            var subGroupCode = subGroup.Code.Trim().ToUpperInvariant();
             var existingCodes = await _repository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId, tracking: false);
+            var usedCodes = existingCodes
+                .Select(x => x.RuleCode?.Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x!)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            var regex = new Regex($"^{Regex.Escape(subGroupCode)}(\\d{{5}})$", RegexOptions.CultureInvariant);
-            var maxNumber = existingCodes
-                .Select(x => regex.Match(x.RuleCode))
-                .Where(m => m.Success)
-                .Select(m => int.Parse(m.Groups[1].Value))
-                .DefaultIfEmpty(0)
-                .Max();
+            var random = new Random();
+            string code;
+            do
+            {
+                code = random.Next(0, 1_000_000).ToString("D6");
+            } while (usedCodes.Contains(code));
 
-            var nextNumber = maxNumber + 1;
-            return $"{subGroupCode}{nextNumber:D5}";
+            return code;
+        }
+
+        private async Task<string> GetRuleCodeAsync(Guid subGroupId, string ruleName)
+        {
+            var normalizedRuleName = ruleName.Trim();
+            var existingForGroup = (await _repository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId, tracking: false))
+                .FirstOrDefault(x => string.Equals(x.RuleName.Trim(), normalizedRuleName, StringComparison.OrdinalIgnoreCase)
+                                  && !string.IsNullOrWhiteSpace(x.RuleCode));
+
+            if (existingForGroup != null)
+            {
+                return existingForGroup.RuleCode.Trim().ToUpperInvariant();
+            }
+
+            return await GetNextStockCodeBySubGroupAsync(subGroupId);
         }
 
 
@@ -208,8 +225,10 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         public async Task DeleteAsync(Guid id)
         {
             var entity = await _repository.GetByIdAsync(id) ?? throw new Exception("Rule not found");
+            var subGroupId = entity.StockSubCodeGroupId;
             await _repository.DeleteAsync(entity);
             await _repository.SaveChangeAsync();
+            await _generatedStockCodeService.RefreshDerivedFieldsBySubGroupAsync(subGroupId);
         }
     }
 }

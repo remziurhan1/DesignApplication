@@ -24,6 +24,8 @@
             <th>Kod</th>
             <th>Kural Adı</th>
             <th>Açıklama</th>
+            <th>1. Birim</th>
+            <th>KG Karşılığı</th>
             <th>Birim Fiyat</th>
             <th>Hedef Fiyat</th>
         </tr>
@@ -36,6 +38,8 @@
             <td>@item.GeneratedCode</td>
             <td>@item.RuleName</td>
             <td>@item.Description</td>
+            <td>@item.PrimaryUnitType</td>
+            <td>@item.KgEquivalentPerPrimaryUnit.ToString("N4")</td>
             <td>@(item.UnitPrice?.ToString("N2") ?? "-")</td>
             <td>@(item.TargetPrice?.ToString("N2") ?? "-")</td>
         </tr>

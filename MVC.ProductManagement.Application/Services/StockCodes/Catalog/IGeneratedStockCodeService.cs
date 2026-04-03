@@ -9,5 +9,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         Task<GeneratedStockCodeListDto> CreateAsync(GeneratedStockCodeCreateDto dto);
         Task<GeneratedStockCodeDetailDto> UpdateAsync(GeneratedStockCodeUpdateDto dto);
         Task<GeneratedStockCodeResolveDto> ResolveCodeAsync(Guid subGroupId, List<Guid>? selectedRuleIds = null);
+        Task RefreshDerivedFieldsBySubGroupAsync(Guid subGroupId);
     }
 }

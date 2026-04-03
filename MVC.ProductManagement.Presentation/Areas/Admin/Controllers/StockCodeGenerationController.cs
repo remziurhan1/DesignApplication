@@ -60,7 +60,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleName = vm.RuleName ?? string.Empty,
                 Description = vm.Description,
                 UnitPrice = vm.UnitPrice,
-                TargetPrice = vm.TargetPrice
+                TargetPrice = vm.TargetPrice,
+                PrimaryUnitType = vm.PrimaryUnitType,
+                KgEquivalentPerPrimaryUnit = vm.KgEquivalentPerPrimaryUnit
             });
 
             return RedirectToAction(nameof(Index));
@@ -83,7 +85,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 RuleName = dto.RuleName,
                 Description = dto.Description,
                 UnitPrice = dto.UnitPrice,
-                TargetPrice = dto.TargetPrice
+                TargetPrice = dto.TargetPrice,
+                PrimaryUnitType = dto.PrimaryUnitType,
+                KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit
             });
         }
 
@@ -104,7 +108,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 SelectedRuleIds = vm.SelectedRuleIds,
                 Description = vm.Description,
                 UnitPrice = vm.UnitPrice,
-                TargetPrice = vm.TargetPrice
+                TargetPrice = vm.TargetPrice,
+                PrimaryUnitType = vm.PrimaryUnitType,
+                KgEquivalentPerPrimaryUnit = vm.KgEquivalentPerPrimaryUnit
             });
 
             return RedirectToAction(nameof(Index), new { subGroupId = vm.StockSubCodeGroupId });

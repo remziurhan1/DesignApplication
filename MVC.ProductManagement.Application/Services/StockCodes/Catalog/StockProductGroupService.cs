@@ -78,7 +78,9 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                             Description = code?.Description ?? string.Empty,
                             UnitPrice = x.UnitPrice,
                             Quantity = x.Quantity,
-                            TotalCost = x.TotalCost
+                            TotalCost = x.TotalCost,
+                            KgEquivalentPerPrimaryUnit = code?.KgEquivalentPerPrimaryUnit ?? 1m,
+                            TotalWeightKg = x.Quantity * (code?.KgEquivalentPerPrimaryUnit ?? 1m)
                         };
                     })
                     .ToList()
