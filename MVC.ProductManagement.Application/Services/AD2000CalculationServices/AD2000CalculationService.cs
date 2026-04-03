@@ -33,7 +33,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
         private const string ManualGroupCostGroupName = "Ek Stok Grupları";
         private const string BombeLaborCostGroupCode = "BOMBE";
         private const string BombeLaborCostGroupName = "Bombe İşçilik";
-        private const double FilmLengthDivisor = 450d;
+        private const double WeldConsumableRatio = 0.18d;
+        private const double WeldConsumableRecoveryRatio = 0.95d;
 
         public AD2000CalculationService(
             IAD2000Repository repository,
@@ -65,6 +66,12 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             var shellThickness = ((effectivePressure * d) / ((20 * (shellSigma / 1.5) * z) + effectivePressure)) + ca;
             var headThickness = ((effectivePressure * d * beta) / ((40 * (headSigma / 1.5) * z) - effectivePressure)) + ca;
 
+            var weldLength1500 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 1500d);
+            var weldLength2000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 2000d);
+            var weldLength3000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 3000d);
+            var weldLength4000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 4000d);
+            var weldBreakdown = CalculateWeldBreakdown(d, dto.ShellLength, 2000d);
+
             return Task.FromResult(new AD2000ResultDTO
             {
                 Name = dto.Name,
@@ -95,10 +102,16 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 RoundedShellThickness = RoundUpToHalf(shellThickness),
                 RoundedHeadThickness = RoundUpToHalf(headThickness),
                 TestPressure = effectivePressure * 1.3,
-                WeldLength1500 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 1500d),
-                WeldLength2000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 2000d),
-                WeldLength3000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 3000d),
-                WeldLength4000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 4000d),
+                WeldLength1500 = weldLength1500,
+                WeldLength2000 = weldLength2000,
+                WeldLength3000 = weldLength3000,
+                WeldLength4000 = weldLength4000,
+                ShellWeldLength = weldBreakdown.ShellWeldLength,
+                HeadWeldLength = weldBreakdown.HeadWeldLength,
+                CircumferenceWeldLength = weldBreakdown.CircumferenceWeldLength,
+                TotalWeldLength = weldBreakdown.TotalWeldLength,
+                StiffenerRingWeldLength = 0d,
+                WeldConsumableCost = CalculateWeldConsumableCost(weldBreakdown.TotalWeldLength),
                 SurfaceArea = CalculateSurfaceArea(d, dto.ShellLength)
             });
         }
@@ -509,10 +522,10 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             rows.Add(await BuildMaterialRowAsync("HEAD", 20, "SAC", "Sac Maliyeti", "Bombe Sacı", result.HeadMaterialId, result.HeadMaterialFormId, result.HeadThickness, result.RoundedHeadThickness, result.Diameter, result.ShellLength, true, previousCalculatedItems));
             rows.Add(await BuildBombeLaborRowAsync(result, previousAnalysis?.HeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-HEAD")));
 
-            var filmCountRow = await BuildFilmCountRowAsync(result.WeldLength1500, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
-            if (filmCountRow is not null)
+            var weldConsumableRow = await BuildWeldConsumableRowAsync(result.TotalWeldLength, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE"));
+            if (weldConsumableRow is not null)
             {
-                rows.Add(filmCountRow);
+                rows.Add(weldConsumableRow);
             }
 
             rows.Add(await BuildServiceRowAsync("SURFACE", 70, "YUZ", "Yüzey / Boya", "Yüzey Alanı", string.Empty, result.SurfaceArea, "m²", previousCalculatedItems));
@@ -562,10 +575,10 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             return await ApplyPreviousPricingAsync(row, previous, 0);
         }
 
-        private async Task<AD2000MaterialCostRowDTO?> BuildFilmCountRowAsync(double weldLength1500, AD2000CostAnalysisItem? previous)
+        private async Task<AD2000MaterialCostRowDTO?> BuildWeldConsumableRowAsync(double totalWeldLength, AD2000CostAnalysisItem? previous)
         {
-            var totalFilmCount = CalculateFilmCount(weldLength1500);
-            if (totalFilmCount <= 0)
+            var weldConsumableCost = CalculateWeldConsumableCost(totalWeldLength);
+            if (weldConsumableCost <= 0)
             {
                 return null;
             }
@@ -573,28 +586,21 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             var row = new AD2000MaterialCostRowDTO
             {
                 SortOrder = 30,
-                ItemKey = "FILM-COUNT",
+                ItemKey = "WELD-CONSUMABLE",
                 ItemSourceType = CalculatedSourceType,
-                CostGroupCode = "FILM",
-                CostGroupName = "Film Maliyeti",
-                ItemName = "Toplam Film Sayısı (1500 Kaynak)",
-                MaterialName = "Film",
+                CostGroupCode = "WELD",
+                CostGroupName = "Kaynak Sarf Maliyeti",
+                ItemName = "Toplam Kaynak Sarf Maliyeti (Kaynak Teli)",
+                MaterialName = "Kaynak Teli",
                 FormType = "Hizmet",
-                Quantity = totalFilmCount,
-                Unit = "adet"
+                Quantity = 1,
+                Unit = "lot",
+                StockUnitPrice = weldConsumableCost,
+                UnitPrice = weldConsumableCost,
+                ItemCost = weldConsumableCost
             };
 
             return await ApplyPreviousPricingAsync(row, previous, 0);
-        }
-
-        private static double CalculateFilmCount(double weldLength1500)
-        {
-            if (weldLength1500 <= 0)
-            {
-                return 0d;
-            }
-
-            return Math.Ceiling(weldLength1500 / FilmLengthDivisor);
         }
 
         private async Task<AD2000MaterialCostRowDTO> BuildBombeLaborRowAsync(AD2000ResultDTO result, Guid? selectedRateId, AD2000CostAnalysisItem? previous)
@@ -1052,6 +1058,12 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             WeldLength2000 = dto.WeldLength2000,
             WeldLength3000 = dto.WeldLength3000,
             WeldLength4000 = dto.WeldLength4000,
+            ShellWeldLength = dto.ShellWeldLength,
+            HeadWeldLength = dto.HeadWeldLength,
+            CircumferenceWeldLength = dto.CircumferenceWeldLength,
+            TotalWeldLength = dto.TotalWeldLength,
+            StiffenerRingWeldLength = dto.StiffenerRingWeldLength,
+            WeldConsumableCost = dto.WeldConsumableCost,
             SurfaceArea = dto.SurfaceArea,
             CreatedBy = createdBy,
             CreatedDate = DateTime.UtcNow
@@ -1092,6 +1104,12 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             WeldLength2000 = entity.WeldLength2000,
             WeldLength3000 = entity.WeldLength3000,
             WeldLength4000 = entity.WeldLength4000,
+            ShellWeldLength = entity.ShellWeldLength,
+            HeadWeldLength = entity.HeadWeldLength,
+            CircumferenceWeldLength = entity.CircumferenceWeldLength,
+            TotalWeldLength = entity.TotalWeldLength,
+            StiffenerRingWeldLength = entity.StiffenerRingWeldLength,
+            WeldConsumableCost = entity.WeldConsumableCost,
             SurfaceArea = entity.SurfaceArea
         };
 
@@ -1112,6 +1130,27 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             var headPulDiameter = 1.17d * diameter;
             var headWeldLength = Math.Round((headPulDiameter / sectorWidth) * (headPulDiameter / 1.15d) * 2d, 2);
             return Math.Round(shellWeldLength + circularWeldLength + headWeldLength, 2);
+        }
+
+        private static (double ShellWeldLength, double HeadWeldLength, double CircumferenceWeldLength, double TotalWeldLength) CalculateWeldBreakdown(double diameter, double shellLength, double sectorWidth)
+        {
+            var sectorCount = shellLength / sectorWidth;
+            var shellWeldLength = sectorCount * diameter * Math.PI;
+            var circumferenceWeldLength = shellWeldLength + (Math.PI * diameter);
+            var headPulDiameter = 1.17d * diameter;
+            var headWeldLength = (headPulDiameter / sectorWidth) * (headPulDiameter / 1.15d) * 2d;
+            var totalWeldLength = circumferenceWeldLength + headWeldLength;
+
+            return (Math.Round(shellWeldLength, 2), Math.Round(headWeldLength, 2), Math.Round(circumferenceWeldLength, 2), Math.Round(totalWeldLength, 2));
+        }
+
+        private static double CalculateWeldConsumableCost(double totalWeldLengthMm)
+        {
+            var totalWeldLengthM = totalWeldLengthMm / 1000d;
+            var ratio = totalWeldLengthM
+                + (totalWeldLengthM * WeldConsumableRatio)
+                - ((totalWeldLengthM * WeldConsumableRatio) * WeldConsumableRecoveryRatio);
+            return Math.Round(ratio * 2d, 2);
         }
 
         private static double CalculateStaticPressureBar(double density, TankOrientation orientation, double shellLengthMm, double diameterMm)
