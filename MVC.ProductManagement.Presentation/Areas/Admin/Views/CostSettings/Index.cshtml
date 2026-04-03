@@ -31,7 +31,7 @@
                     @Html.AntiForgeryToken()
                     <div class="col-md-4">
                         <label asp-for="NewLaborRate.HourlyRate" class="form-label">1 Adam/Saat Ücreti</label>
-                        <input asp-for="NewLaborRate.HourlyRate" class="form-control" placeholder="Örn. 17" />
+                        <input asp-for="NewLaborRate.HourlyRate" type="text" inputmode="decimal" class="form-control js-decimal-input" placeholder="Örn. 17 veya 17,25" />
                         <span asp-validation-for="NewLaborRate.HourlyRate" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
@@ -53,7 +53,7 @@
                                         <input type="hidden" name="Id" value="@item.Id" />
                                         <input type="hidden" name="Name" value="@item.Name" />
                                         <div class="col-md-3">
-                                            <input name="HourlyRate" value="@item.HourlyRate.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm" />
+                                            <input name="HourlyRate" type="text" inputmode="decimal" value="@item.HourlyRate.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-decimal-input" />
                                             <div class="small text-muted mt-1">@fmt(item.HourlyRate) TL / saat</div>
                                         </div>
                                         <div class="col-md-7"><input name="Notes" value="@item.Notes" class="form-control form-control-sm" /></div>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-md-4">
                         <label asp-for="NewBombeLaborRate.RatePerKg" class="form-label">Kg Başına İşçilik</label>
-                        <input asp-for="NewBombeLaborRate.RatePerKg" class="form-control" placeholder="Örn. 12,5" />
+                        <input asp-for="NewBombeLaborRate.RatePerKg" type="text" inputmode="decimal" class="form-control js-decimal-input" placeholder="Örn. 12,5 veya 12.5" />
                         <span asp-validation-for="NewBombeLaborRate.RatePerKg" class="text-danger small"></span>
                     </div>
                     <div class="col-md-4 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">Ekle</button></div>
@@ -109,7 +109,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <input name="RatePerKg" value="@item.RatePerKg.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm" />
+                            <input name="RatePerKg" type="text" inputmode="decimal" value="@item.RatePerKg.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-decimal-input" />
                             <div class="small text-muted mt-1">@fmt(item.RatePerKg) TL / kg</div>
                         </div>
                         <div class="col-md-4"><input name="Notes" value="@item.Notes" class="form-control form-control-sm" /></div>
@@ -131,7 +131,7 @@
                     @Html.AntiForgeryToken()
                     <div class="col-md-4">
                         <label asp-for="NewGugHourlyRate.HourlyRate" class="form-label">1 Saatlik GÜG</label>
-                        <input asp-for="NewGugHourlyRate.HourlyRate" class="form-control" placeholder="Örn. 8" />
+                        <input asp-for="NewGugHourlyRate.HourlyRate" type="text" inputmode="decimal" class="form-control js-decimal-input" placeholder="Örn. 8 veya 8,75" />
                         <span asp-validation-for="NewGugHourlyRate.HourlyRate" class="text-danger small"></span>
                     </div>
                     <div class="col-md-5">
@@ -147,7 +147,7 @@
                         <input type="hidden" name="Id" value="@item.Id" />
                         <input type="hidden" name="Name" value="@item.Name" />
                         <div class="col-md-3">
-                            <input name="HourlyRate" value="@item.HourlyRate.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm" />
+                            <input name="HourlyRate" type="text" inputmode="decimal" value="@item.HourlyRate.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-decimal-input" />
                             <div class="small text-muted mt-1">@fmt(item.HourlyRate) TL / saat</div>
                         </div>
                         <div class="col-md-7"><input name="Notes" value="@item.Notes" class="form-control form-control-sm" /></div>
@@ -176,7 +176,7 @@
                     </div>
                     <div class="col-md-3">
                         <label asp-for="NewOverheadRate.Percentage" class="form-label">Oran %</label>
-                        <input asp-for="NewOverheadRate.Percentage" class="form-control" placeholder="Örn. 8,93" />
+                        <input asp-for="NewOverheadRate.Percentage" type="text" inputmode="decimal" class="form-control js-decimal-input" placeholder="Örn. 8,93 veya 8.93" />
                         <span asp-validation-for="NewOverheadRate.Percentage" class="text-danger small"></span>
                     </div>
                     <div class="col-md-4">
@@ -204,7 +204,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <input name="Percentage" value="@item.Percentage.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm" />
+                                            <input name="Percentage" type="text" inputmode="decimal" value="@item.Percentage.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-decimal-input" />
                                             <div class="small text-muted mt-1">%@fmt(item.Percentage)</div>
                                         </div>
                                         <div class="col-md-5"><input name="Notes" value="@item.Notes" class="form-control form-control-sm" /></div>
@@ -226,4 +226,40 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const allowedChars = /[0-9.,\s-]/;
+            const normalizeDecimal = (value) => {
+                if (!value) return value;
+                let normalized = value.trim().replace(/\s+/g, '');
+                const lastComma = normalized.lastIndexOf(',');
+                const lastDot = normalized.lastIndexOf('.');
+                if (lastComma >= 0 && lastDot >= 0) {
+                    normalized = lastComma > lastDot
+                        ? normalized.replace(/\./g, '').replace(',', '.')
+                        : normalized.replace(/,/g, '');
+                } else {
+                    normalized = normalized.replace(',', '.');
+                }
+                return normalized;
+            };
+
+            document.querySelectorAll('.js-decimal-input').forEach((input) => {
+                input.addEventListener('beforeinput', (event) => {
+                    if (!event.data) return;
+                    if (!allowedChars.test(event.data)) {
+                        event.preventDefault();
+                    }
+                });
+            });
+
+            document.querySelectorAll('form').forEach((form) => {
+                form.addEventListener('submit', () => {
+                    form.querySelectorAll('.js-decimal-input').forEach((input) => {
+                        input.value = normalizeDecimal(input.value);
+                    });
+                });
+            });
+        })();
+    </script>
 }
