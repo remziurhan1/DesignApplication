@@ -35,6 +35,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStorageTypeService, StorageTypeService>();
             services.AddScoped<IAD2000CalculationService, AD2000CalculationService>();
             services.AddScoped<IEN13458CalculationServices, EN13458CalculationServices>();
+            services.AddScoped<IEN13458FilmQuantityService, EN13458FilmQuantityService>();
             services.AddScoped<IEN13458MaterialStrengthProvider, EN13458MaterialStrengthProvider>();
             services.AddScoped<IEN13458CalculationManager, EN13458CalculationManager>();
             services.AddScoped<ICryogenicsCalculationEngine, EN13458CalculationEngine>();
