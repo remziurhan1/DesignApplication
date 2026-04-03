@@ -71,8 +71,15 @@ namespace MVC.ProductManagement.Domain.Entities
         public double OuterTankHeadWeight { get; set; }
         public double InnerTankHeadWeldLength { get; set; }
         public double InnerTankCircumferenceWeldLength { get; set; }
+        public double InnerTankShellWeldLength { get; set; }
+        public double InnerTankBombeWeldLength { get; set; }
+        public double InnerTankTotalWeldLength { get; set; }
         public double OuterTankHeadWeldLength { get; set; }
         public double OuterTankCircumferenceWeldLength { get; set; }
+        public double OuterTankShellWeldLength { get; set; }
+        public double OuterTankBombeWeldLength { get; set; }
+        public double OuterTankTotalWeldLength { get; set; }
+        public double StiffenerRingWeldLength { get; set; }
         public double TotalWeldLength { get; set; }
         public double TotalFilmCost { get; set; }
 
