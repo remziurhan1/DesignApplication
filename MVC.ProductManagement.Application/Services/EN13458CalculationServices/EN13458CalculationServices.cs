@@ -891,7 +891,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
         private async Task<EN13458MaterialCostRowDTO?> BuildFilmCountCostRowAsync(EN13458ResultDTO result, EN13458CostAnalysisItem? previous)
         {
-            var totalFilmCount = CalculateFilmCount(result.TotalWeldLength);
+            var weldLengthForFilmCount = result.TotalWeldLength > 0
+                ? result.TotalWeldLength
+                : CalculateInnerTankWeldLength1500(result);
+            var totalFilmCount = CalculateFilmCount(weldLengthForFilmCount);
             if (totalFilmCount <= 0)
             {
                 return null;
