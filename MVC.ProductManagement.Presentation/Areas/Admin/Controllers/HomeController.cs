@@ -42,7 +42,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 StorageTypeCount = await _context.StorageTypes
                     .AsNoTracking()
                     .CountAsync(x => x.Status != Status.Deleted),
-                ThermodynamicPropertyCount = await _context.ThermodynamicProperties
+                ThermodynamicPropertyCount = await _context.ThermodynamicProperties//ss
                     .AsNoTracking()
                     .CountAsync(x => x.Status != Status.Deleted)
             };
