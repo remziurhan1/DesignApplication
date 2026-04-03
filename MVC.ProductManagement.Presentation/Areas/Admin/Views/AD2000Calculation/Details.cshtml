@@ -52,6 +52,13 @@
                         <tr><th>Korozyon Payı</th><td>@Model.CorrosionAllowance.ToString("N2") mm</td><th>Kaynak Faktörü</th><td>@Model.WeldJointFactor.ToString("N2")</td></tr>
                         <tr><th>Tank Yönelimi</th><td>@Model.TankOrientation</td><th>Sıvı</th><td>@(!string.IsNullOrWhiteSpace(Model.StorageTypeName) ? Model.StorageTypeName : "Manuel yoğunluk")</td></tr>
                         <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity.ToString("N2") kg/m³</td><th>Statik Basınç</th><td>@Model.StaticPressure.ToString("N3") bar</td></tr>
+                        <tr><th>Kaynak Metrajı 1500</th><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Kaynak Metrajı 2000</th><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>Kaynak Metrajı 3000</th><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Kaynak Metrajı 4000</th><td>@Model.WeldLength4000.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th colspan="4" class="table-secondary">Kaynak Detayları</th></tr>
+                        <tr><th>Gövde Kaynak Metrajı</th><td>@Model.ShellWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Bombe Kaynak Metrajı (Çevre)</th><td>@(Math.Max(Model.CircumferenceWeldLength - Model.ShellWeldLength, 0d).ToString("0.##", CultureInfo.InvariantCulture)) mm</td></tr>
+                        <tr><th>Toplam Çevre Kaynakları</th><td>@Model.CircumferenceWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>L Kaynakları</th><td>@Model.HeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>Stifner Ring Kaynak Metrajı</th><td>@Model.StiffenerRingWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam Kaynak Metrajı</th><td>@Model.TotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>Kaynak Sarf Maliyeti (Kaynak Teli)</th><td>@Model.WeldConsumableCost.ToString("0.##", CultureInfo.InvariantCulture)</td><th></th><td></td></tr>
                     </tbody>
                 </table>
             </div>

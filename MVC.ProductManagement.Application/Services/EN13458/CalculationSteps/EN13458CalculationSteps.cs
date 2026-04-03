@@ -314,6 +314,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
     {
         private const double HeadPulDiameterCoefficient = 1.17d;
         private const double PerliteDensity = 120d; // kg/m3
+        private const double WeldConsumableRatio = 0.18d;
+        private const double WeldConsumableRecoveryRatio = 0.95d;
 
         public void Execute(EN13458DesignContext context)
         {
@@ -337,8 +339,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var outerTankSectorWeld = outerTankSectorQty * outerDiameter * Math.PI;
             var outerTankCircularWeld = Math.PI * outerDiameter;
 
-            context.Result.InnerTankCircumferenceWeldLength = Math.Round(oneSectorWeld + oneHeadCircularWeld);
-            context.Result.OuterTankCircumferenceWeldLength = Math.Round(outerTankSectorWeld + outerTankCircularWeld);
+            context.Result.InnerTankShellWeldLength = Math.Round(oneSectorWeld, 2);
+            context.Result.InnerTankBombeWeldLength = Math.Round(oneHeadCircularWeld, 2);
+            context.Result.InnerTankCircumferenceWeldLength = Math.Round(oneSectorWeld + oneHeadCircularWeld, 2);
+
+            context.Result.OuterTankShellWeldLength = Math.Round(outerTankSectorWeld, 2);
+            context.Result.OuterTankBombeWeldLength = Math.Round(outerTankCircularWeld, 2);
+            context.Result.OuterTankCircumferenceWeldLength = Math.Round(outerTankSectorWeld + outerTankCircularWeld, 2);
 
             var innerHeadPulDiameter = HeadPulDiameterCoefficient * innerDiameter;
             var outerHeadPulDiameter = HeadPulDiameterCoefficient * outerDiameter;
@@ -349,15 +356,11 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             context.Result.OuterTankHeadWeldLength =
                 Math.Round(((outerHeadPulDiameter / sectorWidth) * (outerHeadPulDiameter / 1.15d) * 2d), 2);
 
-            context.Result.TotalWeldLength =
-                Math.Round(
-                    context.Result.InnerTankHeadWeldLength
-                    + context.Result.InnerTankCircumferenceWeldLength
-                    + context.Result.OuterTankHeadWeldLength
-                    + context.Result.OuterTankCircumferenceWeldLength,
-                    2);
-
-            context.Result.TotalFilmCost = 0d;
+            context.Result.InnerTankTotalWeldLength = Math.Round(context.Result.InnerTankCircumferenceWeldLength + context.Result.InnerTankHeadWeldLength, 2);
+            context.Result.OuterTankTotalWeldLength = Math.Round(context.Result.OuterTankCircumferenceWeldLength + context.Result.OuterTankHeadWeldLength, 2);
+            context.Result.StiffenerRingWeldLength = 0d;
+            context.Result.TotalWeldLength = Math.Round(context.Result.InnerTankTotalWeldLength + context.Result.OuterTankTotalWeldLength, 2);
+            context.Result.TotalFilmCost = CalculateWeldConsumableCost(context.Result.TotalWeldLength);
 
             context.Result.PerliteVolume =
                 Math.Round(Math.Max(context.Result.OuterVolume - context.Result.InnerVolume, 0d), 2);
@@ -379,6 +382,16 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var outerHeadWeld = ((outerHeadPulDiameter / sourceLength) * (outerHeadPulDiameter / 1.15d) * 2d);
 
             return Math.Round(innerCircumferenceWeld + innerHeadWeld + outerCircumferenceWeld + outerHeadWeld, 2);
+        }
+
+        internal static double CalculateWeldConsumableCost(double totalWeldLengthMm)
+        {
+            var totalWeldLengthM = totalWeldLengthMm / 1000d;
+            var ratio = totalWeldLengthM
+                + (totalWeldLengthM * WeldConsumableRatio)
+                - ((totalWeldLengthM * WeldConsumableRatio) * WeldConsumableRecoveryRatio);
+
+            return Math.Round(ratio * 2d, 2);
         }
 
     }
@@ -491,6 +504,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             context.Result.ProfileDevelopedLength = Math.Round(profileDevelopedLength, 2);
             context.Result.TotalProfileLength = Math.Round(totalProfileLength, 2);
             context.Result.ProfileWeldLength = Math.Round(profileWeldLength, 2);
+            context.Result.StiffenerRingWeldLength = context.Result.ProfileWeldLength;
+            context.Result.TotalWeldLength = Math.Round(context.Result.InnerTankTotalWeldLength + context.Result.OuterTankTotalWeldLength + context.Result.StiffenerRingWeldLength, 2);
+            context.Result.TotalFilmCost = WeldFilmPerliteStep.CalculateWeldConsumableCost(context.Result.TotalWeldLength);
         }
     }
 
