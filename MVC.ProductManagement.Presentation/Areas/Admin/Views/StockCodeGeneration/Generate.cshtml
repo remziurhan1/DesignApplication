@@ -1,74 +1,132 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog.GeneratedStockCodeVm
 @using Microsoft.AspNetCore.Mvc.Rendering
 
-<h4>Stok Kodu Üretimi</h4>
-<p class="text-muted">Alt grup seçin, her kural grubundan uygun seçeneği belirleyin. Stok kodu ilk 4 karakter alt grup kodu + 4 haneli sayaç olarak üretilir ve açıklama seçilen özelliklerden otomatik oluşturulur.</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1">Stok Kodu Üretimi</h4>
+        <p class="text-muted mb-0">Alt grup seçin, kural seçimlerini yapın ve stok kodunu profesyonel akışla oluşturun.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-list-ul me-1"></i>Stok Kodları
+    </a>
+</div>
 
 <form asp-action="Generate" method="post" enctype="multipart/form-data" id="generate-form">
     @Html.AntiForgeryToken()
 
-    <div class="mb-3">
-        <label class="form-label">Alt Grup</label>
-        <select id="StockSubCodeGroupId" asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select">
-            <option value="">Alt grup seçiniz...</option>
-        </select>
-    </div>
+    <div class="row g-4">
+        <div class="col-12 col-xl-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">1) Kural Seçimi</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Alt Grup</label>
+                        <select id="StockSubCodeGroupId" asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select">
+                            <option value="">Alt grup seçiniz...</option>
+                        </select>
+                    </div>
 
-    <div class="mb-3">
-        <label class="form-label">Alt Gruba Ait Kural Grupları</label>
-        <div id="rules-container" class="border rounded p-2">
-            <span class="text-muted">Alt grup seçiniz...</span>
+                    <div class="mb-3">
+                        <label class="form-label">Alt Gruba Ait Kural Grupları</label>
+                        <div id="rules-container" class="border rounded p-3 bg-body-tertiary">
+                            <span class="text-muted">Alt grup seçiniz...</span>
+                        </div>
+                        <div class="form-text">Her kural grubundan uygun seçeneği dropdown ile belirleyin.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Stok Kodu Açıklaması (otomatik)</label>
+                        <textarea id="description-preview" class="form-control" rows="3" readonly></textarea>
+                    </div>
+
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="include-custom-description" />
+                        <label class="form-check-label" for="include-custom-description">Ek açıklama eklemek istiyorum</label>
+                    </div>
+
+                    <div id="custom-description-wrapper" class="mb-3" style="display:none;">
+                        <label class="form-label">Ek Açıklama</label>
+                        <textarea id="custom-description" class="form-control" rows="3" placeholder="Opsiyonel ek açıklama"></textarea>
+                    </div>
+
+                    <input id="description" asp-for="Description" type="hidden" />
+
+                    <button id="btn-generate" type="button" class="btn btn-outline-primary">
+                        <i class="bi bi-magic me-1"></i>Kod Üret
+                    </button>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">2) Fiyat ve Birim Bilgileri</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="UnitPrice" class="form-label">Birim Fiyat</label>
+                            <input id="unit-price" asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label>
+                            <input id="target-price" asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6">
+                            <label asp-for="PrimaryUnitType" class="form-label">1. Birim</label>
+                            <select asp-for="PrimaryUnitType" class="form-select" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.PrimaryUnitType>()"></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="KgEquivalentPerPrimaryUnit" class="form-label">2. Birim (KG karşılığı)</label>
+                            <input asp-for="KgEquivalentPerPrimaryUnit" type="number" min="0.0001" step="0.0001" class="form-control" />
+                            <div class="form-text">Örn: 1 metre profil = 3.2 kg için 3.2 girin.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-text">Her kural grubundan uygun seçeneği dropdown ile belirleyin.</div>
-    </div>
 
-    <div class="mb-3">
-        <label class="form-label">Stok Kodu Açıklaması (otomatik)</label>
-        <textarea id="description-preview" class="form-control" readonly></textarea>
-    </div>
+        <div class="col-12 col-xl-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-info-subtle text-info-emphasis fw-semibold">3) Üretilen Kod</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="GeneratedCode" class="form-label">Üretilen Kod</label>
+                        <input id="generated-code" asp-for="GeneratedCode" class="form-control form-control-lg fw-semibold" readonly />
+                    </div>
+                    <div id="generate-info" class="small text-muted">
+                        Format: ilk 4 karakter alt grup kodu + 4 haneli sıra (örn. SFCA0001).
+                    </div>
+                </div>
+            </div>
 
-    <div class="form-check mb-2">
-        <input class="form-check-input" type="checkbox" id="include-custom-description" />
-        <label class="form-check-label" for="include-custom-description">Ek açıklama eklemek istiyorum</label>
-    </div>
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold">4) Dosya Ekleri</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Step3DFile" class="form-label">STEP (3D)</label>
+                        <input asp-for="Step3DFile" type="file" class="form-control" accept=".step,.stp,.stl,.igs,.iges" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="DatasheetFile" class="form-label">Datasheet</label>
+                        <input asp-for="DatasheetFile" type="file" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="DxfFile1" class="form-label">DXF 1 (Kesim)</label>
+                        <input asp-for="DxfFile1" type="file" class="form-control" accept=".dxf" />
+                    </div>
+                    <div>
+                        <label asp-for="DxfFile2" class="form-label">DXF 2 (Kesim)</label>
+                        <input asp-for="DxfFile2" type="file" class="form-control" accept=".dxf" />
+                    </div>
+                </div>
+            </div>
 
-    <div id="custom-description-wrapper" class="mb-3" style="display:none;">
-        <label class="form-label">Ek Açıklama</label>
-        <textarea id="custom-description" class="form-control" placeholder="Opsiyonel ek açıklama"></textarea>
-    </div>
-
-    <input id="description" asp-for="Description" type="hidden" />
-
-    <div class="mb-3">
-        <button id="btn-generate" type="button" class="btn btn-outline-primary">Kod Üret</button>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="GeneratedCode" class="form-label">Üretilen Kod</label>
-        <input id="generated-code" asp-for="GeneratedCode" class="form-control" readonly />
-        <div id="generate-info" class="form-text">Format: ilk 4 karakter alt grup kodu + 4 haneli sıra (örn. SFCA0001).</div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="UnitPrice" class="form-label">Birim Fiyat</label>
-            <input id="unit-price" asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
-        </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label>
-            <input id="target-price" asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="PrimaryUnitType" class="form-label">1. Birim</label>
-            <select asp-for="PrimaryUnitType" class="form-select" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.PrimaryUnitType>()"></select>
-        </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="KgEquivalentPerPrimaryUnit" class="form-label">2. Birim (KG karşılığı)</label>
-            <input asp-for="KgEquivalentPerPrimaryUnit" type="number" min="0.0001" step="0.0001" class="form-control" />
-            <div class="form-text">Örn: 1 metre profil = 3.2 kg için 3.2 girin.</div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="bi bi-save me-1"></i>Üretilen Kodu Kaydet
+                </button>
+            </div>
         </div>
     </div>
 
@@ -78,30 +136,7 @@
     <input asp-for="DxfFilePath2" type="hidden" />
     <input asp-for="DatasheetFilePath" type="hidden" />
 
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="Step3DFile" class="form-label">STEP (3D)</label>
-            <input asp-for="Step3DFile" type="file" class="form-control" accept=".step,.stp,.stl,.igs,.iges" />
-        </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="DatasheetFile" class="form-label">Datasheet</label>
-            <input asp-for="DatasheetFile" type="file" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="DxfFile1" class="form-label">DXF 1 (Kesim)</label>
-            <input asp-for="DxfFile1" type="file" class="form-control" accept=".dxf" />
-        </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="DxfFile2" class="form-label">DXF 2 (Kesim)</label>
-            <input asp-for="DxfFile2" type="file" class="form-control" accept=".dxf" />
-        </div>
-    </div>
-
     <div id="selected-rule-inputs"></div>
-
-    <button type="submit" class="btn btn-success">Üretilen Kodu Kaydet</button>
 </form>
 
 <script>
@@ -191,8 +226,8 @@
                     .join('');
 
                 return `
-                    <div class="mb-2">
-                        <label class="form-label mb-1"><strong>${groupName}</strong></label>
+                    <div class="mb-3 p-2 border rounded bg-white">
+                        <label class="form-label mb-1 fw-semibold">${groupName}</label>
                         <select class="form-select form-select-sm rule-group-select" data-group-name="${groupName}">
                             <option value="">Seçiniz...</option>
                             ${options}
