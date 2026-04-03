@@ -17,80 +17,37 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             _context = context;
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    var vm = new TechnicalDashboardVm
-        //    {
-        //        En13458CalculationCount = await _context.EN13458Calculations
-        //            .AsNoTracking()
-        //            .CountAsync(x => x.Status != Status.Deleted),
-        //        Ad2000CalculationCount = await _context.AD2000Calculations
-        //            .AsNoTracking()
-        //            .CountAsync(x => x.Status != Status.Deleted),
-        //        MaterialCount = await _context.Materials
-        //            .AsNoTracking()
-        //            .CountAsync(x => x.Status != Status.Deleted),
-        //        CustomerCount = await _context.Customers
-        //            .AsNoTracking()
-        //            .CountAsync(x => x.Status != Status.Deleted),
-        //        ActiveSalesRequestCount = await _context.SalesRequests
-        //            .AsNoTracking()
-        //            .CountAsync(x => x.Status != Status.Deleted)
-        //    };
+        public async Task<IActionResult> Index()
+        {
+            var vm = new TechnicalDashboardVm
+            {
+                En13458CalculationCount = await _context.EN13458Calculations
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                Ad2000CalculationCount = await _context.AD2000Calculations
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                MaterialCount = await _context.Materials
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                MaterialFormCount = await _context.MaterialForms
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                YieldStrengthCount = await _context.YieldStrengths
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                AllowableStressCount = await _context.AllowableStresses
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                StorageTypeCount = await _context.StorageTypes
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted),
+                ThermodynamicPropertyCount = await _context.ThermodynamicProperties//ss
+                    .AsNoTracking()
+                    .CountAsync(x => x.Status != Status.Deleted)
+            };
 
-        //    vm.RecentActivities = await BuildRecentActivitiesAsync();
-
-        //    return View(vm);
-        //}
-
-        //private async Task<List<TechnicalActivityVm>> BuildRecentActivitiesAsync()
-        //{
-        //    var activities = new List<TechnicalActivityVm>();
-
-        //    var recentEn = await _context.EN13458Calculations
-        //        .AsNoTracking()
-        //        .Where(x => x.Status != Status.Deleted)
-        //        .OrderByDescending(x => x.ModifiedDate ?? x.CreatedDate)
-        //        .Take(5)
-        //        .Select(x => new TechnicalActivityVm
-        //        {
-        //            Title = $"EN13458 hesap güncellendi: {x.Name}",
-        //            Date = x.ModifiedDate ?? x.CreatedDate
-        //        })
-        //        .ToListAsync();
-
-        //    var recentAd = await _context.AD2000Calculations
-        //        .AsNoTracking()
-        //        .Where(x => x.Status != Status.Deleted)
-        //        .OrderByDescending(x => x.ModifiedDate ?? x.CreatedDate)
-        //        .Take(5)
-        //        .Select(x => new TechnicalActivityVm
-        //        {
-        //            Title = $"AD2000 hesap güncellendi: {x.Name}",
-        //            Date = x.ModifiedDate ?? x.CreatedDate
-        //        })
-        //        .ToListAsync();
-
-        //    var recentRequests = await _context.SalesRequests
-        //        .AsNoTracking()
-        //        .Where(x => x.Status != Status.Deleted)
-        //        .OrderByDescending(x => x.ModifiedDate ?? x.CreatedDate)
-        //        .Take(5)
-        //        .Select(x => new TechnicalActivityVm
-        //        {
-        //            Title = $"Talep güncellendi: {x.RequestNo}",
-        //            Date = x.ModifiedDate ?? x.CreatedDate
-        //        })
-        //        .ToListAsync();
-
-        //    activities.AddRange(recentEn);
-        //    activities.AddRange(recentAd);
-        //    activities.AddRange(recentRequests);
-
-        //    return activities
-        //        .OrderByDescending(x => x.Date)
-        //        .Take(10)
-        //        .ToList();
-        //}
+            return View(vm);
+        }
     }
 }

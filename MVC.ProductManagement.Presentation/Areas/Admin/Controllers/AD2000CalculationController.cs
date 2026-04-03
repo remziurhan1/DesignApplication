@@ -139,6 +139,31 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SalesPrice(Guid id, Guid costAnalysisId)
+        {
+            var dto = await _calculationService.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            var vm = MapResultVm(dto);
+            vm.SelectedCostAnalysisId = costAnalysisId;
+            await PopulateDisplayNamesAsync(vm);
+            vm.CostAnalyses = await _calculationService.GetCostAnalysesAsync(id);
+
+            var costTable = await _calculationService.GetCostAnalysisAsync(id, costAnalysisId);
+            if (costTable == null)
+            {
+                TempData["ErrorMessage"] = "Önce maliyet analizi oluşturup uygulayın.";
+                return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            }
+
+            await PopulateCostParameterLookupsAsync(costTable);
+            ViewBag.CostTable = costTable;
+
+            return View(vm);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Calculate()
         {
             await LoadLookupsAsync();
@@ -323,7 +348,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            return RedirectToAction(nameof(SalesPrice), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -352,7 +377,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            return RedirectToAction(nameof(SalesPrice), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -370,7 +395,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            return RedirectToAction(nameof(SalesPrice), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -390,7 +415,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Cost), new { id, costAnalysisId });
+            return RedirectToAction(nameof(SalesPrice), new { id, costAnalysisId });
         }
 
         [HttpPost]
@@ -525,7 +550,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.GugRateOptions = gugHourlyRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.GugHourlyRateId == x.Id)).ToList();
             ViewBag.FinanceRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "Finance", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.FinanceOverheadRateId == x.Id)).ToList();
             ViewBag.GeneralManagementRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "GeneralManagement", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.GeneralManagementOverheadRateId == x.Id)).ToList();
-            ViewBag.HeadBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} TL/kg", x.Id.ToString(), costTable.HeadBombeLaborRateId == x.Id)).ToList();
+            ViewBag.HeadBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} €/kg", x.Id.ToString(), costTable.HeadBombeLaborRateId == x.Id)).ToList();
         }
 
         private double? ReadLocalizedDoubleFromForm(string key, double? fallback = null)
