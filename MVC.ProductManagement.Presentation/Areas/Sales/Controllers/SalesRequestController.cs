@@ -996,6 +996,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                 vm.RoundedHeadThickness = $"İç: {calculation.RoundedInnerHeadThickness:N2} mm / Dış: {calculation.RoundedOuterHeadThickness:N2} mm";
                 vm.InnerTankLength = $"{calculation.InnerTankTotalLength:N2} mm";
                 vm.TankDiameter = $"İç: {calculation.OuterDiameter:N2} mm / Dış: {calculation.OuterTankDiameter:N2} mm";
+                var innerBombeWeldLength = calculation.InnerTankBombeWeldLength > 0
+                    ? calculation.InnerTankBombeWeldLength
+                    : Math.Round(Math.PI * calculation.OuterDiameter, 2);
+                var outerBombeWeldLength = calculation.OuterTankBombeWeldLength > 0
+                    ? calculation.OuterTankBombeWeldLength
+                    : Math.Round(Math.PI * calculation.OuterTankDiameter, 2);
 
                 vm.TankDetailFields = new List<SalesRequestTechnicalFieldVm>
                 {
@@ -1012,6 +1018,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     new() { Label = "Yuvarlanmış Dış Bombe Et", Value = $"{calculation.RoundedOuterHeadThickness:N2} mm" },
                     new() { Label = "İç Tank Toplam Uzunluk", Value = $"{calculation.InnerTankTotalLength:N2} mm" },
                     new() { Label = "Dış Tank Toplam Uzunluk", Value = $"{calculation.OuterTankTotalLength:N2} mm" },
+                    new() { Label = "İç Bombe Kaynak Metrajı", Value = $"{innerBombeWeldLength:N2} mm" },
+                    new() { Label = "Dış Bombe Kaynak Metrajı", Value = $"{outerBombeWeldLength:N2} mm" },
                     new() { Label = "Toplam Kaynak Uzunluğu", Value = $"{calculation.TotalWeldLength:N2} m" }
                 };
 
@@ -1026,6 +1034,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Sales.Controllers
                     new() { Label = "Sıvı Yoğunluğu", Value = $"{calculation.LiquidDensity:N2}" },
                     new() { Label = "Tank Yönelimi", Value = "Horizontal" },
                     new() { Label = "Kaynak metrajları", Value = $"1500: {calculation.WeldLength1500:N2} m | 2000: {calculation.WeldLength2000:N2} m | 2500: {calculation.WeldLength2500:N2} m | 3000: {calculation.WeldLength3000:N2} m" },
+                    new() { Label = "İç Bombe Kaynak Metrajı", Value = $"{innerBombeWeldLength:N2} mm" },
+                    new() { Label = "Dış Bombe Kaynak Metrajı", Value = $"{outerBombeWeldLength:N2} mm" },
                     new() { Label = "İç Tank Kaynak Metrajı", Value = $"{(calculation.InnerTankHeadWeldLength + calculation.InnerTankCircumferenceWeldLength):N2} m" },
                     new() { Label = "Dış Tank Kaynak Metrajı", Value = $"{(calculation.OuterTankHeadWeldLength + calculation.OuterTankCircumferenceWeldLength):N2} m" },
                     new() { Label = "Toplam Kaynak", Value = $"{calculation.TotalWeldLength:N2} m" }
