@@ -720,12 +720,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 rows.Add(profileRow);
             }
 
-            var filmCountRow = await BuildFilmCountCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
-            if (filmCountRow is not null)
-            {
-                rows.Add(filmCountRow);
-            }
-
             if (previousItems != null)
             {
                 rows.AddRange(previousItems
