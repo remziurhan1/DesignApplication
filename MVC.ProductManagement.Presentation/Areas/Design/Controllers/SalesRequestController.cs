@@ -23,6 +23,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            if (!await HasDesignPermissionAsync(x => x.CanAccessDesignArea))
+            {
+                return Forbid();
+            }
+
             var requests = await _context.SalesRequests
                 .AsNoTracking()
                 .Include(x => x.Customer)
@@ -54,6 +59,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanAccessDesignArea))
+            {
+                return Forbid();
+            }
+
             var request = await _context.SalesRequests
                 .AsNoTracking()
                 .Include(x => x.Customer)
@@ -247,6 +257,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
         [HttpGet]
         public async Task<IActionResult> CalculationResult(Guid requestId, Guid itemId)
         {
+            if (!await HasDesignPermissionAsync(x => x.CanManageDesignCalculations || x.CanAccessDesignArea))
+            {
+                return Forbid();
+            }
+
             var request = await _context.SalesRequests
                 .AsNoTracking()
                 .Include(x => x.Items)

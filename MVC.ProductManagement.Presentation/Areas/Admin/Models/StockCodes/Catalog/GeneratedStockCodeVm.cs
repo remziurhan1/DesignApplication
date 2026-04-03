@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using MVC.ProductManagement.Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog
 {
@@ -34,5 +35,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catal
 
         [Range(0.0001, 999999999)]
         public decimal KgEquivalentPerPrimaryUnit { get; set; } = 1m;
+
+        public string? Step3DFilePath { get; set; }
+        public string? DxfFilePath1 { get; set; }
+        public string? DxfFilePath2 { get; set; }
+        public string? DatasheetFilePath { get; set; }
+
+        public IFormFile? Step3DFile { get; set; }
+        public IFormFile? DxfFile1 { get; set; }
+        public IFormFile? DxfFile2 { get; set; }
+        public IFormFile? DatasheetFile { get; set; }
     }
 }

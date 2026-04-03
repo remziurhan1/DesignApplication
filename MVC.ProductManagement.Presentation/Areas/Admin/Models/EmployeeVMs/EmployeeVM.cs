@@ -13,6 +13,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs
         public string Email { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
         public bool CanAccessSalesArea { get; set; }
+        public bool CanAccessDesignArea { get; set; }
     }
 
     public class EmployeeUpdateVm
@@ -45,6 +46,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs
         public bool CanManageSalesCustomers { get; set; }
         public bool CanCreateSalesRequests { get; set; }
         public bool CanViewSalesPricing { get; set; }
+        public bool CanAccessDesignArea { get; set; }
+        public bool CanManageDesignCalculations { get; set; }
+        public bool CanCreateStockCodes { get; set; }
+        public bool CanEditStockCodes { get; set; }
+        public bool CanAccessMaterialGroups { get; set; }
+        public bool CanManageMaterials { get; set; }
     }
 
     public class EmployeeCreateVm
@@ -79,5 +86,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs
         public bool CanManageSalesCustomers { get; set; }
         public bool CanCreateSalesRequests { get; set; }
         public bool CanViewSalesPricing { get; set; }
+        public bool CanAccessDesignArea { get; set; }
+        public bool CanManageDesignCalculations { get; set; }
+        public bool CanCreateStockCodes { get; set; }
+        public bool CanEditStockCodes { get; set; }
+        public bool CanAccessMaterialGroups { get; set; }
+        public bool CanManageMaterials { get; set; }
     }
 }

@@ -80,7 +80,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                         TargetPrice = x.TargetPrice,
                         PrimaryUnitType = x.PrimaryUnitType,
                         KgEquivalentPerPrimaryUnit = x.KgEquivalentPerPrimaryUnit,
-                        CurrentStock = lastStocks.TryGetValue(x.Id, out var currentStock) ? currentStock : 0
+                        CurrentStock = lastStocks.TryGetValue(x.Id, out var currentStock) ? currentStock : 0,
+                        Step3DFilePath = x.Step3DFilePath,
+                        DxfFilePath1 = x.DxfFilePath1,
+                        DxfFilePath2 = x.DxfFilePath2,
+                        DatasheetFilePath = x.DatasheetFilePath
                     };
                 })
                 .ToList();
@@ -114,7 +118,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 UnitPrice = item.UnitPrice,
                 TargetPrice = item.TargetPrice,
                 PrimaryUnitType = item.PrimaryUnitType,
-                KgEquivalentPerPrimaryUnit = item.KgEquivalentPerPrimaryUnit
+                KgEquivalentPerPrimaryUnit = item.KgEquivalentPerPrimaryUnit,
+                Step3DFilePath = item.Step3DFilePath,
+                DxfFilePath1 = item.DxfFilePath1,
+                DxfFilePath2 = item.DxfFilePath2,
+                DatasheetFilePath = item.DatasheetFilePath
             };
         }
 
@@ -154,6 +162,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var description = string.IsNullOrWhiteSpace(dto.Description)
                 ? await ComposeDescriptionAsync(dto.StockSubCodeGroupId, dto.SelectedRuleIds, null)
                 : dto.Description.Trim();
+            EnsureAtLeastOneAttachment(dto.Step3DFilePath, dto.DxfFilePath1, dto.DxfFilePath2, dto.DatasheetFilePath);
 
             var entity = new GeneratedStockCode
             {
@@ -165,7 +174,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 UnitPrice = dto.UnitPrice,
                 TargetPrice = dto.TargetPrice,
                 PrimaryUnitType = dto.PrimaryUnitType,
-                KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit
+                KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit,
+                Step3DFilePath = dto.Step3DFilePath,
+                DxfFilePath1 = dto.DxfFilePath1,
+                DxfFilePath2 = dto.DxfFilePath2,
+                DatasheetFilePath = dto.DatasheetFilePath
             };
 
             await _repository.AddAsync(entity);
@@ -188,6 +201,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             entity.TargetPrice = dto.TargetPrice;
             entity.PrimaryUnitType = dto.PrimaryUnitType;
             entity.KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit;
+            entity.Step3DFilePath = dto.Step3DFilePath;
+            entity.DxfFilePath1 = dto.DxfFilePath1;
+            entity.DxfFilePath2 = dto.DxfFilePath2;
+            entity.DatasheetFilePath = dto.DatasheetFilePath;
+            EnsureAtLeastOneAttachment(entity.Step3DFilePath, entity.DxfFilePath1, entity.DxfFilePath2, entity.DatasheetFilePath);
 
             await _repository.UpdateAsync(entity);
             await SaveRuleSelectionsAsync(entity.Id, dto.SelectedRuleIds);
@@ -374,6 +392,19 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             }
 
             return normalized;
+        }
+
+        private static void EnsureAtLeastOneAttachment(string? step3D, string? dxf1, string? dxf2, string? datasheet)
+        {
+            var hasAny = !string.IsNullOrWhiteSpace(step3D)
+                         || !string.IsNullOrWhiteSpace(dxf1)
+                         || !string.IsNullOrWhiteSpace(dxf2)
+                         || !string.IsNullOrWhiteSpace(datasheet);
+
+            if (!hasAny)
+            {
+                throw new Exception("Stok kodu için STEP, DXF veya Datasheet dosyalarından en az biri zorunludur.");
+            }
         }
 
         public async Task<IReadOnlyList<GeneratedStockCodeInventoryMovementDto>> GetInventoryMovementsAsync(Guid generatedStockCodeId)

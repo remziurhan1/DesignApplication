@@ -18,6 +18,10 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public PrimaryUnitType PrimaryUnitType { get; set; }
         public decimal KgEquivalentPerPrimaryUnit { get; set; }
         public int CurrentStock { get; set; }
+        public string? Step3DFilePath { get; set; }
+        public string? DxfFilePath1 { get; set; }
+        public string? DxfFilePath2 { get; set; }
+        public string? DatasheetFilePath { get; set; }
     }
 
     public class GeneratedStockCodeDetailDto : GeneratedStockCodeListDto { }
@@ -34,6 +38,10 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public decimal? TargetPrice { get; set; }
         public PrimaryUnitType PrimaryUnitType { get; set; } = PrimaryUnitType.Adet;
         public decimal KgEquivalentPerPrimaryUnit { get; set; } = 1m;
+        public string? Step3DFilePath { get; set; }
+        public string? DxfFilePath1 { get; set; }
+        public string? DxfFilePath2 { get; set; }
+        public string? DatasheetFilePath { get; set; }
     }
 
     public class GeneratedStockCodeUpdateDto
@@ -46,6 +54,10 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
         public decimal? TargetPrice { get; set; }
         public PrimaryUnitType PrimaryUnitType { get; set; } = PrimaryUnitType.Adet;
         public decimal KgEquivalentPerPrimaryUnit { get; set; } = 1m;
+        public string? Step3DFilePath { get; set; }
+        public string? DxfFilePath1 { get; set; }
+        public string? DxfFilePath2 { get; set; }
+        public string? DatasheetFilePath { get; set; }
     }
 
     public class GeneratedStockCodeResolveDto

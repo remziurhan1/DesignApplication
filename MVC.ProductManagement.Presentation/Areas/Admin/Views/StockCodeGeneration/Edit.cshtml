@@ -4,12 +4,16 @@
 <h4>Stok Kodu Düzenle</h4>
 <p class="text-muted">Alt gruba ait kural seçeneklerini güncelleyebilir, checkbox ile ek açıklama yazabilir ve fiyat bilgilerini değiştirebilirsiniz.</p>
 
-<form asp-action="Edit" method="post" id="edit-form">
+<form asp-action="Edit" method="post" enctype="multipart/form-data" id="edit-form">
     @Html.AntiForgeryToken()
     <input asp-for="Id" type="hidden" />
     <input asp-for="StockSubCodeGroupId" type="hidden" id="StockSubCodeGroupId" />
     <input asp-for="StockSubCodeRuleId" id="stock-sub-code-rule-id" type="hidden" />
     <input id="description" asp-for="Description" type="hidden" />
+    <input asp-for="Step3DFilePath" type="hidden" />
+    <input asp-for="DxfFilePath1" type="hidden" />
+    <input asp-for="DxfFilePath2" type="hidden" />
+    <input asp-for="DatasheetFilePath" type="hidden" />
 
     <div class="mb-3">
         <label class="form-label">Alt Grup</label>
@@ -66,6 +70,44 @@
         <div class="col-md-6 mb-3">
             <label asp-for="KgEquivalentPerPrimaryUnit" class="form-label">2. Birim (KG karşılığı)</label>
             <input asp-for="KgEquivalentPerPrimaryUnit" type="number" min="0.0001" step="0.0001" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Step3DFile" class="form-label">STEP (3D)</label>
+            <input asp-for="Step3DFile" type="file" class="form-control" accept=".step,.stp,.stl,.igs,.iges" />
+            @if (!string.IsNullOrWhiteSpace(Model.Step3DFilePath))
+            {
+                <div class="form-text">Mevcut: <a href="@Model.Step3DFilePath" target="_blank">STEP Dosyası</a></div>
+            }
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="DatasheetFile" class="form-label">Datasheet</label>
+            <input asp-for="DatasheetFile" type="file" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx" />
+            @if (!string.IsNullOrWhiteSpace(Model.DatasheetFilePath))
+            {
+                <div class="form-text">Mevcut: <a href="@Model.DatasheetFilePath" target="_blank">Datasheet</a></div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="DxfFile1" class="form-label">DXF 1 (Kesim)</label>
+            <input asp-for="DxfFile1" type="file" class="form-control" accept=".dxf" />
+            @if (!string.IsNullOrWhiteSpace(Model.DxfFilePath1))
+            {
+                <div class="form-text">Mevcut: <a href="@Model.DxfFilePath1" target="_blank">DXF 1</a></div>
+            }
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="DxfFile2" class="form-label">DXF 2 (Kesim)</label>
+            <input asp-for="DxfFile2" type="file" class="form-control" accept=".dxf" />
+            @if (!string.IsNullOrWhiteSpace(Model.DxfFilePath2))
+            {
+                <div class="form-text">Mevcut: <a href="@Model.DxfFilePath2" target="_blank">DXF 2</a></div>
+            }
         </div>
     </div>
 

@@ -19,7 +19,7 @@
 </form>
 
 <table class="table table-striped">
-    <thead><tr><th>Ana/Alt Grup</th><th>Kod</th><th>Açıklama</th><th>1. Birim</th><th>KG Karşılığı</th><th>Mevcut Stok</th><th>Birim Fiyat</th><th>Hedef Fiyat</th><th>İşlem</th></tr></thead>
+    <thead><tr><th>Ana/Alt Grup</th><th>Kod</th><th>Açıklama</th><th>Dosyalar</th><th>1. Birim</th><th>KG Karşılığı</th><th>Mevcut Stok</th><th>Birim Fiyat</th><th>Hedef Fiyat</th><th>İşlem</th></tr></thead>
     <tbody>
     @foreach (var item in Model)
     {
@@ -27,6 +27,24 @@
             <td>@item.MainGroupCode / @item.SubGroupCode - @item.SubGroupName</td>
             <td>@item.GeneratedCode</td>
             <td>@item.Description</td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(item.Step3DFilePath))
+                {
+                    <a href="@item.Step3DFilePath" target="_blank" class="badge bg-primary text-decoration-none">STEP</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.DxfFilePath1))
+                {
+                    <a href="@item.DxfFilePath1" target="_blank" class="badge bg-info text-decoration-none">DXF-1</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.DxfFilePath2))
+                {
+                    <a href="@item.DxfFilePath2" target="_blank" class="badge bg-info text-decoration-none">DXF-2</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.DatasheetFilePath))
+                {
+                    <a href="@item.DatasheetFilePath" target="_blank" class="badge bg-secondary text-decoration-none">Datasheet</a>
+                }
+            </td>
             <td>@item.PrimaryUnitType</td>
             <td>@item.KgEquivalentPerPrimaryUnit.ToString("N4")</td>
             <td>@item.CurrentStock</td>

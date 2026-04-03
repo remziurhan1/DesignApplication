@@ -66,6 +66,33 @@
                 <label asp-for="CanViewSalesPricing" class="form-check-label"></label>
             </div>
 
+            <hr />
+            <h5>Dizayn Yetkileri</h5>
+            <div class="form-check">
+                <input asp-for="CanAccessDesignArea" class="form-check-input" />
+                <label asp-for="CanAccessDesignArea" class="form-check-label">Dizayn ekranını görebilsin</label>
+            </div>
+            <div class="form-check">
+                <input asp-for="CanManageDesignCalculations" class="form-check-input" />
+                <label asp-for="CanManageDesignCalculations" class="form-check-label">Hesap modüllerine erişebilsin</label>
+            </div>
+            <div class="form-check">
+                <input asp-for="CanCreateStockCodes" class="form-check-input" />
+                <label asp-for="CanCreateStockCodes" class="form-check-label">Stok kodu açabilsin</label>
+            </div>
+            <div class="form-check">
+                <input asp-for="CanEditStockCodes" class="form-check-input" />
+                <label asp-for="CanEditStockCodes" class="form-check-label">Stok kodu düzenleyebilsin</label>
+            </div>
+            <div class="form-check">
+                <input asp-for="CanAccessMaterialGroups" class="form-check-input" />
+                <label asp-for="CanAccessMaterialGroups" class="form-check-label">Malzeme gruplarına erişebilsin</label>
+            </div>
+            <div class="form-check mb-3">
+                <input asp-for="CanManageMaterials" class="form-check-input" />
+                <label asp-for="CanManageMaterials" class="form-check-label">Malzeme CRUD yapabilsin</label>
+            </div>
+
             <button type="submit" class="btn btn-primary">Güncelle</button>
             <a asp-action="Index" class="btn btn-secondary">İptal</a>
         </form>

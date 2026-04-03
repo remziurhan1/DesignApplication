@@ -18,6 +18,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            if (!await HasDesignPermissionAsync(x => x.CanAccessDesignArea || x.CanAccessMaterialGroups))
+            {
+                return Forbid();
+            }
+
             var vm = new DesignCatalogVm
             {
                 Materials = await _context.Materials

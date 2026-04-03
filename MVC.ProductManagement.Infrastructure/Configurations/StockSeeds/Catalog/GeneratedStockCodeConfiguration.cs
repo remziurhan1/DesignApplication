@@ -17,6 +17,10 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds.Catalog
             builder.Property(x => x.UnitPrice).HasColumnType("decimal(18,2)");
             builder.Property(x => x.TargetPrice).HasColumnType("decimal(18,2)");
             builder.Property(x => x.KgEquivalentPerPrimaryUnit).HasColumnType("decimal(18,4)");
+            builder.Property(x => x.Step3DFilePath).HasMaxLength(500);
+            builder.Property(x => x.DxfFilePath1).HasMaxLength(500);
+            builder.Property(x => x.DxfFilePath2).HasMaxLength(500);
+            builder.Property(x => x.DatasheetFilePath).HasMaxLength(500);
 
             builder.HasOne(x => x.StockSubCodeGroup)
                 .WithMany(x => x.GeneratedCodes)
