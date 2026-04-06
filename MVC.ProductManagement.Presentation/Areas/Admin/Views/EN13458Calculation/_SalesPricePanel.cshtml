@@ -50,13 +50,19 @@
         @if (Model.SalesPrice != null)
         {
             <div class="row g-3 mt-2">
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <div class="border rounded p-3 h-100">
+                        <div class="small text-muted">Maliyet (İMM)</div>
+                        <div class="fs-5 fw-semibold">@Model.SalesPrice.ImmCost.ToString("N2") €</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="border rounded p-3 h-100">
                         <div class="small text-muted">Minimum Satış Fiyatı</div>
                         <div class="fs-5 fw-semibold">@Model.SalesPrice.MinimumSalesPrice.ToString("N2") €</div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="border rounded p-3 h-100 bg-success-subtle border-success-subtle">
                         <div class="small text-muted">Tavsiye Edilen Satış Fiyatı</div>
                         <div class="fs-5 fw-semibold">@Model.SalesPrice.SalesPrice.ToString("N2") €</div>
