@@ -1,6 +1,7 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs.AD2000ResultVM
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using System.Linq
 @{
     ViewData["Title"] = "AD2000 Satış Fiyatı";
     var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.AD2000DTOs.AD2000MaterialCostTableDTO;
@@ -50,4 +51,43 @@
         ["FinanceRateOptions"] = financeRateOptions,
         ["GeneralManagementRateOptions"] = generalManagementRateOptions
     })
+
+    @if (Model.CostAnalyses?.Any() == true)
+    {
+        <div class="card shadow-sm mt-3">
+            <div class="card-header bg-light fw-semibold">Revizyon Fiyat Geçmişi</div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Revizyon</th>
+                                <th>Analiz Adı</th>
+                                <th class="text-end">Maliyet (İMM)</th>
+                                <th class="text-end">Minimum Fiyat</th>
+                                <th class="text-end">Tavsiye Fiyat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var analysis in Model.CostAnalyses.OrderByDescending(x => x.RevisionNo))
+                        {
+                            var isSelected = Model.SelectedCostAnalysisId == analysis.Id;
+                            <tr class="@(isSelected ? "table-primary" : string.Empty)">
+                                <td>
+                                    <a asp-action="SalesPrice" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id" class="text-decoration-none fw-semibold">
+                                        @analysis.RevisionCode
+                                    </a>
+                                </td>
+                                <td>@analysis.Name</td>
+                                <td class="text-end">@analysis.GrandTotalCost.ToString("N2") €</td>
+                                <td class="text-end">@(analysis.MinimumSalesPrice.HasValue ? $"{analysis.MinimumSalesPrice.Value:N2} €" : "-")</td>
+                                <td class="text-end">@(analysis.RecommendedSalesPrice.HasValue ? $"{analysis.RecommendedSalesPrice.Value:N2} €" : "-")</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
 }

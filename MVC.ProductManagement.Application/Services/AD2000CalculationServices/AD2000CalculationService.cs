@@ -151,7 +151,17 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                     RevisionCode = x.RevisionCode,
                     Name = x.Name,
                     CreatedDate = x.CreatedDate,
-                    GrandTotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => i.ItemCost)
+                    GrandTotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => i.ItemCost),
+                    MinimumSalesPrice = x.SalesPrices
+                        .Where(s => s.Status != Status.Deleted)
+                        .OrderByDescending(s => s.CreatedDate)
+                        .Select(s => (double?)s.MinimumSalesPrice)
+                        .FirstOrDefault(),
+                    RecommendedSalesPrice = x.SalesPrices
+                        .Where(s => s.Status != Status.Deleted)
+                        .OrderByDescending(s => s.CreatedDate)
+                        .Select(s => (double?)s.SalesPrice)
+                        .FirstOrDefault()
                 })
                 .ToListAsync();
         }
@@ -1002,6 +1012,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             var generalManagementCost = araToplam1 * generalManagementPercentage / 100d;
             var araToplam2 = araToplam1 + financeCost + generalManagementCost;
             var salesPrice = araToplam2 * (1 + profitPercentage / 100d);
+            var minimumSalesPrice = immCost / 0.60d;
 
             return new AD2000SalesPriceDTO
             {
@@ -1018,7 +1029,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 FinanceCost = financeCost,
                 GeneralManagementCost = generalManagementCost,
                 AraToplam2 = araToplam2,
-                MinimumSalesPrice = immCost,
+                MinimumSalesPrice = minimumSalesPrice,
                 SalesPrice = salesPrice
             };
         }

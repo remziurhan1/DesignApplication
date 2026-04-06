@@ -11,5 +11,7 @@ namespace MVC.ProductManagement.Application.DTOs.AD2000DTOs
         public string Name { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public double GrandTotalCost { get; set; }
+        public double? MinimumSalesPrice { get; set; }
+        public double? RecommendedSalesPrice { get; set; }
     }
 }
