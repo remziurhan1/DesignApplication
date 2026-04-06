@@ -82,7 +82,17 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                     RevisionCode = x.RevisionCode,
                     Name = x.Name,
                     CreatedDate = x.CreatedDate,
-                    GrandTotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => i.ItemCost)
+                    GrandTotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => i.ItemCost),
+                    MinimumSalesPrice = x.SalesPrices
+                        .Where(s => s.Status != Status.Deleted)
+                        .OrderByDescending(s => s.CreatedDate)
+                        .Select(s => (double?)s.MinimumSalesPrice)
+                        .FirstOrDefault(),
+                    RecommendedSalesPrice = x.SalesPrices
+                        .Where(s => s.Status != Status.Deleted)
+                        .OrderByDescending(s => s.CreatedDate)
+                        .Select(s => (double?)s.SalesPrice)
+                        .FirstOrDefault()
                 })
                 .ToListAsync();
         }
@@ -726,6 +736,12 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 rows.Add(BuildWeldConsumableRow(result.TotalWeldLength, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE")));
             }
 
+            var filmRow = BuildFilmCountCostRow(result, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
+            if (filmRow != null)
+            {
+                rows.Add(filmRow);
+            }
+
             var profileRow = await BuildProfileCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("PROFILE"));
             if (profileRow is not null)
             {
@@ -933,6 +949,50 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             return row;
         }
 
+        private EN13458MaterialCostRowDTO? BuildFilmCountCostRow(EN13458ResultDTO result, EN13458CostAnalysisItem? previous)
+        {
+            var filmCalculation = _filmQuantityService.Calculate(result.TotalWeldLength);
+            if (filmCalculation.FilmQuantity <= 0)
+            {
+                return null;
+            }
+
+            var defaultUnitPrice = filmCalculation.FilmQuantity > 0
+                ? result.TotalFilmCost / filmCalculation.FilmQuantity
+                : 0;
+
+            var row = new EN13458MaterialCostRowDTO
+            {
+                SortOrder = 85,
+                ItemKey = "FILM-COUNT",
+                ItemSourceType = CalculatedSourceType,
+                CostGroupCode = "FILM",
+                CostGroupName = "Film Maliyeti",
+                ItemName = "Röntgen Film Adedi",
+                MaterialName = "Röntgen Film",
+                FormType = "Hizmet",
+                Quantity = filmCalculation.FilmQuantity,
+                Unit = "adet",
+                StockUnitPrice = defaultUnitPrice,
+                UnitPrice = defaultUnitPrice,
+                ItemCost = filmCalculation.FilmQuantity * defaultUnitPrice
+            };
+
+            if (previous != null)
+            {
+                row.UseManualUnitPrice = previous.UseManualUnitPrice;
+                row.ManualUnitPrice = previous.ManualUnitPrice;
+                if (previous.StockUnitPrice > 0)
+                {
+                    row.StockUnitPrice = previous.StockUnitPrice;
+                }
+                row.UnitPrice = ResolveEffectiveUnitPrice(row.StockUnitPrice, row.UseManualUnitPrice, row.ManualUnitPrice);
+                row.ItemCost = row.Quantity * row.UnitPrice;
+            }
+
+            return row;
+        }
+
         private async Task<EN13458MaterialCostRowDTO> ApplyPreviousPricingAsync(EN13458MaterialCostRowDTO row, EN13458CostAnalysisItem? previous, double fallbackUnitPrice)
         {
             row.GeneratedStockCodeId = previous?.GeneratedStockCodeId;
@@ -1076,7 +1136,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
             if (!hasFilmRow)
             {
-                var filmRow = await BuildFilmCountCostRowAsync(result, previous: null);
+                var filmRow = BuildFilmCountCostRow(result, previous: null);
                 if (filmRow != null)
                 {
                     var filmEntity = ToEntity(filmRow, "System");
@@ -1227,6 +1287,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             var generalManagementCost = araToplam1 * generalManagementPercentage / 100d;
             var araToplam2 = araToplam1 + financeCost + generalManagementCost;
             var salesPrice = araToplam2 * (1 + (profitPercentage / 100d));
+            var minimumSalesPrice = immCost / 0.60d;
 
             return new EN13458SalesPriceDTO
             {
@@ -1243,7 +1304,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 FinanceCost = financeCost,
                 GeneralManagementCost = generalManagementCost,
                 AraToplam2 = araToplam2,
-                MinimumSalesPrice = immCost,
+                MinimumSalesPrice = minimumSalesPrice,
                 SalesPrice = salesPrice
             };
         }
