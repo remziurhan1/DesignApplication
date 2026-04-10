@@ -75,12 +75,14 @@
             <div class="card-header bg-primary-subtle text-primary-emphasis">Malzeme seçimi</div>
             <div class="card-body">
                 <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label">Gövde Product Form</label><select id="ShellMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label class="form-label">Bombe Product Form</label><select id="HeadMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label class="form-label">Gövde Malzeme Sınıfı</label><select id="ShellMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label class="form-label">Bombe Malzeme Sınıfı</label><select id="HeadMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label class="form-label">Gövde Norm</label><select id="ShellMaterialNorm" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label class="form-label">Bombe Norm</label><select id="HeadMaterialNorm" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label asp-for="ShellMaterialId" class="form-label">Gövde Malzemesi</label><select asp-for="ShellMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label asp-for="HeadMaterialId" class="form-label">Bombe Malzemesi</label><select asp-for="HeadMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
-                    <div class="col-md-6"><label class="form-label">Gövde Form Tipi</label><select id="ShellMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
-                    <div class="col-md-6"><label class="form-label">Bombe Form Tipi</label><select id="HeadMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label asp-for="ShellMaterialFormId" class="form-label">Gövde Formu</label><select asp-for="ShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label asp-for="HeadMaterialFormId" class="form-label">Bombe Formu</label><select asp-for="HeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
                 </div>
@@ -99,7 +101,7 @@
         const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialFormsByMaterial));
         const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.StorageTypeDensities));
         const materialsByGroup = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialsByGroup));
-        const formTypesByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialFormTypesByMaterial));
+        const allMaterialOptions = [...new Map(Object.values(materialsByGroup || {}).flat().map(x => [x.value, x])).values()];
 
         function fillOptions(selectElement, options, placeholder = 'Seçiniz') {
             if (!selectElement) return;
@@ -120,45 +122,52 @@
             }
         }
 
-        function bindMaterialCascade(groupSelectId, materialSelectId, formTypeSelectId, formSelectId) {
-            const groupSelect = document.getElementById(groupSelectId);
-            const materialSelect = document.getElementById(materialSelectId);
+        function bindMaterialCascade(formTypeSelectId, groupSelectId, normSelectId, materialSelectId, formSelectId) {
             const formTypeSelect = document.getElementById(formTypeSelectId);
+            const groupSelect = document.getElementById(groupSelectId);
+            const normSelect = document.getElementById(normSelectId);
+            const materialSelect = document.getElementById(materialSelectId);
             const formSelect = document.getElementById(formSelectId);
-            if (!groupSelect || !materialSelect || !formTypeSelect || !formSelect) return;
+            if (!formTypeSelect || !groupSelect || !normSelect || !materialSelect || !formSelect) return;
 
-            const refillMaterials = () => {
+            const getAllForms = () =>
+                Object.entries(formsByMaterial || {}).flatMap(([materialId, items]) =>
+                    (items || []).map(x => ({ ...x, materialId })));
+
+            const applyFormFilters = (forms, includeMaterial = false) => {
+                const selectedType = formTypeSelect.value;
                 const selectedGroup = groupSelect.value;
-                const materialOptions = materialsByGroup[selectedGroup] || [];
+                const selectedNorm = normSelect.value;
+                const selectedMaterial = includeMaterial ? materialSelect.value : '';
+
+                return (forms || []).filter(x =>
+                    (!selectedType || x.formType === selectedType) &&
+                    (!selectedGroup || ((x.materialClass || '').trim().toLowerCase() === selectedGroup.trim().toLowerCase())) &&
+                    (!selectedNorm || ((x.norm || '').trim().toLowerCase() === selectedNorm.trim().toLowerCase())) &&
+                    (!selectedMaterial || x.materialId === selectedMaterial));
+            };
+
+            const refillByFilters = () => {
+                const candidateForms = applyFormFilters(getAllForms(), false);
+                const normOptions = [...new Set(candidateForms.map(x => x.norm).filter(x => x && x.trim().length > 0))]
+                    .map(x => ({ value: x, text: x }));
+                fillOptions(normSelect, normOptions);
+
+                const filteredForMaterial = applyFormFilters(getAllForms(), false);
+                const materialIds = [...new Set(filteredForMaterial.map(x => x.materialId))];
+                const materialOptions = allMaterialOptions.filter(x => materialIds.includes(x.value));
                 fillOptions(materialSelect, materialOptions);
-                refillFormTypes();
+
+                const filteredForForms = applyFormFilters(getAllForms(), true);
+                const formOptions = filteredForForms.map(x => ({ value: x.value, text: x.text }));
+                fillOptions(formSelect, formOptions);
             };
 
-            const refillFormTypes = () => {
-                const selectedGroup = groupSelect.value;
-                const selectedMaterialId = materialSelect.value;
-                const scopedForms = (formsByMaterial[selectedMaterialId] || []).filter(x =>
-                    !selectedGroup || ((x.materialClass || '').trim().toLowerCase() === selectedGroup.trim().toLowerCase()));
-                const types = [...new Set(scopedForms.map(x => x.formType))];
-                const options = types.map(type => ({ value: type, text: type }));
-                fillOptions(formTypeSelect, options);
-                refillForms();
-            };
-
-            const refillForms = () => {
-                const selectedGroup = groupSelect.value;
-                const selectedMaterialId = materialSelect.value;
-                const selectedFormType = formTypeSelect.value;
-                const baseForms = (formsByMaterial[selectedMaterialId] || []).filter(x =>
-                    !selectedGroup || ((x.materialClass || '').trim().toLowerCase() === selectedGroup.trim().toLowerCase()));
-                const filtered = selectedFormType ? baseForms.filter(x => x.formType === selectedFormType) : baseForms;
-                fillOptions(formSelect, filtered);
-            };
-
-            groupSelect.addEventListener('change', refillMaterials);
-            materialSelect.addEventListener('change', refillFormTypes);
-            formTypeSelect.addEventListener('change', refillForms);
-            refillMaterials();
+            formTypeSelect.addEventListener('change', refillByFilters);
+            groupSelect.addEventListener('change', refillByFilters);
+            normSelect.addEventListener('change', refillByFilters);
+            materialSelect.addEventListener('change', refillByFilters);
+            refillByFilters();
         }
 
         function bindDensityMode() {
@@ -183,8 +192,8 @@
             updateDensity();
         }
 
-        bindMaterialCascade('ShellMaterialGroup', 'ShellMaterialId', 'ShellMaterialFormType', 'ShellMaterialFormId');
-        bindMaterialCascade('HeadMaterialGroup', 'HeadMaterialId', 'HeadMaterialFormType', 'HeadMaterialFormId');
+        bindMaterialCascade('ShellMaterialFormType', 'ShellMaterialGroup', 'ShellMaterialNorm', 'ShellMaterialId', 'ShellMaterialFormId');
+        bindMaterialCascade('HeadMaterialFormType', 'HeadMaterialGroup', 'HeadMaterialNorm', 'HeadMaterialId', 'HeadMaterialFormId');
         bindDensityMode();
     </script>
 }

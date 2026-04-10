@@ -1444,6 +1444,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         text = $"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]",
                         formType = x.FormType.ToString(),
                         materialClass = x.MaterialClass,
+                        norm = x.Norm,
                         momentOfInertia = x.MomentOfInertia,
                         sectionArea = x.SectionArea,
                         sectionModulus = x.SectionModulus

@@ -7,11 +7,6 @@
 
 <form asp-area="Admin" asp-controller="MaterialForm" asp-action="Create" method="post">
    
-    <div class="form-group">
-    <label for="MaterialId">Material</label>
-    <select asp-for="MaterialId" asp-items="ViewBag.Materials" class="form-control"></select>
-</div>
-
     <div class="mb-3">
         <label asp-for="FormType" class="form-label"></label>
         <select asp-for="FormType" class="form-select"
@@ -30,6 +25,11 @@
         <select asp-for="Norm" class="form-select" asp-items="ViewBag.MaterialNorms">
             <option value="">Seçiniz</option>
         </select>
+    </div>
+
+    <div class="form-group">
+        <label for="MaterialId">Malzeme adı</label>
+        <select asp-for="MaterialId" asp-items="ViewBag.Materials" class="form-control"></select>
     </div>
 
     <div class="mb-3">

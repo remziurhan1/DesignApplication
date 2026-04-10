@@ -174,6 +174,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 
             };
 
+            var materials = await _materialService.GetAllAsync();
+            ViewBag.Materials = new SelectList(materials, "Id", "Name", vm.MaterialId);
             LoadMaterialFormSelections();
             return View(vm);
         }
@@ -185,6 +187,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var materials = await _materialService.GetAllAsync();
+                ViewBag.Materials = new SelectList(materials, "Id", "Name", vm.MaterialId);
                 LoadMaterialFormSelections();
                 return View(vm);
             }
