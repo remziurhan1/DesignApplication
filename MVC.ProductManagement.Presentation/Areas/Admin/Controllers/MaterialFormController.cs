@@ -9,6 +9,45 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
     public class MaterialFormController : AdminBaseController
     {
+        private static readonly string[] MaterialClasses =
+        {
+            "Carbon Steel",
+            "Alloy Steel",
+            "Alluminum Alloy",
+            "Carbon Low Alloy",
+            "Copper Alloy",
+            "Nickel Alloy",
+            "Stainless Steel",
+            "Titanium - Zirconium"
+        };
+
+        private static readonly string[] MaterialOrigins =
+        {
+            "Plate",
+            "Forging",
+            "Welded Tube",
+            "Seamless Tube",
+            "Seamless Pipe",
+            "Welded Pipe",
+            "Cast Steel",
+            "Fitting",
+            "Bolting",
+            "Bar"
+        };
+
+        private static readonly string[] MaterialNorms =
+        {
+            "ASME II",
+            "ASTM",
+            "EN10025",
+            "EN10028-2",
+            "EN10028-3",
+            "EN10028-4",
+            "EN10028-5",
+            "EN10028-6",
+            "EN10028-7"
+        };
+
         private readonly IMaterialFormService _materialFormService;
         private readonly IMaterialService _materialService;
 
@@ -29,6 +68,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = f.Id,
                 MaterialId = f.MaterialId,
                 FormType = f.FormType,
+                Origin = f.Origin,
+                MaterialClass = f.MaterialClass,
+                Norm = f.Norm,
+                SymbolicName = f.SymbolicName,
+                StockCode = f.StockCode,
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
                 UnitPrice=f.UnitPrice,
@@ -54,6 +98,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = dto.Id,
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
+                Origin = dto.Origin,
+                MaterialClass = dto.MaterialClass,
+                Norm = dto.Norm,
+                SymbolicName = dto.SymbolicName,
+                StockCode = dto.StockCode,
                 ThicknessMin = dto.ThicknessMin,
                 ThicknessMax = dto.ThicknessMax,
                 ProductStandard = dto.ProductStandard,
@@ -73,6 +122,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             // Tüm malzemeleri dropdown için getir
             var materials = await _materialService.GetAllAsync();
             ViewBag.Materials = new SelectList(materials, "Id", "Name");
+            LoadMaterialFormSelections();
 
             return View(new MaterialFormCreateVm());
         }
@@ -82,12 +132,23 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MaterialFormCreateVm vm)
         {
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                var materials = await _materialService.GetAllAsync();
+                ViewBag.Materials = new SelectList(materials, "Id", "Name", vm.MaterialId);
+                LoadMaterialFormSelections();
+                return View(vm);
+            }
 
             var dto = new MaterialFormCreateDto
             {
                 MaterialId = vm.MaterialId,
                 FormType = vm.FormType,
+                Origin = vm.Origin,
+                MaterialClass = vm.MaterialClass,
+                Norm = vm.Norm,
+                SymbolicName = vm.SymbolicName,
+                StockCode = vm.StockCode,
                 ThicknessMin = vm.ThicknessMin,
                 ThicknessMax = vm.ThicknessMax,
                 ProductStandard = vm.ProductStandard,
@@ -115,6 +176,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = dto.Id,
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
+                Origin = dto.Origin,
+                MaterialClass = dto.MaterialClass,
+                Norm = dto.Norm,
+                SymbolicName = dto.SymbolicName,
+                StockCode = dto.StockCode,
                 ThicknessMin = dto.ThicknessMin,
                 ThicknessMax = dto.ThicknessMax,
                 ProductStandard = dto.ProductStandard,
@@ -126,6 +192,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 
             };
 
+            LoadMaterialFormSelections();
             return View(vm);
         }
 
@@ -134,13 +201,22 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MaterialFormUpdateVm vm)
         {
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                LoadMaterialFormSelections();
+                return View(vm);
+            }
 
             var dto = new MaterialFormUpdateDto
             {
                 Id = vm.Id,
                 MaterialId = vm.MaterialId,
                 FormType = vm.FormType,
+                Origin = vm.Origin,
+                MaterialClass = vm.MaterialClass,
+                Norm = vm.Norm,
+                SymbolicName = vm.SymbolicName,
+                StockCode = vm.StockCode,
                 ThicknessMin = vm.ThicknessMin,
                 ThicknessMax = vm.ThicknessMax,
                 ProductStandard = vm.ProductStandard,
@@ -167,6 +243,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = dto.Id,
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
+                Origin = dto.Origin,
+                MaterialClass = dto.MaterialClass,
+                Norm = dto.Norm,
+                SymbolicName = dto.SymbolicName,
+                StockCode = dto.StockCode,
                 ThicknessMin = dto.ThicknessMin,
                 ThicknessMax = dto.ThicknessMax,
                 ProductStandard = dto.ProductStandard,
@@ -178,6 +259,21 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             };
 
             return View(vm);
+        }
+
+        private void LoadMaterialFormSelections()
+        {
+            ViewBag.MaterialOrigins = MaterialOrigins
+                .Select(origin => new SelectListItem(origin, origin))
+                .ToList();
+
+            ViewBag.MaterialClasses = MaterialClasses
+                .Select(materialClass => new SelectListItem(materialClass, materialClass))
+                .ToList();
+
+            ViewBag.MaterialNorms = MaterialNorms
+                .Select(norm => new SelectListItem(norm, norm))
+                .ToList();
         }
 
         // 📌 Silme POST
