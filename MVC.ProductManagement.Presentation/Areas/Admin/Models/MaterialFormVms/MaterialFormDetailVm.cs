@@ -8,6 +8,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialFormVms
         public Guid MaterialId { get; set; }
         public string? MaterialName { get; set; } // ilişkili Material’den gösterim kolaylığı
         public MaterialFormType FormType { get; set; }
+        public string Origin { get; set; } = string.Empty;
+        public string MaterialClass { get; set; } = string.Empty;
+        public string Norm { get; set; } = string.Empty;
+        public string? SymbolicName { get; set; }
+        public string? StockCode { get; set; }
         public double ThicknessMin { get; set; }
         public double ThicknessMax { get; set; }
         public string ProductStandard { get; set; } = string.Empty;
