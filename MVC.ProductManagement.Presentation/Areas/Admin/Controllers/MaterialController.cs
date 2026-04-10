@@ -156,6 +156,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Forms = vm.Forms.Select(f => new MaterialFormCreateDto
                 {
                     FormType = f.FormType,
+                    Origin = f.Origin,
+                    MaterialClass = f.MaterialClass,
+                    Norm = f.Norm,
+                    SymbolicName = f.SymbolicName,
+                    StockCode = f.StockCode,
                     ThicknessMin = f.ThicknessMin,
                     ThicknessMax = f.ThicknessMax,
                     ProductStandard = f.ProductStandard,
