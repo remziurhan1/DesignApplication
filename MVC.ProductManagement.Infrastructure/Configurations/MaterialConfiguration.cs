@@ -22,21 +22,6 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(m => m.MaterialNumber)
                    .HasMaxLength(50);
 
-            builder.Property(m => m.SymbolicName)
-                   .HasMaxLength(100);
-
-            builder.Property(m => m.Origin)
-                   .HasMaxLength(50);
-
-            builder.Property(m => m.Group)
-                   .HasMaxLength(50);
-
-            builder.Property(m => m.Norm)
-                   .HasMaxLength(50);
-
-            builder.Property(m => m.StockCode)
-                   .HasMaxLength(100);
-
             builder.Property(m => m.Density)
                    .HasPrecision(10, 3);
 

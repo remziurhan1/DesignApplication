@@ -1992,11 +1992,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<double?>("ElasticModulus")
                         .HasColumnType("float");
 
-                    b.Property<string>("Group")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("MaterialNumber")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -2013,32 +2008,11 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Norm")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Origin")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("StockCode")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Standard")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("SymbolicName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<double?>("YieldFactorK")
                         .HasColumnType("float");
@@ -2054,15 +2028,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedBy = "SeedData",
                             CreatedDate = new DateTime(2026, 3, 31, 14, 8, 4, 859, DateTimeKind.Utc).AddTicks(291),
                             Density = 7850.0,
-                            Group = "Carbon Steel",
                             MaterialNumber = "1.0565",
-                            Name = "P355NH",
-                            Norm = "EN10028-3",
-                            Notes = "Normalized delivery condition according to EN 10028-3",
-                            Origin = "Plate",
-                            Standard = 0,
-                            Status = 0,
-                            SymbolicName = "P355NH"
+                            Name = "P355GH",
+                            Notes = "Pressure vessel plate according to EN10028-2",
+                            Status = 0
                         },
                         new
                         {
@@ -2070,15 +2039,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedBy = "SeedData",
                             CreatedDate = new DateTime(2026, 3, 31, 14, 8, 4, 859, DateTimeKind.Utc).AddTicks(296),
                             Density = 8000.0,
-                            Group = "Stainless Steel",
                             MaterialNumber = "1.4301",
                             Name = "X5CrNi18-10",
-                            Norm = "EN10028-7",
                             Notes = "EN 10028-7 stainless pressure vessel steel",
-                            Origin = "Plate",
-                            Standard = 0,
-                            Status = 0,
-                            SymbolicName = "X5CrNi18-10"
+                            Status = 0
                         },
                         new
                         {
@@ -2087,15 +2051,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedDate = new DateTime(2026, 3, 31, 14, 8, 4, 859, DateTimeKind.Utc).AddTicks(302),
                             Density = 7850.0,
                             ElasticModulus = 206000.0,
-                            Group = "Carbon Steel",
                             MaterialNumber = "1.0038",
                             Name = "S235JR",
-                            Norm = "EN10025",
                             Notes = "Profile material for supports/rings",
-                            Origin = "Bar",
-                            Standard = 0,
                             Status = 0,
-                            SymbolicName = "S235JR",
                             YieldFactorK = 235.0
                         });
                 });
@@ -2148,11 +2107,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Norm")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Origin")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -2215,7 +2169,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             MaterialClass = "Carbon Steel",
                             Norm = "EN10028-3",
                             Notes = "Standard plate form for P355NH",
-                            Origin = "Plate",
                             ProductStandard = "EN 10028-3",
                             Status = 0,
                             SymbolicName = "P355NH",
@@ -2234,7 +2187,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             MaterialClass = "Stainless Steel",
                             Norm = "EN10028-7",
                             Notes = "Plate form for X5CrNi18-10 (Cold stretch optional)",
-                            Origin = "Plate",
                             ProductStandard = "EN 10028-7",
                             Status = 0,
                             SymbolicName = "X5CrNi18-10",
@@ -2252,7 +2204,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             MaterialClass = "Carbon Steel",
                             Norm = "EN10028-3",
                             Notes = "Seamless pipe form for P355NH",
-                            Origin = "Seamless Pipe",
                             ProductStandard = "EN 10216-3",
                             Status = 0,
                             SymbolicName = "P355NH",
@@ -2272,7 +2223,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             MomentOfInertia = 101700.0,
                             Norm = "EN10025",
                             Notes = "S235JR kutu profil 40x40x3 mm",
-                            Origin = "Bar",
                             ProductStandard = "EN 10025-2",
                             SectionArea = 444.0,
                             SectionModulus = 5080.0,

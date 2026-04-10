@@ -26,7 +26,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = f.Id,
                 MaterialId = f.MaterialId,
                 FormType = f.FormType,
-                Origin = f.Origin,
                 MaterialClass = f.MaterialClass,
                 Norm = f.Norm,
                 SymbolicName = f.SymbolicName,
@@ -57,7 +56,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             {
                 Id = f.Id,
                 FormType = f.FormType,
-                Origin = f.Origin,
                 MaterialClass = f.MaterialClass,
                 Norm = f.Norm,
                 SymbolicName = f.SymbolicName,
@@ -80,7 +78,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             {
                 Id = f.Id,
                 FormType = f.FormType,
-                Origin = f.Origin,
                 MaterialClass = f.MaterialClass,
                 Norm = f.Norm,
                 SymbolicName = f.SymbolicName,
@@ -106,7 +103,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = form.Id,
                 MaterialId = form.MaterialId,
                 FormType = form.FormType,
-                Origin = form.Origin,
                 MaterialClass = form.MaterialClass,
                 Norm = form.Norm,
                 SymbolicName = form.SymbolicName,
@@ -132,7 +128,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = Guid.NewGuid(),
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
-                Origin = dto.Origin,
                 MaterialClass = dto.MaterialClass,
                 Norm = dto.Norm,
                 SymbolicName = dto.SymbolicName,
@@ -158,7 +153,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = entity.Id,
                 MaterialId = entity.MaterialId,
                 FormType = entity.FormType,
-                Origin = entity.Origin,
                 MaterialClass = entity.MaterialClass,
                 Norm = entity.Norm,
                 SymbolicName = entity.SymbolicName,
@@ -184,7 +178,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
 
             entity.MaterialId = dto.MaterialId;
             entity.FormType = dto.FormType;
-            entity.Origin = dto.Origin;
             entity.MaterialClass = dto.MaterialClass;
             entity.Norm = dto.Norm;
             entity.SymbolicName = dto.SymbolicName;
@@ -209,7 +202,6 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = entity.Id,
                 MaterialId = entity.MaterialId,
                 FormType = entity.FormType,
-                Origin = entity.Origin,
                 MaterialClass = entity.MaterialClass,
                 Norm = entity.Norm,
                 SymbolicName = entity.SymbolicName,

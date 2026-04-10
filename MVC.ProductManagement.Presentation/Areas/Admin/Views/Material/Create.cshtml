@@ -14,45 +14,8 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="SymbolicName" class="form-label">Sembolik İsim</label>
-        <input asp-for="SymbolicName" class="form-control" />
-    </div>
-
-    <div class="mb-3">
         <label asp-for="MaterialNumber" class="form-label"></label>
         <input asp-for="MaterialNumber" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Standard" class="form-label"></label>
-        <select asp-for="Standard" class="form-select"
-                asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.MaterialStandard>()"></select>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Origin" class="form-label">Origin</label>
-        <select asp-for="Origin" class="form-select" asp-items="ViewBag.MaterialOrigins">
-            <option value="">Seçiniz</option>
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Group" class="form-label"></label>
-        <select asp-for="Group" class="form-select" asp-items="ViewBag.MaterialGroups">
-            <option value="">Seçiniz</option>
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Norm" class="form-label">Norm</label>
-        <select asp-for="Norm" class="form-select" asp-items="ViewBag.MaterialNorms">
-            <option value="">Seçiniz</option>
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="StockCode" class="form-label">Stok Kodu</label>
-        <input asp-for="StockCode" class="form-control" />
     </div>
 
     <div class="mb-3">
@@ -96,10 +59,6 @@
             <label>Thickness Max</label>
             <input name="Forms[0].ThicknessMax" type="number" class="form-control" />
 
-            <label>Origin</label>
-            <select name="Forms[0].Origin" class="form-select" asp-items="ViewBag.MaterialOrigins">
-                <option value="">Seçiniz</option>
-            </select>
 
             <label>Class</label>
             <select name="Forms[0].MaterialClass" class="form-select" asp-items="ViewBag.MaterialGroups">

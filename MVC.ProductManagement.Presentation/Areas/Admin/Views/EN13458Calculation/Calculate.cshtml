@@ -208,17 +208,22 @@
             };
 
             const refillFormTypes = () => {
+                const selectedGroup = groupSelect.value;
                 const selectedMaterialId = materialSelect.value;
-                const types = formTypesByMaterial[selectedMaterialId] || [];
+                const scopedForms = (formsByMaterial[selectedMaterialId] || []).filter(x =>
+                    !selectedGroup || ((x.materialClass || '').trim().toLowerCase() === selectedGroup.trim().toLowerCase()));
+                const types = [...new Set(scopedForms.map(x => x.formType))];
                 const options = types.map(type => ({ value: type, text: type }));
                 fillOptions(formTypeSelect, options);
                 refillForms();
             };
 
             const refillForms = () => {
+                const selectedGroup = groupSelect.value;
                 const selectedMaterialId = materialSelect.value;
                 const selectedFormType = formTypeSelect.value;
-                const baseForms = formsByMaterial[selectedMaterialId] || [];
+                const baseForms = (formsByMaterial[selectedMaterialId] || []).filter(x =>
+                    !selectedGroup || ((x.materialClass || '').trim().toLowerCase() === selectedGroup.trim().toLowerCase()));
                 const filtered = selectedFormType ? baseForms.filter(x => x.formType === selectedFormType) : baseForms;
                 fillOptions(formSelect, filtered);
             };
