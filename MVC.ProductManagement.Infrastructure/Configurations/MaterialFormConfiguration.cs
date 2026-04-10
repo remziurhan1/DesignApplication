@@ -18,9 +18,6 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(f => f.ProductStandard)
                    .HasMaxLength(100);
 
-            builder.Property(f => f.Origin)
-                   .HasMaxLength(50);
-
             builder.Property(f => f.MaterialClass)
                    .HasMaxLength(50);
 

@@ -14,8 +14,6 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Standard</th>
-            <th>Group</th>
             <th>Cold Stretch (MPa)</th>
             <th>E (MPa)</th>
             <th>K (MPa)</th>
@@ -26,10 +24,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Id</td>
                 <td>@item.Name</td>
-                <td>@item.Standard</td>
-                <td>@item.Group</td>
                 <td>@item.ColdStretchYieldStrength</td>
                 <td>@item.ElasticModulus</td>
                 <td>@item.YieldFactorK</td>
