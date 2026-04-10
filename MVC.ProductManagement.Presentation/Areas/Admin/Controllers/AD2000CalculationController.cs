@@ -603,10 +603,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var materialForms = await _materialFormService.GetAllAsync() ?? new List<MaterialFormListDto>();
             var storageTypes = await _storageTypeService.GetAllAsync();
 
-            static string BuildMaterialDisplay(MaterialListDto material, IEnumerable<MaterialFormListDto> forms)
+            static string BuildMaterialDisplay(MaterialListDto material, IEnumerable<MaterialFormListDto> forms, string? materialClass = null)
             {
-                var details = forms
-                    .Select(x => string.Join(" / ", new[] { x.MaterialClass, x.Norm, x.SymbolicName, x.Origin }
+                var scopedForms = forms
+                    .Where(x => string.IsNullOrWhiteSpace(materialClass)
+                        || string.Equals((x.MaterialClass ?? string.Empty).Trim(), materialClass.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                var details = scopedForms
+                    .Select(x => string.Join(" / ", new[] { x.SymbolicName, x.Norm, x.Origin }
                         .Where(v => !string.IsNullOrWhiteSpace(v))
                         .Select(v => v!.Trim())))
                     .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -645,12 +649,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     .Select(m => new
                     {
                         value = m.Id.ToString(),
-                        text = BuildMaterialDisplay(m, formsByMaterialId.GetValueOrDefault(m.Id) ?? new List<MaterialFormListDto>())
+                        text = BuildMaterialDisplay(m, formsByMaterialId.GetValueOrDefault(m.Id) ?? new List<MaterialFormListDto>(), group)
                     })
                     .ToList(),
                 StringComparer.OrdinalIgnoreCase);
             ViewBag.MaterialForms = new SelectList(materialForms, "Id", "FormType");
-            ViewBag.MaterialFormsByMaterial = materialForms.GroupBy(x => x.MaterialId).ToDictionary(g => g.Key.ToString(), g => g.Select(x => new { value = x.Id.ToString(), text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", formType = x.FormType.ToString() }).ToList());
+            ViewBag.MaterialFormsByMaterial = materialForms.GroupBy(x => x.MaterialId).ToDictionary(g => g.Key.ToString(), g => g.Select(x => new { value = x.Id.ToString(), text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", formType = x.FormType.ToString(), materialClass = x.MaterialClass }).ToList());
             ViewBag.MaterialFormTypesByMaterial = materialForms.GroupBy(x => x.MaterialId).ToDictionary(g => g.Key.ToString(), g => g.Select(x => x.FormType.ToString()).Distinct().OrderBy(x => x).ToList());
 
             var storageTypeList = storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();

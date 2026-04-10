@@ -1379,10 +1379,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var forms = await _materialFormService.GetAllAsync();
             var storageTypes = await _storageTypeService.GetAllAsync();
 
-            static string BuildMaterialDisplay(MaterialListDto material, IEnumerable<MaterialFormListDto> materialForms)
+            static string BuildMaterialDisplay(MaterialListDto material, IEnumerable<MaterialFormListDto> materialForms, string? materialClass = null)
             {
-                var details = materialForms
-                    .Select(x => string.Join(" / ", new[] { x.MaterialClass, x.Norm, x.SymbolicName, x.Origin }
+                var scopedForms = materialForms
+                    .Where(x => string.IsNullOrWhiteSpace(materialClass)
+                        || string.Equals((x.MaterialClass ?? string.Empty).Trim(), materialClass.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                var details = scopedForms
+                    .Select(x => string.Join(" / ", new[] { x.SymbolicName, x.Norm, x.Origin }
                         .Where(v => !string.IsNullOrWhiteSpace(v))
                         .Select(v => v!.Trim())))
                     .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -1421,7 +1425,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     .Select(m => new
                     {
                         value = m.Id.ToString(),
-                        text = BuildMaterialDisplay(m, formsByMaterialId.GetValueOrDefault(m.Id) ?? new List<MaterialFormListDto>())
+                        text = BuildMaterialDisplay(m, formsByMaterialId.GetValueOrDefault(m.Id) ?? new List<MaterialFormListDto>(), group)
                     })
                     .ToList(),
                 StringComparer.OrdinalIgnoreCase);
@@ -1439,6 +1443,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         value = x.Id.ToString(),
                         text = $"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]",
                         formType = x.FormType.ToString(),
+                        materialClass = x.MaterialClass,
                         momentOfInertia = x.MomentOfInertia,
                         sectionArea = x.SectionArea,
                         sectionModulus = x.SectionModulus
