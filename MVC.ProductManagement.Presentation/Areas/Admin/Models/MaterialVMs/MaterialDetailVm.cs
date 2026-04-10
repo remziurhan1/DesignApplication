@@ -6,12 +6,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialVMs
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string? SymbolicName { get; set; }
         public string MaterialNumber { get; set; } = string.Empty;
         public MaterialStandard Standard { get; set; }
-        public string Origin { get; set; } = string.Empty;
         public string Group { get; set; } = string.Empty;
-        public string Norm { get; set; } = string.Empty;
         public string? StockCode { get; set; }
         public double Density { get; set; }
         public double? ColdStretchYieldStrength { get; set; }

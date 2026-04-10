@@ -93,12 +93,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = dto.Id,
                 Name = dto.Name,
-                SymbolicName = dto.SymbolicName,
                 MaterialNumber = dto.MaterialNumber,
                 Standard = dto.Standard,
-                Origin = dto.Origin,
                 Group = dto.Group,
-                Norm = dto.Norm,
                 StockCode = dto.StockCode,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
@@ -141,12 +138,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = new MaterialCreateDto
             {
                 Name = vm.Name,
-                SymbolicName = null,
                 MaterialNumber = vm.MaterialNumber,
                 Standard = vm.Standard,
-                Origin = string.Empty,
                 Group = vm.Group,
-                Norm = string.Empty,
                 StockCode = null,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
@@ -188,12 +182,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = dto.Id,
                 Name = dto.Name,
-                SymbolicName = dto.SymbolicName,
                 MaterialNumber = dto.MaterialNumber,
                 Standard = dto.Standard,
-                Origin = dto.Origin,
                 Group = dto.Group,
-                Norm = dto.Norm,
                 StockCode = dto.StockCode,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
@@ -230,12 +221,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = vm.Id,
                 Name = vm.Name,
-                SymbolicName = existing.SymbolicName,
                 MaterialNumber = vm.MaterialNumber,
                 Standard = vm.Standard,
-                Origin = existing.Origin,
                 Group = vm.Group,
-                Norm = existing.Norm,
                 StockCode = existing.StockCode,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
@@ -261,6 +249,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.MaterialNorms = MaterialNorms
                 .Select(norm => new SelectListItem(norm, norm))
                 .ToList();
+
         }
 
         // 📌 Silme GET
@@ -278,12 +267,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = dto.Id,
                 Name = dto.Name,
-                SymbolicName = dto.SymbolicName,
                 MaterialNumber = dto.MaterialNumber,
                 Standard = dto.Standard,
-                Origin = dto.Origin,
                 Group = dto.Group,
-                Norm = dto.Norm,
                 StockCode = dto.StockCode,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,

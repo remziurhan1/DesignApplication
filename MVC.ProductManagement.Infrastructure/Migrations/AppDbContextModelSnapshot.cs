@@ -2013,18 +2013,8 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Norm")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Origin")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("StockCode")
                         .HasMaxLength(100)
@@ -2035,10 +2025,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("SymbolicName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<double?>("YieldFactorK")
                         .HasColumnType("float");
@@ -2056,13 +2042,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Density = 7850.0,
                             Group = "Carbon Steel",
                             MaterialNumber = "1.0565",
-                            Name = "P355NH",
-                            Norm = "EN10028-3",
-                            Notes = "Normalized delivery condition according to EN 10028-3",
-                            Origin = "Plate",
+                            Name = "P355GH",
+                            Notes = "Pressure vessel plate according to EN10028-2",
                             Standard = 0,
-                            Status = 0,
-                            SymbolicName = "P355NH"
+                            Status = 0
                         },
                         new
                         {
@@ -2073,12 +2056,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Group = "Stainless Steel",
                             MaterialNumber = "1.4301",
                             Name = "X5CrNi18-10",
-                            Norm = "EN10028-7",
                             Notes = "EN 10028-7 stainless pressure vessel steel",
-                            Origin = "Plate",
                             Standard = 0,
-                            Status = 0,
-                            SymbolicName = "X5CrNi18-10"
+                            Status = 0
                         },
                         new
                         {
@@ -2090,12 +2070,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Group = "Carbon Steel",
                             MaterialNumber = "1.0038",
                             Name = "S235JR",
-                            Norm = "EN10025",
                             Notes = "Profile material for supports/rings",
-                            Origin = "Bar",
                             Standard = 0,
                             Status = 0,
-                            SymbolicName = "S235JR",
                             YieldFactorK = 235.0
                         });
                 });

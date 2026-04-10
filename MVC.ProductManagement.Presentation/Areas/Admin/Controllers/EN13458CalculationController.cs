@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
+using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
+using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
 using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
@@ -1377,7 +1379,29 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var forms = await _materialFormService.GetAllAsync();
             var storageTypes = await _storageTypeService.GetAllAsync();
 
-            ViewBag.Materials = materials.Select(x => new SelectListItem(x.Name, x.Id.ToString())).ToList();
+            static string BuildMaterialDisplay(MaterialListDto material, IEnumerable<MaterialFormListDto> materialForms)
+            {
+                var details = materialForms
+                    .Select(x => string.Join(" / ", new[] { x.MaterialClass, x.Norm, x.SymbolicName, x.Origin }
+                        .Where(v => !string.IsNullOrWhiteSpace(v))
+                        .Select(v => v!.Trim())))
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Take(2)
+                    .ToList();
+
+                return details.Count == 0 ? material.Name : $"{material.Name} ({string.Join(" | ", details)})";
+            }
+
+            var formsByMaterialId = forms
+                .GroupBy(x => x.MaterialId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            ViewBag.Materials = materials
+                .Select(x => new SelectListItem(
+                    BuildMaterialDisplay(x, formsByMaterialId.GetValueOrDefault(x.Id) ?? new List<MaterialFormListDto>()),
+                    x.Id.ToString()))
+                .ToList();
             ViewBag.MaterialGroups = materials
                 .Select(x => (x.Group ?? string.Empty).Trim())
                 .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -1389,7 +1413,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.MaterialsByGroup = materials
                 .Where(x => !string.IsNullOrWhiteSpace(x.Group))
                 .GroupBy(x => x.Group.Trim(), StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(g => g.Key, g => g.Select(x => new { value = x.Id.ToString(), text = x.Name }).ToList(), StringComparer.OrdinalIgnoreCase);
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(x => new
+                    {
+                        value = x.Id.ToString(),
+                        text = BuildMaterialDisplay(x, formsByMaterialId.GetValueOrDefault(x.Id) ?? new List<MaterialFormListDto>())
+                    }).ToList(),
+                    StringComparer.OrdinalIgnoreCase);
 
             ViewBag.MaterialForms = forms
                 .Select(x => new SelectListItem($"{x.FormType} [{x.ThicknessMin}-{x.ThicknessMax}]", x.Id.ToString()))
