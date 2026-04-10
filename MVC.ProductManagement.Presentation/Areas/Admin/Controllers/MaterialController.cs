@@ -141,13 +141,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = new MaterialCreateDto
             {
                 Name = vm.Name,
-                SymbolicName = vm.Forms.FirstOrDefault()?.SymbolicName,
+                SymbolicName = null,
                 MaterialNumber = vm.MaterialNumber,
                 Standard = vm.Standard,
-                Origin = vm.Forms.FirstOrDefault()?.Origin ?? string.Empty,
+                Origin = string.Empty,
                 Group = vm.Group,
-                Norm = vm.Forms.FirstOrDefault()?.Norm ?? string.Empty,
-                StockCode = vm.Forms.FirstOrDefault()?.StockCode,
+                Norm = string.Empty,
+                StockCode = null,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
                 ElasticModulus = vm.ElasticModulus,
