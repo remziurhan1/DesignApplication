@@ -33,7 +33,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                     .Select(x => new DesignSimpleLookupVm
                     {
                         Name = x.Name,
-                        Description = $"{x.Standard} · {x.Group}"
+                        Description = "Form bazlı malzeme"
                     }).ToListAsync(),
 
                 MaterialForms = await _context.MaterialForms

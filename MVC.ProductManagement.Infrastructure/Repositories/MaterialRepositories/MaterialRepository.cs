@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities;
-using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.DataAccess.EntityFramework;
 using System;
@@ -24,13 +23,6 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories
         {
             return await _context.Materials
                                  .FirstOrDefaultAsync(m => m.Name == materialName);
-        }
-
-        public async Task<List<Material>> GetByStandardAsync(MaterialStandard standard)
-        {
-            return await _context.Materials
-                                 .Where(m => m.Standard == standard)
-                                 .ToListAsync();
         }
     }
 }
