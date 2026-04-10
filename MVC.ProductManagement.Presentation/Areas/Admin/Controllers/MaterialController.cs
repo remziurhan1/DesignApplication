@@ -21,20 +21,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             "Titanium - Zirconium"
         };
 
-        private static readonly string[] MaterialOrigins =
-        {
-            "Plate",
-            "Forging",
-            "Welded Tube",
-            "Seamless Tube",
-            "Seamless Pipe",
-            "Welded Pipe",
-            "Cast Steel",
-            "Fitting",
-            "Bolting",
-            "Bar"
-        };
-
         private static readonly string[] MaterialNorms =
         {
             "ASME II",
@@ -142,7 +128,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Forms = vm.Forms.Select(f => new MaterialFormCreateDto
                 {
                     FormType = f.FormType,
-                    Origin = f.Origin,
                     MaterialClass = f.MaterialClass,
                     Norm = f.Norm,
                     SymbolicName = f.SymbolicName,
@@ -226,10 +211,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             ViewBag.MaterialGroups = MaterialGroups
                 .Select(group => new SelectListItem(group, group))
-                .ToList();
-
-            ViewBag.MaterialOrigins = MaterialOrigins
-                .Select(origin => new SelectListItem(origin, origin))
                 .ToList();
 
             ViewBag.MaterialNorms = MaterialNorms

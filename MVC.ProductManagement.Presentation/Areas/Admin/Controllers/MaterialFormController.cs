@@ -21,20 +21,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             "Titanium - Zirconium"
         };
 
-        private static readonly string[] MaterialOrigins =
-        {
-            "Plate",
-            "Forging",
-            "Welded Tube",
-            "Seamless Tube",
-            "Seamless Pipe",
-            "Welded Pipe",
-            "Cast Steel",
-            "Fitting",
-            "Bolting",
-            "Bar"
-        };
-
         private static readonly string[] MaterialNorms =
         {
             "ASME II",
@@ -68,7 +54,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = f.Id,
                 MaterialId = f.MaterialId,
                 FormType = f.FormType,
-                Origin = f.Origin,
                 MaterialClass = f.MaterialClass,
                 Norm = f.Norm,
                 SymbolicName = f.SymbolicName,
@@ -98,7 +83,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = dto.Id,
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
-                Origin = dto.Origin,
                 MaterialClass = dto.MaterialClass,
                 Norm = dto.Norm,
                 SymbolicName = dto.SymbolicName,
@@ -144,7 +128,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 MaterialId = vm.MaterialId,
                 FormType = vm.FormType,
-                Origin = vm.Origin,
                 MaterialClass = vm.MaterialClass,
                 Norm = vm.Norm,
                 SymbolicName = vm.SymbolicName,
@@ -176,7 +159,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = dto.Id,
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
-                Origin = dto.Origin,
                 MaterialClass = dto.MaterialClass,
                 Norm = dto.Norm,
                 SymbolicName = dto.SymbolicName,
@@ -212,7 +194,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = vm.Id,
                 MaterialId = vm.MaterialId,
                 FormType = vm.FormType,
-                Origin = vm.Origin,
                 MaterialClass = vm.MaterialClass,
                 Norm = vm.Norm,
                 SymbolicName = vm.SymbolicName,
@@ -243,7 +224,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Id = dto.Id,
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
-                Origin = dto.Origin,
                 MaterialClass = dto.MaterialClass,
                 Norm = dto.Norm,
                 SymbolicName = dto.SymbolicName,
@@ -263,10 +243,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         private void LoadMaterialFormSelections()
         {
-            ViewBag.MaterialOrigins = MaterialOrigins
-                .Select(origin => new SelectListItem(origin, origin))
-                .ToList();
-
             ViewBag.MaterialClasses = MaterialClasses
                 .Select(materialClass => new SelectListItem(materialClass, materialClass))
                 .ToList();

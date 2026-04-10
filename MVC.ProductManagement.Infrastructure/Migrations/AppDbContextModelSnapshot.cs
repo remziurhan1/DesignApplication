@@ -2111,11 +2111,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Origin")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("ProductStandard")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -2174,7 +2169,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             MaterialClass = "Carbon Steel",
                             Norm = "EN10028-3",
                             Notes = "Standard plate form for P355NH",
-                            Origin = "Plate",
                             ProductStandard = "EN 10028-3",
                             Status = 0,
                             SymbolicName = "P355NH",
@@ -2193,7 +2187,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             MaterialClass = "Stainless Steel",
                             Norm = "EN10028-7",
                             Notes = "Plate form for X5CrNi18-10 (Cold stretch optional)",
-                            Origin = "Plate",
                             ProductStandard = "EN 10028-7",
                             Status = 0,
                             SymbolicName = "X5CrNi18-10",
@@ -2211,7 +2204,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             MaterialClass = "Carbon Steel",
                             Norm = "EN10028-3",
                             Notes = "Seamless pipe form for P355NH",
-                            Origin = "Seamless Pipe",
                             ProductStandard = "EN 10216-3",
                             Status = 0,
                             SymbolicName = "P355NH",
@@ -2231,7 +2223,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             MomentOfInertia = 101700.0,
                             Norm = "EN10025",
                             Notes = "S235JR kutu profil 40x40x3 mm",
-                            Origin = "Bar",
                             ProductStandard = "EN 10025-2",
                             SectionArea = 444.0,
                             SectionModulus = 5080.0,

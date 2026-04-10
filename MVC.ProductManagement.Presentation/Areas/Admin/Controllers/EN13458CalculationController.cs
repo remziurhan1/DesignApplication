@@ -1386,7 +1386,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         || string.Equals((x.MaterialClass ?? string.Empty).Trim(), materialClass.Trim(), StringComparison.OrdinalIgnoreCase));
 
                 var details = scopedForms
-                    .Select(x => string.Join(" / ", new[] { x.SymbolicName, x.Norm, x.Origin }
+                    .Select(x => string.Join(" / ", new[] { x.SymbolicName, x.Norm, x.FormType.ToString() }
                         .Where(v => !string.IsNullOrWhiteSpace(v))
                         .Select(v => v!.Trim())))
                     .Where(x => !string.IsNullOrWhiteSpace(x))
