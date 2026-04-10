@@ -17,15 +17,16 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                 new Material
                 {
                     Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "P355NH",
+                    Name = "P355GH",
                     MaterialNumber = "1.0565",
                     Standard = MaterialStandard.EN,
                     Origin = "Plate",
                     Group = "Carbon Steel",
-                    Norm = "EN10028-3",
-                    SymbolicName = "P355NH",
+                    Norm = "EN10028-2",
+                    SymbolicName = "P355GH",
+                    StockCode = null,
                     Density = 7850, // kg/m³
-                    Notes = "Normalized delivery condition according to EN 10028-3",
+                    Notes = "Pressure vessel plate according to EN10028-2",
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow
                 },
@@ -39,6 +40,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     Group = "Stainless Steel",
                     Norm = "EN10028-7",
                     SymbolicName = "X5CrNi18-10",
+                    StockCode = "STK-SS-4301",
                     Density = 8000,
                     Notes = "EN 10028-7 stainless pressure vessel steel",
                     CreatedBy = "SeedData",
@@ -54,10 +56,43 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     Group = "Carbon Steel",
                     Norm = "EN10025",
                     SymbolicName = "S235JR",
+                    StockCode = "STK-CS-S235JR",
                     Density = 7850,
                     ElasticModulus = 206000,
                     YieldFactorK = 235,
                     Notes = "Profile material for supports/rings",
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
+                },
+                new Material
+                {
+                    Id = Guid.Parse("77777777-7777-7777-7777-777777777777"),
+                    Name = "P355NH",
+                    MaterialNumber = "1.0565",
+                    Standard = MaterialStandard.EN,
+                    Origin = "Plate",
+                    Group = "Carbon Steel",
+                    Norm = "EN10028-3",
+                    SymbolicName = "P355NH",
+                    StockCode = null,
+                    Density = 7850,
+                    Notes = "Normalized pressure vessel steel EN10028-3",
+                    CreatedBy = "SeedData",
+                    CreatedDate = DateTime.UtcNow
+                },
+                new Material
+                {
+                    Id = Guid.Parse("88888888-8888-8888-8888-888888888888"),
+                    Name = "X2CrNi18-9",
+                    MaterialNumber = "1.4307",
+                    Standard = MaterialStandard.EN,
+                    Origin = "Plate",
+                    Group = "Stainless Steel",
+                    Norm = "EN10028-7",
+                    SymbolicName = "X2CrNi18-9",
+                    StockCode = null,
+                    Density = 8000,
+                    Notes = "Austenitic stainless steel plate EN10028-7",
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow
                 }
