@@ -14,6 +14,11 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="SymbolicName" class="form-label">Sembolik İsim</label>
+        <input asp-for="SymbolicName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
         <label asp-for="MaterialNumber" class="form-label"></label>
         <input asp-for="MaterialNumber" class="form-control" />
     </div>
@@ -25,10 +30,29 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="Origin" class="form-label">Origin</label>
+        <select asp-for="Origin" class="form-select" asp-items="ViewBag.MaterialOrigins">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
         <label asp-for="Group" class="form-label"></label>
         <select asp-for="Group" class="form-select" asp-items="ViewBag.MaterialGroups">
             <option value="">Seçiniz</option>
         </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Norm" class="form-label">Norm</label>
+        <select asp-for="Norm" class="form-select" asp-items="ViewBag.MaterialNorms">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="StockCode" class="form-label">Stok Kodu</label>
+        <input asp-for="StockCode" class="form-control" />
     </div>
 
     <div class="mb-3">
@@ -74,6 +98,21 @@
 
             <label>Thickness Max</label>
             <input name="Forms[0].ThicknessMax" type="number" class="form-control" />
+
+            <label>Origin</label>
+            <input name="Forms[0].Origin" type="text" class="form-control" />
+
+            <label>Class</label>
+            <input name="Forms[0].MaterialClass" type="text" class="form-control" />
+
+            <label>Norm</label>
+            <input name="Forms[0].Norm" type="text" class="form-control" />
+
+            <label>Sembolik İsim</label>
+            <input name="Forms[0].SymbolicName" type="text" class="form-control" />
+
+            <label>Stok Kodu</label>
+            <input name="Forms[0].StockCode" type="text" class="form-control" />
 
             <label>Product Standard</label>
             <input name="Forms[0].ProductStandard" type="text" class="form-control" />

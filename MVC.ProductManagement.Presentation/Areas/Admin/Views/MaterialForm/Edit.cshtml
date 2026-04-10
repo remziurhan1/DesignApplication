@@ -16,6 +16,37 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="Origin" class="form-label">Origin</label>
+        <select asp-for="Origin" class="form-select" asp-items="ViewBag.MaterialOrigins">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MaterialClass" class="form-label">Class</label>
+        <select asp-for="MaterialClass" class="form-select" asp-items="ViewBag.MaterialClasses">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Norm" class="form-label">Norm</label>
+        <select asp-for="Norm" class="form-select" asp-items="ViewBag.MaterialNorms">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SymbolicName" class="form-label">Sembolik İsim</label>
+        <input asp-for="SymbolicName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="StockCode" class="form-label">Stok Kodu</label>
+        <input asp-for="StockCode" class="form-control" />
+    </div>
+
+    <div class="mb-3">
         <label asp-for="ThicknessMin" class="form-label"></label>
         <input asp-for="ThicknessMin" class="form-control" type="number" />
     </div>
