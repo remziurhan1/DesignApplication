@@ -13,6 +13,11 @@ namespace MVC.ProductManagement.Application.DTOs.MaterialFormDTOs
         public Guid MaterialId { get; set; }
 
         public MaterialFormType FormType { get; set; }
+        public string Origin { get; set; } = string.Empty;
+        public string MaterialClass { get; set; } = string.Empty;
+        public string Norm { get; set; } = string.Empty;
+        public string? SymbolicName { get; set; }
+        public string? StockCode { get; set; }
         public double ThicknessMin { get; set; }
         public double ThicknessMax { get; set; }
         public double UnitPrice { get; set; }

@@ -26,6 +26,11 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = f.Id,
                 MaterialId = f.MaterialId,
                 FormType = f.FormType,
+                Origin = f.Origin,
+                MaterialClass = f.MaterialClass,
+                Norm = f.Norm,
+                SymbolicName = f.SymbolicName,
+                StockCode = f.StockCode,
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
                 UnitPrice=f.UnitPrice,
@@ -52,6 +57,11 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             {
                 Id = f.Id,
                 FormType = f.FormType,
+                Origin = f.Origin,
+                MaterialClass = f.MaterialClass,
+                Norm = f.Norm,
+                SymbolicName = f.SymbolicName,
+                StockCode = f.StockCode,
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
                 UnitPrice = f.UnitPrice,
@@ -70,6 +80,11 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             {
                 Id = f.Id,
                 FormType = f.FormType,
+                Origin = f.Origin,
+                MaterialClass = f.MaterialClass,
+                Norm = f.Norm,
+                SymbolicName = f.SymbolicName,
+                StockCode = f.StockCode,
                 ThicknessMin = f.ThicknessMin,
                 ThicknessMax = f.ThicknessMax,
                 UnitPrice = f.UnitPrice,
@@ -91,6 +106,11 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = form.Id,
                 MaterialId = form.MaterialId,
                 FormType = form.FormType,
+                Origin = form.Origin,
+                MaterialClass = form.MaterialClass,
+                Norm = form.Norm,
+                SymbolicName = form.SymbolicName,
+                StockCode = form.StockCode,
                 ThicknessMin = form.ThicknessMin,
                 ThicknessMax = form.ThicknessMax,
                 ProductStandard = form.ProductStandard,
@@ -112,6 +132,11 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = Guid.NewGuid(),
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
+                Origin = dto.Origin,
+                MaterialClass = dto.MaterialClass,
+                Norm = dto.Norm,
+                SymbolicName = dto.SymbolicName,
+                StockCode = dto.StockCode,
                 ThicknessMin = dto.ThicknessMin,
                 ThicknessMax = dto.ThicknessMax,
                 ProductStandard = dto.ProductStandard,
@@ -133,6 +158,11 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = entity.Id,
                 MaterialId = entity.MaterialId,
                 FormType = entity.FormType,
+                Origin = entity.Origin,
+                MaterialClass = entity.MaterialClass,
+                Norm = entity.Norm,
+                SymbolicName = entity.SymbolicName,
+                StockCode = entity.StockCode,
                 ThicknessMin = entity.ThicknessMin,
                 ThicknessMax = entity.ThicknessMax,
                 ProductStandard = entity.ProductStandard,
@@ -154,6 +184,11 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
 
             entity.MaterialId = dto.MaterialId;
             entity.FormType = dto.FormType;
+            entity.Origin = dto.Origin;
+            entity.MaterialClass = dto.MaterialClass;
+            entity.Norm = dto.Norm;
+            entity.SymbolicName = dto.SymbolicName;
+            entity.StockCode = dto.StockCode;
             entity.ThicknessMin = dto.ThicknessMin;
             entity.ThicknessMax = dto.ThicknessMax;
             entity.ProductStandard = dto.ProductStandard;
@@ -174,6 +209,11 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = entity.Id,
                 MaterialId = entity.MaterialId,
                 FormType = entity.FormType,
+                Origin = entity.Origin,
+                MaterialClass = entity.MaterialClass,
+                Norm = entity.Norm,
+                SymbolicName = entity.SymbolicName,
+                StockCode = entity.StockCode,
                 ThicknessMin = entity.ThicknessMin,
                 ThicknessMax = entity.ThicknessMax,
                 ProductStandard = entity.ProductStandard,
