@@ -141,13 +141,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = new MaterialCreateDto
             {
                 Name = vm.Name,
-                SymbolicName = vm.SymbolicName,
+                SymbolicName = vm.Forms.FirstOrDefault()?.SymbolicName,
                 MaterialNumber = vm.MaterialNumber,
                 Standard = vm.Standard,
-                Origin = vm.Origin,
+                Origin = vm.Forms.FirstOrDefault()?.Origin ?? string.Empty,
                 Group = vm.Group,
-                Norm = vm.Norm,
-                StockCode = vm.StockCode,
+                Norm = vm.Forms.FirstOrDefault()?.Norm ?? string.Empty,
+                StockCode = vm.Forms.FirstOrDefault()?.StockCode,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
                 ElasticModulus = vm.ElasticModulus,
@@ -223,17 +223,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View(vm);
             }
 
+            var existing = await _materialService.GetByIdAsync(vm.Id);
+            if (existing == null) return NotFound();
+
             var dto = new MaterialUpdateDto
             {
                 Id = vm.Id,
                 Name = vm.Name,
-                SymbolicName = vm.SymbolicName,
+                SymbolicName = existing.SymbolicName,
                 MaterialNumber = vm.MaterialNumber,
                 Standard = vm.Standard,
-                Origin = vm.Origin,
+                Origin = existing.Origin,
                 Group = vm.Group,
-                Norm = vm.Norm,
-                StockCode = vm.StockCode,
+                Norm = existing.Norm,
+                StockCode = existing.StockCode,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
                 ElasticModulus = vm.ElasticModulus,
