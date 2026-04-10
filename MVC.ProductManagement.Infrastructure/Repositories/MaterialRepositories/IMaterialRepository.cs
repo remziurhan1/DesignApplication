@@ -1,5 +1,4 @@
 ﻿using MVC.ProductManagement.Domain.Entities;
-using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,6 +17,5 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories
      IAsyncUpdatebleRepository<Material>
     {
         Task<Material> GetByNameAsync(string materialName);
-        Task<List<Material>> GetByStandardAsync(MaterialStandard standard);
     }
 }
