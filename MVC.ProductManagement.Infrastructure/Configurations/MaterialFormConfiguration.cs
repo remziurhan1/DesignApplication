@@ -18,6 +18,21 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(f => f.ProductStandard)
                    .HasMaxLength(100);
 
+            builder.Property(f => f.Origin)
+                   .HasMaxLength(50);
+
+            builder.Property(f => f.MaterialClass)
+                   .HasMaxLength(50);
+
+            builder.Property(f => f.Norm)
+                   .HasMaxLength(50);
+
+            builder.Property(f => f.SymbolicName)
+                   .HasMaxLength(100);
+
+            builder.Property(f => f.StockCode)
+                   .HasMaxLength(100);
+
             builder.Property(f => f.WeldingFactor)
                    .HasPrecision(5, 2);
 
