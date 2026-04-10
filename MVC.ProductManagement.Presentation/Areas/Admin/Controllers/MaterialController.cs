@@ -12,10 +12,40 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private static readonly string[] MaterialGroups =
         {
             "Carbon Steel",
+            "Alloy Steel",
+            "Alluminum Alloy",
+            "Carbon Low Alloy",
+            "Copper Alloy",
+            "Nickel Alloy",
             "Stainless Steel",
-            "Aluminum",
-            "Duplex Stainless Steel",
-            "Nickel Alloy"
+            "Titanium - Zirconium"
+        };
+
+        private static readonly string[] MaterialOrigins =
+        {
+            "Plate",
+            "Forging",
+            "Welded Tube",
+            "Seamless Tube",
+            "Seamless Pipe",
+            "Welded Pipe",
+            "Cast Steel",
+            "Fitting",
+            "Bolting",
+            "Bar"
+        };
+
+        private static readonly string[] MaterialNorms =
+        {
+            "ASME II",
+            "ASTM",
+            "EN10025",
+            "EN10028-2",
+            "EN10028-3",
+            "EN10028-4",
+            "EN10028-5",
+            "EN10028-6",
+            "EN10028-7"
         };
 
         private readonly IMaterialService _materialService;
@@ -63,9 +93,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = dto.Id,
                 Name = dto.Name,
+                SymbolicName = dto.SymbolicName,
                 MaterialNumber = dto.MaterialNumber,
                 Standard = dto.Standard,
+                Origin = dto.Origin,
                 Group = dto.Group,
+                Norm = dto.Norm,
+                StockCode = dto.StockCode,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
                 ElasticModulus = dto.ElasticModulus,
@@ -84,7 +118,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return Forbid();
             }
 
-            LoadMaterialGroups();
+            LoadMaterialSelections();
             return View();
         }
 
@@ -100,16 +134,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                LoadMaterialGroups();
+                LoadMaterialSelections();
                 return View(vm);
             }
 
             var dto = new MaterialCreateDto
             {
                 Name = vm.Name,
+                SymbolicName = vm.SymbolicName,
                 MaterialNumber = vm.MaterialNumber,
                 Standard = vm.Standard,
+                Origin = vm.Origin,
                 Group = vm.Group,
+                Norm = vm.Norm,
+                StockCode = vm.StockCode,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
                 ElasticModulus = vm.ElasticModulus,
@@ -145,9 +183,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = dto.Id,
                 Name = dto.Name,
+                SymbolicName = dto.SymbolicName,
                 MaterialNumber = dto.MaterialNumber,
                 Standard = dto.Standard,
+                Origin = dto.Origin,
                 Group = dto.Group,
+                Norm = dto.Norm,
+                StockCode = dto.StockCode,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
                 ElasticModulus = dto.ElasticModulus,
@@ -155,7 +197,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 Notes = dto.Notes
             };
 
-            LoadMaterialGroups();
+            LoadMaterialSelections();
 
             return View(vm);
         }
@@ -172,7 +214,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                LoadMaterialGroups();
+                LoadMaterialSelections();
                 return View(vm);
             }
 
@@ -180,9 +222,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = vm.Id,
                 Name = vm.Name,
+                SymbolicName = vm.SymbolicName,
                 MaterialNumber = vm.MaterialNumber,
                 Standard = vm.Standard,
+                Origin = vm.Origin,
                 Group = vm.Group,
+                Norm = vm.Norm,
+                StockCode = vm.StockCode,
                 Density = vm.Density,
                 ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
                 ElasticModulus = vm.ElasticModulus,
@@ -194,10 +240,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private void LoadMaterialGroups()
+        private void LoadMaterialSelections()
         {
             ViewBag.MaterialGroups = MaterialGroups
                 .Select(group => new SelectListItem(group, group))
+                .ToList();
+
+            ViewBag.MaterialOrigins = MaterialOrigins
+                .Select(origin => new SelectListItem(origin, origin))
+                .ToList();
+
+            ViewBag.MaterialNorms = MaterialNorms
+                .Select(norm => new SelectListItem(norm, norm))
                 .ToList();
         }
 
@@ -216,9 +270,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 Id = dto.Id,
                 Name = dto.Name,
+                SymbolicName = dto.SymbolicName,
                 MaterialNumber = dto.MaterialNumber,
                 Standard = dto.Standard,
+                Origin = dto.Origin,
                 Group = dto.Group,
+                Norm = dto.Norm,
+                StockCode = dto.StockCode,
                 Density = dto.Density,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
                 ElasticModulus = dto.ElasticModulus,
