@@ -59,9 +59,6 @@
     <button type="submit" class="btn btn-success">Save</button>
     <a asp-area="Admin" asp-controller="Material" asp-action="Index" class="btn btn-secondary">Cancel</a>
 
-    <h4>Material Info</h4>
-    <!-- burada malzeme alanları olacak -->
-
     <h4>Form Info</h4>
     <div id="forms-container">
         <div class="form-block">
@@ -74,6 +71,27 @@
 
             <label>Thickness Max</label>
             <input name="Forms[0].ThicknessMax" type="number" class="form-control" />
+
+            <label>Origin</label>
+            <select name="Forms[0].Origin" class="form-select" asp-items="ViewBag.MaterialOrigins">
+                <option value="">Seçiniz</option>
+            </select>
+
+            <label>Class</label>
+            <select name="Forms[0].MaterialClass" class="form-select" asp-items="ViewBag.MaterialGroups">
+                <option value="">Seçiniz</option>
+            </select>
+
+            <label>Norm</label>
+            <select name="Forms[0].Norm" class="form-select" asp-items="ViewBag.MaterialNorms">
+                <option value="">Seçiniz</option>
+            </select>
+
+            <label>Sembolik İsim</label>
+            <input name="Forms[0].SymbolicName" type="text" class="form-control" />
+
+            <label>Stok Kodu</label>
+            <input name="Forms[0].StockCode" type="text" class="form-control" />
 
             <label>Product Standard</label>
             <input name="Forms[0].ProductStandard" type="text" class="form-control" />
