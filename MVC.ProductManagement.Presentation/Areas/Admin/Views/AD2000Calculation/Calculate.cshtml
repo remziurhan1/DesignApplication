@@ -81,6 +81,8 @@
                     <div class="col-md-6"><label class="form-label">Bombe Malzeme Sınıfı</label><select id="HeadMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label class="form-label">Gövde Norm</label><select id="ShellMaterialNorm" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label class="form-label">Bombe Norm</label><select id="HeadMaterialNorm" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label class="form-label">Gövde Sembolik İsim</label><select id="ShellMaterialSymbolicName" class="form-select"><option value="">Seçiniz</option></select></div>
+                    <div class="col-md-6"><label class="form-label">Bombe Sembolik İsim</label><select id="HeadMaterialSymbolicName" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label asp-for="ShellMaterialId" class="form-label">Gövde Malzemesi</label><select asp-for="ShellMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label asp-for="HeadMaterialId" class="form-label">Bombe Malzemesi</label><select asp-for="HeadMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
                     <div class="col-md-6"><label asp-for="ShellMaterialFormId" class="form-label">Gövde Formu</label><select asp-for="ShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
@@ -122,13 +124,14 @@
             }
         }
 
-        function bindMaterialCascade(formTypeSelectId, groupSelectId, normSelectId, materialSelectId, formSelectId) {
+        function bindMaterialCascade(formTypeSelectId, groupSelectId, normSelectId, symbolicSelectId, materialSelectId, formSelectId) {
             const formTypeSelect = document.getElementById(formTypeSelectId);
             const groupSelect = document.getElementById(groupSelectId);
             const normSelect = document.getElementById(normSelectId);
+            const symbolicSelect = document.getElementById(symbolicSelectId);
             const materialSelect = document.getElementById(materialSelectId);
             const formSelect = document.getElementById(formSelectId);
-            if (!formTypeSelect || !groupSelect || !normSelect || !materialSelect || !formSelect) return;
+            if (!formTypeSelect || !groupSelect || !normSelect || !symbolicSelect || !materialSelect || !formSelect) return;
 
             const getAllForms = () =>
                 Object.entries(formsByMaterial || {}).flatMap(([materialId, items]) =>
@@ -138,20 +141,31 @@
                 const selectedType = formTypeSelect.value;
                 const selectedGroup = groupSelect.value;
                 const selectedNorm = normSelect.value;
+                const selectedSymbolic = symbolicSelect.value;
                 const selectedMaterial = includeMaterial ? materialSelect.value : '';
 
                 return (forms || []).filter(x =>
                     (!selectedType || x.formType === selectedType) &&
                     (!selectedGroup || ((x.materialClass || '').trim().toLowerCase() === selectedGroup.trim().toLowerCase())) &&
                     (!selectedNorm || ((x.norm || '').trim().toLowerCase() === selectedNorm.trim().toLowerCase())) &&
+                    (!selectedSymbolic || ((x.symbolicName || '').trim().toLowerCase() === selectedSymbolic.trim().toLowerCase())) &&
                     (!selectedMaterial || x.materialId === selectedMaterial));
             };
 
             const refillByFilters = () => {
+                const allForms = getAllForms();
+                const formTypeOptions = [...new Set(allForms.map(x => x.formType).filter(x => x && x.trim().length > 0))]
+                    .map(x => ({ value: x, text: x }));
+                fillOptions(formTypeSelect, formTypeOptions);
+
                 const candidateForms = applyFormFilters(getAllForms(), false);
                 const normOptions = [...new Set(candidateForms.map(x => x.norm).filter(x => x && x.trim().length > 0))]
                     .map(x => ({ value: x, text: x }));
                 fillOptions(normSelect, normOptions);
+
+                const symbolicOptions = [...new Set(candidateForms.map(x => x.symbolicName).filter(x => x && x.trim().length > 0))]
+                    .map(x => ({ value: x, text: x }));
+                fillOptions(symbolicSelect, symbolicOptions);
 
                 const filteredForMaterial = applyFormFilters(getAllForms(), false);
                 const materialIds = [...new Set(filteredForMaterial.map(x => x.materialId))];
@@ -166,6 +180,7 @@
             formTypeSelect.addEventListener('change', refillByFilters);
             groupSelect.addEventListener('change', refillByFilters);
             normSelect.addEventListener('change', refillByFilters);
+            symbolicSelect.addEventListener('change', refillByFilters);
             materialSelect.addEventListener('change', refillByFilters);
             refillByFilters();
         }
@@ -192,8 +207,8 @@
             updateDensity();
         }
 
-        bindMaterialCascade('ShellMaterialFormType', 'ShellMaterialGroup', 'ShellMaterialNorm', 'ShellMaterialId', 'ShellMaterialFormId');
-        bindMaterialCascade('HeadMaterialFormType', 'HeadMaterialGroup', 'HeadMaterialNorm', 'HeadMaterialId', 'HeadMaterialFormId');
+        bindMaterialCascade('ShellMaterialFormType', 'ShellMaterialGroup', 'ShellMaterialNorm', 'ShellMaterialSymbolicName', 'ShellMaterialId', 'ShellMaterialFormId');
+        bindMaterialCascade('HeadMaterialFormType', 'HeadMaterialGroup', 'HeadMaterialNorm', 'HeadMaterialSymbolicName', 'HeadMaterialId', 'HeadMaterialFormId');
         bindDensityMode();
     </script>
 }

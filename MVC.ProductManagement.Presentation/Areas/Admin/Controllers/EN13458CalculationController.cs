@@ -1445,6 +1445,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                         formType = x.FormType.ToString(),
                         materialClass = x.MaterialClass,
                         norm = x.Norm,
+                        symbolicName = x.SymbolicName,
                         momentOfInertia = x.MomentOfInertia,
                         sectionArea = x.SectionArea,
                         sectionModulus = x.SectionModulus
