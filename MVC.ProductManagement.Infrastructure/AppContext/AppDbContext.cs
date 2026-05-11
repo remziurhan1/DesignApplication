@@ -14,6 +14,8 @@ using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.Configurations;
 using MVC.ProductManagement.Infrastructure.Seeds;
+using DesignPlanning.Entities;
+using DesignPlanning.DataAccess;
 
 using System;
 using System.Collections.Generic;
@@ -91,6 +93,13 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
         public DbSet<SFeatureValueDependency> SFeatureValueDependencies { get; set; }
         public DbSet<SPrefixRule> SPrefixRules => Set<SPrefixRule>();
 
+        public DbSet<DesignPlanning.Entities.Employee> DesignPlanningEmployees => Set<DesignPlanning.Entities.Employee>();
+        public DbSet<EmployeeExpertise> DesignPlanningEmployeeExpertises => Set<EmployeeExpertise>();
+        public DbSet<ProjectType> DesignPlanningProjectTypes => Set<ProjectType>();
+        public DbSet<TaskTemplate> DesignPlanningTaskTemplates => Set<TaskTemplate>();
+        public DbSet<Project> DesignPlanningProjects => Set<Project>();
+        public DbSet<ProjectTask> DesignPlanningProjectTasks => Set<ProjectTask>();
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -105,6 +114,10 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             builder.Entity<StorageType>().HasData(StorageTypeSeed.Get());
             builder.Entity<StorageTypeProperties>().HasData(StorageTypePropertiesSeed.Get());
             builder.Entity<SalesRequestProductGroup>().HasData(SalesRequestProductGroupSeed.Get());
+            builder.Entity<DesignPlanning.Entities.Employee>().HasData(DesignPlanningSeed.Employees());
+            builder.Entity<EmployeeExpertise>().HasData(DesignPlanningSeed.EmployeeExpertises());
+            builder.Entity<ProjectType>().HasData(DesignPlanningSeed.ProjectTypes());
+            builder.Entity<TaskTemplate>().HasData(DesignPlanningSeed.TaskTemplates());
             builder.Entity<EmployeeProfile>(entity =>
             {
                 entity.HasIndex(x => x.UserId).IsUnique();
