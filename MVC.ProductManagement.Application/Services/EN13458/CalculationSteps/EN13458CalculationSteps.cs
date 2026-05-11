@@ -241,7 +241,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
 
     public class WeightStep : IEN13458CalculationStep
     {
-        private const double SteelDensity = 7850d;
         private const double BombeCoefficient = 1.174d;
         private const double BombeFactor = 1.7d * 3.5d;
 
@@ -259,7 +258,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var innerShellVolume =
                 innerEffectiveDiameter * (shellLength / 1000d) * (innerShellT / 1000d);
 
-            var innerShellWeight = innerShellVolume * SteelDensity;
+            var innerShellWeight = innerShellVolume * context.Result.InnerShellMaterialDensity;
 
             var innerBombePulDiameter =
                 (BombeCoefficient * diameter) + (BombeFactor * innerHeadT);
@@ -270,7 +269,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 (Math.PI / 4d) * Math.Pow(innerBombePulDiameter / 1000d, 2)
                 * (innerHeadT / 1000d);
 
-            var innerBombeWeight = innerBombeVolume * SteelDensity;
+            var innerBombeWeight = innerBombeVolume * context.Result.InnerHeadMaterialDensity;
             context.Result.InnerTankHeadWeight = Math.Round(innerBombeWeight, 2);
 
             context.Result.InnerTankWeight =
@@ -291,7 +290,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
             var outerShellVolume =
                 outerEffectiveDiameter * (outerShellLength / 1000d) * (outerShellT / 1000d);
 
-            var outerShellWeight = outerShellVolume * SteelDensity;
+            var outerShellWeight = outerShellVolume * context.Result.OuterShellMaterialDensity;
 
             var outerBombePulDiameter =
                 (BombeCoefficient * outerDiameter) + (BombeFactor * outerHeadT);
@@ -302,7 +301,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.CalculationSteps
                 (Math.PI / 4d) * Math.Pow(outerBombePulDiameter / 1000d, 2)
                 * (outerHeadT / 1000d);
 
-            var outerBombeWeight = outerBombeVolume * SteelDensity;
+            var outerBombeWeight = outerBombeVolume * context.Result.OuterHeadMaterialDensity;
             context.Result.OuterTankHeadWeight = Math.Round(outerBombeWeight, 2);
 
             context.Result.OuterTankWeight =

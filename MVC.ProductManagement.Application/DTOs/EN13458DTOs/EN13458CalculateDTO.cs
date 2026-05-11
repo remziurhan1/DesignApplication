@@ -19,6 +19,7 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double LiquidDensity { get; set; }
         public TankOrientation TankOrientation { get; set; } = TankOrientation.Horizontal;
         public bool IsColdStretchApplied { get; set; }
+        public double DesignTemperature { get; set; } = 20d;
 
         public double WeldLength1500 { get; set; }
         public double WeldLength2000 { get; set; }
@@ -42,6 +43,11 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double? InnerHeadMaterialStrength { get; set; }
         public double? OuterShellMaterialStrength { get; set; }
         public double? OuterHeadMaterialStrength { get; set; }
+
+        public double? InnerShellMaterialDensity { get; set; }
+        public double? InnerHeadMaterialDensity { get; set; }
+        public double? OuterShellMaterialDensity { get; set; }
+        public double? OuterHeadMaterialDensity { get; set; }
 
         // Dış tank elastik-plastik burkulma için seçilen malzemeden resolve edilir
         public double? ElasticModulus { get; set; }

@@ -1,5 +1,6 @@
 ﻿using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
 using MVC.ProductManagement.Domain.Entities;
+using MVC.ProductManagement.Domain.Enums;
 using MVC.ProductManagement.Infrastructure.DataAccess.Interfaces;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using System;
@@ -27,6 +28,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 MaterialId = f.MaterialId,
                 FormType = f.FormType,
                 MaterialClass = f.MaterialClass,
+                MaterialFamily = f.MaterialFamily,
                 Norm = f.Norm,
                 SymbolicName = f.SymbolicName,
                 StockCode = f.StockCode,
@@ -57,6 +59,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = f.Id,
                 FormType = f.FormType,
                 MaterialClass = f.MaterialClass,
+                MaterialFamily = f.MaterialFamily,
                 Norm = f.Norm,
                 SymbolicName = f.SymbolicName,
                 StockCode = f.StockCode,
@@ -79,6 +82,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 Id = f.Id,
                 FormType = f.FormType,
                 MaterialClass = f.MaterialClass,
+                MaterialFamily = f.MaterialFamily,
                 Norm = f.Norm,
                 SymbolicName = f.SymbolicName,
                 StockCode = f.StockCode,
@@ -104,6 +108,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 MaterialId = form.MaterialId,
                 FormType = form.FormType,
                 MaterialClass = form.MaterialClass,
+                MaterialFamily = form.MaterialFamily,
                 Norm = form.Norm,
                 SymbolicName = form.SymbolicName,
                 StockCode = form.StockCode,
@@ -129,6 +134,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 MaterialId = dto.MaterialId,
                 FormType = dto.FormType,
                 MaterialClass = dto.MaterialClass,
+                MaterialFamily = ResolveMaterialFamily(dto.MaterialFamily, dto.MaterialClass),
                 Norm = dto.Norm,
                 SymbolicName = dto.SymbolicName,
                 StockCode = dto.StockCode,
@@ -154,6 +160,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 MaterialId = entity.MaterialId,
                 FormType = entity.FormType,
                 MaterialClass = entity.MaterialClass,
+                MaterialFamily = entity.MaterialFamily,
                 Norm = entity.Norm,
                 SymbolicName = entity.SymbolicName,
                 StockCode = entity.StockCode,
@@ -179,6 +186,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             entity.MaterialId = dto.MaterialId;
             entity.FormType = dto.FormType;
             entity.MaterialClass = dto.MaterialClass;
+            entity.MaterialFamily = ResolveMaterialFamily(dto.MaterialFamily, dto.MaterialClass);
             entity.Norm = dto.Norm;
             entity.SymbolicName = dto.SymbolicName;
             entity.StockCode = dto.StockCode;
@@ -203,6 +211,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 MaterialId = entity.MaterialId,
                 FormType = entity.FormType,
                 MaterialClass = entity.MaterialClass,
+                MaterialFamily = entity.MaterialFamily,
                 Norm = entity.Norm,
                 SymbolicName = entity.SymbolicName,
                 StockCode = entity.StockCode,
@@ -219,6 +228,16 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 SectionModulus = dto.SectionModulus
 
             };
+        }
+
+        private static MaterialFamily ResolveMaterialFamily(MaterialFamily materialFamily, string materialClass)
+        {
+            if (materialFamily != MaterialFamily.Unknown) return materialFamily;
+
+            var normalized = (materialClass ?? string.Empty).Trim().ToLowerInvariant();
+            if (normalized.Contains("stainless") || normalized.Contains("paslanmaz")) return MaterialFamily.StainlessSteel;
+            if (normalized.Contains("carbon") || normalized.Contains("karbon")) return MaterialFamily.CarbonSteel;
+            return MaterialFamily.Unknown;
         }
 
         public async Task DeleteAsync(Guid id)

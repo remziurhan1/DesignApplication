@@ -16,6 +16,14 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(x => x.ItemName).HasMaxLength(128).IsRequired();
             builder.Property(x => x.MaterialName).HasMaxLength(128).IsRequired();
             builder.Property(x => x.FormType).HasMaxLength(64).IsRequired();
+            builder.Property(x => x.MaterialNumber).HasMaxLength(64).IsRequired();
+            builder.Property(x => x.MaterialClass).HasMaxLength(64).IsRequired();
+            builder.Property(x => x.MaterialFamily).HasMaxLength(64).IsRequired();
+            builder.Property(x => x.Norm).HasMaxLength(64).IsRequired();
+            builder.Property(x => x.ProductStandard).HasMaxLength(128).IsRequired();
+            builder.Property(x => x.SymbolicName).HasMaxLength(128).IsRequired();
+            builder.Property(x => x.DensitySource).HasMaxLength(64).IsRequired();
+            builder.Property(x => x.PriceSource).HasMaxLength(64).IsRequired();
             builder.Property(x => x.StockCode).HasMaxLength(32).IsRequired();
             builder.Property(x => x.StockCodeName).HasMaxLength(256).IsRequired();
             builder.Property(x => x.Unit).HasMaxLength(32).IsRequired();

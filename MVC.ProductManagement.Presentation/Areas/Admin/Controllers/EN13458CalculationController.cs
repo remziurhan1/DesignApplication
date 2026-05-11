@@ -754,6 +754,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             vm.LiquidDensity = dto.LiquidDensity;
             vm.TankOrientation = dto.TankOrientation;
             vm.IsColdStretchApplied = dto.IsColdStretchApplied;
+            vm.DesignTemperature = dto.DesignTemperature;
             vm.WeldLength1500 = dto.WeldLength1500;
             vm.WeldLength2000 = dto.WeldLength2000;
             vm.WeldLength2500 = dto.WeldLength2500;
@@ -770,6 +771,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             vm.InnerHeadMaterialStrength = dto.InnerHeadMaterialStrength;
             vm.OuterShellMaterialStrength = dto.OuterShellMaterialStrength;
             vm.OuterHeadMaterialStrength = dto.OuterHeadMaterialStrength;
+            vm.InnerShellMaterialDensity = dto.InnerShellMaterialDensity;
+            vm.InnerHeadMaterialDensity = dto.InnerHeadMaterialDensity;
+            vm.OuterShellMaterialDensity = dto.OuterShellMaterialDensity;
+            vm.OuterHeadMaterialDensity = dto.OuterHeadMaterialDensity;
             vm.InnerShellThickness = dto.InnerShellThickness;
             vm.InnerHeadThickness = dto.InnerHeadThickness;
             vm.OuterShellThickness = dto.OuterShellThickness;
@@ -850,6 +855,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 LiquidDensity = vm.LiquidDensity,
                 TankOrientation = vm.TankOrientation,
                 IsColdStretchApplied = vm.IsColdStretchApplied,
+                DesignTemperature = vm.DesignTemperature == 0d ? 20d : vm.DesignTemperature,
                 WeldLength1500 = vm.WeldLength1500,
                 WeldLength2000 = vm.WeldLength2000,
                 WeldLength2500 = vm.WeldLength2500,
@@ -866,6 +872,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 InnerHeadMaterialStrength = vm.InnerHeadMaterialStrength,
                 OuterShellMaterialStrength = vm.OuterShellMaterialStrength,
                 OuterHeadMaterialStrength = vm.OuterHeadMaterialStrength,
+                InnerShellMaterialDensity = vm.InnerShellMaterialDensity,
+                InnerHeadMaterialDensity = vm.InnerHeadMaterialDensity,
+                OuterShellMaterialDensity = vm.OuterShellMaterialDensity,
+                OuterHeadMaterialDensity = vm.OuterHeadMaterialDensity,
                 InnerShellThickness = vm.InnerShellThickness,
                 InnerHeadThickness = vm.InnerHeadThickness,
                 OuterShellThickness = vm.OuterShellThickness,

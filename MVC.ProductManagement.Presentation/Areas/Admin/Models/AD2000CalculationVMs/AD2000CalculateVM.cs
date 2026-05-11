@@ -46,6 +46,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000Calculatio
         [Display(Name = "Bombe Akma Dayanımı (MPa)")]
         public double HeadAllowableStress { get; set; }
 
+        public double ShellYieldStrengthRp02 { get; set; }
+        public double HeadYieldStrengthRp02 { get; set; }
+        public double ShellDesignStress { get; set; }
+        public double HeadDesignStress { get; set; }
+
         [Range(0.1, 5)]
         public double Beta { get; set; } = 1.0;
 

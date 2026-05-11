@@ -21,6 +21,9 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(f => f.MaterialClass)
                    .HasMaxLength(50);
 
+            builder.Property(f => f.MaterialFamily)
+                   .IsRequired();
+
             builder.Property(f => f.Norm)
                    .HasMaxLength(50);
 
@@ -48,6 +51,9 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
 
             builder.Property(f => f.SectionModulus)
                    .HasPrecision(14, 3);
+
+            builder.HasIndex(f => new { f.MaterialId, f.FormType, f.Norm, f.ProductStandard, f.ThicknessMin, f.ThicknessMax })
+                   .IsUnique();
 
             builder.HasMany(f => f.YieldStrengths)
                    .WithOne(y => y.MaterialForm)

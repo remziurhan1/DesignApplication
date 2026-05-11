@@ -15,6 +15,7 @@ namespace MVC.ProductManagement.Domain.Entities
 
         public MaterialFormType FormType { get; set; }                // Plate, Pipe, Forging, Bar
         public string MaterialClass { get; set; } = string.Empty;     // Carbon Steel, Stainless Steel...
+        public MaterialFamily MaterialFamily { get; set; } = MaterialFamily.Unknown;
         public string Norm { get; set; } = string.Empty;              // ASME II, EN10028-2...
         public string? SymbolicName { get; set; }                     // P355GH vb.
         public string? StockCode { get; set; }                        // nullable stok kodu

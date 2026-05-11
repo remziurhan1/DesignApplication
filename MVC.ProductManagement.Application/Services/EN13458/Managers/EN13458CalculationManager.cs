@@ -25,18 +25,54 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
 
         public async Task<EN13458ResultDTO> CalculateAsync(EN13458CalculateDTO input)
         {
-            input.InnerShellMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerShellMaterialId, input.InnerShellMaterialFormId, input.IsColdStretchApplied);
-            input.InnerHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerHeadMaterialId, input.InnerHeadMaterialFormId, input.IsColdStretchApplied);
-            input.OuterShellMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterShellMaterialId, input.OuterShellMaterialFormId, input.IsColdStretchApplied);
-            input.OuterHeadMaterialStrength = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterHeadMaterialId, input.OuterHeadMaterialFormId, input.IsColdStretchApplied);
+            input.DesignTemperature = input.DesignTemperature == 0d ? 20d : input.DesignTemperature;
+            input.InnerShellMaterialDensity = await _strengthProvider.ResolveDensityAsync(input.InnerShellMaterialId);
+            input.InnerHeadMaterialDensity = await _strengthProvider.ResolveDensityAsync(input.InnerHeadMaterialId);
+            input.OuterShellMaterialDensity = await _strengthProvider.ResolveDensityAsync(input.OuterShellMaterialId);
+            input.OuterHeadMaterialDensity = await _strengthProvider.ResolveDensityAsync(input.OuterHeadMaterialId);
+
+            await ResolveMaterialStrengthsAsync(input, null);
 
             input.YieldFactorK = await _strengthProvider.ResolveYieldFactorKAsync(input.OuterShellMaterialId);
             input.ElasticModulus = await _strengthProvider.ResolveElasticModulusAsync(input.OuterShellMaterialId);
 
             var result = await _engine.CalculateAsync(input);
+            var refined = await ResolveMaterialStrengthsAsync(input, result);
+            if (refined)
+            {
+                result = await _engine.CalculateAsync(input);
+            }
+
             ApplySectorOrientationOutputs(result, input);
             return result;
         }
+
+        private async Task<bool> ResolveMaterialStrengthsAsync(EN13458CalculateDTO input, EN13458ResultDTO? previousResult)
+        {
+            var shellThickness = previousResult?.RoundedInnerShellThickness ?? 0d;
+            var headThickness = previousResult?.RoundedInnerHeadThickness ?? 0d;
+            var outerShellThickness = previousResult?.RoundedOuterShellThickness ?? 0d;
+            var outerHeadThickness = previousResult?.RoundedOuterHeadThickness ?? 0d;
+
+            var innerShell = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerShellMaterialId, input.InnerShellMaterialFormId, input.IsColdStretchApplied, input.DesignTemperature, shellThickness);
+            var innerHead = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.InnerHeadMaterialId, input.InnerHeadMaterialFormId, input.IsColdStretchApplied, input.DesignTemperature, headThickness);
+            var outerShell = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterShellMaterialId, input.OuterShellMaterialFormId, input.IsColdStretchApplied, input.DesignTemperature, outerShellThickness);
+            var outerHead = await _strengthProvider.ResolveEffectiveYieldStrengthAsync(input.OuterHeadMaterialId, input.OuterHeadMaterialFormId, input.IsColdStretchApplied, input.DesignTemperature, outerHeadThickness);
+
+            var changed = !AreClose(input.InnerShellMaterialStrength, innerShell)
+                || !AreClose(input.InnerHeadMaterialStrength, innerHead)
+                || !AreClose(input.OuterShellMaterialStrength, outerShell)
+                || !AreClose(input.OuterHeadMaterialStrength, outerHead);
+
+            input.InnerShellMaterialStrength = innerShell;
+            input.InnerHeadMaterialStrength = innerHead;
+            input.OuterShellMaterialStrength = outerShell;
+            input.OuterHeadMaterialStrength = outerHead;
+            return previousResult != null && changed;
+        }
+
+        private static bool AreClose(double? left, double right)
+            => left.HasValue && Math.Abs(left.Value - right) < 0.0001d;
 
         public async Task<EN13458ResultDTO> SaveAsync(EN13458ResultDTO result, string createdBy = "System")
         {
@@ -75,13 +111,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
         private static EN13458Calculation ToEntity(EN13458ResultDTO dto, string createdBy) => new EN13458Calculation
         {
             Id = Guid.NewGuid(), Name = dto.Name, OuterDiameter = dto.OuterDiameter, OuterTankDiameter = dto.OuterTankDiameter, ShellLength = dto.ShellLength,
-            Pressure = dto.Pressure, ProductTypeId = dto.StorageTypeId, LiquidDensity = dto.LiquidDensity,
+            Pressure = dto.Pressure, ProductTypeId = dto.StorageTypeId, LiquidDensity = dto.LiquidDensity, DesignTemperature = dto.DesignTemperature,
             InnerShellMaterialId = dto.InnerShellMaterialId, InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
             InnerHeadMaterialId = dto.InnerHeadMaterialId, InnerHeadMaterialFormId = dto.InnerHeadMaterialFormId,
             OuterShellMaterialId = dto.OuterShellMaterialId, OuterShellMaterialFormId = dto.OuterShellMaterialFormId,
             OuterHeadMaterialId = dto.OuterHeadMaterialId, OuterHeadMaterialFormId = dto.OuterHeadMaterialFormId,
             InnerShellMaterialStrength = dto.InnerShellMaterialStrength, InnerHeadMaterialStrength = dto.InnerHeadMaterialStrength,
             OuterShellMaterialStrength = dto.OuterShellMaterialStrength, OuterHeadMaterialStrength = dto.OuterHeadMaterialStrength,
+            InnerShellMaterialDensity = dto.InnerShellMaterialDensity, InnerHeadMaterialDensity = dto.InnerHeadMaterialDensity,
+            OuterShellMaterialDensity = dto.OuterShellMaterialDensity, OuterHeadMaterialDensity = dto.OuterHeadMaterialDensity,
             InnerShellThickness = dto.InnerShellThickness, InnerHeadThickness = dto.InnerHeadThickness,
             OuterShellThickness = dto.OuterShellThickness, OuterHeadThickness = dto.OuterHeadThickness,
             RoundedInnerShellThickness = dto.RoundedInnerShellThickness, RoundedInnerHeadThickness = dto.RoundedInnerHeadThickness,
@@ -151,6 +189,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             entity.Pressure = dto.Pressure;
             entity.ProductTypeId = dto.StorageTypeId;
             entity.LiquidDensity = dto.LiquidDensity;
+            entity.DesignTemperature = dto.DesignTemperature;
             entity.InnerShellMaterialId = dto.InnerShellMaterialId;
             entity.InnerShellMaterialFormId = dto.InnerShellMaterialFormId;
             entity.InnerHeadMaterialId = dto.InnerHeadMaterialId;
@@ -163,6 +202,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             entity.InnerHeadMaterialStrength = dto.InnerHeadMaterialStrength;
             entity.OuterShellMaterialStrength = dto.OuterShellMaterialStrength;
             entity.OuterHeadMaterialStrength = dto.OuterHeadMaterialStrength;
+            entity.InnerShellMaterialDensity = dto.InnerShellMaterialDensity;
+            entity.InnerHeadMaterialDensity = dto.InnerHeadMaterialDensity;
+            entity.OuterShellMaterialDensity = dto.OuterShellMaterialDensity;
+            entity.OuterHeadMaterialDensity = dto.OuterHeadMaterialDensity;
             entity.InnerShellThickness = dto.InnerShellThickness;
             entity.InnerHeadThickness = dto.InnerHeadThickness;
             entity.OuterShellThickness = dto.OuterShellThickness;
@@ -238,7 +281,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
         private static EN13458ResultDTO ToDto(EN13458Calculation entity) => new EN13458ResultDTO
         {
             Id = entity.Id, Name = entity.Name, OuterDiameter = entity.OuterDiameter, OuterTankDiameter = entity.OuterTankDiameter, ShellLength = entity.ShellLength,
-            Pressure = entity.Pressure, StorageTypeId = entity.ProductTypeId, LiquidDensity = entity.LiquidDensity,
+            Pressure = entity.Pressure, StorageTypeId = entity.ProductTypeId, LiquidDensity = entity.LiquidDensity, DesignTemperature = entity.DesignTemperature,
             IsColdStretchApplied = false, TankOrientation = MVC.ProductManagement.Domain.Enums.TankOrientation.Horizontal,
             InnerShellMaterialId = entity.InnerShellMaterialId, InnerShellMaterialFormId = entity.InnerShellMaterialFormId,
             InnerHeadMaterialId = entity.InnerHeadMaterialId, InnerHeadMaterialFormId = entity.InnerHeadMaterialFormId,
@@ -246,6 +289,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
             OuterHeadMaterialId = entity.OuterHeadMaterialId, OuterHeadMaterialFormId = entity.OuterHeadMaterialFormId,
             InnerShellMaterialStrength = entity.InnerShellMaterialStrength, InnerHeadMaterialStrength = entity.InnerHeadMaterialStrength,
             OuterShellMaterialStrength = entity.OuterShellMaterialStrength, OuterHeadMaterialStrength = entity.OuterHeadMaterialStrength,
+            InnerShellMaterialDensity = entity.InnerShellMaterialDensity, InnerHeadMaterialDensity = entity.InnerHeadMaterialDensity,
+            OuterShellMaterialDensity = entity.OuterShellMaterialDensity, OuterHeadMaterialDensity = entity.OuterHeadMaterialDensity,
             InnerShellThickness = entity.InnerShellThickness, InnerHeadThickness = entity.InnerHeadThickness,
             OuterShellThickness = entity.OuterShellThickness, OuterHeadThickness = entity.OuterHeadThickness,
             RoundedInnerShellThickness = entity.RoundedInnerShellThickness, RoundedInnerHeadThickness = entity.RoundedInnerHeadThickness,
