@@ -1,0 +1,4 @@
+@model IEnumerable<ProjectType>
+@{ ViewData["Title"] = "Dizayn Proje Tipleri"; }
+<div class="d-flex justify-content-between align-items-center mb-3"><h2>@ViewData["Title"]</h2><a asp-action="Create" class="btn btn-primary">Yeni Tip</a></div>
+<table class="table table-striped table-bordered"><thead><tr><th>Ad</th><th></th></tr></thead><tbody>@foreach (var item in Model) {<tr><td>@item.Name</td><td class="text-end"><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a><form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline"><button class="btn btn-sm btn-outline-danger" onclick="return confirm('Silinsin mi?')">Sil</button></form></td></tr>}</tbody></table>
