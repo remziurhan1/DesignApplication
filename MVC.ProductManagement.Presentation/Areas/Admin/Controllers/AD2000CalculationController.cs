@@ -668,7 +668,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                     .ToList(),
                 StringComparer.OrdinalIgnoreCase);
             ViewBag.MaterialForms = new SelectList(materialForms, "Id", "FormType");
-            ViewBag.MaterialFormsByMaterial = materialForms.GroupBy(x => x.MaterialId).ToDictionary(g => g.Key.ToString(), g => g.Select(x => new { value = x.Id.ToString(), text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", formType = x.FormType.ToString(), materialClass = x.MaterialClass, norm = x.Norm }).ToList());
+            ViewBag.MaterialFormsByMaterial = materialForms.GroupBy(x => x.MaterialId).ToDictionary(g => g.Key.ToString(), g => g.Select(x => new { value = x.Id.ToString(), text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", formType = x.FormType.ToString(), materialClass = x.MaterialClass, norm = x.Norm, symbolicName = x.SymbolicName }).ToList());
             ViewBag.MaterialFormTypesByMaterial = materialForms.GroupBy(x => x.MaterialId).ToDictionary(g => g.Key.ToString(), g => g.Select(x => x.FormType.ToString()).Distinct().OrderBy(x => x).ToList());
 
             var storageTypeList = storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
