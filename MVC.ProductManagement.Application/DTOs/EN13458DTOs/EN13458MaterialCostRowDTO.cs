@@ -22,6 +22,13 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public Guid? MaterialFormId { get; set; }
         public string FormType { get; set; } = string.Empty;
 
+        public string MaterialNumber { get; set; } = string.Empty;
+        public string MaterialClass { get; set; } = string.Empty;
+        public string MaterialFamily { get; set; } = string.Empty;
+        public string Norm { get; set; } = string.Empty;
+        public string ProductStandard { get; set; } = string.Empty;
+        public string SymbolicName { get; set; } = string.Empty;
+
         public double Quantity { get; set; }
         public string Unit { get; set; } = string.Empty;
 
@@ -34,6 +41,14 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double UnitPrice { get; set; }
 
         public double TheoreticalWeight { get; set; }
+
+        public double UsedYieldStrength { get; set; }
+        public double UsedDesignStress { get; set; }
+        public double UsedTemperature { get; set; }
+        public double UsedThicknessBandMin { get; set; }
+        public double UsedThicknessBandMax { get; set; }
+        public string DensitySource { get; set; } = string.Empty;
+        public string PriceSource { get; set; } = string.Empty;
         public double ItemCost { get; set; }
 
         public bool IsCalculated => string.Equals(ItemSourceType, "Calculated", StringComparison.OrdinalIgnoreCase);

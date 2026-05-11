@@ -52,8 +52,10 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
         {
             var pDesign = dto.DesignPressure;
             var d = dto.Diameter;
-            var shellSigma = dto.ShellAllowableStress > 0 ? dto.ShellAllowableStress : dto.AllowableStress;
-            var headSigma = dto.HeadAllowableStress > 0 ? dto.HeadAllowableStress : dto.AllowableStress;
+            var shellYield = dto.ShellYieldStrengthRp02 > 0 ? dto.ShellYieldStrengthRp02 : dto.ShellAllowableStress > 0 ? dto.ShellAllowableStress : dto.AllowableStress;
+            var headYield = dto.HeadYieldStrengthRp02 > 0 ? dto.HeadYieldStrengthRp02 : dto.HeadAllowableStress > 0 ? dto.HeadAllowableStress : dto.AllowableStress;
+            var shellDesignStress = dto.ShellDesignStress > 0 ? dto.ShellDesignStress : shellYield / 1.5d;
+            var headDesignStress = dto.HeadDesignStress > 0 ? dto.HeadDesignStress : headYield / 1.5d;
             var z = dto.WeldJointFactor <= 0 ? 1.0 : dto.WeldJointFactor;
             var beta = dto.Beta <= 0 ? 1.0 : dto.Beta;
             var ca = Math.Max(0, dto.CorrosionAllowance);
@@ -63,8 +65,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 : CalculateStaticPressureBar(dto.LiquidDensity, dto.TankOrientation, dto.ShellLength, dto.Diameter);
 
             var effectivePressure = pDesign + staticPressure;
-            var shellThickness = ((effectivePressure * d) / ((20 * (shellSigma / 1.5) * z) + effectivePressure)) + ca;
-            var headThickness = ((effectivePressure * d * beta) / ((40 * (headSigma / 1.5) * z) - effectivePressure)) + ca;
+            var shellThickness = ((effectivePressure * d) / ((20 * shellDesignStress * z) + effectivePressure)) + ca;
+            var headThickness = ((effectivePressure * d * beta) / ((40 * headDesignStress * z) - effectivePressure)) + ca;
 
             var weldLength1500 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 1500d);
             var weldLength2000 = CalculateWeldLengthForSectorWidth(d, dto.ShellLength, 2000d);
@@ -83,8 +85,12 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 CorrosionAllowance = dto.CorrosionAllowance,
                 WeldJointFactor = dto.WeldJointFactor,
                 AllowableStress = dto.AllowableStress,
-                ShellAllowableStress = dto.ShellAllowableStress,
-                HeadAllowableStress = dto.HeadAllowableStress,
+                ShellAllowableStress = shellYield,
+                HeadAllowableStress = headYield,
+                ShellYieldStrengthRp02 = shellYield,
+                HeadYieldStrengthRp02 = headYield,
+                ShellDesignStress = shellDesignStress,
+                HeadDesignStress = headDesignStress,
                 EstimatedShellThickness = dto.EstimatedShellThickness,
                 EstimatedHeadThickness = dto.EstimatedHeadThickness,
                 Beta = dto.Beta,
@@ -528,8 +534,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 .ToDictionary(x => x.ItemKey, StringComparer.OrdinalIgnoreCase)
                 ?? new Dictionary<string, AD2000CostAnalysisItem>(StringComparer.OrdinalIgnoreCase);
 
-            rows.Add(await BuildMaterialRowAsync("SHELL", 10, "SAC", "Sac Maliyeti", "Gövde Sacı", result.ShellMaterialId, result.ShellMaterialFormId, result.ShellThickness, result.RoundedShellThickness, result.Diameter, result.ShellLength, false, previousCalculatedItems));
-            rows.Add(await BuildMaterialRowAsync("HEAD", 20, "SAC", "Sac Maliyeti", "Bombe Sacı", result.HeadMaterialId, result.HeadMaterialFormId, result.HeadThickness, result.RoundedHeadThickness, result.Diameter, result.ShellLength, true, previousCalculatedItems));
+            rows.Add(await BuildMaterialRowAsync("SHELL", 10, "SAC", "Sac Maliyeti", "Gövde Sacı", result.ShellMaterialId, result.ShellMaterialFormId, result.ShellThickness, result.RoundedShellThickness, result.Diameter, result.ShellLength, false, result, previousCalculatedItems));
+            rows.Add(await BuildMaterialRowAsync("HEAD", 20, "SAC", "Sac Maliyeti", "Bombe Sacı", result.HeadMaterialId, result.HeadMaterialFormId, result.HeadThickness, result.RoundedHeadThickness, result.Diameter, result.ShellLength, true, result, previousCalculatedItems));
             rows.Add(await BuildBombeLaborRowAsync(result, previousAnalysis?.HeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-HEAD")));
 
             var weldConsumableRow = await BuildWeldConsumableRowAsync(result.TotalWeldLength, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE"));
@@ -552,7 +558,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             return rows.OrderBy(x => x.SortOrder).ThenBy(x => x.ItemName).ToList();
         }
 
-        private async Task<AD2000MaterialCostRowDTO> BuildMaterialRowAsync(string itemKey, int sortOrder, string costGroupCode, string costGroupName, string itemName, Guid materialId, Guid materialFormId, double calculatedThickness, double usedThickness, double diameter, double shellLength, bool isHead, IReadOnlyDictionary<string, AD2000CostAnalysisItem> previousItems)
+        private async Task<AD2000MaterialCostRowDTO> BuildMaterialRowAsync(string itemKey, int sortOrder, string costGroupCode, string costGroupName, string itemName, Guid materialId, Guid materialFormId, double calculatedThickness, double usedThickness, double diameter, double shellLength, bool isHead, AD2000ResultDTO result, IReadOnlyDictionary<string, AD2000CostAnalysisItem> previousItems)
         {
             var material = await _materialRepository.GetByIdAsync(materialId) ?? throw new InvalidOperationException($"Material not found: {materialId}");
             var form = await _materialFormRepository.GetByIdAsync(materialFormId) ?? throw new InvalidOperationException($"MaterialForm not found: {materialFormId}");
@@ -574,15 +580,28 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 MaterialName = material.Name,
                 MaterialFormId = form.Id,
                 FormType = form.FormType.ToString(),
+                MaterialNumber = material.MaterialNumber,
+                MaterialClass = form.MaterialClass,
+                MaterialFamily = form.MaterialFamily.ToString(),
+                Norm = form.Norm,
+                ProductStandard = form.ProductStandard,
+                SymbolicName = form.SymbolicName ?? string.Empty,
                 Quantity = Math.Round(weightKg, 2),
                 Unit = "kg",
                 CalculatedThickness = calculatedThickness,
                 UsedThickness = usedThickness,
                 Density = material.Density,
-                TheoreticalWeight = Math.Round(weightKg, 2)
+                TheoreticalWeight = Math.Round(weightKg, 2),
+                UsedYieldStrength = itemKey == "SHELL" ? result.ShellYieldStrengthRp02 : result.HeadYieldStrengthRp02,
+                UsedDesignStress = itemKey == "SHELL" ? result.ShellDesignStress : result.HeadDesignStress,
+                UsedTemperature = result.DesignTemperatureMax,
+                UsedThicknessBandMin = form.ThicknessMin,
+                UsedThicknessBandMax = form.ThicknessMax,
+                DensitySource = "Material.Density",
+                PriceSource = ResolveFormPriceSource(form)
             };
 
-            return await ApplyPreviousPricingAsync(row, previous, 0);
+            return await ApplyPreviousPricingAsync(row, previous, ResolveFormFallbackUnitPrice(form));
         }
 
         private async Task<AD2000MaterialCostRowDTO?> BuildWeldConsumableRowAsync(double totalWeldLength, AD2000CostAnalysisItem? previous)
@@ -610,7 +629,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 ItemCost = weldConsumableCost
             };
 
-            return await ApplyPreviousPricingAsync(row, previous, 0);
+            return await ApplyPreviousPricingAsync(row, previous, weldConsumableCost);
         }
 
         private async Task<AD2000MaterialCostRowDTO> BuildBombeLaborRowAsync(AD2000ResultDTO result, Guid? selectedRateId, AD2000CostAnalysisItem? previous)
@@ -690,16 +709,25 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 row.StockCode = selectedCode.GeneratedCode;
                 row.StockCodeName = BuildStockDisplayName(selectedCode.GeneratedCode, selectedCode.Description, selectedCode.RuleName);
                 row.StockUnitPrice = Convert.ToDouble(selectedCode.UnitPrice ?? 0m);
+                row.PriceSource = "GeneratedStockCode.UnitPrice";
             }
             else
             {
                 row.StockUnitPrice = fallbackUnitPrice;
+                if (string.IsNullOrWhiteSpace(row.PriceSource)) row.PriceSource = fallbackUnitPrice > 0 ? "MaterialForm" : "None";
             }
 
+            if (row.UseManualUnitPrice) row.PriceSource = "ManualUnitPrice";
             row.UnitPrice = ResolveEffectiveUnitPrice(row.StockUnitPrice, row.UseManualUnitPrice, row.ManualUnitPrice);
             row.ItemCost = row.Quantity * row.UnitPrice;
             return row;
         }
+
+        private static double ResolveFormFallbackUnitPrice(MaterialForm form)
+            => form.TargetPrice.HasValue && form.TargetPrice.Value > 0d ? form.TargetPrice.Value : form.UnitPrice;
+
+        private static string ResolveFormPriceSource(MaterialForm form)
+            => form.TargetPrice.HasValue && form.TargetPrice.Value > 0d ? "MaterialForm.TargetPrice" : form.UnitPrice > 0d ? "MaterialForm.UnitPrice" : "None";
 
         private async Task ApplyCostAnalysisItemUpdateAsync(AD2000CostAnalysisItem item, Guid? generatedStockCodeId, double? quantity, bool useManualUnitPrice, double? manualUnitPrice, string modifiedBy)
         {
@@ -897,6 +925,12 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 MaterialName = item.MaterialName,
                 MaterialFormId = item.MaterialFormId,
                 FormType = item.FormType,
+                MaterialNumber = item.MaterialNumber,
+                MaterialClass = item.MaterialClass,
+                MaterialFamily = item.MaterialFamily,
+                Norm = item.Norm,
+                ProductStandard = item.ProductStandard,
+                SymbolicName = item.SymbolicName,
                 GeneratedStockCodeId = item.GeneratedStockCodeId,
                 StockCode = item.StockCode,
                 StockCodeName = item.StockCodeName,
@@ -906,6 +940,13 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 UsedThickness = item.UsedThickness,
                 Density = item.Density,
                 TheoreticalWeight = item.TheoreticalWeight,
+                UsedYieldStrength = item.UsedYieldStrength,
+                UsedDesignStress = item.UsedDesignStress,
+                UsedTemperature = item.UsedTemperature,
+                UsedThicknessBandMin = item.UsedThicknessBandMin,
+                UsedThicknessBandMax = item.UsedThicknessBandMax,
+                DensitySource = item.DensitySource,
+                PriceSource = item.PriceSource,
                 UseManualUnitPrice = item.UseManualUnitPrice,
                 ManualUnitPrice = item.UseManualUnitPrice ? NormalizeNullablePrice(item.ManualUnitPrice) : null,
                 StockUnitPrice = item.StockUnitPrice,
@@ -935,6 +976,12 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 MaterialName = item.MaterialName,
                 MaterialFormId = item.MaterialFormId,
                 FormType = item.FormType,
+                MaterialNumber = item.MaterialNumber,
+                MaterialClass = item.MaterialClass,
+                MaterialFamily = item.MaterialFamily,
+                Norm = item.Norm,
+                ProductStandard = item.ProductStandard,
+                SymbolicName = item.SymbolicName,
                 Quantity = item.Quantity,
                 Unit = item.Unit,
                 CalculatedThickness = item.CalculatedThickness,
@@ -945,6 +992,13 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 ManualUnitPrice = item.UseManualUnitPrice ? NormalizeNullablePrice(item.ManualUnitPrice) : null,
                 UnitPrice = item.UnitPrice,
                 TheoreticalWeight = item.TheoreticalWeight,
+                UsedYieldStrength = item.UsedYieldStrength,
+                UsedDesignStress = item.UsedDesignStress,
+                UsedTemperature = item.UsedTemperature,
+                UsedThicknessBandMin = item.UsedThicknessBandMin,
+                UsedThicknessBandMax = item.UsedThicknessBandMax,
+                DensitySource = item.DensitySource,
+                PriceSource = item.PriceSource,
                 ItemCost = item.ItemCost
             };
         }
@@ -1048,6 +1102,10 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             AllowableStress = dto.AllowableStress,
             ShellAllowableStress = dto.ShellAllowableStress,
             HeadAllowableStress = dto.HeadAllowableStress,
+            ShellYieldStrengthRp02 = dto.ShellYieldStrengthRp02,
+            HeadYieldStrengthRp02 = dto.HeadYieldStrengthRp02,
+            ShellDesignStress = dto.ShellDesignStress,
+            HeadDesignStress = dto.HeadDesignStress,
             EstimatedShellThickness = dto.EstimatedShellThickness,
             EstimatedHeadThickness = dto.EstimatedHeadThickness,
             Beta = dto.Beta,
@@ -1094,6 +1152,10 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             AllowableStress = entity.AllowableStress,
             ShellAllowableStress = entity.ShellAllowableStress > 0 ? entity.ShellAllowableStress : entity.AllowableStress,
             HeadAllowableStress = entity.HeadAllowableStress > 0 ? entity.HeadAllowableStress : entity.AllowableStress,
+            ShellYieldStrengthRp02 = entity.ShellYieldStrengthRp02 > 0 ? entity.ShellYieldStrengthRp02 : entity.ShellAllowableStress,
+            HeadYieldStrengthRp02 = entity.HeadYieldStrengthRp02 > 0 ? entity.HeadYieldStrengthRp02 : entity.HeadAllowableStress,
+            ShellDesignStress = entity.ShellDesignStress,
+            HeadDesignStress = entity.HeadDesignStress,
             EstimatedShellThickness = entity.EstimatedShellThickness,
             EstimatedHeadThickness = entity.EstimatedHeadThickness,
             Beta = entity.Beta,

@@ -25,6 +25,9 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(m => m.Density)
                    .HasPrecision(10, 3);
 
+            builder.HasIndex(m => new { m.MaterialNumber, m.Name })
+                   .IsUnique();
+
 
             builder.HasMany(m => m.Forms)
                    .WithOne(f => f.Material)

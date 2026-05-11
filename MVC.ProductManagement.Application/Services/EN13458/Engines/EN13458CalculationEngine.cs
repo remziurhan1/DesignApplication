@@ -30,6 +30,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Engines
                 LiquidDensity = input.LiquidDensity,
                 TankOrientation = input.TankOrientation,
                 IsColdStretchApplied = input.IsColdStretchApplied,
+                DesignTemperature = input.DesignTemperature,
                 WeldLength1500 = input.WeldLength1500,
                 WeldLength2000 = input.WeldLength2000,
                 WeldLength2500 = input.WeldLength2500,
@@ -45,7 +46,11 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Engines
                 InnerShellMaterialStrength = input.InnerShellMaterialStrength ?? 0d,
                 InnerHeadMaterialStrength = input.InnerHeadMaterialStrength ?? 0d,
                 OuterShellMaterialStrength = input.OuterShellMaterialStrength ?? 0d,
-                OuterHeadMaterialStrength = input.OuterHeadMaterialStrength ?? 0d
+                OuterHeadMaterialStrength = input.OuterHeadMaterialStrength ?? 0d,
+                InnerShellMaterialDensity = input.InnerShellMaterialDensity ?? 7850d,
+                InnerHeadMaterialDensity = input.InnerHeadMaterialDensity ?? 7850d,
+                OuterShellMaterialDensity = input.OuterShellMaterialDensity ?? 7850d,
+                OuterHeadMaterialDensity = input.OuterHeadMaterialDensity ?? 7850d
             };
 
             var context = new EN13458DesignContext { Input = input, Result = result };

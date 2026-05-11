@@ -2,6 +2,7 @@
 using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
+using MVC.ProductManagement.Domain.Enums;
 using System;
 using System.Threading.Tasks;
 
@@ -25,6 +26,16 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             _yieldStrengthService = yieldStrengthService;
         }
 
+        public async Task<double> ResolveDensityAsync(Guid materialId)
+        {
+            var material = await _materialService.GetByIdAsync(materialId)
+                ?? throw new InvalidOperationException($"Material not found: {materialId}");
+
+            if (material.Density <= 0d)
+                throw new InvalidOperationException($"Material density is not defined: {materialId}");
+
+            return material.Density;
+        }
 
         public async Task<double> ResolveElasticModulusAsync(Guid materialId)
         {
@@ -36,7 +47,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
 
             return 210000d;
         }
-
 
         public async Task<double> ResolveYieldFactorKAsync(Guid materialId)
         {
@@ -52,7 +62,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             return 235d;
         }
 
-        public async Task<double> ResolveEffectiveYieldStrengthAsync(Guid materialId, Guid materialFormId, bool isColdStretchApplied)
+        public Task<double> ResolveEffectiveYieldStrengthAsync(Guid materialId, Guid materialFormId, bool isColdStretchApplied)
+            => ResolveEffectiveYieldStrengthAsync(materialId, materialFormId, isColdStretchApplied, DefaultTemperature, 0d);
+
+        public async Task<double> ResolveEffectiveYieldStrengthAsync(Guid materialId, Guid materialFormId, bool isColdStretchApplied, double temperature, double thickness)
         {
             var form = await _materialFormService.GetByIdAsync(materialFormId)
                 ?? throw new InvalidOperationException($"Material form not found: {materialFormId}");
@@ -60,11 +73,19 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             var material = await _materialService.GetByIdAsync(materialId)
                 ?? throw new InvalidOperationException($"Material not found: {materialId}");
 
-            var normalYieldSourceThickness = form.ThicknessMin > 0d ? form.ThicknessMin : 10d;
-            var interpolated = await _yieldStrengthService.GetByConditionsAsync(materialFormId, DefaultTemperature, normalYieldSourceThickness);
+            var normalizedThickness = thickness > 0d
+                ? thickness
+                : form.ThicknessMin > 0d ? form.ThicknessMin : 10d;
+            var normalizedTemperature = double.IsNaN(temperature) ? DefaultTemperature : temperature;
+
+            var interpolated = await _yieldStrengthService.GetByConditionsAsync(materialFormId, normalizedTemperature, normalizedThickness);
             var normalYield = interpolated?.Rp02;
 
-            var coldStretchYield = form.ColdStretchYieldStrength ?? material.ColdStretchYieldStrength;
+            var coldStretchAllowed = form.MaterialFamily == MaterialFamily.StainlessSteel
+                && form.FormType == MaterialFormType.Plate;
+            var coldStretchYield = coldStretchAllowed
+                ? form.ColdStretchYieldStrength ?? material.ColdStretchYieldStrength
+                : null;
             var effectiveYield = isColdStretchApplied
                 ? (coldStretchYield ?? normalYield)
                 : normalYield;
@@ -72,7 +93,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             if (!effectiveYield.HasValue)
             {
                 throw new InvalidOperationException(
-                    $"Yield strength data not found for material={materialId}, form={materialFormId}.");
+                    $"Yield strength data not found for material={materialId}, form={materialFormId}, temperature={normalizedTemperature}, thickness={normalizedThickness}.");
             }
 
             return effectiveYield.Value;

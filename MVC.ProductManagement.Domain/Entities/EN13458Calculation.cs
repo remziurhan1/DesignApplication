@@ -14,6 +14,7 @@ namespace MVC.ProductManagement.Domain.Entities
         public double ShellLength { get; set; }              // mm
         public double Pressure { get; set; }                 // bar
         public double LiquidDensity { get; set; }            // kg/m³
+        public double DesignTemperature { get; set; } = 20d;
         public double WeldLength1500 { get; set; }
         public double WeldLength2000 { get; set; }
         public double WeldLength2500 { get; set; }
@@ -49,6 +50,10 @@ namespace MVC.ProductManagement.Domain.Entities
         public double InnerHeadMaterialStrength { get; set; }    // Rp0.2 (MPa)
         public double OuterShellMaterialStrength { get; set; }   // Rp0.2 (MPa)
         public double OuterHeadMaterialStrength { get; set; }    // Rp0.2 (MPa)
+        public double InnerShellMaterialDensity { get; set; }
+        public double InnerHeadMaterialDensity { get; set; }
+        public double OuterShellMaterialDensity { get; set; }
+        public double OuterHeadMaterialDensity { get; set; }
 
         // === HESAPLANAN DEĞERLER ===
         public double InnerShellThickness { get; set; }

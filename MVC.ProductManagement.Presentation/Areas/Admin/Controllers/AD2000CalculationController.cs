@@ -211,6 +211,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             vm.ShellAllowableStress = shellYield!.Rp02;
             vm.HeadAllowableStress = headYield!.Rp02;
             vm.AllowableStress = vm.ShellAllowableStress;
+            var shellDesignStress = shellYield.Rp02 / 1.5d;
+            var headDesignStress = headYield.Rp02 / 1.5d;
 
             var result = await _calculationService.CalculateAsync(new AD2000CalculateDTO
             {
@@ -225,6 +227,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 AllowableStress = vm.AllowableStress,
                 ShellAllowableStress = vm.ShellAllowableStress,
                 HeadAllowableStress = vm.HeadAllowableStress,
+                ShellYieldStrengthRp02 = shellYield.Rp02,
+                HeadYieldStrengthRp02 = headYield.Rp02,
+                ShellDesignStress = shellDesignStress,
+                HeadDesignStress = headDesignStress,
                 EstimatedShellThickness = vm.EstimatedShellThickness,
                 EstimatedHeadThickness = vm.EstimatedHeadThickness,
                 Beta = vm.Beta,
@@ -273,6 +279,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 AllowableStress = vm.AllowableStress,
                 ShellAllowableStress = vm.ShellAllowableStress,
                 HeadAllowableStress = vm.HeadAllowableStress,
+                ShellYieldStrengthRp02 = vm.ShellYieldStrengthRp02 > 0 ? vm.ShellYieldStrengthRp02 : vm.ShellAllowableStress,
+                HeadYieldStrengthRp02 = vm.HeadYieldStrengthRp02 > 0 ? vm.HeadYieldStrengthRp02 : vm.HeadAllowableStress,
+                ShellDesignStress = vm.ShellDesignStress > 0 ? vm.ShellDesignStress : vm.ShellAllowableStress / 1.5d,
+                HeadDesignStress = vm.HeadDesignStress > 0 ? vm.HeadDesignStress : vm.HeadAllowableStress / 1.5d,
                 EstimatedShellThickness = vm.EstimatedShellThickness,
                 EstimatedHeadThickness = vm.EstimatedHeadThickness,
                 Beta = vm.Beta,
@@ -501,6 +511,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             AllowableStress = result.AllowableStress,
             ShellAllowableStress = result.ShellAllowableStress,
             HeadAllowableStress = result.HeadAllowableStress,
+            ShellYieldStrengthRp02 = result.ShellYieldStrengthRp02,
+            HeadYieldStrengthRp02 = result.HeadYieldStrengthRp02,
+            ShellDesignStress = result.ShellDesignStress,
+            HeadDesignStress = result.HeadDesignStress,
             EstimatedShellThickness = result.EstimatedShellThickness,
             EstimatedHeadThickness = result.EstimatedHeadThickness,
             Beta = result.Beta,

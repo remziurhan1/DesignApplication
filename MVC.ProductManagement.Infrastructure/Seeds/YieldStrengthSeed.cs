@@ -13,6 +13,7 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
         {
             var formId = Guid.Parse("22222222-2222-2222-2222-222222222222");
             var ssFormId = Guid.Parse("44444444-4444-4444-4444-444444444441");
+            var x2CrNi189FormId = Guid.Parse("88888888-8888-8888-8888-888888888881");
             var pipeFormId = Guid.Parse("22222222-2222-2222-2222-222222222223");
             var profileFormId = Guid.Parse("66666666-6666-6666-6666-666666666661");
 
@@ -98,6 +99,21 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 300, Rp02 = 150, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 350, Rp02 = 140, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = ssFormId, ThicknessMin = 1, ThicknessMax = 200, Temperature = 400, Rp02 = 130, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+
+                // 1.4307 (X2CrNi18-9) Plate EN 10028-7
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = -196, Rp02 = 350, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = -150, Rp02 = 330, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = -100, Rp02 = 300, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = -50, Rp02 = 260, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 20, Rp02 = 210, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 50, Rp02 = 205, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 100, Rp02 = 195, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 150, Rp02 = 185, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 200, Rp02 = 170, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 250, Rp02 = 160, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 300, Rp02 = 150, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 350, Rp02 = 140, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
+                new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = x2CrNi189FormId, ThicknessMin = 1, ThicknessMax = 120, Temperature = 400, Rp02 = 130, Rm = 650, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
 
                 // P355NH Pipe EN 10216-3
                 new YieldStrength { Id = Guid.NewGuid(), MaterialFormId = pipeFormId, ThicknessMin = 2, ThicknessMax = 40, Temperature = 20, Rp02 = 355, Rm = 490, CreatedBy = "SeedData", CreatedDate = DateTime.UtcNow },
