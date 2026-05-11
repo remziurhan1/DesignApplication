@@ -22,6 +22,7 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double LiquidDensity { get; set; }
         public TankOrientation TankOrientation { get; set; }
         public bool IsColdStretchApplied { get; set; }
+        public double DesignTemperature { get; set; }
 
         public double WeldLength1500 { get; set; }
         public double WeldLength2000 { get; set; }
@@ -44,6 +45,10 @@ namespace MVC.ProductManagement.Application.DTOs.EN13458DTOs
         public double InnerHeadMaterialStrength { get; set; }
         public double OuterShellMaterialStrength { get; set; }
         public double OuterHeadMaterialStrength { get; set; }
+        public double InnerShellMaterialDensity { get; set; }
+        public double InnerHeadMaterialDensity { get; set; }
+        public double OuterShellMaterialDensity { get; set; }
+        public double OuterHeadMaterialDensity { get; set; }
 
         // === KALINLIK SONUÇLARI ===
         public double InnerShellThickness { get; set; }

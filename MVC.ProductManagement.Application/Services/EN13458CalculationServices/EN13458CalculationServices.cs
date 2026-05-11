@@ -708,10 +708,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 .ToDictionary(x => x.ItemKey, StringComparer.OrdinalIgnoreCase)
                 ?? new Dictionary<string, EN13458CostAnalysisItem>(StringComparer.OrdinalIgnoreCase);
 
-            rows.Add(await BuildMaterialRowAsync("INNER-SHELL", 10, "SAC", "Sac Maliyeti", "İç Gövde", result.InnerShellMaterialId, result.InnerShellMaterialFormId, result.InnerShellThickness, result.RoundedInnerShellThickness, result.OuterDiameter, result.ShellLength, isHead: false, previousCalculatedItems));
-            rows.Add(await BuildMaterialRowAsync("INNER-HEAD", 20, "SAC", "Sac Maliyeti", "İç Bombe", result.InnerHeadMaterialId, result.InnerHeadMaterialFormId, result.InnerHeadThickness, result.RoundedInnerHeadThickness, result.OuterDiameter, result.ShellLength, isHead: true, previousCalculatedItems));
-            rows.Add(await BuildMaterialRowAsync("OUTER-SHELL", 30, "SAC", "Sac Maliyeti", "Dış Gövde", result.OuterShellMaterialId, result.OuterShellMaterialFormId, result.OuterShellThickness, result.RoundedOuterShellThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: false, previousCalculatedItems));
-            rows.Add(await BuildMaterialRowAsync("OUTER-HEAD", 40, "SAC", "Sac Maliyeti", "Dış Bombe", result.OuterHeadMaterialId, result.OuterHeadMaterialFormId, result.OuterHeadThickness, result.RoundedOuterHeadThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: true, previousCalculatedItems));
+            rows.Add(await BuildMaterialRowAsync("INNER-SHELL", 10, "SAC", "Sac Maliyeti", "İç Gövde", result.InnerShellMaterialId, result.InnerShellMaterialFormId, result.InnerShellThickness, result.RoundedInnerShellThickness, result.OuterDiameter, result.ShellLength, isHead: false, result, previousCalculatedItems));
+            rows.Add(await BuildMaterialRowAsync("INNER-HEAD", 20, "SAC", "Sac Maliyeti", "İç Bombe", result.InnerHeadMaterialId, result.InnerHeadMaterialFormId, result.InnerHeadThickness, result.RoundedInnerHeadThickness, result.OuterDiameter, result.ShellLength, isHead: true, result, previousCalculatedItems));
+            rows.Add(await BuildMaterialRowAsync("OUTER-SHELL", 30, "SAC", "Sac Maliyeti", "Dış Gövde", result.OuterShellMaterialId, result.OuterShellMaterialFormId, result.OuterShellThickness, result.RoundedOuterShellThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: false, result, previousCalculatedItems));
+            rows.Add(await BuildMaterialRowAsync("OUTER-HEAD", 40, "SAC", "Sac Maliyeti", "Dış Bombe", result.OuterHeadMaterialId, result.OuterHeadMaterialFormId, result.OuterHeadThickness, result.RoundedOuterHeadThickness, result.OuterTankDiameter, result.OuterTankTotalLength, isHead: true, result, previousCalculatedItems));
             rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-INNER", 25, "İç Bombe İşçilik", result.InnerHeadMaterialId, result.InnerTankHeadWeight * 2d, previousAnalysis?.InnerHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-INNER")));
             rows.Add(await BuildBombeLaborRowAsync("BOMBE-LABOR-OUTER", 45, "Dış Bombe İşçilik", result.OuterHeadMaterialId, result.OuterTankHeadWeight * 2d, previousAnalysis?.OuterHeadBombeLaborRateId, previousCalculatedItems.GetValueOrDefault("BOMBE-LABOR-OUTER")));
             rows = rows.Where(x => x != null).ToList();
@@ -774,6 +774,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             double diameter,
             double shellLength,
             bool isHead,
+            EN13458ResultDTO result,
             IReadOnlyDictionary<string, EN13458CostAnalysisItem> previousItems)
         {
             var material = await _materialRepository.GetByIdAsync(materialId)
@@ -802,18 +803,31 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 MaterialName = material.Name,
                 MaterialFormId = form.Id,
                 FormType = form.FormType.ToString(),
+                MaterialNumber = material.MaterialNumber,
+                MaterialClass = form.MaterialClass,
+                MaterialFamily = form.MaterialFamily.ToString(),
+                Norm = form.Norm,
+                ProductStandard = form.ProductStandard,
+                SymbolicName = form.SymbolicName ?? string.Empty,
                 Quantity = weightKg,
                 Unit = "kg",
                 CalculatedThickness = calculatedThickness,
                 UsedThickness = usedThickness,
                 Density = material.Density,
                 TheoreticalWeight = weightKg,
+                UsedYieldStrength = ResolveUsedYieldStrength(result, itemKey),
+                UsedDesignStress = ResolveUsedYieldStrength(result, itemKey) / 1.5d,
+                UsedTemperature = result.DesignTemperature,
+                UsedThicknessBandMin = form.ThicknessMin,
+                UsedThicknessBandMax = form.ThicknessMax,
+                DensitySource = "Material.Density",
+                PriceSource = ResolveFormPriceSource(form),
                 StockUnitPrice = 0,
                 UnitPrice = 0,
                 ItemCost = 0
             };
 
-            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
+            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: ResolveFormFallbackUnitPrice(form));
         }
 
         private async Task<EN13458MaterialCostRowDTO> BuildBombeLaborRowAsync(string itemKey, int sortOrder, string itemName, Guid materialId, double quantity, Guid? selectedRateId, EN13458CostAnalysisItem? previous)
@@ -1017,12 +1031,15 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 row.StockCode = selectedCode.GeneratedCode;
                 row.StockCodeName = BuildStockDisplayName(selectedCode.GeneratedCode, selectedCode.Description, selectedCode.RuleName);
                 row.StockUnitPrice = Convert.ToDouble(selectedCode.UnitPrice ?? 0m);
+                row.PriceSource = "GeneratedStockCode.UnitPrice";
             }
             else
             {
                 row.StockUnitPrice = fallbackUnitPrice;
+                if (string.IsNullOrWhiteSpace(row.PriceSource)) row.PriceSource = fallbackUnitPrice > 0 ? "MaterialForm" : "None";
             }
 
+            if (row.UseManualUnitPrice) row.PriceSource = "ManualUnitPrice";
             row.UnitPrice = ResolveEffectiveUnitPrice(row.StockUnitPrice, row.UseManualUnitPrice, row.ManualUnitPrice);
             row.ItemCost = row.Quantity * row.UnitPrice;
             return row;
@@ -1042,9 +1059,26 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             row.UseManualUnitPrice = previous.UseManualUnitPrice;
             row.ManualUnitPrice = previous.UseManualUnitPrice ? NormalizeNullablePrice(previous.ManualUnitPrice) : null;
             row.UnitPrice = ResolveEffectiveUnitPrice(row.StockUnitPrice, row.UseManualUnitPrice, row.ManualUnitPrice);
+            row.PriceSource = previous.PriceSource;
             row.ItemCost = row.Quantity * row.UnitPrice;
             return row;
         }
+
+        private static double ResolveFormFallbackUnitPrice(MaterialForm form)
+            => form.TargetPrice.HasValue && form.TargetPrice.Value > 0d ? form.TargetPrice.Value : form.UnitPrice;
+
+        private static string ResolveFormPriceSource(MaterialForm form)
+            => form.TargetPrice.HasValue && form.TargetPrice.Value > 0d ? "MaterialForm.TargetPrice" : form.UnitPrice > 0d ? "MaterialForm.UnitPrice" : "None";
+
+        private static double ResolveUsedYieldStrength(EN13458ResultDTO result, string itemKey)
+            => itemKey switch
+            {
+                "INNER-SHELL" => result.InnerShellMaterialStrength,
+                "INNER-HEAD" => result.InnerHeadMaterialStrength,
+                "OUTER-SHELL" => result.OuterShellMaterialStrength,
+                "OUTER-HEAD" => result.OuterHeadMaterialStrength,
+                _ => 0d
+            };
 
         private async Task<GeneratedStockCode?> ResolveGeneratedStockCodeAsync(Guid? generatedStockCodeId, string? stockCode)
         {
@@ -1166,6 +1200,12 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 MaterialName = item.MaterialName,
                 MaterialFormId = item.MaterialFormId,
                 FormType = item.FormType,
+                MaterialNumber = item.MaterialNumber,
+                MaterialClass = item.MaterialClass,
+                MaterialFamily = item.MaterialFamily,
+                Norm = item.Norm,
+                ProductStandard = item.ProductStandard,
+                SymbolicName = item.SymbolicName,
                 GeneratedStockCodeId = item.GeneratedStockCodeId,
                 StockCode = item.StockCode,
                 StockCodeName = item.StockCodeName,
@@ -1175,6 +1215,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 UsedThickness = item.UsedThickness,
                 Density = item.Density,
                 TheoreticalWeight = item.TheoreticalWeight,
+                UsedYieldStrength = item.UsedYieldStrength,
+                UsedDesignStress = item.UsedDesignStress,
+                UsedTemperature = item.UsedTemperature,
+                UsedThicknessBandMin = item.UsedThicknessBandMin,
+                UsedThicknessBandMax = item.UsedThicknessBandMax,
+                DensitySource = item.DensitySource,
+                PriceSource = item.PriceSource,
                 UseManualUnitPrice = item.UseManualUnitPrice,
                 ManualUnitPrice = item.UseManualUnitPrice ? NormalizeNullablePrice(item.ManualUnitPrice) : null,
                 StockUnitPrice = item.StockUnitPrice,
@@ -1204,6 +1251,12 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 MaterialName = item.MaterialName,
                 MaterialFormId = item.MaterialFormId,
                 FormType = item.FormType,
+                MaterialNumber = item.MaterialNumber,
+                MaterialClass = item.MaterialClass,
+                MaterialFamily = item.MaterialFamily,
+                Norm = item.Norm,
+                ProductStandard = item.ProductStandard,
+                SymbolicName = item.SymbolicName,
                 Quantity = item.Quantity,
                 Unit = item.Unit,
                 CalculatedThickness = item.CalculatedThickness,
@@ -1214,6 +1267,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 ManualUnitPrice = item.UseManualUnitPrice ? NormalizeNullablePrice(item.ManualUnitPrice) : null,
                 UnitPrice = item.UnitPrice,
                 TheoreticalWeight = item.TheoreticalWeight,
+                UsedYieldStrength = item.UsedYieldStrength,
+                UsedDesignStress = item.UsedDesignStress,
+                UsedTemperature = item.UsedTemperature,
+                UsedThicknessBandMin = item.UsedThicknessBandMin,
+                UsedThicknessBandMax = item.UsedThicknessBandMax,
+                DensitySource = item.DensitySource,
+                PriceSource = item.PriceSource,
                 ItemCost = item.ItemCost
             };
         }

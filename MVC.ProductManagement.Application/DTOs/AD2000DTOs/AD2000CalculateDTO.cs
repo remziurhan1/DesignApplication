@@ -16,6 +16,10 @@ namespace MVC.ProductManagement.Application.DTOs.AD2000DTOs
         public double AllowableStress { get; set; }
         public double ShellAllowableStress { get; set; }
         public double HeadAllowableStress { get; set; }
+        public double ShellYieldStrengthRp02 { get; set; }
+        public double HeadYieldStrengthRp02 { get; set; }
+        public double ShellDesignStress { get; set; }
+        public double HeadDesignStress { get; set; }
         public double EstimatedShellThickness { get; set; }
         public double EstimatedHeadThickness { get; set; }
         public double Beta { get; set; }
