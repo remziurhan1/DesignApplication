@@ -199,8 +199,19 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.Id" />
                         <div class="input-group mb-2">
-                            <select asp-for="OfferStatus" id="offerStatusSelect" name="offerStatus" class="form-select" asp-items="Html.GetEnumSelectList<SalesOfferStatus>()" @@(Model.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer ? null : "disabled")></select>
-                            <button type="submit" class="btn btn-outline-primary" @(Model.CustomerQuoteStatus == SalesCustomerQuoteStatus.SharedWithCustomer ? null : "disabled")>Güncelle</button>
+                            <select asp-for="OfferStatus"
+                                    id="offerStatusSelect"
+                                    name="offerStatus"
+                                    class="form-select"
+                                    asp-items="Html.GetEnumSelectList<SalesOfferStatus>()"
+                                    disabled="@(Model.CustomerQuoteStatus != SalesCustomerQuoteStatus.SharedWithCustomer)">
+                            </select>
+
+                            <button type="submit"
+                                    class="btn btn-outline-primary"
+                                    disabled="@(Model.CustomerQuoteStatus != SalesCustomerQuoteStatus.SharedWithCustomer)">
+                                Güncelle
+                            </button>
                         </div>
                         <div id="soldFields" class="border rounded p-2 mb-2" style="display:none;">
                             <div class="mb-2">

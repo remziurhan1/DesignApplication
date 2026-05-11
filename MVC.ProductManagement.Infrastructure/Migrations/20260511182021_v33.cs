@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MVC.ProductManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class v22 : Migration
+    public partial class v33 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -157,6 +157,32 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DesignPlanningEmployees",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    DailyCapacityHours = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false, defaultValue: 8m),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesignPlanningEmployees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DesignPlanningProjectTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesignPlanningProjectTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DesignStandards",
                 columns: table => new
                 {
@@ -196,6 +222,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     CanManageSalesCustomers = table.Column<bool>(type: "bit", nullable: false),
                     CanCreateSalesRequests = table.Column<bool>(type: "bit", nullable: false),
                     CanViewSalesPricing = table.Column<bool>(type: "bit", nullable: false),
+                    CanAccessDesignArea = table.Column<bool>(type: "bit", nullable: false),
+                    CanManageDesignCalculations = table.Column<bool>(type: "bit", nullable: false),
+                    CanCreateStockCodes = table.Column<bool>(type: "bit", nullable: false),
+                    CanEditStockCodes = table.Column<bool>(type: "bit", nullable: false),
+                    CanAccessMaterialGroups = table.Column<bool>(type: "bit", nullable: false),
+                    CanManageMaterials = table.Column<bool>(type: "bit", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -308,8 +340,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     MaterialNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Standard = table.Column<int>(type: "int", nullable: false),
-                    Group = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Density = table.Column<double>(type: "float(10)", precision: 10, scale: 3, nullable: false),
                     ColdStretchYieldStrength = table.Column<double>(type: "float", nullable: true),
                     ElasticModulus = table.Column<double>(type: "float", nullable: true),
@@ -703,6 +733,74 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DesignPlanningEmployeeExpertises",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExpertiseName = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesignPlanningEmployeeExpertises", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DesignPlanningEmployeeExpertises_DesignPlanningEmployees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "DesignPlanningEmployees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DesignPlanningProjects",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProjectCode = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    ProjectName = table.Column<string>(type: "nvarchar(180)", maxLength: 180, nullable: false),
+                    ProjectTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesignPlanningProjects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DesignPlanningProjects_DesignPlanningProjectTypes_ProjectTypeId",
+                        column: x => x.ProjectTypeId,
+                        principalTable: "DesignPlanningProjectTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DesignPlanningTaskTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProjectTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SequenceNo = table.Column<int>(type: "int", nullable: false),
+                    ResponsibleRole = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                    TaskName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    DurationValue = table.Column<decimal>(type: "decimal(8,2)", precision: 8, scale: 2, nullable: false),
+                    DurationUnit = table.Column<int>(type: "int", nullable: false),
+                    IsPassive = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesignPlanningTaskTemplates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DesignPlanningTaskTemplates_DesignPlanningProjectTypes_ProjectTypeId",
+                        column: x => x.ProjectTypeId,
+                        principalTable: "DesignPlanningProjectTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GasTypeDesignStandards",
                 columns: table => new
                 {
@@ -803,6 +901,11 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FormType = table.Column<int>(type: "int", nullable: false),
+                    MaterialClass = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MaterialFamily = table.Column<int>(type: "int", nullable: false),
+                    Norm = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    SymbolicName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    StockCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ThicknessMin = table.Column<double>(type: "float", nullable: false),
                     ThicknessMax = table.Column<double>(type: "float", nullable: false),
                     ProductStandard = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -1192,6 +1295,49 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DesignPlanningProjectTasks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TaskTemplateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssignedEmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SequenceNo = table.Column<int>(type: "int", nullable: false),
+                    ResponsibleRole = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                    TaskName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    DurationValue = table.Column<decimal>(type: "decimal(8,2)", precision: 8, scale: 2, nullable: false),
+                    DurationUnit = table.Column<int>(type: "int", nullable: false),
+                    IsPassive = table.Column<bool>(type: "bit", nullable: false),
+                    PlannedStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PlannedEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ActualStart = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ActualEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesignPlanningProjectTasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DesignPlanningProjectTasks_DesignPlanningEmployees_AssignedEmployeeId",
+                        column: x => x.AssignedEmployeeId,
+                        principalTable: "DesignPlanningEmployees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_DesignPlanningProjectTasks_DesignPlanningProjects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "DesignPlanningProjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DesignPlanningProjectTasks_DesignPlanningTaskTemplates_TaskTemplateId",
+                        column: x => x.TaskTemplateId,
+                        principalTable: "DesignPlanningTaskTemplates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AD2000Calculations",
                 columns: table => new
                 {
@@ -1207,6 +1353,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     AllowableStress = table.Column<double>(type: "float", nullable: false),
                     ShellAllowableStress = table.Column<double>(type: "float", nullable: false),
                     HeadAllowableStress = table.Column<double>(type: "float", nullable: false),
+                    ShellYieldStrengthRp02 = table.Column<double>(type: "float", nullable: false),
+                    HeadYieldStrengthRp02 = table.Column<double>(type: "float", nullable: false),
+                    ShellDesignStress = table.Column<double>(type: "float", nullable: false),
+                    HeadDesignStress = table.Column<double>(type: "float", nullable: false),
                     EstimatedShellThickness = table.Column<double>(type: "float", nullable: false),
                     EstimatedHeadThickness = table.Column<double>(type: "float", nullable: false),
                     Beta = table.Column<double>(type: "float", nullable: false),
@@ -1228,6 +1378,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     WeldLength2000 = table.Column<double>(type: "float", nullable: false),
                     WeldLength3000 = table.Column<double>(type: "float", nullable: false),
                     WeldLength4000 = table.Column<double>(type: "float", nullable: false),
+                    ShellWeldLength = table.Column<double>(type: "float", nullable: false),
+                    HeadWeldLength = table.Column<double>(type: "float", nullable: false),
+                    CircumferenceWeldLength = table.Column<double>(type: "float", nullable: false),
+                    TotalWeldLength = table.Column<double>(type: "float", nullable: false),
+                    StiffenerRingWeldLength = table.Column<double>(type: "float", nullable: false),
+                    WeldConsumableCost = table.Column<double>(type: "float", nullable: false),
                     SurfaceArea = table.Column<double>(type: "float", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -1304,6 +1460,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     ShellLength = table.Column<double>(type: "float", nullable: false),
                     Pressure = table.Column<double>(type: "float", nullable: false),
                     LiquidDensity = table.Column<double>(type: "float", nullable: false),
+                    DesignTemperature = table.Column<double>(type: "float", nullable: false),
                     WeldLength1500 = table.Column<double>(type: "float", nullable: false),
                     WeldLength2000 = table.Column<double>(type: "float", nullable: false),
                     WeldLength2500 = table.Column<double>(type: "float", nullable: false),
@@ -1320,6 +1477,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     InnerHeadMaterialStrength = table.Column<double>(type: "float", nullable: false),
                     OuterShellMaterialStrength = table.Column<double>(type: "float", nullable: false),
                     OuterHeadMaterialStrength = table.Column<double>(type: "float", nullable: false),
+                    InnerShellMaterialDensity = table.Column<double>(type: "float", nullable: false),
+                    InnerHeadMaterialDensity = table.Column<double>(type: "float", nullable: false),
+                    OuterShellMaterialDensity = table.Column<double>(type: "float", nullable: false),
+                    OuterHeadMaterialDensity = table.Column<double>(type: "float", nullable: false),
                     InnerShellThickness = table.Column<double>(type: "float", nullable: false),
                     InnerHeadThickness = table.Column<double>(type: "float", nullable: false),
                     OuterShellThickness = table.Column<double>(type: "float", nullable: false),
@@ -1337,8 +1498,15 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     OuterTankHeadWeight = table.Column<double>(type: "float", nullable: false),
                     InnerTankHeadWeldLength = table.Column<double>(type: "float", nullable: false),
                     InnerTankCircumferenceWeldLength = table.Column<double>(type: "float", nullable: false),
+                    InnerTankShellWeldLength = table.Column<double>(type: "float", nullable: false),
+                    InnerTankBombeWeldLength = table.Column<double>(type: "float", nullable: false),
+                    InnerTankTotalWeldLength = table.Column<double>(type: "float", nullable: false),
                     OuterTankHeadWeldLength = table.Column<double>(type: "float", nullable: false),
                     OuterTankCircumferenceWeldLength = table.Column<double>(type: "float", nullable: false),
+                    OuterTankShellWeldLength = table.Column<double>(type: "float", nullable: false),
+                    OuterTankBombeWeldLength = table.Column<double>(type: "float", nullable: false),
+                    OuterTankTotalWeldLength = table.Column<double>(type: "float", nullable: false),
+                    StiffenerRingWeldLength = table.Column<double>(type: "float", nullable: false),
                     TotalWeldLength = table.Column<double>(type: "float", nullable: false),
                     TotalFilmCost = table.Column<double>(type: "float", nullable: false),
                     InnerTankTotalLength = table.Column<double>(type: "float", nullable: false),
@@ -2063,6 +2231,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     TargetPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PrimaryUnitType = table.Column<int>(type: "int", nullable: false),
+                    KgEquivalentPerPrimaryUnit = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    Step3DFilePath = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    DxfFilePath1 = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    DxfFilePath2 = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    DatasheetFilePath = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -2104,6 +2278,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     MaterialName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     MaterialFormId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FormType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    MaterialNumber = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    MaterialClass = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    MaterialFamily = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Norm = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    ProductStandard = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    SymbolicName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     GeneratedStockCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     StockCode = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
                     StockCodeName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
@@ -2113,6 +2293,13 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     UsedThickness = table.Column<double>(type: "float", nullable: false),
                     Density = table.Column<double>(type: "float", nullable: false),
                     TheoreticalWeight = table.Column<double>(type: "float", nullable: false),
+                    UsedYieldStrength = table.Column<double>(type: "float", nullable: false),
+                    UsedDesignStress = table.Column<double>(type: "float", nullable: false),
+                    UsedTemperature = table.Column<double>(type: "float", nullable: false),
+                    UsedThicknessBandMin = table.Column<double>(type: "float", nullable: false),
+                    UsedThicknessBandMax = table.Column<double>(type: "float", nullable: false),
+                    DensitySource = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    PriceSource = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     UseManualUnitPrice = table.Column<bool>(type: "bit", nullable: false),
                     ManualUnitPrice = table.Column<double>(type: "float", nullable: true),
                     StockUnitPrice = table.Column<double>(type: "float", nullable: false),
@@ -2224,6 +2411,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     MaterialName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     MaterialFormId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FormType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    MaterialNumber = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    MaterialClass = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    MaterialFamily = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Norm = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    ProductStandard = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    SymbolicName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     GeneratedStockCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     StockCode = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
                     StockCodeName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
@@ -2233,6 +2426,13 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     UsedThickness = table.Column<double>(type: "float", nullable: false),
                     Density = table.Column<double>(type: "float", nullable: false),
                     TheoreticalWeight = table.Column<double>(type: "float", nullable: false),
+                    UsedYieldStrength = table.Column<double>(type: "float", nullable: false),
+                    UsedDesignStress = table.Column<double>(type: "float", nullable: false),
+                    UsedTemperature = table.Column<double>(type: "float", nullable: false),
+                    UsedThicknessBandMin = table.Column<double>(type: "float", nullable: false),
+                    UsedThicknessBandMax = table.Column<double>(type: "float", nullable: false),
+                    DensitySource = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    PriceSource = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     UseManualUnitPrice = table.Column<bool>(type: "bit", nullable: false),
                     ManualUnitPrice = table.Column<double>(type: "float", nullable: true),
                     StockUnitPrice = table.Column<double>(type: "float", nullable: false),
@@ -2406,6 +2606,77 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GeneratedStockCodeInventoryMovements",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GeneratedStockCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MovementType = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    StockBefore = table.Column<int>(type: "int", nullable: false),
+                    StockAfter = table.Column<int>(type: "int", nullable: false),
+                    MovementDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StockProductGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReferenceDocument = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneratedStockCodeInventoryMovements", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GeneratedStockCodeInventoryMovements_GeneratedStockCodes_GeneratedStockCodeId",
+                        column: x => x.GeneratedStockCodeId,
+                        principalTable: "GeneratedStockCodes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GeneratedStockCodeInventoryMovements_StockProductGroups_StockProductGroupId",
+                        column: x => x.StockProductGroupId,
+                        principalTable: "StockProductGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GeneratedStockCodeRuleSelections",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GeneratedStockCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StockSubCodeRuleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneratedStockCodeRuleSelections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GeneratedStockCodeRuleSelections_GeneratedStockCodes_GeneratedStockCodeId",
+                        column: x => x.GeneratedStockCodeId,
+                        principalTable: "GeneratedStockCodes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GeneratedStockCodeRuleSelections_StockSubCodeRules_StockSubCodeRuleId",
+                        column: x => x.StockSubCodeRuleId,
+                        principalTable: "StockSubCodeRules",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StockProductGroupItems",
                 columns: table => new
                 {
@@ -2441,13 +2712,39 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Materials",
-                columns: new[] { "Id", "ColdStretchYieldStrength", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "Density", "ElasticModulus", "Group", "MaterialNumber", "ModifiedBy", "ModifiedDate", "Name", "Notes", "Standard", "Status", "YieldFactorK" },
+                table: "DesignPlanningEmployees",
+                columns: new[] { "Id", "DailyCapacityHours", "FullName", "IsActive" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), null, "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6458), null, null, 7850.0, null, "Fine grain pressure vessel steel", "1.0565", null, null, "P355NH", "Normalized delivery condition according to EN 10028-3", 0, 0, null },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), null, "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6463), null, null, 8000.0, null, "Austenitic stainless steel", "1.4301", null, null, "X5CrNi18-10", "EN 10028-7 stainless pressure vessel steel", 0, 0, null },
-                    { new Guid("55555555-5555-5555-5555-555555555555"), null, "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6469), null, null, 7850.0, 206000.0, "Structural steel", "1.0038", null, null, "S235JR", "Profile material for supports/rings", 0, 0, 235.0 }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), 8m, "Remzi Urhan", true },
+                    { new Guid("11111111-1111-1111-1111-111111111112"), 8m, "Büşra Ateş", true },
+                    { new Guid("11111111-1111-1111-1111-111111111113"), 8m, "Erdoğan Elgin", true },
+                    { new Guid("11111111-1111-1111-1111-111111111114"), 8m, "Muhammed Şimşek", true },
+                    { new Guid("11111111-1111-1111-1111-111111111115"), 8m, "Ayhan Şahin", true },
+                    { new Guid("11111111-1111-1111-1111-111111111116"), 8m, "Mustafa Çakal", true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "DesignPlanningProjectTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("22222222-2222-2222-2222-222222222221"), "Tek Cidarlı Depolama" },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), "Çift Cidarlı Depolama" },
+                    { new Guid("22222222-2222-2222-2222-222222222223"), "Tek Cidarlı Transport" },
+                    { new Guid("22222222-2222-2222-2222-222222222224"), "Çift Cidarlı Transport" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Materials",
+                columns: new[] { "Id", "ColdStretchYieldStrength", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "Density", "ElasticModulus", "MaterialNumber", "ModifiedBy", "ModifiedDate", "Name", "Notes", "Status", "YieldFactorK" },
+                values: new object[,]
+                {
+                    { new Guid("11111111-1111-1111-1111-111111111111"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(847), null, null, 7850.0, null, "1.0565", null, null, "P355GH", "Pressure vessel plate according to EN10028-2", 0, null },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(852), null, null, 8000.0, null, "1.4301", null, null, "X5CrNi18-10", "EN 10028-7 stainless pressure vessel steel", 0, null },
+                    { new Guid("55555555-5555-5555-5555-555555555555"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(883), null, null, 7850.0, 206000.0, "1.0038", null, null, "S235JR", "Profile material for supports/rings", 0, 235.0 },
+                    { new Guid("77777777-7777-7777-7777-777777777777"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(887), null, null, 7850.0, null, "1.0565", null, null, "P355NH", "Normalized pressure vessel steel EN10028-3", 0, null },
+                    { new Guid("88888888-8888-8888-8888-888888888888"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(891), null, null, 8000.0, null, "1.4307", null, null, "X2CrNi18-9", "Austenitic stainless steel plate EN10028-7", 0, null }
                 });
 
             migrationBuilder.InsertData(
@@ -2472,22 +2769,65 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "Density", "Description", "ModifiedBy", "ModifiedDate", "Name", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("10000000-0000-0000-0000-000000000001"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6870), null, null, 460.0, "Liquefied Natural Gas", null, null, "Methane / LNG", 0 },
-                    { new Guid("10000000-0000-0000-0000-000000000002"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6875), null, null, 808.0, "Liquid Nitrogen", null, null, "Nitrogen / LIN", 0 },
-                    { new Guid("10000000-0000-0000-0000-000000000003"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6877), null, null, 1141.0, "Liquid Oxygen", null, null, "Oxygen / LOX", 0 },
-                    { new Guid("10000000-0000-0000-0000-000000000004"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6879), null, null, 1395.0, "Liquid Argon", null, null, "Argon / LAR", 0 },
-                    { new Guid("10000000-0000-0000-0000-000000000005"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6882), null, null, 1070.0, "Liquid Carbon Dioxide", null, null, "Carbon Dioxide / LCO2", 0 }
+                    { new Guid("10000000-0000-0000-0000-000000000001"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1620), null, null, 460.0, "Liquefied Natural Gas", null, null, "Methane / LNG", 0 },
+                    { new Guid("10000000-0000-0000-0000-000000000002"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1627), null, null, 808.0, "Liquid Nitrogen", null, null, "Nitrogen / LIN", 0 },
+                    { new Guid("10000000-0000-0000-0000-000000000003"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1631), null, null, 1141.0, "Liquid Oxygen", null, null, "Oxygen / LOX", 0 },
+                    { new Guid("10000000-0000-0000-0000-000000000004"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1635), null, null, 1395.0, "Liquid Argon", null, null, "Argon / LAR", 0 },
+                    { new Guid("10000000-0000-0000-0000-000000000005"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1637), null, null, 1070.0, "Liquid Carbon Dioxide", null, null, "Carbon Dioxide / LCO2", 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "DesignPlanningEmployeeExpertises",
+                columns: new[] { "Id", "EmployeeId", "ExpertiseName", "Priority" },
+                values: new object[,]
+                {
+                    { new Guid("31111111-1111-1111-1111-111111111111"), new Guid("11111111-1111-1111-1111-111111111111"), "Teklif Hazırlama", 1 },
+                    { new Guid("31111111-1111-1111-1111-111111111112"), new Guid("11111111-1111-1111-1111-111111111112"), "Tek Cidarlı Depolama", 1 },
+                    { new Guid("31111111-1111-1111-1111-111111111113"), new Guid("11111111-1111-1111-1111-111111111112"), "Tek Cidarlı Transport", 1 },
+                    { new Guid("31111111-1111-1111-1111-111111111114"), new Guid("11111111-1111-1111-1111-111111111113"), "Çift Cidarlı Depolama", 1 },
+                    { new Guid("31111111-1111-1111-1111-111111111115"), new Guid("11111111-1111-1111-1111-111111111113"), "Çift Cidarlı Transport", 1 },
+                    { new Guid("31111111-1111-1111-1111-111111111116"), new Guid("11111111-1111-1111-1111-111111111114"), "Tek Cidarlı Depolama", 1 },
+                    { new Guid("31111111-1111-1111-1111-111111111117"), new Guid("11111111-1111-1111-1111-111111111114"), "Çift Cidarlı Depolama", 1 },
+                    { new Guid("31111111-1111-1111-1111-111111111118"), new Guid("11111111-1111-1111-1111-111111111115"), "Teknik Ressam", 1 },
+                    { new Guid("31111111-1111-1111-1111-111111111119"), new Guid("11111111-1111-1111-1111-111111111116"), "Teknik Ressam", 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "DesignPlanningTaskTemplates",
+                columns: new[] { "Id", "DurationUnit", "DurationValue", "IsActive", "IsPassive", "ProjectTypeId", "ResponsibleRole", "SequenceNo", "TaskName" },
+                values: new object[,]
+                {
+                    { new Guid("40000000-0000-0000-2221-000000000001"), 1, 2m, true, false, new Guid("22222222-2222-2222-2222-222222222221"), "Teklif Hazırlama", 1, "GAD RESMİ ÇİZİMİ" },
+                    { new Guid("40000000-0000-0000-2221-000000000002"), 1, 2m, true, false, new Guid("22222222-2222-2222-2222-222222222221"), "Teklif Hazırlama", 2, "GAD RESMİ ÇİZİM ONAYI" },
+                    { new Guid("40000000-0000-0000-2221-000000000003"), 1, 1m, true, false, new Guid("22222222-2222-2222-2222-222222222221"), "Teklif Hazırlama", 3, "Hesaplamalar" },
+                    { new Guid("40000000-0000-0000-2221-000000000004"), 3, 1m, true, true, new Guid("22222222-2222-2222-2222-222222222221"), "Dizayn Mühendisi", 4, "TUV Tip Onay Süreci" },
+                    { new Guid("40000000-0000-0000-2221-000000000005"), 1, 6m, true, false, new Guid("22222222-2222-2222-2222-222222222221"), "Dizayn Mühendisi", 5, "Genel Tip Onay Resmi" },
+                    { new Guid("40000000-0000-0000-2221-000000000006"), 1, 4m, true, false, new Guid("22222222-2222-2222-2222-222222222221"), "Dizayn Mühendisi", 6, "TANK MONTAJ TASARIMI" },
+                    { new Guid("40000000-0000-0000-2221-000000000007"), 1, 2m, true, false, new Guid("22222222-2222-2222-2222-222222222221"), "Teknik Ressam", 7, "TANK KESİM RESİMLERİNİN VE LİSTELERİNİN HAZIRLANMASI" },
+                    { new Guid("40000000-0000-0000-2222-000000000001"), 1, 2m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Teklif Hazırlama", 1, "Hesaplamalar" },
+                    { new Guid("40000000-0000-0000-2222-000000000002"), 1, 2m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Teklif Hazırlama", 2, "GÖVDE BOMBE ORYANTASYON HAZIRLAMA" },
+                    { new Guid("40000000-0000-0000-2222-000000000003"), 1, 1m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Teklif Hazırlama", 3, "KRİTİK AKSESUAR LİSTESİ YAYINLAMA" },
+                    { new Guid("40000000-0000-0000-2222-000000000004"), 1, 1m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Teklif Hazırlama", 4, "P&ID HAZIRLAMA" },
+                    { new Guid("40000000-0000-0000-2222-000000000005"), 1, 1m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Teklif Hazırlama", 5, "GAD RESMİ ÇİZİMİ" },
+                    { new Guid("40000000-0000-0000-2222-000000000006"), 3, 1m, true, true, new Guid("22222222-2222-2222-2222-222222222222"), "Teklif Hazırlama", 6, "GAD RESMİ ÇİZİM ONAYI" },
+                    { new Guid("40000000-0000-0000-2222-000000000007"), 1, 6m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Dizayn Mühendisi", 7, "Genel Tip Onay Resmi" },
+                    { new Guid("40000000-0000-0000-2222-000000000008"), 3, 1m, true, true, new Guid("22222222-2222-2222-2222-222222222222"), "Dizayn Mühendisi", 8, "TUV Tip Onay Süreci" },
+                    { new Guid("40000000-0000-0000-2222-000000000009"), 1, 4m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Dizayn Mühendisi", 9, "İÇ TANK MONTAJ TASARIMI" },
+                    { new Guid("40000000-0000-0000-2222-000000000010"), 1, 4m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Dizayn Mühendisi", 10, "DIŞ TANK MONTAJ TASARIMI" },
+                    { new Guid("40000000-0000-0000-2222-000000000011"), 1, 2m, true, false, new Guid("22222222-2222-2222-2222-222222222222"), "Teknik Ressam", 11, "DIŞ TANK KESİM RESİMLERİNİN VE LİSTELERİNİN HAZIRLANMASI" }
                 });
 
             migrationBuilder.InsertData(
                 table: "MaterialForms",
-                columns: new[] { "Id", "ColdStretchYieldStrength", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "FormType", "MaterialId", "ModifiedBy", "ModifiedDate", "MomentOfInertia", "Notes", "ProductStandard", "SectionArea", "SectionModulus", "Status", "TargetPrice", "ThicknessMax", "ThicknessMin", "UnitPrice", "WeldingFactor" },
+                columns: new[] { "Id", "ColdStretchYieldStrength", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "FormType", "MaterialClass", "MaterialFamily", "MaterialId", "ModifiedBy", "ModifiedDate", "MomentOfInertia", "Norm", "Notes", "ProductStandard", "SectionArea", "SectionModulus", "Status", "StockCode", "SymbolicName", "TargetPrice", "ThicknessMax", "ThicknessMin", "UnitPrice", "WeldingFactor" },
                 values: new object[,]
                 {
-                    { new Guid("22222222-2222-2222-2222-222222222222"), null, "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6526), null, null, 0, new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, "Standard plate form for P355NH", "EN 10028-3", null, null, 0, null, 250.0, 1.0, 1.5, null },
-                    { new Guid("22222222-2222-2222-2222-222222222223"), null, "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6552), null, null, 1, new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, "Seamless pipe form for P355NH", "EN 10216-3", null, null, 0, null, 40.0, 2.0, 2.2999999999999998, 1.0 },
-                    { new Guid("44444444-4444-4444-4444-444444444441"), 400.0, "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6530), null, null, 0, new Guid("33333333-3333-3333-3333-333333333333"), null, null, null, "Plate form for X5CrNi18-10 (Cold stretch optional)", "EN 10028-7", null, null, 0, null, 200.0, 1.0, 4.5, null },
-                    { new Guid("66666666-6666-6666-6666-666666666661"), null, "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6556), null, null, 4, new Guid("55555555-5555-5555-5555-555555555555"), null, null, 101700.0, "S235JR kutu profil 40x40x3 mm", "EN 10025-2", 444.0, 5080.0, 0, null, 30.0, 3.0, 1.2, null }
+                    { new Guid("22222222-2222-2222-2222-222222222222"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(944), null, null, 0, "Carbon Steel", 1, new Guid("11111111-1111-1111-1111-111111111111"), null, null, null, "EN10028-2", "Standard plate form for P355GH", "EN 10028-2", null, null, 0, null, "P355GH", null, 250.0, 1.0, 1.5, null },
+                    { new Guid("22222222-2222-2222-2222-222222222223"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(964), null, null, 1, "Carbon Steel", 1, new Guid("77777777-7777-7777-7777-777777777777"), null, null, null, "EN10216-3", "Seamless pipe form for P355NH", "EN 10216-3", null, null, 0, "STK-CS-P355NH-SP", "P355NH", null, 40.0, 2.0, 2.2999999999999998, 1.0 },
+                    { new Guid("44444444-4444-4444-4444-444444444441"), 400.0, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(956), null, null, 0, "Stainless Steel", 2, new Guid("33333333-3333-3333-3333-333333333333"), null, null, null, "EN10028-7", "Plate form for X5CrNi18-10 (Cold stretch optional)", "EN 10028-7", null, null, 0, "STK-SS-4301-PL", "X5CrNi18-10", null, 200.0, 1.0, 4.5, null },
+                    { new Guid("66666666-6666-6666-6666-666666666661"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(972), null, null, 4, "Carbon Steel", 1, new Guid("55555555-5555-5555-5555-555555555555"), null, null, 101700.0, "EN10025", "S235JR kutu profil 40x40x3 mm", "EN 10025-2", 444.0, 5080.0, 0, "STK-CS-S235JR-PROF", "S235JR", null, 30.0, 3.0, 1.2, null },
+                    { new Guid("77777777-7777-7777-7777-777777777771"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(976), null, null, 2, "Carbon Steel", 1, new Guid("77777777-7777-7777-7777-777777777777"), null, null, null, "EN10028-3", "Forged part seed for P355NH", "EN 10028-3", null, null, 0, null, "P355NH", null, 300.0, 20.0, 2.7999999999999998, null },
+                    { new Guid("88888888-8888-8888-8888-888888888881"), null, "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(983), null, null, 0, "Stainless Steel", 2, new Guid("88888888-8888-8888-8888-888888888888"), null, null, null, "EN10028-7", "Plate seed for X2CrNi18-9", "EN 10028-7", null, null, 0, null, "X2CrNi18-9", null, 120.0, 1.0, 4.9000000000000004, null }
                 });
 
             migrationBuilder.InsertData(
@@ -2495,9 +2835,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "Enthalpy_Gas_kJkg", "Enthalpy_Liquid_kJkg", "Entropy_Gas_kJkgK", "Entropy_Liquid_kJkgK", "GasConstant_kJkgK", "ModifiedBy", "ModifiedDate", "Pressure_bar", "SpecificVolume_Gas_m3kg", "SpecificVolume_Liquid_dm3kg", "Status", "StorageTypeId", "Temperature_C" },
                 values: new object[,]
                 {
-                    { new Guid("20000000-0000-0000-0000-000000000001"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6905), null, null, 688.0, 200.0, 4.9626999999999999, 1.0, 488.0, null, null, 2.3839999999999999, 0.25041999999999998, 2.4674, 0, new Guid("10000000-0000-0000-0000-000000000001"), -150.0 },
-                    { new Guid("20000000-0000-0000-0000-000000000002"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6910), null, null, 281.19, 81.790000000000006, 2.4571000000000001, -0.1275, 199.40000000000001, null, null, 0.98999999999999999, 0.2215, 1.2352000000000001, 0, new Guid("10000000-0000-0000-0000-000000000002"), -196.0 },
-                    { new Guid("20000000-0000-0000-0000-000000000003"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6913), null, null, 367.88, 200.0, 2.3632, 1.0, 167.88, null, null, 12.214, 0.02129, 1.0495000000000001, 0, new Guid("10000000-0000-0000-0000-000000000003"), -150.0 }
+                    { new Guid("20000000-0000-0000-0000-000000000001"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1680), null, null, 688.0, 200.0, 4.9626999999999999, 1.0, 488.0, null, null, 2.3839999999999999, 0.25041999999999998, 2.4674, 0, new Guid("10000000-0000-0000-0000-000000000001"), -150.0 },
+                    { new Guid("20000000-0000-0000-0000-000000000002"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1687), null, null, 281.19, 81.790000000000006, 2.4571000000000001, -0.1275, 199.40000000000001, null, null, 0.98999999999999999, 0.2215, 1.2352000000000001, 0, new Guid("10000000-0000-0000-0000-000000000002"), -196.0 },
+                    { new Guid("20000000-0000-0000-0000-000000000003"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1691), null, null, 367.88, 200.0, 2.3632, 1.0, 167.88, null, null, 12.214, 0.02129, 1.0495000000000001, 0, new Guid("10000000-0000-0000-0000-000000000003"), -150.0 }
                 });
 
             migrationBuilder.InsertData(
@@ -2505,83 +2845,96 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "MaterialFormId", "ModifiedBy", "ModifiedDate", "Rm", "Rp02", "Status", "Temperature", "ThicknessMax", "ThicknessMin" },
                 values: new object[,]
                 {
-                    { new Guid("004f1605-43b4-41c6-973a-8046ef52242a"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6775), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 195.0, 0, 100.0, 200.0, 1.0 },
-                    { new Guid("0516575c-84a0-49c5-8e9a-188e88746fc5"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6677), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 190.0, 0, 400.0, 60.0, 40.0 },
-                    { new Guid("084f240c-dd8b-4092-8d4e-520ff22ff7d6"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6617), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 355.0, 0, 20.0, 16.0, 1.0 },
-                    { new Guid("0a207ab5-4ef3-47de-adab-083e9d5d635a"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6626), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 299.0, 0, 150.0, 16.0, 1.0 },
-                    { new Guid("12b153c1-fccb-440f-8593-fbebf0841694"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6706), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 257.0, 0, 150.0, 150.0, 100.0 },
-                    { new Guid("1429a60d-3cd0-4cb4-974f-9722c78348a6"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6681), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 315.0, 0, 20.0, 100.0, 60.0 },
-                    { new Guid("1b1a42bd-0d4f-4c0f-94e0-6b5691857c88"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6739), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 184.0, 0, 350.0, 150.0, 100.0 },
-                    { new Guid("1bf3857b-cb4e-4945-bc1d-e18dcfbb3ecb"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6767), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 300.0, 0, -100.0, 200.0, 1.0 },
-                    { new Guid("218bee6f-fa8b-448b-843f-3d7269f047a8"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6805), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 214.0, 0, 350.0, 40.0, 2.0 },
-                    { new Guid("259a265d-a1bf-46ef-b390-dbc24ddd21f8"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6769), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 260.0, 0, -50.0, 200.0, 1.0 },
-                    { new Guid("2692dfd3-6b90-4d96-b911-b6e26446bf6a"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6754), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 209.0, 0, 250.0, 250.0, 150.0 },
-                    { new Guid("2723a71f-f52d-4a7b-adf6-cdfc8e6a883b"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6799), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 275.0, 0, 200.0, 40.0, 2.0 },
-                    { new Guid("29060ac6-a380-4b68-91a9-bc5fe145270d"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6748), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 268.0, 0, 100.0, 250.0, 150.0 },
-                    { new Guid("2e70b9d0-b291-400d-a659-387d1e6f1479"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6671), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 238.0, 0, 250.0, 60.0, 40.0 },
-                    { new Guid("304e86b0-9a97-40b3-aef8-a7402c053432"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6689), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 244.0, 0, 200.0, 100.0, 60.0 },
-                    { new Guid("30caa9f2-90d1-4eca-9fce-542f8787d3b9"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6809), null, null, new Guid("66666666-6666-6666-6666-666666666661"), null, null, 360.0, 235.0, 0, 20.0, 30.0, 3.0 },
-                    { new Guid("340016ec-f68d-41e3-b5a6-aae04ad6dcbf"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6699), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 305.0, 0, 20.0, 150.0, 100.0 },
-                    { new Guid("34438cac-2938-4ed1-bdf5-ff90d5576bac"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6622), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 323.0, 0, 100.0, 16.0, 1.0 },
-                    { new Guid("3ab792b0-29f1-40e5-b306-1a8ac9c264b9"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6786), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 140.0, 0, 350.0, 200.0, 1.0 },
-                    { new Guid("437d9559-41a9-4d53-a94c-ad756bc497ff"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6645), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 314.0, 0, 100.0, 40.0, 16.0 },
-                    { new Guid("45013cac-38a9-442a-8a09-7c522e2a4a9b"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6777), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 185.0, 0, 150.0, 200.0, 1.0 },
-                    { new Guid("458747b1-943f-483f-b074-7770e74dce3e"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6686), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 265.0, 0, 150.0, 100.0, 60.0 },
-                    { new Guid("4cd245af-963d-442d-8140-278ebe77e73c"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6620), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 343.0, 0, 50.0, 16.0, 1.0 },
-                    { new Guid("4da687bb-75b3-4c99-bce0-cb430c141f50"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6803), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 232.0, 0, 300.0, 40.0, 2.0 },
-                    { new Guid("51657a17-450b-45b8-a7ec-b53a4b355d58"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6761), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 167.0, 0, 400.0, 250.0, 150.0 },
-                    { new Guid("566e02be-cd9d-40de-8606-c734f158162a"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6774), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 205.0, 0, 50.0, 200.0, 1.0 },
-                    { new Guid("5855e19c-4ef0-4811-b25a-1e39a9a9a855"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6682), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 305.0, 0, 50.0, 100.0, 60.0 },
-                    { new Guid("5d5d3034-08ff-4cd3-9717-2eddaed6a562"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6751), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 228.0, 0, 200.0, 250.0, 150.0 },
-                    { new Guid("5d60c750-55a4-4a06-87b4-2507663f7399"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6693), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 206.0, 0, 300.0, 100.0, 60.0 },
-                    { new Guid("63c6c762-224b-4125-9b96-7100afea10ac"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6667), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 282.0, 0, 150.0, 60.0, 40.0 },
-                    { new Guid("661f0440-3491-44cb-9843-880deb4e35b3"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6796), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 299.0, 0, 150.0, 40.0, 2.0 },
-                    { new Guid("6e899839-a3d4-4c14-a417-df17cc4bdd66"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6782), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 160.0, 0, 250.0, 200.0, 1.0 },
-                    { new Guid("72269743-52d3-4199-b216-77f9f1d15125"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6708), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 236.0, 0, 200.0, 150.0, 100.0 },
-                    { new Guid("7c9764ee-6dcf-40e3-9afa-019c331d880b"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6743), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 295.0, 0, 20.0, 250.0, 150.0 },
-                    { new Guid("7caa598b-50b7-4fba-a3ee-ee0a9b592e04"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6637), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 214.0, 0, 350.0, 16.0, 1.0 },
-                    { new Guid("7cfd4e04-4703-44e3-b8d3-0a7ff3a57511"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6762), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 350.0, 0, -196.0, 200.0, 1.0 },
-                    { new Guid("7e0ab36c-1a16-4543-939f-02aa4cfc930f"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6654), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 225.0, 0, 300.0, 40.0, 16.0 },
-                    { new Guid("807feb61-15e3-4912-8b76-abb75d360c7e"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6791), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 355.0, 0, 20.0, 40.0, 2.0 },
-                    { new Guid("82aa52e4-fa04-4b68-9681-6d19703d883e"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6788), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 130.0, 0, 400.0, 200.0, 1.0 },
-                    { new Guid("8306ecf1-7598-4806-a75d-2d172cf6a534"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6659), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 196.0, 0, 400.0, 40.0, 16.0 },
-                    { new Guid("83545325-b58a-47a8-bf4b-ddcd7cf712a3"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6771), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 210.0, 0, 20.0, 200.0, 1.0 },
-                    { new Guid("846029ec-fc2d-46b5-9d82-a2ac78a7e925"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6759), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 178.0, 0, 350.0, 250.0, 150.0 },
-                    { new Guid("858f4e00-8da2-448f-8b38-5e2dbb5eeecb"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6793), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 343.0, 0, 50.0, 40.0, 2.0 },
-                    { new Guid("8dbabe3b-314e-4eea-8173-0a41316fc238"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6701), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 295.0, 0, 50.0, 150.0, 100.0 },
-                    { new Guid("90d1d1a2-c803-48ed-a2fa-7057484dc8a3"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6794), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 323.0, 0, 100.0, 40.0, 2.0 },
-                    { new Guid("981a2498-4e80-499a-84fe-eed96b8521da"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6656), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 208.0, 0, 350.0, 40.0, 16.0 },
-                    { new Guid("9c6d3290-6afd-4192-8b18-bf4662aae4bf"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6647), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 291.0, 0, 150.0, 40.0, 16.0 },
-                    { new Guid("9cc8707f-66e2-4ec1-8e2f-f74825b92fc1"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6634), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 232.0, 0, 300.0, 16.0, 1.0 },
-                    { new Guid("a28e687d-765c-4004-a93c-a9210a58540f"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6642), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 334.0, 0, 50.0, 40.0, 16.0 },
-                    { new Guid("acd9ead7-a995-498a-bbdd-ffa748e2bca7"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6745), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 285.0, 0, 50.0, 250.0, 150.0 },
-                    { new Guid("af4ba270-81c6-45d6-848a-406d58039b6e"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6784), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 150.0, 0, 300.0, 200.0, 1.0 },
-                    { new Guid("b01b992e-9636-46e8-9231-695089d7f084"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6765), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 330.0, 0, -150.0, 200.0, 1.0 },
-                    { new Guid("b264c90a-9230-4219-9ed8-74187df21aa5"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6663), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 324.0, 0, 50.0, 60.0, 40.0 },
-                    { new Guid("b276efbe-98bf-4f85-babe-7bbf4491547c"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6651), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 245.0, 0, 250.0, 40.0, 16.0 },
-                    { new Guid("b2949675-fd28-4a9a-ba2c-f296793061b9"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6695), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 190.0, 0, 350.0, 100.0, 60.0 },
-                    { new Guid("b527343a-9aab-4b22-9894-483868b324e7"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6660), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 335.0, 0, 20.0, 60.0, 40.0 },
-                    { new Guid("b63891ca-0b13-4fec-b969-ee9451d52059"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6741), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 173.0, 0, 400.0, 150.0, 100.0 },
-                    { new Guid("b689744d-867d-4752-882c-e24258eb6696"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6801), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 252.0, 0, 250.0, 40.0, 2.0 },
-                    { new Guid("b8c2c49f-9216-40da-9571-0a27814e8a8c"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6641), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 345.0, 0, 20.0, 40.0, 16.0 },
-                    { new Guid("be7bec65-b20f-48a8-bc63-99044344608f"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6684), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 287.0, 0, 100.0, 100.0, 60.0 },
-                    { new Guid("bf0409ed-affa-4033-8d9d-e90b1d733177"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6673), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 219.0, 0, 300.0, 60.0, 40.0 },
-                    { new Guid("c5fe578e-f512-4090-a6d1-cd969a1825e9"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6807), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 202.0, 0, 400.0, 40.0, 2.0 },
-                    { new Guid("c6aaf444-dff4-4d0b-bb5e-089e8f378d76"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6632), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 252.0, 0, 250.0, 16.0, 1.0 },
-                    { new Guid("cadc0256-e7fd-44a9-95eb-2a4e3444779d"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6628), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 275.0, 0, 200.0, 16.0, 1.0 },
-                    { new Guid("d26d728c-140e-4dbb-ad0a-16029b54a4e8"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6734), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 216.0, 0, 250.0, 150.0, 100.0 },
-                    { new Guid("d4ea22af-5cdc-4aef-96c8-9ea81d912c00"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6665), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 305.0, 0, 100.0, 60.0, 40.0 },
-                    { new Guid("d797d40b-85e3-4af8-ac5f-89cda4ff2eed"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6757), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 192.0, 0, 300.0, 250.0, 150.0 },
-                    { new Guid("d7b5c566-4e13-439f-9372-8d539795c271"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6690), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 224.0, 0, 250.0, 100.0, 60.0 },
-                    { new Guid("d9347d28-680b-48de-b692-17227ef14068"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6703), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 277.0, 0, 100.0, 150.0, 100.0 },
-                    { new Guid("e3ff5247-45ae-4387-91a7-4f35e2b0b6d2"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6736), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 199.0, 0, 300.0, 150.0, 100.0 },
-                    { new Guid("e4bc08fe-0426-4773-8ad4-9d0734f99f7e"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6669), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 259.0, 0, 200.0, 60.0, 40.0 },
-                    { new Guid("e6fc9865-8181-4581-a66d-cfe52077e220"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6638), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 202.0, 0, 400.0, 16.0, 1.0 },
-                    { new Guid("e7592d49-9361-4c59-82c3-7bd49abaec28"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6697), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 179.0, 0, 400.0, 100.0, 60.0 },
-                    { new Guid("ea86d04c-24cd-44b1-87ba-3ea687a93ca5"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6649), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 267.0, 0, 200.0, 40.0, 16.0 },
-                    { new Guid("f00464c3-b980-4b9f-8d15-f609731b5a6a"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6750), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 249.0, 0, 150.0, 250.0, 150.0 },
-                    { new Guid("f2344829-591b-4a36-98f0-03b0212d3d06"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6675), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 202.0, 0, 350.0, 60.0, 40.0 },
-                    { new Guid("f4923995-0d98-4c2d-9e00-55af323bd4ef"), "SeedData", new DateTime(2026, 3, 31, 8, 49, 5, 182, DateTimeKind.Utc).AddTicks(6779), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 170.0, 0, 200.0, 200.0, 1.0 }
+                    { new Guid("0233e48f-37f0-4eda-8ff2-a24e9eb177ef"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1216), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 167.0, 0, 400.0, 250.0, 150.0 },
+                    { new Guid("02d6281a-9064-40bd-b13a-0e227feb2342"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1294), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 210.0, 0, 20.0, 120.0, 1.0 },
+                    { new Guid("0aa749c8-c207-4cb0-b02a-7fe7371eaf8c"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1092), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 208.0, 0, 350.0, 40.0, 16.0 },
+                    { new Guid("0ebbf670-9f8f-4f8b-99ff-4394b5b002d0"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1085), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 245.0, 0, 250.0, 40.0, 16.0 },
+                    { new Guid("10ea6f6b-cfef-44f6-9c66-e7dfdec47fbc"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1138), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 287.0, 0, 100.0, 100.0, 60.0 },
+                    { new Guid("13ff9aad-7a8b-442d-852f-ee5e6125f245"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1200), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 249.0, 0, 150.0, 250.0, 150.0 },
+                    { new Guid("155184bb-c258-4809-a034-5502a92b815b"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1197), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 268.0, 0, 100.0, 250.0, 150.0 },
+                    { new Guid("162f033d-4901-4208-9b32-8c64c06bb0d3"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1321), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 130.0, 0, 400.0, 120.0, 1.0 },
+                    { new Guid("1cb17006-cf87-4f99-ae06-ffc25f414e79"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1269), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 160.0, 0, 250.0, 200.0, 1.0 },
+                    { new Guid("1d7e6f54-032c-40f6-a2fd-fcff3b66e25f"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1178), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 216.0, 0, 250.0, 150.0, 100.0 },
+                    { new Guid("1fb23be8-4dce-4e8e-95aa-50c9cfa1a06d"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1250), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 260.0, 0, -50.0, 200.0, 1.0 },
+                    { new Guid("20a7d742-4a1b-4ade-b973-2d1eba2edcb9"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1152), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 206.0, 0, 300.0, 100.0, 60.0 },
+                    { new Guid("246e10f0-cc17-43ca-9f74-1f62ce19a190"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1316), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 140.0, 0, 350.0, 120.0, 1.0 },
+                    { new Guid("284ca400-a7c1-41d5-8194-ac05e19e9b97"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1185), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 184.0, 0, 350.0, 150.0, 100.0 },
+                    { new Guid("29fd746b-4ce4-4476-abfe-6e4ece7fbf09"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1096), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 196.0, 0, 400.0, 40.0, 16.0 },
+                    { new Guid("2b2514ec-4276-4827-8243-9a15e15bcaff"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1122), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 202.0, 0, 350.0, 60.0, 40.0 },
+                    { new Guid("2b512007-d67c-4838-b490-270d73ef267f"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1283), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 350.0, 0, -196.0, 120.0, 1.0 },
+                    { new Guid("2d40e461-a082-4e25-a72b-7828a7b0f9ac"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1259), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 195.0, 0, 100.0, 200.0, 1.0 },
+                    { new Guid("2dc278ac-9c33-4b64-a724-a42175a90569"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1213), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 178.0, 0, 350.0, 250.0, 150.0 },
+                    { new Guid("325e6090-df1a-4b61-9659-1d1865119dba"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1106), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 305.0, 0, 100.0, 60.0, 40.0 },
+                    { new Guid("3346e401-98ab-4787-91dc-c2637f6359be"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1194), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 285.0, 0, 50.0, 250.0, 150.0 },
+                    { new Guid("3744d43e-5d63-4db5-bce7-caa219e5db1a"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1350), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 202.0, 0, 400.0, 40.0, 2.0 },
+                    { new Guid("3bde7871-9c99-4dea-b997-489cf372adc9"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1128), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 190.0, 0, 400.0, 60.0, 40.0 },
+                    { new Guid("3d468e06-8df9-40e0-bebf-a9c26c72336b"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1135), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 305.0, 0, 50.0, 100.0, 60.0 },
+                    { new Guid("41870be9-a8c9-47bb-b6a9-1b00f08202ce"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1118), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 219.0, 0, 300.0, 60.0, 40.0 },
+                    { new Guid("435bcfd7-2c09-4b95-84ec-4fd1f2615ead"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1203), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 228.0, 0, 200.0, 250.0, 150.0 },
+                    { new Guid("44da7479-e1b0-41b9-86f6-9d9cce15327b"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1115), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 238.0, 0, 250.0, 60.0, 40.0 },
+                    { new Guid("4a5637b1-537b-4313-b241-348ec698f057"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1307), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 170.0, 0, 200.0, 120.0, 1.0 },
+                    { new Guid("4c717158-3b43-428a-98a9-a565112e1281"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1279), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 130.0, 0, 400.0, 200.0, 1.0 },
+                    { new Guid("4ee304ed-a690-44fd-8779-386ddf5aeb1e"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1111), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 259.0, 0, 200.0, 60.0, 40.0 },
+                    { new Guid("4f8275f1-7031-45b2-bb83-363de6057b46"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1172), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 257.0, 0, 150.0, 150.0, 100.0 },
+                    { new Guid("51a9c543-a4c4-4ada-a995-413452508cb0"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1330), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 323.0, 0, 100.0, 40.0, 2.0 },
+                    { new Guid("5495cb64-1760-46b6-97c8-7b6b99408651"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1048), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 345.0, 0, 20.0, 40.0, 16.0 },
+                    { new Guid("5911b92f-b1d2-4eff-9666-dba26ed7206a"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1300), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 195.0, 0, 100.0, 120.0, 1.0 },
+                    { new Guid("5f3c5347-e923-48ee-848d-83cd7e395fa2"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1165), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 295.0, 0, 50.0, 150.0, 100.0 },
+                    { new Guid("5fe41f5c-db81-4e64-9773-2e37ca78ed6b"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1146), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 244.0, 0, 200.0, 100.0, 60.0 },
+                    { new Guid("63f813d7-9605-4d33-8262-c6ede97c2456"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1191), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 295.0, 0, 20.0, 250.0, 150.0 },
+                    { new Guid("643a76cf-6b1d-46a4-909f-085fa17390f5"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1158), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 179.0, 0, 400.0, 100.0, 60.0 },
+                    { new Guid("668ad330-1058-4815-b7b2-4d9fcfcbd413"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1090), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 225.0, 0, 300.0, 40.0, 16.0 },
+                    { new Guid("686d2238-853b-4543-b86f-47bcbaef07b8"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1108), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 282.0, 0, 150.0, 60.0, 40.0 },
+                    { new Guid("6a1e2919-724d-4bb1-933f-44951e7065aa"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1337), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 275.0, 0, 200.0, 40.0, 2.0 },
+                    { new Guid("6c00ad02-e2b7-4617-9ec2-a028a2e21dbe"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1037), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 232.0, 0, 300.0, 16.0, 1.0 },
+                    { new Guid("6f514aa1-742e-4f74-a85d-b6a74dca2733"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1285), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 330.0, 0, -150.0, 120.0, 1.0 },
+                    { new Guid("70f71ccb-98b6-40d1-b17d-09a3c625029c"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1340), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 252.0, 0, 250.0, 40.0, 2.0 },
+                    { new Guid("7527771f-3a6d-4ffd-8330-d938d0e2354b"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1353), null, null, new Guid("66666666-6666-6666-6666-666666666661"), null, null, 360.0, 235.0, 0, 20.0, 30.0, 3.0 },
+                    { new Guid("785e813b-114a-4b48-9289-0baef438a7f4"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1022), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 323.0, 0, 100.0, 16.0, 1.0 },
+                    { new Guid("7a22aad9-1015-4291-ba76-9626d6450653"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1206), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 209.0, 0, 250.0, 250.0, 150.0 },
+                    { new Guid("7e1d45d3-97f3-410a-871b-6ecba5c4b7e4"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1098), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 335.0, 0, 20.0, 60.0, 40.0 },
+                    { new Guid("87f2b032-e290-4045-8f9e-f9a8db20b742"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1297), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 205.0, 0, 50.0, 120.0, 1.0 },
+                    { new Guid("89ef5a69-0663-4328-8254-d24fff4aafe1"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1343), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 232.0, 0, 300.0, 40.0, 2.0 },
+                    { new Guid("8a11dc53-47c8-4e5e-8d40-ad9682df90a0"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1303), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 185.0, 0, 150.0, 120.0, 1.0 },
+                    { new Guid("8bfb4c37-5d36-46e1-b370-bb18c3967097"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1162), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 305.0, 0, 20.0, 150.0, 100.0 },
+                    { new Guid("8ef52cfb-e2c7-4330-bf6a-88af6082cbee"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1082), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 267.0, 0, 200.0, 40.0, 16.0 },
+                    { new Guid("8fa15a9a-4980-4b8f-bb91-1973388b4a97"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1149), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 224.0, 0, 250.0, 100.0, 60.0 },
+                    { new Guid("8fb37d38-372d-4ed4-b7f1-3e4ec452d4dd"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1252), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 210.0, 0, 20.0, 200.0, 1.0 },
+                    { new Guid("9f3dce62-1462-4790-acc6-cdb7b58c14e9"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1245), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 330.0, 0, -150.0, 200.0, 1.0 },
+                    { new Guid("a68594de-6a33-4864-9b3b-be6b77c1a0b9"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1019), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 343.0, 0, 50.0, 16.0, 1.0 },
+                    { new Guid("a6d6b1a4-189e-420d-a6b8-8c8d1ebc55dc"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1030), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 275.0, 0, 200.0, 16.0, 1.0 },
+                    { new Guid("a709568b-afe3-4df5-ae41-78df545deb1a"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1262), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 185.0, 0, 150.0, 200.0, 1.0 },
+                    { new Guid("acdb89fc-b47f-45c2-aa2f-58f8d3c8e0b5"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1014), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 355.0, 0, 20.0, 16.0, 1.0 },
+                    { new Guid("b1185bb1-d056-4ac5-a3e9-fa28e076f863"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1080), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 291.0, 0, 150.0, 40.0, 16.0 },
+                    { new Guid("b4251a1c-ed7c-4762-a851-52aba916a944"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1247), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 300.0, 0, -100.0, 200.0, 1.0 },
+                    { new Guid("b728d8dc-40ce-43a8-b971-b46331038bde"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1210), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 450.0, 192.0, 0, 300.0, 250.0, 150.0 },
+                    { new Guid("b8c2797c-1037-4777-9215-2fab250c3787"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1272), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 150.0, 0, 300.0, 200.0, 1.0 },
+                    { new Guid("b974cb25-b4f3-41e5-9c3d-088a7a39d8fd"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1077), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 314.0, 0, 100.0, 40.0, 16.0 },
+                    { new Guid("bb758967-13d3-45e7-a75f-38913096b4cf"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1045), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 202.0, 0, 400.0, 16.0, 1.0 },
+                    { new Guid("bc50b6ff-a9f7-45b0-9e65-a9498681739e"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1026), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 299.0, 0, 150.0, 16.0, 1.0 },
+                    { new Guid("bcbf5809-7b0f-469c-9fe2-f800e5561b6a"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1072), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 334.0, 0, 50.0, 40.0, 16.0 },
+                    { new Guid("c0cea6a2-8191-4606-84d9-430ef5d59d3a"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1265), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 170.0, 0, 200.0, 200.0, 1.0 },
+                    { new Guid("c452656d-e417-4290-9dd6-7054c48cc342"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1276), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 140.0, 0, 350.0, 200.0, 1.0 },
+                    { new Guid("c6d8cf84-94d4-46ed-a981-5ef4dff98466"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1311), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 160.0, 0, 250.0, 120.0, 1.0 },
+                    { new Guid("c7bb0b36-76a3-4304-80ef-997a6b93f5dd"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1333), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 299.0, 0, 150.0, 40.0, 2.0 },
+                    { new Guid("c7c73c12-3351-4c4b-be0b-8bcca7708a7e"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1103), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 470.0, 324.0, 0, 50.0, 60.0, 40.0 },
+                    { new Guid("c8fdc479-e8ad-4cce-80dc-5bcec4d0cd15"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1168), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 277.0, 0, 100.0, 150.0, 100.0 },
+                    { new Guid("cd3f4e35-f340-4485-b1b3-614553fba6da"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1154), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 190.0, 0, 350.0, 100.0, 60.0 },
+                    { new Guid("d30f348c-14d0-4863-bc4e-5c6bc747570e"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1314), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 150.0, 0, 300.0, 120.0, 1.0 },
+                    { new Guid("d64ed853-3007-4d11-aa82-a8c40ea41c8f"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1240), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 350.0, 0, -196.0, 200.0, 1.0 },
+                    { new Guid("d79e5ee3-90c1-497a-b3c9-1c5b6eec8961"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1347), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 214.0, 0, 350.0, 40.0, 2.0 },
+                    { new Guid("dc3c2695-45fa-4b8b-b4e5-4cba8861f7b7"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1324), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 355.0, 0, 20.0, 40.0, 2.0 },
+                    { new Guid("dd24d725-b503-4c13-a05d-bdf7f1f1dcef"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1132), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 315.0, 0, 20.0, 100.0, 60.0 },
+                    { new Guid("e1779827-e6c2-438b-86d4-19689aa4d595"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1290), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 260.0, 0, -50.0, 120.0, 1.0 },
+                    { new Guid("e3f7e210-41c7-437c-bff2-ceb8013c7ac9"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1327), null, null, new Guid("22222222-2222-2222-2222-222222222223"), null, null, 490.0, 343.0, 0, 50.0, 40.0, 2.0 },
+                    { new Guid("e9123741-8999-48af-9532-0e579e2b449b"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1189), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 173.0, 0, 400.0, 150.0, 100.0 },
+                    { new Guid("eb0855c0-3828-4ecf-881e-e789c8c85701"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1041), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 214.0, 0, 350.0, 16.0, 1.0 },
+                    { new Guid("eb5bdf68-a8b3-41e8-90e8-f7bebaa070ee"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1255), null, null, new Guid("44444444-4444-4444-4444-444444444441"), null, null, 650.0, 205.0, 0, 50.0, 200.0, 1.0 },
+                    { new Guid("ed8227de-f185-4174-bce1-2a9111284c14"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1141), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 265.0, 0, 150.0, 100.0, 60.0 },
+                    { new Guid("effba63f-ff01-45d3-afc8-cdfa439b00f5"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1034), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 490.0, 252.0, 0, 250.0, 16.0, 1.0 },
+                    { new Guid("f19ac75b-34e2-45b1-8f77-8321f98aa5bd"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1288), null, null, new Guid("88888888-8888-8888-8888-888888888881"), null, null, 650.0, 300.0, 0, -100.0, 120.0, 1.0 },
+                    { new Guid("f47eb2ed-9c8c-4895-a36b-158fe8be1da0"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1181), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 199.0, 0, 300.0, 150.0, 100.0 },
+                    { new Guid("fe0386bc-18eb-4ab3-ba9a-4b5639ea8476"), "SeedData", new DateTime(2026, 5, 11, 18, 20, 21, 475, DateTimeKind.Utc).AddTicks(1175), null, null, new Guid("22222222-2222-2222-2222-222222222222"), null, null, 460.0, 236.0, 0, 200.0, 150.0, 100.0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -2704,6 +3057,49 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 name: "IX_CapacityOptions_CapacityGroupId",
                 table: "CapacityOptions",
                 column: "CapacityGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignPlanningEmployeeExpertises_EmployeeId_ExpertiseName",
+                table: "DesignPlanningEmployeeExpertises",
+                columns: new[] { "EmployeeId", "ExpertiseName" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignPlanningProjects_ProjectCode",
+                table: "DesignPlanningProjects",
+                column: "ProjectCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignPlanningProjects_ProjectTypeId",
+                table: "DesignPlanningProjects",
+                column: "ProjectTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignPlanningProjectTasks_AssignedEmployeeId",
+                table: "DesignPlanningProjectTasks",
+                column: "AssignedEmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignPlanningProjectTasks_ProjectId_SequenceNo",
+                table: "DesignPlanningProjectTasks",
+                columns: new[] { "ProjectId", "SequenceNo" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignPlanningProjectTasks_TaskTemplateId",
+                table: "DesignPlanningProjectTasks",
+                column: "TaskTemplateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignPlanningProjectTypes_Name",
+                table: "DesignPlanningProjectTypes",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignPlanningTaskTemplates_ProjectTypeId_SequenceNo",
+                table: "DesignPlanningTaskTemplates",
+                columns: new[] { "ProjectTypeId", "SequenceNo" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DesignStandards_Code",
@@ -2858,6 +3254,27 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_GeneratedStockCodeInventoryMovements_GeneratedStockCodeId_MovementDate",
+                table: "GeneratedStockCodeInventoryMovements",
+                columns: new[] { "GeneratedStockCodeId", "MovementDate" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneratedStockCodeInventoryMovements_StockProductGroupId",
+                table: "GeneratedStockCodeInventoryMovements",
+                column: "StockProductGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneratedStockCodeRuleSelections_GeneratedStockCodeId_StockSubCodeRuleId",
+                table: "GeneratedStockCodeRuleSelections",
+                columns: new[] { "GeneratedStockCodeId", "StockSubCodeRuleId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneratedStockCodeRuleSelections_StockSubCodeRuleId",
+                table: "GeneratedStockCodeRuleSelections",
+                column: "StockSubCodeRuleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GeneratedStockCodes_StockSubCodeGroupId",
                 table: "GeneratedStockCodes",
                 column: "StockSubCodeGroupId");
@@ -2868,9 +3285,16 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 column: "StockSubCodeRuleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MaterialForms_MaterialId",
+                name: "IX_MaterialForms_MaterialId_FormType_Norm_ProductStandard_ThicknessMin_ThicknessMax",
                 table: "MaterialForms",
-                column: "MaterialId");
+                columns: new[] { "MaterialId", "FormType", "Norm", "ProductStandard", "ThicknessMin", "ThicknessMax" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Materials_MaterialNumber_Name",
+                table: "Materials",
+                columns: new[] { "MaterialNumber", "Name" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PrefixRules_FluidId_SProductGroupId_SProductId",
@@ -3257,8 +3681,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_StockSubCodeRules_StockSubCodeGroupId_RuleCode",
                 table: "StockSubCodeRules",
-                columns: new[] { "StockSubCodeGroupId", "RuleCode" },
-                unique: true);
+                columns: new[] { "StockSubCodeGroupId", "RuleCode" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_StorageTypeProperties_StorageTypeId",
@@ -3310,6 +3733,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 name: "CapacityOptions");
 
             migrationBuilder.DropTable(
+                name: "DesignPlanningEmployeeExpertises");
+
+            migrationBuilder.DropTable(
+                name: "DesignPlanningProjectTasks");
+
+            migrationBuilder.DropTable(
                 name: "EmployeeProfiles");
 
             migrationBuilder.DropTable(
@@ -3326,6 +3755,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "GasTypePressures");
+
+            migrationBuilder.DropTable(
+                name: "GeneratedStockCodeInventoryMovements");
+
+            migrationBuilder.DropTable(
+                name: "GeneratedStockCodeRuleSelections");
 
             migrationBuilder.DropTable(
                 name: "PrefixRules");
@@ -3394,6 +3829,15 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 name: "CapacityGroups");
 
             migrationBuilder.DropTable(
+                name: "DesignPlanningEmployees");
+
+            migrationBuilder.DropTable(
+                name: "DesignPlanningProjects");
+
+            migrationBuilder.DropTable(
+                name: "DesignPlanningTaskTemplates");
+
+            migrationBuilder.DropTable(
                 name: "EN13458CostAnalyses");
 
             migrationBuilder.DropTable(
@@ -3431,6 +3875,9 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AD2000Calculations");
+
+            migrationBuilder.DropTable(
+                name: "DesignPlanningProjectTypes");
 
             migrationBuilder.DropTable(
                 name: "BombeLaborRates");
