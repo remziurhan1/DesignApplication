@@ -1,0 +1,3 @@
+@model Employee
+@{ ViewData["Title"] = "Personel Düzenle"; }
+<h2>@ViewData["Title"]</h2><form asp-action="Edit" method="post"><input type="hidden" asp-for="Id" /><partial name="_Form" model="Model" /></form>

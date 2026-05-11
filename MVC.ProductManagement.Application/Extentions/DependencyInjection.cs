@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DesignPlanning.Business;
 
 namespace MVC.ProductManagement.Application.Extentions
 {
@@ -58,6 +59,8 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockSubCodeRuleService, StockSubCodeRuleService>();
             services.AddScoped<IGeneratedStockCodeService, GeneratedStockCodeService>();
             services.AddScoped<IStockProductGroupService, StockProductGroupService>();
+
+            services.AddScoped<IPlanningService, PlanningService>();
 
             //services.AddScoped<IExcelExportService, ExcelExportService>();
 

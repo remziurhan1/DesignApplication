@@ -38,4 +38,19 @@
             </ul>
         </div>
     </div>
+
+    <div class="card mt-3 border-primary">
+        <div class="card-body pt-4">
+            <h5 class="card-title">Dizayn Planlama</h5>
+            <p class="text-muted">Excel’den bağımsız proje görev planlama MVP ekranları.</p>
+            <div class="d-flex flex-wrap gap-2">
+                <a asp-controller="DesignPlanningProjects" asp-action="Index" class="btn btn-primary">Projeler</a>
+                <a asp-controller="DesignPlanningEmployees" asp-action="Index" class="btn btn-outline-primary">Personeller</a>
+                <a asp-controller="DesignPlanningProjectTypes" asp-action="Index" class="btn btn-outline-primary">Proje Tipleri</a>
+                <a asp-controller="DesignPlanningTaskTemplates" asp-action="Index" class="btn btn-outline-primary">Görev Şablonları</a>
+                <a asp-controller="DesignPlanningPlan" asp-action="Daily" class="btn btn-outline-secondary">Günlük Plan</a>
+                <a asp-controller="DesignPlanningPlan" asp-action="Weekly" class="btn btn-outline-secondary">Haftalık Plan</a>
+            </div>
+        </div>
+    </div>
 </section>
