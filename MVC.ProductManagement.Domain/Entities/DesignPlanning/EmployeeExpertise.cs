@@ -6,5 +6,5 @@ public class EmployeeExpertise
     public Guid EmployeeId { get; set; }
     public string ExpertiseName { get; set; } = string.Empty;
     public int Priority { get; set; } = 1;
-    public Employee? Employee { get; set; }
+    public virtual Employee? Employee { get; set; }
 }

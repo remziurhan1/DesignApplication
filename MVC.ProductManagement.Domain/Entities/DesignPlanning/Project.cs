@@ -9,6 +9,6 @@ public class Project
     public DateTime StartDate { get; set; } = DateTime.Today;
     public int Priority { get; set; } = 1;
     public ProjectStatus Status { get; set; } = ProjectStatus.Waiting;
-    public ProjectType? ProjectType { get; set; }
-    public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
+    public virtual ProjectType? ProjectType { get; set; }
+    public virtual ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
 }

@@ -11,6 +11,6 @@ public class TaskTemplate
     public DurationUnit DurationUnit { get; set; }
     public bool IsPassive { get; set; }
     public bool IsActive { get; set; } = true;
-    public ProjectType? ProjectType { get; set; }
-    public ICollection<ProjectTask> ProjectTasks { get; set; } = new List<ProjectTask>();
+    public virtual ProjectType? ProjectType { get; set; }
+    public virtual ICollection<ProjectTask> ProjectTasks { get; set; } = new List<ProjectTask>();
 }

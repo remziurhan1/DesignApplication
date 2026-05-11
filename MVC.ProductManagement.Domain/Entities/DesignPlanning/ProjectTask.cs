@@ -17,7 +17,7 @@ public class ProjectTask
     public DateTime? ActualStart { get; set; }
     public DateTime? ActualEnd { get; set; }
     public TaskStatus Status { get; set; } = TaskStatus.Waiting;
-    public Project? Project { get; set; }
-    public TaskTemplate? TaskTemplate { get; set; }
-    public Employee? AssignedEmployee { get; set; }
+    public virtual Project? Project { get; set; }
+    public virtual TaskTemplate? TaskTemplate { get; set; }
+    public virtual Employee? AssignedEmployee { get; set; }
 }
