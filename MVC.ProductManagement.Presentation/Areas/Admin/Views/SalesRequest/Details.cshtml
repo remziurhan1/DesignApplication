@@ -30,104 +30,148 @@
             _ => null
         };
 
+    string TextOrDash(object? value) => string.IsNullOrWhiteSpace(value?.ToString()) ? "-" : value.ToString()!;
+
+    void RenderFact(string label, object? value, string columnClass = "col-md-4")
+    {
+        <div class="@columnClass">
+            <div class="detail-label">@label</div>
+            <div class="detail-value">@TextOrDash(value)</div>
+        </div>
+    }
+
+    void RenderLongFact(string label, string? value)
+    {
+        <div class="col-12">
+            <div class="detail-label">@label</div>
+            <div class="detail-note">@TextOrDash(value)</div>
+        </div>
+    }
+
     void RenderItem(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item, int depth)
     {
         var technicalLink = BuildTechnicalLink(item);
         var analysisLink = BuildAnalysisLink(item);
-        <div class="card mb-3 ms-@Math.Min(depth * 2, 5)">
-            <div class="card-body pt-3">
-                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                    <div>
-                        <span class="badge bg-secondary">@item.ItemCode</span>
-                        <h5 class="mt-2 mb-1">@item.ItemTitle</h5>
-                        <div class="text-muted">@item.ProductGroupName</div>
-                    </div>
-                    <span class="badge bg-@StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span>
+        var indentClass = depth > 0 ? "child-item" : string.Empty;
+
+        <div class="request-line-card @indentClass">
+            <div class="request-line-head">
+                <div>
+                    <span class="badge bg-secondary">@item.ItemCode</span>
+                    <h5 class="mb-1 mt-2">@item.ItemTitle</h5>
+                    <div class="text-muted small">@item.ProductGroupName</div>
                 </div>
-                <div class="row mt-3 g-3">
-                    <div class="col-md-3"><strong>Kapasite:</strong> @item.CapacityM3 m³</div>
-                    <div class="col-md-3"><strong>Talep grubu:</strong> @item.RequestCategory</div>
-                    <div class="col-md-3"><strong>Tank tipi:</strong> @item.TankOrientation</div>
-                    <div class="col-md-3"><strong>Kurulum:</strong> @item.PlacementType</div>
-                    <div class="col-md-3"><strong>Tüketim:</strong> @(item.ConsumptionCapacity?.ToString("0.##") ?? "-")</div>
-                    <div class="col-md-3"><strong>Ürün:</strong> @item.ProductCode</div>
-                    <div class="col-md-3"><strong>Dizayn standardı:</strong> @item.DesignStandardCode</div>
-                    <div class="col-md-3"><strong>Dizayn basıncı:</strong> @item.DesignPressureBar</div>
-                    <div class="col-md-3"><strong>Dizayn sıcaklık:</strong> @item.DesignTemperatureMin / @item.DesignTemperatureMax</div>
-                    @if (item.RequestCategory == SalesRequestCategory.Tank)
-                    {
-                        <div class="col-md-3"><strong>Tank tipi:</strong> @item.TankType</div>
-                        <div class="col-md-3"><strong>Depolama:</strong> @item.StorageOption</div>
-                        <div class="col-md-3"><strong>Transport:</strong> @item.TransportOption</div>
-                        <div class="col-md-3"><strong>STD/OPS/SPC:</strong> @item.StdOpsSelection</div>
-                        <div class="col-md-6"><strong>SPC detay:</strong> @item.SpcTechnicalDetails</div>
-                    }
-                    @if (item.RequestCategory == SalesRequestCategory.Evaporator)
-                    {
-                        <div class="col-md-3"><strong>Ortam sıcaklık:</strong> @item.AmbientTemperatureMin / @item.AmbientTemperatureMax</div>
-                        <div class="col-md-3"><strong>Tank tüketim:</strong> @(item.HasTankConsumptionCapacity ? "Aktif" : "Pasif")</div>
-                    }
-                    @if (item.RequestCategory == SalesRequestCategory.Facility)
-                    {
-                        <div class="col-md-3"><strong>Tesis tipi:</strong> @item.FacilityType</div>
-                        <div class="col-md-3"><strong>Basınç (G/Ç):</strong> @item.FacilityInletPressureBar / @item.FacilityOutletPressureBar</div>
-                        <div class="col-md-3"><strong>Sıcaklık (G/Ç):</strong> @item.FacilityInletTemperature / @item.FacilityOutletTemperature</div>
-                        <div class="col-md-3"><strong>Tesis kapasitesi:</strong> @item.FacilityCapacityNm3h</div>
-                        <div class="col-md-3"><strong>Pompa:</strong> @(item.HasPump ? "Var" : "Yok")</div>
-                        <div class="col-md-3"><strong>Pompa detay:</strong> @item.PumpDetails</div>
-                        <div class="col-md-3"><strong>Elektrikli ısıtıcı:</strong> @(item.HasElectricHeater ? "Var" : "Yok")</div>
-                        <div class="col-md-3"><strong>Isıtıcı detay:</strong> @item.ElectricHeaterDetails</div>
-                    }
-                    <div class="col-12"><strong>Ek sorular/cevaplar:</strong><div class="text-muted">@item.AdditionalQuestionsJson</div></div>
-                    <div class="col-12"><strong>Minimum teknik veri:</strong><div class="text-muted">@item.MinimumTechnicalNotes</div></div>
-                    @if (!string.IsNullOrWhiteSpace(item.DesignDetails))
-                    {
-                        <div class="col-12"><strong>Teknik özet:</strong><div class="text-muted">@item.DesignDetails</div></div>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(item.LinkedCalculationName))
-                    {
-                        <div class="col-12">
-                            <strong>Bağlı teknik hesap:</strong>
-                            <div class="text-muted">
-                                @item.LinkedCalculationType · @item.LinkedCalculationName
-                                @if (!string.IsNullOrWhiteSpace(technicalLink))
-                                {
-                                    <a href="@technicalLink" class="ms-2">Teknik hesabı aç</a>
-                                }
-                            </div>
-                        </div>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(item.LinkedCalculationName))
-                    {
-                        <div class="col-12">
-                            <strong>Bağlı maliyet çalışması:</strong>
-                            <div class="text-muted">
-                                @item.LinkedCalculationType · @item.LinkedCalculationName · @item.LinkedCostAnalysisRevisionCode · @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "0,00") ₺
-                                @if (!string.IsNullOrWhiteSpace(analysisLink))
-                                {
-                                    <a href="@analysisLink" class="ms-2">Hesap detayını aç</a>
-                                }
-                            </div>
-                        </div>
-                    }
-                    @if (Model.IsManagerView)
-                    {
-                        <div class="col-md-4"><strong>Maliyet:</strong> @(item.EstimatedCost?.ToString("N2") ?? "-") ₺</div>
-                        <div class="col-md-4"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                        <div class="col-md-4"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                        @if (!string.IsNullOrWhiteSpace(item.LinkedCostAnalysisRevisionCode))
-                        {
-                            <div class="col-12"><strong>Aktif revizyon:</strong> <span class="text-muted">@item.LinkedCostAnalysisRevisionCode</span></div>
-                        }
-                        <div class="col-12"><strong>İç açıklama:</strong><div class="text-muted">@item.SalesEngineeringNotes</div></div>
-                    }
-                    else
-                    {
-                        <div class="col-md-6"><strong>Minimum satış fiyatı:</strong> @(item.MinimumSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                        <div class="col-md-6"><strong>Satış fiyatı:</strong> @(item.ApprovedSalesPrice?.ToString("N2") ?? "-") ₺</div>
-                    }
+                <div class="d-flex flex-wrap gap-2 justify-content-end">
+                    <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis">@item.RequestCategory</span>
+                    <span class="badge rounded-pill bg-@StatusClass(item.WorkflowStatus)">@item.WorkflowStatus</span>
                 </div>
             </div>
+
+            <div class="line-section">
+                <div class="line-section-title">A) Temel istek</div>
+                <div class="row g-3">
+                    @{ RenderFact("Akışkan / Ürün", item.ProductCode); }
+                    @{ RenderFact("Kapasite", item.RequestCategory == SalesRequestCategory.Tank ? $"{item.CapacityM3:0.##} m³" : "-"); }
+                    @{ RenderFact("Dizayn basıncı", item.DesignPressureBar?.ToString("0.##")); }
+                    @{ RenderFact("Dizayn standardı", item.DesignStandardCode); }
+                    @{ RenderFact("Dizayn sıcaklığı", $"{TextOrDash(item.DesignTemperatureMin)} / {TextOrDash(item.DesignTemperatureMax)}"); }
+                    @{ RenderFact("Tüketim", item.ConsumptionCapacity?.ToString("0.##")); }
+                </div>
+            </div>
+
+            @if (item.RequestCategory == SalesRequestCategory.Tank)
+            {
+                <div class="line-section">
+                    <div class="line-section-title">B) Tank bilgileri</div>
+                    <div class="row g-3">
+                        @{ RenderFact("Tank tipi", item.TankType); }
+                        @{ RenderFact("Depolama", item.StorageOption); }
+                        @{ RenderFact("Transport", item.TransportOption); }
+                        @{ RenderFact("Kurulum", item.PlacementType); }
+                        @{ RenderFact("STD/OPS/SPC", item.StdOpsSelection); }
+                        @{ RenderLongFact("SPC teknik bilgileri", item.SpcTechnicalDetails); }
+                    </div>
+                </div>
+            }
+
+            @if (item.RequestCategory == SalesRequestCategory.Evaporator)
+            {
+                <div class="line-section">
+                    <div class="line-section-title">B) Evaporatör bilgileri</div>
+                    <div class="row g-3">
+                        @{ RenderFact("Ortam sıcaklığı", $"{TextOrDash(item.AmbientTemperatureMin)} / {TextOrDash(item.AmbientTemperatureMax)}"); }
+                        @{ RenderFact("Tank tüketim kapasitesi", item.HasTankConsumptionCapacity ? "Aktif" : "Pasif"); }
+                    </div>
+                </div>
+            }
+
+            @if (item.RequestCategory == SalesRequestCategory.Facility)
+            {
+                <div class="line-section">
+                    <div class="line-section-title">B) Tesis bilgileri</div>
+                    <div class="row g-3">
+                        @{ RenderFact("Tesis tipi", item.FacilityType); }
+                        @{ RenderFact("Basınç (G/Ç)", $"{TextOrDash(item.FacilityInletPressureBar)} / {TextOrDash(item.FacilityOutletPressureBar)}"); }
+                        @{ RenderFact("Sıcaklık (G/Ç)", $"{TextOrDash(item.FacilityInletTemperature)} / {TextOrDash(item.FacilityOutletTemperature)}"); }
+                        @{ RenderFact("Tesis kapasitesi", item.FacilityCapacityNm3h); }
+                        @{ RenderFact("Pompa", item.HasPump ? "Var" : "Yok"); }
+                        @{ RenderFact("Elektrikli ısıtıcı", item.HasElectricHeater ? "Var" : "Yok"); }
+                        @{ RenderLongFact("Pompa detay", item.PumpDetails); }
+                        @{ RenderLongFact("Isıtıcı detay", item.ElectricHeaterDetails); }
+                    </div>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(item.AdditionalQuestionsJson) || !string.IsNullOrWhiteSpace(item.MinimumTechnicalNotes) || !string.IsNullOrWhiteSpace(item.DesignDetails))
+            {
+                <div class="line-section">
+                    <div class="line-section-title">C) Notlar</div>
+                    <div class="row g-3">
+                        @{ RenderLongFact("Ek sorular / cevaplar", item.AdditionalQuestionsJson); }
+                        @{ RenderLongFact("Minimum teknik veri", item.MinimumTechnicalNotes); }
+                        @{ RenderLongFact("Teknik özet", item.DesignDetails); }
+                    </div>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(item.LinkedCalculationName) || Model.IsManagerView)
+            {
+                <div class="line-section mb-0">
+                    <div class="line-section-title">D) Fiyatlandırma ve teknik bağlantılar</div>
+                    <div class="row g-3 align-items-center">
+                        @if (!string.IsNullOrWhiteSpace(item.LinkedCalculationName))
+                        {
+                            <div class="col-12">
+                                <div class="detail-label">Bağlı teknik hesap</div>
+                                <div class="detail-value">
+                                    @item.LinkedCalculationType · @item.LinkedCalculationName
+                                    @if (!string.IsNullOrWhiteSpace(technicalLink))
+                                    {
+                                        <a href="@technicalLink" class="btn btn-sm btn-outline-primary ms-2">Teknik hesabı aç</a>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="detail-label">Bağlı maliyet çalışması</div>
+                                <div class="detail-value">
+                                    @item.LinkedCostAnalysisRevisionCode · @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺
+                                    @if (!string.IsNullOrWhiteSpace(analysisLink))
+                                    {
+                                        <a href="@analysisLink" class="btn btn-sm btn-outline-secondary ms-2">Maliyet detayını aç</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @if (Model.IsManagerView)
+                        {
+                            @{ RenderFact("Maliyet", item.EstimatedCost.HasValue ? $"{item.EstimatedCost:N2} ₺" : "-"); }
+                            @{ RenderFact("Minimum satış fiyatı", item.MinimumSalesPrice.HasValue ? $"{item.MinimumSalesPrice:N2} ₺" : "-"); }
+                            @{ RenderFact("Satış fiyatı", item.ApprovedSalesPrice.HasValue ? $"{item.ApprovedSalesPrice:N2} ₺" : "-"); }
+                            @{ RenderLongFact("İç açıklama", item.SalesEngineeringNotes); }
+                        }
+                    </div>
+                </div>
+            }
         </div>
 
         foreach (var child in item.Children)
@@ -137,213 +181,585 @@
     }
 }
 
-<div class="pagetitle d-flex justify-content-between align-items-center">
+<style>
+    .detail-page {
+        background: #f6f8fb;
+        border-radius: 1.25rem;
+        padding: 1rem;
+    }
+
+    .detail-hero {
+        background: linear-gradient(135deg, #0d6efd 0%, #1f2a44 100%);
+        color: #fff;
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        box-shadow: 0 18px 40px rgba(13, 110, 253, 0.18);
+    }
+
+    .hero-pill {
+        background: rgba(255, 255, 255, .14);
+        border: 1px solid rgba(255, 255, 255, .24);
+        border-radius: 999px;
+        padding: .45rem .8rem;
+        font-size: .85rem;
+    }
+
+    .easy-card,
+    .request-line-card {
+        border: 1px solid #e5ebf3;
+        border-radius: 1.1rem;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+        background: #fff;
+    }
+
+    .easy-card .card-header {
+        background: #fff;
+        border-bottom: 1px solid #edf1f6;
+        padding: 1rem 1.25rem;
+    }
+
+    .step-number {
+        width: 2.35rem;
+        height: 2.35rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #0d6efd;
+        color: #fff;
+        font-weight: 800;
+        flex: 0 0 auto;
+    }
+
+    .detail-label {
+        color: #6c757d;
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: .02em;
+        text-transform: uppercase;
+    }
+
+    .detail-value {
+        color: #1f2a44;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+    .detail-note {
+        color: #495057;
+        background: #fbfcfe;
+        border: 1px solid #edf1f6;
+        border-radius: .75rem;
+        padding: .65rem .75rem;
+        min-height: 2.5rem;
+        overflow-wrap: anywhere;
+    }
+
+    .request-line-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .request-line-card.child-item {
+        margin-left: 1.25rem;
+        border-left: .35rem solid #cfe7ff;
+    }
+
+    .request-line-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+        background: #f7faff;
+        border: 1px solid #d9e8ff;
+        border-radius: .9rem;
+        padding: .85rem 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .line-section,
+    .subitem-section {
+        border: 1px solid #edf1f6;
+        border-radius: .9rem;
+        padding: 1rem;
+        background: #fbfcfe;
+        margin-bottom: 1rem;
+    }
+
+    .line-section-title,
+    .subitem-section-title {
+        font-weight: 800;
+        color: #1f2a44;
+        margin-bottom: .8rem;
+    }
+
+    .side-card {
+        position: sticky;
+        top: 1rem;
+    }
+</style>
+
+<div class="pagetitle d-flex flex-wrap justify-content-between align-items-center gap-3">
     <div>
         <h1>@Model.RequestNo</h1>
         <p class="text-muted mb-0">@Model.Title</p>
     </div>
-    <div class="d-flex gap-2">
+    <div class="d-flex flex-wrap gap-2">
         @if (Model.IsManagerView)
         {
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Talebi güncelle</a>
             <a asp-action="Pricing" asp-route-id="@Model.Id" class="btn btn-primary">Fiyatlandırma ekranı</a>
             @if (Model.WorkflowStatus == SalesRequestWorkflowStatus.Approved)
             {
-                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-success">Satış sorumlusu ekranına git</a>
+                <a asp-area="Sales" asp-controller="SalesRequest" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-success">Satışçı görünümü</a>
             }
         }
         <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
     </div>
 </div>
 
-<div class="alert alert-light border mt-3" role="alert">
-    <div class="d-flex flex-wrap align-items-center gap-2">
-        <span class="badge bg-primary">1) Talep</span>
-        <i class="bi bi-arrow-right text-muted"></i>
-        <span class="badge bg-warning text-dark">2) Maliyetlendirme</span>
-        <i class="bi bi-arrow-right text-muted"></i>
-        <span class="badge bg-success">3) Satış Müdürü Onayı</span>
-        <span class="ms-2 text-muted small">Aktif aşama: <strong>@Model.WorkflowStatus</strong></span>
+<section class="section mt-4 detail-page">
+    <div class="detail-hero mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div>
+                <h4 class="mb-2">Talep detayını adım adım oku</h4>
+                <p class="mb-0 opacity-75">Müşteri, teslimat, teknik satırlar, ekler ve revizyonlar aynı oluşturma ekranındaki sırayla gösterilir.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="hero-pill">Durum: @Model.WorkflowStatus</span>
+                <span class="hero-pill">Revizyon: @Model.RevisionCode</span>
+                <span class="hero-pill">Kalem: @Model.Items.Count</span>
+            </div>
+        </div>
     </div>
-</div>
 
-<section class="section mt-4">
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card">
-                <div class="card-body pt-4">
+            <div class="card easy-card mb-4">
+                <div class="card-header d-flex gap-3 align-items-start">
+                    <span class="step-number">1</span>
+                    <div>
+                        <h5 class="mb-1">Müşteri ve talep sahibi</h5>
+                        <div class="text-muted small">Talebin kimin için ve kim tarafından açıldığını hızlıca kontrol et.</div>
+                    </div>
+                </div>
+                <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-4"><strong>Müşteri:</strong><div><a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.CustomerId">@Model.CustomerName</a></div></div>
-                        <div class="col-md-4"><strong>Yetkili:</strong><div>@Model.CustomerContact</div></div>
-                        <div class="col-md-4"><strong>İletişim:</strong><div>@Model.CustomerEmail<br />@Model.CustomerPhone</div></div>
-                        <div class="col-md-4"><strong>Satışçı:</strong><div>@Model.RequestedByName</div></div>
-                        <div class="col-md-4"><strong>Departman:</strong><div>@Model.RequestedByDepartment</div></div>
-                        <div class="col-md-4"><strong>Durum:</strong><div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span></div></div>
-                        <div class="col-md-4"><strong>Müşteri bildirimi:</strong><div>@Model.CustomerQuoteStatus</div></div>
-                        <div class="col-md-4"><strong>Revizyon:</strong><div>@Model.RevisionCode</div></div>
-                        <div class="col-md-4"><strong>Talep oluşturma tarihi:</strong><div>@Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div></div>
-                        <div class="col-md-4"><strong>Talep alma tarihi:</strong><div>@(Model.RequestReceivedAt.HasValue ? Model.RequestReceivedAt.Value.ToString("dd.MM.yyyy") : "-")</div></div>
-                        <div class="col-md-4"><strong>İhtiyaç tarihi:</strong><div>@Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")</div></div>
-                        <div class="col-md-4"><strong>Talep kaynağı:</strong><div>@Model.RequestSource</div></div>
-                        <div class="col-md-4"><strong>Sevk ülkesi:</strong><div>@Model.ShipmentCountry</div></div>
-                        <div class="col-md-4"><strong>Kurulum ülkesi:</strong><div>@Model.InstallationCountry</div></div>
-                        <div class="col-md-4"><strong>Nakliye:</strong><div>@(Model.IsTransportByCustomer ? "Müşteri" : "Biz")</div></div>
-                        <div class="col-md-4"><strong>Müşteri sektörü:</strong><div>@Model.CustomerSector</div></div>
-                        <div class="col-md-4"><strong>Ana bayi ülkesi:</strong><div>@Model.CustomerMainDealerCountry</div></div>
-                        <div class="col-md-4"><strong>Bölge:</strong><div>@Model.CustomerRegion</div></div>
-                        <div class="col-12"><strong>Özet:</strong><div class="text-muted">@Model.SummaryNotes</div></div>
+                        <div class="col-md-4">
+                            <div class="detail-label">Müşteri</div>
+                            <div class="detail-value"><a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.CustomerId">@Model.CustomerName</a></div>
+                        </div>
+                        @{ RenderFact("Yetkili", Model.CustomerContact); }
+                        <div class="col-md-4">
+                            <div class="detail-label">İletişim</div>
+                            <div class="detail-value">@TextOrDash(Model.CustomerEmail)<br />@TextOrDash(Model.CustomerPhone)</div>
+                        </div>
+                        @{ RenderFact("Satışçı", Model.RequestedByName); }
+                        @{ RenderFact("Departman", Model.RequestedByDepartment); }
+                        <div class="col-md-4">
+                            <div class="detail-label">Durum</div>
+                            <div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            @foreach (var item in Model.Items)
-            {
-                RenderItem(item, 0);
-            }
+            <div class="card easy-card mb-4">
+                <div class="card-header d-flex gap-3 align-items-start">
+                    <span class="step-number">2</span>
+                    <div>
+                        <h5 class="mb-1">Tarih ve kaynak</h5>
+                        <div class="text-muted small">Talebin geliş ve ihtiyaç tarihleri.</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        @{ RenderFact("Talep oluşturma", Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")); }
+                        @{ RenderFact("Talep alma", Model.RequestReceivedAt.HasValue ? Model.RequestReceivedAt.Value.ToString("dd.MM.yyyy") : "-"); }
+                        @{ RenderFact("İhtiyaç tarihi", Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")); }
+                        @{ RenderFact("Talep kaynağı", Model.RequestSource); }
+                        @{ RenderFact("Müşteri bildirimi", Model.CustomerQuoteStatus); }
+                        @{ RenderFact("Revizyon", Model.RevisionCode); }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card easy-card mb-4">
+                <div class="card-header d-flex gap-3 align-items-start">
+                    <span class="step-number">3</span>
+                    <div>
+                        <h5 class="mb-1">Teslimat ve özet</h5>
+                        <div class="text-muted small">Sevk, kurulum, bölge ve satış özeti.</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        @{ RenderFact("Sevk ülkesi", Model.ShipmentCountry); }
+                        @{ RenderFact("Kurulum ülkesi", Model.InstallationCountry); }
+                        @{ RenderFact("Nakliye", Model.IsTransportByCustomer ? "Müşteri" : "Biz"); }
+                        @{ RenderFact("Müşteri sektörü", Model.CustomerSector); }
+                        @{ RenderFact("Ana bayi ülkesi", Model.CustomerMainDealerCountry); }
+                        @{ RenderFact("Bölge", Model.CustomerRegion); }
+                        @{ RenderLongFact("Satış özeti", Model.SummaryNotes); }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card easy-card mb-4">
+                <div class="card-header d-flex gap-3 align-items-start">
+                    <span class="step-number">4</span>
+                    <div>
+                        <h5 class="mb-1">Talep satırları</h5>
+                        <div class="text-muted small">Her teknik ihtiyaç ayrı kartta ve kategoriye göre gruplanır.</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model.Items.Any())
+                    {
+                        @foreach (var item in Model.Items)
+                        {
+                            RenderItem(item, 0);
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Talep satırı bulunmuyor.</p>
+                    }
+                </div>
+            </div>
         </div>
+
         <div class="col-lg-4">
-            <div class="card">
-                <div class="card-body pt-4">
-                    <h5 class="card-title">Ekler</h5>
-                    @if (Model.Attachments.Any())
-                    {
-                        <ul class="list-group list-group-flush">
-                        @foreach (var file in Model.Attachments)
+            <div class="side-card">
+                <div class="card easy-card mb-3">
+                    <div class="card-header d-flex gap-3 align-items-start">
+                        <span class="step-number">5</span>
+                        <div>
+                            <h5 class="mb-1">Ekler</h5>
+                            <div class="text-muted small">Talebe bağlı dosyalar.</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Attachments.Any())
                         {
-                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                <a href="@file.RelativePath" target="_blank">@file.OriginalFileName</a>
-                                <small class="text-muted">@(file.FileSize / 1024) KB</small>
-                            </li>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var file in Model.Attachments)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <a href="@file.RelativePath" target="_blank">@file.OriginalFileName</a>
+                                        <small class="text-muted">@(file.FileSize / 1024) KB</small>
+                                    </li>
+                                }
+                            </ul>
                         }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="text-muted mb-0">Ek dosya yok.</p>
-                    }
-                </div>
-            </div>
-
-            <div class="card mt-3">
-                <div class="card-body pt-4">
-                    <h5 class="card-title">Talep Yorumları</h5>
-                    <form asp-action="AddComment" method="post" class="mb-3">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="SalesRequestId" value="@Model.NewComment.SalesRequestId" />
-                        <textarea name="CommentText" class="form-control" rows="3" placeholder="Yönetici yorumu ekleyin"></textarea>
-                        <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Yorum Ekle</button>
-                    </form>
-
-                    @if (Model.Comments.Any())
-                    {
-                        <ul class="list-group list-group-flush">
-                            @foreach (var comment in Model.Comments)
-                            {
-                                <li class="list-group-item px-0">
-                                    <div class="small text-muted">@comment.CommentedBy · @comment.CommentedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
-                                    <div>@comment.CommentText</div>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="text-muted mb-0">Henüz yorum bulunmuyor.</p>
-                    }
-                </div>
-            </div>
-
-            <div class="card mt-3">
-                <div class="card-body pt-4">
-                    <h5 class="card-title">Revizyon Ekranları</h5>
-                    @if (Model.RevisionCosts.Any())
-                    {
-                        @foreach (var revision in Model.RevisionCosts)
+                        else
                         {
-                            <div class="border rounded-2 p-2 mb-2">
-                                <div class="d-flex justify-content-between flex-wrap">
-                                    <div><strong>@revision.RevisionCode</strong> - @revision.RevisionReason</div>
-                                    <div><strong>Toplam:</strong> @(revision.TotalCost?.ToString("N2") ?? "-") ₺</div>
-                                </div>
-                                <small class="text-muted">@revision.RevisedBy · @revision.RevisedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
-                                <div class="mt-2">
-                                    <a asp-action="Revision"
-                                       asp-route-id="@Model.Id"
-                                       asp-route-revisionNo="@revision.RevisionNo"
-                                       asp-route-mode="@(Model.IsManagerView ? "manager" : "sales")"
-                                       class="btn btn-sm btn-outline-primary">
-                                        @revision.RevisionCode ekranını aç
-                                    </a>
-                                </div>
-                                <div class="mt-1">
-                                    @foreach (var item in revision.Items)
-                                    {
-                                        <div class="small text-muted">
-                                            @item.ItemCode · @item.CapacityM3 m³ · @(item.LinkedCostAnalysisRevisionCode ?? "-") · Maliyet: @(item.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺ · İletilen: @(item.SharedSalesPrice?.ToString("N2") ?? "-") ₺ · Satılan: @(item.SoldSalesPrice?.ToString("N2") ?? "-") ₺
-                                        </div>
-                                    }
-                                </div>
-                            </div>
+                            <p class="text-muted mb-0">Ek dosya yok.</p>
                         }
-                    }
-                    else
-                    {
-                        <p class="text-muted mb-0">Revizyon kaydı bulunmuyor.</p>
-                    }
-                </div>
-            </div>
-
-            @if (Model.IsManagerView)
-            {
-                <div class="card mt-4">
-                    <div class="card-body pt-4">
-                        <h5 class="card-title">Alt talep ekle</h5>
-                        <form asp-action="AddSubItem" method="post">
-                            @Html.AntiForgeryToken()
-                            <input asp-for="NewSubItem.SalesRequestId" type="hidden" />
-                            <div class="mb-3">
-                                <label class="form-label">Bağlı olduğu üst satır</label>
-                                <select asp-for="NewSubItem.ParentSalesRequestItemId" class="form-select">
-                                    <option value="">Ana talep seviyesinde ekle</option>
-                                    @foreach (var root in Model.Items)
-                                    {
-                                        <option value="@root.Id">@root.ItemCode - @root.ItemTitle</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="NewSubItem.ProductGroupId" class="form-label"></label>
-                                <select asp-for="NewSubItem.ProductGroupId" class="form-select" asp-items="Model.NewSubItem.ProductGroups">
-                                    <option value="">Akışkan seçin</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="NewSubItem.CapacityM3" class="form-label"></label>
-                                <input asp-for="NewSubItem.CapacityM3" class="form-control" />
-                            </div>
-                            <div class="row g-2">
-                                <div class="col-md-6">
-                                    <label asp-for="NewSubItem.TankOrientation" class="form-label"></label>
-                                    <select asp-for="NewSubItem.TankOrientation" asp-items="Html.GetEnumSelectList<RequestTankOrientation>()" class="form-select"></select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label asp-for="NewSubItem.PlacementType" class="form-label"></label>
-                                    <select asp-for="NewSubItem.PlacementType" asp-items="Html.GetEnumSelectList<PlacementType>()" class="form-select"></select>
-                                </div>
-                            </div>
-                            <div class="mb-3 mt-3">
-                                <label asp-for="NewSubItem.ConsumptionCapacity" class="form-label"></label>
-                                <input asp-for="NewSubItem.ConsumptionCapacity" class="form-control" />
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="NewSubItem.MinimumTechnicalNotes" class="form-label"></label>
-                                <textarea asp-for="NewSubItem.MinimumTechnicalNotes" class="form-control" rows="3"></textarea>
-                            </div>
-                            <button class="btn btn-outline-primary w-100" type="submit">Alt talep ekle</button>
-                        </form>
                     </div>
                 </div>
-            }
+
+                <div class="card easy-card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-1">Talep yorumları</h5>
+                        <div class="text-muted small">Yönetici notları ve geçmiş yorumlar.</div>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="AddComment" method="post" class="mb-3">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="SalesRequestId" value="@Model.NewComment.SalesRequestId" />
+                            <textarea name="CommentText" class="form-control" rows="3" placeholder="Yönetici yorumu ekleyin"></textarea>
+                            <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Yorum ekle</button>
+                        </form>
+
+                        @if (Model.Comments.Any())
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var comment in Model.Comments)
+                                {
+                                    <li class="list-group-item px-0">
+                                        <div class="small text-muted">@comment.CommentedBy · @comment.CommentedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                                        <div>@comment.CommentText</div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">Yorum bulunmuyor.</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="card easy-card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-1">Revizyon ekranları</h5>
+                        <div class="text-muted small">Revizyon bazlı maliyet ve satış bilgileri.</div>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.RevisionCosts.Any())
+                        {
+                            @foreach (var revision in Model.RevisionCosts)
+                            {
+                                <div class="border rounded-3 p-3 mb-2 bg-light-subtle">
+                                    <div class="d-flex justify-content-between flex-wrap gap-2">
+                                        <div><strong>@revision.RevisionCode</strong> - @revision.RevisionReason</div>
+                                        <div><strong>Toplam:</strong> @(revision.TotalCost?.ToString("N2") ?? "-") ₺</div>
+                                    </div>
+                                    <small class="text-muted">@revision.RevisedBy · @revision.RevisedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+                                    <div class="mt-2">
+                                        <a asp-action="Revision"
+                                           asp-route-id="@Model.Id"
+                                           asp-route-revisionNo="@revision.RevisionNo"
+                                           asp-route-mode="@(Model.IsManagerView ? "manager" : "sales")"
+                                           class="btn btn-sm btn-outline-primary">
+                                            @revision.RevisionCode ekranını aç
+                                        </a>
+                                    </div>
+                                    <div class="mt-2">
+                                        @foreach (var revisionItem in revision.Items)
+                                        {
+                                            <div class="small text-muted">
+                                                @revisionItem.ItemCode · @revisionItem.CapacityM3 m³ · @(revisionItem.LinkedCostAnalysisRevisionCode ?? "-") · Maliyet: @(revisionItem.LinkedCostAnalysisTotal?.ToString("N2") ?? "-") ₺ · İletilen: @(revisionItem.SharedSalesPrice?.ToString("N2") ?? "-") ₺ · Satılan: @(revisionItem.SoldSalesPrice?.ToString("N2") ?? "-") ₺
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">Revizyon kaydı bulunmuyor.</p>
+                        }
+                    </div>
+                </div>
+
+                @if (Model.IsManagerView)
+                {
+                    <div class="card easy-card">
+                        <div class="card-header">
+                            <h5 class="mb-1">Alt talep ekle</h5>
+                            <div class="text-muted small">Oluşturma ekranındaki aynı sırayla ek satır gir.</div>
+                        </div>
+                        <div class="card-body">
+                            <form asp-action="AddSubItem" method="post" id="subitem-form">
+                                @Html.AntiForgeryToken()
+                                <input asp-for="NewSubItem.SalesRequestId" type="hidden" />
+
+                                <div class="subitem-section">
+                                    <div class="subitem-section-title">A) Önce ne istendiğini seç</div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Bağlı olduğu üst satır</label>
+                                        <select asp-for="NewSubItem.ParentSalesRequestItemId" class="form-select">
+                                            <option value="">Ana talep seviyesinde ekle</option>
+                                            @foreach (var root in Model.Items)
+                                            {
+                                                <option value="@root.Id">@root.ItemCode - @root.ItemTitle</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="NewSubItem.RequestCategory" class="form-label"></label>
+                                        <select asp-for="NewSubItem.RequestCategory" asp-items="Html.GetEnumSelectList<SalesRequestCategory>()" class="form-select subitem-category"></select>
+                                    </div>
+                                    <div class="mb-0">
+                                        <label asp-for="NewSubItem.ProductGroupId" class="form-label"></label>
+                                        <select asp-for="NewSubItem.ProductGroupId" class="form-select" asp-items="Model.NewSubItem.ProductGroups">
+                                            <option value="">Akışkan seçin</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="subitem-section tank-only-fields">
+                                    <div class="subitem-section-title">B) Tank için temel bilgiler</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.CapacityM3" class="form-label"></label>
+                                            <input asp-for="NewSubItem.CapacityM3" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.PlacementType" class="form-label"></label>
+                                            <select asp-for="NewSubItem.PlacementType" asp-items="Html.GetEnumSelectList<PlacementType>()" class="form-select"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="subitem-section non-spare-fields">
+                                    <div class="subitem-section-title">B) Basınç ve standart bilgileri</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.DesignPressureBar" class="form-label"></label>
+                                            <input asp-for="NewSubItem.DesignPressureBar" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.DesignStandardCode" class="form-label"></label>
+                                            <input asp-for="NewSubItem.DesignStandardCode" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="subitem-section tank-fields">
+                                    <div class="subitem-section-title">C) Tank tipi</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.TankType" class="form-label"></label>
+                                            <select asp-for="NewSubItem.TankType" asp-items="Html.GetEnumSelectList<RequestTankType>()" class="form-select subitem-tank-type"></select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.StorageOption" class="form-label"></label>
+                                            <select asp-for="NewSubItem.StorageOption" asp-items="Html.GetEnumSelectList<RequestStorageOption>()" class="form-select subitem-storage-option"></select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.TransportOption" class="form-label"></label>
+                                            <select asp-for="NewSubItem.TransportOption" asp-items="Html.GetEnumSelectList<RequestTransportOption>()" class="form-select subitem-transport-option"></select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.StdOpsSelection" class="form-label"></label>
+                                            <select asp-for="NewSubItem.StdOpsSelection" asp-items="Html.GetEnumSelectList<RequestStdOpsSelection>()" class="form-select"></select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label asp-for="NewSubItem.SpcTechnicalDetails" class="form-label"></label>
+                                            <input asp-for="NewSubItem.SpcTechnicalDetails" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="subitem-section tank-only-fields">
+                                    <div class="subitem-section-title">D) Varsa tüketim</div>
+                                    <div class="form-check mb-3">
+                                        <input asp-for="NewSubItem.HasTankConsumptionCapacity" class="form-check-input subitem-consumption-toggle" />
+                                        <label asp-for="NewSubItem.HasTankConsumptionCapacity" class="form-check-label"></label>
+                                    </div>
+                                    <label asp-for="NewSubItem.ConsumptionCapacity" class="form-label"></label>
+                                    <input asp-for="NewSubItem.ConsumptionCapacity" class="form-control subitem-consumption-input" />
+                                </div>
+
+                                <div class="subitem-section evap-fields">
+                                    <div class="subitem-section-title">B) Evaporatör ortam bilgisi</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.AmbientTemperatureMin" class="form-label"></label>
+                                            <input asp-for="NewSubItem.AmbientTemperatureMin" class="form-control" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="NewSubItem.AmbientTemperatureMax" class="form-label"></label>
+                                            <input asp-for="NewSubItem.AmbientTemperatureMax" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="subitem-section facility-fields">
+                                    <div class="subitem-section-title">B) Tesis giriş/çıkış bilgileri</div>
+                                    <div class="row g-3">
+                                        <div class="col-12"><label asp-for="NewSubItem.FacilityType" class="form-label"></label><input asp-for="NewSubItem.FacilityType" class="form-control" /></div>
+                                        <div class="col-md-6"><label asp-for="NewSubItem.FacilityInletPressureBar" class="form-label"></label><input asp-for="NewSubItem.FacilityInletPressureBar" class="form-control" /></div>
+                                        <div class="col-md-6"><label asp-for="NewSubItem.FacilityOutletPressureBar" class="form-label"></label><input asp-for="NewSubItem.FacilityOutletPressureBar" class="form-control" /></div>
+                                        <div class="col-md-6"><label asp-for="NewSubItem.FacilityInletTemperature" class="form-label"></label><input asp-for="NewSubItem.FacilityInletTemperature" class="form-control" /></div>
+                                        <div class="col-md-6"><label asp-for="NewSubItem.FacilityOutletTemperature" class="form-label"></label><input asp-for="NewSubItem.FacilityOutletTemperature" class="form-control" /></div>
+                                        <div class="col-12"><label asp-for="NewSubItem.FacilityCapacityNm3h" class="form-label"></label><input asp-for="NewSubItem.FacilityCapacityNm3h" class="form-control" /></div>
+                                        <div class="col-md-6"><div class="form-check"><input asp-for="NewSubItem.HasPump" class="form-check-input" /><label asp-for="NewSubItem.HasPump" class="form-check-label"></label></div></div>
+                                        <div class="col-md-6"><div class="form-check"><input asp-for="NewSubItem.HasElectricHeater" class="form-check-input" /><label asp-for="NewSubItem.HasElectricHeater" class="form-check-label"></label></div></div>
+                                        <div class="col-md-6"><label asp-for="NewSubItem.PumpDetails" class="form-label"></label><input asp-for="NewSubItem.PumpDetails" class="form-control" /></div>
+                                        <div class="col-md-6"><label asp-for="NewSubItem.ElectricHeaterDetails" class="form-label"></label><input asp-for="NewSubItem.ElectricHeaterDetails" class="form-control" /></div>
+                                    </div>
+                                </div>
+
+                                <div class="subitem-section spare-fields">
+                                    <div class="subitem-section-title">B) Yedek parça bilgisi</div>
+                                    <label asp-for="NewSubItem.SparePartDetails" class="form-label"></label>
+                                    <input asp-for="NewSubItem.SparePartDetails" class="form-control" placeholder="Talep edilen yedek parçayı yaz" />
+                                </div>
+
+                                <div class="subitem-section non-spare-fields">
+                                    <div class="subitem-section-title">Son notlar</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6"><label asp-for="NewSubItem.DesignTemperatureMin" class="form-label"></label><input asp-for="NewSubItem.DesignTemperatureMin" class="form-control" /></div>
+                                        <div class="col-md-6"><label asp-for="NewSubItem.DesignTemperatureMax" class="form-label"></label><input asp-for="NewSubItem.DesignTemperatureMax" class="form-control" /></div>
+                                        <div class="col-12"><label asp-for="NewSubItem.AdditionalQuestionsJson" class="form-label"></label><textarea asp-for="NewSubItem.AdditionalQuestionsJson" class="form-control" rows="2"></textarea></div>
+                                        <div class="col-12"><label asp-for="NewSubItem.MinimumTechnicalNotes" class="form-label"></label><textarea asp-for="NewSubItem.MinimumTechnicalNotes" class="form-control" rows="3"></textarea></div>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-outline-primary w-100" type="submit">Alt talep ekle</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        const subCategoryTank = '@((int)SalesRequestCategory.Tank)';
+        const subCategoryEvap = '@((int)SalesRequestCategory.Evaporator)';
+        const subCategoryFacility = '@((int)SalesRequestCategory.Facility)';
+        const subCategorySparePart = '@((int)SalesRequestCategory.SparePart)';
+        const subTankTypeStorage = '@((int)RequestTankType.Storage)';
+
+        const subitemForm = document.getElementById('subitem-form');
+
+        function toggleSubitemCategoryFields() {
+            if (!subitemForm) return;
+
+            const categoryValue = subitemForm.querySelector('.subitem-category')?.value;
+            const showTank = categoryValue === subCategoryTank;
+            const showEvap = categoryValue === subCategoryEvap;
+            const showFacility = categoryValue === subCategoryFacility;
+            const showSparePart = categoryValue === subCategorySparePart;
+
+            subitemForm.querySelectorAll('.tank-fields').forEach(x => x.style.display = showTank ? '' : 'none');
+            subitemForm.querySelectorAll('.tank-only-fields').forEach(x => x.style.display = showTank ? '' : 'none');
+            subitemForm.querySelectorAll('.evap-fields').forEach(x => x.style.display = showEvap ? '' : 'none');
+            subitemForm.querySelectorAll('.facility-fields').forEach(x => x.style.display = showFacility ? '' : 'none');
+            subitemForm.querySelectorAll('.spare-fields').forEach(x => x.style.display = showSparePart ? '' : 'none');
+            subitemForm.querySelectorAll('.non-spare-fields').forEach(x => x.style.display = showSparePart ? 'none' : '');
+            toggleSubitemTankTypeFields();
+        }
+
+        function toggleSubitemTankTypeFields() {
+            if (!subitemForm) return;
+
+            const tankType = subitemForm.querySelector('.subitem-tank-type');
+            const storage = subitemForm.querySelector('.subitem-storage-option');
+            const transport = subitemForm.querySelector('.subitem-transport-option');
+            if (!tankType || !storage || !transport) return;
+
+            if (tankType.value === subTankTypeStorage) {
+                transport.value = '';
+                transport.disabled = true;
+                storage.disabled = false;
+            } else if (tankType.value) {
+                storage.value = '';
+                storage.disabled = true;
+                transport.disabled = false;
+            } else {
+                storage.disabled = false;
+                transport.disabled = false;
+            }
+        }
+
+        function toggleSubitemConsumptionCapacity() {
+            if (!subitemForm) return;
+
+            const checkbox = subitemForm.querySelector('.subitem-consumption-toggle');
+            const input = subitemForm.querySelector('.subitem-consumption-input');
+            if (!checkbox || !input) return;
+
+            input.disabled = !checkbox.checked;
+            if (!checkbox.checked) {
+                input.value = '';
+            }
+        }
+
+        if (subitemForm) {
+            subitemForm.querySelector('.subitem-category')?.addEventListener('change', toggleSubitemCategoryFields);
+            subitemForm.querySelector('.subitem-tank-type')?.addEventListener('change', toggleSubitemTankTypeFields);
+            subitemForm.querySelector('.subitem-consumption-toggle')?.addEventListener('change', toggleSubitemConsumptionCapacity);
+            toggleSubitemCategoryFields();
+            toggleSubitemConsumptionCapacity();
+        }
+    </script>
+}
