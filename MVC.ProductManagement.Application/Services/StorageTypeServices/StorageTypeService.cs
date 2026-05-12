@@ -21,9 +21,9 @@ namespace MVC.ProductManagement.Application.Services.StorageTypeServices
             _storageTypeRepository = storageTypeRepository;
         }
 
-        public async Task<IResult> AddAsync(StorageTypeCreateDTO dto)
+        public async Task<IResult> CreateAsync(StorageTypeCreateDTO dto)
         {
-            if (await _storageTypeRepository.AnyAsync(x => x.Name.ToLower() == dto.Name.ToLower()))
+            if (await _storageTypeRepository.ExistsByNameAsync(dto.Name))
             {
                 return new ErrorResult("Ürün türü zaten kayıtlı");
             }
@@ -31,7 +31,7 @@ namespace MVC.ProductManagement.Application.Services.StorageTypeServices
             try
             {
                 var newProductType = dto.Adapt<StorageType>();
-                await _storageTypeRepository.AddAsync(newProductType);
+                await _storageTypeRepository.AddStorageTypeAsync(newProductType);
                 await _storageTypeRepository.SaveChangeAsync();
                 return new SuccessResult("Ürün başarıyla Kaydedildi");
 

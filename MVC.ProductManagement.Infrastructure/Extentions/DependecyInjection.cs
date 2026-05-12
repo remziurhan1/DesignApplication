@@ -10,6 +10,7 @@ using MVC.ProductManagement.Infrastructure.Repositories.DesignPlanningRepositori
 using MVC.ProductManagement.Infrastructure.Repositories.IAllowableStressRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
+using MVC.ProductManagement.Infrastructure.Repositories.SalesRequestRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Catalog;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
@@ -60,6 +61,7 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IGeneratedStockCodeInventoryRepository, GeneratedStockCodeInventoryRepository>();
             services.AddScoped<IStockProductGroupRepository, StockProductGroupRepository>();
             services.AddScoped<IStockProductGroupItemRepository, StockProductGroupItemRepository>();
+            services.AddScoped<ISalesRequestRepository, SalesRequestRepository>();
 
 
 

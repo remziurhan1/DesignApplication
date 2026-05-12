@@ -44,7 +44,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             var createDto = model.Adapt<StorageTypeCreateDTO>();
 
-            await _storageTypeService.AddAsync(createDto);
+            await _storageTypeService.CreateAsync(createDto);
 
             return RedirectToAction("Index");
         }
