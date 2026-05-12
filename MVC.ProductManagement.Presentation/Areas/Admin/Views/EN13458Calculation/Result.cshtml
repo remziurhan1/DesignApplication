@@ -5,7 +5,6 @@
     ViewData["Title"] = "EN13458 Result";
     var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
     var totalProfileLengthM = totalProfileLengthMm / 1000d;
-    var canManageCost = User.IsInRole("Admin");
 }
 
 @section Styles {
@@ -147,114 +146,6 @@
 </div>
 
 
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light fw-semibold">Sac Oryantasyonu (Sektör Bazlı)</div>
-    <div class="card-body">
-        <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
-
-        <h6 class="text-muted text-uppercase fw-semibold mb-2">İç Tank Gövde</h6>
-        <div class="table-responsive mb-3">
-            <table class="table table-sm table-striped table-bordered align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Sektör Genişliği</th>
-                        <th>Parça Adedi</th>
-                        <th>Sac Açınımı</th>
-                        <th>Kesim Listesi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan1500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan1500</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2000</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.InnerSectorPlan2500) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan2500</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.InnerSectorPlan3000) adet</td><td>@Model.InnerDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.InnerSectorPlan3000</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h6 class="text-muted text-uppercase fw-semibold mb-2">Dış Tank Gövde</h6>
-        <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Sektör Genişliği</th>
-                        <th>Parça Adedi</th>
-                        <th>Sac Açınımı</th>
-                        <th>Kesim Listesi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan1500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan1500</td></tr>
-                    <tr><td>2000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2000</td></tr>
-                    <tr><td>2500 mm</td><td>@GetPieceCount(Model.OuterSectorPlan2500) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan2500</td></tr>
-                    <tr><td>3000 mm</td><td>@GetPieceCount(Model.OuterSectorPlan3000) adet</td><td>@Model.OuterDevelopedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><td>@Model.OuterSectorPlan3000</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-@{
-    var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO;
-}
-@if (costTable != null && canManageCost)
-{
-    <div class="card shadow-sm mt-4">
-        <div class="card-header bg-light fw-semibold">Maliyet Grupları</div>
-        <div class="card-body">
-            <div class="row g-3 mb-3">
-                @foreach (var group in costTable.GroupTotals)
-                {
-                    <div class="col-12 col-md-4">
-                        <div class="border rounded p-3 h-100">
-                            <div class="small text-muted">@group.CostGroupCode - @group.CostGroupName</div>
-                            <div class="fs-5 fw-semibold">@group.TotalCost.ToString("N2")</div>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-sm table-striped align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th>Grup</th>
-                            <th>Kalem</th>
-                            <th>Stok Kodu</th>
-                            <th>Malzeme</th>
-                            <th class="text-end">Miktar</th>
-                            <th>Birim</th>
-                            <th class="text-end">Birim Fiyat</th>
-                            <th class="text-end">Tutar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in costTable.Items)
-                        {
-                            <tr>
-                                <td>@item.CostGroupCode</td>
-                                <td>@item.ItemName</td>
-                                <td>@item.StockCode</td>
-                                <td>@item.MaterialName</td>
-                                <td class="text-end">@item.Quantity.ToString("N2")</td>
-                                <td>@item.Unit</td>
-                                <td class="text-end">@item.UnitPrice.ToString("N2")</td>
-                                <td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td>
-                            </tr>
-                        }
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="7" class="text-end">Genel Toplam</th>
-                            <th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-}
-
 
 <form asp-action="Save" method="post" class="mt-4 mb-5 pb-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
     @Html.AntiForgeryToken()
@@ -277,13 +168,5 @@
     }
 </form>
 
-
-@functions {
-    private static int GetPieceCount(string? cutList)
-    {
-        if (string.IsNullOrWhiteSpace(cutList)) return 0;
-        return cutList.Split(" + ", StringSplitOptions.RemoveEmptyEntries).Length;
-    }
-}
 
 </div>
