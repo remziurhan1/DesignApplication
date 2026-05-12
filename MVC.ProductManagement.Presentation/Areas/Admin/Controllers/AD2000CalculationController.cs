@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using MVC.ProductManagement.Domain.Enums;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {

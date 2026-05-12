@@ -30,8 +30,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             CancellationToken cancellationToken = default)
         {
             var prices = await _repository.GetPriceHistoryAsync(stockCardId, PriceCurrency, cancellationToken);
-            var dtos = prices.Select(MapToPriceDto).ToList();
-
+            var dtos = prices.Select(x => MapToPriceDto(x)).ToList();
             Console.WriteLine($"=== GET PRICE HISTORY ===");
             Console.WriteLine($"StockCardId: {stockCardId}");
             Console.WriteLine($"Total Prices Found: {dtos.Count}");

@@ -48,7 +48,7 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
             CancellationToken cancellationToken = default)
         {
             var movements = await _repository.GetMovementsAsync(stockCardId, startDate, endDate, cancellationToken);
-            return movements.Select(MapToDto).ToList();
+            return movements.Select(x => MapToDto(x)).ToList();
         }
 
         public async Task<InventoryDto> CreateMovementAsync(
