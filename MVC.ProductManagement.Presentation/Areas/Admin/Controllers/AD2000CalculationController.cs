@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Application.DTOs.AD2000DTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
@@ -11,8 +10,7 @@ using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StockCodes.Catalog;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
-using MVC.ProductManagement.Domain.Enums;
-using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Application.Services.Costing;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.AD2000CalculationVMs;
 using System;
 using System.Collections.Generic;
@@ -31,7 +29,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IStorageTypeService _storageTypeService;
         private readonly IGeneratedStockCodeService _generatedStockCodeService;
         private readonly IStockProductGroupService _stockProductGroupService;
-        private readonly AppDbContext _context;
+        private readonly ICostSettingsService _costSettingsService;
 
         public AD2000CalculationController(
             IAD2000CalculationService calculationService,
@@ -41,7 +39,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             IStorageTypeService storageTypeService,
             IGeneratedStockCodeService generatedStockCodeService,
             IStockProductGroupService stockProductGroupService,
-            AppDbContext context)
+            ICostSettingsService costSettingsService)
         {
             _calculationService = calculationService;
             _materialService = materialService;
@@ -50,7 +48,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             _storageTypeService = storageTypeService;
             _generatedStockCodeService = generatedStockCodeService;
             _stockProductGroupService = stockProductGroupService;
-            _context = context;
+            _costSettingsService = costSettingsService;
         }
 
         [HttpGet]
@@ -73,34 +71,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var calculation = await _context.AD2000Calculations
-                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
-
-            if (calculation == null)
+            var deleted = await _calculationService.DeleteAsync(id);
+            if (!deleted)
             {
                 return NotFound();
             }
-
-            var costAnalyses = await _context.AD2000CostAnalyses
-                .Where(x => x.AD2000CalculationId == id && x.Status != Status.Deleted)
-                .ToListAsync();
-
-            var costAnalysisIds = costAnalyses.Select(x => x.Id).ToList();
-
-            var costItems = await _context.AD2000CostAnalysisItems
-                .Where(x => costAnalysisIds.Contains(x.AD2000CostAnalysisId) && x.Status != Status.Deleted)
-                .ToListAsync();
-
-            var salesPrices = await _context.AD2000SalesPrices
-                .Where(x => x.AD2000CalculationId == id && x.Status != Status.Deleted)
-                .ToListAsync();
-
-            _context.AD2000CostAnalysisItems.RemoveRange(costItems);
-            _context.AD2000SalesPrices.RemoveRange(salesPrices);
-            _context.AD2000CostAnalyses.RemoveRange(costAnalyses);
-            _context.AD2000Calculations.Remove(calculation);
-
-            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
@@ -573,10 +548,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         private async Task PopulateCostParameterLookupsAsync(AD2000MaterialCostTableDTO costTable)
         {
-            var laborRates = await _context.LaborRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.Name).ToListAsync();
-            var gugHourlyRates = await _context.GugHourlyRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.Name).ToListAsync();
-            var overheadRates = await _context.OverheadRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.OverheadType).ThenBy(x => x.Name).ToListAsync();
-            var bombeRates = await _context.BombeLaborRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.MaterialType).ThenBy(x => x.Name).ToListAsync();
+            var laborRates = (await _costSettingsService.GetActiveLaborRatesAsync()).OrderBy(x => x.Name).ToList();
+            var gugHourlyRates = (await _costSettingsService.GetActiveGugHourlyRatesAsync()).OrderBy(x => x.Name).ToList();
+            var overheadRates = (await _costSettingsService.GetActiveOverheadRatesAsync()).OrderBy(x => x.OverheadType).ThenBy(x => x.Name).ToList();
+            var bombeRates = (await _costSettingsService.GetActiveBombeLaborRatesAsync()).OrderBy(x => x.MaterialType).ThenBy(x => x.Name).ToList();
 
             ViewBag.LaborRateOptions = laborRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.LaborRateId == x.Id)).ToList();
             ViewBag.GugRateOptions = gugHourlyRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.GugHourlyRateId == x.Id)).ToList();

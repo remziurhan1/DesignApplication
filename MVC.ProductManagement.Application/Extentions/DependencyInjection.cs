@@ -3,6 +3,7 @@ using MVC.ProductManagement.Application.Interfaces.Services;
 using MVC.ProductManagement.Application.Services.AD2000CalculationServices;
 using MVC.ProductManagement.Application.Services.AllowableStressServices;
 using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
+using MVC.ProductManagement.Application.Services.Costing;
 using MVC.ProductManagement.Application.Services.EN13458.CalculationSteps;
 using MVC.ProductManagement.Application.Services.EN13458.Engines;
 using MVC.ProductManagement.Application.Services.EN13458.Interfaces;
@@ -35,6 +36,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IAllowableStressService, AllowableStressService>();
             services.AddScoped<IStorageTypeService, StorageTypeService>();
             services.AddScoped<IAD2000CalculationService, AD2000CalculationService>();
+            services.AddScoped<ICostSettingsService, CostSettingsService>();
             services.AddScoped<IEN13458CalculationServices, EN13458CalculationServices>();
             services.AddScoped<IEN13458FilmQuantityService, EN13458FilmQuantityService>();
             services.AddScoped<IEN13458MaterialStrengthProvider, EN13458MaterialStrengthProvider>();
