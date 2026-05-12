@@ -65,6 +65,45 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         public Task<List<EN13458ResultDTO>> GetAllAsync()
             => _calculationManager.GetAllAsync();
 
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var calculation = await _context.EN13458Calculations
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
+
+            if (calculation == null)
+            {
+                return false;
+            }
+
+            var costAnalyses = await _context.EN13458CostAnalyses
+                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            var costAnalysisIds = costAnalyses.Select(x => x.Id).ToList();
+
+            var costItems = await _context.EN13458CostAnalysisItems
+                .Where(x => costAnalysisIds.Contains(x.EN13458CostAnalysisId) && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            var salesPrices = await _context.EN13458SalesPrices
+                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            var costDetails = await _context.EN13458CostDetails
+                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
+                .ToListAsync();
+
+            _context.EN13458CostAnalysisItems.RemoveRange(costItems);
+            _context.EN13458SalesPrices.RemoveRange(salesPrices);
+            _context.EN13458CostDetails.RemoveRange(costDetails);
+            _context.EN13458CostAnalyses.RemoveRange(costAnalyses);
+            _context.EN13458Calculations.Remove(calculation);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public Task<EN13458ResultDTO> SaveAsync(EN13458ResultDTO result, string createdBy = "System")
             => _calculationManager.SaveAsync(result, createdBy);
 
@@ -95,6 +134,65 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                         .FirstOrDefault()
                 })
                 .ToListAsync();
+        }
+
+        public async Task<EN13458CostParameterLookupDTO> GetCostParameterLookupsAsync()
+        {
+            var laborRates = await _context.LaborRates
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted)
+                .OrderBy(x => x.Name)
+                .Select(x => new EN13458LaborRateLookupDTO
+                {
+                    Id = x.Id,
+                    HourlyRate = x.HourlyRate
+                })
+                .ToListAsync();
+
+            var gugHourlyRates = await _context.GugHourlyRates
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted)
+                .OrderBy(x => x.Name)
+                .Select(x => new EN13458GugHourlyRateLookupDTO
+                {
+                    Id = x.Id,
+                    HourlyRate = x.HourlyRate
+                })
+                .ToListAsync();
+
+            var overheadRates = await _context.OverheadRates
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted)
+                .OrderBy(x => x.OverheadType)
+                .ThenBy(x => x.Name)
+                .Select(x => new EN13458OverheadRateLookupDTO
+                {
+                    Id = x.Id,
+                    OverheadType = x.OverheadType,
+                    Percentage = x.Percentage
+                })
+                .ToListAsync();
+
+            var bombeRates = await _context.BombeLaborRates
+                .AsNoTracking()
+                .Where(x => x.Status != Status.Deleted)
+                .OrderBy(x => x.MaterialType)
+                .ThenBy(x => x.Name)
+                .Select(x => new EN13458BombeLaborRateLookupDTO
+                {
+                    Id = x.Id,
+                    MaterialType = x.MaterialType,
+                    RatePerKg = x.RatePerKg
+                })
+                .ToListAsync();
+
+            return new EN13458CostParameterLookupDTO
+            {
+                LaborRates = laborRates,
+                GugHourlyRates = gugHourlyRates,
+                OverheadRates = overheadRates,
+                BombeLaborRates = bombeRates
+            };
         }
 
         public async Task<EN13458MaterialCostTableDTO?> GetCostAnalysisAsync(Guid calculationId, Guid? costAnalysisId = null)

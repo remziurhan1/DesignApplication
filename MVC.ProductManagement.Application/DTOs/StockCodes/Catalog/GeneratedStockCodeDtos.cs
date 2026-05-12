@@ -26,6 +26,15 @@ namespace MVC.ProductManagement.Application.DTOs.StockCodes.Catalog
 
     public class GeneratedStockCodeDetailDto : GeneratedStockCodeListDto { }
 
+    public class GeneratedStockCodeFilterDto
+    {
+        public string? SearchTerm { get; set; }
+        public string? MainGroupCode { get; set; }
+        public string? SubGroupCode { get; set; }
+        public bool OnlyWithPrice { get; set; }
+        public int? Take { get; set; }
+    }
+
     public class GeneratedStockCodeCreateDto
     {
         public Guid StockSubCodeGroupId { get; set; }

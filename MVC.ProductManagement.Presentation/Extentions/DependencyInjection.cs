@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification;
 using Microsoft.AspNetCore.Identity;
 using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Presentation.Services.EN13458;
 
 namespace MVC.ProductManagement.Presentation.Extentions
 {
@@ -18,6 +19,8 @@ namespace MVC.ProductManagement.Presentation.Extentions
 
 
             services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddScoped<IEN13458AdminExportService, EN13458AdminExportService>();
+            services.AddScoped<IEN13458SpecificationExportService, EN13458SpecificationExportService>();
 
             return services;
         }

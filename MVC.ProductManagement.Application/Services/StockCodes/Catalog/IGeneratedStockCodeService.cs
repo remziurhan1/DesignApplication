@@ -5,6 +5,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
     public interface IGeneratedStockCodeService
     {
         Task<List<GeneratedStockCodeListDto>> GetAllAsync(Guid? subGroupId = null);
+        Task<List<GeneratedStockCodeListDto>> GetFilteredAsync(GeneratedStockCodeFilterDto filter);
         Task<GeneratedStockCodeDetailDto?> GetByIdAsync(Guid id);
         Task<GeneratedStockCodeListDto> CreateAsync(GeneratedStockCodeCreateDto dto);
         Task<GeneratedStockCodeDetailDto> UpdateAsync(GeneratedStockCodeUpdateDto dto);
