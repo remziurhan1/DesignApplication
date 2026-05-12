@@ -164,6 +164,24 @@
                 <div class="card shadow-sm mt-4 border-success-subtle order-2">
                     <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">Ek Stok / Grup Maliyeti</div>
                     <div class="card-body">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-5">
+                                <label class="form-label">Stok kodu filtrele</label>
+                                <input type="search" class="form-control js-stock-filter" placeholder="Kod, açıklama, ana grup veya alt grup ara" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Ana Grup</label>
+                                <input type="text" class="form-control js-stock-main-filter" placeholder="Örn: ZA" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Alt Grup</label>
+                                <input type="text" class="form-control js-stock-sub-filter" placeholder="Alt grup kodu" />
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="button" class="btn btn-outline-secondary w-100 js-stock-filter-clear" title="Filtreyi temizle">Sil</button>
+                            </div>
+                            <div class="col-12 small text-muted js-stock-filter-summary"></div>
+                        </div>
                         <div class="row g-4">
                             <div class="col-12 col-xl-6">
                                 <div class="border rounded p-3 h-100 bg-light-subtle">
@@ -203,7 +221,7 @@
                                                 <option value="">Stok kodu seçiniz</option>
                                                 @foreach (var stockOption in stockCodeOptions)
                                                 {
-                                                    <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">@stockOption.text</option>
+                                                    <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" data-main-group="@stockOption.mainGroupCode" data-sub-group="@stockOption.subGroupCode" data-search-text="@stockOption.searchText">@stockOption.text</option>
                                                 }
                                             </select>
                                         </div>
@@ -334,11 +352,11 @@
                                                         {
                                                             if (item.GeneratedStockCodeId?.ToString() == stockOption.id.ToString())
                                                             {
-                                                                <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" selected>@stockOption.text</option>
+                                                                <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" data-main-group="@stockOption.mainGroupCode" data-sub-group="@stockOption.subGroupCode" data-search-text="@stockOption.searchText" selected>@stockOption.text</option>
                                                             }
                                                             else
                                                             {
-                                                                <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">@stockOption.text</option>
+                                                                <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" data-main-group="@stockOption.mainGroupCode" data-sub-group="@stockOption.subGroupCode" data-search-text="@stockOption.searchText">@stockOption.text</option>
                                                             }
                                                         }
                                                     }
@@ -478,6 +496,41 @@
                 maximumFractionDigits: 2
             });
 
+            const normalizeText = (value) => String(value || '').trim().toLocaleLowerCase('tr-TR');
+
+            const applyStockFilters = () => {
+                const term = normalizeText(document.querySelector('.js-stock-filter')?.value);
+                const mainGroup = normalizeText(document.querySelector('.js-stock-main-filter')?.value);
+                const subGroup = normalizeText(document.querySelector('.js-stock-sub-filter')?.value);
+                let visibleCount = 0;
+                let totalCount = 0;
+
+                document.querySelectorAll('.cost-stock-select option').forEach((option) => {
+                    if (!option.value) {
+                        option.hidden = false;
+                        return;
+                    }
+
+                    totalCount += 1;
+                    const searchText = normalizeText(option.dataset.searchText || option.textContent);
+                    const optionMainGroup = normalizeText(option.dataset.mainGroup);
+                    const optionSubGroup = normalizeText(option.dataset.subGroup);
+                    const isMatch = (!term || searchText.includes(term))
+                        && (!mainGroup || optionMainGroup.includes(mainGroup))
+                        && (!subGroup || optionSubGroup.includes(subGroup));
+
+                    option.hidden = !isMatch && !option.selected;
+                    if (!option.hidden) visibleCount += 1;
+                });
+
+                const summary = document.querySelector('.js-stock-filter-summary');
+                if (summary) {
+                    summary.textContent = term || mainGroup || subGroup
+                        ? `${visibleCount}/${totalCount} stok kodu gösteriliyor. Seçili stoklar filtre dışında kalsa bile korunur.`
+                        : '';
+                }
+            };
+
             const normalizeDecimalInputs = (scope) => {
                 scope.querySelectorAll('.js-decimal-input').forEach((input) => {
                     if (input.disabled) return;
@@ -550,6 +603,19 @@
                 totalCell.dataset.value = String(total);
                 totalCell.textContent = formatDecimal(total);
             };
+
+            document.querySelectorAll('.js-stock-filter, .js-stock-main-filter, .js-stock-sub-filter').forEach((input) => {
+                input.addEventListener('input', applyStockFilters);
+            });
+
+            document.querySelector('.js-stock-filter-clear')?.addEventListener('click', () => {
+                document.querySelectorAll('.js-stock-filter, .js-stock-main-filter, .js-stock-sub-filter').forEach((input) => {
+                    input.value = '';
+                });
+                applyStockFilters();
+            });
+
+            applyStockFilters();
 
             document.querySelectorAll('.js-manual-toggle').forEach((checkbox) => {
                 const manualInput = resolveManualInput(checkbox);

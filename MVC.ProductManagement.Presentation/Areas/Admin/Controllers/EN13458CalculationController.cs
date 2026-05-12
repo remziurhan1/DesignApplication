@@ -4,26 +4,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
+using MVC.ProductManagement.Application.DTOs.StockCodes.Catalog;
 using MVC.ProductManagement.Application.Services.EN13458CalculationServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
-using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Application.Services.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Enums;
+using MVC.ProductManagement.Presentation.Areas.Admin.Mappers;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
+using MVC.ProductManagement.Presentation.Services.EN13458;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
@@ -35,8 +31,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private readonly IStorageTypeService _storageTypeService;
         private readonly IGeneratedStockCodeService _generatedStockCodeService;
         private readonly IStockProductGroupService _stockProductGroupService;
-        private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IEN13458AdminExportService _exportService;
+        private readonly IEN13458SpecificationExportService _specificationExportService;
 
         public EN13458CalculationController(
             IEN13458CalculationServices service,
@@ -45,8 +42,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             IStorageTypeService storageTypeService,
             IGeneratedStockCodeService generatedStockCodeService,
             IStockProductGroupService stockProductGroupService,
-            AppDbContext context,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            IEN13458AdminExportService exportService,
+            IEN13458SpecificationExportService specificationExportService)
         {
             _service = service;
             _materialService = materialService;
@@ -54,8 +52,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             _storageTypeService = storageTypeService;
             _generatedStockCodeService = generatedStockCodeService;
             _stockProductGroupService = stockProductGroupService;
-            _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _exportService = exportService;
+            _specificationExportService = specificationExportService;
         }
 
         [HttpGet]
@@ -81,39 +80,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var calculation = await _context.EN13458Calculations
-                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
+            var deleted = await _service.DeleteAsync(id);
 
-            if (calculation == null)
+            if (!deleted)
             {
                 return NotFound();
             }
-
-            var costAnalyses = await _context.EN13458CostAnalyses
-                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
-                .ToListAsync();
-
-            var costAnalysisIds = costAnalyses.Select(x => x.Id).ToList();
-
-            var costItems = await _context.EN13458CostAnalysisItems
-                .Where(x => costAnalysisIds.Contains(x.EN13458CostAnalysisId) && x.Status != Status.Deleted)
-                .ToListAsync();
-
-            var salesPrices = await _context.EN13458SalesPrices
-                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
-                .ToListAsync();
-
-            var costDetails = await _context.EN13458CostDetails
-                .Where(x => x.EN13458CalculationId == id && x.Status != Status.Deleted)
-                .ToListAsync();
-
-            _context.EN13458CostAnalysisItems.RemoveRange(costItems);
-            _context.EN13458SalesPrices.RemoveRange(salesPrices);
-            _context.EN13458CostDetails.RemoveRange(costDetails);
-            _context.EN13458CostAnalyses.RemoveRange(costAnalyses);
-            _context.EN13458Calculations.Remove(calculation);
-
-            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
@@ -124,7 +96,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
-            var vm = MapDetailsVm(dto);
+            var vm = EN13458CalculationVmMapper.MapDetailsVm(dto);
             await PopulateResultDisplayNamesAsync(vm);
             vm.CostAnalyses = await _service.GetCostAnalysesAsync(id);
             ViewBag.IsSalesView = string.Equals(mode, "sales", StringComparison.OrdinalIgnoreCase);
@@ -139,7 +111,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
-            var vm = MapDetailsVm(dto);
+            var vm = EN13458CalculationVmMapper.MapDetailsVm(dto);
             vm.SelectedCostAnalysisId = costAnalysisId;
 
             await PopulateResultDisplayNamesAsync(vm);
@@ -161,7 +133,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
-            var vm = MapDetailsVm(dto);
+            var vm = EN13458CalculationVmMapper.MapDetailsVm(dto);
             vm.SelectedCostAnalysisId = costAnalysisId;
             await PopulateResultDisplayNamesAsync(vm);
             vm.CostAnalyses = await _service.GetCostAnalysesAsync(id);
@@ -200,25 +172,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var templatePath = GetSpecificationTemplatePath();
-            if (!System.IO.File.Exists(templatePath))
-            {
-                throw new FileNotFoundException("Şartname şablon dosyası bulunamadı.", templatePath);
-            }
-
-            var bytes = await System.IO.File.ReadAllBytesAsync(templatePath);
-            using var stream = new MemoryStream();
-            await stream.WriteAsync(bytes, 0, bytes.Length);
-            stream.Position = 0;
-
-            using (var document = WordprocessingDocument.Open(stream, true))
-            {
-                ApplySpecificationTemplate(document, specification);
-            }
-
             var fileName = $"LLL_Storage_Tank_Quotation_{DateTime.UtcNow:yyyyMMddHHmmss}.docx";
 
-            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+            return File(
+                await _specificationExportService.BuildWordDocumentAsync(GetSpecificationTemplatePath(), specification),
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                fileName);
         }
 
         [HttpGet]
@@ -228,7 +187,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             if (dto == null) return NotFound();
 
             await LoadLookupsAsync();
-            return View("Calculate", MapCalculateVm(dto));
+            return View("Calculate", EN13458CalculationVmMapper.MapCalculateVm(dto));
         }
 
         [HttpGet]
@@ -237,173 +196,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var dto = await _service.GetByIdAsync(id);
             if (dto == null) return NotFound();
 
-            var vm = MapDetailsVm(dto);
+            var vm = EN13458CalculationVmMapper.MapDetailsVm(dto);
             await PopulateResultDisplayNamesAsync(vm);
 
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using var package = new ExcelPackage();
-            var ws = package.Workbook.Worksheets.Add("EN13458 Detay");
-            var row = 1;
-
-            WriteSectionHeader(ws, row++, "EN13458 Hesap Özeti");
-            row = WriteKeyValues(ws, row, new List<(string Label, object Value)>
-            {
-                ("Ad", vm.Name),
-                ("Kayıt Id", vm.Id),
-                ("İç Tank Çapı", vm.OuterDiameter),
-                ("Dış Tank Çapı", vm.OuterTankDiameter),
-                ("Silindirik Boy", vm.ShellLength),
-                ("Basınç", vm.Pressure),
-                ("Depolama Tipi", vm.StorageTypeName),
-                ("Depolama Tipi Id", vm.StorageTypeId),
-                ("Sıvı Yoğunluğu", vm.LiquidDensity),
-                ("Tank Yönelimi", vm.TankOrientation),
-                ("Cold Stretch", vm.IsColdStretchApplied ? "Evet" : "Hayır"),
-                ("Kaynak Metrajı 1500", vm.WeldLength1500),
-                ("Kaynak Metrajı 2000", vm.WeldLength2000),
-                ("Kaynak Metrajı 2500", vm.WeldLength2500),
-                ("Kaynak Metrajı 3000", vm.WeldLength3000)
-            });
-
-            row = WriteSection(ws, row, "İç Tank", new List<(string Label, object Value)>
-            {
-                ("Gövde Malzemesi", vm.InnerShellMaterialName),
-                ("Gövde Malzeme Formu", vm.InnerShellMaterialFormName),
-                ("Bombe Malzemesi", vm.InnerHeadMaterialName),
-                ("Bombe Malzeme Formu", vm.InnerHeadMaterialFormName),
-                ("Gövde Akma Dayanımı", vm.InnerShellMaterialStrength),
-                ("Bombe Akma Dayanımı", vm.InnerHeadMaterialStrength),
-                ("Gövde Kalınlığı", vm.InnerShellThickness),
-                ("Bombe Kalınlığı", vm.InnerHeadThickness),
-                ("Yuvarlanmış Gövde Kalınlığı", vm.RoundedInnerShellThickness),
-                ("Yuvarlanmış Bombe Kalınlığı", vm.RoundedInnerHeadThickness),
-                ("Bombe Pulu Çapı", vm.InnerTankHeadPulDiameter),
-                ("Bombe Ağırlığı", vm.InnerTankHeadWeight),
-                ("Bombe Kaynak Uzunluğu", vm.InnerTankHeadWeldLength),
-                ("Çevre Kaynak Uzunluğu", vm.InnerTankCircumferenceWeldLength),
-                ("Toplam Uzunluk", vm.InnerTankTotalLength),
-                ("İç Hacim", vm.InnerVolume),
-                ("İç Yüzey Alanı", vm.InnerSurfaceArea),
-                ("Tank Ağırlığı", vm.InnerTankWeight)
-            });
-
-            row = WriteSection(ws, row, "Dış Tank", new List<(string Label, object Value)>
-            {
-                ("Gövde Malzemesi", vm.OuterShellMaterialName),
-                ("Gövde Malzeme Formu", vm.OuterShellMaterialFormName),
-                ("Bombe Malzemesi", vm.OuterHeadMaterialName),
-                ("Bombe Malzeme Formu", vm.OuterHeadMaterialFormName),
-                ("Gövde Akma Dayanımı", vm.OuterShellMaterialStrength),
-                ("Bombe Akma Dayanımı", vm.OuterHeadMaterialStrength),
-                ("Gövde Kalınlığı", vm.OuterShellThickness),
-                ("Bombe Kalınlığı", vm.OuterHeadThickness),
-                ("Yuvarlanmış Gövde Kalınlığı", vm.RoundedOuterShellThickness),
-                ("Yuvarlanmış Bombe Kalınlığı", vm.RoundedOuterHeadThickness),
-                ("Bombe Pulu Çapı", vm.OuterTankHeadPulDiameter),
-                ("Bombe Ağırlığı", vm.OuterTankHeadWeight),
-                ("Bombe Kaynak Uzunluğu", vm.OuterTankHeadWeldLength),
-                ("Çevre Kaynak Uzunluğu", vm.OuterTankCircumferenceWeldLength),
-                ("Toplam Uzunluk", vm.OuterTankTotalLength),
-                ("Dış Hacim", vm.OuterVolume),
-                ("Dış Yüzey Alanı", vm.OuterSurfaceArea),
-                ("Tank Ağırlığı", vm.OuterTankWeight)
-            });
-
-            row = WriteSection(ws, row, "Ortak Sonuçlar", new List<(string Label, object Value)>
-            {
-                ("Design Pressure", vm.DesignPressure),
-                ("Test Pressure", vm.TestPressure),
-                ("Static Pressure", vm.StaticPressure),
-                ("Toplam Kaynak Uzunluğu", vm.TotalWeldLength),
-                ("Toplam Film Maliyeti", vm.TotalFilmCost),
-                ("Perlit Hacmi", vm.PerliteVolume),
-                ("Perlit Ağırlığı", vm.PerliteWeight),
-                ("Gaz Azot Hacmi", vm.GasNitrogenVolume),
-                ("Sıvı Azot Hacmi", vm.LiquidNitrogenVolume),
-                ("Burkulma Dalga Sayısı", vm.BucklingWaveNumber),
-                ("Elastik Burkulma Basıncı (P1)", vm.ElasticBucklingPressureP1),
-                ("Plastik Çökme Basıncı (P2)", vm.PlasticCollapsePressureP2),
-                ("Dış Tasarım Basıncı (Pv)", vm.DesignExternalPressurePv),
-                ("Takviye Halkası Gerekli", vm.SupportRingRequired ? "Evet" : "Hayır"),
-                ("Takviye Halkası Kritik Basınç (Pe)", vm.SupportRingCriticalPressurePe),
-                ("Takviye Halkası Gerilme (X)", vm.SupportRingStressX),
-                ("Takviye Halkası İzin Verilen Gerilme", vm.SupportRingAllowableStress),
-                ("Takviye Halkası Yeterli", vm.SupportRingAdequate ? "Evet" : "Hayır"),
-                ("Head Collapse Pressure", vm.HeadCollapsePressure),
-                ("Gerekli Profil Sayısı", vm.RequiredProfileCount),
-                ("Profil Açınım Boyu (mm)", vm.ProfileDevelopedLength),
-                ("Toplam Profil Boyu (mm)", vm.TotalProfileLength),
-                ("Profil Kaynak Metrajı (mm)", vm.ProfileWeldLength)
-            });
-
-            WriteSection(ws, row, "Sac Oryantasyonu", new List<(string Label, object Value)>
-            {
-                ("İç Tank Açınım", vm.InnerDevelopedLength),
-                ("Dış Tank Açınım", vm.OuterDevelopedLength),
-                ("İç 1500", vm.InnerSectorPlan1500),
-                ("İç 2000", vm.InnerSectorPlan2000),
-                ("İç 2500", vm.InnerSectorPlan2500),
-                ("İç 3000", vm.InnerSectorPlan3000),
-                ("Dış 1500", vm.OuterSectorPlan1500),
-                ("Dış 2000", vm.OuterSectorPlan2000),
-                ("Dış 2500", vm.OuterSectorPlan2500),
-                ("Dış 3000", vm.OuterSectorPlan3000)
-            });
-
             var costTable = await _service.GetCostAnalysisAsync(id, costAnalysisId) ?? await _service.BuildMaterialCostTableAsync(dto);
-            var costWs = package.Workbook.Worksheets.Add("Maliyet Detay");
-            var costRow = 1;
-
-            WriteSectionHeader(costWs, costRow++, $"Maliyet Özeti - {costTable.RevisionCode}");
-            costRow = WriteKeyValues(costWs, costRow, new List<(string Label, object Value)>
-            {
-                ("Analiz", costTable.AnalysisName),
-                ("Revizyon", costTable.RevisionCode),
-                ("Toplam", costTable.GrandTotalCost)
-            });
-
-            costRow += 1;
-            WriteSectionHeader(costWs, costRow++, "Maliyet Kalemleri");
-            costWs.Cells[costRow, 1].Value = "Grup";
-            costWs.Cells[costRow, 2].Value = "Kalem";
-            costWs.Cells[costRow, 3].Value = "Stok Kodu";
-            costWs.Cells[costRow, 4].Value = "Malzeme";
-            costWs.Cells[costRow, 5].Value = "Miktar";
-            costWs.Cells[costRow, 6].Value = "Birim";
-            costWs.Cells[costRow, 7].Value = "Stok Fiyatı";
-            costWs.Cells[costRow, 8].Value = "Hesaba Giren Fiyat";
-            costWs.Cells[costRow, 9].Value = "Hesaplanan Birim Fiyat";
-            costWs.Cells[costRow, 10].Value = "Tutar";
-
-            using (var header = costWs.Cells[costRow, 1, costRow, 10])
-            {
-                header.Style.Font.Bold = true;
-                header.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                header.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
-                header.Style.Border.BorderAround(ExcelBorderStyle.Thin);
-            }
-
-            foreach (var item in costTable.Items)
-            {
-                costRow++;
-                costWs.Cells[costRow, 1].Value = $"{item.CostGroupCode} - {item.CostGroupName}";
-                costWs.Cells[costRow, 2].Value = item.ItemName;
-                costWs.Cells[costRow, 3].Value = item.StockCode;
-                costWs.Cells[costRow, 4].Value = item.MaterialName;
-                costWs.Cells[costRow, 5].Value = item.Quantity;
-                costWs.Cells[costRow, 6].Value = item.Unit;
-                costWs.Cells[costRow, 7].Value = item.StockUnitPrice;
-                costWs.Cells[costRow, 8].Value = item.UseManualUnitPrice ? item.ManualUnitPrice ?? 0 : item.StockUnitPrice;
-                costWs.Cells[costRow, 9].Value = item.UnitPrice;
-                costWs.Cells[costRow, 10].Value = item.ItemCost;
-            }
-
-            costWs.Cells[costWs.Dimension.Address].AutoFitColumns();
-            ws.Cells[ws.Dimension.Address].AutoFitColumns();
             var safeName = string.Concat((vm.Name ?? "EN13458").Where(ch => !Path.GetInvalidFileNameChars().Contains(ch)));
             var fileName = $"EN13458_Detay_{safeName}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
 
-            return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            return File(
+                _exportService.BuildDetailExcel(vm, costTable),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileName);
         }
 
         [HttpGet]
@@ -438,7 +241,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(EN13458ResultVM vm)
         {
-            var dto = MapResultDto(vm);
+            var dto = EN13458CalculationVmMapper.MapResultDto(vm);
             var saved = await _service.SaveAsync(dto, User?.Identity?.Name ?? "AdminUser");
             TempData["SuccessMessage"] = vm.IsEditMode ? "Tank hesabı güncellendi." : "Tank hesabı kaydedildi.";
             return RedirectToAction(nameof(Details), new { id = saved.Id });
@@ -688,7 +491,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 var result = await _service.CalculateAsync(dto);
                 result.Id = vm.Id;
-                var resultVm = MapResultVm(result);
+                var resultVm = EN13458CalculationVmMapper.MapResultVm(result);
                 resultVm.IsEditMode = isEditMode;
                 await PopulateResultDisplayNamesAsync(resultVm);
                 ViewBag.CostTable = await _service.BuildMaterialCostTableAsync(result);
@@ -702,247 +505,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
         }
 
-        private static EN13458DetailsVM MapDetailsVm(EN13458ResultDTO dto)
-        {
-            var vm = new EN13458DetailsVM();
-            CopyResult(dto, vm);
-            return vm;
-        }
-
-        private static EN13458CalculateVM MapCalculateVm(EN13458ResultDTO dto)
-        {
-            return new EN13458CalculateVM
-            {
-                Id = dto.Id,
-                Name = dto.Name,
-                OuterDiameter = dto.OuterDiameter,
-                OuterTankDiameter = dto.OuterTankDiameter,
-                ShellLength = dto.ShellLength,
-                Pressure = dto.Pressure,
-                StorageTypeId = dto.StorageTypeId,
-                LiquidDensity = dto.LiquidDensity,
-                TankOrientation = dto.TankOrientation,
-                IsColdStretchApplied = dto.IsColdStretchApplied,
-                InnerShellMaterialId = dto.InnerShellMaterialId,
-                InnerShellMaterialFormId = dto.InnerShellMaterialFormId,
-                InnerHeadMaterialId = dto.InnerHeadMaterialId,
-                InnerHeadMaterialFormId = dto.InnerHeadMaterialFormId,
-                OuterShellMaterialId = dto.OuterShellMaterialId,
-                OuterShellMaterialFormId = dto.OuterShellMaterialFormId,
-                OuterHeadMaterialId = dto.OuterHeadMaterialId,
-                OuterHeadMaterialFormId = dto.OuterHeadMaterialFormId,
-                StiffenerSpacing = 750
-            };
-        }
-
-        private EN13458ResultVM MapResultVm(EN13458ResultDTO dto)
-        {
-            var vm = new EN13458ResultVM();
-            CopyResult(dto, vm);
-            return vm;
-        }
-
-        private static void CopyResult(EN13458ResultDTO dto, EN13458ResultVM vm)
-        {
-            vm.Id = dto.Id;
-            vm.Name = dto.Name;
-            vm.OuterDiameter = dto.OuterDiameter;
-            vm.OuterTankDiameter = dto.OuterTankDiameter;
-            vm.ShellLength = dto.ShellLength;
-            vm.Pressure = dto.Pressure;
-            vm.StorageTypeId = dto.StorageTypeId;
-            vm.LiquidDensity = dto.LiquidDensity;
-            vm.TankOrientation = dto.TankOrientation;
-            vm.IsColdStretchApplied = dto.IsColdStretchApplied;
-            vm.DesignTemperature = dto.DesignTemperature;
-            vm.WeldLength1500 = dto.WeldLength1500;
-            vm.WeldLength2000 = dto.WeldLength2000;
-            vm.WeldLength2500 = dto.WeldLength2500;
-            vm.WeldLength3000 = dto.WeldLength3000;
-            vm.InnerShellMaterialId = dto.InnerShellMaterialId;
-            vm.InnerShellMaterialFormId = dto.InnerShellMaterialFormId;
-            vm.InnerHeadMaterialId = dto.InnerHeadMaterialId;
-            vm.InnerHeadMaterialFormId = dto.InnerHeadMaterialFormId;
-            vm.OuterShellMaterialId = dto.OuterShellMaterialId;
-            vm.OuterShellMaterialFormId = dto.OuterShellMaterialFormId;
-            vm.OuterHeadMaterialId = dto.OuterHeadMaterialId;
-            vm.OuterHeadMaterialFormId = dto.OuterHeadMaterialFormId;
-            vm.InnerShellMaterialStrength = dto.InnerShellMaterialStrength;
-            vm.InnerHeadMaterialStrength = dto.InnerHeadMaterialStrength;
-            vm.OuterShellMaterialStrength = dto.OuterShellMaterialStrength;
-            vm.OuterHeadMaterialStrength = dto.OuterHeadMaterialStrength;
-            vm.InnerShellMaterialDensity = dto.InnerShellMaterialDensity;
-            vm.InnerHeadMaterialDensity = dto.InnerHeadMaterialDensity;
-            vm.OuterShellMaterialDensity = dto.OuterShellMaterialDensity;
-            vm.OuterHeadMaterialDensity = dto.OuterHeadMaterialDensity;
-            vm.InnerShellThickness = dto.InnerShellThickness;
-            vm.InnerHeadThickness = dto.InnerHeadThickness;
-            vm.OuterShellThickness = dto.OuterShellThickness;
-            vm.OuterHeadThickness = dto.OuterHeadThickness;
-            vm.RoundedInnerShellThickness = dto.RoundedInnerShellThickness;
-            vm.RoundedInnerHeadThickness = dto.RoundedInnerHeadThickness;
-            vm.RoundedOuterShellThickness = dto.RoundedOuterShellThickness;
-            vm.RoundedOuterHeadThickness = dto.RoundedOuterHeadThickness;
-            vm.DesignPressure = dto.DesignPressure;
-            vm.TestPressure = dto.TestPressure;
-            vm.StaticPressure = dto.StaticPressure;
-            vm.InnerTankHeadPulDiameter = dto.InnerTankHeadPulDiameter;
-            vm.OuterTankHeadPulDiameter = dto.OuterTankHeadPulDiameter;
-            vm.InnerTankHeadWeight = dto.InnerTankHeadWeight;
-            vm.OuterTankHeadWeight = dto.OuterTankHeadWeight;
-            vm.InnerTankHeadWeldLength = dto.InnerTankHeadWeldLength;
-            vm.InnerTankCircumferenceWeldLength = dto.InnerTankCircumferenceWeldLength;
-            vm.InnerTankShellWeldLength = dto.InnerTankShellWeldLength;
-            vm.InnerTankBombeWeldLength = dto.InnerTankBombeWeldLength;
-            vm.InnerTankTotalWeldLength = dto.InnerTankTotalWeldLength;
-            vm.OuterTankHeadWeldLength = dto.OuterTankHeadWeldLength;
-            vm.OuterTankCircumferenceWeldLength = dto.OuterTankCircumferenceWeldLength;
-            vm.OuterTankShellWeldLength = dto.OuterTankShellWeldLength;
-            vm.OuterTankBombeWeldLength = dto.OuterTankBombeWeldLength;
-            vm.OuterTankTotalWeldLength = dto.OuterTankTotalWeldLength;
-            vm.StiffenerRingWeldLength = dto.StiffenerRingWeldLength;
-            vm.TotalWeldLength = dto.TotalWeldLength;
-            vm.TotalFilmCost = dto.TotalFilmCost;
-            vm.InnerTankTotalLength = dto.InnerTankTotalLength;
-            vm.OuterTankTotalLength = dto.OuterTankTotalLength;
-            vm.InnerVolume = dto.InnerVolume;
-            vm.OuterVolume = dto.OuterVolume;
-            vm.InnerSurfaceArea = dto.InnerSurfaceArea;
-            vm.OuterSurfaceArea = dto.OuterSurfaceArea;
-            vm.InnerTankWeight = dto.InnerTankWeight;
-            vm.OuterTankWeight = dto.OuterTankWeight;
-            vm.PerliteVolume = dto.PerliteVolume;
-            vm.PerliteWeight = dto.PerliteWeight;
-            vm.GasNitrogenVolume = dto.GasNitrogenVolume;
-            vm.LiquidNitrogenVolume = dto.LiquidNitrogenVolume;
-            vm.BucklingWaveNumber = dto.BucklingWaveNumber;
-            vm.ElasticBucklingPressureP1 = dto.ElasticBucklingPressureP1;
-            vm.PlasticCollapsePressureP2 = dto.PlasticCollapsePressureP2;
-            vm.DesignExternalPressurePv = dto.DesignExternalPressurePv;
-            vm.SupportRingRequired = dto.SupportRingRequired;
-            vm.SupportRingCriticalPressurePe = dto.SupportRingCriticalPressurePe;
-            vm.SupportRingStressX = dto.SupportRingStressX;
-            vm.SupportRingAllowableStress = dto.SupportRingAllowableStress;
-            vm.SupportRingAdequate = dto.SupportRingAdequate;
-            vm.HeadCollapsePressure = dto.HeadCollapsePressure;
-            vm.RequiredProfileCount = dto.RequiredProfileCount;
-            vm.ProfileDevelopedLength = dto.ProfileDevelopedLength;
-            vm.TotalProfileLength = dto.TotalProfileLength;
-            vm.ProfileWeldLength = dto.ProfileWeldLength;
-            vm.InnerDevelopedLength = dto.InnerDevelopedLength;
-            vm.OuterDevelopedLength = dto.OuterDevelopedLength;
-            vm.InnerSectorPlan1500 = dto.InnerSectorPlan1500;
-            vm.InnerSectorPlan2000 = dto.InnerSectorPlan2000;
-            vm.InnerSectorPlan2500 = dto.InnerSectorPlan2500;
-            vm.InnerSectorPlan3000 = dto.InnerSectorPlan3000;
-            vm.OuterSectorPlan1500 = dto.OuterSectorPlan1500;
-            vm.OuterSectorPlan2000 = dto.OuterSectorPlan2000;
-            vm.OuterSectorPlan2500 = dto.OuterSectorPlan2500;
-            vm.OuterSectorPlan3000 = dto.OuterSectorPlan3000;
-        }
-
-        private static EN13458ResultDTO MapResultDto(EN13458ResultVM vm)
-        {
-            return new EN13458ResultDTO
-            {
-                Id = vm.Id,
-                Name = vm.Name,
-                OuterDiameter = vm.OuterDiameter,
-                OuterTankDiameter = vm.OuterTankDiameter,
-                ShellLength = vm.ShellLength,
-                Pressure = vm.Pressure,
-                StorageTypeId = vm.StorageTypeId,
-                LiquidDensity = vm.LiquidDensity,
-                TankOrientation = vm.TankOrientation,
-                IsColdStretchApplied = vm.IsColdStretchApplied,
-                DesignTemperature = vm.DesignTemperature == 0d ? 20d : vm.DesignTemperature,
-                WeldLength1500 = vm.WeldLength1500,
-                WeldLength2000 = vm.WeldLength2000,
-                WeldLength2500 = vm.WeldLength2500,
-                WeldLength3000 = vm.WeldLength3000,
-                InnerShellMaterialId = vm.InnerShellMaterialId,
-                InnerShellMaterialFormId = vm.InnerShellMaterialFormId,
-                InnerHeadMaterialId = vm.InnerHeadMaterialId,
-                InnerHeadMaterialFormId = vm.InnerHeadMaterialFormId,
-                OuterShellMaterialId = vm.OuterShellMaterialId,
-                OuterShellMaterialFormId = vm.OuterShellMaterialFormId,
-                OuterHeadMaterialId = vm.OuterHeadMaterialId,
-                OuterHeadMaterialFormId = vm.OuterHeadMaterialFormId,
-                InnerShellMaterialStrength = vm.InnerShellMaterialStrength,
-                InnerHeadMaterialStrength = vm.InnerHeadMaterialStrength,
-                OuterShellMaterialStrength = vm.OuterShellMaterialStrength,
-                OuterHeadMaterialStrength = vm.OuterHeadMaterialStrength,
-                InnerShellMaterialDensity = vm.InnerShellMaterialDensity,
-                InnerHeadMaterialDensity = vm.InnerHeadMaterialDensity,
-                OuterShellMaterialDensity = vm.OuterShellMaterialDensity,
-                OuterHeadMaterialDensity = vm.OuterHeadMaterialDensity,
-                InnerShellThickness = vm.InnerShellThickness,
-                InnerHeadThickness = vm.InnerHeadThickness,
-                OuterShellThickness = vm.OuterShellThickness,
-                OuterHeadThickness = vm.OuterHeadThickness,
-                RoundedInnerShellThickness = vm.RoundedInnerShellThickness,
-                RoundedInnerHeadThickness = vm.RoundedInnerHeadThickness,
-                RoundedOuterShellThickness = vm.RoundedOuterShellThickness,
-                RoundedOuterHeadThickness = vm.RoundedOuterHeadThickness,
-                DesignPressure = vm.DesignPressure,
-                TestPressure = vm.TestPressure,
-                StaticPressure = vm.StaticPressure,
-                InnerTankHeadPulDiameter = vm.InnerTankHeadPulDiameter,
-                OuterTankHeadPulDiameter = vm.OuterTankHeadPulDiameter,
-                InnerTankHeadWeight = vm.InnerTankHeadWeight,
-                OuterTankHeadWeight = vm.OuterTankHeadWeight,
-                InnerTankHeadWeldLength = vm.InnerTankHeadWeldLength,
-                InnerTankCircumferenceWeldLength = vm.InnerTankCircumferenceWeldLength,
-                InnerTankShellWeldLength = vm.InnerTankShellWeldLength,
-                InnerTankBombeWeldLength = vm.InnerTankBombeWeldLength,
-                InnerTankTotalWeldLength = vm.InnerTankTotalWeldLength,
-                OuterTankHeadWeldLength = vm.OuterTankHeadWeldLength,
-                OuterTankCircumferenceWeldLength = vm.OuterTankCircumferenceWeldLength,
-                OuterTankShellWeldLength = vm.OuterTankShellWeldLength,
-                OuterTankBombeWeldLength = vm.OuterTankBombeWeldLength,
-                OuterTankTotalWeldLength = vm.OuterTankTotalWeldLength,
-                StiffenerRingWeldLength = vm.StiffenerRingWeldLength,
-                TotalWeldLength = vm.TotalWeldLength,
-                TotalFilmCost = vm.TotalFilmCost,
-                InnerTankTotalLength = vm.InnerTankTotalLength,
-                OuterTankTotalLength = vm.OuterTankTotalLength,
-                InnerVolume = vm.InnerVolume,
-                OuterVolume = vm.OuterVolume,
-                InnerSurfaceArea = vm.InnerSurfaceArea,
-                OuterSurfaceArea = vm.OuterSurfaceArea,
-                InnerTankWeight = vm.InnerTankWeight,
-                OuterTankWeight = vm.OuterTankWeight,
-                PerliteVolume = vm.PerliteVolume,
-                PerliteWeight = vm.PerliteWeight,
-                GasNitrogenVolume = vm.GasNitrogenVolume,
-                LiquidNitrogenVolume = vm.LiquidNitrogenVolume,
-                BucklingWaveNumber = vm.BucklingWaveNumber,
-                ElasticBucklingPressureP1 = vm.ElasticBucklingPressureP1,
-                PlasticCollapsePressureP2 = vm.PlasticCollapsePressureP2,
-                DesignExternalPressurePv = vm.DesignExternalPressurePv,
-                SupportRingRequired = vm.SupportRingRequired,
-                SupportRingCriticalPressurePe = vm.SupportRingCriticalPressurePe,
-                SupportRingStressX = vm.SupportRingStressX,
-                SupportRingAllowableStress = vm.SupportRingAllowableStress,
-                SupportRingAdequate = vm.SupportRingAdequate,
-                HeadCollapsePressure = vm.HeadCollapsePressure,
-                RequiredProfileCount = vm.RequiredProfileCount,
-                ProfileDevelopedLength = vm.ProfileDevelopedLength,
-                TotalProfileLength = vm.TotalProfileLength,
-                ProfileWeldLength = vm.ProfileWeldLength,
-                InnerDevelopedLength = vm.InnerDevelopedLength,
-                OuterDevelopedLength = vm.OuterDevelopedLength,
-                InnerSectorPlan1500 = vm.InnerSectorPlan1500,
-                InnerSectorPlan2000 = vm.InnerSectorPlan2000,
-                InnerSectorPlan2500 = vm.InnerSectorPlan2500,
-                InnerSectorPlan3000 = vm.InnerSectorPlan3000,
-                OuterSectorPlan1500 = vm.OuterSectorPlan1500,
-                OuterSectorPlan2000 = vm.OuterSectorPlan2000,
-                OuterSectorPlan2500 = vm.OuterSectorPlan2500,
-                OuterSectorPlan3000 = vm.OuterSectorPlan3000
-            };
-        }
-
         private async Task PopulateManualCostLookupsAsync(EN13458DetailsVM vm)
         {
             vm.AvailableStockGroups = (await _stockProductGroupService.GetAllAsync())
@@ -950,9 +512,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .Select(x => new SelectListItem($"{x.Name} (Kalem: {x.ItemCount}, Tutar: {x.TotalCost:N2})", x.Id.ToString()))
                 .ToList();
 
-            var stockCodes = (await _generatedStockCodeService.GetAllAsync())
-                .OrderBy(x => x.GeneratedCode)
-                .ToList();
+            var stockCodes = await _generatedStockCodeService.GetFilteredAsync(new GeneratedStockCodeFilterDto
+            {
+                Take = 1000
+            });
 
             vm.AvailableStockCodes = stockCodes
                 .OrderBy(x => x.GeneratedCode)
@@ -963,24 +526,46 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             {
                 id = x.Id,
                 text = $"{x.GeneratedCode} - {(!string.IsNullOrWhiteSpace(x.Description) ? x.Description : x.RuleName)}",
-                unitPrice = Convert.ToDouble(x.UnitPrice ?? 0m)
+                unitPrice = Convert.ToDouble(x.UnitPrice ?? 0m),
+                mainGroupCode = x.MainGroupCode,
+                subGroupCode = x.SubGroupCode,
+                searchText = $"{x.GeneratedCode} {x.Description} {x.RuleName} {x.MainGroupCode} {x.SubGroupCode} {x.SubGroupName}"
             }).ToList();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchStockCodes(string? term, string? mainGroupCode, string? subGroupCode, bool onlyWithPrice = false, int take = 50)
+        {
+            var stockCodes = await _generatedStockCodeService.GetFilteredAsync(new GeneratedStockCodeFilterDto
+            {
+                SearchTerm = term,
+                MainGroupCode = mainGroupCode,
+                SubGroupCode = subGroupCode,
+                OnlyWithPrice = onlyWithPrice,
+                Take = take
+            });
+
+            return Json(stockCodes.Select(x => new
+            {
+                id = x.Id,
+                text = $"{x.GeneratedCode} - {(!string.IsNullOrWhiteSpace(x.Description) ? x.Description : x.RuleName)}",
+                unitPrice = Convert.ToDouble(x.UnitPrice ?? 0m),
+                mainGroupCode = x.MainGroupCode,
+                subGroupCode = x.SubGroupCode
+            }));
         }
 
         private async Task PopulateCostParameterLookupsAsync(EN13458MaterialCostTableDTO costTable)
         {
-            var laborRates = await _context.LaborRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.Name).ToListAsync();
-            var gugHourlyRates = await _context.GugHourlyRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.Name).ToListAsync();
-            var overheadRates = await _context.OverheadRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.OverheadType).ThenBy(x => x.Name).ToListAsync();
-            var bombeRates = await _context.BombeLaborRates.AsNoTracking().Where(x => x.Status != Status.Deleted).OrderBy(x => x.MaterialType).ThenBy(x => x.Name).ToListAsync();
+            var lookups = await _service.GetCostParameterLookupsAsync();
 
-            ViewBag.LaborRateOptions = laborRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.LaborRateId == x.Id)).ToList();
-            ViewBag.GugRateOptions = gugHourlyRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.GugHourlyRateId == x.Id)).ToList();
-            ViewBag.FinanceRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "Finance", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.FinanceOverheadRateId == x.Id)).ToList();
-            ViewBag.GeneralManagementRateOptions = overheadRates.Where(x => string.Equals(x.OverheadType, "GeneralManagement", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.GeneralManagementOverheadRateId == x.Id)).ToList();
+            ViewBag.LaborRateOptions = lookups.LaborRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.LaborRateId == x.Id)).ToList();
+            ViewBag.GugRateOptions = lookups.GugHourlyRates.Select(x => new SelectListItem($"{x.HourlyRate:N2} TL/saat", x.Id.ToString(), costTable.SalesPrice?.GugHourlyRateId == x.Id)).ToList();
+            ViewBag.FinanceRateOptions = lookups.OverheadRates.Where(x => string.Equals(x.OverheadType, "Finance", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.FinanceOverheadRateId == x.Id)).ToList();
+            ViewBag.GeneralManagementRateOptions = lookups.OverheadRates.Where(x => string.Equals(x.OverheadType, "GeneralManagement", StringComparison.OrdinalIgnoreCase)).Select(x => new SelectListItem($"%{x.Percentage:N2}", x.Id.ToString(), costTable.SalesPrice?.GeneralManagementOverheadRateId == x.Id)).ToList();
 
-            ViewBag.InnerBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} €/kg", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
-            ViewBag.OuterBombeRateOptions = bombeRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} €/kg", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
+            ViewBag.InnerBombeRateOptions = lookups.BombeLaborRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} €/kg", x.Id.ToString(), costTable.InnerHeadBombeLaborRateId == x.Id)).ToList();
+            ViewBag.OuterBombeRateOptions = lookups.BombeLaborRates.Select(x => new SelectListItem($"{x.MaterialType} - {x.RatePerKg:N2} €/kg", x.Id.ToString(), costTable.OuterHeadBombeLaborRateId == x.Id)).ToList();
         }
 
         private async Task<EN13458SpecificationVM?> BuildSpecificationVmAsync(Guid id, Guid? costAnalysisId)
@@ -991,7 +576,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return null;
             }
 
-            var resultVm = MapResultVm(dto);
+            var resultVm = EN13458CalculationVmMapper.MapResultVm(dto);
             await PopulateResultDisplayNamesAsync(resultVm);
 
             var costTable = await _service.GetCostAnalysisAsync(id, costAnalysisId) ?? await _service.BuildMaterialCostTableAsync(dto);
@@ -1191,119 +776,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return Path.Combine(AppContext.BaseDirectory, "Templates", "LLL_17 Bar Storage Tank Quotation_(20m3).docx");
         }
 
-        private static void ApplySpecificationTemplate(WordprocessingDocument document, EN13458SpecificationVM specification)
-        {
-            var body = document.MainDocumentPart?.Document?.Body;
-            if (body == null)
-            {
-                throw new InvalidOperationException("Şablon Word doküman gövdesi okunamadı.");
-            }
-
-            foreach (var paragraph in body.Descendants<Paragraph>().ToList())
-            {
-                var paragraphText = paragraph.InnerText?.Trim();
-                if (string.IsNullOrWhiteSpace(paragraphText))
-                {
-                    continue;
-                }
-
-                if (paragraphText.StartsWith("Fluid:", StringComparison.OrdinalIgnoreCase))
-                {
-                    ReplaceParagraphText(paragraph, $"Fluid: {specification.FluidDisplay}");
-                }
-                else if (paragraphText.StartsWith("MAWP:", StringComparison.OrdinalIgnoreCase))
-                {
-                    ReplaceParagraphText(paragraph, $"MAWP: {specification.PressureDisplay}");
-                }
-                else if (paragraphText.StartsWith("SV:", StringComparison.OrdinalIgnoreCase))
-                {
-                    ReplaceParagraphText(paragraph, $"SV: Inner vessel safety valves set pressure will be {specification.PressureDisplay.ToLowerInvariant()}.");
-                }
-            }
-
-            InsertAccessoryTable(body, specification.AccessoryItems);
-            document.MainDocumentPart?.Document?.Save();
-        }
-
-        private static void ReplaceParagraphText(Paragraph paragraph, string newText)
-        {
-            paragraph.RemoveAllChildren<Run>();
-            paragraph.Append(new Run(new Text(newText) { Space = SpaceProcessingModeValues.Preserve }));
-        }
-
-        private static void InsertAccessoryTable(Body body, IReadOnlyCollection<EN13458AccessoryItemVM> accessoryItems)
-        {
-            var anchorParagraph = body.Descendants<Paragraph>()
-                .FirstOrDefault(x => string.Equals(x.InnerText?.Trim(), "Flow schematic: See P&ID below", StringComparison.OrdinalIgnoreCase));
-
-            if (anchorParagraph == null)
-            {
-                return;
-            }
-
-            OpenXmlElement insertAfter = anchorParagraph;
-            var heading = new Paragraph(new Run(new RunProperties(new Bold()), new Text("Accessories List")));
-            insertAfter.InsertAfterSelf(heading);
-            insertAfter = heading;
-
-            if (accessoryItems.Count == 0)
-            {
-                var emptyParagraph = new Paragraph(new Run(new Text("No accessory added.")));
-                insertAfter.InsertAfterSelf(emptyParagraph);
-                return;
-            }
-
-            var table = new Table(
-                new TableProperties(
-                    new TableBorders(
-                        new TopBorder { Val = BorderValues.Single, Size = 6 },
-                        new BottomBorder { Val = BorderValues.Single, Size = 6 },
-                        new LeftBorder { Val = BorderValues.Single, Size = 6 },
-                        new RightBorder { Val = BorderValues.Single, Size = 6 },
-                        new InsideHorizontalBorder { Val = BorderValues.Single, Size = 4 },
-                        new InsideVerticalBorder { Val = BorderValues.Single, Size = 4 })));
-
-            table.Append(
-                CreateAccessoryRow("Group", "Item", "Stock Code", "Description", "Qty", "Unit", true));
-
-            foreach (var item in accessoryItems)
-            {
-                table.Append(CreateAccessoryRow(
-                    item.GroupName,
-                    item.ItemName,
-                    item.StockCode,
-                    item.Description,
-                    item.Quantity.ToString("N2", CultureInfo.InvariantCulture),
-                    item.Unit,
-                    false));
-            }
-
-            insertAfter.InsertAfterSelf(table);
-        }
-
-        private static TableRow CreateAccessoryRow(string group, string item, string stockCode, string description, string quantity, string unit, bool isHeader)
-        {
-            return new TableRow(
-                CreateAccessoryCell(group, isHeader),
-                CreateAccessoryCell(item, isHeader),
-                CreateAccessoryCell(stockCode, isHeader),
-                CreateAccessoryCell(description, isHeader),
-                CreateAccessoryCell(quantity, isHeader),
-                CreateAccessoryCell(unit, isHeader));
-        }
-
-        private static TableCell CreateAccessoryCell(string text, bool bold)
-        {
-            var runProperties = new RunProperties();
-            if (bold)
-            {
-                runProperties.Append(new Bold());
-            }
-
-            return new TableCell(
-                new Paragraph(new Run(runProperties, new Text(text ?? string.Empty) { Space = SpaceProcessingModeValues.Preserve })));
-        }
-
         private double? ReadLocalizedDoubleFromForm(string key, double? fallback = null)
         {
             if (!Request.HasFormContentType)
@@ -1475,34 +947,5 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.MaterialExternalProperties = materials.ToDictionary(x => x.Id.ToString(), x => new { elasticModulus = x.ElasticModulus, yieldFactorK = x.YieldFactorK });
         }
 
-        private static void WriteSectionHeader(ExcelWorksheet ws, int row, string title)
-        {
-            ws.Cells[row, 1].Value = title;
-            ws.Cells[row, 1, row, 2].Merge = true;
-            ws.Cells[row, 1, row, 2].Style.Font.Bold = true;
-            ws.Cells[row, 1, row, 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            ws.Cells[row, 1, row, 2].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightSteelBlue);
-            ws.Cells[row, 1, row, 2].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-        }
-
-        private static int WriteKeyValues(ExcelWorksheet ws, int startRow, List<(string Label, object Value)> items)
-        {
-            var row = startRow;
-            foreach (var item in items)
-            {
-                ws.Cells[row, 1].Value = item.Label;
-                ws.Cells[row, 2].Value = item.Value;
-                ws.Cells[row, 1, row, 2].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                row++;
-            }
-
-            return row + 1;
-        }
-
-        private static int WriteSection(ExcelWorksheet ws, int startRow, string title, List<(string Label, object Value)> items)
-        {
-            WriteSectionHeader(ws, startRow, title);
-            return WriteKeyValues(ws, startRow + 1, items);
-        }
     }
 }

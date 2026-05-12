@@ -90,6 +90,53 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 .ToList();
         }
 
+        public async Task<List<GeneratedStockCodeListDto>> GetFilteredAsync(GeneratedStockCodeFilterDto filter)
+        {
+            var normalizedSearch = filter.SearchTerm?.Trim();
+            var normalizedMainGroup = filter.MainGroupCode?.Trim();
+            var normalizedSubGroup = filter.SubGroupCode?.Trim();
+            var take = Math.Clamp(filter.Take ?? 500, 1, 1000);
+
+            var codes = await GetAllAsync();
+
+            var query = codes.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(normalizedSearch))
+            {
+                query = query.Where(x =>
+                    ContainsInvariant(x.GeneratedCode, normalizedSearch)
+                    || ContainsInvariant(x.Description, normalizedSearch)
+                    || ContainsInvariant(x.RuleName, normalizedSearch)
+                    || ContainsInvariant(x.SubGroupName, normalizedSearch));
+            }
+
+            if (!string.IsNullOrWhiteSpace(normalizedMainGroup))
+            {
+                query = query.Where(x => string.Equals(x.MainGroupCode, normalizedMainGroup, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrWhiteSpace(normalizedSubGroup))
+            {
+                query = query.Where(x => string.Equals(x.SubGroupCode, normalizedSubGroup, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (filter.OnlyWithPrice)
+            {
+                query = query.Where(x => x.UnitPrice.HasValue && x.UnitPrice.Value > 0);
+            }
+
+            return query
+                .OrderBy(x => x.GeneratedCode)
+                .Take(take)
+                .ToList();
+        }
+
+        private static bool ContainsInvariant(string? value, string searchTerm)
+        {
+            return !string.IsNullOrWhiteSpace(value)
+                && value.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<GeneratedStockCodeDetailDto?> GetByIdAsync(Guid id)
         {
             var entity = await _repository.GetByIdAsync(id, tracking: false);
