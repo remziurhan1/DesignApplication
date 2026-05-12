@@ -17,7 +17,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             // Design-time connection string
             optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.UseSqlServer(
-                "Data Source=DIZAYN-REMZI\\MSSQLSERVER02;Initial Catalog=dap34;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+                @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Application Name=""SQL Server Management Studio"";Command Timeout=0"
             );
 
             return new AppDbContext(optionsBuilder.Options);
