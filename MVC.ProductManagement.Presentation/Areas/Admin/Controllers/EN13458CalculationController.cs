@@ -494,7 +494,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 var resultVm = EN13458CalculationVmMapper.MapResultVm(result);
                 resultVm.IsEditMode = isEditMode;
                 await PopulateResultDisplayNamesAsync(resultVm);
-                ViewBag.CostTable = await _service.BuildMaterialCostTableAsync(result);
                 return View("Result", resultVm);
             }
             catch (InvalidOperationException ex)

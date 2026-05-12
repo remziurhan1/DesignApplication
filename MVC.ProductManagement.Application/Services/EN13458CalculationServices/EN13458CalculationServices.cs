@@ -511,9 +511,12 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             item.StockCodeName = stockInfo == null
                 ? string.Empty
                 : BuildStockDisplayName(stockInfo.GeneratedCode, stockInfo.Description, stockInfo.RuleName);
-            item.StockUnitPrice = stockInfo == null ? 0 : Convert.ToDouble(stockInfo.UnitPrice ?? 0m);
+            item.StockUnitPrice = stockInfo == null ? 0 : ResolveGeneratedStockCodeUnitPrice(stockInfo);
             item.UseManualUnitPrice = useManualUnitPrice;
             item.ManualUnitPrice = useManualUnitPrice ? NormalizeNullablePrice(manualUnitPrice) : null;
+            item.PriceSource = useManualUnitPrice
+                ? "ManualUnitPrice"
+                : stockInfo == null ? "None" : ResolveGeneratedStockCodeUnitPriceSource(stockInfo);
             item.UnitPrice = ResolveEffectiveUnitPrice(item.StockUnitPrice, item.UseManualUnitPrice, item.ManualUnitPrice);
             item.ItemCost = item.Quantity * item.UnitPrice;
             item.ModifiedBy = modifiedBy;
@@ -919,13 +922,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 UsedThicknessBandMin = form.ThicknessMin,
                 UsedThicknessBandMax = form.ThicknessMax,
                 DensitySource = "Material.Density",
-                PriceSource = ResolveFormPriceSource(form),
+                PriceSource = "None",
                 StockUnitPrice = 0,
                 UnitPrice = 0,
                 ItemCost = 0
             };
 
-            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: ResolveFormFallbackUnitPrice(form));
+            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
         }
 
         private async Task<EN13458MaterialCostRowDTO> BuildBombeLaborRowAsync(string itemKey, int sortOrder, string itemName, Guid materialId, double quantity, Guid? selectedRateId, EN13458CostAnalysisItem? previous)
@@ -1128,8 +1131,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 row.GeneratedStockCodeId = selectedCode.Id;
                 row.StockCode = selectedCode.GeneratedCode;
                 row.StockCodeName = BuildStockDisplayName(selectedCode.GeneratedCode, selectedCode.Description, selectedCode.RuleName);
-                row.StockUnitPrice = Convert.ToDouble(selectedCode.UnitPrice ?? 0m);
-                row.PriceSource = "GeneratedStockCode.UnitPrice";
+                row.StockUnitPrice = ResolveGeneratedStockCodeUnitPrice(selectedCode);
+                row.PriceSource = ResolveGeneratedStockCodeUnitPriceSource(selectedCode);
             }
             else
             {
@@ -1162,11 +1165,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             return row;
         }
 
-        private static double ResolveFormFallbackUnitPrice(MaterialForm form)
-            => form.TargetPrice.HasValue && form.TargetPrice.Value > 0d ? form.TargetPrice.Value : form.UnitPrice;
+        private static double ResolveGeneratedStockCodeUnitPrice(GeneratedStockCode stockCode)
+            => Convert.ToDouble(stockCode.UnitPrice ?? 0m);
 
-        private static string ResolveFormPriceSource(MaterialForm form)
-            => form.TargetPrice.HasValue && form.TargetPrice.Value > 0d ? "MaterialForm.TargetPrice" : form.UnitPrice > 0d ? "MaterialForm.UnitPrice" : "None";
+        private static string ResolveGeneratedStockCodeUnitPriceSource(GeneratedStockCode stockCode)
+            => stockCode.UnitPrice.HasValue && stockCode.UnitPrice.Value > 0m
+                ? "GeneratedStockCode.UnitPrice"
+                : "None";
 
         private static double ResolveUsedYieldStrength(EN13458ResultDTO result, string itemKey)
             => itemKey switch
@@ -1196,9 +1201,9 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private async Task<double> ResolveUnitPriceAsync(string stockCode, Guid? generatedStockCodeId)
         {
             var generatedCode = await ResolveGeneratedStockCodeAsync(generatedStockCodeId, stockCode);
-            if (generatedCode?.UnitPrice != null)
+            if (generatedCode != null)
             {
-                return Convert.ToDouble(generatedCode.UnitPrice.Value);
+                return ResolveGeneratedStockCodeUnitPrice(generatedCode);
             }
 
             if (string.IsNullOrWhiteSpace(stockCode))
@@ -1206,19 +1211,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 return 0;
             }
 
-            var today = DateTime.UtcNow.Date;
-            var unitPrice = await _context.StockCardPrices
-                .AsNoTracking()
-                .Where(p => p.StockCard.StockCode8 == stockCode
-                    && p.IsActive
-                    && p.Status != Status.Deleted
-                    && p.ValidFrom.Date <= today
-                    && (p.ValidTo == null || p.ValidTo.Value.Date >= today))
-                .OrderByDescending(p => p.ValidFrom)
-                .Select(p => (double?)p.UnitPrice)
-                .FirstOrDefaultAsync();
+            return 0;
 
-            return unitPrice ?? 0;
         }
 
         private async Task<int> GetNextSortOrderAsync(Guid costAnalysisId)
