@@ -24,7 +24,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
             CancellationToken cancellationToken = default)
         {
             var datasheets = await _repository.GetByStockCardAsync(stockCardId, cancellationToken);
-            return datasheets.Select(MapToDto).ToList();
+            return datasheets.Select(x => MapToDto(x)).ToList();
         }
 
         public async Task<DatasheetDto> GetDatasheetByIdAsync(
