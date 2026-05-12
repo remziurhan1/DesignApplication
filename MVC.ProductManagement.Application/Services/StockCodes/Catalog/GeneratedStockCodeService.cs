@@ -1,8 +1,6 @@
 using MVC.ProductManagement.Application.DTOs.StockCodes.Catalog;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Catalog;
-using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Catalog;
-using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
@@ -17,20 +15,20 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
         private readonly IStockSubCodeGroupRepository _subGroupRepository;
         private readonly IStockMainCodeGroupRepository _mainGroupRepository;
         private readonly IStockSubCodeRuleRepository _ruleRepository;
-        private readonly AppDbContext _context;
+        private readonly IGeneratedStockCodeInventoryRepository _inventoryRepository;
 
         public GeneratedStockCodeService(
             IGeneratedStockCodeRepository repository,
             IStockSubCodeGroupRepository subGroupRepository,
             IStockMainCodeGroupRepository mainGroupRepository,
             IStockSubCodeRuleRepository ruleRepository,
-            AppDbContext context)
+            IGeneratedStockCodeInventoryRepository inventoryRepository)
         {
             _repository = repository;
             _subGroupRepository = subGroupRepository;
             _mainGroupRepository = mainGroupRepository;
             _ruleRepository = ruleRepository;
-            _context = context;
+            _inventoryRepository = inventoryRepository;
         }
 
         public async Task<List<GeneratedStockCodeListDto>> GetAllAsync(Guid? subGroupId = null)
@@ -47,16 +45,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var mainGroups = await _mainGroupRepository.GetAllAsync(x => mainGroupIds.Contains(x.Id), tracking: false);
             var mainGroupsById = mainGroups.ToDictionary(x => x.Id);
             var codeIds = entities.Select(x => x.Id).ToList();
-            var lastStocks = await _context.GeneratedStockCodeInventoryMovements
-                .AsNoTracking()
-                .Where(x => codeIds.Contains(x.GeneratedStockCodeId))
-                .GroupBy(x => x.GeneratedStockCodeId)
-                .Select(g => new
-                {
-                    GeneratedStockCodeId = g.Key,
-                    CurrentStock = g.OrderByDescending(x => x.MovementDate).ThenByDescending(x => x.CreatedDate).Select(x => x.StockAfter).FirstOrDefault()
-                })
-                .ToDictionaryAsync(x => x.GeneratedStockCodeId, x => x.CurrentStock);
+            var lastStocks = await _inventoryRepository.GetCurrentStocksAsync(codeIds);
 
             return entities
                 .OrderByDescending(x => x.CreatedDate)
@@ -356,11 +345,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var entities = await _repository.GetAllAsync(x => x.StockSubCodeGroupId == subGroupId);
             foreach (var entity in entities)
             {
-                var selectedRuleIds = await _context.GeneratedStockCodeRuleSelections
-                    .AsNoTracking()
-                    .Where(x => x.GeneratedStockCodeId == entity.Id)
-                    .Select(x => x.StockSubCodeRuleId)
-                    .ToListAsync();
+                var selectedRuleIds = (await _inventoryRepository.GetSelectedRuleIdsAsync(entity.Id)).ToList();
 
                 if (!selectedRuleIds.Any() && entity.StockSubCodeRuleId.HasValue)
                 {
@@ -382,24 +367,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 .Distinct()
                 .ToList();
 
-            var existing = _context.GeneratedStockCodeRuleSelections
-                .Where(x => x.GeneratedStockCodeId == generatedStockCodeId)
-                .ToList();
-
-            if (existing.Any())
-            {
-                _context.GeneratedStockCodeRuleSelections.RemoveRange(existing);
-            }
-
-            if (normalizedIds.Any())
-            {
-                var rows = normalizedIds.Select(ruleId => new GeneratedStockCodeRuleSelection
-                {
-                    GeneratedStockCodeId = generatedStockCodeId,
-                    StockSubCodeRuleId = ruleId
-                });
-                await _context.GeneratedStockCodeRuleSelections.AddRangeAsync(rows);
-            }
+            await _inventoryRepository.ReplaceRuleSelectionsAsync(generatedStockCodeId, normalizedIds);
         }
 
         private static string? Normalize(string? text)
@@ -459,27 +427,23 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
             var code = await _repository.GetByIdAsync(generatedStockCodeId, tracking: false)
                 ?? throw new Exception("Generated stock code not found");
 
-            return await _context.GeneratedStockCodeInventoryMovements
-                .AsNoTracking()
-                .Where(x => x.GeneratedStockCodeId == generatedStockCodeId)
-                .OrderByDescending(x => x.MovementDate)
-                .ThenByDescending(x => x.CreatedDate)
-                .Select(x => new GeneratedStockCodeInventoryMovementDto
-                {
-                    Id = x.Id,
-                    GeneratedStockCodeId = x.GeneratedStockCodeId,
-                    GeneratedCode = code.GeneratedCode,
-                    MovementType = x.MovementType,
-                    Quantity = x.Quantity,
-                    StockBefore = x.StockBefore,
-                    StockAfter = x.StockAfter,
-                    MovementDate = x.MovementDate,
-                    StockProductGroupId = x.StockProductGroupId,
-                    StockProductGroupName = x.StockProductGroup != null ? x.StockProductGroup.Name : null,
-                    ReferenceDocument = x.ReferenceDocument,
-                    Description = x.Description
-                })
-                .ToListAsync();
+            var movements = await _inventoryRepository.GetMovementsAsync(generatedStockCodeId);
+
+            return movements.Select(x => new GeneratedStockCodeInventoryMovementDto
+            {
+                Id = x.Id,
+                GeneratedStockCodeId = x.GeneratedStockCodeId,
+                GeneratedCode = code.GeneratedCode,
+                MovementType = x.MovementType,
+                Quantity = x.Quantity,
+                StockBefore = x.StockBefore,
+                StockAfter = x.StockAfter,
+                MovementDate = x.MovementDate,
+                StockProductGroupId = x.StockProductGroupId,
+                StockProductGroupName = x.StockProductGroup != null ? x.StockProductGroup.Name : null,
+                ReferenceDocument = x.ReferenceDocument,
+                Description = x.Description
+            }).ToList();
         }
 
         public async Task<GeneratedStockCodeInventoryMovementDto> CreateInventoryMovementAsync(GeneratedStockCodeInventoryMovementCreateDto dto, string userName = "System")
@@ -492,13 +456,7 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 throw new Exception("Quantity must be greater than zero.");
             }
 
-            var lastStock = await _context.GeneratedStockCodeInventoryMovements
-                .AsNoTracking()
-                .Where(x => x.GeneratedStockCodeId == dto.GeneratedStockCodeId)
-                .OrderByDescending(x => x.MovementDate)
-                .ThenByDescending(x => x.CreatedDate)
-                .Select(x => x.StockAfter)
-                .FirstOrDefaultAsync();
+            var lastStock = await _inventoryRepository.GetLastStockAsync(dto.GeneratedStockCodeId);
 
             var stockBefore = lastStock;
             int stockAfter;
@@ -537,17 +495,13 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Catalog
                 CreatedDate = DateTime.UtcNow
             };
 
-            _context.GeneratedStockCodeInventoryMovements.Add(movement);
-            await _context.SaveChangesAsync();
+            await _inventoryRepository.AddMovementAsync(movement);
+            await _inventoryRepository.CommitAsync();
 
             string? groupName = null;
             if (movement.StockProductGroupId.HasValue)
             {
-                groupName = await _context.StockProductGroups
-                    .AsNoTracking()
-                    .Where(x => x.Id == movement.StockProductGroupId.Value)
-                    .Select(x => x.Name)
-                    .FirstOrDefaultAsync();
+                groupName = await _inventoryRepository.GetStockProductGroupNameAsync(movement.StockProductGroupId.Value);
             }
 
             return new GeneratedStockCodeInventoryMovementDto

@@ -1,7 +1,6 @@
 ﻿using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
 using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Enums;
-using MVC.ProductManagement.Infrastructure.DataAccess.Interfaces;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using System;
 using System.Collections.Generic;
@@ -22,25 +21,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
         public async Task<List<MaterialFormListDto>> GetAllAsync()
         {
             var forms = await _materialFormRepository.GetAllAsync();
-            return forms.Select(f => new MaterialFormListDto
-            {
-                Id = f.Id,
-                MaterialId = f.MaterialId,
-                FormType = f.FormType,
-                MaterialClass = f.MaterialClass,
-                MaterialFamily = f.MaterialFamily,
-                Norm = f.Norm,
-                SymbolicName = f.SymbolicName,
-                StockCode = f.StockCode,
-                ThicknessMin = f.ThicknessMin,
-                ThicknessMax = f.ThicknessMax,
-                UnitPrice=f.UnitPrice,
-                TargetPrice=f.TargetPrice,
-                ColdStretchYieldStrength = f.ColdStretchYieldStrength,
-                SectionArea = f.SectionArea,
-                MomentOfInertia = f.MomentOfInertia,
-                SectionModulus = f.SectionModulus
-            }).ToList();
+            return MapListDtos(forms, includeMaterialId: true);
         }
         public async Task<IEnumerable<MaterialForm>> GetAllWithMaterialAsync()
         {
@@ -54,47 +35,13 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
         public async Task<List<MaterialFormListDto>> GetByMaterialIdAsync(Guid materialId)
         {
             var forms = await _materialFormRepository.GetByMaterialIdAsync(materialId);
-            return forms.Select(f => new MaterialFormListDto
-            {
-                Id = f.Id,
-                FormType = f.FormType,
-                MaterialClass = f.MaterialClass,
-                MaterialFamily = f.MaterialFamily,
-                Norm = f.Norm,
-                SymbolicName = f.SymbolicName,
-                StockCode = f.StockCode,
-                ThicknessMin = f.ThicknessMin,
-                ThicknessMax = f.ThicknessMax,
-                UnitPrice = f.UnitPrice,
-                TargetPrice = f.TargetPrice,
-                ColdStretchYieldStrength = f.ColdStretchYieldStrength,
-                SectionArea = f.SectionArea,
-                MomentOfInertia = f.MomentOfInertia,
-                SectionModulus = f.SectionModulus
-            }).ToList();
+            return MapListDtos(forms, includeMaterialId: false);
         }
 
         public async Task<List<MaterialFormListDto>> GetByFormTypeAsync(Domain.Enums.MaterialFormType formType)
         {
             var forms = await _materialFormRepository.GetByFormTypeAsync(formType);
-            return forms.Select(f => new MaterialFormListDto
-            {
-                Id = f.Id,
-                FormType = f.FormType,
-                MaterialClass = f.MaterialClass,
-                MaterialFamily = f.MaterialFamily,
-                Norm = f.Norm,
-                SymbolicName = f.SymbolicName,
-                StockCode = f.StockCode,
-                ThicknessMin = f.ThicknessMin,
-                ThicknessMax = f.ThicknessMax,
-                UnitPrice = f.UnitPrice,
-                TargetPrice = f.TargetPrice,
-                ColdStretchYieldStrength = f.ColdStretchYieldStrength,
-                SectionArea = f.SectionArea,
-                MomentOfInertia = f.MomentOfInertia,
-                SectionModulus = f.SectionModulus
-            }).ToList();
+            return MapListDtos(forms, includeMaterialId: false);
         }
 
         public async Task<MaterialFormDetailDto?> GetByIdAsync(Guid id)
@@ -151,7 +98,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 SectionModulus = dto.SectionModulus
             };
 
-            await _materialFormRepository.AddAsync(entity);
+            await _materialFormRepository.AddMaterialFormAsync(entity);
             await _materialFormRepository.SaveChangeAsync();
 
             return new MaterialFormDetailDto
@@ -248,5 +195,41 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             await _materialFormRepository.DeleteAsync(entity);
             await _materialFormRepository.SaveChangeAsync();
         }
+        private static List<MaterialFormListDto> MapListDtos(IEnumerable<MaterialForm> forms, bool includeMaterialId)
+        {
+            var result = new List<MaterialFormListDto>();
+
+            foreach (var form in forms)
+            {
+                var dto = new MaterialFormListDto
+                {
+                    Id = form.Id,
+                    FormType = form.FormType,
+                    MaterialClass = form.MaterialClass,
+                    MaterialFamily = form.MaterialFamily,
+                    Norm = form.Norm,
+                    SymbolicName = form.SymbolicName,
+                    StockCode = form.StockCode,
+                    ThicknessMin = form.ThicknessMin,
+                    ThicknessMax = form.ThicknessMax,
+                    UnitPrice = form.UnitPrice,
+                    TargetPrice = form.TargetPrice,
+                    ColdStretchYieldStrength = form.ColdStretchYieldStrength,
+                    SectionArea = form.SectionArea,
+                    MomentOfInertia = form.MomentOfInertia,
+                    SectionModulus = form.SectionModulus
+                };
+
+                if (includeMaterialId)
+                {
+                    dto.MaterialId = form.MaterialId;
+                }
+
+                result.Add(dto);
+            }
+
+            return result;
+        }
+
     }
 }

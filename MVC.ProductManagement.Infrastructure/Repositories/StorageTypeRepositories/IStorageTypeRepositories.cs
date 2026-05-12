@@ -10,6 +10,7 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.StorageTypeRepositor
 {
     public interface IStorageTypeRepositories : IAsyncRepository, IAsyncFindableRepository<StorageType>, IAsyncInsertableRepository<StorageType>, IAsyncQueryableRepository<StorageType>, IAsyncDeletableRepository<StorageType>, IAsyncUpdatebleRepository<StorageType>
     {
-
+        Task<bool> ExistsByNameAsync(string name);
+        Task AddStorageTypeAsync(StorageType entity);
     }
 }

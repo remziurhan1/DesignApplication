@@ -16,6 +16,7 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories
      IAsyncDeletableRepository<Material>,
      IAsyncUpdatebleRepository<Material>
     {
-        Task<Material> GetByNameAsync(string materialName);
+        Task<Material?> GetByNameAsync(string materialName);
+        Task AddMaterialAsync(Material entity);
     }
 }

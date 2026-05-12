@@ -6,9 +6,11 @@ using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.AD2000Repositories;
 using MVC.ProductManagement.Infrastructure.Repositories.EN13458Repositories;
 using MVC.ProductManagement.Infrastructure.Repositories.CostingRepositories;
+using MVC.ProductManagement.Infrastructure.Repositories.DesignPlanningRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.IAllowableStressRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
+using MVC.ProductManagement.Infrastructure.Repositories.SalesRequestRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Catalog;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.S;
@@ -42,18 +44,24 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IEN13458Repository, EN13458Repository>();
             services.AddScoped<IAD2000Repository, AD2000Repository>();
             services.AddScoped<ICostSettingsRepository, CostSettingsRepository>();
+            services.AddScoped<IPlanningRepository, PlanningRepository>();
             services.AddScoped<IStorageTypeRepositories, StorageTypeRepository>();
             services.AddScoped<IStorageTypePropertiesRepository, StorageTypePropertiesRepository>();
             services.AddScoped<IFluidRepositories, FluidRepository>();
             services.AddScoped<IStockCardRepositories, StockCardRepository>();
+            services.AddScoped<IStockCardDatasheetRepository, StockCardDatasheetRepository>();
+            services.AddScoped<IStockCardPriceRepository, StockCardPriceRepository>();
+            services.AddScoped<IStockCardInventoryRepository, StockCardInventoryRepository>();
             services.AddScoped<ISProductRepositories, SProductRepository>();
             services.AddScoped<ISProductGroupRepositories, SProductGroupRepository>();
             services.AddScoped<IStockMainCodeGroupRepository, StockMainCodeGroupRepository>();
             services.AddScoped<IStockSubCodeGroupRepository, StockSubCodeGroupRepository>();
             services.AddScoped<IStockSubCodeRuleRepository, StockSubCodeRuleRepository>();
             services.AddScoped<IGeneratedStockCodeRepository, GeneratedStockCodeRepository>();
+            services.AddScoped<IGeneratedStockCodeInventoryRepository, GeneratedStockCodeInventoryRepository>();
             services.AddScoped<IStockProductGroupRepository, StockProductGroupRepository>();
             services.AddScoped<IStockProductGroupItemRepository, StockProductGroupItemRepository>();
+            services.AddScoped<ISalesRequestRepository, SalesRequestRepository>();
 
 
 

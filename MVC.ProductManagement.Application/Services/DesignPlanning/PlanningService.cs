@@ -1,6 +1,5 @@
 using DesignPlanning.Entities;
-using Microsoft.EntityFrameworkCore;
-using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Infrastructure.Repositories.DesignPlanningRepositories;
 using TaskStatus = DesignPlanning.Entities.TaskStatus;
 
 namespace DesignPlanning.Business;
@@ -8,29 +7,23 @@ namespace DesignPlanning.Business;
 public class PlanningService : IPlanningService
 {
     private static readonly TimeSpan WorkStart = new(8, 0, 0);
-    private readonly AppDbContext _context;
+    private readonly IPlanningRepository _planningRepository;
 
-    public PlanningService(AppDbContext context)
+    public PlanningService(IPlanningRepository planningRepository)
     {
-        _context = context;
+        _planningRepository = planningRepository;
     }
 
     public async Task GenerateProjectTasksAsync(Guid projectId)
     {
-        var project = await _context.DesignPlanningProjects.FindAsync(projectId) ?? throw new InvalidOperationException("Proje bulunamadı.");
-        var hasTasks = await _context.DesignPlanningProjectTasks.AnyAsync(x => x.ProjectId == projectId);
+        var project = await _planningRepository.GetProjectByIdAsync(projectId) ?? throw new InvalidOperationException("Proje bulunamadı.");
+        var hasTasks = await _planningRepository.HasProjectTasksAsync(projectId);
         if (hasTasks) return;
 
-        var templates = await _context.DesignPlanningTaskTemplates
-            .AsNoTracking()
-            .Where(x => x.ProjectTypeId == project.ProjectTypeId && x.IsActive)
-            .OrderBy(x => x.SequenceNo)
-            .ToListAsync();
+        var templates = await _planningRepository.GetActiveTaskTemplatesAsync(project.ProjectTypeId);
 
-        foreach (var template in templates)
+        var projectTasks = templates.Select(template => new ProjectTask
         {
-            _context.DesignPlanningProjectTasks.Add(new ProjectTask
-            {
                 Id = Guid.NewGuid(),
                 ProjectId = project.Id,
                 TaskTemplateId = template.Id,
@@ -43,24 +36,19 @@ public class PlanningService : IPlanningService
                 PlannedStart = project.StartDate.Date.Add(WorkStart),
                 PlannedEnd = project.StartDate.Date.Add(WorkStart),
                 Status = TaskStatus.Waiting
-            });
-        }
+        });
 
-        await _context.SaveChangesAsync();
+        await _planningRepository.AddProjectTasksAsync(projectTasks);
+        await _planningRepository.CommitAsync();
     }
 
     public async Task AutoAssignAndPlanAsync(Guid projectId)
     {
         await GenerateProjectTasksAsync(projectId);
 
-        var project = await _context.DesignPlanningProjects
-            .Include(x => x.ProjectType)
-            .FirstOrDefaultAsync(x => x.Id == projectId) ?? throw new InvalidOperationException("Proje bulunamadı.");
+        var project = await _planningRepository.GetProjectWithTypeAsync(projectId) ?? throw new InvalidOperationException("Proje bulunamadı.");
 
-        var tasks = await _context.DesignPlanningProjectTasks
-            .Where(x => x.ProjectId == projectId)
-            .OrderBy(x => x.SequenceNo)
-            .ToListAsync();
+        var tasks = await _planningRepository.GetProjectTasksOrderedAsync(projectId);
 
         var cursor = NextWorkStart(project.StartDate);
         var inMemoryLoads = new Dictionary<(Guid EmployeeId, DateTime Date), decimal>();
@@ -93,15 +81,12 @@ public class PlanningService : IPlanningService
         }
 
         project.Status = ProjectStatus.Planned;
-        await _context.SaveChangesAsync();
+        await _planningRepository.CommitAsync();
     }
 
     public async Task CompleteTaskAsync(Guid projectTaskId)
     {
-        var task = await _context.DesignPlanningProjectTasks
-            .Include(x => x.Project)
-            .ThenInclude(x => x!.Tasks)
-            .FirstOrDefaultAsync(x => x.Id == projectTaskId) ?? throw new InvalidOperationException("Görev bulunamadı.");
+        var task = await _planningRepository.GetProjectTaskWithProjectTasksAsync(projectTaskId) ?? throw new InvalidOperationException("Görev bulunamadı.");
 
         task.ActualStart ??= DateTime.Now;
         task.ActualEnd = DateTime.Now;
@@ -112,53 +97,34 @@ public class PlanningService : IPlanningService
             task.Project.Status = ProjectStatus.Completed;
         }
 
-        await _context.SaveChangesAsync();
+        await _planningRepository.CommitAsync();
     }
 
     public async Task<IReadOnlyList<ProjectTask>> GetDailyPlanAsync(DateTime date)
     {
         var dayStart = date.Date;
         var dayEnd = dayStart.AddDays(1);
-        return await QueryPlannedTasks()
-            .Where(x => x.PlannedStart < dayEnd && x.PlannedEnd >= dayStart)
-            .OrderBy(x => x.PlannedStart)
-            .ThenBy(x => x.SequenceNo)
-            .ToListAsync();
+        return await _planningRepository.GetPlannedTasksForRangeAsync(dayStart, dayEnd, orderByEmployee: false);
     }
 
     public async Task<IReadOnlyList<ProjectTask>> GetWeeklyPlanAsync(DateTime weekStartDate)
     {
         var start = StartOfWeek(weekStartDate);
         var end = start.AddDays(7);
-        return await QueryPlannedTasks()
-            .Where(x => x.PlannedStart < end && x.PlannedEnd >= start)
-            .OrderBy(x => x.PlannedStart)
-            .ThenBy(x => x.AssignedEmployee!.FullName)
-            .ToListAsync();
+        return await _planningRepository.GetPlannedTasksForRangeAsync(start, end, orderByEmployee: true);
     }
 
-    private IQueryable<ProjectTask> QueryPlannedTasks() => _context.DesignPlanningProjectTasks
-        .AsNoTracking()
-        .Include(x => x.Project).ThenInclude(x => x!.ProjectType)
-        .Include(x => x.AssignedEmployee);
 
     private async Task<Employee?> SelectEmployeeAsync(string role, string? projectTypeName, DateTime plannedDate)
     {
         var keys = new[] { role, projectTypeName ?? string.Empty }.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-        var candidates = await _context.DesignPlanningEmployees
-            .Include(x => x.Expertises)
-            .Where(x => x.IsActive && x.Expertises.Any(e => keys.Contains(e.ExpertiseName)))
-            .ToListAsync();
+        var candidates = await _planningRepository.GetActiveEmployeesByExpertiseAsync(keys);
 
         if (!candidates.Any()) return null;
 
         var weekStart = StartOfWeek(plannedDate);
         var weekEnd = weekStart.AddDays(7);
-        var loads = await _context.DesignPlanningProjectTasks
-            .Where(x => x.AssignedEmployeeId != null && !x.IsPassive && x.PlannedStart < weekEnd && x.PlannedEnd >= weekStart && x.Status != TaskStatus.Completed)
-            .GroupBy(x => x.AssignedEmployeeId!.Value)
-            .Select(g => new { EmployeeId = g.Key, Hours = g.Sum(x => x.DurationUnit == DurationUnit.Hour ? x.DurationValue : x.DurationUnit == DurationUnit.Day ? x.DurationValue * 8 : x.DurationValue * 40) })
-            .ToDictionaryAsync(x => x.EmployeeId, x => x.Hours);
+        var loads = await _planningRepository.GetEmployeeLoadsByWeekAsync(weekStart, weekEnd);
 
         return candidates
             .OrderBy(x => loads.TryGetValue(x.Id, out var hours) ? hours : 0)
@@ -216,9 +182,7 @@ public class PlanningService : IPlanningService
     {
         var dayStart = date.Date;
         var dayEnd = dayStart.AddDays(1);
-        return await _context.DesignPlanningProjectTasks
-            .Where(x => x.AssignedEmployeeId == employeeId && !x.IsPassive && x.Status != TaskStatus.Completed && x.PlannedStart < dayEnd && x.PlannedEnd >= dayStart)
-            .SumAsync(x => x.DurationUnit == DurationUnit.Hour ? x.DurationValue : x.DurationUnit == DurationUnit.Day ? x.DurationValue * 8 : x.DurationValue * 40);
+        return await _planningRepository.GetUsedHoursAsync(employeeId, dayStart, dayEnd);
     }
 
     private static decimal ToHours(decimal duration, DurationUnit unit, Employee? employee) => unit switch

@@ -12,7 +12,7 @@ namespace MVC.ProductManagement.Application.Services.StorageTypeServices
     {
         Task<IDataResult<List<StorageTypeListDTO>>> GetAllAsync();
         Task<IDataResult<StorageTypeDTO>> GetByIdAsync(Guid id);
-        Task<IResult> AddAsync(StorageTypeCreateDTO dto);
+        Task<IResult> CreateAsync(StorageTypeCreateDTO dto);
         Task<IResult> UpdateAsync(StorageTypeUpdateDTO dto);
         Task<IResult> DeleteAsync(Guid id);
     }

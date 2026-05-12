@@ -22,18 +22,25 @@ namespace MVC.ProductManagement.Application.Interfaces.Services
         public async Task<List<YieldStrengthListDto>> GetByMaterialFormIdAsync(Guid materialFormId)
         {
             var list = await _yieldStrengthRepository.GetByMaterialFormIdAsync(materialFormId);
-            return list.Select(y => new YieldStrengthListDto
+            var result = new List<YieldStrengthListDto>();
+
+            foreach (var item in list)
             {
-                Id = y.Id,
-                MaterialFormId = y.MaterialFormId,
-                Temperature = y.Temperature,
-                ThicknessMin = y.ThicknessMin,
-                ThicknessMax = y.ThicknessMax,
-                Rp02 = y.Rp02,
-                Rm = y.Rm,
-                MaterialName=y.MaterialForm.Material.Name,
-                MaterialFormName = $"{y.MaterialForm.FormType} "
-            }).ToList();
+                result.Add(new YieldStrengthListDto
+                {
+                    Id = item.Id,
+                    MaterialFormId = item.MaterialFormId,
+                    Temperature = item.Temperature,
+                    ThicknessMin = item.ThicknessMin,
+                    ThicknessMax = item.ThicknessMax,
+                    Rp02 = item.Rp02,
+                    Rm = item.Rm,
+                    MaterialName = item.MaterialForm.Material.Name,
+                    MaterialFormName = $"{item.MaterialForm.FormType} "
+                });
+            }
+
+            return result;
         }
 
         public async Task<YieldStrengthDetailDto?> GetByIdAsync(Guid id)
@@ -93,15 +100,19 @@ namespace MVC.ProductManagement.Application.Interfaces.Services
             // 3) Kalınlık bandını belirle (yarı-açık: [min, max), yalnızca EN BÜYÜK max için <=)
             var globalMax = candidates.Max(c => c.ThicknessMax);
 
-            var band = candidates
-                .Where(c =>
-                    // [min, max)
-                    (c.ThicknessMin - EPS <= thickness && thickness < c.ThicknessMax - EPS)
-                    // son bandın üst sınırında eşitse dahil et
-                    || (Math.Abs(thickness - c.ThicknessMax) < EPS && Math.Abs(c.ThicknessMax - globalMax) < EPS)
-                )
-                .OrderBy(c => c.Temperature)
-                .ToList();
+            var band = new List<YieldStrength>();
+            foreach (var candidate in candidates)
+            {
+                var isInsideHalfOpenBand = candidate.ThicknessMin - EPS <= thickness && thickness < candidate.ThicknessMax - EPS;
+                var isAtLastBandUpperLimit = Math.Abs(thickness - candidate.ThicknessMax) < EPS && Math.Abs(candidate.ThicknessMax - globalMax) < EPS;
+
+                if (isInsideHalfOpenBand || isAtLastBandUpperLimit)
+                {
+                    band.Add(candidate);
+                }
+            }
+
+            band.Sort((left, right) => left.Temperature.CompareTo(right.Temperature));
 
             if (band.Count == 0) return null; // girilen kalınlık hiçbir banda düşmedi
 
@@ -162,7 +173,7 @@ namespace MVC.ProductManagement.Application.Interfaces.Services
                 Rm = dto.Rm
             };
 
-            await _yieldStrengthRepository.AddAsync(entity);
+            await _yieldStrengthRepository.AddYieldStrengthAsync(entity);
             await _yieldStrengthRepository.SaveChangeAsync();
 
             return new YieldStrengthDetailDto

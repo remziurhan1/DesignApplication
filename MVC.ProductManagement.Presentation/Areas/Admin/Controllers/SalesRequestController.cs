@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities.SalesRequests;
 using MVC.ProductManagement.Domain.Enums;
-using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Application.Services.SalesRequestServices;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs;
 using System.Security.Claims;
 using System.Text.Json.Nodes;
@@ -14,27 +13,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class SalesRequestController : AdminBaseController
     {
-        private readonly AppDbContext _context;
+        private readonly ISalesRequestAdminService _salesRequestService;
         private readonly IWebHostEnvironment _environment;
 
-        public SalesRequestController(AppDbContext context, IWebHostEnvironment environment)
+        public SalesRequestController(ISalesRequestAdminService salesRequestService, IWebHostEnvironment environment)
         {
-            _context = context;
+            _salesRequestService = salesRequestService;
             _environment = environment;
         }
 
         public async Task<IActionResult> Index()
         {
-            await RefreshLinkedPricingAsync();
+            await _salesRequestService.RefreshLinkedPricingAsync();
 
-            var requests = await _context.SalesRequests
-                .AsNoTracking()
-                .Include(x => x.Customer)
-                .Include(x => x.Items)
-                .Include(x => x.Attachments)
-                .Where(x => x.Status != Status.Deleted)
-                .OrderByDescending(x => x.CreatedDate)
-                .ToListAsync();
+            var requests = await _salesRequestService.GetIndexRequestsAsync();
 
             var vm = new SalesRequestIndexVm
             {
@@ -146,7 +138,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 SalesOpenedAt = salesOpenedAt
             };
 
-            var groups = await _context.SalesRequestProductGroups.AsNoTracking().ToDictionaryAsync(x => x.Id);
+            var groups = await _salesRequestService.GetProductGroupsDictionaryAsync();
             var itemOrder = 1;
             foreach (var itemVm in vm.Items)
             {
@@ -191,8 +183,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 });
             }
 
-            _context.SalesRequests.Add(entity);
-            await _context.SaveChangesAsync();
+            await _salesRequestService.CreateAsync(entity);
             await SaveAttachmentsAsync(entity, vm.Attachments);
             return RedirectToAction(nameof(Details), new { id = entity.Id, mode = "manager" });
         }
@@ -200,10 +191,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var entity = await _context.SalesRequests
-                .AsNoTracking()
-                .Include(x => x.Items)
-                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
+            var entity = await _salesRequestService.GetForEditAsync(id, tracking: false);
             if (entity == null) return NotFound();
 
             var vm = new SalesRequestCreateVm
@@ -292,9 +280,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 NormalizeAndValidateItem(vm.Items[i], $"Items[{i}]");
             }
 
-            var entity = await _context.SalesRequests
-                .Include(x => x.Items)
-                .FirstOrDefaultAsync(x => x.Id == id && x.Status != Status.Deleted);
+            var entity = await _salesRequestService.GetForEditAsync(id, tracking: true);
             if (entity == null) return NotFound();
 
             if (vm.RequestReceivedAt.HasValue && vm.RequestReceivedAt.Value.Date > entity.SalesOpenedAt.Date)
@@ -330,15 +316,15 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var existingItems = entity.Items.ToList();
             if (existingItems.Count > 0)
             {
-                _context.SalesRequestItems.RemoveRange(existingItems);
+                _salesRequestService.RemoveItems(existingItems);
             }
 
-            var groups = await _context.SalesRequestProductGroups.AsNoTracking().ToDictionaryAsync(x => x.Id);
+            var groups = await _salesRequestService.GetProductGroupsDictionaryAsync();
             var itemOrder = 1;
             foreach (var itemVm in vm.Items)
             {
                 var group = groups[itemVm.ProductGroupId];
-                _context.SalesRequestItems.Add(new SalesRequestItem
+                await _salesRequestService.AddItemAsync(new SalesRequestItem
                 {
                     SalesRequestId = entity.Id,
                     ProductGroupId = itemVm.ProductGroupId,
@@ -379,7 +365,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 });
             }
 
-            await _context.SaveChangesAsync();
+            await _salesRequestService.CommitAsync();
             await SaveAttachmentsAsync(entity, vm.Attachments);
             TempData["SuccessMessage"] = "Talep başarıyla güncellendi.";
             return RedirectToAction(nameof(Details), new { id = entity.Id, mode = "manager" });
@@ -388,16 +374,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id, string mode = "sales")
         {
-            await RefreshLinkedPricingAsync(id);
+            await _salesRequestService.RefreshLinkedPricingAsync(id);
 
-            var entity = await LoadRequestAsync(id);
+            var entity = await _salesRequestService.LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
-            var revisions = await _context.SalesRequestRevisions
-                .AsNoTracking()
-                .Where(x => x.SalesRequestId == id && x.Status != Status.Deleted)
-                .OrderByDescending(x => x.RevisionNo)
-                .ToListAsync();
+            var revisions = await _salesRequestService.GetRevisionsAsync(id);
 
             var vm = MapDetailVm(entity, revisions, string.Equals(mode, "manager", StringComparison.OrdinalIgnoreCase));
             vm.NewComment.SalesRequestId = id;
@@ -408,16 +390,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Revision(Guid id, int revisionNo, string mode = "manager")
         {
-            await RefreshLinkedPricingAsync(id);
+            await _salesRequestService.RefreshLinkedPricingAsync(id);
 
-            var entity = await LoadRequestAsync(id);
+            var entity = await _salesRequestService.LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
-            var revisions = await _context.SalesRequestRevisions
-                .AsNoTracking()
-                .Where(x => x.SalesRequestId == id && x.Status != Status.Deleted)
-                .OrderByDescending(x => x.RevisionNo)
-                .ToListAsync();
+            var revisions = await _salesRequestService.GetRevisionsAsync(id);
 
             var detailVm = MapDetailVm(entity, revisions, string.Equals(mode, "manager", StringComparison.OrdinalIgnoreCase));
             var selectedRevision = detailVm.RevisionCosts
@@ -446,9 +424,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Pricing(Guid id)
         {
-            await RefreshLinkedPricingAsync(id);
+            await _salesRequestService.RefreshLinkedPricingAsync(id);
 
-            var entity = await LoadRequestAsync(id);
+            var entity = await _salesRequestService.LoadRequestAsync(id);
             if (entity == null) return NotFound();
 
             var availableAnalyses = await GetAvailableAnalysesAsync();
@@ -497,9 +475,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             vm.AvailableAnalyses = await GetAvailableAnalysesAsync();
 
-            var entity = await _context.SalesRequests
-                .Include(x => x.Items)
-                .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted);
+            var entity = await _salesRequestService.GetForPricingAsync(vm.SalesRequestId);
             if (entity == null) return NotFound();
 
             var analysisMap = vm.AvailableAnalyses.ToDictionary(x => x.Key, StringComparer.OrdinalIgnoreCase);
@@ -559,7 +535,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             entity.PricingCompletedAt = DateTime.UtcNow;
             entity.ApprovedAt = entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved ? DateTime.UtcNow : null;
 
-            await _context.SaveChangesAsync();
+            await _salesRequestService.CommitAsync();
             TempData["SuccessMessage"] = "Talep kalemleri güncellendi. Satış yöneticisi onayı sonrası satış sorumlusu ekranına gönderildi.";
 
             if (entity.WorkflowStatus == SalesRequestWorkflowStatus.Approved)
@@ -580,10 +556,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
             }
 
-            var request = await _context.SalesRequests.Include(x => x.Items).FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted);
+            var request = await _salesRequestService.GetWithItemsAsync(vm.SalesRequestId);
             if (request == null) return NotFound();
 
-            var group = await _context.SalesRequestProductGroups.FirstAsync(x => x.Id == vm.ProductGroupId);
+            var group = await _salesRequestService.GetProductGroupAsync(vm.ProductGroupId, tracking: true) ?? throw new InvalidOperationException("Ürün grubu bulunamadı.");
             var nextOrder = request.Items.Count + 1;
             request.Items.Add(new SalesRequestItem
             {
@@ -627,25 +603,19 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             });
 
             request.WorkflowStatus = SalesRequestWorkflowStatus.Submitted;
-            await _context.SaveChangesAsync();
+            await _salesRequestService.CommitAsync();
             return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
         }
 
         private async Task PopulateFormAsync(SalesRequestCreateVm vm)
         {
-            vm.Customers = await _context.Customers
-                .AsNoTracking()
-                .Where(x => x.Status != Status.Deleted && x.IsActive)
-                .OrderBy(x => x.CompanyName)
+            vm.Customers = (await _salesRequestService.GetActiveCustomersAsync())
                 .Select(x => new SelectListItem(x.CompanyName, x.Id.ToString()))
-                .ToListAsync();
+                .ToList();
 
-            vm.ProductGroups = await _context.SalesRequestProductGroups
-                .AsNoTracking()
-                .Where(x => x.Status != Status.Deleted && x.IsActive)
-                .OrderBy(x => x.DisplayOrder)
+            vm.ProductGroups = (await _salesRequestService.GetActiveProductGroupsAsync())
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
-                .ToListAsync();
+                .ToList();
         }
 
         private async Task PopulateRequesterInfoAsync(SalesRequestCreateVm vm, bool overwriteExisting)
@@ -656,9 +626,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return;
             }
 
-            var profile = await _context.EmployeeProfiles
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UserId == userId);
+            var profile = await _salesRequestService.GetEmployeeProfileAsync(userId);
 
             var requestName = profile?.FullName ?? User.Identity?.Name;
             var requestDepartment = profile?.Department;
@@ -691,21 +659,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
             }
 
-            var request = await _context.SalesRequests
-                .FirstOrDefaultAsync(x => x.Id == vm.SalesRequestId && x.Status != Status.Deleted);
+            var request = await _salesRequestService.GetByIdAsync(vm.SalesRequestId);
             if (request == null)
             {
                 return NotFound();
             }
 
-            _context.SalesRequestComments.Add(new SalesRequestComment
+            await _salesRequestService.AddCommentAsync(new SalesRequestComment
             {
                 SalesRequestId = request.Id,
                 CommentText = vm.CommentText.Trim(),
                 CommentedBy = User.Identity?.Name ?? "System"
             });
-
-            await _context.SaveChangesAsync();
             TempData["SuccessMessage"] = "Yorum kaydedildi.";
             return RedirectToAction(nameof(Details), new { id = vm.SalesRequestId, mode = "manager" });
         }
@@ -713,26 +678,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         private async Task PopulateSubItemAsync(SalesRequestAddSubItemVm vm, Guid requestId)
         {
             vm.SalesRequestId = requestId;
-            vm.ProductGroups = await _context.SalesRequestProductGroups
-                .AsNoTracking()
-                .Where(x => x.Status != Status.Deleted && x.IsActive)
-                .OrderBy(x => x.DisplayOrder)
+            vm.ProductGroups = (await _salesRequestService.GetActiveProductGroupsAsync())
                 .Select(x => new SelectListItem($"{x.Code} - {x.Name}", x.Id.ToString()))
-                .ToListAsync();
+                .ToList();
         }
 
-        private async Task<SalesRequest?> LoadRequestAsync(Guid id)
-        {
-            return await _context.SalesRequests
-                .AsNoTracking()
-                .Include(x => x.Customer)
-                .Include(x => x.Attachments)
-                .Include(x => x.Items)
-                    .ThenInclude(x => x.ProductGroup)
-                .Include(x => x.Comments)
-                .Where(x => x.Id == id && x.Status != Status.Deleted)
-                .FirstOrDefaultAsync();
-        }
 
         private SalesRequestDetailVm MapDetailVm(SalesRequest entity, List<SalesRequestRevision> revisions, bool isManagerView)
         {
@@ -953,59 +903,27 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         private async Task<List<SalesRequestPricingAnalysisOptionVm>> GetAvailableAnalysesAsync()
         {
-            var ad2000Analyses = await _context.AD2000CostAnalyses
-                .AsNoTracking()
-                .Where(x => x.Status != Status.Deleted && x.AD2000Calculation.Status != Status.Deleted)
-                .Select(x => new
-                {
-                    CalculationType = SalesRequestCalculationType.AD2000,
-                    CalculationId = x.AD2000CalculationId,
-                    CostAnalysisId = x.Id,
-                    CalculationName = x.AD2000Calculation.Name,
-                    RevisionCode = x.RevisionCode,
-                    TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d,
-                    MinimumSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.MinimumSalesPrice).FirstOrDefault(),
-                    RecommendedSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.SalesPrice).FirstOrDefault()
-                })
-                .ToListAsync();
+            var analyses = await _salesRequestService.GetAvailableAnalysesAsync();
 
-            var en13458Analyses = await _context.EN13458CostAnalyses
-                .AsNoTracking()
-                .Where(x => x.Status != Status.Deleted && x.EN13458Calculation.Status != Status.Deleted)
-                .Select(x => new
-                {
-                    CalculationType = SalesRequestCalculationType.EN13458,
-                    CalculationId = x.EN13458CalculationId,
-                    CostAnalysisId = x.Id,
-                    CalculationName = x.EN13458Calculation.Name,
-                    RevisionCode = x.RevisionCode,
-                    TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d,
-                    MinimumSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.MinimumSalesPrice).FirstOrDefault(),
-                    RecommendedSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.SalesPrice).FirstOrDefault()
-                })
-                .ToListAsync();
-
-            return ad2000Analyses
-                .Concat(en13458Analyses)
+            return analyses
                 .OrderByDescending(x => x.RevisionCode)
                 .ThenBy(x => x.CalculationName)
                 .Select(x =>
                 {
-                    var totalCost = Convert.ToDecimal(x.TotalCost);
-                    var minimumSalesPrice = x.MinimumSalesPrice.HasValue ? Convert.ToDecimal(x.MinimumSalesPrice.Value) : (decimal?)null;
-                    var recommendedSalesPrice = x.RecommendedSalesPrice.HasValue ? Convert.ToDecimal(x.RecommendedSalesPrice.Value) : (decimal?)null;
+                    var minimumSalesPrice = x.MinimumSalesPrice;
+                    var recommendedSalesPrice = x.RecommendedSalesPrice;
                     return new SalesRequestPricingAnalysisOptionVm
                     {
                         Key = BuildAnalysisKey(x.CalculationType, x.CalculationId, x.CostAnalysisId) ?? string.Empty,
                         Label = recommendedSalesPrice.HasValue
-                            ? $"{x.CalculationType} · {x.CalculationName} · {x.RevisionCode} · Min {minimumSalesPrice.GetValueOrDefault(totalCost):N2} ₺ / Tavsiye {recommendedSalesPrice.Value:N2} ₺"
-                            : $"{x.CalculationType} · {x.CalculationName} · {x.RevisionCode} · Min {minimumSalesPrice.GetValueOrDefault(totalCost):N2} ₺ / Tavsiye hesaplanmadı",
+                            ? $"{x.CalculationType} · {x.CalculationName} · {x.RevisionCode} · Min {minimumSalesPrice.GetValueOrDefault(x.TotalCost):N2} ₺ / Tavsiye {recommendedSalesPrice.Value:N2} ₺"
+                            : $"{x.CalculationType} · {x.CalculationName} · {x.RevisionCode} · Min {minimumSalesPrice.GetValueOrDefault(x.TotalCost):N2} ₺ / Tavsiye hesaplanmadı",
                         CalculationType = x.CalculationType,
                         CalculationId = x.CalculationId,
                         CostAnalysisId = x.CostAnalysisId,
                         CalculationName = x.CalculationName,
                         RevisionCode = x.RevisionCode,
-                        TotalCost = totalCost,
+                        TotalCost = x.TotalCost,
                         MinimumSalesPrice = minimumSalesPrice,
                         RecommendedSalesPrice = recommendedSalesPrice
                     };
@@ -1013,132 +931,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 .ToList();
         }
 
-        private async Task RefreshLinkedPricingAsync(Guid? requestId = null)
-        {
-            var query = _context.SalesRequests
-                .Include(x => x.Items)
-                .Where(x => x.Status != Status.Deleted);
-
-            if (requestId.HasValue)
-            {
-                query = query.Where(x => x.Id == requestId.Value);
-            }
-
-            var requests = await query.ToListAsync();
-            var hasChanges = false;
-
-            foreach (var request in requests)
-            {
-                foreach (var item in request.Items.Where(x => x.LinkedCalculationType.HasValue && x.LinkedCalculationId.HasValue))
-                {
-                    var snapshot = await GetLatestLinkedSnapshotAsync(item.LinkedCalculationType.Value, item.LinkedCalculationId.Value);
-                    if (snapshot == null)
-                    {
-                        continue;
-                    }
-
-                    var minimumSalesPrice = snapshot.MinimumSalesPrice ?? snapshot.TotalCost;
-                    var recommendedSalesPrice = snapshot.RecommendedSalesPrice ?? minimumSalesPrice;
-
-                    if (item.LinkedCostAnalysisId == snapshot.CostAnalysisId
-                        && item.LinkedCostAnalysisRevisionCode == snapshot.RevisionCode
-                        && item.LinkedCalculationName == snapshot.CalculationName
-                        && item.LinkedCostAnalysisTotal == snapshot.TotalCost
-                        && item.EstimatedCost == snapshot.TotalCost
-                        && item.MinimumSalesPrice == minimumSalesPrice
-                        && item.ApprovedSalesPrice == recommendedSalesPrice)
-                    {
-                        continue;
-                    }
-
-                    item.LinkedCostAnalysisId = snapshot.CostAnalysisId;
-                    item.LinkedCalculationName = snapshot.CalculationName;
-                    item.LinkedCostAnalysisRevisionCode = snapshot.RevisionCode;
-                    item.LinkedCostAnalysisTotal = snapshot.TotalCost;
-                    item.EstimatedCost = snapshot.TotalCost;
-                    item.MinimumSalesPrice = minimumSalesPrice;
-                    item.ApprovedSalesPrice = recommendedSalesPrice;
-                    hasChanges = true;
-                }
-            }
-
-            if (hasChanges)
-            {
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        private async Task<LinkedPricingSnapshot?> GetLatestLinkedSnapshotAsync(SalesRequestCalculationType calculationType, Guid calculationId)
-        {
-            if (calculationType == SalesRequestCalculationType.AD2000)
-            {
-                var snapshot = await _context.AD2000CostAnalyses
-                    .AsNoTracking()
-                    .Where(x => x.AD2000CalculationId == calculationId && x.Status != Status.Deleted)
-                    .OrderByDescending(x => x.RevisionNo)
-                    .Select(x => new
-                    {
-                        CalculationName = x.AD2000Calculation.Name,
-                        CostAnalysisId = x.Id,
-                        RevisionCode = x.RevisionCode,
-                        TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d,
-                        MinimumSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.MinimumSalesPrice).FirstOrDefault(),
-                        RecommendedSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.SalesPrice).FirstOrDefault()
-                    })
-                    .FirstOrDefaultAsync();
-
-                return snapshot == null ? null : new LinkedPricingSnapshot
-                {
-                    CalculationName = snapshot.CalculationName,
-                    CostAnalysisId = snapshot.CostAnalysisId,
-                    RevisionCode = snapshot.RevisionCode,
-                    TotalCost = Convert.ToDecimal(snapshot.TotalCost),
-                    MinimumSalesPrice = snapshot.MinimumSalesPrice.HasValue ? Convert.ToDecimal(snapshot.MinimumSalesPrice.Value) : (decimal?)null,
-                    RecommendedSalesPrice = snapshot.RecommendedSalesPrice.HasValue ? Convert.ToDecimal(snapshot.RecommendedSalesPrice.Value) : (decimal?)null
-                };
-            }
-
-            if (calculationType == SalesRequestCalculationType.EN13458)
-            {
-                var snapshot = await _context.EN13458CostAnalyses
-                    .AsNoTracking()
-                    .Where(x => x.EN13458CalculationId == calculationId && x.Status != Status.Deleted)
-                    .OrderByDescending(x => x.RevisionNo)
-                    .Select(x => new
-                    {
-                        CalculationName = x.EN13458Calculation.Name,
-                        CostAnalysisId = x.Id,
-                        RevisionCode = x.RevisionCode,
-                        TotalCost = x.Items.Where(i => i.Status != Status.Deleted).Sum(i => (double?)i.ItemCost) ?? 0d,
-                        MinimumSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.MinimumSalesPrice).FirstOrDefault(),
-                        RecommendedSalesPrice = x.SalesPrices.Where(s => s.Status != Status.Deleted).Select(s => (double?)s.SalesPrice).FirstOrDefault()
-                    })
-                    .FirstOrDefaultAsync();
-
-                return snapshot == null ? null : new LinkedPricingSnapshot
-                {
-                    CalculationName = snapshot.CalculationName,
-                    CostAnalysisId = snapshot.CostAnalysisId,
-                    RevisionCode = snapshot.RevisionCode,
-                    TotalCost = Convert.ToDecimal(snapshot.TotalCost),
-                    MinimumSalesPrice = snapshot.MinimumSalesPrice.HasValue ? Convert.ToDecimal(snapshot.MinimumSalesPrice.Value) : (decimal?)null,
-                    RecommendedSalesPrice = snapshot.RecommendedSalesPrice.HasValue ? Convert.ToDecimal(snapshot.RecommendedSalesPrice.Value) : (decimal?)null
-                };
-            }
-
-            return null;
-        }
-
         private async Task<string> GenerateRequestNoAsync()
         {
-            var prefix = $"TR-{DateTime.UtcNow:yyyyMMdd}";
-            var todayCount = await _context.SalesRequests.CountAsync(x => x.RequestNo.StartsWith(prefix));
-            return $"{prefix}-{todayCount + 1:000}";
+            return await _salesRequestService.GenerateRequestNoAsync();
         }
 
         private async Task<string> BuildRequestTitleAsync(SalesRequestItemInputVm item)
         {
-            var group = await _context.SalesRequestProductGroups.AsNoTracking().FirstAsync(x => x.Id == item.ProductGroupId);
+            var group = await _salesRequestService.GetProductGroupAsync(item.ProductGroupId) ?? throw new InvalidOperationException("Ürün grubu bulunamadı.");
             return BuildItemTitle(group.ShortCode, item);
         }
 
@@ -1182,8 +982,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             var validFiles = files?.Where(x => x.Length > 0).ToList() ?? new List<IFormFile>();
             if (!validFiles.Any()) return;
 
-            _context.Entry(request).State = EntityState.Unchanged;
-
             var root = Path.Combine(_environment.WebRootPath, "uploads", "sales-requests", request.Id.ToString());
             Directory.CreateDirectory(root);
 
@@ -1205,19 +1003,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 });
             }
 
-            await _context.SalesRequestAttachments.AddRangeAsync(attachments);
-            await _context.SaveChangesAsync();
+            await _salesRequestService.AddAttachmentsAsync(request, attachments);
         }
 
-        private sealed class LinkedPricingSnapshot
-        {
-            public string CalculationName { get; set; } = string.Empty;
-            public Guid CostAnalysisId { get; set; }
-            public string RevisionCode { get; set; } = string.Empty;
-            public decimal TotalCost { get; set; }
-            public decimal? MinimumSalesPrice { get; set; }
-            public decimal? RecommendedSalesPrice { get; set; }
-        }
 
         private void NormalizeAndValidateItem(SalesRequestItemInputVm item, string keyPrefix)
         {

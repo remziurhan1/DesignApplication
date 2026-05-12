@@ -3,6 +3,7 @@ using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialVMs;
+using MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialFormVms;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
@@ -50,13 +51,18 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             }
 
             var dtos = await _materialService.GetAllAsync();
-            var vms = dtos.Select(m => new MaterialListVm
+            var vms = new List<MaterialListVm>();
+
+            foreach (var material in dtos)
             {
-                Id = m.Id,
-                Name = m.Name,
-                ElasticModulus = m.ElasticModulus,
-                YieldFactorK = m.YieldFactorK,
-            }).ToList();
+                vms.Add(new MaterialListVm
+                {
+                    Id = material.Id,
+                    Name = material.Name,
+                    ElasticModulus = material.ElasticModulus,
+                    YieldFactorK = material.YieldFactorK,
+                });
+            }
 
             return View(vms);
         }
@@ -125,19 +131,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 ElasticModulus = vm.ElasticModulus,
                 YieldFactorK = vm.YieldFactorK,
                 Notes = vm.Notes,
-                Forms = vm.Forms.Select(f => new MaterialFormCreateDto
-                {
-                    FormType = f.FormType,
-                    MaterialClass = f.MaterialClass,
-                    Norm = f.Norm,
-                    SymbolicName = f.SymbolicName,
-                    StockCode = f.StockCode,
-                    ThicknessMin = f.ThicknessMin,
-                    ThicknessMax = f.ThicknessMax,
-                    ProductStandard = f.ProductStandard,
-                    WeldingFactor = f.WeldingFactor,
-                    Notes = f.Notes
-                }).ToList()
+                Forms = BuildMaterialFormCreateDtos(vm.Forms)
             };
 
             await _materialService.CreateAsync(dto);
@@ -207,15 +201,47 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        private static List<MaterialFormCreateDto> BuildMaterialFormCreateDtos(IEnumerable<MaterialFormCreateVm> forms)
+        {
+            var result = new List<MaterialFormCreateDto>();
+
+            foreach (var form in forms)
+            {
+                result.Add(new MaterialFormCreateDto
+                {
+                    FormType = form.FormType,
+                    MaterialClass = form.MaterialClass,
+                    Norm = form.Norm,
+                    SymbolicName = form.SymbolicName,
+                    StockCode = form.StockCode,
+                    ThicknessMin = form.ThicknessMin,
+                    ThicknessMax = form.ThicknessMax,
+                    ProductStandard = form.ProductStandard,
+                    WeldingFactor = form.WeldingFactor,
+                    Notes = form.Notes
+                });
+            }
+
+            return result;
+        }
+
         private void LoadMaterialSelections()
         {
-            ViewBag.MaterialGroups = MaterialGroups
-                .Select(group => new SelectListItem(group, group))
-                .ToList();
+            var materialGroups = new List<SelectListItem>();
+            foreach (var group in MaterialGroups)
+            {
+                materialGroups.Add(new SelectListItem(group, group));
+            }
 
-            ViewBag.MaterialNorms = MaterialNorms
-                .Select(norm => new SelectListItem(norm, norm))
-                .ToList();
+            var materialNorms = new List<SelectListItem>();
+            foreach (var norm in MaterialNorms)
+            {
+                materialNorms.Add(new SelectListItem(norm, norm));
+            }
+
+            ViewBag.MaterialGroups = materialGroups;
+            ViewBag.MaterialNorms = materialNorms;
 
         }
 

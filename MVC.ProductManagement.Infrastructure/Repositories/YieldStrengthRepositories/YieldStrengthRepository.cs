@@ -39,5 +39,9 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.YieldStrengthReposit
                                  .Where(y => y.MaterialFormId == materialFormId)
                                  .ToListAsync();
         }
+        public async Task AddYieldStrengthAsync(YieldStrength entity)
+        {
+            await AddAsync(entity);
+        }
     }
 }

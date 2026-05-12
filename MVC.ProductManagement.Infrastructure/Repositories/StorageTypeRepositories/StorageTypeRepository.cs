@@ -17,5 +17,14 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.StorageTypeRepositor
         {
             _context = context;
         }
+        public async Task<bool> ExistsByNameAsync(string name)
+        {
+            return await AnyAsync(x => x.Name.ToLower() == name.ToLower());
+        }
+
+        public async Task AddStorageTypeAsync(StorageType entity)
+        {
+            await AddAsync(entity);
+        }
     }
 }

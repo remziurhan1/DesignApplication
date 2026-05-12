@@ -13,6 +13,7 @@ using MVC.ProductManagement.Application.Services.Export;
 using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
+using MVC.ProductManagement.Application.Services.SalesRequestServices;
 using MVC.ProductManagement.Application.Services.StockCodes.Common;
 using MVC.ProductManagement.Application.Services.StockCodes.Catalog;
 using MVC.ProductManagement.Application.Services.StorageTypeServices;
@@ -61,6 +62,7 @@ namespace MVC.ProductManagement.Application.Extentions
             services.AddScoped<IStockSubCodeRuleService, StockSubCodeRuleService>();
             services.AddScoped<IGeneratedStockCodeService, GeneratedStockCodeService>();
             services.AddScoped<IStockProductGroupService, StockProductGroupService>();
+            services.AddScoped<ISalesRequestAdminService, SalesRequestAdminService>();
 
             services.AddScoped<IPlanningService, PlanningService>();
 

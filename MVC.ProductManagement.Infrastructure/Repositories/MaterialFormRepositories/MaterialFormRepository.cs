@@ -48,5 +48,9 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.MaterialFormReposito
                 .Include(f => f.Material)
                 .FirstOrDefaultAsync(f => f.Id == id);
         }
+        public async Task AddMaterialFormAsync(MaterialForm entity)
+        {
+            await AddAsync(entity);
+        }
     }
 }

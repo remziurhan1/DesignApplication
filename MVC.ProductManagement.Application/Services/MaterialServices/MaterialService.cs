@@ -21,14 +21,21 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
         public async Task<List<MaterialListDto>> GetAllAsync()
         {
             var materials = await _materialRepository.GetAllAsync();
-            return materials.Select(m => new MaterialListDto
+            var result = new List<MaterialListDto>();
+
+            foreach (var material in materials)
             {
-                Id = m.Id,
-                Name = m.Name,
-                ColdStretchYieldStrength = m.ColdStretchYieldStrength,
-                ElasticModulus = m.ElasticModulus,
-                YieldFactorK = m.YieldFactorK,
-            }).ToList();
+                result.Add(new MaterialListDto
+                {
+                    Id = material.Id,
+                    Name = material.Name,
+                    ColdStretchYieldStrength = material.ColdStretchYieldStrength,
+                    ElasticModulus = material.ElasticModulus,
+                    YieldFactorK = material.YieldFactorK,
+                });
+            }
+
+            return result;
         }
 
         public async Task<MaterialDetailDto?> GetByIdAsync(Guid id)
@@ -81,7 +88,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Notes = dto.Notes
             };
 
-            await _materialRepository.AddAsync(entity);
+            await _materialRepository.AddMaterialAsync(entity);
             await _materialRepository.SaveChangeAsync();
 
             return new MaterialDetailDto
