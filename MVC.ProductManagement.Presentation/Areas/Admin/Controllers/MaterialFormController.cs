@@ -49,22 +49,27 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var dtos = await _materialFormService.GetAllWithMaterialAsync(); // ✅ Servis tüm formları getirecek
-            var vms = dtos.Select(f => new MaterialFormListVm
+            var vms = new List<MaterialFormListVm>();
+
+            foreach (var form in dtos)
             {
-                Id = f.Id,
-                MaterialId = f.MaterialId,
-                FormType = f.FormType,
-                MaterialClass = f.MaterialClass,
-                Norm = f.Norm,
-                SymbolicName = f.SymbolicName,
-                StockCode = f.StockCode,
-                ThicknessMin = f.ThicknessMin,
-                ThicknessMax = f.ThicknessMax,
-                UnitPrice=f.UnitPrice,
-                TargetPrice=f.TargetPrice,
-                ColdStretchYieldStrength = f.ColdStretchYieldStrength,
-                MaterialName=f.Material.Name,
-            }).ToList();
+                vms.Add(new MaterialFormListVm
+                {
+                    Id = form.Id,
+                    MaterialId = form.MaterialId,
+                    FormType = form.FormType,
+                    MaterialClass = form.MaterialClass,
+                    Norm = form.Norm,
+                    SymbolicName = form.SymbolicName,
+                    StockCode = form.StockCode,
+                    ThicknessMin = form.ThicknessMin,
+                    ThicknessMax = form.ThicknessMax,
+                    UnitPrice = form.UnitPrice,
+                    TargetPrice = form.TargetPrice,
+                    ColdStretchYieldStrength = form.ColdStretchYieldStrength,
+                    MaterialName = form.Material.Name,
+                });
+            }
 
             return View(vms);
         }
@@ -247,13 +252,20 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         private void LoadMaterialFormSelections()
         {
-            ViewBag.MaterialClasses = MaterialClasses
-                .Select(materialClass => new SelectListItem(materialClass, materialClass))
-                .ToList();
+            var materialClasses = new List<SelectListItem>();
+            foreach (var materialClass in MaterialClasses)
+            {
+                materialClasses.Add(new SelectListItem(materialClass, materialClass));
+            }
 
-            ViewBag.MaterialNorms = MaterialNorms
-                .Select(norm => new SelectListItem(norm, norm))
-                .ToList();
+            var materialNorms = new List<SelectListItem>();
+            foreach (var norm in MaterialNorms)
+            {
+                materialNorms.Add(new SelectListItem(norm, norm));
+            }
+
+            ViewBag.MaterialClasses = materialClasses;
+            ViewBag.MaterialNorms = materialNorms;
         }
 
         // 📌 Silme POST

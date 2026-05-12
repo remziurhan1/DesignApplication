@@ -18,5 +18,6 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.YieldStrengthReposit
     {
         Task<YieldStrength?> GetByConditionsAsync(Guid materialFormId, double temperature, double thickness);
         Task<List<YieldStrength>> GetByMaterialFormIdAsync(Guid materialFormId);
+        Task AddYieldStrengthAsync(YieldStrength entity);
     }
 }

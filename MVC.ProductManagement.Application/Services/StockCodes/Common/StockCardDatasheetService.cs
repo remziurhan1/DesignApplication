@@ -1,25 +1,18 @@
 ﻿using MVC.ProductManagement.Application.DTOs.StockCodes.OrtakKlasör;
-using MVC.ProductManagement.Domain.Entities.StockCodes.Common;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
-using MVC.ProductManagement.Infrastructure.AppContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Enums;
+using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 
 namespace MVC.ProductManagement.Application.Services.StockCodes.Common
 {
     public class StockCardDatasheetService : IStockCardDatasheetService
     {
-        private readonly AppDbContext _context;
+        private readonly IStockCardDatasheetRepository _repository;
         private readonly string _uploadPath;
 
-        public StockCardDatasheetService(AppDbContext context)
+        public StockCardDatasheetService(IStockCardDatasheetRepository repository)
         {
-            _context = context;
+            _repository = repository;
             _uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "datasheets");
 
             if (!Directory.Exists(_uploadPath))
@@ -30,52 +23,16 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
             Guid stockCardId,
             CancellationToken cancellationToken = default)
         {
-            return await _context.StockCardDatasheets
-                .AsNoTracking()
-                .Where(d => d.StockCardId == stockCardId && d.Status != Status.Deleted) // ✅ Değişti
-                .OrderByDescending(d => d.Version)
-                .ThenByDescending(d => d.CreatedDate)
-                .Select(d => new DatasheetDto
-                {
-                    Id = d.Id,
-                    StockCardId = d.StockCardId,
-                    StockCode = d.StockCard.StockCode8,
-                    FileName = d.FileName,
-                    FilePath = d.FilePath,
-                    FileSize = d.FileSize,
-                    ContentType = d.ContentType,
-                    Version = d.Version,
-                    Description = d.Description,
-                    IsActive = d.IsActive,
-                    CreatedDate = d.CreatedDate,
-                    CreatedBy = d.CreatedBy
-                })
-                .ToListAsync(cancellationToken);
+            var datasheets = await _repository.GetByStockCardAsync(stockCardId, cancellationToken);
+            return datasheets.Select(MapToDto).ToList();
         }
 
         public async Task<DatasheetDto> GetDatasheetByIdAsync(
             Guid id,
             CancellationToken cancellationToken = default)
         {
-            return await _context.StockCardDatasheets
-                .AsNoTracking()
-                .Where(d => d.Id == id && d.Status != Status.Deleted) // ✅ Değişti
-                .Select(d => new DatasheetDto
-                {
-                    Id = d.Id,
-                    StockCardId = d.StockCardId,
-                    StockCode = d.StockCard.StockCode8,
-                    FileName = d.FileName,
-                    FilePath = d.FilePath,
-                    FileSize = d.FileSize,
-                    ContentType = d.ContentType,
-                    Version = d.Version,
-                    Description = d.Description,
-                    IsActive = d.IsActive,
-                    CreatedDate = d.CreatedDate,
-                    CreatedBy = d.CreatedBy
-                })
-                .FirstOrDefaultAsync(cancellationToken);
+            var datasheet = await _repository.GetByIdAsync(id, tracking: false, cancellationToken);
+            return datasheet == null ? null! : MapToDto(datasheet);
         }
 
         public async Task<DatasheetDto> UploadDatasheetAsync(
@@ -83,16 +40,11 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
             string userName,
             CancellationToken cancellationToken = default)
         {
-            var stockCard = await _context.Set<StockCard>()
-                .FirstOrDefaultAsync(sc => sc.Id == uploadDto.StockCardId && sc.Status != Status.Deleted, cancellationToken); // ✅ Değişti
-
+            var stockCard = await _repository.GetStockCardAsync(uploadDto.StockCardId, cancellationToken);
             if (stockCard == null)
                 throw new InvalidOperationException("Stok kartı bulunamadı.");
 
-            var lastVersion = await _context.StockCardDatasheets
-                .Where(d => d.StockCardId == uploadDto.StockCardId)
-                .MaxAsync(d => (int?)d.Version, cancellationToken) ?? 0;
-
+            var lastVersion = await _repository.GetLastVersionAsync(uploadDto.StockCardId, cancellationToken);
             var fileExtension = Path.GetExtension(uploadDto.FileName);
             var uniqueFileName = $"{stockCard.StockCode8}_v{lastVersion + 1}_{Guid.NewGuid()}{fileExtension}";
             var filePath = Path.Combine(_uploadPath, uniqueFileName);
@@ -112,17 +64,59 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
                 IsActive = true,
                 CreatedBy = userName,
                 CreatedDate = DateTime.UtcNow,
-                Status = Status.Added // ✅ Değişti
+                Status = Status.Added
             };
 
-            _context.StockCardDatasheets.Add(datasheet);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _repository.AddAsync(datasheet, cancellationToken);
+            await _repository.CommitAsync(cancellationToken);
 
+            return MapToDto(datasheet, stockCard.StockCode8);
+        }
+
+        public async Task<bool> DeleteDatasheetAsync(
+            Guid id,
+            string userName,
+            CancellationToken cancellationToken = default)
+        {
+            var datasheet = await _repository.GetByIdAsync(id, tracking: true, cancellationToken);
+            if (datasheet == null)
+                return false;
+
+            if (File.Exists(datasheet.FilePath))
+            {
+                File.Delete(datasheet.FilePath);
+            }
+
+            datasheet.Status = Status.Deleted;
+            datasheet.DeletedBy = userName;
+            datasheet.DeletedDate = DateTime.UtcNow;
+
+            await _repository.CommitAsync(cancellationToken);
+            return true;
+        }
+
+        public async Task<(byte[] Content, string FileName, string ContentType)> DownloadDatasheetAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            var datasheet = await _repository.GetByIdAsync(id, tracking: false, cancellationToken);
+            if (datasheet == null)
+                throw new InvalidOperationException("Datasheet bulunamadı.");
+
+            if (!File.Exists(datasheet.FilePath))
+                throw new FileNotFoundException("Dosya fiziksel olarak bulunamadı.");
+
+            var content = await File.ReadAllBytesAsync(datasheet.FilePath, cancellationToken);
+            return (content, datasheet.FileName, datasheet.ContentType);
+        }
+
+        private static DatasheetDto MapToDto(StockCardDatasheet datasheet, string? stockCode = null)
+        {
             return new DatasheetDto
             {
                 Id = datasheet.Id,
                 StockCardId = datasheet.StockCardId,
-                StockCode = stockCard.StockCode8,
+                StockCode = stockCode ?? datasheet.StockCard?.StockCode8 ?? string.Empty,
                 FileName = datasheet.FileName,
                 FilePath = datasheet.FilePath,
                 FileSize = datasheet.FileSize,
@@ -133,50 +127,6 @@ namespace MVC.ProductManagement.Application.Services.StockCodes.Common
                 CreatedDate = datasheet.CreatedDate,
                 CreatedBy = datasheet.CreatedBy
             };
-        }
-
-        public async Task<bool> DeleteDatasheetAsync(
-            Guid id,
-            string userName,
-            CancellationToken cancellationToken = default)
-        {
-            var datasheet = await _context.StockCardDatasheets
-                .FirstOrDefaultAsync(d => d.Id == id && d.Status != Status.Deleted, cancellationToken); // ✅ Değişti
-
-            if (datasheet == null)
-                return false;
-
-            // Fiziksel dosyayı sil
-            if (File.Exists(datasheet.FilePath))
-            {
-                File.Delete(datasheet.FilePath);
-            }
-
-            // Soft delete
-            datasheet.Status = Status.Deleted; // ✅ Değişti
-            datasheet.DeletedBy = userName;
-            datasheet.DeletedDate = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync(cancellationToken);
-            return true;
-        }
-
-        public async Task<(byte[] Content, string FileName, string ContentType)> DownloadDatasheetAsync(
-            Guid id,
-            CancellationToken cancellationToken = default)
-        {
-            var datasheet = await _context.StockCardDatasheets
-                .AsNoTracking()
-                .FirstOrDefaultAsync(d => d.Id == id && d.Status != Status.Deleted, cancellationToken); // ✅ Değişti
-
-            if (datasheet == null)
-                throw new InvalidOperationException("Datasheet bulunamadı.");
-
-            if (!File.Exists(datasheet.FilePath))
-                throw new FileNotFoundException("Dosya fiziksel olarak bulunamadı.");
-
-            var content = await File.ReadAllBytesAsync(datasheet.FilePath, cancellationToken);
-            return (content, datasheet.FileName, datasheet.ContentType);
         }
     }
 }

@@ -21,5 +21,6 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.MaterialFormReposito
         Task<List<MaterialForm>> GetByFormTypeAsync(MaterialFormType formType);
         Task<IEnumerable<MaterialForm>> GetAllWithMaterialAsync();
         Task<MaterialForm> GetByIdWithMaterialAsync(Guid id);
+        Task AddMaterialFormAsync(MaterialForm entity);
     }
 }

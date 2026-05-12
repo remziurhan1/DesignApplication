@@ -46,19 +46,22 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 dtos = await _yieldStrengthService.GetByMaterialFormIdAsync(materialFormId.Value);
             }
 
-            var vms = dtos.Select(x => new YieldStrengthListVM
+            var vms = new List<YieldStrengthListVM>();
+            foreach (var dto in dtos)
             {
-                Id = x.Id,
-                MaterialFormId = x.MaterialFormId,
-                Temperature = x.Temperature,
-                ThicknessMin = x.ThicknessMin,
-                ThicknessMax = x.ThicknessMax,
-                Rp02 = x.Rp02,
-                Rm = x.Rm,
-                MaterialName = x.MaterialName,
-                MaterialFormName = x.MaterialFormName
-
-            }).ToList();
+                vms.Add(new YieldStrengthListVM
+                {
+                    Id = dto.Id,
+                    MaterialFormId = dto.MaterialFormId,
+                    Temperature = dto.Temperature,
+                    ThicknessMin = dto.ThicknessMin,
+                    ThicknessMax = dto.ThicknessMax,
+                    Rp02 = dto.Rp02,
+                    Rm = dto.Rm,
+                    MaterialName = dto.MaterialName,
+                    MaterialFormName = dto.MaterialFormName
+                });
+            }
 
             ViewBag.MaterialId = materialId;
             ViewBag.FormId = materialFormId;
@@ -74,11 +77,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             // Tüm form listesini servisten çekelim
             var forms = await _materialFormService.GetAllWithMaterialAsync();
 
-            ViewBag.MaterialForms = forms.Select(f => new SelectListItem
+            var materialForms = new List<SelectListItem>();
+            foreach (var form in forms)
             {
-                Value = f.Id.ToString(),
-                Text = $"{f.Material.Name} - {f.FormType} [{f.ThicknessMin}-{f.ThicknessMax} mm]"
-            }).ToList();
+                materialForms.Add(new SelectListItem
+                {
+                    Value = form.Id.ToString(),
+                    Text = $"{form.Material.Name} - {form.FormType} [{form.ThicknessMin}-{form.ThicknessMax} mm]"
+                });
+            }
+
+            ViewBag.MaterialForms = materialForms;
             // seçili form bilgisini bul
             var selectedForm = forms.FirstOrDefault(f => f.Id == materialFormId);
 

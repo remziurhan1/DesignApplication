@@ -24,5 +24,9 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories
             return await _context.Materials
                                  .FirstOrDefaultAsync(m => m.Name == materialName);
         }
+        public async Task AddMaterialAsync(Material entity)
+        {
+            await AddAsync(entity);
+        }
     }
 }
