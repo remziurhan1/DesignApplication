@@ -79,6 +79,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             vm.Items = vm.Items
                 .Where(x => x.ProductGroupId != Guid.Empty || !string.IsNullOrWhiteSpace(x.SparePartDetails))
                 .ToList();
+            ClearItemModelStateEntries();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
@@ -262,6 +263,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             vm.Items = vm.Items
                 .Where(x => x.ProductGroupId != Guid.Empty || !string.IsNullOrWhiteSpace(x.SparePartDetails))
                 .ToList();
+            ClearItemModelStateEntries();
             if (!vm.Items.Any())
             {
                 ModelState.AddModelError(string.Empty, "En az bir talep satırı girmelisiniz.");
@@ -548,8 +550,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddSubItem(SalesRequestAddSubItemVm vm)
+        public async Task<IActionResult> AddSubItem([Bind(Prefix = "NewSubItem")] SalesRequestAddSubItemVm vm)
         {
+            if (vm.ProductGroupId == Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(vm.ProductGroupId), "Akışkan grubu seçimi zorunludur.");
+            }
+
             NormalizeAndValidateItem(vm, nameof(vm));
             if (!ModelState.IsValid)
             {
@@ -1006,6 +1013,14 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             await _salesRequestService.AddAttachmentsAsync(request, attachments);
         }
 
+
+        private void ClearItemModelStateEntries()
+        {
+            foreach (var key in ModelState.Keys.Where(x => x.StartsWith("Items[", StringComparison.OrdinalIgnoreCase)).ToList())
+            {
+                ModelState.Remove(key);
+            }
+        }
 
         private void NormalizeAndValidateItem(SalesRequestItemInputVm item, string keyPrefix)
         {
