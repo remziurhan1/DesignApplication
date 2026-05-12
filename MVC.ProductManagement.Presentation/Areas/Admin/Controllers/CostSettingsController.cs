@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Entities.Costing;
-using MVC.ProductManagement.Infrastructure.AppContext;
+using MVC.ProductManagement.Application.Services.Costing;
 using MVC.ProductManagement.Presentation.Areas.Admin.Models.CostSettingsVMs;
 using System.Globalization;
 
@@ -11,11 +10,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class CostSettingsController : AdminBaseController
     {
-        private readonly AppDbContext _context;
+        private readonly ICostSettingsService _costSettingsService;
 
-        public CostSettingsController(AppDbContext context)
+        public CostSettingsController(ICostSettingsService costSettingsService)
         {
-            _context = context;
+            _costSettingsService = costSettingsService;
         }
 
         [HttpGet]
@@ -35,13 +34,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View("Index", await BuildVmAsync(model));
             }
 
-            _context.LaborRates.Add(new LaborRate
+            await _costSettingsService.AddLaborRateAsync(new LaborRate
             {
                 Name = BuildLaborRateName(model),
                 HourlyRate = model.HourlyRate,
                 Notes = model.Notes?.Trim() ?? string.Empty
             });
-            await _context.SaveChangesAsync();
             TempData["CostSettingsMessage"] = "İşçilik birim fiyatı kaydedildi.";
             return RedirectToAction(nameof(Index));
         }
@@ -52,12 +50,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             ApplyLocalizedDouble(nameof(model.HourlyRate), nameof(model.HourlyRate), value => model.HourlyRate = value);
 
-            var entity = await _context.LaborRates.FirstOrDefaultAsync(x => x.Id == model.Id);
-            if (entity == null) return RedirectToAction(nameof(Index));
-            entity.Name = BuildLaborRateName(model);
-            entity.HourlyRate = model.HourlyRate;
-            entity.Notes = model.Notes?.Trim() ?? string.Empty;
-            await _context.SaveChangesAsync();
+            await _costSettingsService.UpdateLaborRateAsync(model.Id, entity =>
+            {
+                entity.Name = BuildLaborRateName(model);
+                entity.HourlyRate = model.HourlyRate;
+                entity.Notes = model.Notes?.Trim() ?? string.Empty;
+            });
             TempData["CostSettingsMessage"] = "İşçilik birim fiyatı güncellendi.";
             return RedirectToAction(nameof(Index));
         }
@@ -66,13 +64,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteLaborRate(Guid id)
         {
-            var entity = await _context.LaborRates.FirstOrDefaultAsync(x => x.Id == id);
-            if (entity != null)
-            {
-                _context.LaborRates.Remove(entity);
-                await _context.SaveChangesAsync();
-                TempData["CostSettingsMessage"] = "İşçilik birim fiyatı silindi.";
-            }
+            await _costSettingsService.DeleteLaborRateAsync(id);
+            TempData["CostSettingsMessage"] = "İşçilik birim fiyatı silindi.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -87,13 +80,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View("Index", await BuildVmAsync(gug: model));
             }
 
-            _context.GugHourlyRates.Add(new GugHourlyRate
+            await _costSettingsService.AddGugHourlyRateAsync(new GugHourlyRate
             {
                 Name = BuildGugRateName(model),
                 HourlyRate = model.HourlyRate,
                 Notes = model.Notes?.Trim() ?? string.Empty
             });
-            await _context.SaveChangesAsync();
             TempData["CostSettingsMessage"] = "GÜG birim fiyatı kaydedildi.";
             return RedirectToAction(nameof(Index));
         }
@@ -104,12 +96,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             ApplyLocalizedDouble(nameof(model.HourlyRate), nameof(model.HourlyRate), value => model.HourlyRate = value);
 
-            var entity = await _context.GugHourlyRates.FirstOrDefaultAsync(x => x.Id == model.Id);
-            if (entity == null) return RedirectToAction(nameof(Index));
-            entity.Name = BuildGugRateName(model);
-            entity.HourlyRate = model.HourlyRate;
-            entity.Notes = model.Notes?.Trim() ?? string.Empty;
-            await _context.SaveChangesAsync();
+            await _costSettingsService.UpdateGugHourlyRateAsync(model.Id, entity =>
+            {
+                entity.Name = BuildGugRateName(model);
+                entity.HourlyRate = model.HourlyRate;
+                entity.Notes = model.Notes?.Trim() ?? string.Empty;
+            });
             TempData["CostSettingsMessage"] = "GÜG birim fiyatı güncellendi.";
             return RedirectToAction(nameof(Index));
         }
@@ -118,13 +110,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteGugHourlyRate(Guid id)
         {
-            var entity = await _context.GugHourlyRates.FirstOrDefaultAsync(x => x.Id == id);
-            if (entity != null)
-            {
-                _context.GugHourlyRates.Remove(entity);
-                await _context.SaveChangesAsync();
-                TempData["CostSettingsMessage"] = "GÜG birim fiyatı silindi.";
-            }
+            await _costSettingsService.DeleteGugHourlyRateAsync(id);
+            TempData["CostSettingsMessage"] = "GÜG birim fiyatı silindi.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -139,14 +126,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View("Index", await BuildVmAsync(bombe: model));
             }
 
-            _context.BombeLaborRates.Add(new BombeLaborRate
+            await _costSettingsService.AddBombeLaborRateAsync(new BombeLaborRate
             {
                 Name = BuildBombeRateName(model),
                 MaterialType = model.MaterialType.Trim(),
                 RatePerKg = model.RatePerKg,
                 Notes = model.Notes?.Trim() ?? string.Empty
             });
-            await _context.SaveChangesAsync();
             TempData["CostSettingsMessage"] = "Bombe birim fiyatı kaydedildi.";
             return RedirectToAction(nameof(Index));
         }
@@ -157,13 +143,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             ApplyLocalizedDouble(nameof(model.RatePerKg), nameof(model.RatePerKg), value => model.RatePerKg = value);
 
-            var entity = await _context.BombeLaborRates.FirstOrDefaultAsync(x => x.Id == model.Id);
-            if (entity == null) return RedirectToAction(nameof(Index));
-            entity.Name = BuildBombeRateName(model);
-            entity.MaterialType = model.MaterialType.Trim();
-            entity.RatePerKg = model.RatePerKg;
-            entity.Notes = model.Notes?.Trim() ?? string.Empty;
-            await _context.SaveChangesAsync();
+            await _costSettingsService.UpdateBombeLaborRateAsync(model.Id, entity =>
+            {
+                entity.Name = BuildBombeRateName(model);
+                entity.MaterialType = model.MaterialType.Trim();
+                entity.RatePerKg = model.RatePerKg;
+                entity.Notes = model.Notes?.Trim() ?? string.Empty;
+            });
             TempData["CostSettingsMessage"] = "Bombe birim fiyatı güncellendi.";
             return RedirectToAction(nameof(Index));
         }
@@ -172,13 +158,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteBombeLaborRate(Guid id)
         {
-            var entity = await _context.BombeLaborRates.FirstOrDefaultAsync(x => x.Id == id);
-            if (entity != null)
-            {
-                _context.BombeLaborRates.Remove(entity);
-                await _context.SaveChangesAsync();
-                TempData["CostSettingsMessage"] = "Bombe birim fiyatı silindi.";
-            }
+            await _costSettingsService.DeleteBombeLaborRateAsync(id);
+            TempData["CostSettingsMessage"] = "Bombe birim fiyatı silindi.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -193,14 +174,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 return View("Index", await BuildVmAsync(overhead: model));
             }
 
-            _context.OverheadRates.Add(new OverheadRate
+            await _costSettingsService.AddOverheadRateAsync(new OverheadRate
             {
                 Name = BuildOverheadRateName(model),
                 OverheadType = model.OverheadType.Trim(),
                 Percentage = model.Percentage,
                 Notes = model.Notes?.Trim() ?? string.Empty
             });
-            await _context.SaveChangesAsync();
             TempData["CostSettingsMessage"] = "Gider oranı kaydedildi.";
             return RedirectToAction(nameof(Index));
         }
@@ -211,13 +191,13 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             ApplyLocalizedDouble(nameof(model.Percentage), nameof(model.Percentage), value => model.Percentage = value);
 
-            var entity = await _context.OverheadRates.FirstOrDefaultAsync(x => x.Id == model.Id);
-            if (entity == null) return RedirectToAction(nameof(Index));
-            entity.Name = BuildOverheadRateName(model);
-            entity.OverheadType = model.OverheadType.Trim();
-            entity.Percentage = model.Percentage;
-            entity.Notes = model.Notes?.Trim() ?? string.Empty;
-            await _context.SaveChangesAsync();
+            await _costSettingsService.UpdateOverheadRateAsync(model.Id, entity =>
+            {
+                entity.Name = BuildOverheadRateName(model);
+                entity.OverheadType = model.OverheadType.Trim();
+                entity.Percentage = model.Percentage;
+                entity.Notes = model.Notes?.Trim() ?? string.Empty;
+            });
             TempData["CostSettingsMessage"] = "Gider oranı güncellendi.";
             return RedirectToAction(nameof(Index));
         }
@@ -226,13 +206,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteOverheadRate(Guid id)
         {
-            var entity = await _context.OverheadRates.FirstOrDefaultAsync(x => x.Id == id);
-            if (entity != null)
-            {
-                _context.OverheadRates.Remove(entity);
-                await _context.SaveChangesAsync();
-                TempData["CostSettingsMessage"] = "Gider oranı silindi.";
-            }
+            await _costSettingsService.DeleteOverheadRateAsync(id);
+            TempData["CostSettingsMessage"] = "Gider oranı silindi.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -244,10 +219,10 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
         {
             return new CostSettingsIndexVM
             {
-                LaborRates = await _context.LaborRates.AsNoTracking().Where(x => x.Status != Domain.Enums.Status.Deleted).OrderBy(x => x.HourlyRate).ThenBy(x => x.Name).ToListAsync(),
-                GugHourlyRates = await _context.GugHourlyRates.AsNoTracking().Where(x => x.Status != Domain.Enums.Status.Deleted).OrderBy(x => x.HourlyRate).ThenBy(x => x.Name).ToListAsync(),
-                BombeLaborRates = await _context.BombeLaborRates.AsNoTracking().Where(x => x.Status != Domain.Enums.Status.Deleted).OrderBy(x => x.MaterialType).ThenBy(x => x.RatePerKg).ToListAsync(),
-                OverheadRates = await _context.OverheadRates.AsNoTracking().Where(x => x.Status != Domain.Enums.Status.Deleted).OrderBy(x => x.OverheadType).ThenBy(x => x.Percentage).ToListAsync(),
+                LaborRates = (await _costSettingsService.GetActiveLaborRatesAsync()).ToList(),
+                GugHourlyRates = (await _costSettingsService.GetActiveGugHourlyRatesAsync()).ToList(),
+                BombeLaborRates = (await _costSettingsService.GetActiveBombeLaborRatesAsync()).ToList(),
+                OverheadRates = (await _costSettingsService.GetActiveOverheadRatesAsync()).ToList(),
                 NewLaborRate = labor ?? new LaborRateInputVM(),
                 NewGugHourlyRate = gug ?? new GugHourlyRateInputVM(),
                 NewBombeLaborRate = bombe ?? new BombeLaborRateInputVM { MaterialType = "Paslanmaz" },

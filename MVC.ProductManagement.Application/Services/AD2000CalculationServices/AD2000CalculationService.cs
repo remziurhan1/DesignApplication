@@ -48,6 +48,11 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
             _materialFormRepository = materialFormRepository;
         }
 
+        public Task<bool> DeleteAsync(Guid id)
+        {
+            return _repository.DeleteCalculationGraphAsync(id);
+        }
+
         public Task<AD2000ResultDTO> CalculateAsync(AD2000CalculateDTO dto)
         {
             var pDesign = dto.DesignPressure;

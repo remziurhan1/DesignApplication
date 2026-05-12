@@ -10,5 +10,6 @@ namespace MVC.ProductManagement.Infrastructure.Repositories.AD2000Repositories
         IAsyncUpdatebleRepository<AD2000Calculation>,
         IAsyncDeletableRepository<AD2000Calculation>
     {
+        Task<bool> DeleteCalculationGraphAsync(Guid calculationId, CancellationToken cancellationToken = default);
     }
 }

@@ -5,6 +5,7 @@ using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Infrastructure.AppContext;
 using MVC.ProductManagement.Infrastructure.Repositories.AD2000Repositories;
 using MVC.ProductManagement.Infrastructure.Repositories.EN13458Repositories;
+using MVC.ProductManagement.Infrastructure.Repositories.CostingRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.IAllowableStressRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
@@ -40,6 +41,7 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
             services.AddScoped<IAllowableStressRepository, AllowableStressRepository>();
             services.AddScoped<IEN13458Repository, EN13458Repository>();
             services.AddScoped<IAD2000Repository, AD2000Repository>();
+            services.AddScoped<ICostSettingsRepository, CostSettingsRepository>();
             services.AddScoped<IStorageTypeRepositories, StorageTypeRepository>();
             services.AddScoped<IStorageTypePropertiesRepository, StorageTypePropertiesRepository>();
             services.AddScoped<IFluidRepositories, FluidRepository>();

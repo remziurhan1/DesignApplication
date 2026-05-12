@@ -11,6 +11,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
         Task<AD2000ResultDTO> SaveAsync(AD2000ResultDTO result, string createdBy = "System");
         Task<AD2000ResultDTO?> GetByIdAsync(Guid id);
         Task<List<AD2000ResultDTO>> GetAllAsync();
+        Task<bool> DeleteAsync(Guid id);
         Task<AD2000MaterialCostTableDTO> BuildMaterialCostTableAsync(AD2000ResultDTO result);
         Task<List<AD2000CostAnalysisSummaryDTO>> GetCostAnalysesAsync(Guid calculationId);
         Task<AD2000MaterialCostTableDTO?> GetCostAnalysisAsync(Guid calculationId, Guid? costAnalysisId = null);
