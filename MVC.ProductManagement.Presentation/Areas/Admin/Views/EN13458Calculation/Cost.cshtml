@@ -368,49 +368,41 @@
                                         <td>@item.Unit</td>
                                         <td>
                                             <input type="hidden" name="items[@itemIndex].CostAnalysisItemId" value="@item.CostAnalysisItemId" />
-                                            @if (string.Equals(item.ItemKey, "WELD-CONSUMABLE", StringComparison.OrdinalIgnoreCase))
-                                            {
-                                                <div class="small fw-semibold mb-2 text-muted">Stok kodundan seçilmez (sabit: 30 €)</div>
-                                                <input type="hidden" name="items[@itemIndex].GeneratedStockCodeId" value="" />
-                                            }
-                                            else
-                                            {
-                                                <div class="small fw-semibold mb-1">@(string.IsNullOrWhiteSpace(item.StockCodeName) ? "Stok seçilmedi" : $"Seçili: {item.StockCodeName}")</div>
-                                                <select name="items[@itemIndex].GeneratedStockCodeId" class="form-select form-select-sm mb-2 cost-stock-select">
-                                                    <option value="">Stok seçiniz</option>
-                                                    @if (item.IsBombeLabor)
+                                            <div class="small fw-semibold mb-1">@(string.IsNullOrWhiteSpace(item.StockCodeName) ? "Stok seçilmedi" : $"Seçili: {item.StockCodeName}")</div>
+                                            <select name="items[@itemIndex].GeneratedStockCodeId" class="form-select form-select-sm mb-2 cost-stock-select">
+                                                <option value="">Stok seçiniz</option>
+                                                @if (item.IsBombeLabor)
+                                                {
+                                                    var bombeOptions = item.ItemName.Contains("İç", StringComparison.OrdinalIgnoreCase)
+                                                        ? innerBombeRateOptions
+                                                        : outerBombeRateOptions;
+                                                    foreach (var bombeOption in bombeOptions)
                                                     {
-                                                        var bombeOptions = item.ItemName.Contains("İç", StringComparison.OrdinalIgnoreCase)
-                                                            ? innerBombeRateOptions
-                                                            : outerBombeRateOptions;
-                                                        foreach (var bombeOption in bombeOptions)
+                                                        if (item.GeneratedStockCodeId?.ToString() == bombeOption.Value)
                                                         {
-                                                            if (item.GeneratedStockCodeId?.ToString() == bombeOption.Value)
-                                                            {
-                                                                <option value="@bombeOption.Value" selected>@bombeOption.Text</option>
-                                                            }
-                                                            else
-                                                            {
-                                                                <option value="@bombeOption.Value">@bombeOption.Text</option>
-                                                            }
+                                                            <option value="@bombeOption.Value" selected>@bombeOption.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@bombeOption.Value">@bombeOption.Text</option>
                                                         }
                                                     }
-                                                    else
+                                                }
+                                                else
+                                                {
+                                                    foreach (var stockOption in stockCodeOptions)
                                                     {
-                                                        foreach (var stockOption in stockCodeOptions)
+                                                        if (item.GeneratedStockCodeId?.ToString() == stockOption.id.ToString())
                                                         {
-                                                            if (item.GeneratedStockCodeId?.ToString() == stockOption.id.ToString())
-                                                            {
-                                                                <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" data-main-group="@stockOption.mainGroupCode" data-sub-group="@stockOption.subGroupCode" data-search-text="@stockOption.searchText" selected>@stockOption.text</option>
-                                                            }
-                                                            else
-                                                            {
-                                                                <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" data-main-group="@stockOption.mainGroupCode" data-sub-group="@stockOption.subGroupCode" data-search-text="@stockOption.searchText">@stockOption.text</option>
-                                                            }
+                                                            <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" data-main-group="@stockOption.mainGroupCode" data-sub-group="@stockOption.subGroupCode" data-search-text="@stockOption.searchText" selected>@stockOption.text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" data-main-group="@stockOption.mainGroupCode" data-sub-group="@stockOption.subGroupCode" data-search-text="@stockOption.searchText">@stockOption.text</option>
                                                         }
                                                     }
-                                                </select>
-                                            }
+                                                }
+                                            </select>
                                             <div class="form-check mb-2">
                                                 <input class="form-check-input js-manual-toggle" type="checkbox" name="items[@itemIndex].UseManualUnitPrice" value="true" @(item.UseManualUnitPrice ? "checked" : null) />
                                                 <input type="hidden" name="items[@itemIndex].UseManualUnitPrice" value="false" />
