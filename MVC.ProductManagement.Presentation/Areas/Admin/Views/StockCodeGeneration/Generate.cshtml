@@ -1,14 +1,51 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.StockCodes.Catalog.GeneratedStockCodeVm
 @using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Stok Kodu Üret";
+}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h4 class="mb-1">Stok Kodu Üretimi</h4>
-        <p class="text-muted mb-0">Alt grup seçin, kural seçimlerini yapın ve stok kodunu profesyonel akışla oluşturun.</p>
+<div class="card border-0 shadow-sm mb-4 overflow-hidden">
+    <div class="card-body p-4 p-lg-5 bg-primary-subtle">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div class="col-lg-8">
+                <span class="badge bg-primary mb-3">Yeni başlayan dostu akış</span>
+                <h2 class="mb-2">Stok kodu üretimi</h2>
+                <p class="lead text-primary-emphasis mb-0">
+                    Bu ekran sizi adım adım yönlendirir: önce ürün ailesini seçin, özellikleri işaretleyin, kodu oluşturun ve en son kaydedin.
+                </p>
+            </div>
+            <a asp-action="Index" class="btn btn-light border">
+                <i class="bi bi-list-ul me-1"></i>Kayıtlı stok kodlarını gör
+            </a>
+        </div>
     </div>
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        <i class="bi bi-list-ul me-1"></i>Stok Kodları
-    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-3">
+        <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
+            <div class="fw-semibold"><span class="badge bg-primary me-2">1</span>Alt grup seç</div>
+            <div class="small text-muted mt-2">Kodun hangi ürün ailesine ait olduğunu belirler.</div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
+            <div class="fw-semibold"><span class="badge bg-primary me-2">2</span>Özellikleri seç</div>
+            <div class="small text-muted mt-2">Açılan her listeden ürünü tarif eden seçeneği seçin.</div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
+            <div class="fw-semibold"><span class="badge bg-primary me-2">3</span>Kod üret</div>
+            <div class="small text-muted mt-2">Sistem sıradaki uygun kodu otomatik hazırlar.</div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
+            <div class="fw-semibold"><span class="badge bg-success me-2">4</span>Kaydet</div>
+            <div class="small text-muted mt-2">Fiyat, birim ve dosyaları kontrol edip kaydı tamamlayın.</div>
+        </div>
+    </div>
 </div>
 
 <form asp-action="Generate" method="post" enctype="multipart/form-data" id="generate-form">
@@ -17,31 +54,32 @@
     <div class="row g-4">
         <div class="col-12 col-xl-8">
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">1) Kural Seçimi</div>
+                <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">1) Ürün ailesi ve özellik seçimi</div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label class="form-label">Alt Grup</label>
+                        <label class="form-label fw-semibold">Alt Grup <span class="text-danger">*</span></label>
                         <select id="StockSubCodeGroupId" asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select">
-                            <option value="">Alt grup seçiniz...</option>
+                            <option value="">Önce ürün ailesini seçiniz...</option>
                         </select>
+                        <div class="form-text">Bilmiyorsanız ürünün en genel ailesinden başlayın; seçince özellik listeleri otomatik gelir.</div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Alt Gruba Ait Kural Grupları</label>
+                        <label class="form-label fw-semibold">2) Ürünün özellikleri <span class="text-danger">*</span></label>
                         <div id="rules-container" class="border rounded p-3 bg-body-tertiary">
                             <span class="text-muted">Alt grup seçiniz...</span>
                         </div>
-                        <div class="form-text">Her kural grubundan uygun seçeneği dropdown ile belirleyin.</div>
+                        <div class="form-text">Her kutu bir özelliktir. Emin değilseniz teknik ekipten teyit almadan kaydetmeyin.</div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Stok Kodu Açıklaması (otomatik)</label>
+                        <label class="form-label fw-semibold">Otomatik açıklama</label>
                         <textarea id="description-preview" class="form-control" rows="3" readonly></textarea>
                     </div>
 
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="include-custom-description" />
-                        <label class="form-check-label" for="include-custom-description">Ek açıklama eklemek istiyorum</label>
+                        <label class="form-check-label" for="include-custom-description">Açıklamaya kısa bir not eklemek istiyorum</label>
                     </div>
 
                     <div id="custom-description-wrapper" class="mb-3" style="display:none;">
@@ -52,21 +90,21 @@
                     <input id="description" asp-for="Description" type="hidden" />
 
                     <button id="btn-generate" type="button" class="btn btn-outline-primary">
-                        <i class="bi bi-magic me-1"></i>Kod Üret
+                        <i class="bi bi-magic me-1"></i>3) Seçimlerden kodu hazırla
                     </button>
                 </div>
             </div>
 
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">2) Fiyat ve Birim Bilgileri</div>
+                <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">4) Fiyat ve birim bilgileri</div>
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label asp-for="UnitPrice" class="form-label">Birim Fiyat</label>
+                            <label asp-for="UnitPrice" class="form-label fw-semibold">Alış / stok birim fiyatı</label>
                             <input id="unit-price" asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
                         </div>
                         <div class="col-md-6">
-                            <label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label>
+                            <label asp-for="TargetPrice" class="form-label fw-semibold">Hedef satış fiyatı</label>
                             <input id="target-price" asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
                         </div>
                     </div>
@@ -91,17 +129,17 @@
                 <div class="card-header bg-info-subtle text-info-emphasis fw-semibold">3) Üretilen Kod</div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label asp-for="GeneratedCode" class="form-label">Üretilen Kod</label>
+                        <label asp-for="GeneratedCode" class="form-label fw-semibold">Sistemin ürettiği stok kodu</label>
                         <input id="generated-code" asp-for="GeneratedCode" class="form-control form-control-lg fw-semibold" readonly />
                     </div>
                     <div id="generate-info" class="small text-muted">
-                        Format: ilk 4 karakter alt grup kodu + 4 haneli sıra (örn. SFCA0001).
+                        Henüz kod görünmüyorsa soldaki seçimleri yapıp “Seçimlerden kodu hazırla” butonuna basın. Format: ilk 4 karakter alt grup kodu + 4 haneli sıra (örn. SFCA0001).
                     </div>
                 </div>
             </div>
 
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold">4) Dosya Ekleri</div>
+                <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold">5) İsteğe bağlı dosya ekleri</div>
                 <div class="card-body">
                     <div class="mb-3">
                         <label asp-for="Step3DFile" class="form-label">STEP (3D)</label>
@@ -124,7 +162,7 @@
 
             <div class="d-grid">
                 <button type="submit" class="btn btn-success btn-lg">
-                    <i class="bi bi-save me-1"></i>Üretilen Kodu Kaydet
+                    <i class="bi bi-save me-1"></i>Son kontrolü yaptım, stok kodunu kaydet
                 </button>
             </div>
         </div>
@@ -200,7 +238,7 @@
 
     function renderRules() {
         if (!rules.length) {
-            rulesContainer.innerHTML = '<span class="text-muted">Bu alt grupta kural bulunamadı.</span>';
+            rulesContainer.innerHTML = '<div class="alert alert-warning mb-0"><strong>Bu alt grup için özellik tanımlanmamış.</strong><br>Önce stok kod kuralı oluşturma ekranından bu ürün ailesine kural ekleyin.</div>';
             syncDerivedTexts();
             return;
         }
@@ -246,7 +284,7 @@
         rulesContainer.innerHTML = '<span class="text-muted">Yükleniyor...</span>';
 
         if (!subGroupSelect?.value) {
-            rulesContainer.innerHTML = '<span class="text-muted">Alt grup seçiniz...</span>';
+            rulesContainer.innerHTML = '<span class="text-muted">Başlamak için yukarıdan ürün ailesi / alt grup seçiniz.</span>';
             syncDerivedTexts();
             return;
         }
@@ -272,7 +310,7 @@
 
     document.getElementById('btn-generate')?.addEventListener('click', async function () {
         if (!subGroupSelect?.value) {
-            alert('Lütfen önce alt grup seçiniz.');
+            alert('1. adımı tamamlayın: önce ürün ailesi / alt grup seçiniz.');
             return;
         }
 
@@ -280,7 +318,7 @@
 
         const selectedIds = getSelectedRuleIds().join(',');
         if (!selectedIds) {
-            alert('Lütfen en az bir kural seçeneği seçiniz.');
+            alert('2. adımı tamamlayın: en az bir ürün özelliği seçiniz.');
             return;
         }
 
@@ -307,7 +345,7 @@
         syncDerivedTexts();
         if (!descriptionHiddenInput.value?.trim()) {
             event.preventDefault();
-            alert('Kayıt için en az bir kural seçeneği seçiniz.');
+            alert('Kaydetmeden önce özellik seçip stok kodunu hazırlamanız gerekir.');
         }
     });
 
