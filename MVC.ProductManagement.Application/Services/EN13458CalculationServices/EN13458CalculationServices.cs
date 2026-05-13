@@ -27,7 +27,6 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
         private const string GasNitrogenStockCode = "ZA001871";
         private const string LiquidNitrogenStockCode = "ZA000216";
         private const string PerliteStockCode = "ZA000464";
-        private const double DefaultWeldConsumableUnitPriceEuro = 30d;
         private const string DefaultAnalysisName = "Maliyet Analizi";
         private const string CalculatedSourceType = "Calculated";
         private const string ManualSourceType = "Manual";
@@ -834,10 +833,10 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
             if (result.TotalWeldLength > 0)
             {
-                rows.Add(BuildWeldConsumableRow(result.TotalWeldLength, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE")));
+                rows.Add(await BuildWeldConsumableRowAsync(result.TotalWeldLength, previousCalculatedItems.GetValueOrDefault("WELD-CONSUMABLE")));
             }
 
-            var filmRow = BuildFilmCountCostRow(result, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
+            var filmRow = await BuildFilmCountCostRowAsync(result, previousCalculatedItems.GetValueOrDefault("FILM-COUNT"));
             if (filmRow != null)
             {
                 rows.Add(filmRow);
@@ -1032,7 +1031,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
             return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
         }
 
-        private EN13458MaterialCostRowDTO BuildWeldConsumableRow(double totalWeldLengthMm, EN13458CostAnalysisItem? previous)
+        private async Task<EN13458MaterialCostRowDTO> BuildWeldConsumableRowAsync(double totalWeldLengthMm, EN13458CostAnalysisItem? previous)
         {
             var weldLengthM = Math.Round(totalWeldLengthMm / 1000d, 2);
 
@@ -1048,33 +1047,22 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 FormType = "Hizmet",
                 Quantity = weldLengthM,
                 Unit = "m",
-                StockUnitPrice = DefaultWeldConsumableUnitPriceEuro,
-                UnitPrice = DefaultWeldConsumableUnitPriceEuro,
-                ItemCost = weldLengthM * DefaultWeldConsumableUnitPriceEuro
+                PriceSource = "None",
+                StockUnitPrice = 0,
+                UnitPrice = 0,
+                ItemCost = 0
             };
 
-            if (previous != null)
-            {
-                row.UseManualUnitPrice = previous.UseManualUnitPrice;
-                row.ManualUnitPrice = previous.ManualUnitPrice;
-                row.UnitPrice = ResolveEffectiveUnitPrice(row.StockUnitPrice, row.UseManualUnitPrice, row.ManualUnitPrice);
-                row.ItemCost = row.Quantity * row.UnitPrice;
-            }
-
-            return row;
+            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
         }
 
-        private EN13458MaterialCostRowDTO? BuildFilmCountCostRow(EN13458ResultDTO result, EN13458CostAnalysisItem? previous)
+        private async Task<EN13458MaterialCostRowDTO?> BuildFilmCountCostRowAsync(EN13458ResultDTO result, EN13458CostAnalysisItem? previous)
         {
             var filmCalculation = _filmQuantityService.Calculate(result.TotalWeldLength);
             if (filmCalculation.FilmQuantity <= 0)
             {
                 return null;
             }
-
-            var defaultUnitPrice = filmCalculation.FilmQuantity > 0
-                ? result.TotalFilmCost / filmCalculation.FilmQuantity
-                : 0;
 
             var row = new EN13458MaterialCostRowDTO
             {
@@ -1088,24 +1076,13 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 FormType = "Hizmet",
                 Quantity = filmCalculation.FilmQuantity,
                 Unit = "adet",
-                StockUnitPrice = defaultUnitPrice,
-                UnitPrice = defaultUnitPrice,
-                ItemCost = filmCalculation.FilmQuantity * defaultUnitPrice
+                PriceSource = "None",
+                StockUnitPrice = 0,
+                UnitPrice = 0,
+                ItemCost = 0
             };
 
-            if (previous != null)
-            {
-                row.UseManualUnitPrice = previous.UseManualUnitPrice;
-                row.ManualUnitPrice = previous.ManualUnitPrice;
-                if (previous.StockUnitPrice > 0)
-                {
-                    row.StockUnitPrice = previous.StockUnitPrice;
-                }
-                row.UnitPrice = ResolveEffectiveUnitPrice(row.StockUnitPrice, row.UseManualUnitPrice, row.ManualUnitPrice);
-                row.ItemCost = row.Quantity * row.UnitPrice;
-            }
-
-            return row;
+            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
         }
 
         private async Task<EN13458MaterialCostRowDTO> ApplyPreviousPricingAsync(EN13458MaterialCostRowDTO row, EN13458CostAnalysisItem? previous, double fallbackUnitPrice)
@@ -1253,7 +1230,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
             if (!hasWeldRow && result.TotalWeldLength > 0)
             {
-                var weldRow = BuildWeldConsumableRow(result.TotalWeldLength, previous: null);
+                var weldRow = await BuildWeldConsumableRowAsync(result.TotalWeldLength, previous: null);
                 var weldEntity = ToEntity(weldRow, "System");
                 weldEntity.EN13458CostAnalysisId = analysis.Id;
                 analysis.Items.Add(weldEntity);
@@ -1262,7 +1239,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
             if (!hasFilmRow)
             {
-                var filmRow = BuildFilmCountCostRow(result, previous: null);
+                var filmRow = await BuildFilmCountCostRowAsync(result, previous: null);
                 if (filmRow != null)
                 {
                     var filmEntity = ToEntity(filmRow, "System");
@@ -1326,7 +1303,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
 
         private static EN13458MaterialCostRowDTO ToRowDto(EN13458CostAnalysisItem item)
         {
-            return new EN13458MaterialCostRowDTO
+            var row = new EN13458MaterialCostRowDTO
             {
                 CostAnalysisItemId = item.Id,
                 CostAnalysisId = item.EN13458CostAnalysisId,
@@ -1368,6 +1345,28 @@ namespace MVC.ProductManagement.Application.Services.EN13458CalculationServices
                 PriceSource = item.PriceSource,
                 ItemCost = item.ItemCost
             };
+
+            return NormalizeUnpricedServiceCostRow(row);
+        }
+
+        private static EN13458MaterialCostRowDTO NormalizeUnpricedServiceCostRow(EN13458MaterialCostRowDTO row)
+        {
+            var isServiceCost = string.Equals(row.ItemKey, "WELD-CONSUMABLE", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(row.ItemKey, "FILM-COUNT", StringComparison.OrdinalIgnoreCase);
+            var hasExplicitPrice = row.GeneratedStockCodeId.HasValue
+                || !string.IsNullOrWhiteSpace(row.StockCode)
+                || row.UseManualUnitPrice;
+
+            if (isServiceCost && !hasExplicitPrice)
+            {
+                row.StockCodeName = string.Empty;
+                row.StockUnitPrice = 0;
+                row.UnitPrice = 0;
+                row.ItemCost = 0;
+                row.PriceSource = "None";
+            }
+
+            return row;
         }
 
         private static EN13458MaterialCostTableDTO BuildCostTableFromItems(EN13458CostAnalysis analysis, List<EN13458MaterialCostRowDTO> items, EN13458SalesPrice? salesPrice = null)

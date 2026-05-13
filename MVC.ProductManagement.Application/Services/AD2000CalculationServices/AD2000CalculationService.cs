@@ -611,8 +611,8 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
 
         private async Task<AD2000MaterialCostRowDTO?> BuildWeldConsumableRowAsync(double totalWeldLength, AD2000CostAnalysisItem? previous)
         {
-            var weldConsumableCost = CalculateWeldConsumableCost(totalWeldLength);
-            if (weldConsumableCost <= 0)
+            var weldLengthM = Math.Round(totalWeldLength / 1000d, 2);
+            if (weldLengthM <= 0)
             {
                 return null;
             }
@@ -624,17 +624,18 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 ItemSourceType = CalculatedSourceType,
                 CostGroupCode = "WELD",
                 CostGroupName = "Kaynak Sarf Maliyeti",
-                ItemName = "Toplam Kaynak Sarf Maliyeti (Kaynak Teli)",
+                ItemName = "Toplam Kaynak Miktarı",
                 MaterialName = "Kaynak Teli",
                 FormType = "Hizmet",
-                Quantity = 1,
-                Unit = "lot",
-                StockUnitPrice = weldConsumableCost,
-                UnitPrice = weldConsumableCost,
-                ItemCost = weldConsumableCost
+                Quantity = weldLengthM,
+                Unit = "m",
+                PriceSource = "None",
+                StockUnitPrice = 0,
+                UnitPrice = 0,
+                ItemCost = 0
             };
 
-            return await ApplyPreviousPricingAsync(row, previous, weldConsumableCost);
+            return await ApplyPreviousPricingAsync(row, previous, fallbackUnitPrice: 0);
         }
 
         private async Task<AD2000MaterialCostRowDTO> BuildBombeLaborRowAsync(AD2000ResultDTO result, Guid? selectedRateId, AD2000CostAnalysisItem? previous)
@@ -963,7 +964,7 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
 
         private static AD2000MaterialCostRowDTO ToRowDto(AD2000CostAnalysisItem item)
         {
-            return new AD2000MaterialCostRowDTO
+            var row = new AD2000MaterialCostRowDTO
             {
                 CostAnalysisItemId = item.Id,
                 CostAnalysisId = item.AD2000CostAnalysisId,
@@ -1005,6 +1006,27 @@ namespace MVC.ProductManagement.Application.Services.AD2000CalculationServices
                 PriceSource = item.PriceSource,
                 ItemCost = item.ItemCost
             };
+
+            return NormalizeUnpricedServiceCostRow(row);
+        }
+
+        private static AD2000MaterialCostRowDTO NormalizeUnpricedServiceCostRow(AD2000MaterialCostRowDTO row)
+        {
+            var isServiceCost = string.Equals(row.ItemKey, "WELD-CONSUMABLE", StringComparison.OrdinalIgnoreCase);
+            var hasExplicitPrice = row.GeneratedStockCodeId.HasValue
+                || !string.IsNullOrWhiteSpace(row.StockCode)
+                || row.UseManualUnitPrice;
+
+            if (isServiceCost && !hasExplicitPrice)
+            {
+                row.StockCodeName = string.Empty;
+                row.StockUnitPrice = 0;
+                row.UnitPrice = 0;
+                row.ItemCost = 0;
+                row.PriceSource = "None";
+            }
+
+            return row;
         }
 
         private static AD2000MaterialCostTableDTO BuildCostTableFromItems(AD2000CostAnalysis analysis, List<AD2000MaterialCostRowDTO> items, AD2000SalesPrice? salesPrice = null)
