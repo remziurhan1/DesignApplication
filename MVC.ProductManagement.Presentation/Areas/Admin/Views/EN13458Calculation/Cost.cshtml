@@ -11,6 +11,19 @@
     var outerBombeRateOptions = (ViewBag.OuterBombeRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
     string ResolveInputPriceSource(bool useManualUnitPrice) => useManualUnitPrice ? "Manuel fiyat" : "Stok fiyatı";
     double ResolveInputPrice(double stockUnitPrice, bool useManualUnitPrice, double? manualUnitPrice) => useManualUnitPrice ? (manualUnitPrice ?? 0) : stockUnitPrice;
+    string ResolveCostGroupNote(string? costGroupCode) => (costGroupCode ?? string.Empty).ToUpperInvariant() switch
+    {
+        "SAC" => "Hesaplanan sac ağırlığı (kg) × seçilen stok/manuel birim fiyat. Ağırlık; alan, kalınlık ve malzeme yoğunluğundan gelir.",
+        "BOMBE" => "Hesaplanan bombe ağırlığı (kg) × seçilen bombe işçilik birim fiyatı. Fiyat seçilmezse maliyet 0 kalır.",
+        "SARF" => "Hesaplanan sarf miktarı × stok veya manuel birim fiyat. Azot, perlit gibi miktarlar hesap sonucundan gelir.",
+        "WELD" => "Hesaplanan toplam kaynak boyu (m) × stok veya manuel birim fiyat. Başlangıç fiyatı 0'dır; siz fiyat girince tutar oluşur.",
+        "FILM" => "Hesaplanan röntgen film adedi × stok veya manuel birim fiyat. Başlangıç fiyatı 0'dır; siz fiyat girince tutar oluşur.",
+        "PROF" => "Hesaplanan profil boyu/ağırlığı × stok veya manuel birim fiyat. Profil gerekiyorsa hesap sonucundan otomatik gelir.",
+        "YUZ" => "Hesaplanan yüzey alanı (m²) × stok veya manuel birim fiyat. Boya/yüzey işlemi için kullanılır.",
+        "EK-STK" => "Elle eklenen stok miktarı × stok veya manuel birim fiyat. Ek parçalar ve aksesuarlar için kullanılır.",
+        "EK-GRP" => "Hazır stok grubundaki her kalemin miktarı × çarpan × birim fiyat. Set halinde eklenen parçalar için kullanılır.",
+        _ => "Bu grupta tutar, satırdaki miktar ile seçilen stok/manuel birim fiyatın çarpımıyla hesaplanır."
+    };
 }
 
 @section Styles {
@@ -160,6 +173,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-info small" role="alert">
+                        <strong>Maliyet oluşturunca ne olacak?</strong><br />
+                        Sistem hesaplanan miktarları tabloya getirir. Başlangıçta fiyatı olmayan kalemler 0 görünür; stok seçtiğinizde veya manuel birim fiyat girdiğinizde satır ve grup toplamı otomatik hesaplanır.
+                    </div>
                     <label class="form-label">Analiz Adı</label>
                     <input type="text" name="analysisName" class="form-control mb-3" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" />
                     <label class="form-label">Not</label>
@@ -208,6 +225,18 @@
                 <span class="badge @(costTable.IsPreview ? "bg-secondary" : "bg-success")">@(costTable.IsPreview ? "Ön İzleme" : "Kayıtlı Revizyon")</span>
             </div>
             <div class="card-body d-flex flex-column gap-4">
+                <div class="alert alert-light border d-flex gap-3 align-items-start mb-0" role="alert">
+                    <i class="bi bi-list-check text-primary fs-4"></i>
+                    <div>
+                        <div class="fw-semibold mb-1">Maliyet oluşturulduktan sonra nasıl ilerlenir?</div>
+                        <ol class="mb-0 small ps-3">
+                            <li>Her maliyet grubunun mavi satırındaki notu okuyun; miktarın nereden geldiğini açıklar.</li>
+                            <li>Satırlarda uygun stok kodunu seçin. Stok fiyatı otomatik gelirse tutar hemen hesaplanır.</li>
+                            <li>Stokta fiyat yoksa veya özel fiyat kullanacaksanız “manuel fiyat” kutusunu işaretleyip birim fiyat girin.</li>
+                            <li>Kontrol sonrası “Değişiklikleri uygula” butonuna basın; toplamlar güncellenir.</li>
+                        </ol>
+                    </div>
+                </div>
             @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue)
             {
                 <div class="card shadow-sm mt-4 border-success-subtle order-2">
@@ -335,7 +364,13 @@
                             @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                             {
                                 <tr class="table-primary">
-                                    <td colspan="11" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
+                                    <td colspan="11">
+                                        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                                            <div class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</div>
+                                            <span class="badge bg-light text-primary border">Nasıl hesaplanır?</span>
+                                        </div>
+                                        <div class="small text-primary-emphasis mt-1">@ResolveCostGroupNote(groupItems.Key.CostGroupCode)</div>
+                                    </td>
                                 </tr>
 
                                 @foreach (var item in groupItems)
@@ -485,7 +520,13 @@
                         @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
                         {
                             <tr class="table-primary">
-                                <td colspan="10" class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</td>
+                                <td colspan="10">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                                        <div class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</div>
+                                        <span class="badge bg-light text-primary border">Nasıl hesaplanır?</span>
+                                    </div>
+                                    <div class="small text-primary-emphasis mt-1">@ResolveCostGroupNote(groupItems.Key.CostGroupCode)</div>
+                                </td>
                             </tr>
                             @foreach (var item in groupItems)
                             {
