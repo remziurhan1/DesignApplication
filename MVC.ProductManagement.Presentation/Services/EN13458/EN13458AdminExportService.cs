@@ -1,13 +1,13 @@
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
-using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
+using AdminEN13458DetailsVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM;
 
 namespace MVC.ProductManagement.Presentation.Services.EN13458
 {
     public class EN13458AdminExportService : IEN13458AdminExportService
     {
-        public byte[] BuildDetailExcel(EN13458DetailsVM vm, EN13458MaterialCostTableDTO costTable)
+        public byte[] BuildDetailExcel(AdminEN13458DetailsVM vm, EN13458MaterialCostTableDTO costTable)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var package = new ExcelPackage();
