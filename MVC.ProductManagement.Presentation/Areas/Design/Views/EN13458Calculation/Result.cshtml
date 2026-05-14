@@ -1,0 +1,172 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.EN13458CalculationVMs.EN13458ResultVM
+@using System
+@using System.Globalization
+@{
+    ViewData["Title"] = "EN13458 Result";
+    var totalProfileLengthMm = Model.TotalProfileLength > 0 ? Model.TotalProfileLength : Model.RequiredProfileCount * Model.ProfileDevelopedLength;
+    var totalProfileLengthM = totalProfileLengthMm / 1000d;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+<div class="en-hero">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <span class="en-kicker"><i class="bi bi-check2-circle"></i> Hesap sonucu</span>
+            <h2>EN13458 sonuç seti hazır.</h2>
+            <p class="mb-0">Kaydetmeden önce ana ölçüleri, malzeme kalınlıklarını ve oryantasyon çıktısını profesyonel bir görünümle gözden geçirin.</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="en-hero-actions">
+                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Hesaplama tamamlandı</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="en-metric-grid">
+    <div class="en-metric-card"><span class="en-metric-label">İç Gövde T</span><div class="en-metric-value">@Model.RoundedInnerShellThickness.ToString("N2") mm</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Dış Gövde T</span><div class="en-metric-value">@Model.RoundedOuterShellThickness.ToString("N2") mm</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Toplam Kaynak</span><div class="en-metric-value">@Model.TotalWeldLength.ToString("N2")</div></div>
+    <div class="en-metric-card"><span class="en-metric-label">Perlit Ağırlığı</span><div class="en-metric-value">@Model.PerliteWeight.ToString("N2") kg</div></div>
+</div>
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h2 class="mb-0">EN13458 Sonuç</h2>
+    <div class="d-flex gap-2 flex-wrap">
+        <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Hesaplama tamamlandı</span>
+        @if (Model.Id != Guid.Empty)
+        {
+            <a asp-action="Specification" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-file-earmark-richtext me-1"></i>Şartname
+            </a>
+        }
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light fw-semibold">Girilen Değerler</div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-sm align-middle mb-0">
+                        <tbody>
+                        <tr><th class="w-50">Ad</th><td>@Model.Name</td></tr>
+                        <tr><th>İç Tank Çapı</th><td>@Model.OuterDiameter</td></tr>
+                        <tr><th>Dış Tank Çapı</th><td>@Model.OuterTankDiameter</td></tr>
+                        <tr><th>Silindirik Boy</th><td>@Model.ShellLength</td></tr>
+                        <tr><th>Basınç</th><td>@Model.Pressure</td></tr>
+                        <tr><th>Depolanacak Ürün</th><td>@Model.StorageTypeName</td></tr>
+                        <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td></tr>
+                        <tr><th>Kaynak Boyu 1500</th><td>@Model.WeldLength1500</td></tr>
+                        <tr><th>Kaynak Boyu 2000</th><td>@Model.WeldLength2000</td></tr>
+                        <tr><th>Kaynak Boyu 2500</th><td>@Model.WeldLength2500</td></tr>
+                        <tr><th>Kaynak Boyu 3000</th><td>@Model.WeldLength3000</td></tr>
+                        <tr><th>Tank Yönelimi</th><td>@Model.TankOrientation</td></tr>
+                        <tr><th>Cold Stretch Uygulandı mı?</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
+
+                        <tr><th>İç Tank Gövde Malzemesi</th><td>@Model.InnerShellMaterialName</td></tr>
+                        <tr><th>İç Tank Gövde Malzeme Formu</th><td>@Model.InnerShellMaterialFormName</td></tr>
+                        <tr><th>İç Tank Bombe Malzemesi</th><td>@Model.InnerHeadMaterialName</td></tr>
+                        <tr><th>İç Tank Bombe Malzeme Formu</th><td>@Model.InnerHeadMaterialFormName</td></tr>
+                        <tr><th>Dış Tank Gövde Malzemesi</th><td>@Model.OuterShellMaterialName</td></tr>
+                        <tr><th>Dış Tank Gövde Malzeme Formu</th><td>@Model.OuterShellMaterialFormName</td></tr>
+                        <tr><th>Dış Tank Bombe Malzemesi</th><td>@Model.OuterHeadMaterialName</td></tr>
+                        <tr><th>Dış Tank Bombe Malzeme Formu</th><td>@Model.OuterHeadMaterialFormName</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light fw-semibold">Hesap Sonuçları</div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-sm align-middle mb-0">
+                        <tbody>
+                        <tr><th class="w-50">İç Gövde Akma Dayanımı (MPa)</th><td>@Model.InnerShellMaterialStrength</td></tr>
+                        <tr><th>İç Bombe Akma Dayanımı (MPa)</th><td>@Model.InnerHeadMaterialStrength</td></tr>
+                        <tr><th>Dış Gövde Akma Dayanımı (MPa)</th><td>@Model.OuterShellMaterialStrength</td></tr>
+                        <tr><th>Dış Bombe Akma Dayanımı (MPa)</th><td>@Model.OuterHeadMaterialStrength</td></tr>
+
+                        <tr><th>İç Gövde Kalınlığı</th><td>@Model.InnerShellThickness</td></tr>
+                        <tr><th>İç Bombe Kalınlığı</th><td>@Model.InnerHeadThickness</td></tr>
+                        <tr><th>Dış Gövde Kalınlığı</th><td>@Model.OuterShellThickness</td></tr>
+                        <tr><th>Dış Bombe Kalınlığı</th><td>@Model.OuterHeadThickness</td></tr>
+
+                        <tr><th>Yuvarlanmış İç Gövde Kalınlığı</th><td>@Model.RoundedInnerShellThickness</td></tr>
+                        <tr><th>Yuvarlanmış İç Bombe Kalınlığı</th><td>@Model.RoundedInnerHeadThickness</td></tr>
+                        <tr><th>Yuvarlanmış Dış Gövde Kalınlığı</th><td>@Model.RoundedOuterShellThickness</td></tr>
+                        <tr><th>Yuvarlanmış Dış Bombe Kalınlığı</th><td>@Model.RoundedOuterHeadThickness</td></tr>
+
+                        <tr><th>Design Pressure</th><td>@Model.DesignPressure</td></tr>
+                        <tr><th>Test Pressure</th><td>@Model.TestPressure</td></tr>
+                        <tr><th>Static Pressure</th><td>@Model.StaticPressure</td></tr>
+                        <tr><th>İç Tank Toplam Uzunluk</th><td>@Model.InnerTankTotalLength</td></tr>
+                        <tr><th>Dış Tank Toplam Uzunluk</th><td>@Model.OuterTankTotalLength</td></tr>
+
+                        <tr><th>İç Hacim</th><td>@Model.InnerVolume</td></tr>
+                        <tr><th>Dış Hacim</th><td>@Model.OuterVolume</td></tr>
+                        <tr><th>İç Yüzey Alanı</th><td>@Model.InnerSurfaceArea</td></tr>
+                        <tr><th>Dış Yüzey Alanı</th><td>@Model.OuterSurfaceArea</td></tr>
+                        <tr><th>İç Tank Ağırlığı</th><td>@Model.InnerTankWeight</td></tr>
+                        <tr><th>Dış Tank Ağırlığı</th><td>@Model.OuterTankWeight</td></tr>
+                        <tr><th>Perlit Hacmi</th><td>@Model.PerliteVolume</td></tr>
+                        <tr><th>Perlit Ağırlığı (kg)</th><td>@Model.PerliteWeight</td></tr>
+                        <tr><th>Gaz Azot Hacmi</th><td>@Model.GasNitrogenVolume</td></tr>
+                        <tr><th>Sıvı Azot Hacmi</th><td>@Model.LiquidNitrogenVolume</td></tr>
+                        <tr><th>Burkulma Dalga Sayısı (n)</th><td>@Model.BucklingWaveNumber</td></tr>
+                        <tr><th>Elastik Burkulma Basıncı P1 (bar)</th><td>@Model.ElasticBucklingPressureP1</td></tr>
+                        <tr><th>Plastik Çökme Basıncı P2 (bar)</th><td>@Model.PlasticCollapsePressureP2</td></tr>
+                        <tr><th>Tasarım Dış Basıncı Pv (bar)</th><td>@Model.DesignExternalPressurePv</td></tr>
+                        <tr><th>Destek Ring Gerekli mi?</th><td>@(Model.SupportRingRequired ? "Evet" : "Hayır")</td></tr>
+                        <tr><th>Ring Elastik Kritik Basınç Pe (bar)</th><td>@Model.SupportRingCriticalPressurePe</td></tr>
+                        <tr><th>Ring Gerilme X (N/mm²)</th><td>@Model.SupportRingStressX</td></tr>
+                        <tr><th>Ring İzinli Gerilme (N/mm²)</th><td>@Model.SupportRingAllowableStress</td></tr>
+                        <tr><th>Ring Yeterlilik</th><td>@(Model.SupportRingAdequate ? "Yeterli" : "Yetersiz")</td></tr>
+                        <tr><th>Head Çökme Basıncı (bar)</th><td>@Model.HeadCollapsePressure</td></tr>
+                        <tr><th>Gerekli Profil Adedi</th><td>@Model.RequiredProfileCount</td></tr>
+                        <tr><th>Profil Açınım Uzunluğu (mm)</th><td>@Model.ProfileDevelopedLength</td></tr>
+                        <tr><th>Toplam Profil Metrajı (m)</th><td>@totalProfileLengthM.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                        <tr><th>Toplam Profil Boyu (mm)</th><td>@totalProfileLengthMm.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                        <tr><th>Profil Kaynak Metrajı (mm)</th><td>@Model.ProfileWeldLength.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<form asp-action="Save" method="post" class="mt-4 mb-5 pb-4 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
+    @Html.AntiForgeryToken()
+    @foreach (var p in ViewData.ModelMetadata.Properties)
+    {
+        <input type="hidden" name="@p.PropertyName" value="@ViewData.ModelExplorer.GetExplorerForProperty(p.PropertyName).Model" />
+    }
+
+    <button type="submit" class="btn btn-success px-4">
+        <i class="bi bi-check2-circle me-1"></i>@(Model.IsEditMode ? "Güncellemeyi Kaydet" : "Kaydet")
+    </button>
+    <a asp-action="Calculate" class="btn btn-primary px-4">
+        <i class="bi bi-plus-circle me-1"></i>Yeni Hesap
+    </a>
+    @if (Model.Id != Guid.Empty)
+    {
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary px-4">
+            <i class="bi bi-list-ul me-1"></i>Detaya Dön
+        </a>
+    }
+</form>
+
+
+</div>

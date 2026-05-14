@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles ="Admin,DesignEngineer,DesignManager")]
+    [Authorize(Roles = "Admin")]
     public class AdminBaseController : BaseController
     {
         protected async Task<bool> HasDesignPermissionAsync(Func<Domain.Entities.EmployeeProfile, bool> permissionSelector)

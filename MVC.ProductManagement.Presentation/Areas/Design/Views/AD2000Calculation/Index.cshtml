@@ -1,0 +1,96 @@
+@model List<MVC.ProductManagement.Presentation.Areas.Design.Models.AD2000CalculationVMs.AD2000ListVM>
+@using System.Globalization
+@using System.Linq
+@{
+    ViewData["Title"] = "AD2000 Index";
+    var totalCount = Model.Count;
+    var avgPressure = totalCount > 0 ? Model.Average(x => x.DesignPressure) : 0;
+    var avgShell = totalCount > 0 ? Model.Average(x => x.RoundedShellThickness) : 0;
+    var canManageCost = false;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-hdd-stack"></i> AD2000 mühendislik merkezi</span>
+                <h2>AD2000 hesap, detay ve maliyet akışı tek yapıda.</h2>
+                <p class="mb-0">Tek cidarlı tank hesaplarını daha profesyonel bir görünümle yönetin; tasarım basıncı, seçilen et kalınlıkları ve kayıt detaylarını hızlıca takip edin.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Calculate" class="btn btn-light btn-lg"><i class="bi bi-plus-circle me-1"></i>Yeni AD2000 Hesabı</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="en-metric-grid">
+        <div class="en-metric-card"><span class="en-metric-label">Toplam Kayıt</span><div class="en-metric-value">@totalCount</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Ort. Basınç</span><div class="en-metric-value">@avgPressure.ToString("N2", CultureInfo.InvariantCulture) bar</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Ort. Gövde Et</span><div class="en-metric-value">@avgShell.ToString("N2", CultureInfo.InvariantCulture) mm</div></div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span>AD2000 hesap listesi</span>
+            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle">@totalCount kayıt</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Ad</th>
+                            <th>Dizayn Basınç</th>
+                            <th>Gövde Et</th>
+                            <th>Bombe Et</th>
+                            <th class="text-end">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@item.Name</div>
+                                    <div class="small text-muted">Kayıt: @item.Id</div>
+                                </td>
+                                <td>@item.DesignPressure.ToString("N2", CultureInfo.InvariantCulture) bar</td>
+                                <td>@item.RoundedShellThickness.ToString("N2", CultureInfo.InvariantCulture) mm</td>
+                                <td>@item.RoundedHeadThickness.ToString("N2", CultureInfo.InvariantCulture) mm</td>
+                                <td class="text-end">
+                                    <div class="d-inline-flex gap-2">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-right-circle me-1"></i>Detay</a>
+                                        @if (canManageCost)
+                                        {
+                                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Bu AD2000 tank kaydını silmek istediğinize emin misiniz?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>Sil</button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <div class="en-empty d-inline-block">Henüz AD2000 hesabı bulunmuyor. İlk hesabı oluşturmak için “Yeni AD2000 Hesabı” butonunu kullanın.</div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

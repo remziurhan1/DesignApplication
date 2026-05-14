@@ -1,0 +1,91 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.AD2000CalculationVMs.AD2000ResultVM
+@using System
+@using System.Globalization
+@using System.Linq
+@using System.Collections.Generic
+@{
+    ViewData["Title"] = "AD2000 Result";
+    var canManageCost = false;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-check2-circle"></i> AD2000 sonuç ekranı</span>
+                <h2>Hesap sonucu hazır.</h2>
+                <p class="mb-0">Gövde ve bombe et kalınlıklarını, oryantasyon planını ve maliyet hazırlık verilerini kaydetmeden önce kontrol edin.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Calculate" class="btn btn-outline-light"><i class="bi bi-arrow-repeat me-1"></i>Yeni Hesap</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="en-metric-grid">
+        <div class="en-metric-card"><span class="en-metric-label">Gövde Et</span><div class="en-metric-value">@Model.RoundedShellThickness.ToString("N2") mm</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Bombe Et</span><div class="en-metric-value">@Model.RoundedHeadThickness.ToString("N2") mm</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Statik Basınç</span><div class="en-metric-value">@Model.StaticPressure.ToString("N3") bar</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Yüzey Alanı</span><div class="en-metric-value">@Model.SurfaceArea.ToString("N2") m²</div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="card h-100">
+                <div class="card-header bg-light">Giriş değerleri</div>
+                <div class="card-body p-0">
+                    <table class="table table-striped align-middle mb-0"><tbody>
+                        <tr><th>Tank</th><td>@Model.Name</td></tr>
+                        <tr><th>Çap</th><td>@Model.Diameter.ToString("N2") mm</td></tr>
+                        <tr><th>Silindir Boyu</th><td>@Model.ShellLength.ToString("N2") mm</td></tr>
+                        <tr><th>Dizayn Basıncı</th><td>@Model.DesignPressure.ToString("N2") bar</td></tr>
+                        <tr><th>Dizayn Sıcaklığı</th><td>@Model.DesignTemperatureMin.ToString("N2") / @Model.DesignTemperatureMax.ToString("N2") °C</td></tr>
+                        <tr><th>Tank Yönelimi</th><td>@Model.TankOrientation</td></tr>
+                        <tr><th>Sıvı</th><td>@(!string.IsNullOrWhiteSpace(Model.StorageTypeName) ? Model.StorageTypeName : "Manuel yoğunluk")</td></tr>
+                        <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity.ToString("N2") kg/m³</td></tr>
+                        <tr><th>Gövde Malzemesi</th><td>@Model.ShellMaterialName / @Model.ShellMaterialFormName</td></tr>
+                        <tr><th>Bombe Malzemesi</th><td>@Model.HeadMaterialName / @Model.HeadMaterialFormName</td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card h-100">
+                <div class="card-header bg-light">Çıkış değerleri</div>
+                <div class="card-body p-0">
+                    <table class="table table-striped align-middle mb-0"><tbody>
+                        <tr><th>Hesaplanan Gövde Et</th><td>@Model.ShellThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Seçilen Gövde Et</th><td>@Model.RoundedShellThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Hesaplanan Bombe Et</th><td>@Model.HeadThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Seçilen Bombe Et</th><td>@Model.RoundedHeadThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Test Basıncı</th><td>@Model.TestPressure.ToString("N2") bar</td></tr>
+                        <tr><th>Kaynak Metrajı (1500)</th><td>@Model.WeldLength1500.ToString("N2") mm</td></tr>
+                        <tr><th>Kaynak Metrajı (2000)</th><td>@Model.WeldLength2000.ToString("N2") mm</td></tr>
+                        <tr><th>Kaynak Metrajı (3000)</th><td>@Model.WeldLength3000.ToString("N2") mm</td></tr>
+                        <tr><th>Kaynak Metrajı (4000)</th><td>@Model.WeldLength4000.ToString("N2") mm</td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Save" method="post" class="mt-4 mb-5 pb-2 p-3 border rounded bg-light d-flex flex-wrap gap-2 justify-content-end">
+        @Html.AntiForgeryToken()
+        @foreach (var p in ViewData.ModelMetadata.Properties)
+        {
+            <input type="hidden" name="@p.PropertyName" value="@ViewData.ModelExplorer.GetExplorerForProperty(p.PropertyName).Model" />
+        }
+        <button type="submit" class="btn btn-success px-4"><i class="bi bi-check2-circle me-1"></i>Kaydet</button>
+        @if (Model.Id != Guid.Empty && canManageCost)
+        {
+            <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-primary px-4"><i class="bi bi-cash-stack me-1"></i>Maliyet Görünümü</a>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary px-4"><i class="bi bi-list-ul me-1"></i>Kayıt Listesi</a>
+    </form>
+</div>
