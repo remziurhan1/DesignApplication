@@ -1,0 +1,152 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.AD2000CalculationVMs.AD2000ResultVM
+@using System
+@using System.Globalization
+@using System.Linq
+@using System.Collections.Generic
+@{
+    ViewData["Title"] = "AD2000 Details";
+    var isSalesView = ViewBag.IsSalesView is bool flag && flag;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-file-earmark-bar-graph"></i> AD2000 detay ekranı</span>
+                <h2>@Model.Name</h2>
+                <p class="mb-0">Hesap sonucu, malzeme bilgileri ve teknik çıktılarını tek sayfada mühendislik odaklı bir görünümle inceleyin.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Index" class="btn btn-outline-light"><i class="bi bi-list-ul me-1"></i>Liste</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="en-metric-grid">
+        <div class="en-metric-card"><span class="en-metric-label">Gövde Et</span><div class="en-metric-value">@Model.RoundedShellThickness.ToString("N2") mm</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Bombe Et</span><div class="en-metric-value">@Model.RoundedHeadThickness.ToString("N2") mm</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Test Basıncı</span><div class="en-metric-value">@Model.TestPressure.ToString("N2") bar</div></div>
+        <div class="en-metric-card"><span class="en-metric-label">Yüzey Alanı</span><div class="en-metric-value">@Model.SurfaceArea.ToString("N2") m²</div></div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">Kimlik ve giriş verileri</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <tbody>
+                        <tr><th>Kayıt Id</th><td>@Model.Id</td><th>Tank</th><td>@Model.Name</td></tr>
+                        <tr><th>Çap</th><td>@Model.Diameter.ToString("N2") mm</td><th>Gövde Boyu</th><td>@Model.ShellLength.ToString("N2") mm</td></tr>
+                        <tr><th>Dizayn Basıncı</th><td>@Model.DesignPressure.ToString("N2") bar</td><th>Sıcaklık Aralığı</th><td>@Model.DesignTemperatureMin.ToString("N2") / @Model.DesignTemperatureMax.ToString("N2") °C</td></tr>
+                        <tr><th>Korozyon Payı</th><td>@Model.CorrosionAllowance.ToString("N2") mm</td><th>Kaynak Faktörü</th><td>@Model.WeldJointFactor.ToString("N2")</td></tr>
+                        <tr><th>Tank Yönelimi</th><td>@Model.TankOrientation</td><th>Sıvı</th><td>@(!string.IsNullOrWhiteSpace(Model.StorageTypeName) ? Model.StorageTypeName : "Manuel yoğunluk")</td></tr>
+                        <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity.ToString("N2") kg/m³</td><th>Statik Basınç</th><td>@Model.StaticPressure.ToString("N3") bar</td></tr>
+                        <tr><th>Kaynak Metrajı 1500</th><td>@Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Kaynak Metrajı 2000</th><td>@Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>Kaynak Metrajı 3000</th><td>@Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Kaynak Metrajı 4000</th><td>@Model.WeldLength4000.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th colspan="4" class="table-secondary">Kaynak Detayları</th></tr>
+                        <tr><th>Gövde Kaynak Metrajı</th><td>@Model.ShellWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Bombe Kaynak Metrajı (Çevre)</th><td>@(Math.Max(Model.CircumferenceWeldLength - Model.ShellWeldLength, 0d).ToString("0.##", CultureInfo.InvariantCulture)) mm</td></tr>
+                        <tr><th>Toplam Çevre Kaynakları</th><td>@Model.CircumferenceWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>L Kaynakları</th><td>@Model.HeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                        <tr><th>Stifner Ring Kaynak Metrajı</th><td>@Model.StiffenerRingWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam Kaynak Metrajı</th><td>@Model.TotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="card h-100 border-primary-subtle">
+                <div class="card-header bg-primary-subtle text-primary-emphasis">Malzeme bilgileri</div>
+                <div class="card-body p-0">
+                    <table class="table table-striped align-middle mb-0"><tbody>
+                        <tr><th>Gövde Malzemesi</th><td>@Model.ShellMaterialName</td></tr>
+                        <tr><th>Gövde Formu</th><td>@Model.ShellMaterialFormName</td></tr>
+                        <tr><th>Bombe Malzemesi</th><td>@Model.HeadMaterialName</td></tr>
+                        <tr><th>Bombe Formu</th><td>@Model.HeadMaterialFormName</td></tr>
+                        <tr><th>Gövde Akma Dayanımı</th><td>@Model.ShellAllowableStress.ToString("N2") MPa</td></tr>
+                        <tr><th>Bombe Akma Dayanımı</th><td>@Model.HeadAllowableStress.ToString("N2") MPa</td></tr>
+                        <tr><th>Tahmini Gövde Et</th><td>@Model.EstimatedShellThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Tahmini Bombe Et</th><td>@Model.EstimatedHeadThickness.ToString("N2") mm</td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card h-100 border-success-subtle">
+                <div class="card-header bg-success-subtle text-success-emphasis">Hesap sonuçları</div>
+                <div class="card-body p-0">
+                    <table class="table table-striped align-middle mb-0"><tbody>
+                        <tr><th>Hesaplanan Gövde Et</th><td>@Model.ShellThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Seçilen Gövde Et</th><td>@Model.RoundedShellThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Hesaplanan Bombe Et</th><td>@Model.HeadThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Seçilen Bombe Et</th><td>@Model.RoundedHeadThickness.ToString("N2") mm</td></tr>
+                        <tr><th>Beta</th><td>@Model.Beta.ToString("N2")</td></tr>
+                        <tr><th>İzin Verilebilir Gerilme</th><td>@Model.AllowableStress.ToString("N2") MPa</td></tr>
+                        <tr><th>Test Basıncı</th><td>@Model.TestPressure.ToString("N2") bar</td></tr>
+                        <tr><th>Yüzey Alanı</th><td>@Model.SurfaceArea.ToString("N2") m²</td></tr>
+                    </tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header bg-light">Sac oryantasyonu</div>
+        <div class="card-body">
+            <p class="text-muted mb-2">Format: <strong>Et (mm) x Sektör Genişliği (mm) x Sac Açınımı (mm)</strong></p>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Sektör Genişliği</th>
+                            <th>Parça Adedi</th>
+                            <th>Sac Açınımı</th>
+                            <th>Kesim Listesi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sectorWidth in new[] { 1500d, 2000d, 3000d, 4000d })
+                        {
+                            var plan = BuildSectorPlan(Model.ShellLength, sectorWidth);
+                            var developedLength = Math.Round(Math.PI * Model.Diameter, 2);
+                            var cutList = string.Join(" + ", plan.Widths.Select(w => $"{Model.RoundedShellThickness.ToString("0.##", CultureInfo.InvariantCulture)} x {w.ToString("0.##", CultureInfo.InvariantCulture)} x {developedLength.ToString("0.##", CultureInfo.InvariantCulture)}"));
+                            <tr>
+                                <td>@sectorWidth.ToString("0", CultureInfo.InvariantCulture) mm</td>
+                                <td>@plan.PieceCount adet</td>
+                                <td>@developedLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td>
+                                <td>@cutList</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    private static (int PieceCount, List<double> Widths) BuildSectorPlan(double shellLength, double sectorWidth)
+    {
+        if (shellLength <= 0 || sectorWidth <= 0)
+        {
+            return (0, new List<double>());
+        }
+
+        var pieceCount = (int)Math.Ceiling(shellLength / sectorWidth);
+        var widths = new List<double>(pieceCount);
+
+        for (var i = 0; i < pieceCount; i++)
+        {
+            var remaining = shellLength - (i * sectorWidth);
+            widths.Add(Math.Round(Math.Min(sectorWidth, Math.Max(0, remaining)), 2));
+        }
+
+        return (pieceCount, widths);
+    }
+}

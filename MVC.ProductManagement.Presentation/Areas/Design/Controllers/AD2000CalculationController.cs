@@ -1,0 +1,372 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MVC.ProductManagement.Application.DTOs.AD2000DTOs;
+using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
+using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
+using MVC.ProductManagement.Application.Services.AD2000CalculationServices;
+using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
+using MVC.ProductManagement.Application.Services.MaterialFormServices;
+using MVC.ProductManagement.Application.Services.MaterialServices;
+using MVC.ProductManagement.Application.Services.StorageTypeServices;
+using MVC.ProductManagement.Presentation.Areas.Design.Models.AD2000CalculationVMs;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using MVC.ProductManagement.Domain.Enums;
+
+namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
+{
+    public class AD2000CalculationController : DesignBaseController
+    {
+        private readonly IAD2000CalculationService _calculationService;
+        private readonly IMaterialService _materialService;
+        private readonly IMaterialFormService _materialFormService;
+        private readonly IYieldStrengthService _yieldStrengthService;
+        private readonly IStorageTypeService _storageTypeService;
+
+        public AD2000CalculationController(
+            IAD2000CalculationService calculationService,
+            IMaterialService materialService,
+            IMaterialFormService materialFormService,
+            IYieldStrengthService yieldStrengthService,
+            IStorageTypeService storageTypeService)
+        {
+            _calculationService = calculationService;
+            _materialService = materialService;
+            _materialFormService = materialFormService;
+            _yieldStrengthService = yieldStrengthService;
+            _storageTypeService = storageTypeService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var list = await _calculationService.GetAllAsync() ?? new List<AD2000ResultDTO>();
+            var vm = list.Select(x => new AD2000ListVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+                DesignPressure = x.DesignPressure,
+                RoundedShellThickness = x.RoundedShellThickness,
+                RoundedHeadThickness = x.RoundedHeadThickness
+            }).ToList();
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var deleted = await _calculationService.DeleteAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id, string mode = "manager")
+        {
+            var dto = await _calculationService.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+
+            var vm = MapResultVm(dto);
+            await PopulateDisplayNamesAsync(vm);
+            ViewBag.IsSalesView = string.Equals(mode, "sales", StringComparison.OrdinalIgnoreCase);
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Calculate()
+        {
+            await LoadLookupsAsync();
+            return View(new AD2000CalculateVM { TankOrientation = TankOrientation.Horizontal, IsManualDensity = false });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Calculate(AD2000CalculateVM vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                await LoadLookupsAsync();
+                return View(vm);
+            }
+
+            if (vm.IsManualDensity)
+            {
+                if (vm.LiquidDensity <= 0)
+                {
+                    ModelState.AddModelError(nameof(vm.LiquidDensity), "Yoğunluk değeri 0'dan büyük olmalıdır.");
+                }
+            }
+            else if (!vm.StorageTypeId.HasValue || vm.StorageTypeId.Value == Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(vm.StorageTypeId), "Tanımlı sıvı seçiniz veya manuel yoğunluk seçeneğini işaretleyiniz.");
+            }
+            else
+            {
+                try { vm.LiquidDensity = await ResolveLiquidDensityAsync(vm.StorageTypeId.Value); }
+                catch (InvalidOperationException ex) { ModelState.AddModelError(nameof(vm.StorageTypeId), ex.Message); }
+            }
+
+            var shellYield = await _yieldStrengthService.GetByConditionsAsync(vm.ShellMaterialFormId, vm.DesignTemperatureMax, vm.EstimatedShellThickness);
+            var headYield = await _yieldStrengthService.GetByConditionsAsync(vm.HeadMaterialFormId, vm.DesignTemperatureMax, vm.EstimatedHeadThickness);
+            if (shellYield == null) ModelState.AddModelError(nameof(vm.EstimatedShellThickness), "Gövde için girilen sıcaklık/kalınlıkta akma dayanımı bulunamadı.");
+            if (headYield == null) ModelState.AddModelError(nameof(vm.EstimatedHeadThickness), "Bombe için girilen sıcaklık/kalınlıkta akma dayanımı bulunamadı.");
+
+            if (!ModelState.IsValid)
+            {
+                await LoadLookupsAsync();
+                return View(vm);
+            }
+
+            vm.ShellAllowableStress = shellYield!.Rp02;
+            vm.HeadAllowableStress = headYield!.Rp02;
+            vm.AllowableStress = vm.ShellAllowableStress;
+            var shellDesignStress = shellYield.Rp02 / 1.5d;
+            var headDesignStress = headYield.Rp02 / 1.5d;
+
+            var result = await _calculationService.CalculateAsync(new AD2000CalculateDTO
+            {
+                Name = vm.Name,
+                Diameter = vm.Diameter,
+                ShellLength = vm.ShellLength,
+                DesignPressure = vm.DesignPressure,
+                DesignTemperatureMin = vm.DesignTemperatureMin,
+                DesignTemperatureMax = vm.DesignTemperatureMax,
+                CorrosionAllowance = vm.CorrosionAllowance,
+                WeldJointFactor = vm.WeldJointFactor,
+                AllowableStress = vm.AllowableStress,
+                ShellAllowableStress = vm.ShellAllowableStress,
+                HeadAllowableStress = vm.HeadAllowableStress,
+                ShellYieldStrengthRp02 = shellYield.Rp02,
+                HeadYieldStrengthRp02 = headYield.Rp02,
+                ShellDesignStress = shellDesignStress,
+                HeadDesignStress = headDesignStress,
+                EstimatedShellThickness = vm.EstimatedShellThickness,
+                EstimatedHeadThickness = vm.EstimatedHeadThickness,
+                Beta = vm.Beta,
+                TankOrientation = vm.TankOrientation,
+                StorageTypeId = vm.StorageTypeId,
+                IsManualDensity = vm.IsManualDensity,
+                LiquidDensity = vm.LiquidDensity,
+                StaticPressure = vm.StaticPressure,
+                ShellMaterialId = vm.ShellMaterialId,
+                ShellMaterialFormId = vm.ShellMaterialFormId,
+                HeadMaterialId = vm.HeadMaterialId,
+                HeadMaterialFormId = vm.HeadMaterialFormId,
+                WeldLength1500 = vm.WeldLength1500,
+                WeldLength2000 = vm.WeldLength2000,
+                WeldLength3000 = vm.WeldLength3000,
+                WeldLength4000 = vm.WeldLength4000,
+                ShellWeldLength = vm.ShellWeldLength,
+                HeadWeldLength = vm.HeadWeldLength,
+                CircumferenceWeldLength = vm.CircumferenceWeldLength,
+                TotalWeldLength = vm.TotalWeldLength,
+                StiffenerRingWeldLength = vm.StiffenerRingWeldLength,
+                WeldConsumableCost = vm.WeldConsumableCost,
+                SurfaceArea = vm.SurfaceArea
+            });
+
+            var resultVm = MapResultVm(result);
+            await PopulateDisplayNamesAsync(resultVm);
+            return View("Result", resultVm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(AD2000ResultVM vm)
+        {
+            var dto = new AD2000ResultDTO
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                Diameter = vm.Diameter,
+                ShellLength = vm.ShellLength,
+                DesignPressure = vm.DesignPressure,
+                DesignTemperatureMin = vm.DesignTemperatureMin,
+                DesignTemperatureMax = vm.DesignTemperatureMax,
+                CorrosionAllowance = vm.CorrosionAllowance,
+                WeldJointFactor = vm.WeldJointFactor,
+                AllowableStress = vm.AllowableStress,
+                ShellAllowableStress = vm.ShellAllowableStress,
+                HeadAllowableStress = vm.HeadAllowableStress,
+                ShellYieldStrengthRp02 = vm.ShellYieldStrengthRp02 > 0 ? vm.ShellYieldStrengthRp02 : vm.ShellAllowableStress,
+                HeadYieldStrengthRp02 = vm.HeadYieldStrengthRp02 > 0 ? vm.HeadYieldStrengthRp02 : vm.HeadAllowableStress,
+                ShellDesignStress = vm.ShellDesignStress > 0 ? vm.ShellDesignStress : vm.ShellAllowableStress / 1.5d,
+                HeadDesignStress = vm.HeadDesignStress > 0 ? vm.HeadDesignStress : vm.HeadAllowableStress / 1.5d,
+                EstimatedShellThickness = vm.EstimatedShellThickness,
+                EstimatedHeadThickness = vm.EstimatedHeadThickness,
+                Beta = vm.Beta,
+                TankOrientation = vm.TankOrientation,
+                StorageTypeId = vm.StorageTypeId,
+                IsManualDensity = vm.IsManualDensity,
+                LiquidDensity = vm.LiquidDensity,
+                StaticPressure = vm.StaticPressure,
+                ShellMaterialId = vm.ShellMaterialId,
+                ShellMaterialFormId = vm.ShellMaterialFormId,
+                HeadMaterialId = vm.HeadMaterialId,
+                HeadMaterialFormId = vm.HeadMaterialFormId,
+                ShellThickness = vm.ShellThickness,
+                HeadThickness = vm.HeadThickness,
+                RoundedShellThickness = vm.RoundedShellThickness,
+                RoundedHeadThickness = vm.RoundedHeadThickness,
+                TestPressure = vm.TestPressure,
+                WeldLength1500 = vm.WeldLength1500,
+                WeldLength2000 = vm.WeldLength2000,
+                WeldLength3000 = vm.WeldLength3000,
+                WeldLength4000 = vm.WeldLength4000,
+                ShellWeldLength = vm.ShellWeldLength,
+                HeadWeldLength = vm.HeadWeldLength,
+                CircumferenceWeldLength = vm.CircumferenceWeldLength,
+                TotalWeldLength = vm.TotalWeldLength,
+                StiffenerRingWeldLength = vm.StiffenerRingWeldLength,
+                WeldConsumableCost = vm.WeldConsumableCost,
+                SurfaceArea = vm.SurfaceArea
+            };
+
+            var saved = await _calculationService.SaveAsync(dto, User?.Identity?.Name ?? "DesignUser");
+            return RedirectToAction(nameof(Details), new { id = saved.Id });
+        }
+
+        private static AD2000ResultVM MapResultVm(AD2000ResultDTO result) => new AD2000ResultVM
+        {
+            Id = result.Id,
+            Name = result.Name,
+            Diameter = result.Diameter,
+            ShellLength = result.ShellLength,
+            DesignPressure = result.DesignPressure,
+            DesignTemperatureMin = result.DesignTemperatureMin,
+            DesignTemperatureMax = result.DesignTemperatureMax,
+            CorrosionAllowance = result.CorrosionAllowance,
+            WeldJointFactor = result.WeldJointFactor,
+            AllowableStress = result.AllowableStress,
+            ShellAllowableStress = result.ShellAllowableStress,
+            HeadAllowableStress = result.HeadAllowableStress,
+            ShellYieldStrengthRp02 = result.ShellYieldStrengthRp02,
+            HeadYieldStrengthRp02 = result.HeadYieldStrengthRp02,
+            ShellDesignStress = result.ShellDesignStress,
+            HeadDesignStress = result.HeadDesignStress,
+            EstimatedShellThickness = result.EstimatedShellThickness,
+            EstimatedHeadThickness = result.EstimatedHeadThickness,
+            Beta = result.Beta,
+            TankOrientation = result.TankOrientation,
+            StorageTypeId = result.StorageTypeId,
+            IsManualDensity = result.IsManualDensity,
+            LiquidDensity = result.LiquidDensity,
+            StaticPressure = result.StaticPressure,
+            ShellMaterialId = result.ShellMaterialId,
+            ShellMaterialFormId = result.ShellMaterialFormId,
+            HeadMaterialId = result.HeadMaterialId,
+            HeadMaterialFormId = result.HeadMaterialFormId,
+            ShellThickness = result.ShellThickness,
+            HeadThickness = result.HeadThickness,
+            RoundedShellThickness = result.RoundedShellThickness,
+            RoundedHeadThickness = result.RoundedHeadThickness,
+            TestPressure = result.TestPressure,
+            WeldLength1500 = result.WeldLength1500,
+            WeldLength2000 = result.WeldLength2000,
+            WeldLength3000 = result.WeldLength3000,
+            WeldLength4000 = result.WeldLength4000,
+            ShellWeldLength = result.ShellWeldLength,
+            HeadWeldLength = result.HeadWeldLength,
+            CircumferenceWeldLength = result.CircumferenceWeldLength,
+            TotalWeldLength = result.TotalWeldLength,
+            StiffenerRingWeldLength = result.StiffenerRingWeldLength,
+            WeldConsumableCost = result.WeldConsumableCost,
+            SurfaceArea = result.SurfaceArea
+        };
+
+        private async Task PopulateDisplayNamesAsync(AD2000ResultVM vm)
+        {
+            var materials = await _materialService.GetAllAsync() ?? new List<MaterialListDto>();
+            var materialForms = await _materialFormService.GetAllAsync() ?? new List<MaterialFormListDto>();
+            var storageTypes = await _storageTypeService.GetAllAsync();
+            var storageTypeList = storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
+
+            vm.StorageTypeName = vm.StorageTypeId.HasValue ? storageTypeList.FirstOrDefault(x => x.Id == vm.StorageTypeId.Value)?.Name ?? string.Empty : string.Empty;
+            vm.ShellMaterialName = materials.FirstOrDefault(x => x.Id == vm.ShellMaterialId)?.Name ?? string.Empty;
+            vm.HeadMaterialName = materials.FirstOrDefault(x => x.Id == vm.HeadMaterialId)?.Name ?? string.Empty;
+            vm.ShellMaterialFormName = materialForms.FirstOrDefault(x => x.Id == vm.ShellMaterialFormId)?.FormType.ToString() ?? string.Empty;
+            vm.HeadMaterialFormName = materialForms.FirstOrDefault(x => x.Id == vm.HeadMaterialFormId)?.FormType.ToString() ?? string.Empty;
+        }
+
+        private async Task<double> ResolveLiquidDensityAsync(Guid storageTypeId)
+        {
+            var storageType = await _storageTypeService.GetByIdAsync(storageTypeId);
+            if (storageType?.Data == null || storageType.Data.Density <= 0) throw new InvalidOperationException("Seçilen sıvı için geçerli yoğunluk değeri bulunamadı.");
+            return storageType.Data.Density;
+        }
+
+        private async Task LoadLookupsAsync()
+        {
+            var materials = await _materialService.GetAllAsync() ?? new List<MaterialListDto>();
+            var materialForms = await _materialFormService.GetAllAsync() ?? new List<MaterialFormListDto>();
+            var storageTypes = await _storageTypeService.GetAllAsync();
+
+            static string BuildMaterialDisplay(MaterialListDto material, IEnumerable<MaterialFormListDto> forms, string? materialClass = null)
+            {
+                var scopedForms = forms
+                    .Where(x => string.IsNullOrWhiteSpace(materialClass)
+                        || string.Equals((x.MaterialClass ?? string.Empty).Trim(), materialClass.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                var details = scopedForms
+                    .Select(x => string.Join(" / ", new[] { x.SymbolicName, x.Norm, x.FormType.ToString() }
+                        .Where(v => !string.IsNullOrWhiteSpace(v))
+                        .Select(v => v!.Trim())))
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Take(2)
+                    .ToList();
+
+                return details.Count == 0 ? material.Name : $"{material.Name} ({string.Join(" | ", details)})";
+            }
+
+            var formsByMaterialId = materialForms
+                .GroupBy(x => x.MaterialId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            ViewBag.Materials = materials
+                .Select(x => new SelectListItem(
+                    BuildMaterialDisplay(x, formsByMaterialId.GetValueOrDefault(x.Id) ?? new List<MaterialFormListDto>()),
+                    x.Id.ToString()))
+                .ToList();
+            var materialClasses = materialForms
+                .Select(x => (x.MaterialClass ?? string.Empty).Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x)
+                .ToList();
+
+            ViewBag.MaterialGroups = materialClasses
+                .Select(x => new SelectListItem(x, x))
+                .ToList();
+
+            ViewBag.MaterialsByGroup = materialClasses.ToDictionary(
+                group => group,
+                group => materials
+                    .Where(m => (formsByMaterialId.GetValueOrDefault(m.Id) ?? new List<MaterialFormListDto>())
+                        .Any(f => string.Equals((f.MaterialClass ?? string.Empty).Trim(), group, StringComparison.OrdinalIgnoreCase)))
+                    .Select(m => new
+                    {
+                        value = m.Id.ToString(),
+                        text = BuildMaterialDisplay(m, formsByMaterialId.GetValueOrDefault(m.Id) ?? new List<MaterialFormListDto>(), group)
+                    })
+                    .ToList(),
+                StringComparer.OrdinalIgnoreCase);
+            ViewBag.MaterialForms = new SelectList(materialForms, "Id", "FormType");
+            ViewBag.MaterialFormsByMaterial = materialForms.GroupBy(x => x.MaterialId).ToDictionary(g => g.Key.ToString(), g => g.Select(x => new { value = x.Id.ToString(), text = $"{x.FormType} [{x.ThicknessMin.ToString("0.###", CultureInfo.InvariantCulture)}-{x.ThicknessMax.ToString("0.###", CultureInfo.InvariantCulture)}]", formType = x.FormType.ToString(), materialClass = x.MaterialClass, norm = x.Norm, symbolicName = x.SymbolicName }).ToList());
+            ViewBag.MaterialFormTypesByMaterial = materialForms.GroupBy(x => x.MaterialId).ToDictionary(g => g.Key.ToString(), g => g.Select(x => x.FormType.ToString()).Distinct().OrderBy(x => x).ToList());
+
+            var storageTypeList = storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>();
+            ViewBag.StorageTypes = storageTypeList.Select(x => new SelectListItem(x.Name, x.Id.ToString())).ToList();
+            ViewBag.StorageTypeDensities = storageTypeList.ToDictionary(x => x.Id.ToString(), x => x.Density);
+        }
+    }
+}

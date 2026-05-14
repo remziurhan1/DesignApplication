@@ -1,0 +1,88 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.StockCodes.Catalog.GeneratedStockCodeInventoryVm
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h4 class="mb-0">Stok Hareketleri - @Model.GeneratedCode</h4>
+        <p class="text-muted mb-0">@Model.Description</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Listeye Dön</a>
+</div>
+
+<div class="alert alert-info">
+    <strong>Güncel Stok:</strong> @Model.CurrentStock
+</div>
+
+<form asp-action="Inventory" method="post" class="card card-body mb-3">
+    @Html.AntiForgeryToken()
+    <input asp-for="GeneratedStockCodeId" type="hidden" />
+
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <label asp-for="MovementType" class="form-label">Hareket Tipi</label>
+            <select asp-for="MovementType" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.InventoryMovementType>()" class="form-select"></select>
+        </div>
+        <div class="col-md-2 mb-3">
+            <label asp-for="Quantity" class="form-label">Miktar</label>
+            <input asp-for="Quantity" type="number" min="1" class="form-control" />
+        </div>
+        <div class="col-md-3 mb-3">
+            <label asp-for="MovementDate" class="form-label">Tarih</label>
+            <input asp-for="MovementDate" type="datetime-local" class="form-control" value="@Model.MovementDate.ToString("yyyy-MM-ddTHH:mm")" />
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="StockProductGroupId" class="form-label">Tank / Ürün Grubu</label>
+            <select asp-for="StockProductGroupId" class="form-select">
+                <option value="">Seçiniz (opsiyonel)</option>
+                @foreach (var group in Model.StockProductGroups)
+                {
+                    <option value="@group.Id">@group.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="ReferenceDocument" class="form-label">Referans Belge</label>
+            <input asp-for="ReferenceDocument" class="form-control" placeholder="İrsaliye/Fatura no" />
+        </div>
+        <div class="col-md-8 mb-3">
+            <label asp-for="MovementDescription" class="form-label">Açıklama</label>
+            <input asp-for="MovementDescription" class="form-control" placeholder="Açıklama giriniz" />
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary">Hareket Ekle</button>
+    </div>
+</form>
+
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th>Tarih</th>
+            <th>Tip</th>
+            <th>Miktar</th>
+            <th>Önce</th>
+            <th>Sonra</th>
+            <th>Tank</th>
+            <th>Belge</th>
+            <th>Açıklama</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Movements)
+    {
+        <tr>
+            <td>@item.MovementDate.ToString("dd.MM.yyyy HH:mm")</td>
+            <td>@item.MovementType</td>
+            <td>@item.Quantity</td>
+            <td>@item.StockBefore</td>
+            <td>@item.StockAfter</td>
+            <td>@(item.StockProductGroupName ?? "-")</td>
+            <td>@item.ReferenceDocument</td>
+            <td>@item.Description</td>
+        </tr>
+    }
+    </tbody>
+</table>
