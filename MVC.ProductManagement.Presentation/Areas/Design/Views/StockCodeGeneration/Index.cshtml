@@ -1,0 +1,58 @@
+@model IEnumerable<MVC.ProductManagement.Application.DTOs.StockCodes.Catalog.GeneratedStockCodeListDto>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<h4>Üretilen Stok Kodları</h4>
+
+<form method="get" asp-action="Index" class="row g-2 align-items-end mb-3">
+    <div class="col-md-6">
+        <label class="form-label">Alt Grup</label>
+        <select name="subGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select">
+            <option value="">Tümü</option>
+        </select>
+    </div>
+    <div class="col-md-6 text-md-end">
+        <button class="btn btn-outline-primary" type="submit">Filtrele</button>
+        <a asp-action="Generate" class="btn btn-primary">Yeni Kod Üret</a>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead><tr><th>Ana/Alt Grup</th><th>Kod</th><th>Açıklama</th><th>Dosyalar</th><th>1. Birim</th><th>KG Karşılığı</th><th>Mevcut Stok</th><th>Birim Fiyat</th><th>Hedef Fiyat</th><th>İşlem</th></tr></thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MainGroupCode / @item.SubGroupCode - @item.SubGroupName</td>
+            <td>@item.GeneratedCode</td>
+            <td>@item.Description</td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(item.Step3DFilePath))
+                {
+                    <a href="@item.Step3DFilePath" target="_blank" class="badge bg-primary text-decoration-none">STEP</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.DxfFilePath1))
+                {
+                    <a href="@item.DxfFilePath1" target="_blank" class="badge bg-info text-decoration-none">DXF-1</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.DxfFilePath2))
+                {
+                    <a href="@item.DxfFilePath2" target="_blank" class="badge bg-info text-decoration-none">DXF-2</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.DatasheetFilePath))
+                {
+                    <a href="@item.DatasheetFilePath" target="_blank" class="badge bg-secondary text-decoration-none">Datasheet</a>
+                }
+            </td>
+            <td>@item.PrimaryUnitType</td>
+            <td>@item.KgEquivalentPerPrimaryUnit.ToString("N4")</td>
+            <td>@item.CurrentStock</td>
+            <td>@(item.UnitPrice?.ToString("N2") ?? "-")</td>
+            <td>@(item.TargetPrice?.ToString("N2") ?? "-")</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                <a asp-action="Inventory" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success">Stok Hareketleri</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
