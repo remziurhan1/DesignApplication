@@ -9,7 +9,7 @@ namespace MVC.ProductManagement.Presentation.Services.EN13458
 {
     public class EN13458SpecificationExportService : IEN13458SpecificationExportService
     {
-        public async Task<byte[]> BuildWordDocumentAsync(string templatePath, EN13458SpecificationVM specification)
+        public async Task<byte[]> BuildWordDocumentAsync(string templatePath, AdminEN13458SpecificationVM specification)
         {
             if (!File.Exists(templatePath))
             {
@@ -29,7 +29,7 @@ namespace MVC.ProductManagement.Presentation.Services.EN13458
             return stream.ToArray();
         }
 
-        private static void ApplySpecificationTemplate(WordprocessingDocument document, EN13458SpecificationVM specification)
+        private static void ApplySpecificationTemplate(WordprocessingDocument document, AdminEN13458SpecificationVM specification)
         {
             var body = document.MainDocumentPart?.Document?.Body;
             if (body == null)
@@ -69,7 +69,7 @@ namespace MVC.ProductManagement.Presentation.Services.EN13458
             paragraph.Append(new Run(new Text(newText) { Space = SpaceProcessingModeValues.Preserve }));
         }
 
-        private static void InsertAccessoryTable(Body body, IReadOnlyCollection<EN13458AccessoryItemVM> accessoryItems)
+        private static void InsertAccessoryTable(Body body, IReadOnlyCollection<AdminEN13458AccessoryItemVM> accessoryItems)
         {
             var anchorParagraph = body.Descendants<Paragraph>()
                 .FirstOrDefault(x => string.Equals(x.InnerText?.Trim(), "Flow schematic: See P&ID below", StringComparison.OrdinalIgnoreCase));
