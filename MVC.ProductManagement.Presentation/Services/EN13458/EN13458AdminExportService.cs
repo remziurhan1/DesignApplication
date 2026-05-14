@@ -172,6 +172,40 @@ namespace MVC.ProductManagement.Presentation.Services.EN13458
             return package.GetAsByteArray();
         }
 
+        public byte[] BuildDetailExcel(DesignEN13458DetailsVM vm, EN13458MaterialCostTableDTO costTable)
+        {
+            return BuildDetailExcel(MapDesignDetailsToAdmin(vm), costTable);
+        }
+
+        private static AdminEN13458DetailsVM MapDesignDetailsToAdmin(DesignEN13458DetailsVM source)
+        {
+            var target = new AdminEN13458DetailsVM();
+            var sourceType = typeof(DesignEN13458DetailsVM);
+
+            foreach (var targetProperty in typeof(AdminEN13458DetailsVM).GetProperties())
+            {
+                if (!targetProperty.CanWrite)
+                {
+                    continue;
+                }
+
+                var sourceProperty = sourceType.GetProperty(targetProperty.Name);
+                if (sourceProperty == null || !sourceProperty.CanRead)
+                {
+                    continue;
+                }
+
+                if (!targetProperty.PropertyType.IsAssignableFrom(sourceProperty.PropertyType))
+                {
+                    continue;
+                }
+
+                targetProperty.SetValue(target, sourceProperty.GetValue(source));
+            }
+
+            return target;
+        }
+
         private static void WriteSectionHeader(ExcelWorksheet ws, int row, string title)
         {
             ws.Cells[row, 1].Value = title;

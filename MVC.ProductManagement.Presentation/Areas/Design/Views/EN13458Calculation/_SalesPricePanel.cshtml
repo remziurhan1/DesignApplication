@@ -1,0 +1,74 @@
+@model MVC.ProductManagement.Application.DTOs.EN13458DTOs.EN13458MaterialCostTableDTO
+@using System
+@using System.Globalization
+@using System.Linq
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    var calculationId = (Guid)ViewData["CalculationId"]!;
+    var laborRateOptions = (ViewData["LaborRateOptions"] as IEnumerable<SelectListItem>) ?? Enumerable.Empty<SelectListItem>();
+    var gugRateOptions = (ViewData["GugRateOptions"] as IEnumerable<SelectListItem>) ?? Enumerable.Empty<SelectListItem>();
+    var financeRateOptions = (ViewData["FinanceRateOptions"] as IEnumerable<SelectListItem>) ?? Enumerable.Empty<SelectListItem>();
+    var generalManagementRateOptions = (ViewData["GeneralManagementRateOptions"] as IEnumerable<SelectListItem>) ?? Enumerable.Empty<SelectListItem>();
+}
+
+<div class="card shadow-sm mt-4 border-primary-subtle order-1">
+    <div class="card-header bg-primary-subtle text-primary-emphasis fw-semibold">Satış Fiyatı Oluşturma</div>
+    <div class="card-body">
+        <form asp-action="SaveSalesPrice" method="post" class="row g-3">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@calculationId" />
+            <input type="hidden" name="costAnalysisId" value="@Model.CostAnalysisId" />
+            <div class="col-md-3">
+                <label class="form-label">İşçilik Tarifesi</label>
+                <select name="laborRateId" class="form-select" asp-items="laborRateOptions"></select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">İşçilik Saati</label>
+                <input type="text" name="laborHours" value="@Model.SalesPrice?.LaborHours.ToString(CultureInfo.InvariantCulture)" class="form-control js-decimal-input" inputmode="decimal" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">GÜG Saatlik</label>
+                <select name="gugHourlyRateId" class="form-select" asp-items="gugRateOptions"></select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Finans Gideri</label>
+                <select name="financeOverheadRateId" class="form-select" asp-items="financeRateOptions"></select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Genel Yönetim</label>
+                <select name="generalManagementOverheadRateId" class="form-select" asp-items="generalManagementRateOptions"></select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Kâr Oranı %</label>
+                <input type="text" name="profitPercentage" value="@Model.SalesPrice?.ProfitPercentage.ToString(CultureInfo.InvariantCulture)" class="form-control js-decimal-input" inputmode="decimal" />
+            </div>
+            <div class="col-md-9 d-flex align-items-end justify-content-end">
+                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-currency-exchange me-1"></i>Satış Fiyatı Oluştur</button>
+            </div>
+        </form>
+
+        @if (Model.SalesPrice != null)
+        {
+            <div class="row g-3 mt-2">
+                <div class="col-md-4">
+                    <div class="border rounded p-3 h-100">
+                        <div class="small text-muted">Maliyet (İMM)</div>
+                        <div class="fs-5 fw-semibold">@Model.SalesPrice.ImmCost.ToString("N2") €</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="border rounded p-3 h-100">
+                        <div class="small text-muted">Minimum Satış Fiyatı</div>
+                        <div class="fs-5 fw-semibold">@Model.SalesPrice.MinimumSalesPrice.ToString("N2") €</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="border rounded p-3 h-100 bg-success-subtle border-success-subtle">
+                        <div class="small text-muted">Tavsiye Edilen Satış Fiyatı</div>
+                        <div class="fs-5 fw-semibold">@Model.SalesPrice.SalesPrice.ToString("N2") €</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
