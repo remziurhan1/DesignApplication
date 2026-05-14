@@ -6,7 +6,6 @@
 @{
     ViewData["Title"] = "AD2000 Details";
     var isSalesView = ViewBag.IsSalesView is bool flag && flag;
-    var canManageCost = false;
 }
 
 @section Styles {
@@ -19,14 +18,10 @@
             <div class="col-lg-8">
                 <span class="en-kicker"><i class="bi bi-file-earmark-bar-graph"></i> AD2000 detay ekranı</span>
                 <h2>@Model.Name</h2>
-                <p class="mb-0">Hesap sonucu, malzeme bilgileri ve maliyet hazırlık verilerini tek sayfada mühendislik odaklı bir görünümle inceleyin.</p>
+                <p class="mb-0">Hesap sonucu, malzeme bilgileri ve teknik çıktılarını tek sayfada mühendislik odaklı bir görünümle inceleyin.</p>
             </div>
             <div class="col-lg-4">
                 <div class="en-hero-actions">
-                    @if (!isSalesView && canManageCost)
-                    {
-                        <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-cash-stack me-1"></i>Maliyet</a>
-                    }
                     <a asp-action="Index" class="btn btn-outline-light"><i class="bi bi-list-ul me-1"></i>Liste</a>
                 </div>
             </div>
@@ -58,7 +53,6 @@
                         <tr><th>Gövde Kaynak Metrajı</th><td>@Model.ShellWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Bombe Kaynak Metrajı (Çevre)</th><td>@(Math.Max(Model.CircumferenceWeldLength - Model.ShellWeldLength, 0d).ToString("0.##", CultureInfo.InvariantCulture)) mm</td></tr>
                         <tr><th>Toplam Çevre Kaynakları</th><td>@Model.CircumferenceWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>L Kaynakları</th><td>@Model.HeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
                         <tr><th>Stifner Ring Kaynak Metrajı</th><td>@Model.StiffenerRingWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam Kaynak Metrajı</th><td>@Model.TotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
-                        <tr><th>Kaynak Sarf Maliyeti (Kaynak Teli)</th><td>@Model.WeldConsumableCost.ToString("0.##", CultureInfo.InvariantCulture)</td><th></th><td></td></tr>
                     </tbody>
                 </table>
             </div>

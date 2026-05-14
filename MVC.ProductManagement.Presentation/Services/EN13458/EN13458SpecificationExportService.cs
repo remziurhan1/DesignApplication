@@ -7,7 +7,6 @@ using AdminEN13458AccessoryItemVM = MVC.ProductManagement.Presentation.Areas.Adm
 using AdminEN13458QuotationRowVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458QuotationRowVM;
 using AdminEN13458SpecificationLineVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458SpecificationLineVM;
 using AdminEN13458SpecificationVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458SpecificationVM;
-using DesignEN13458SpecificationVM = MVC.ProductManagement.Presentation.Areas.Design.Models.EN13458CalculationVMs.EN13458SpecificationVM;
 
 namespace MVC.ProductManagement.Presentation.Services.EN13458
 {
@@ -31,68 +30,6 @@ namespace MVC.ProductManagement.Presentation.Services.EN13458
             }
 
             return stream.ToArray();
-        }
-
-        public Task<byte[]> BuildWordDocumentAsync(string templatePath, DesignEN13458SpecificationVM specification)
-        {
-            return BuildWordDocumentAsync(templatePath, MapDesignSpecificationToAdmin(specification));
-        }
-
-        private static AdminEN13458SpecificationVM MapDesignSpecificationToAdmin(DesignEN13458SpecificationVM source)
-        {
-            return new AdminEN13458SpecificationVM
-            {
-                Id = source.Id,
-                SelectedCostAnalysisId = source.SelectedCostAnalysisId,
-                DocumentTitle = source.DocumentTitle,
-                GeneratedAtUtc = source.GeneratedAtUtc,
-                FluidDisplay = source.FluidDisplay,
-                PressureDisplay = source.PressureDisplay,
-                HeaderItems = MapLines(source.HeaderItems),
-                IntroParagraphs = source.IntroParagraphs.ToList(),
-                GeneralItems = MapLines(source.GeneralItems),
-                InnerVesselItems = MapLines(source.InnerVesselItems),
-                OuterVesselItems = MapLines(source.OuterVesselItems),
-                InsulationItems = MapLines(source.InsulationItems),
-                PipeworkItems = MapLines(source.PipeworkItems),
-                AccessoryItems = source.AccessoryItems.Select(x => new AdminEN13458AccessoryItemVM
-                {
-                    GroupName = x.GroupName,
-                    ItemName = x.ItemName,
-                    StockCode = x.StockCode,
-                    Description = x.Description,
-                    Quantity = x.Quantity,
-                    Unit = x.Unit
-                }).ToList(),
-                SurfaceApplicationItems = MapLines(source.SurfaceApplicationItems),
-                VesselDocumentationItems = source.VesselDocumentationItems.ToList(),
-                InspectionItems = source.InspectionItems.ToList(),
-                CommercialParagraphs = source.CommercialParagraphs.ToList(),
-                QuotationRows = source.QuotationRows.Select(x => new AdminEN13458QuotationRowVM
-                {
-                    No = x.No,
-                    Product = x.Product,
-                    UnitPrice = x.UnitPrice,
-                    Quantity = x.Quantity,
-                    TotalPrice = x.TotalPrice
-                }).ToList(),
-                Notes = source.Notes.ToList(),
-                PaymentTerms = source.PaymentTerms.ToList(),
-                DeliveryTerms = source.DeliveryTerms.ToList(),
-                WarrantyTerms = source.WarrantyTerms.ToList(),
-                StorageTerms = source.StorageTerms.ToList(),
-                ValidityTerms = source.ValidityTerms.ToList(),
-                FooterTechnicalNotes = source.FooterTechnicalNotes.ToList()
-            };
-        }
-
-        private static List<AdminEN13458SpecificationLineVM> MapLines(IEnumerable<MVC.ProductManagement.Presentation.Areas.Design.Models.EN13458CalculationVMs.EN13458SpecificationLineVM> lines)
-        {
-            return lines.Select(x => new AdminEN13458SpecificationLineVM
-            {
-                Label = x.Label,
-                Value = x.Value
-            }).ToList();
         }
 
         private static void ApplySpecificationTemplate(WordprocessingDocument document, AdminEN13458SpecificationVM specification)

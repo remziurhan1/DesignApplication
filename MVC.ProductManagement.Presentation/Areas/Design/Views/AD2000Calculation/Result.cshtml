@@ -5,7 +5,6 @@
 @using System.Collections.Generic
 @{
     ViewData["Title"] = "AD2000 Result";
-    var canManageCost = false;
 }
 
 @section Styles {
@@ -18,7 +17,7 @@
             <div class="col-lg-8">
                 <span class="en-kicker"><i class="bi bi-check2-circle"></i> AD2000 sonuç ekranı</span>
                 <h2>Hesap sonucu hazır.</h2>
-                <p class="mb-0">Gövde ve bombe et kalınlıklarını, oryantasyon planını ve maliyet hazırlık verilerini kaydetmeden önce kontrol edin.</p>
+                <p class="mb-0">Gövde ve bombe et kalınlıklarını, oryantasyon planını ve teknik çıktılarını kaydetmeden önce kontrol edin.</p>
             </div>
             <div class="col-lg-4">
                 <div class="en-hero-actions">
@@ -82,10 +81,6 @@
             <input type="hidden" name="@p.PropertyName" value="@ViewData.ModelExplorer.GetExplorerForProperty(p.PropertyName).Model" />
         }
         <button type="submit" class="btn btn-success px-4"><i class="bi bi-check2-circle me-1"></i>Kaydet</button>
-        @if (Model.Id != Guid.Empty && canManageCost)
-        {
-            <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-primary px-4"><i class="bi bi-cash-stack me-1"></i>Maliyet Görünümü</a>
-        }
         <a asp-action="Index" class="btn btn-outline-secondary px-4"><i class="bi bi-list-ul me-1"></i>Kayıt Listesi</a>
     </form>
 </div>

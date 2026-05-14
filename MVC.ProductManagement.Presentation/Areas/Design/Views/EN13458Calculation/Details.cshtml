@@ -24,7 +24,6 @@
     var outerTankTotalWeldLength = Model.OuterTankTotalWeldLength > 0
         ? Model.OuterTankTotalWeldLength
         : Model.OuterTankCircumferenceWeldLength + Model.OuterTankHeadWeldLength;
-    var canManageCost = false;
 }
 
 @section Styles {
@@ -37,105 +36,11 @@
             <div class="col-lg-8">
                 <span class="en-kicker"><i class="bi bi-file-earmark-bar-graph"></i> Kayıt detayı</span>
                 <h2>@Model.Name</h2>
-                <p class="mb-0">Tank geometrisi, malzeme kararları ve maliyet revizyonlarını tek sayfada görüntüleyin. Kayıt kimliği: @Model.Id</p>
+                <p class="mb-0">Tank geometrisi, malzeme kararları ve teknik hesap sonuçlarını tek sayfada görüntüleyin. Kayıt kimliği: @Model.Id</p>
             </div>
             <div class="col-lg-4">
                 <div class="en-hero-actions">
-                    @if (!isSalesView && canManageCost)
-                    {
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-light"><i class="bi bi-pencil-square me-1"></i>Tankı Güncelle</a>
-                        <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-cash-coin me-1"></i>Maliyet</a>
-                    }
-                    <a asp-action="Specification" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-file-earmark-richtext me-1"></i>Şartname</a>
-                    <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" class="btn btn-outline-light"><i class="bi bi-file-earmark-excel me-1"></i>Excel</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="en-metric-grid">
-        <div class="en-metric-card"><span class="en-metric-label">İç Tank Ağırlığı</span><div class="en-metric-value">@Model.InnerTankWeight.ToString("N2") kg</div></div>
-        <div class="en-metric-card"><span class="en-metric-label">Dış Tank Ağırlığı</span><div class="en-metric-value">@Model.OuterTankWeight.ToString("N2") kg</div></div>
-        <div class="en-metric-card"><span class="en-metric-label">Toplam Kaynak</span><div class="en-metric-value">@Model.TotalWeldLength.ToString("N2")</div></div>
-        <div class="en-metric-card"><span class="en-metric-label">Kayıtlı Revizyon</span><div class="en-metric-value">@Model.CostAnalyses.Count</div></div>
-    </div>
-
-    @if (TempData["SuccessMessage"] is string successMessage)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @successMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    @if (TempData["ErrorMessage"] is string errorMessage)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @errorMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    @if (!isSalesView && canManageCost)
-    {
-        <div class="card shadow-sm mb-4 border-warning-subtle">
-            <div class="card-header bg-warning-subtle text-warning-emphasis d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <span>Maliyet durumu</span>
-                <a asp-action="Cost" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Maliyet ekranına git</a>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-4"><div class="en-metric-card h-100"><span class="en-metric-label">Kayıtlı revizyon sayısı</span><div class="en-metric-value">@Model.CostAnalyses.Count</div></div></div>
-                    <div class="col-12 col-md-8">
-                        <div class="en-surface p-3 h-100">
-                            <div class="section-title">Son revizyonlar</div>
-                            @if (Model.CostAnalyses.Any())
-                            {
-                                <div class="d-flex flex-wrap gap-2">
-                                    @foreach (var analysis in Model.CostAnalyses.Take(5))
-                                    {
-                                        <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id" class="btn btn-outline-warning btn-sm">
-                                            @analysis.RevisionCode - @analysis.GrandTotalCost.ToString("N2")
-                                        </a>
-                                    }
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="en-empty">Henüz maliyet revizyonu oluşturulmadı.</div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-light">Giriş verileri</div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle mb-0">
-                    <tbody>
-                        <tr><th>Ad</th><td>@Model.Name</td><th>İç Tank Çapı</th><td>@Model.OuterDiameter</td><th>Dış Tank Çapı</th><td>@Model.OuterTankDiameter</td></tr>
-                        <tr><th>Silindirik Boy</th><td>@Model.ShellLength</td><th>Basınç</th><td>@Model.Pressure</td><th>Depolanacak Ürün</th><td>@Model.StorageTypeName</td></tr>
-                        <tr><th>Sıvı Yoğunluğu</th><td>@Model.LiquidDensity</td><th>Tank Yönelimi</th><td>@Model.TankOrientation</td><th>Cold Stretch</th><td>@(Model.IsColdStretchApplied ? "Evet" : "Hayır")</td></tr>
-                        <tr><th>Kaynak metrajları</th><td colspan="5">1500: @Model.WeldLength1500.ToString("0.##", CultureInfo.InvariantCulture) mm | 2000: @Model.WeldLength2000.ToString("0.##", CultureInfo.InvariantCulture) mm | 2500: @Model.WeldLength2500.ToString("0.##", CultureInfo.InvariantCulture) mm | 3000: @Model.WeldLength3000.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
-                        <tr><th colspan="6" class="table-secondary">Kaynak Detayları</th></tr>
-                        <tr><th colspan="6" class="table-primary">İç Tank Kaynak Detayları</th></tr>
-                        <tr><th>Gövde Kaynak Metrajı</th><td>@innerShellWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Bombe Kaynak Metrajı</th><td>@innerBombeWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>L Kaynakları</th><td>@Model.InnerTankHeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
-                        <tr><th>Toplam (Çevre)</th><td>@Model.InnerTankCircumferenceWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam (L)</th><td>@Model.InnerTankHeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam Kaynak</th><td>@innerTankTotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
-                        <tr><th colspan="6" class="table-info">Dış Tank Kaynak Detayları</th></tr>
-                        <tr><th>Gövde Kaynak Metrajı</th><td>@outerShellWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Bombe Kaynak Metrajı</th><td>@outerBombeWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>L Kaynakları</th><td>@Model.OuterTankHeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
-                        <tr><th>Toplam (Çevre)</th><td>@Model.OuterTankCircumferenceWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam (L)</th><td>@Model.OuterTankHeadWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam Kaynak</th><td>@outerTankTotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td></tr>
-                        <tr><th>Stifner Ring Kaynak Metrajı</th><td>@Model.StiffenerRingWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Toplam Kaynak Metrajı</th><td>@Model.TotalWeldLength.ToString("0.##", CultureInfo.InvariantCulture) mm</td><th>Kaynak Sarf Maliyeti</th><td>@Model.TotalFilmCost.ToString("0.##", CultureInfo.InvariantCulture)</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4">
+                    <div class="row g-4">
         <div class="col-12 col-xxl-6">
             <div class="card h-100 border-primary-subtle">
                 <div class="card-header bg-primary-subtle text-primary-emphasis">İç tank</div>
