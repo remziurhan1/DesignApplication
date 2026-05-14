@@ -1,0 +1,327 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.EN13458CalculationVMs.EN13458CalculateVM
+@using System
+@{
+    ViewData["Title"] = "EN13458 Calculate";
+    var isCreateMode = Model.Id == Guid.Empty;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+    <section class="en-hero">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="en-kicker"><i class="bi bi-rulers"></i> Tasarım ve hesap girişi</span>
+                <h2>@(isCreateMode ? "EN13458 tank hesabını hazırlayın" : "EN13458 kaydını güncelleyin")</h2>
+                <p class="mb-0">Operasyon akışını bozmadan, mühendislik odaklı bir arayüz ile ana geometri, malzeme ve destek ring parametrelerini tek formda yönetin.</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="en-hero-actions">
+                    <a asp-action="Index" class="btn btn-outline-light"><i class="bi bi-list-ul me-1"></i>Listeye Dön</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <form asp-action="@(isCreateMode ? "Calculate" : "Update")" method="post">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-light">Temel proje parametreleri</div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-lg-4">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="OuterDiameter" class="form-label">İç Tank Çapı (mm)</label>
+                        <input asp-for="OuterDiameter" class="form-control" />
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="OuterTankDiameter" class="form-label">Dış Tank Çapı (mm)</label>
+                        <input asp-for="OuterTankDiameter" class="form-control" />
+                        <small class="text-muted">Boş bırakılırsa EN13458 kuralı otomatik uygulanır.</small>
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="ShellLength" class="form-label"></label>
+                        <input asp-for="ShellLength" class="form-control" />
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="Pressure" class="form-label"></label>
+                        <input asp-for="Pressure" class="form-control" />
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="StorageTypeId" class="form-label">Depolama Tipi</label>
+                        <select asp-for="StorageTypeId" asp-items="ViewBag.StorageTypes" class="form-select">
+                            <option value="">Seçiniz</option>
+                        </select>
+                        <span asp-validation-for="StorageTypeId" class="text-danger"></span>
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="LiquidDensity" class="form-label">Sıvı Yoğunluğu (kg/m³)</label>
+                        <input asp-for="LiquidDensity" class="form-control" readonly />
+                        <small class="text-muted">Seçilen depolama tipinden otomatik alınır.</small>
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="TankOrientation" class="form-label">Tank Yönelimi</label>
+                        <select asp-for="TankOrientation" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.TankOrientation>()" class="form-select"></select>
+                    </div>
+                    <div class="col-lg-4 d-flex align-items-end">
+                        <div class="form-check ps-0 w-100 en-surface px-4 py-3">
+                            <input asp-for="IsColdStretchApplied" class="form-check-input ms-0 me-2" />
+                            <label asp-for="IsColdStretchApplied" class="form-check-label ms-4">Cold Stretch uygulansın</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-12 col-xl-6">
+                <div class="card h-100">
+                    <div class="card-header bg-primary-subtle text-primary-emphasis">İç tank malzeme seçimi</div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label">İç gövde Product Form</label><select id="InnerShellMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">İç bombe Product Form</label><select id="InnerHeadMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">İç gövde malzeme sınıfı</label><select id="InnerShellMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">İç bombe malzeme sınıfı</label><select id="InnerHeadMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">İç gövde norm</label><select id="InnerShellMaterialNorm" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">İç bombe norm</label><select id="InnerHeadMaterialNorm" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">İç gövde sembolik isim</label><select id="InnerShellMaterialSymbolicName" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">İç bombe sembolik isim</label><select id="InnerHeadMaterialSymbolicName" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label asp-for="InnerShellMaterialId" class="form-label">İç gövde malzemesi</label><select asp-for="InnerShellMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label asp-for="InnerHeadMaterialId" class="form-label">İç bombe malzemesi</label><select asp-for="InnerHeadMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label asp-for="InnerShellMaterialFormId" class="form-label">İç gövde formu</label><select asp-for="InnerShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label asp-for="InnerHeadMaterialFormId" class="form-label">İç bombe formu</label><select asp-for="InnerHeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-xl-6">
+                <div class="card h-100">
+                    <div class="card-header bg-secondary-subtle text-secondary-emphasis">Dış tank malzeme seçimi</div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label">Dış gövde Product Form</label><select id="OuterShellMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">Dış bombe Product Form</label><select id="OuterHeadMaterialFormType" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">Dış gövde malzeme sınıfı</label><select id="OuterShellMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">Dış bombe malzeme sınıfı</label><select id="OuterHeadMaterialGroup" asp-items="ViewBag.MaterialGroups" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">Dış gövde norm</label><select id="OuterShellMaterialNorm" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">Dış bombe norm</label><select id="OuterHeadMaterialNorm" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">Dış gövde sembolik isim</label><select id="OuterShellMaterialSymbolicName" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label class="form-label">Dış bombe sembolik isim</label><select id="OuterHeadMaterialSymbolicName" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label asp-for="OuterShellMaterialId" class="form-label">Dış gövde malzemesi</label><select asp-for="OuterShellMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label asp-for="OuterHeadMaterialId" class="form-label">Dış bombe malzemesi</label><select asp-for="OuterHeadMaterialId" asp-items="ViewBag.Materials" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label asp-for="OuterShellMaterialFormId" class="form-label">Dış gövde formu</label><select asp-for="OuterShellMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
+                            <div class="col-md-6"><label asp-for="OuterHeadMaterialFormId" class="form-label">Dış bombe formu</label><select asp-for="OuterHeadMaterialFormId" asp-items="ViewBag.MaterialForms" class="form-select"><option value="">Seçiniz</option></select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card my-4">
+            <div class="card-header bg-info-subtle text-info-emphasis">Profil / destek ring verileri</div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-lg-4">
+                        <label asp-for="StiffenerSpacing" class="form-label">Profil arası mesafe / burkulma boyu L (mm)</label>
+                        <input asp-for="StiffenerSpacing" class="form-control" />
+                        <span asp-validation-for="StiffenerSpacing" class="text-danger"></span>
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="StiffenerMaterialId" class="form-label">Profil malzemesi</label>
+                        <select asp-for="StiffenerMaterialId" asp-items="ViewBag.Materials" class="form-select">
+                            <option value="">Seçiniz</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="StiffenerMaterialFormId" class="form-label">Profil formu</label>
+                        <select asp-for="StiffenerMaterialFormId" class="form-select">
+                            <option value="">Seçiniz</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="StiffenerInertia" class="form-label">Atalet Momenti I (mm⁴)</label>
+                        <input asp-for="StiffenerInertia" class="form-control" readonly />
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="StiffenerArea" class="form-label">Kesit Alanı A (mm²)</label>
+                        <input asp-for="StiffenerArea" class="form-control" readonly />
+                    </div>
+                    <div class="col-lg-4">
+                        <label asp-for="StiffenerSectionModulus" class="form-label">Kesit Modülü W (mm³)</label>
+                        <input asp-for="StiffenerSectionModulus" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 justify-content-end mb-5 pb-2">
+            <a asp-action="Index" class="btn btn-outline-secondary">Liste</a>
+            <button type="submit" class="btn btn-primary btn-lg px-4">@(isCreateMode ? "Hesabı Oluştur" : "Güncellenmiş Hesabı Hazırla")</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const formsByMaterial = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialFormsByMaterial));
+        const storageTypeDensities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.StorageTypeDensities));
+        const materialsByGroup = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialsByGroup));
+        const materialExternalProperties = @Html.Raw(System.Text.Json.JsonSerializer.Serialize<object>(ViewBag.MaterialExternalProperties));
+        const allMaterialOptions = [...new Map(Object.values(materialsByGroup || {}).flat().map(x => [x.value, x])).values()];
+
+        function fillOptions(selectElement, options, placeholder = 'Seçiniz') {
+            if (!selectElement) return;
+            const current = selectElement.value;
+            selectElement.innerHTML = '';
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.text = placeholder;
+            selectElement.appendChild(defaultOption);
+
+            (options || []).forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.value;
+                opt.text = item.text;
+                selectElement.appendChild(opt);
+            });
+
+            if ([...selectElement.options].some(x => x.value === current)) {
+                selectElement.value = current;
+            }
+        }
+
+        function bindMaterialCascade(formTypeSelectId, groupSelectId, normSelectId, symbolicSelectId, materialSelectId, formSelectId) {
+            const formTypeSelect = document.getElementById(formTypeSelectId);
+            const groupSelect = document.getElementById(groupSelectId);
+            const normSelect = document.getElementById(normSelectId);
+            const symbolicSelect = document.getElementById(symbolicSelectId);
+            const materialSelect = document.getElementById(materialSelectId);
+            const formSelect = document.getElementById(formSelectId);
+            if (!formTypeSelect || !groupSelect || !normSelect || !symbolicSelect || !materialSelect || !formSelect) return;
+
+            const getAllForms = () =>
+                Object.entries(formsByMaterial || {}).flatMap(([materialId, items]) =>
+                    (items || []).map(x => ({ ...x, materialId })));
+
+            const applyFormFilters = (forms, includeMaterial = false) => {
+                const selectedType = formTypeSelect.value;
+                const selectedGroup = groupSelect.value;
+                const selectedNorm = normSelect.value;
+                const selectedSymbolic = symbolicSelect.value;
+                const selectedMaterial = includeMaterial ? materialSelect.value : '';
+
+                return (forms || []).filter(x =>
+                    (!selectedType || x.formType === selectedType) &&
+                    (!selectedGroup || ((x.materialClass || '').trim().toLowerCase() === selectedGroup.trim().toLowerCase())) &&
+                    (!selectedNorm || ((x.norm || '').trim().toLowerCase() === selectedNorm.trim().toLowerCase())) &&
+                    (!selectedSymbolic || ((x.symbolicName || '').trim().toLowerCase() === selectedSymbolic.trim().toLowerCase())) &&
+                    (!selectedMaterial || x.materialId === selectedMaterial));
+            };
+
+            const refillByFilters = () => {
+                const allForms = getAllForms();
+                const formTypeOptions = [...new Set(allForms.map(x => x.formType).filter(x => x && x.trim().length > 0))]
+                    .map(x => ({ value: x, text: x }));
+                fillOptions(formTypeSelect, formTypeOptions);
+
+                const candidateForms = applyFormFilters(getAllForms(), false);
+                const normOptions = [...new Set(candidateForms.map(x => x.norm).filter(x => x && x.trim().length > 0))]
+                    .map(x => ({ value: x, text: x }));
+                fillOptions(normSelect, normOptions);
+
+                const symbolicOptions = [...new Set(candidateForms.map(x => x.symbolicName).filter(x => x && x.trim().length > 0))]
+                    .map(x => ({ value: x, text: x }));
+                fillOptions(symbolicSelect, symbolicOptions);
+
+                const filteredForMaterial = applyFormFilters(getAllForms(), false);
+                const materialIds = [...new Set(filteredForMaterial.map(x => x.materialId))];
+                const materialOptions = allMaterialOptions.filter(x => materialIds.includes(x.value));
+                fillOptions(materialSelect, materialOptions);
+
+                const filteredForForms = applyFormFilters(getAllForms(), true);
+                const formOptions = filteredForForms.map(x => ({ value: x.value, text: x.text }));
+                fillOptions(formSelect, formOptions);
+            };
+
+            formTypeSelect.addEventListener('change', refillByFilters);
+            groupSelect.addEventListener('change', refillByFilters);
+            normSelect.addEventListener('change', refillByFilters);
+            symbolicSelect.addEventListener('change', refillByFilters);
+            materialSelect.addEventListener('change', refillByFilters);
+            refillByFilters();
+        }
+
+        function bindStorageTypeDensity(storageTypeSelectId, densityInputId) {
+            const storageTypeSelect = document.getElementById(storageTypeSelectId);
+            const densityInput = document.getElementById(densityInputId);
+            if (!storageTypeSelect || !densityInput) return;
+
+            const refill = () => {
+                const selectedStorageTypeId = storageTypeSelect.value;
+                const density = storageTypeDensities[selectedStorageTypeId];
+                densityInput.value = density != null ? density : '';
+            };
+
+            storageTypeSelect.addEventListener('change', refill);
+            refill();
+        }
+
+        function bindStiffenerMaterialFormCascade(materialSelectId, formSelectId) {
+            const materialSelect = document.getElementById(materialSelectId);
+            const formSelect = document.getElementById(formSelectId);
+            if (!materialSelect || !formSelect) return;
+
+            const refill = () => {
+                const selectedMaterialId = materialSelect.value;
+                const forms = (formsByMaterial[selectedMaterialId] || []).filter(x => x.formType === 'Pipe' || x.formType === 'Profile');
+                fillOptions(formSelect, forms);
+                formSelect.dispatchEvent(new Event('change'));
+            };
+
+            materialSelect.addEventListener('change', refill);
+            refill();
+        }
+
+        function bindStiffenerFormProperties(formSelectId, inertiaInputId, areaInputId, sectionModulusInputId) {
+            const formSelect = document.getElementById(formSelectId);
+            const inertiaInput = document.getElementById(inertiaInputId);
+            const areaInput = document.getElementById(areaInputId);
+            const sectionModulusInput = document.getElementById(sectionModulusInputId);
+            if (!formSelect || !inertiaInput || !areaInput || !sectionModulusInput) return;
+
+            const getFormById = (formId) => {
+                if (!formId) return null;
+                const allForms = Object.values(formsByMaterial || {}).flat();
+                return allForms.find(x => x.value === formId) || null;
+            };
+
+            const refill = () => {
+                const selected = getFormById(formSelect.value);
+                inertiaInput.value = selected && selected.momentOfInertia != null ? selected.momentOfInertia : '';
+                areaInput.value = selected && selected.sectionArea != null ? selected.sectionArea : '';
+                sectionModulusInput.value = selected && selected.sectionModulus != null ? selected.sectionModulus : '';
+            };
+
+            formSelect.addEventListener('change', refill);
+            refill();
+        }
+
+        bindMaterialCascade('InnerShellMaterialFormType', 'InnerShellMaterialGroup', 'InnerShellMaterialNorm', 'InnerShellMaterialSymbolicName', 'InnerShellMaterialId', 'InnerShellMaterialFormId');
+        bindMaterialCascade('InnerHeadMaterialFormType', 'InnerHeadMaterialGroup', 'InnerHeadMaterialNorm', 'InnerHeadMaterialSymbolicName', 'InnerHeadMaterialId', 'InnerHeadMaterialFormId');
+        bindMaterialCascade('OuterShellMaterialFormType', 'OuterShellMaterialGroup', 'OuterShellMaterialNorm', 'OuterShellMaterialSymbolicName', 'OuterShellMaterialId', 'OuterShellMaterialFormId');
+        bindMaterialCascade('OuterHeadMaterialFormType', 'OuterHeadMaterialGroup', 'OuterHeadMaterialNorm', 'OuterHeadMaterialSymbolicName', 'OuterHeadMaterialId', 'OuterHeadMaterialFormId');
+        bindStorageTypeDensity('StorageTypeId', 'LiquidDensity');
+        bindStiffenerMaterialFormCascade('StiffenerMaterialId', 'StiffenerMaterialFormId');
+        bindStiffenerFormProperties('StiffenerMaterialFormId', 'StiffenerInertia', 'StiffenerArea', 'StiffenerSectionModulus');
+    </script>
+}

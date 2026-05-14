@@ -1,13 +1,14 @@
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using MVC.ProductManagement.Application.DTOs.EN13458DTOs;
-using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
+using AdminEN13458DetailsVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458DetailsVM;
+using DesignEN13458DetailsVM = MVC.ProductManagement.Presentation.Areas.Design.Models.EN13458CalculationVMs.EN13458DetailsVM;
 
 namespace MVC.ProductManagement.Presentation.Services.EN13458
 {
     public class EN13458AdminExportService : IEN13458AdminExportService
     {
-        public byte[] BuildDetailExcel(EN13458DetailsVM vm, EN13458MaterialCostTableDTO costTable)
+        public byte[] BuildDetailExcel(AdminEN13458DetailsVM vm, EN13458MaterialCostTableDTO costTable)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using var package = new ExcelPackage();
@@ -170,6 +171,40 @@ namespace MVC.ProductManagement.Presentation.Services.EN13458
             ws.Cells[ws.Dimension.Address].AutoFitColumns();
 
             return package.GetAsByteArray();
+        }
+
+        public byte[] BuildDetailExcel(DesignEN13458DetailsVM vm, EN13458MaterialCostTableDTO costTable)
+        {
+            return BuildDetailExcel(MapDesignDetailsToAdmin(vm), costTable);
+        }
+
+        private static AdminEN13458DetailsVM MapDesignDetailsToAdmin(DesignEN13458DetailsVM source)
+        {
+            var target = new AdminEN13458DetailsVM();
+            var sourceType = typeof(DesignEN13458DetailsVM);
+
+            foreach (var targetProperty in typeof(AdminEN13458DetailsVM).GetProperties())
+            {
+                if (!targetProperty.CanWrite)
+                {
+                    continue;
+                }
+
+                var sourceProperty = sourceType.GetProperty(targetProperty.Name);
+                if (sourceProperty == null || !sourceProperty.CanRead)
+                {
+                    continue;
+                }
+
+                if (!targetProperty.PropertyType.IsAssignableFrom(sourceProperty.PropertyType))
+                {
+                    continue;
+                }
+
+                targetProperty.SetValue(target, sourceProperty.GetValue(source));
+            }
+
+            return target;
         }
 
         private static void WriteSectionHeader(ExcelWorksheet ws, int row, string title)
