@@ -1,0 +1,442 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.AD2000CalculationVMs.AD2000ResultVM
+@using System
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@{
+    ViewData["Title"] = "AD2000 Maliyet Hesaplama";
+    var costTable = ViewBag.CostTable as MVC.ProductManagement.Application.DTOs.AD2000DTOs.AD2000MaterialCostTableDTO;
+    var stockCodeOptions = (ViewBag.StockCodeOptions as IEnumerable<dynamic>)?.ToList() ?? new List<dynamic>();
+    var headBombeRateOptions = (ViewBag.HeadBombeRateOptions as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
+    string ResolveInputPriceSource(bool useManualUnitPrice) => useManualUnitPrice ? "Manuel fiyat" : "Stok fiyatı";
+    double ResolveInputPrice(double stockUnitPrice, bool useManualUnitPrice, double? manualUnitPrice) => useManualUnitPrice ? (manualUnitPrice ?? 0) : stockUnitPrice;
+    string ResolveCostGroupNote(string? costGroupCode) => (costGroupCode ?? string.Empty).ToUpperInvariant() switch
+    {
+        "SAC" => "Hesaplanan sac ağırlığı (kg) × seçilen stok/manuel birim fiyat. Ağırlık; alan, kalınlık ve malzeme yoğunluğundan gelir.",
+        "BOMBE" => "Hesaplanan bombe ağırlığı (kg) × seçilen bombe işçilik birim fiyatı. Fiyat seçilmezse maliyet 0 kalır.",
+        "SARF" => "Hesaplanan sarf miktarı × stok veya manuel birim fiyat. Azot, perlit gibi miktarlar hesap sonucundan gelir.",
+        "WELD" => "Hesaplanan toplam kaynak boyu (m) × stok veya manuel birim fiyat. Başlangıç fiyatı 0'dır; siz fiyat girince tutar oluşur.",
+        "FILM" => "Hesaplanan röntgen film adedi × stok veya manuel birim fiyat. Başlangıç fiyatı 0'dır; siz fiyat girince tutar oluşur.",
+        "PROF" => "Hesaplanan profil boyu/ağırlığı × stok veya manuel birim fiyat. Profil gerekiyorsa hesap sonucundan otomatik gelir.",
+        "YUZ" => "Hesaplanan yüzey alanı (m²) × stok veya manuel birim fiyat. Boya/yüzey işlemi için kullanılır.",
+        "EK-STK" => "Elle eklenen stok miktarı × stok veya manuel birim fiyat. Ek parçalar ve aksesuarlar için kullanılır.",
+        "EK-GRP" => "Hazır stok grubundaki her kalemin miktarı × çarpan × birim fiyat. Set halinde eklenen parçalar için kullanılır.",
+        _ => "Bu grupta tutar, satırdaki miktar ile seçilen stok/manuel birim fiyatın çarpımıyla hesaplanır."
+    };
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/en13458.css" asp-append-version="true" />
+}
+
+<div class="en-page">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+            <h2 class="mb-0">AD2000 maliyet hesaplama</h2>
+            <div class="text-muted small">Kayıt Id: @Model.Id</div>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-3 py-2">Maliyet ekranı</span>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-1"></i>Detay Sayfası
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
+                <i class="bi bi-pencil-square me-1"></i>Tankı Güncelle
+            </a>
+            <a asp-action="Specification" asp-route-id="@Model.Id" asp-route-costAnalysisId="@costTable?.CostAnalysisId" class="btn btn-outline-secondary">
+                <i class="bi bi-file-earmark-richtext me-1"></i>Şartname
+            </a>
+            <a asp-action="ExportDetailExcel" asp-route-id="@Model.Id" asp-route-costAnalysisId="@costTable?.CostAnalysisId" class="btn btn-outline-secondary">
+                <i class="bi bi-file-earmark-excel me-1"></i>Excel
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @successMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @errorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+
+    <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+        <div class="card-body p-4 bg-warning-subtle">
+            <div class="row g-3 align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-warning text-dark mb-2">Yeni başlayanlar için</span>
+                    <h4 class="mb-2">Bu ekranda ne yapacağım?</h4>
+                    <p class="mb-0 text-warning-emphasis">
+                        Hesaplanan malzeme kalemlerini stok kodları ve fiyatlarla eşleştirirsiniz. Sistem miktarları hesaplar; siz sadece revizyonu seçer, eksik stok/fiyat bilgilerini tamamlarsınız.
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="bg-white rounded-3 p-3 border h-100">
+                        <div class="small text-muted mb-1">Aktif toplam</div>
+                        <div class="h3 mb-0">@(costTable?.GrandTotalCost.ToString("N2") ?? "0,00")</div>
+                        <div class="small text-muted">Malzeme + ek stok maliyeti</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-3">
+            <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
+                <div class="fw-semibold"><span class="badge bg-warning text-dark me-2">1</span>Analiz oluştur</div>
+                <div class="small text-muted mt-2">İlk maliyet için “İlk maliyeti oluştur”, değişiklik denemek için “Yeni Revizyon” kullanılır.</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
+                <div class="fw-semibold"><span class="badge bg-warning text-dark me-2">2</span>Stokları eşleştir</div>
+                <div class="small text-muted mt-2">Tablodaki her kaleme uygun stok kodunu seçin; fiyat otomatik gelir.</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
+                <div class="fw-semibold"><span class="badge bg-warning text-dark me-2">3</span>Eksikleri tamamla</div>
+                <div class="small text-muted mt-2">Gerekirse ek stok/grup ekleyin veya manuel fiyat kutusunu kullanın.</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
+                <div class="fw-semibold"><span class="badge bg-success me-2">4</span>Değişiklikleri uygula</div>
+                <div class="small text-muted mt-2">Son kontrol sonrası “Değişiklikleri uygula” ile revizyonu güncelleyin; ardından satış fiyatına geçebilirsiniz.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4 border-warning-subtle">
+        <div class="card-header bg-warning-subtle text-warning-emphasis fw-semibold">1) Maliyet revizyonları</div>
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#createAdCostAnalysisModal">
+                            <i class="bi bi-calculator me-1"></i>İlk maliyeti oluştur
+                        </button>
+                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#createAdCostRevisionModal" @(costTable?.CostAnalysisId == null ? "disabled" : null)>
+                            <i class="bi bi-layers me-1"></i>Mevcut maliyetten yeni revizyon aç
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="border rounded p-3 h-100 bg-light-subtle">
+                        <h6 class="fw-semibold">Kayıtlı revizyonlar (çalışmak istediğinizi seçin)</h6>
+                        @if (Model.CostAnalyses.Any())
+                        {
+                            <div class="list-group">
+                                @foreach (var analysis in Model.CostAnalyses)
+                                {
+                                    <a asp-action="Cost" asp-route-id="@Model.Id" asp-route-costAnalysisId="@analysis.Id" class="list-group-item list-group-item-action @(analysis.Id == costTable?.CostAnalysisId ? "active" : string.Empty)">
+                                        <div class="d-flex justify-content-between align-items-center"><strong>@analysis.RevisionCode</strong><span>@analysis.GrandTotalCost.ToString("N2")</span></div>
+                                        <div class="small">@analysis.Name</div>
+                                        <div class="small @(analysis.Id == costTable?.CostAnalysisId ? string.Empty : "text-muted")">@analysis.CreatedDate.ToString("dd.MM.yyyy HH:mm")</div>
+                                    </a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-muted small">Henüz kayıtlı maliyet analizi yok. Önce yeni analiz oluşturun.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createAdCostAnalysisModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="CreateCostAnalysis" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Yeni Maliyet Analizi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info small" role="alert">
+                            <strong>Maliyet oluşturunca ne olacak?</strong><br />
+                            Sistem hesaplanan miktarları tabloya getirir. Başlangıçta fiyatı olmayan kalemler 0 görünür; stok seçtiğinizde veya manuel birim fiyat girdiğinizde satır ve grup toplamı otomatik hesaplanır.
+                        </div>
+                        <label class="form-label">Analiz Adı</label>
+                        <input type="text" name="analysisName" class="form-control mb-3" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" />
+                        <label class="form-label">Not</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="İlk maliyet çalışması veya açıklama"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-warning"><i class="bi bi-calculator me-1"></i>Oluştur</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createAdCostRevisionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="CreateCostAnalysisRevision" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="sourceCostAnalysisId" value="@(costTable?.CostAnalysisId ?? Guid.Empty)" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Mevcut maliyetten yeni revizyon aç</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">Revizyon Adı</label>
+                        <input type="text" name="analysisName" class="form-control mb-3" value="@(costTable?.AnalysisName ?? "Maliyet Analizi")" />
+                        <label class="form-label">Revizyon Açıklaması</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Revizyon açıklamasını yazın"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-outline-warning"><i class="bi bi-layers me-1"></i>Revizyon Oluştur</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @if (costTable != null)
+    {
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-light fw-semibold d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <span>Maliyet Analizi @costTable.RevisionCode - @costTable.AnalysisName</span>
+                <span class="badge @(costTable.IsPreview ? "bg-secondary" : "bg-success")">@(costTable.IsPreview ? "Ön İzleme" : "Kayıtlı Revizyon")</span>
+            </div>
+            <div class="card-body d-flex flex-column gap-4">
+                <div class="alert alert-light border d-flex gap-3 align-items-start mb-0" role="alert">
+                    <i class="bi bi-list-check text-primary fs-4"></i>
+                    <div>
+                        <div class="fw-semibold mb-1">Maliyet oluşturulduktan sonra nasıl ilerlenir?</div>
+                        <ol class="mb-0 small ps-3">
+                            <li>Her maliyet grubunun mavi satırındaki notu okuyun; miktarın nereden geldiğini açıklar.</li>
+                            <li>Satırlarda uygun stok kodunu seçin. Stok fiyatı otomatik gelirse tutar hemen hesaplanır.</li>
+                            <li>Stokta fiyat yoksa veya özel fiyat kullanacaksanız “manuel fiyat” kutusunu işaretleyip birim fiyat girin.</li>
+                            <li>Kontrol sonrası “Değişiklikleri uygula” butonuna basın; toplamlar güncellenir.</li>
+                        </ol>
+                    </div>
+                </div>
+                @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue)
+                {
+                    <div class="card shadow-sm mt-4 border-success-subtle order-2">
+                        <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">3) Hesaba ek stok veya hazır stok grubu ekle</div>
+                        <div class="card-body">
+                            <div class="row g-4">
+                                <div class="col-12 col-xl-6">
+                                    <div class="border rounded p-3 h-100 bg-light-subtle">
+                                        <h6 class="fw-semibold mb-3">Hazır stok grubu ekle</h6>
+                                        <form asp-action="AddStockGroup" method="post" class="row g-3">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@Model.Id" />
+                                            <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
+                                            <div class="col-12"><label class="form-label">Grup</label><select name="stockProductGroupId" class="form-select" asp-items="Model.AvailableStockGroups"><option value="">Grup seçiniz</option></select></div>
+                                            <div class="col-md-6"><label class="form-label">Çarpan</label><input type="text" name="multiplier" class="form-control js-decimal-input" inputmode="decimal" value="1" /></div>
+                                            <div class="col-12"><button type="submit" class="btn btn-success"><i class="bi bi-collection me-1"></i>Bu grubu maliyete ekle</button></div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-xl-6">
+                                    <div class="border rounded p-3 h-100 bg-light-subtle">
+                                        <h6 class="fw-semibold mb-3">Tek bir stok kodu ekle</h6>
+                                        <form asp-action="AddStockCode" method="post" class="row g-3 js-add-stock-form">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@Model.Id" />
+                                            <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
+                                            <div class="col-12"><label class="form-label">Stok Kodu</label><select name="generatedStockCodeId" class="form-select cost-stock-select"><option value="">Stok seçiniz</option>@foreach (var stockOption in stockCodeOptions) { <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">@stockOption.text</option> }</select></div>
+                                            <div class="col-md-4"><label class="form-label">Miktar</label><input type="text" name="quantity" value="1" class="form-control js-quantity-input js-decimal-input" inputmode="decimal" /></div>
+                                            <div class="col-md-4"><label class="form-label">Birim Fiyat</label><input type="text" class="form-control js-effective-unit-price" readonly /></div>
+                                            <div class="col-md-4"><label class="form-label">Tutar</label><input type="text" class="form-control js-line-total" readonly /></div>
+                                            <div class="col-12"><div class="form-check mb-2"><input class="form-check-input js-manual-toggle" type="checkbox" name="useManualUnitPrice" value="true" /><input type="hidden" name="useManualUnitPrice" value="false" /><label class="form-check-label small">Stok fiyatı yerine manuel fiyat gir</label></div><input type="text" name="manualUnitPrice" class="form-control js-manual-price js-decimal-input" inputmode="decimal" disabled /></div>
+                                            <div class="col-12"><button type="submit" class="btn btn-success"><i class="bi bi-plus-circle me-1"></i>Bu stok kodunu maliyete ekle</button></div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (!costTable.IsPreview && costTable.CostAnalysisId.HasValue)
+                {
+                    <form asp-action="BulkUpdateCostItems" method="post" class="mt-4 order-3">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="costAnalysisId" value="@costTable.CostAnalysisId" />
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped align-middle mb-0">
+                                <thead>
+                                    <tr><th>Grup</th><th>Kalem</th><th>Malzeme / Form</th><th class="text-end">Miktar</th><th>Birim</th><th>Stok Seçimi</th><th class="text-end">Stok Fiyatı</th><th class="text-end">Hesaba Giren Fiyat</th><th class="text-end">Birim Fiyat</th><th class="text-end">Tutar</th><th class="text-end">İşlem</th></tr>
+                                </thead>
+                                <tbody>
+                                @{ var itemIndex = 0; }
+                                @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
+                                {
+                                    <tr class="table-primary">
+                                        <td colspan="11">
+                                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                                                <div class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</div>
+                                                <span class="badge bg-light text-primary border">Nasıl hesaplanır?</span>
+                                            </div>
+                                            <div class="small text-primary-emphasis mt-1">@ResolveCostGroupNote(groupItems.Key.CostGroupCode)</div>
+                                        </td>
+                                    </tr>
+                                    @foreach (var item in groupItems)
+                                    {
+                                        var inputPrice = ResolveInputPrice(item.StockUnitPrice, item.UseManualUnitPrice, item.ManualUnitPrice);
+                                        var inputPriceSource = ResolveInputPriceSource(item.UseManualUnitPrice);
+                                        <tr>
+                                            <td>@item.CostGroupCode</td>
+                                            <td><div>@item.ItemName</div><div class="small text-muted">@item.ItemKey</div></td>
+                                            <td><div>@item.MaterialName</div><div class="small text-muted">@item.FormType</div></td>
+                                            <td class="text-end">
+                                                @if (item.IsManual) { <input type="text" name="items[@itemIndex].Quantity" value="@item.Quantity.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm text-end js-quantity-input js-decimal-input" inputmode="decimal" /> }
+                                                else { @item.Quantity.ToString("N2") }
+                                            </td>
+                                            <td>@item.Unit</td>
+                                            <td>
+                                                <input type="hidden" name="items[@itemIndex].CostAnalysisItemId" value="@item.CostAnalysisItemId" />
+                                                <div class="small fw-semibold mb-1">@(string.IsNullOrWhiteSpace(item.StockCodeName) ? "Stok seçilmedi" : $"Seçili: {item.StockCodeName}")</div>
+                                                <select name="items[@itemIndex].GeneratedStockCodeId" class="form-select form-select-sm mb-2 cost-stock-select"><option value="">Stok seçiniz</option>@if (item.IsBombeLabor) { foreach (var bombeOption in headBombeRateOptions) { if (item.GeneratedStockCodeId?.ToString() == bombeOption.Value) { <option value="@bombeOption.Value" selected>@bombeOption.Text</option> } else { <option value="@bombeOption.Value">@bombeOption.Text</option> } } } else { foreach (var stockOption in stockCodeOptions) { if (item.GeneratedStockCodeId?.ToString() == stockOption.id.ToString()) { <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)" selected>@stockOption.text</option> } else { <option value="@stockOption.id" data-unit-price="@Convert.ToDouble(stockOption.unitPrice).ToString(CultureInfo.InvariantCulture)">@stockOption.text</option> } } }</select>
+                                                <div class="form-check mb-2"><input class="form-check-input js-manual-toggle" type="checkbox" name="items[@itemIndex].UseManualUnitPrice" value="true" @(item.UseManualUnitPrice ? "checked" : null) /><input type="hidden" name="items[@itemIndex].UseManualUnitPrice" value="false" /><label class="form-check-label small">Stok fiyatı yerine manuel fiyat gir (€)</label></div>
+                                                <input type="text" name="items[@itemIndex].ManualUnitPrice" value="@item.ManualUnitPrice?.ToString(CultureInfo.InvariantCulture)" class="form-control form-control-sm js-manual-price js-decimal-input" inputmode="decimal" @(!item.UseManualUnitPrice ? "disabled" : null) />
+                                            </td>
+                                            <td class="text-end js-stock-price-cell">@item.StockUnitPrice.ToString("N2")</td>
+                                            <td class="text-end js-input-price-cell"><div>@inputPrice.ToString("N2")</div><div class="small text-muted js-input-price-source">@inputPriceSource</div></td>
+                                            <td class="text-end js-effective-price-cell">@item.UnitPrice.ToString("N2")</td>
+                                            <td class="text-end fw-semibold js-line-total-cell" data-quantity="@item.Quantity.ToString(CultureInfo.InvariantCulture)">@item.ItemCost.ToString("N2")</td>
+                                            <td class="text-end">
+                                                @if (item.IsManual && item.CostAnalysisItemId.HasValue)
+                                                {
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" formaction="@Url.Action("RemoveCostItem", "AD2000Calculation", new { area = "Design" })" formmethod="post" name="costAnalysisItemId" value="@item.CostAnalysisItemId"><i class="bi bi-trash me-1"></i>Sil</button>
+                                                }
+                                                else { <span class="small text-muted">Hesap</span> }
+                                            </td>
+                                        </tr>
+                                        itemIndex++;
+                                    }
+                                }
+                                </tbody>
+                                <tfoot><tr><th colspan="9" class="text-end">Genel Toplam</th><th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th><th></th></tr><tr><td colspan="11" class="text-end"><a asp-action="SalesPrice" asp-route-id="@Model.Id" asp-route-costAnalysisId="@costTable.CostAnalysisId" class="btn btn-outline-primary px-4 me-2"><i class="bi bi-currency-exchange me-1"></i>Sonraki adım: satış fiyatı oluştur</a><button type="submit" class="btn btn-primary px-4"><i class="bi bi-check2-circle me-1"></i>Değişiklikleri uygula</button></td></tr></tfoot>
+                            </table>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <div class="table-responsive mt-4 order-3">
+                        <table class="table table-sm table-striped align-middle mb-0">
+                            <thead><tr><th>Grup</th><th>Kalem</th><th>Malzeme / Form</th><th class="text-end">Miktar</th><th>Birim</th><th>Stok Kodu</th><th class="text-end">Stok Fiyatı</th><th class="text-end">Hesaba Giren Fiyat</th><th class="text-end">Birim Fiyat</th><th class="text-end">Tutar</th></tr></thead>
+                            <tbody>
+                            @foreach (var groupItems in costTable.Items.GroupBy(x => new { x.CostGroupCode, x.CostGroupName }))
+                            {
+                                <tr class="table-primary">
+                                    <td colspan="10">
+                                        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                                            <div class="fw-semibold">@groupItems.Key.CostGroupCode - @groupItems.Key.CostGroupName | Grup Toplamı: @groupItems.Sum(x => x.ItemCost).ToString("N2")</div>
+                                            <span class="badge bg-light text-primary border">Nasıl hesaplanır?</span>
+                                        </div>
+                                        <div class="small text-primary-emphasis mt-1">@ResolveCostGroupNote(groupItems.Key.CostGroupCode)</div>
+                                    </td>
+                                </tr>
+                                @foreach (var item in groupItems)
+                                {
+                                    var inputPrice = ResolveInputPrice(item.StockUnitPrice, item.UseManualUnitPrice, item.ManualUnitPrice);
+                                    var inputPriceSource = ResolveInputPriceSource(item.UseManualUnitPrice);
+                                    <tr><td>@item.CostGroupCode</td><td>@item.ItemName</td><td>@item.MaterialName / @item.FormType</td><td class="text-end">@item.Quantity.ToString("N2")</td><td>@item.Unit</td><td>@(string.IsNullOrWhiteSpace(item.StockCodeName) ? "-" : item.StockCodeName)</td><td class="text-end">@item.StockUnitPrice.ToString("N2")</td><td class="text-end"><div>@inputPrice.ToString("N2")</div><div class="small text-muted">@inputPriceSource</div></td><td class="text-end">@item.UnitPrice.ToString("N2")</td><td class="text-end fw-semibold">@item.ItemCost.ToString("N2")</td></tr>
+                                }
+                            }
+                            </tbody>
+                            <tfoot><tr><th colspan="9" class="text-end">Genel Toplam</th><th class="text-end">@costTable.GrandTotalCost.ToString("N2")</th></tr></tfoot>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const parseDecimal = (value) => {
+                if (value === null || value === undefined) return 0;
+                const normalized = String(value).trim().replace(/\s+/g, '').replace(',', '.');
+                const parsed = Number(normalized);
+                return Number.isFinite(parsed) ? parsed : 0;
+            };
+            const formatDecimal = (value) => Number(value || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const updateAddStockForm = (form) => {
+                const quantityInput = form.querySelector('.js-quantity-input');
+                const stockSelect = form.querySelector('.cost-stock-select');
+                const manualToggle = form.querySelector('.js-manual-toggle');
+                const manualInput = form.querySelector('.js-manual-price');
+                const effectiveUnitPriceInput = form.querySelector('.js-effective-unit-price');
+                const totalInput = form.querySelector('.js-line-total');
+                if (!quantityInput || !stockSelect || !effectiveUnitPriceInput || !totalInput) return;
+                const selectedOption = stockSelect.options[stockSelect.selectedIndex];
+                const stockUnitPrice = parseDecimal(selectedOption?.dataset?.unitPrice);
+                const manualUnitPrice = parseDecimal(manualInput?.value);
+                const quantity = parseDecimal(quantityInput.value);
+                const effectiveUnitPrice = manualToggle?.checked ? manualUnitPrice : stockUnitPrice;
+                effectiveUnitPriceInput.value = formatDecimal(effectiveUnitPrice);
+                totalInput.value = formatDecimal(quantity * effectiveUnitPrice);
+            };
+            const updateCostRow = (row) => {
+                const stockSelect = row.querySelector('.cost-stock-select');
+                const manualToggle = row.querySelector('.js-manual-toggle');
+                const manualInput = row.querySelector('.js-manual-price');
+                const quantityInput = row.querySelector('.js-quantity-input');
+                const stockPriceCell = row.querySelector('.js-stock-price-cell');
+                const inputPriceCell = row.querySelector('.js-input-price-cell');
+                const inputPriceSource = row.querySelector('.js-input-price-source');
+                const effectivePriceCell = row.querySelector('.js-effective-price-cell');
+                const totalCell = row.querySelector('.js-line-total-cell');
+                if (!stockSelect || !stockPriceCell || !inputPriceCell || !effectivePriceCell || !totalCell) return;
+                const selectedOption = stockSelect.options[stockSelect.selectedIndex];
+                const stockUnitPrice = parseDecimal(selectedOption?.dataset?.unitPrice);
+                const manualUnitPrice = parseDecimal(manualInput?.value);
+                const quantity = quantityInput ? parseDecimal(quantityInput.value) : parseDecimal(totalCell.dataset.quantity);
+                const effectiveUnitPrice = manualToggle?.checked ? manualUnitPrice : stockUnitPrice;
+                stockPriceCell.textContent = formatDecimal(stockUnitPrice);
+                inputPriceCell.firstElementChild.textContent = formatDecimal(effectiveUnitPrice);
+                if (inputPriceSource) inputPriceSource.textContent = manualToggle?.checked ? 'Manuel fiyat' : 'Stok fiyatı';
+                effectivePriceCell.textContent = formatDecimal(effectiveUnitPrice);
+                totalCell.textContent = formatDecimal(quantity * effectiveUnitPrice);
+            };
+            document.querySelectorAll('.js-add-stock-form').forEach((form) => {
+                form.addEventListener('input', () => updateAddStockForm(form));
+                form.addEventListener('change', () => {
+                    const toggle = form.querySelector('.js-manual-toggle');
+                    const manual = form.querySelector('.js-manual-price');
+                    if (toggle && manual) manual.disabled = !toggle.checked;
+                    updateAddStockForm(form);
+                });
+                updateAddStockForm(form);
+            });
+            document.querySelectorAll('tr').forEach((row) => {
+                row.addEventListener('input', () => updateCostRow(row));
+                row.addEventListener('change', () => {
+                    const toggle = row.querySelector('.js-manual-toggle');
+                    const manual = row.querySelector('.js-manual-price');
+                    if (toggle && manual) manual.disabled = !toggle.checked;
+                    updateCostRow(row);
+                });
+            });
+        })();
+    </script>
+}

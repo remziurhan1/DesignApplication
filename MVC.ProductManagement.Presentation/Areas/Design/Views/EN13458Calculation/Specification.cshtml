@@ -1,0 +1,332 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.EN13458CalculationVMs.EN13458SpecificationVM
+@using System.Globalization
+@{
+    ViewData["Title"] = "EN13458 Şartname";
+}
+
+@section Styles {
+    <style>
+        .spec-shell {
+            max-width: 980px;
+            margin: 0 auto 2rem auto;
+            background: #fff;
+            color: #111;
+            box-shadow: 0 12px 40px rgba(15, 23, 42, .08);
+            border: 1px solid #dbe2ea;
+        }
+
+        .spec-toolbar {
+            max-width: 980px;
+            margin: 0 auto 1rem auto;
+        }
+
+        .spec-paper {
+            padding: 36px 44px 48px;
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.45;
+            font-size: 14px;
+        }
+
+        .spec-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .spec-subtitle {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 24px 0 8px;
+        }
+
+        .spec-block-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 18px 0 6px;
+        }
+
+        .spec-meta {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 22px;
+        }
+
+        .spec-meta td {
+            padding: 2px 6px 2px 0;
+            vertical-align: top;
+        }
+
+        .spec-lines {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .spec-lines li {
+            margin-bottom: 4px;
+        }
+
+        .spec-lines strong {
+            min-width: 180px;
+            display: inline-block;
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .spec-table th, .spec-table td {
+            border: 1px solid #222;
+            padding: 6px 8px;
+        }
+
+        .spec-table th {
+            background: #f5f5f5;
+        }
+
+        .spec-note-title {
+            font-weight: 700;
+            margin-top: 12px;
+        }
+    </style>
+}
+
+<div class="spec-toolbar d-flex justify-content-between align-items-center gap-2 flex-wrap">
+    <div>
+        <h2 class="mb-0">Word Şablonuna Uyumlu Şartname</h2>
+        <div class="small text-muted">Şablon tarihi: @Model.GeneratedAtUtc.ToString("dd.MM.yyyy HH:mm") UTC</div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Detay
+        </a>
+        <a asp-action="ExportSpecificationWord" asp-route-id="@Model.Id" asp-route-costAnalysisId="@Model.SelectedCostAnalysisId" class="btn btn-primary">
+            <i class="bi bi-file-earmark-word me-1"></i>Word İndir
+        </a>
+    </div>
+</div>
+
+<div class="spec-shell">
+    <div class="spec-paper">
+        <table class="spec-meta">
+            <tbody>
+            @foreach (var item in Model.HeaderItems)
+            {
+                <tr>
+                    <td><strong>@item.Label:</strong></td>
+                    <td>@item.Value</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+        <div class="spec-title">@Model.DocumentTitle</div>
+
+        @foreach (var paragraph in Model.IntroParagraphs)
+        {
+            <p>@paragraph</p>
+        }
+
+        <div class="spec-subtitle">Vessel Technical Specification</div>
+
+        <div class="spec-block-title">General</div>
+        <ul class="spec-lines">
+            @foreach (var item in Model.GeneralItems)
+            {
+                <li><strong>@item.Label :</strong> @item.Value</li>
+            }
+        </ul>
+
+        <div class="spec-block-title">Inner vessel</div>
+        <ul class="spec-lines">
+            @foreach (var item in Model.InnerVesselItems)
+            {
+                <li><strong>@item.Label:</strong> @item.Value</li>
+            }
+        </ul>
+
+        <div class="spec-block-title">Outer vessel</div>
+        <ul class="spec-lines">
+            @foreach (var item in Model.OuterVesselItems)
+            {
+                <li><strong>@item.Label:</strong> @item.Value</li>
+            }
+        </ul>
+
+        <div class="spec-block-title">Insulation</div>
+        <ul class="spec-lines">
+            @foreach (var item in Model.InsulationItems)
+            {
+                <li><strong>@item.Label :</strong> @item.Value</li>
+            }
+        </ul>
+
+        <div class="spec-block-title">Pipework and Accessories</div>
+        <ul class="spec-lines">
+            @foreach (var item in Model.PipeworkItems)
+            {
+                if (string.IsNullOrWhiteSpace(item.Label))
+                {
+                    <li>@item.Value</li>
+                }
+                else
+                {
+                    <li><strong>@item.Label:</strong> @item.Value</li>
+                }
+            }
+        </ul>
+
+        <div class="spec-note-title">Accessories List</div>
+        @if (Model.AccessoryItems.Any())
+        {
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th>Group</th>
+                        <th>Item</th>
+                        <th>Stock Code</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Unit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.AccessoryItems)
+                {
+                    <tr>
+                        <td>@item.GroupName</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.StockCode</td>
+                        <td>@item.Description</td>
+                        <td>@item.Quantity.ToString("N2", CultureInfo.InvariantCulture)</td>
+                        <td>@item.Unit</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No accessory added.</p>
+        }
+
+        <div class="spec-block-title">Surface Application</div>
+        <ul class="spec-lines">
+            @foreach (var item in Model.SurfaceApplicationItems)
+            {
+                if (string.IsNullOrWhiteSpace(item.Label))
+                {
+                    <li>@item.Value</li>
+                }
+                else
+                {
+                    <li><strong>@item.Label:</strong> @item.Value</li>
+                }
+            }
+        </ul>
+
+        <div class="spec-block-title">Vessel documentation</div>
+        <ul>
+            @foreach (var item in Model.VesselDocumentationItems)
+            {
+                <li>@item</li>
+            }
+        </ul>
+
+        <div class="spec-block-title">Inspection</div>
+        <ul>
+            @foreach (var item in Model.InspectionItems)
+            {
+                <li>@item</li>
+            }
+        </ul>
+
+        <div class="spec-block-title">Commercial Terms and Conditions</div>
+        <div class="spec-note-title">Price</div>
+        @foreach (var paragraph in Model.CommercialParagraphs)
+        {
+            <p class="mb-1">@paragraph</p>
+        }
+
+        <table class="spec-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Qty</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var row in Model.QuotationRows)
+            {
+                <tr>
+                    <td>@row.No</td>
+                    <td>@row.Product</td>
+                    <td>@row.UnitPrice</td>
+                    <td>@row.Quantity</td>
+                    <td>@row.TotalPrice</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+        <div class="spec-note-title">Notes:</div>
+        <ul>
+            @foreach (var note in Model.Notes)
+            {
+                <li>@note</li>
+            }
+        </ul>
+
+        <div class="spec-note-title">Payment Terms</div>
+        <ul>
+            @foreach (var item in Model.PaymentTerms)
+            {
+                <li>@item</li>
+            }
+        </ul>
+
+        <div class="spec-note-title">Delivery Time</div>
+        <ul>
+            @foreach (var item in Model.DeliveryTerms)
+            {
+                <li>@item</li>
+            }
+        </ul>
+
+        <div class="spec-note-title">Warranty</div>
+        <ul>
+            @foreach (var item in Model.WarrantyTerms)
+            {
+                <li>@item</li>
+            }
+        </ul>
+
+        <div class="spec-note-title">Storage Cost</div>
+        <ul>
+            @foreach (var item in Model.StorageTerms)
+            {
+                <li>@item</li>
+            }
+        </ul>
+
+        <div class="spec-note-title">Validity</div>
+        <ul>
+            @foreach (var item in Model.ValidityTerms)
+            {
+                <li>@item</li>
+            }
+        </ul>
+
+        <ul class="mt-3">
+            @foreach (var item in Model.FooterTechnicalNotes)
+            {
+                <li>@item</li>
+            }
+        </ul>
+    </div>
+</div>
