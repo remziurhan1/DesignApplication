@@ -3,10 +3,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-using AdminEN13458AccessoryItemVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458AccessoryItemVM;
-using AdminEN13458QuotationRowVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458QuotationRowVM;
-using AdminEN13458SpecificationLineVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458SpecificationLineVM;
-using AdminEN13458SpecificationVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458SpecificationVM;
+using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
 
 namespace MVC.ProductManagement.Presentation.Services.EN13458
 {
