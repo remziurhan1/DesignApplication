@@ -2,13 +2,18 @@ using System.Globalization;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs;
+
+using AdminEN13458AccessoryItemVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458AccessoryItemVM;
+using AdminEN13458QuotationRowVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458QuotationRowVM;
+using AdminEN13458SpecificationLineVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458SpecificationLineVM;
+using AdminEN13458SpecificationVM = MVC.ProductManagement.Presentation.Areas.Admin.Models.EN13458CalculationVMs.EN13458SpecificationVM;
+using DesignEN13458SpecificationVM = MVC.ProductManagement.Presentation.Areas.Design.Models.EN13458CalculationVMs.EN13458SpecificationVM;
 
 namespace MVC.ProductManagement.Presentation.Services.EN13458
 {
     public class EN13458SpecificationExportService : IEN13458SpecificationExportService
     {
-        public async Task<byte[]> BuildWordDocumentAsync(string templatePath, EN13458SpecificationVM specification)
+        public async Task<byte[]> BuildWordDocumentAsync(string templatePath, AdminEN13458SpecificationVM specification)
         {
             if (!File.Exists(templatePath))
             {
@@ -28,7 +33,69 @@ namespace MVC.ProductManagement.Presentation.Services.EN13458
             return stream.ToArray();
         }
 
-        private static void ApplySpecificationTemplate(WordprocessingDocument document, EN13458SpecificationVM specification)
+        public Task<byte[]> BuildWordDocumentAsync(string templatePath, DesignEN13458SpecificationVM specification)
+        {
+            return BuildWordDocumentAsync(templatePath, MapDesignSpecificationToAdmin(specification));
+        }
+
+        private static AdminEN13458SpecificationVM MapDesignSpecificationToAdmin(DesignEN13458SpecificationVM source)
+        {
+            return new AdminEN13458SpecificationVM
+            {
+                Id = source.Id,
+                SelectedCostAnalysisId = source.SelectedCostAnalysisId,
+                DocumentTitle = source.DocumentTitle,
+                GeneratedAtUtc = source.GeneratedAtUtc,
+                FluidDisplay = source.FluidDisplay,
+                PressureDisplay = source.PressureDisplay,
+                HeaderItems = MapLines(source.HeaderItems),
+                IntroParagraphs = source.IntroParagraphs.ToList(),
+                GeneralItems = MapLines(source.GeneralItems),
+                InnerVesselItems = MapLines(source.InnerVesselItems),
+                OuterVesselItems = MapLines(source.OuterVesselItems),
+                InsulationItems = MapLines(source.InsulationItems),
+                PipeworkItems = MapLines(source.PipeworkItems),
+                AccessoryItems = source.AccessoryItems.Select(x => new AdminEN13458AccessoryItemVM
+                {
+                    GroupName = x.GroupName,
+                    ItemName = x.ItemName,
+                    StockCode = x.StockCode,
+                    Description = x.Description,
+                    Quantity = x.Quantity,
+                    Unit = x.Unit
+                }).ToList(),
+                SurfaceApplicationItems = MapLines(source.SurfaceApplicationItems),
+                VesselDocumentationItems = source.VesselDocumentationItems.ToList(),
+                InspectionItems = source.InspectionItems.ToList(),
+                CommercialParagraphs = source.CommercialParagraphs.ToList(),
+                QuotationRows = source.QuotationRows.Select(x => new AdminEN13458QuotationRowVM
+                {
+                    No = x.No,
+                    Product = x.Product,
+                    UnitPrice = x.UnitPrice,
+                    Quantity = x.Quantity,
+                    TotalPrice = x.TotalPrice
+                }).ToList(),
+                Notes = source.Notes.ToList(),
+                PaymentTerms = source.PaymentTerms.ToList(),
+                DeliveryTerms = source.DeliveryTerms.ToList(),
+                WarrantyTerms = source.WarrantyTerms.ToList(),
+                StorageTerms = source.StorageTerms.ToList(),
+                ValidityTerms = source.ValidityTerms.ToList(),
+                FooterTechnicalNotes = source.FooterTechnicalNotes.ToList()
+            };
+        }
+
+        private static List<AdminEN13458SpecificationLineVM> MapLines(IEnumerable<MVC.ProductManagement.Presentation.Areas.Design.Models.EN13458CalculationVMs.EN13458SpecificationLineVM> lines)
+        {
+            return lines.Select(x => new AdminEN13458SpecificationLineVM
+            {
+                Label = x.Label,
+                Value = x.Value
+            }).ToList();
+        }
+
+        private static void ApplySpecificationTemplate(WordprocessingDocument document, AdminEN13458SpecificationVM specification)
         {
             var body = document.MainDocumentPart?.Document?.Body;
             if (body == null)
@@ -68,7 +135,7 @@ namespace MVC.ProductManagement.Presentation.Services.EN13458
             paragraph.Append(new Run(new Text(newText) { Space = SpaceProcessingModeValues.Preserve }));
         }
 
-        private static void InsertAccessoryTable(Body body, IReadOnlyCollection<EN13458AccessoryItemVM> accessoryItems)
+        private static void InsertAccessoryTable(Body body, IReadOnlyCollection<AdminEN13458AccessoryItemVM> accessoryItems)
         {
             var anchorParagraph = body.Descendants<Paragraph>()
                 .FirstOrDefault(x => string.Equals(x.InnerText?.Trim(), "Flow schematic: See P&ID below", StringComparison.OrdinalIgnoreCase));
