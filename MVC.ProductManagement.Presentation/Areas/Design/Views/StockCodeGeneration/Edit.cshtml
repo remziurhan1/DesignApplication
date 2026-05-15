@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 <h4>Stok Kodu Düzenle</h4>
-<p class="text-muted">Alt gruba ait kural seçeneklerini güncelleyebilir, checkbox ile ek açıklama yazabilir ve fiyat bilgilerini değiştirebilirsiniz.</p>
+<p class="text-muted">Alt gruba ait kural seçeneklerini güncelleyebilir, checkbox ile ek açıklama yazabilir ve birim bilgilerini düzenleyebilirsiniz.</p>
 
 <form asp-action="Edit" method="post" enctype="multipart/form-data" id="edit-form">
     @Html.AntiForgeryToken()
@@ -49,17 +49,6 @@
     <div id="custom-description-wrapper" class="mb-3" style="display:none;">
         <label class="form-label">Ek Açıklama</label>
         <textarea id="custom-description" class="form-control" placeholder="Opsiyonel ek açıklama"></textarea>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="UnitPrice" class="form-label">Birim Fiyat</label>
-            <input id="unit-price" asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
-        </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="TargetPrice" class="form-label">Hedef Fiyat</label>
-            <input id="target-price" asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
-        </div>
     </div>
 
     <div class="row">

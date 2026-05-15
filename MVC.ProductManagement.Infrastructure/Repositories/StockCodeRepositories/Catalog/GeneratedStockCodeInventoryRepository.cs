@@ -39,18 +39,29 @@ public class GeneratedStockCodeInventoryRepository : IGeneratedStockCodeInventor
 
     public async Task ReplaceRuleSelectionsAsync(Guid generatedStockCodeId, IEnumerable<Guid> selectedRuleIds)
     {
+        var selectedRuleIdSet = selectedRuleIds
+            .Where(x => x != Guid.Empty)
+            .ToHashSet();
+
         var existing = await _context.GeneratedStockCodeRuleSelections
             .Where(x => x.GeneratedStockCodeId == generatedStockCodeId)
             .ToListAsync();
 
-        if (existing.Any())
+        var obsoleteRows = existing
+            .Where(x => !selectedRuleIdSet.Contains(x.StockSubCodeRuleId))
+            .ToList();
+
+        if (obsoleteRows.Any())
         {
-            _context.GeneratedStockCodeRuleSelections.RemoveRange(existing);
+            _context.GeneratedStockCodeRuleSelections.RemoveRange(obsoleteRows);
         }
 
-        var rows = selectedRuleIds
-            .Where(x => x != Guid.Empty)
-            .Distinct()
+        var existingRuleIdSet = existing
+            .Select(x => x.StockSubCodeRuleId)
+            .ToHashSet();
+
+        var rows = selectedRuleIdSet
+            .Where(ruleId => !existingRuleIdSet.Contains(ruleId))
             .Select(ruleId => new GeneratedStockCodeRuleSelection
             {
                 GeneratedStockCodeId = generatedStockCodeId,
