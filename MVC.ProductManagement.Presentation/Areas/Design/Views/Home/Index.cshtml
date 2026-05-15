@@ -69,6 +69,16 @@
     <div class="col-md-6 col-xl-3">
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-body">
+                <h5 class="card-title">Dizayn Planlama</h5>
+                <p class="card-text">Projeleri, görev şablonlarını, planlama personellerini ve Excel plan çıktılarını yönetin.</p>
+                <div class="d-flex gap-2 flex-wrap"><a asp-area="Design" asp-controller="DesignPlanningProjects" asp-action="Index" class="btn btn-outline-info">Projeler</a><a asp-area="Design" asp-controller="DesignPlanningEmployees" asp-action="Index" class="btn btn-outline-secondary">Personeller</a><a asp-area="Design" asp-controller="DesignPlanningTaskTemplates" asp-action="Index" class="btn btn-outline-secondary">Görevler</a><a asp-area="Design" asp-controller="DesignPlanningPlan" asp-action="Weekly" class="btn btn-info text-white">Haftalık Plan</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
                 <h5 class="card-title">Satılan Talepler</h5>
                 <p class="card-text">Satıştan gelen ve teknik inceleme gerektiren talepleri dizayn ekranında takip edin.</p>
                 <a asp-area="Design" asp-controller="SalesRequest" asp-action="Index" class="btn btn-outline-info">Talep Listesine Git</a>

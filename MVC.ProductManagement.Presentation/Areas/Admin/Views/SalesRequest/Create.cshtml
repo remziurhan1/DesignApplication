@@ -99,6 +99,34 @@
         font-size: .82rem;
     }
 
+    .required-label::after {
+        content: " *";
+        color: #dc3545;
+        font-weight: 800;
+    }
+
+    .required-note {
+        color: #dc3545;
+        font-size: .85rem;
+        font-weight: 600;
+    }
+
+    .step-checklist {
+        background: #fff;
+        border: 1px solid #e5ebf3;
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+    }
+
+    .step-checklist ol {
+        margin-bottom: 0;
+        padding-left: 1.25rem;
+    }
+
+    .step-checklist li + li {
+        margin-top: .35rem;
+    }
+
     .sticky-actions {
         position: sticky;
         bottom: 0;
@@ -135,6 +163,22 @@
         </div>
     </div>
 
+    <div class="step-checklist mb-4">
+        <div class="d-flex flex-wrap justify-content-between gap-2 align-items-start">
+            <div>
+                <strong>Formu sırayla doldurun</strong>
+                <ol class="small text-muted mt-2">
+                    <li>Müşteri ve satışçı bilgisini kontrol edin.</li>
+                    <li>Talep/teklif tarihlerini seçin.</li>
+                    <li>Teslimat ülkesi, ekler ve kısa özeti ekleyin.</li>
+                    <li>Talep grubunu seçip sadece açılan teknik alanları doldurun.</li>
+                    <li>Eksikleri kontrol edip talebi kaydedin.</li>
+                </ol>
+            </div>
+            <div class="required-note">* işaretli alanlar zorunludur.</div>
+        </div>
+    </div>
+
     <form method="post" enctype="multipart/form-data" asp-area="@currentArea" asp-controller="SalesRequest" asp-action="@(isRevision ? "Revise" : isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.Id : null)">
         @Html.AntiForgeryToken()
         @if (isEdit)
@@ -155,8 +199,8 @@
                 <div class="helper-box mb-3 small">Yeni müşteri listede yoksa sağ üstteki <strong>Müşteri ekle</strong> butonuyla önce müşteri kartını oluştur.</div>
                 <div class="row g-3">
                     <div class="col-lg-4">
-                        <label asp-for="CustomerId" class="form-label"></label>
-                        <select asp-for="CustomerId" asp-items="Model.Customers" class="form-select form-select-lg">
+                        <label asp-for="CustomerId" class="form-label required-label"></label>
+                        <select asp-for="CustomerId" asp-items="Model.Customers" class="form-select form-select-lg" required>
                             <option value="">Müşteri seçin</option>
                         </select>
                     </div>
@@ -187,13 +231,13 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label asp-for="RequestReceivedAt" class="form-label"></label>
-                        <input asp-for="RequestReceivedAt" type="date" class="form-control" />
+                        <label asp-for="RequestReceivedAt" class="form-label required-label"></label>
+                        <input asp-for="RequestReceivedAt" type="date" class="form-control" required />
                         <span asp-validation-for="RequestReceivedAt" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
-                        <label asp-for="NeededByDate" class="form-label"></label>
-                        <input asp-for="NeededByDate" type="date" class="form-control" />
+                        <label asp-for="NeededByDate" class="form-label required-label"></label>
+                        <input asp-for="NeededByDate" type="date" class="form-control" required />
                     </div>
                     <div class="col-md-4">
                         <label asp-for="RequestSource" class="form-label"></label>
@@ -284,12 +328,12 @@
                                 <div class="mini-section-title">A) Önce ne istendiğini seç</div>
                                 <div class="row g-3">
                                     <div class="col-md-4">
-                                        <label class="form-label">Talep grubu</label>
-                                        <select asp-for="Items[i].RequestCategory" asp-items="Html.GetEnumSelectList<SalesRequestCategory>()" class="form-select request-category"></select>
+                                        <label class="form-label required-label">Talep grubu</label>
+                                        <select asp-for="Items[i].RequestCategory" asp-items="Html.GetEnumSelectList<SalesRequestCategory>()" class="form-select request-category" required></select>
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">Akışkan grubu</label>
-                                        <select asp-for="Items[i].ProductGroupId" asp-items="Model.ProductGroups" class="form-select product-group"><option value="">Seçin</option></select>
+                                        <label class="form-label required-label">Akışkan grubu</label>
+                                        <select asp-for="Items[i].ProductGroupId" asp-items="Model.ProductGroups" class="form-select product-group" required><option value="">Seçin</option></select>
                                     </div>
                                     <div class="col-md-4 non-spare-fields">
                                         <label class="form-label">Akışkan</label>
@@ -305,8 +349,8 @@
                                 <div class="mini-section-title">B) Tank için temel bilgiler</div>
                                 <div class="row g-3">
                                     <div class="col-md-3">
-                                        <label class="form-label">Hacim (m³)</label>
-                                        <input asp-for="Items[i].CapacityM3" class="form-control" />
+                                        <label class="form-label required-label">Hacim (m³)</label>
+                                        <input asp-for="Items[i].CapacityM3" type="number" min="0.01" step="0.01" inputmode="decimal" class="form-control numeric-input tank-capacity" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Kurulum</label>
@@ -320,7 +364,7 @@
                                 <div class="row g-3">
                                     <div class="col-md-4">
                                         <label class="form-label">Dizayn basıncı (bar)</label>
-                                        <input asp-for="Items[i].DesignPressureBar" class="form-control" />
+                                        <input asp-for="Items[i].DesignPressureBar" type="number" min="0" step="0.01" inputmode="decimal" class="form-control numeric-input" />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Dizayn standardı</label>
@@ -366,7 +410,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Tüketim kapasitesi</label>
-                                        <input asp-for="Items[i].ConsumptionCapacity" class="form-control consumption-input" @@(Model.Items[i].HasTankConsumptionCapacity ? "" : "disabled") />
+                                        <input asp-for="Items[i].ConsumptionCapacity" type="number" min="0.01" step="0.01" inputmode="decimal" class="form-control numeric-input consumption-input" @@(Model.Items[i].HasTankConsumptionCapacity ? "" : "disabled") />
                                         <div class="field-hint">Tank altı buharlaştırıcı hesabı için referans veri.</div>
                                     </div>
                                 </div>
@@ -376,12 +420,12 @@
                                 <div class="mini-section-title">B) Evaporatör için ortam bilgileri</div>
                                 <div class="row g-3">
                                     <div class="col-md-3">
-                                        <label class="form-label">Ortam min sıcaklık (°C)</label>
-                                        <input asp-for="Items[i].AmbientTemperatureMin" class="form-control" />
+                                        <label class="form-label required-label">Ortam min sıcaklık (°C)</label>
+                                        <input asp-for="Items[i].AmbientTemperatureMin" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input evap-required" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Ortam max sıcaklık (°C)</label>
-                                        <input asp-for="Items[i].AmbientTemperatureMax" class="form-control" />
+                                        <label class="form-label required-label">Ortam max sıcaklık (°C)</label>
+                                        <input asp-for="Items[i].AmbientTemperatureMax" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input evap-required" />
                                     </div>
                                 </div>
                             </div>
@@ -394,24 +438,24 @@
                                         <input asp-for="Items[i].FacilityType" class="form-control" />
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="form-label">Giriş P (bar)</label>
-                                        <input asp-for="Items[i].FacilityInletPressureBar" class="form-control" />
+                                        <label class="form-label required-label">Giriş P (bar)</label>
+                                        <input asp-for="Items[i].FacilityInletPressureBar" type="number" min="0" step="0.01" inputmode="decimal" class="form-control numeric-input facility-required" />
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="form-label">Çıkış P (bar)</label>
-                                        <input asp-for="Items[i].FacilityOutletPressureBar" class="form-control" />
+                                        <label class="form-label required-label">Çıkış P (bar)</label>
+                                        <input asp-for="Items[i].FacilityOutletPressureBar" type="number" min="0" step="0.01" inputmode="decimal" class="form-control numeric-input facility-required" />
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="form-label">Giriş T (°C)</label>
-                                        <input asp-for="Items[i].FacilityInletTemperature" class="form-control" />
+                                        <label class="form-label required-label">Giriş T (°C)</label>
+                                        <input asp-for="Items[i].FacilityInletTemperature" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input facility-required" />
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="form-label">Çıkış T (°C)</label>
-                                        <input asp-for="Items[i].FacilityOutletTemperature" class="form-control" />
+                                        <label class="form-label required-label">Çıkış T (°C)</label>
+                                        <input asp-for="Items[i].FacilityOutletTemperature" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input facility-required" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Tesis kapasitesi (Nm3/h)</label>
-                                        <input asp-for="Items[i].FacilityCapacityNm3h" class="form-control" />
+                                        <input asp-for="Items[i].FacilityCapacityNm3h" type="number" min="0" step="0.01" inputmode="decimal" class="form-control numeric-input" />
                                     </div>
                                     <div class="col-md-3 d-flex align-items-end">
                                         <div class="form-check mb-2">
@@ -440,8 +484,8 @@
                                 <div class="mini-section-title">B) Yedek parça bilgisi</div>
                                 <div class="row g-3">
                                     <div class="col-md-8">
-                                        <label class="form-label">Açıklama</label>
-                                        <input asp-for="Items[i].SparePartDetails" class="form-control" placeholder="Talep edilen yedek parçayı anlaşılır şekilde yaz" />
+                                        <label class="form-label required-label">Açıklama</label>
+                                        <input asp-for="Items[i].SparePartDetails" class="form-control spare-details" placeholder="Talep edilen yedek parçayı anlaşılır şekilde yaz" />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Ek yükle</label>
@@ -456,11 +500,11 @@
                                 <div class="row g-3">
                                     <div class="col-md-3">
                                         <label class="form-label">Min sıcaklık (°C)</label>
-                                        <input asp-for="Items[i].DesignTemperatureMin" class="form-control" />
+                                        <input asp-for="Items[i].DesignTemperatureMin" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Max sıcaklık (°C)</label>
-                                        <input asp-for="Items[i].DesignTemperatureMax" class="form-control" />
+                                        <input asp-for="Items[i].DesignTemperatureMax" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Ek sorular / cevaplar</label>
@@ -527,6 +571,11 @@
             item.querySelectorAll('.spare-fields').forEach(x => x.style.display = showSparePart ? '' : 'none');
             item.querySelectorAll('.non-spare-fields').forEach(x => x.style.display = showSparePart ? 'none' : '');
 
+            setRequiredFor(item, '.tank-capacity', showTank);
+            setRequiredFor(item, '.evap-required', showEvap);
+            setRequiredFor(item, '.facility-required', showFacility);
+            setRequiredFor(item, '.spare-details', showSparePart);
+
             toggleTankTypeFields(item);
         }
 
@@ -550,12 +599,19 @@
             }
         }
 
+        function setRequiredFor(item, selector, required) {
+            item.querySelectorAll(selector).forEach(input => {
+                input.required = required;
+            });
+        }
+
         function toggleConsumptionCapacity(item) {
             const checkbox = item.querySelector('.consumption-toggle');
             const input = item.querySelector('.consumption-input');
             if (!checkbox || !input) return;
 
             input.disabled = !checkbox.checked;
+            input.required = checkbox.checked;
             if (!checkbox.checked) {
                 input.value = '';
             }
@@ -597,16 +653,16 @@
                         <div><strong>Talep Satırı #${index + 1}</strong><div class="small text-muted">Bu satırda bir ürün/hizmet ihtiyacını tarif et.</div></div>
                         <span class="badge bg-primary-subtle text-primary-emphasis">Kategoriye göre sadeleşir</span>
                     </div>
-                    <div class="mini-section mb-3"><div class="mini-section-title">A) Önce ne istendiğini seç</div><div class="row g-3"><div class="col-md-4"><label class="form-label">Talep grubu</label><select name="Items[${index}].RequestCategory" class="form-select request-category">${categoryOptions}</select></div><div class="col-md-4"><label class="form-label">Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select product-group"><option value="">Seçin</option>${productOptions}</select></div><div class="col-md-4 non-spare-fields"><label class="form-label">Akışkan</label><input class="form-control product-name-display" readonly placeholder="Akışkan grubundan otomatik gelir" /><input name="Items[${index}].ProductCode" type="hidden" class="product-code" /></div></div></div>
+                    <div class="mini-section mb-3"><div class="mini-section-title">A) Önce ne istendiğini seç</div><div class="row g-3"><div class="col-md-4"><label class="form-label required-label">Talep grubu</label><select name="Items[${index}].RequestCategory" class="form-select request-category" required>${categoryOptions}</select></div><div class="col-md-4"><label class="form-label required-label">Akışkan grubu</label><select name="Items[${index}].ProductGroupId" class="form-select product-group" required><option value="">Seçin</option>${productOptions}</select></div><div class="col-md-4 non-spare-fields"><label class="form-label">Akışkan</label><input class="form-control product-name-display" readonly placeholder="Akışkan grubundan otomatik gelir" /><input name="Items[${index}].ProductCode" type="hidden" class="product-code" /></div></div></div>
                     <input name="Items[${index}].TankOrientation" type="hidden" value="@((int)RequestTankOrientation.Vertical)" />
-                    <div class="mini-section mb-3 tank-only-fields"><div class="mini-section-title">B) Tank için temel bilgiler</div><div class="row g-3"><div class="col-md-3"><label class="form-label">Hacim (m³)</label><input name="Items[${index}].CapacityM3" class="form-control" value="0" /></div><div class="col-md-3"><label class="form-label">Kurulum</label><select name="Items[${index}].PlacementType" class="form-select">${placementOptions}</select></div></div></div>
-                    <div class="mini-section mb-3 non-spare-fields"><div class="mini-section-title">B) Basınç ve standart bilgileri</div><div class="row g-3"><div class="col-md-4"><label class="form-label">Dizayn basıncı (bar)</label><input name="Items[${index}].DesignPressureBar" class="form-control" /></div><div class="col-md-4"><label class="form-label">Dizayn standardı</label><input name="Items[${index}].DesignStandardCode" class="form-control" placeholder="Örn: EN 13458" /></div></div></div>
+                    <div class="mini-section mb-3 tank-only-fields"><div class="mini-section-title">B) Tank için temel bilgiler</div><div class="row g-3"><div class="col-md-3"><label class="form-label required-label">Hacim (m³)</label><input name="Items[${index}].CapacityM3" type="number" min="0.01" step="0.01" inputmode="decimal" class="form-control numeric-input tank-capacity" /></div><div class="col-md-3"><label class="form-label">Kurulum</label><select name="Items[${index}].PlacementType" class="form-select">${placementOptions}</select></div></div></div>
+                    <div class="mini-section mb-3 non-spare-fields"><div class="mini-section-title">B) Basınç ve standart bilgileri</div><div class="row g-3"><div class="col-md-4"><label class="form-label">Dizayn basıncı (bar)</label><input name="Items[${index}].DesignPressureBar" type="number" min="0" step="0.01" inputmode="decimal" class="form-control numeric-input" /></div><div class="col-md-4"><label class="form-label">Dizayn standardı</label><input name="Items[${index}].DesignStandardCode" class="form-control" placeholder="Örn: EN 13458" /></div></div></div>
                     <div class="mini-section mb-3 tank-fields"><div class="mini-section-title">C) Tank tipi ve standart seçimleri</div><div class="row g-3"><div class="col-md-3"><label class="form-label">Tank tipi</label><select name="Items[${index}].TankType" class="form-select tank-type">${tankTypeOptions}</select></div><div class="col-md-3"><label class="form-label">Depolama tipi</label><select name="Items[${index}].StorageOption" class="form-select storage-option">${storageOptions}</select></div><div class="col-md-3"><label class="form-label">Transport tipi</label><select name="Items[${index}].TransportOption" class="form-select transport-option">${transportOptions}</select></div><div class="col-md-3"><label class="form-label">STD/OPS/SPC</label><select name="Items[${index}].StdOpsSelection" class="form-select std-ops">${stdOpsOptions}</select></div><div class="col-12 spc-details"><label class="form-label">SPC teknik bilgileri</label><input name="Items[${index}].SpcTechnicalDetails" class="form-control" placeholder="SPC seçildiyse özel bilgileri yaz" /></div></div></div>
-                    <div class="mini-section mb-3 tank-only-fields"><div class="mini-section-title">D) Varsa tank tüketim bilgisi</div><div class="row g-3 align-items-end"><div class="col-md-4"><div class="form-check mb-2"><input name="Items[${index}].HasTankConsumptionCapacity" type="checkbox" class="form-check-input consumption-toggle" /><label class="form-check-label">Tank tüketim kapasitesi aktif</label></div></div><div class="col-md-4"><label class="form-label">Tüketim kapasitesi</label><input name="Items[${index}].ConsumptionCapacity" class="form-control consumption-input" disabled /><div class="field-hint">Tank altı buharlaştırıcı hesabı için referans veri.</div></div></div></div>
-                    <div class="mini-section mb-3 evap-fields"><div class="mini-section-title">B) Evaporatör için ortam bilgileri</div><div class="row g-3"><div class="col-md-3"><label class="form-label">Ortam min sıcaklık (°C)</label><input name="Items[${index}].AmbientTemperatureMin" class="form-control" /></div><div class="col-md-3"><label class="form-label">Ortam max sıcaklık (°C)</label><input name="Items[${index}].AmbientTemperatureMax" class="form-control" /></div></div></div>
-                    <div class="mini-section mb-3 facility-fields"><div class="mini-section-title">B) Tesis için giriş/çıkış bilgileri</div><div class="row g-3"><div class="col-md-4"><label class="form-label">Tesis tipi</label><input name="Items[${index}].FacilityType" class="form-control" /></div><div class="col-md-2"><label class="form-label">Giriş P (bar)</label><input name="Items[${index}].FacilityInletPressureBar" class="form-control" /></div><div class="col-md-2"><label class="form-label">Çıkış P (bar)</label><input name="Items[${index}].FacilityOutletPressureBar" class="form-control" /></div><div class="col-md-2"><label class="form-label">Giriş T (°C)</label><input name="Items[${index}].FacilityInletTemperature" class="form-control" /></div><div class="col-md-2"><label class="form-label">Çıkış T (°C)</label><input name="Items[${index}].FacilityOutletTemperature" class="form-control" /></div><div class="col-md-3"><label class="form-label">Tesis kapasitesi (Nm3/h)</label><input name="Items[${index}].FacilityCapacityNm3h" class="form-control" /></div><div class="col-md-3 d-flex align-items-end"><div class="form-check mb-2"><input name="Items[${index}].HasPump" type="checkbox" class="form-check-input" /><label class="form-check-label">Pompa var mı?</label></div></div><div class="col-md-3"><label class="form-label">Pompa detay</label><input name="Items[${index}].PumpDetails" class="form-control" /></div><div class="col-md-3 d-flex align-items-end"><div class="form-check mb-2"><input name="Items[${index}].HasElectricHeater" type="checkbox" class="form-check-input" /><label class="form-check-label">Elektrikli ısıtıcı var mı?</label></div></div><div class="col-md-3"><label class="form-label">Isıtıcı detay</label><input name="Items[${index}].ElectricHeaterDetails" class="form-control" /></div></div></div>
-                    <div class="mini-section mb-3 spare-fields"><div class="mini-section-title">B) Yedek parça bilgisi</div><div class="row g-3"><div class="col-md-8"><label class="form-label">Açıklama</label><input name="Items[${index}].SparePartDetails" class="form-control" placeholder="Talep edilen yedek parçayı anlaşılır şekilde yaz" /></div><div class="col-md-4"><label class="form-label">Ek yükle</label><input name="Attachments" type="file" class="form-control" multiple accept=".pdf,.xls,.xlsx,.doc,.docx,.msg,.eml,.png,.jpg,.jpeg" /><div class="field-hint">Yedek parçada en az bir ek önerilir.</div></div></div></div>
-                    <div class="mini-section non-spare-fields"><div class="mini-section-title">Son notlar</div><div class="row g-3"><div class="col-md-3"><label class="form-label">Min sıcaklık (°C)</label><input name="Items[${index}].DesignTemperatureMin" class="form-control" /></div><div class="col-md-3"><label class="form-label">Max sıcaklık (°C)</label><input name="Items[${index}].DesignTemperatureMax" class="form-control" /></div><div class="col-md-6"><label class="form-label">Ek sorular / cevaplar</label><textarea name="Items[${index}].AdditionalQuestionsJson" class="form-control" rows="2" placeholder="JSON zorunlu değil; varsa ek soru-cevapları yaz."></textarea></div><div class="col-12"><label class="form-label">Minimum teknik bilgiler</label><textarea name="Items[${index}].MinimumTechnicalNotes" class="form-control" rows="2" placeholder="Basınç, standart, vana isteği, özel saha şartı vb."></textarea></div></div></div>
+                    <div class="mini-section mb-3 tank-only-fields"><div class="mini-section-title">D) Varsa tank tüketim bilgisi</div><div class="row g-3 align-items-end"><div class="col-md-4"><div class="form-check mb-2"><input name="Items[${index}].HasTankConsumptionCapacity" type="checkbox" class="form-check-input consumption-toggle" /><label class="form-check-label">Tank tüketim kapasitesi aktif</label></div></div><div class="col-md-4"><label class="form-label">Tüketim kapasitesi</label><input name="Items[${index}].ConsumptionCapacity" type="number" min="0.01" step="0.01" inputmode="decimal" class="form-control numeric-input consumption-input" disabled /><div class="field-hint">Tank altı buharlaştırıcı hesabı için referans veri.</div></div></div></div>
+                    <div class="mini-section mb-3 evap-fields"><div class="mini-section-title">B) Evaporatör için ortam bilgileri</div><div class="row g-3"><div class="col-md-3"><label class="form-label required-label">Ortam min sıcaklık (°C)</label><input name="Items[${index}].AmbientTemperatureMin" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input evap-required" /></div><div class="col-md-3"><label class="form-label required-label">Ortam max sıcaklık (°C)</label><input name="Items[${index}].AmbientTemperatureMax" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input evap-required" /></div></div></div>
+                    <div class="mini-section mb-3 facility-fields"><div class="mini-section-title">B) Tesis için giriş/çıkış bilgileri</div><div class="row g-3"><div class="col-md-4"><label class="form-label">Tesis tipi</label><input name="Items[${index}].FacilityType" class="form-control" /></div><div class="col-md-2"><label class="form-label required-label">Giriş P (bar)</label><input name="Items[${index}].FacilityInletPressureBar" type="number" min="0" step="0.01" inputmode="decimal" class="form-control numeric-input facility-required" /></div><div class="col-md-2"><label class="form-label required-label">Çıkış P (bar)</label><input name="Items[${index}].FacilityOutletPressureBar" type="number" min="0" step="0.01" inputmode="decimal" class="form-control numeric-input facility-required" /></div><div class="col-md-2"><label class="form-label required-label">Giriş T (°C)</label><input name="Items[${index}].FacilityInletTemperature" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input facility-required" /></div><div class="col-md-2"><label class="form-label required-label">Çıkış T (°C)</label><input name="Items[${index}].FacilityOutletTemperature" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input facility-required" /></div><div class="col-md-3"><label class="form-label">Tesis kapasitesi (Nm3/h)</label><input name="Items[${index}].FacilityCapacityNm3h" type="number" min="0" step="0.01" inputmode="decimal" class="form-control numeric-input" /></div><div class="col-md-3 d-flex align-items-end"><div class="form-check mb-2"><input name="Items[${index}].HasPump" type="checkbox" class="form-check-input" /><label class="form-check-label">Pompa var mı?</label></div></div><div class="col-md-3"><label class="form-label">Pompa detay</label><input name="Items[${index}].PumpDetails" class="form-control" /></div><div class="col-md-3 d-flex align-items-end"><div class="form-check mb-2"><input name="Items[${index}].HasElectricHeater" type="checkbox" class="form-check-input" /><label class="form-check-label">Elektrikli ısıtıcı var mı?</label></div></div><div class="col-md-3"><label class="form-label">Isıtıcı detay</label><input name="Items[${index}].ElectricHeaterDetails" class="form-control" /></div></div></div>
+                    <div class="mini-section mb-3 spare-fields"><div class="mini-section-title">B) Yedek parça bilgisi</div><div class="row g-3"><div class="col-md-8"><label class="form-label required-label">Açıklama</label><input name="Items[${index}].SparePartDetails" class="form-control spare-details" placeholder="Talep edilen yedek parçayı anlaşılır şekilde yaz" /></div><div class="col-md-4"><label class="form-label">Ek yükle</label><input name="Attachments" type="file" class="form-control" multiple accept=".pdf,.xls,.xlsx,.doc,.docx,.msg,.eml,.png,.jpg,.jpeg" /><div class="field-hint">Yedek parçada en az bir ek önerilir.</div></div></div></div>
+                    <div class="mini-section non-spare-fields"><div class="mini-section-title">Son notlar</div><div class="row g-3"><div class="col-md-3"><label class="form-label">Min sıcaklık (°C)</label><input name="Items[${index}].DesignTemperatureMin" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input" /></div><div class="col-md-3"><label class="form-label">Max sıcaklık (°C)</label><input name="Items[${index}].DesignTemperatureMax" type="number" step="0.01" inputmode="decimal" class="form-control numeric-input" /></div><div class="col-md-6"><label class="form-label">Ek sorular / cevaplar</label><textarea name="Items[${index}].AdditionalQuestionsJson" class="form-control" rows="2" placeholder="JSON zorunlu değil; varsa ek soru-cevapları yaz."></textarea></div><div class="col-12"><label class="form-label">Minimum teknik bilgiler</label><textarea name="Items[${index}].MinimumTechnicalNotes" class="form-control" rows="2" placeholder="Basınç, standart, vana isteği, özel saha şartı vb."></textarea></div></div></div>
                 </div>`;
             container.insertAdjacentHTML('beforeend', html);
             wireItemEvents(container.lastElementChild);
