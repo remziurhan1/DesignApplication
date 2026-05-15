@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -58,6 +58,7 @@ BEGIN
         [CanManageDesignCalculations] bit NOT NULL CONSTRAINT [DF_EmployeeProfiles_CanManageDesignCalculations] DEFAULT 0,
         [CanCreateStockCodes] bit NOT NULL CONSTRAINT [DF_EmployeeProfiles_CanCreateStockCodes] DEFAULT 0,
         [CanEditStockCodes] bit NOT NULL CONSTRAINT [DF_EmployeeProfiles_CanEditStockCodes] DEFAULT 0,
+        [CanManageStockCodeDefinitions] bit NOT NULL CONSTRAINT [DF_EmployeeProfiles_CanManageStockCodeDefinitions] DEFAULT 0,
         [CanAccessMaterialGroups] bit NOT NULL CONSTRAINT [DF_EmployeeProfiles_CanAccessMaterialGroups] DEFAULT 0,
         [CanManageMaterials] bit NOT NULL CONSTRAINT [DF_EmployeeProfiles_CanManageMaterials] DEFAULT 0,
         [Status] int NOT NULL,
@@ -197,6 +198,7 @@ END");
                 CanManageDesignCalculations = false,
                 CanCreateStockCodes = false,
                 CanEditStockCodes = false,
+                CanManageStockCodeDefinitions = false,
                 CanAccessMaterialGroups = false,
                 CanManageMaterials = false,
                 Status = Status.Added,
@@ -273,6 +275,7 @@ END");
                 CanManageDesignCalculations = false,
                 CanCreateStockCodes = false,
                 CanEditStockCodes = false,
+                CanManageStockCodeDefinitions = false,
                 CanAccessMaterialGroups = false,
                 CanManageMaterials = false,
                 Status = Status.Added,
@@ -334,6 +337,7 @@ END");
                     CanManageDesignCalculations = true,
                     CanCreateStockCodes = false,
                     CanEditStockCodes = false,
+                    CanManageStockCodeDefinitions = false,
                     CanAccessMaterialGroups = true,
                     CanManageMaterials = false,
                     Status = Status.Added,
@@ -396,6 +400,7 @@ END");
                     CanManageDesignCalculations = true,
                     CanCreateStockCodes = true,
                     CanEditStockCodes = true,
+                    CanManageStockCodeDefinitions = true,
                     CanAccessMaterialGroups = true,
                     CanManageMaterials = true,
                     Status = Status.Added,

@@ -50,6 +50,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs
         public bool CanManageDesignCalculations { get; set; }
         public bool CanCreateStockCodes { get; set; }
         public bool CanEditStockCodes { get; set; }
+        public bool CanManageStockCodeDefinitions { get; set; }
         public bool CanAccessMaterialGroups { get; set; }
         public bool CanManageMaterials { get; set; }
     }
@@ -90,6 +91,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.EmployeeVMs
         public bool CanManageDesignCalculations { get; set; }
         public bool CanCreateStockCodes { get; set; }
         public bool CanEditStockCodes { get; set; }
+        public bool CanManageStockCodeDefinitions { get; set; }
         public bool CanAccessMaterialGroups { get; set; }
         public bool CanManageMaterials { get; set; }
     }

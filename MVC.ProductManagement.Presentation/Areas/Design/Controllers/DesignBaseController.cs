@@ -12,6 +12,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
     [Authorize(Roles = "DesignEngineer,DesignManager,Admin")]
     public abstract class DesignBaseController : BaseController
     {
+
+        protected async Task<bool> CanManageStockCodeDefinitionsAsync()
+        {
+            return await HasDesignPermissionAsync(x => x.CanManageStockCodeDefinitions);
+        }
+
         protected async Task<bool> HasDesignPermissionAsync(Func<Domain.Entities.EmployeeProfile, bool> permissionSelector)
         {
             if (User.IsInRole("Admin"))

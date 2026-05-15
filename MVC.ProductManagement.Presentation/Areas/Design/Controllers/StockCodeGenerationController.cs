@@ -28,7 +28,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
 
         public async Task<IActionResult> Index(Guid? subGroupId)
         {
-            if (!await HasDesignPermissionAsync(x => x.CanAccessDesignArea || x.CanCreateStockCodes || x.CanEditStockCodes))
+            if (!await HasDesignPermissionAsync(x => x.CanAccessDesignArea || x.CanCreateStockCodes || x.CanEditStockCodes || x.CanManageStockCodeDefinitions))
             {
                 return Forbid();
             }
@@ -40,7 +40,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
         [HttpGet]
         public async Task<IActionResult> GroupBuilder(Guid? subGroupId)
         {
-            return RedirectToAction(nameof(Index), new { subGroupId });
+            if (!await CanManageStockCodeDefinitionsAsync())
+            {
+                return Forbid();
+            }
+
+            return RedirectToAction("Index", "StockSubCodeGroup");
         }
 
         [HttpGet]
