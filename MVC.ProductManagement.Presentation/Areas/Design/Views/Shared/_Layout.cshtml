@@ -30,17 +30,27 @@
                 <ul class="nav flex-column gap-1">
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="Home" asp-action="Index"><i class="bi bi-grid"></i> Dizayn Paneli</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="Catalog" asp-action="Index"><i class="bi bi-box"></i> Teknik Katalog</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="Material" asp-action="Index"><i class="bi bi-layers"></i> Malzeme Yönetimi</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="Material" asp-action="Index"><i class="bi bi-layers"></i> Malzemeler</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="MaterialForm" asp-action="Index"><i class="bi bi-ui-checks"></i> Malzeme Formları</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StorageType" asp-action="Index"><i class="bi bi-archive"></i> Depolama Tipleri</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="YieldStrength" asp-action="Index"><i class="bi bi-graph-up"></i> Akma Mukavemeti</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="EN13458Calculation" asp-action="Index"><i class="bi bi-calculator"></i> EN13458 Hesapları</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="AD2000Calculation" asp-action="Index"><i class="bi bi-calculator"></i> AD2000 Hesapları</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StockCodeGeneration" asp-action="Index"><i class="bi bi-upc"></i> Stok Kodları</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StockCodeGeneration" asp-action="Generate"><i class="bi bi-plus-circle"></i> Stok Kodu Oluştur</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StockMainCodeGroup" asp-action="Index"><i class="bi bi-diagram-3"></i> Stok Grup/Kural Yönetimi</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StockMainCodeGroup" asp-action="Index"><i class="bi bi-diagram-3"></i> Ana Gruplar</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StockSubCodeGroup" asp-action="Index"><i class="bi bi-diagram-2"></i> Alt Gruplar</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StockSubCodeRule" asp-action="Index"><i class="bi bi-list-check"></i> Stok Kuralları</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StockProductGroup" asp-action="Index"><i class="bi bi-box-seam"></i> Ürün Grupları</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="StockCodePermissions" asp-action="Index"><i class="bi bi-shield-check"></i> Stok Kodu Yetkileri</a></li>
+                    <li class="nav-item mt-2 small text-uppercase text-muted px-3">Dizayn Planlama</li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="DesignPlanningProjects" asp-action="Index"><i class="bi bi-folder2-open"></i> Planlama Projeleri</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="DesignPlanningEmployees" asp-action="Index"><i class="bi bi-people"></i> Planlama Personelleri</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="DesignPlanningProjectTypes" asp-action="Index"><i class="bi bi-tags"></i> Proje Tipleri</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="DesignPlanningTaskTemplates" asp-action="Index"><i class="bi bi-list-task"></i> Görev Şablonları</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="DesignPlanningPlan" asp-action="Daily"><i class="bi bi-calendar-day"></i> Günlük Plan</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="DesignPlanningPlan" asp-action="Weekly"><i class="bi bi-calendar-week"></i> Haftalık Plan</a></li>
+                    <li class="nav-item mt-2 small text-uppercase text-muted px-3">Talepler</li>
                     <li class="nav-item"><a class="nav-link" asp-area="Design" asp-controller="SalesRequest" asp-action="Index"><i class="bi bi-kanban"></i> Satılan Talepler</a></li>
                 </ul>
             </aside>
