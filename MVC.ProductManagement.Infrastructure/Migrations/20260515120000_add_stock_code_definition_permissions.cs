@@ -20,6 +20,12 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
+
+            migrationBuilder.Sql(@"
+UPDATE [EmployeeProfiles]
+SET [CanManageStockCodeDefinitions] = 1
+WHERE [CanAccessDesignArea] = 1
+  AND ([DepartmentRole] LIKE N'%Müdür%' OR [DepartmentRole] LIKE N'%Mudur%')");
         }
 
         /// <inheritdoc />

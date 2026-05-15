@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC.ProductManagement.Domain.Enums;
@@ -7,7 +6,6 @@ using MVC.ProductManagement.Presentation.Areas.Design.Models.StockCodes.Permissi
 
 namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
 {
-    [Authorize(Roles = "DesignManager,Admin")]
     public class StockCodePermissionsController : DesignBaseController
     {
         private readonly AppDbContext _context;
@@ -20,6 +18,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            if (!await CanManageStockCodePermissionsAsync())
+            {
+                return Forbid();
+            }
+
             var employees = await _context.EmployeeProfiles
                 .AsNoTracking()
                 .Where(x => x.Status != Status.Deleted && x.CanAccessDesignArea)
@@ -34,7 +37,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                     Email = x.Email,
                     CanCreateStockCodes = x.CanCreateStockCodes,
                     CanEditStockCodes = x.CanEditStockCodes,
-                    CanManageStockCodeDefinitions = x.CanManageStockCodeDefinitions
+                    CanManageStockCodeDefinitions = x.CanManageStockCodeDefinitions,
+                    CanAccessMaterialGroups = x.CanAccessMaterialGroups,
+                    CanManageMaterials = x.CanManageMaterials
                 })
                 .ToListAsync();
 
@@ -45,6 +50,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(StockCodePermissionUpdateVm vm)
         {
+            if (!await CanManageStockCodePermissionsAsync())
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
                 return RedirectToAction(nameof(Index));
@@ -60,6 +70,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
             profile.CanCreateStockCodes = vm.CanCreateStockCodes;
             profile.CanEditStockCodes = vm.CanEditStockCodes;
             profile.CanManageStockCodeDefinitions = vm.CanManageStockCodeDefinitions;
+            profile.CanAccessMaterialGroups = vm.CanAccessMaterialGroups;
+            profile.CanManageMaterials = vm.CanManageMaterials;
             profile.ModifiedBy = User?.Identity?.Name ?? "DesignManager";
             profile.ModifiedDate = DateTime.UtcNow;
 

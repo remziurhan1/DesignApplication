@@ -3,8 +3,18 @@
     ViewData["Title"] = "Dizayn Katalogları";
 }
 
-<h2 class="mb-3">Dizayn Teknik Kaynaklar</h2>
-<p class="text-muted">Bu alanda maliyet/fiyat bilgileri gösterilmez.</p>
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h2 class="mb-1">Dizayn Teknik Kaynaklar</h2>
+        <p class="text-muted mb-0">Bu alanda maliyet/fiyat bilgileri gösterilmez.</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap justify-content-end">
+        <a asp-area="Design" asp-controller="Material" asp-action="Index" class="btn btn-outline-info">Malzeme Yönetimine Git</a>
+        <a asp-area="Design" asp-controller="MaterialForm" asp-action="Index" class="btn btn-outline-info">Malzeme Formları</a>
+        <a asp-area="Design" asp-controller="StorageType" asp-action="Index" class="btn btn-outline-info">Depolama Tipleri</a>
+        <a asp-area="Design" asp-controller="YieldStrength" asp-action="Index" class="btn btn-outline-info">Akma Mukavemeti</a>
+    </div>
+</div>
 
 <div class="row g-3">
     <div class="col-lg-6">

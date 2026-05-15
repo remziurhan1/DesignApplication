@@ -17,6 +17,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Models.StockCodes.Perm
         public bool CanCreateStockCodes { get; set; }
         public bool CanEditStockCodes { get; set; }
         public bool CanManageStockCodeDefinitions { get; set; }
+        public bool CanAccessMaterialGroups { get; set; }
+        public bool CanManageMaterials { get; set; }
     }
 
     public class StockCodePermissionUpdateVm
@@ -27,5 +29,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Models.StockCodes.Perm
         public bool CanCreateStockCodes { get; set; }
         public bool CanEditStockCodes { get; set; }
         public bool CanManageStockCodeDefinitions { get; set; }
+        public bool CanAccessMaterialGroups { get; set; }
+        public bool CanManageMaterials { get; set; }
     }
 }

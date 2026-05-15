@@ -380,7 +380,8 @@ END");
                 });
             }
 
-            if (!await context.EmployeeProfiles.AnyAsync(x => x.UserId == user.Id))
+            var managerProfile = await context.EmployeeProfiles.FirstOrDefaultAsync(x => x.UserId == user.Id);
+            if (managerProfile == null)
             {
                 await context.EmployeeProfiles.AddAsync(new EmployeeProfile
                 {
@@ -407,6 +408,15 @@ END");
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow
                 });
+            }
+            else
+            {
+                managerProfile.CanAccessDesignArea = true;
+                managerProfile.CanCreateStockCodes = true;
+                managerProfile.CanEditStockCodes = true;
+                managerProfile.CanManageStockCodeDefinitions = true;
+                managerProfile.ModifiedBy = "SeedData";
+                managerProfile.ModifiedDate = DateTime.UtcNow;
             }
 
             await context.SaveChangesAsync();
