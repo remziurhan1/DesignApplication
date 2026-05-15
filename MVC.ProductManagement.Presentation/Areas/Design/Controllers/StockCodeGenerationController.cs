@@ -91,8 +91,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 GeneratedCode = vm.GeneratedCode,
                 RuleName = vm.RuleName ?? string.Empty,
                 Description = vm.Description,
-                UnitPrice = vm.UnitPrice,
-                TargetPrice = vm.TargetPrice,
                 PrimaryUnitType = vm.PrimaryUnitType,
                 KgEquivalentPerPrimaryUnit = vm.KgEquivalentPerPrimaryUnit,
                 Step3DFilePath = attachments.Step3DFilePath,
@@ -125,8 +123,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 GeneratedCode = dto.GeneratedCode,
                 RuleName = dto.RuleName,
                 Description = dto.Description,
-                UnitPrice = dto.UnitPrice,
-                TargetPrice = dto.TargetPrice,
                 PrimaryUnitType = dto.PrimaryUnitType,
                 KgEquivalentPerPrimaryUnit = dto.KgEquivalentPerPrimaryUnit,
                 Step3DFilePath = dto.Step3DFilePath,
@@ -159,14 +155,17 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 return View(vm);
             }
 
+            var existing = await _generatedService.GetByIdAsync(vm.Id);
+            if (existing == null) return NotFound();
+
             await _generatedService.UpdateAsync(new GeneratedStockCodeUpdateDto
             {
                 Id = vm.Id,
                 StockSubCodeRuleId = vm.StockSubCodeRuleId,
                 SelectedRuleIds = vm.SelectedRuleIds,
                 Description = vm.Description,
-                UnitPrice = vm.UnitPrice,
-                TargetPrice = vm.TargetPrice,
+                UnitPrice = existing.UnitPrice,
+                TargetPrice = existing.TargetPrice,
                 PrimaryUnitType = vm.PrimaryUnitType,
                 KgEquivalentPerPrimaryUnit = vm.KgEquivalentPerPrimaryUnit,
                 Step3DFilePath = attachments.Step3DFilePath,
@@ -211,8 +210,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
             {
                 code = result.Code,
                 description = result.Description,
-                unitPrice = result.UnitPrice,
-                targetPrice = result.TargetPrice,
                 isExisting = result.IsExisting
             });
         }
