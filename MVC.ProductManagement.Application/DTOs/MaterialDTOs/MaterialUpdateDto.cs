@@ -12,9 +12,6 @@ namespace MVC.ProductManagement.Application.DTOs.MaterialDTOs
         public string Name { get; set; } = string.Empty;
         public string MaterialNumber { get; set; } = string.Empty;
         public double Density { get; set; }
-        public double? ColdStretchYieldStrength { get; set; }
-        public double? ElasticModulus { get; set; }
-        public double? YieldFactorK { get; set; }
         public string? Notes { get; set; }
     }
 }

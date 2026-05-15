@@ -1,5 +1,4 @@
 ﻿using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
-using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -19,7 +18,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
         Task<MaterialFormDetailDto> CreateAsync(MaterialFormCreateDto dto);
         Task<MaterialFormDetailDto> UpdateAsync(MaterialFormUpdateDto dto);
         Task DeleteAsync(Guid id);
-        Task<IEnumerable<MaterialForm>> GetAllWithMaterialAsync();
-        Task<MaterialForm> GetByIdWithMaterialAsync(Guid id);
+        Task<List<MaterialFormListDto>> GetAllWithMaterialAsync();
+        Task<MaterialFormDetailDto?> GetByIdWithMaterialAsync(Guid id);
     }
 }

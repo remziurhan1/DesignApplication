@@ -2728,9 +2728,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double?>("ColdStretchYieldStrength")
-                        .HasColumnType("float");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -2747,9 +2744,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                     b.Property<double>("Density")
                         .HasPrecision(10, 3)
                         .HasColumnType("float(10)");
-
-                    b.Property<double?>("ElasticModulus")
-                        .HasColumnType("float");
 
                     b.Property<string>("MaterialNumber")
                         .IsRequired()
@@ -2772,9 +2766,6 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<double?>("YieldFactorK")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -2812,12 +2803,10 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             CreatedBy = "SeedData",
                             CreatedDate = new DateTime(2026, 5, 12, 19, 9, 21, 689, DateTimeKind.Utc).AddTicks(2536),
                             Density = 7850.0,
-                            ElasticModulus = 206000.0,
                             MaterialNumber = "1.0038",
                             Name = "S235JR",
                             Notes = "Profile material for supports/rings",
-                            Status = 0,
-                            YieldFactorK = 235.0
+                            Status = 0
                         },
                         new
                         {
@@ -2850,6 +2839,14 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double?>("ColdStretchYieldStrength")
+                        .HasPrecision(10, 3)
+                        .HasColumnType("float(10)");
+
+                    b.Property<double?>("ElasticModulus")
+                        .HasPrecision(10, 3)
+                        .HasColumnType("float(10)");
+
+                    b.Property<double?>("YieldFactorK")
                         .HasPrecision(10, 3)
                         .HasColumnType("float(10)");
 
@@ -3008,6 +3005,7 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             Id = new Guid("66666666-6666-6666-6666-666666666661"),
                             CreatedBy = "SeedData",
                             CreatedDate = new DateTime(2026, 5, 12, 19, 9, 21, 689, DateTimeKind.Utc).AddTicks(2648),
+                            ElasticModulus = 206000.0,
                             FormType = 4,
                             MaterialClass = "Carbon Steel",
                             MaterialFamily = 1,
@@ -3022,7 +3020,8 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             SymbolicName = "S235JR",
                             ThicknessMax = 30.0,
                             ThicknessMin = 3.0,
-                            UnitPrice = 1.2
+                            UnitPrice = 1.2,
+                            YieldFactorK = 235.0
                         },
                         new
                         {

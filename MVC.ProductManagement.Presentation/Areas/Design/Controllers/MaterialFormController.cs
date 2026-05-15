@@ -72,7 +72,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                     UnitPrice = form.UnitPrice,
                     TargetPrice = form.TargetPrice,
                     ColdStretchYieldStrength = form.ColdStretchYieldStrength,
-                    MaterialName = form.Material.Name,
+                    ElasticModulus = form.ElasticModulus,
+                    YieldFactorK = form.YieldFactorK,
+                    MaterialName = form.MaterialName,
                 });
             }
 
@@ -109,7 +111,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Notes = dto.Notes,
                 UnitPrice = dto.UnitPrice,
                 TargetPrice = dto.TargetPrice,
-                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK
             };
 
             return View(vm);
@@ -164,7 +168,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Notes = vm.Notes,
                 UnitPrice = vm.UnitPrice,
                 TargetPrice = vm.TargetPrice,
-                ColdStretchYieldStrength = vm.ColdStretchYieldStrength
+                ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
+                ElasticModulus = vm.ElasticModulus,
+                YieldFactorK = vm.YieldFactorK
             };
 
             await _materialFormService.CreateAsync(dto);
@@ -200,7 +206,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Notes = dto.Notes,
                 UnitPrice=dto.UnitPrice,
                 TargetPrice=dto.TargetPrice,
-                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK
                 
             };
 
@@ -244,7 +252,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Notes = vm.Notes,
                 UnitPrice = vm.UnitPrice,
                 TargetPrice = vm.TargetPrice,
-                ColdStretchYieldStrength = vm.ColdStretchYieldStrength
+                ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
+                ElasticModulus = vm.ElasticModulus,
+                YieldFactorK = vm.YieldFactorK
 
             };
 
@@ -279,7 +289,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Notes = dto.Notes,
                 UnitPrice = dto.UnitPrice,
                 TargetPrice = dto.TargetPrice,
-                ColdStretchYieldStrength = dto.ColdStretchYieldStrength
+                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK
             };
 
             return View(vm);

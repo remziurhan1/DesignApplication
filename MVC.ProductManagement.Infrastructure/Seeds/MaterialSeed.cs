@@ -39,8 +39,6 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     Name = "S235JR",
                     MaterialNumber = "1.0038",
                     Density = 7850,
-                    ElasticModulus = 206000,
-                    YieldFactorK = 235,
                     Notes = "Profile material for supports/rings",
                     CreatedBy = "SeedData",
                     CreatedDate = DateTime.UtcNow

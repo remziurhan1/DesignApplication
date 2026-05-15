@@ -23,14 +23,18 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             var forms = await _materialFormRepository.GetAllAsync();
             return MapListDtos(forms, includeMaterialId: true);
         }
-        public async Task<IEnumerable<MaterialForm>> GetAllWithMaterialAsync()
+        public async Task<List<MaterialFormListDto>> GetAllWithMaterialAsync()
         {
-            return await _materialFormRepository.GetAllWithMaterialAsync();
+            var forms = await _materialFormRepository.GetAllWithMaterialAsync();
+            return MapListDtos(forms, includeMaterialId: true);
         }
 
-        public async Task<MaterialForm> GetByIdWithMaterialAsync(Guid id)
+        public async Task<MaterialFormDetailDto?> GetByIdWithMaterialAsync(Guid id)
         {
-            return await _materialFormRepository.GetByIdWithMaterialAsync(id);
+            var form = await _materialFormRepository.GetByIdWithMaterialAsync(id);
+            if (form == null) return null;
+
+            return MapDetailDto(form);
         }
         public async Task<List<MaterialFormListDto>> GetByMaterialIdAsync(Guid materialId)
         {
@@ -53,6 +57,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             {
                 Id = form.Id,
                 MaterialId = form.MaterialId,
+                MaterialName = form.Material?.Name ?? string.Empty,
                 FormType = form.FormType,
                 MaterialClass = form.MaterialClass,
                 MaterialFamily = form.MaterialFamily,
@@ -67,6 +72,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 UnitPrice=form.UnitPrice,
                 TargetPrice=form.TargetPrice,
                 ColdStretchYieldStrength = form.ColdStretchYieldStrength,
+                ElasticModulus = form.ElasticModulus,
+                YieldFactorK = form.YieldFactorK,
                 SectionArea = form.SectionArea,
                 MomentOfInertia = form.MomentOfInertia,
                 SectionModulus = form.SectionModulus
@@ -93,6 +100,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 UnitPrice = dto.UnitPrice,
                 TargetPrice = dto.TargetPrice,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK,
                 SectionArea = dto.SectionArea,
                 MomentOfInertia = dto.MomentOfInertia,
                 SectionModulus = dto.SectionModulus
@@ -119,6 +128,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 UnitPrice = dto.UnitPrice,
                 TargetPrice = dto.TargetPrice,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK,
                 SectionArea = dto.SectionArea,
                 MomentOfInertia = dto.MomentOfInertia,
                 SectionModulus = dto.SectionModulus
@@ -145,6 +156,8 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
             entity.UnitPrice = dto.UnitPrice;
             entity.TargetPrice = dto.TargetPrice;
             entity.ColdStretchYieldStrength = dto.ColdStretchYieldStrength;
+            entity.ElasticModulus = dto.ElasticModulus;
+            entity.YieldFactorK = dto.YieldFactorK;
             entity.SectionArea = dto.SectionArea;
             entity.MomentOfInertia = dto.MomentOfInertia;
             entity.SectionModulus = dto.SectionModulus;
@@ -170,10 +183,42 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                 UnitPrice = dto.UnitPrice,
                 TargetPrice = dto.TargetPrice,
                 ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
+                ElasticModulus = dto.ElasticModulus,
+                YieldFactorK = dto.YieldFactorK,
                 SectionArea = dto.SectionArea,
                 MomentOfInertia = dto.MomentOfInertia,
                 SectionModulus = dto.SectionModulus
 
+            };
+        }
+
+
+        private static MaterialFormDetailDto MapDetailDto(MaterialForm form)
+        {
+            return new MaterialFormDetailDto
+            {
+                Id = form.Id,
+                MaterialId = form.MaterialId,
+                MaterialName = form.Material?.Name ?? string.Empty,
+                FormType = form.FormType,
+                MaterialClass = form.MaterialClass,
+                MaterialFamily = form.MaterialFamily,
+                Norm = form.Norm,
+                SymbolicName = form.SymbolicName,
+                StockCode = form.StockCode,
+                ThicknessMin = form.ThicknessMin,
+                ThicknessMax = form.ThicknessMax,
+                ProductStandard = form.ProductStandard,
+                WeldingFactor = form.WeldingFactor,
+                Notes = form.Notes,
+                UnitPrice = form.UnitPrice,
+                TargetPrice = form.TargetPrice,
+                ColdStretchYieldStrength = form.ColdStretchYieldStrength,
+                ElasticModulus = form.ElasticModulus,
+                YieldFactorK = form.YieldFactorK,
+                SectionArea = form.SectionArea,
+                MomentOfInertia = form.MomentOfInertia,
+                SectionModulus = form.SectionModulus
             };
         }
 
@@ -215,9 +260,12 @@ namespace MVC.ProductManagement.Application.Services.MaterialFormServices
                     UnitPrice = form.UnitPrice,
                     TargetPrice = form.TargetPrice,
                     ColdStretchYieldStrength = form.ColdStretchYieldStrength,
+                    ElasticModulus = form.ElasticModulus,
+                    YieldFactorK = form.YieldFactorK,
                     SectionArea = form.SectionArea,
                     MomentOfInertia = form.MomentOfInertia,
-                    SectionModulus = form.SectionModulus
+                    SectionModulus = form.SectionModulus,
+                    MaterialName = form.Material?.Name ?? string.Empty
                 };
 
                 if (includeMaterialId)

@@ -1,40 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using MVC.ProductManagement.Application.DTOs.MaterialFormDTOs;
 using MVC.ProductManagement.Application.DTOs.MaterialDTOs;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Presentation.Areas.Design.Models.MaterialVMs;
-using MVC.ProductManagement.Presentation.Areas.Design.Models.MaterialFormVms;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
 {
     public class MaterialController : DesignBaseController
     {
-        private static readonly string[] MaterialGroups =
-        {
-            "Carbon Steel",
-            "Alloy Steel",
-            "Alluminum Alloy",
-            "Carbon Low Alloy",
-            "Copper Alloy",
-            "Nickel Alloy",
-            "Stainless Steel",
-            "Titanium - Zirconium"
-        };
-
-        private static readonly string[] MaterialNorms =
-        {
-            "ASME II",
-            "ASTM",
-            "EN10025",
-            "EN10028-2",
-            "EN10028-3",
-            "EN10028-4",
-            "EN10028-5",
-            "EN10028-6",
-            "EN10028-7"
-        };
-
         private readonly IMaterialService _materialService;
 
         public MaterialController(IMaterialService materialService)
@@ -59,8 +31,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 {
                     Id = material.Id,
                     Name = material.Name,
-                    ElasticModulus = material.ElasticModulus,
-                    YieldFactorK = material.YieldFactorK,
+                    MaterialNumber = material.MaterialNumber,
+                    Density = material.Density,
+                    Notes = material.Notes
                 });
             }
 
@@ -85,9 +58,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Name = dto.Name,
                 MaterialNumber = dto.MaterialNumber,
                 Density = dto.Density,
-                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
-                ElasticModulus = dto.ElasticModulus,
-                YieldFactorK = dto.YieldFactorK,
                 Notes = dto.Notes
             };
 
@@ -102,7 +72,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 return Forbid();
             }
 
-            LoadMaterialSelections();
             return View();
         }
 
@@ -118,7 +87,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
 
             if (!ModelState.IsValid)
             {
-                LoadMaterialSelections();
                 return View(vm);
             }
 
@@ -127,11 +95,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Name = vm.Name,
                 MaterialNumber = vm.MaterialNumber,
                 Density = vm.Density,
-                ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
-                ElasticModulus = vm.ElasticModulus,
-                YieldFactorK = vm.YieldFactorK,
-                Notes = vm.Notes,
-                Forms = BuildMaterialFormCreateDtos(vm.Forms)
+                Notes = vm.Notes
             };
 
             await _materialService.CreateAsync(dto);
@@ -155,13 +119,9 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Name = dto.Name,
                 MaterialNumber = dto.MaterialNumber,
                 Density = dto.Density,
-                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
-                ElasticModulus = dto.ElasticModulus,
-                YieldFactorK = dto.YieldFactorK,
                 Notes = dto.Notes
             };
 
-            LoadMaterialSelections();
 
             return View(vm);
         }
@@ -178,7 +138,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
 
             if (!ModelState.IsValid)
             {
-                LoadMaterialSelections();
                 return View(vm);
             }
 
@@ -191,58 +150,11 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Name = vm.Name,
                 MaterialNumber = vm.MaterialNumber,
                 Density = vm.Density,
-                ColdStretchYieldStrength = vm.ColdStretchYieldStrength,
-                ElasticModulus = vm.ElasticModulus,
-                YieldFactorK = vm.YieldFactorK,
                 Notes = vm.Notes
             };
 
             await _materialService.UpdateAsync(dto);
             return RedirectToAction(nameof(Index));
-        }
-
-
-        private static List<MaterialFormCreateDto> BuildMaterialFormCreateDtos(IEnumerable<MaterialFormCreateVm> forms)
-        {
-            var result = new List<MaterialFormCreateDto>();
-
-            foreach (var form in forms)
-            {
-                result.Add(new MaterialFormCreateDto
-                {
-                    FormType = form.FormType,
-                    MaterialClass = form.MaterialClass,
-                    Norm = form.Norm,
-                    SymbolicName = form.SymbolicName,
-                    StockCode = form.StockCode,
-                    ThicknessMin = form.ThicknessMin,
-                    ThicknessMax = form.ThicknessMax,
-                    ProductStandard = form.ProductStandard,
-                    WeldingFactor = form.WeldingFactor,
-                    Notes = form.Notes
-                });
-            }
-
-            return result;
-        }
-
-        private void LoadMaterialSelections()
-        {
-            var materialGroups = new List<SelectListItem>();
-            foreach (var group in MaterialGroups)
-            {
-                materialGroups.Add(new SelectListItem(group, group));
-            }
-
-            var materialNorms = new List<SelectListItem>();
-            foreach (var norm in MaterialNorms)
-            {
-                materialNorms.Add(new SelectListItem(norm, norm));
-            }
-
-            ViewBag.MaterialGroups = materialGroups;
-            ViewBag.MaterialNorms = materialNorms;
-
         }
 
         // 📌 Silme GET
@@ -262,9 +174,6 @@ namespace MVC.ProductManagement.Presentation.Areas.Design.Controllers
                 Name = dto.Name,
                 MaterialNumber = dto.MaterialNumber,
                 Density = dto.Density,
-                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
-                ElasticModulus = dto.ElasticModulus,
-                YieldFactorK = dto.YieldFactorK,
                 Notes = dto.Notes
             };
 

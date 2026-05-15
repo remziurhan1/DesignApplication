@@ -83,7 +83,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 materialForms.Add(new SelectListItem
                 {
                     Value = form.Id.ToString(),
-                    Text = $"{form.Material.Name} - {form.FormType} [{form.ThicknessMin}-{form.ThicknessMax} mm]"
+                    Text = $"{form.MaterialName} - {form.FormType} [{form.ThicknessMin}-{form.ThicknessMax} mm]"
                 });
             }
 
@@ -91,7 +91,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             // seçili form bilgisini bul
             var selectedForm = forms.FirstOrDefault(f => f.Id == materialFormId);
 
-            ViewBag.MaterialName = selectedForm?.Material?.Name;
+            ViewBag.MaterialName = selectedForm?.MaterialName;
             ViewBag.FormInfo = $"{selectedForm?.FormType} [{selectedForm?.ThicknessMin}-{selectedForm?.ThicknessMax} mm]";
             var vm = new YieldStrengthDualCalculateVM
             {
@@ -119,12 +119,12 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
 
             // 📌 Form bilgisini çek
             var form = await _materialFormService.GetByIdWithMaterialAsync(vm.MaterialFormId);
-            var material = await _materialService.GetByIdAsync(form.MaterialId);
+            if (form == null) return NotFound();
 
 
             var resultVm = new YieldStrengthDualResultVM
             {
-                MaterialName = material.Name,
+                MaterialName = form.MaterialName,
                 MaterialFormName = form.FormType.ToString(),
 
                 Temperature = vm.Temperature,
