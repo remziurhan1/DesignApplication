@@ -943,7 +943,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             ViewBag.StorageTypeDensities = (storageTypes.Data ?? new List<MVC.ProductManagement.Application.DTOs.StorageTypeDTOs.StorageTypeListDTO>())
                 .ToDictionary(x => x.Id.ToString(), x => x.Density);
 
-            ViewBag.MaterialExternalProperties = materials.ToDictionary(x => x.Id.ToString(), x => new { elasticModulus = x.ElasticModulus, yieldFactorK = x.YieldFactorK });
+            ViewBag.MaterialExternalProperties = forms.ToDictionary(x => x.Id.ToString(), x => new { elasticModulus = x.ElasticModulus, yieldFactorK = x.YieldFactorK });
         }
 
     }

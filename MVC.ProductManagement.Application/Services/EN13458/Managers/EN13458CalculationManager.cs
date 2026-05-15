@@ -33,8 +33,8 @@ namespace MVC.ProductManagement.Application.Services.EN13458.Managers
 
             await ResolveMaterialStrengthsAsync(input, null);
 
-            input.YieldFactorK = await _strengthProvider.ResolveYieldFactorKAsync(input.OuterShellMaterialId);
-            input.ElasticModulus = await _strengthProvider.ResolveElasticModulusAsync(input.OuterShellMaterialId);
+            input.YieldFactorK = await _strengthProvider.ResolveYieldFactorKAsync(input.OuterShellMaterialFormId);
+            input.ElasticModulus = await _strengthProvider.ResolveElasticModulusAsync(input.OuterShellMaterialFormId);
 
             var result = await _engine.CalculateAsync(input);
             var refined = await ResolveMaterialStrengthsAsync(input, result);

@@ -37,27 +37,27 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             return material.Density;
         }
 
-        public async Task<double> ResolveElasticModulusAsync(Guid materialId)
+        public async Task<double> ResolveElasticModulusAsync(Guid materialFormId)
         {
-            var material = await _materialService.GetByIdAsync(materialId)
-                ?? throw new InvalidOperationException($"Material not found: {materialId}");
+            var form = await _materialFormService.GetByIdAsync(materialFormId)
+                ?? throw new InvalidOperationException($"Material form not found: {materialFormId}");
 
-            if (material.ElasticModulus.HasValue && material.ElasticModulus.Value > 0d)
-                return material.ElasticModulus.Value;
+            if (form.ElasticModulus.HasValue && form.ElasticModulus.Value > 0d)
+                return form.ElasticModulus.Value;
 
             return 210000d;
         }
 
-        public async Task<double> ResolveYieldFactorKAsync(Guid materialId)
+        public async Task<double> ResolveYieldFactorKAsync(Guid materialFormId)
         {
-            var material = await _materialService.GetByIdAsync(materialId)
-                ?? throw new InvalidOperationException($"Material not found: {materialId}");
+            var form = await _materialFormService.GetByIdAsync(materialFormId)
+                ?? throw new InvalidOperationException($"Material form not found: {materialFormId}");
 
-            if (material.YieldFactorK.HasValue && material.YieldFactorK.Value > 0d)
-                return material.YieldFactorK.Value;
+            if (form.YieldFactorK.HasValue && form.YieldFactorK.Value > 0d)
+                return form.YieldFactorK.Value;
 
-            if (material.ColdStretchYieldStrength.HasValue && material.ColdStretchYieldStrength.Value > 0d)
-                return material.ColdStretchYieldStrength.Value;
+            if (form.ColdStretchYieldStrength.HasValue && form.ColdStretchYieldStrength.Value > 0d)
+                return form.ColdStretchYieldStrength.Value;
 
             return 235d;
         }
@@ -84,7 +84,7 @@ namespace MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter
             var coldStretchAllowed = form.MaterialFamily == MaterialFamily.StainlessSteel
                 && form.FormType == MaterialFormType.Plate;
             var coldStretchYield = coldStretchAllowed
-                ? form.ColdStretchYieldStrength ?? material.ColdStretchYieldStrength
+                ? form.ColdStretchYieldStrength
                 : null;
             var effectiveYield = isColdStretchApplied
                 ? (coldStretchYield ?? normalYield)

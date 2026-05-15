@@ -83,6 +83,16 @@
         <input asp-for="ColdStretchYieldStrength" class="form-control" type="number" step="0.01" />
     </div>
 
+    <div class="mb-3">
+        <label asp-for="ElasticModulus" class="form-label">Elastisite Modülü E (MPa)</label>
+        <input asp-for="ElasticModulus" class="form-control" type="number" step="0.01" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="YieldFactorK" class="form-label">K Katsayısı (MPa)</label>
+        <input asp-for="YieldFactorK" class="form-control" type="number" step="0.01" />
+    </div>
+
     <button type="submit" class="btn btn-success">Save</button>
     <a asp-area="Admin" asp-controller="MaterialForm" asp-action="Index" asp-route-materialId="@Model.MaterialId" class="btn btn-secondary">Cancel</a>
 </form>

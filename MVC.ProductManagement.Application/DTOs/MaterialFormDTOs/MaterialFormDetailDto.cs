@@ -26,6 +26,8 @@ namespace MVC.ProductManagement.Application.DTOs.MaterialFormDTOs
         public double UnitPrice { get; set; }
         public double? TargetPrice { get; set; }
         public double? ColdStretchYieldStrength { get; set; }
+        public double? ElasticModulus { get; set; }
+        public double? YieldFactorK { get; set; }
         public double? SectionArea { get; set; }
         public double? MomentOfInertia { get; set; }
         public double? SectionModulus { get; set; }

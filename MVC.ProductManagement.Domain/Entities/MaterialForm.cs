@@ -27,6 +27,8 @@ namespace MVC.ProductManagement.Domain.Entities
         public double UnitPrice { get; set; }
         public double? TargetPrice { get; set; }
         public double? ColdStretchYieldStrength { get; set; }         // MPa (sadece plate/paslanmaz senaryoları için)
+        public double? ElasticModulus { get; set; }                   // MPa (Young modülü, EN dış basınç hesabı)
+        public double? YieldFactorK { get; set; }                     // MPa (dış basınç plastisite katsayısı)
         public double? SectionArea { get; set; }                      // mm² (profil kesit alanı)
         public double? MomentOfInertia { get; set; }                  // mm4 (atalet momenti)
         public double? SectionModulus { get; set; }                   // mm3 (mukavemet momenti)

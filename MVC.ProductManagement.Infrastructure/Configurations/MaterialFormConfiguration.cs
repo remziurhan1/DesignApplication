@@ -43,6 +43,12 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.Property(f => f.ColdStretchYieldStrength)
                    .HasPrecision(10, 3);
 
+            builder.Property(f => f.ElasticModulus)
+                   .HasPrecision(10, 3);
+
+            builder.Property(f => f.YieldFactorK)
+                   .HasPrecision(10, 3);
+
             builder.Property(f => f.SectionArea)
                    .HasPrecision(12, 3);
 

@@ -3,8 +3,6 @@ using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MVC.ProductManagement.Application.Services.MaterialServices
@@ -29,9 +27,9 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 {
                     Id = material.Id,
                     Name = material.Name,
-                    ColdStretchYieldStrength = material.ColdStretchYieldStrength,
-                    ElasticModulus = material.ElasticModulus,
-                    YieldFactorK = material.YieldFactorK,
+                    MaterialNumber = material.MaterialNumber,
+                    Density = material.Density,
+                    Notes = material.Notes
                 });
             }
 
@@ -43,17 +41,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
             var material = await _materialRepository.GetByIdAsync(id);
             if (material == null) return null;
 
-            return new MaterialDetailDto
-            {
-                Id = material.Id,
-                Name = material.Name,
-                MaterialNumber = material.MaterialNumber,
-                Density = material.Density,
-                ColdStretchYieldStrength = material.ColdStretchYieldStrength,
-                ElasticModulus = material.ElasticModulus,
-                YieldFactorK = material.YieldFactorK,
-                Notes = material.Notes
-            };
+            return MapDetailDto(material);
         }
 
         public async Task<MaterialDetailDto?> GetByNameAsync(string name)
@@ -61,17 +49,7 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
             var material = await _materialRepository.GetByNameAsync(name);
             if (material == null) return null;
 
-            return new MaterialDetailDto
-            {
-                Id = material.Id,
-                Name = material.Name,
-                MaterialNumber = material.MaterialNumber,
-                Density = material.Density,
-                ColdStretchYieldStrength = material.ColdStretchYieldStrength,
-                ElasticModulus = material.ElasticModulus,
-                YieldFactorK = material.YieldFactorK,
-                Notes = material.Notes
-            };
+            return MapDetailDto(material);
         }
 
         public async Task<MaterialDetailDto> CreateAsync(MaterialCreateDto dto)
@@ -82,26 +60,13 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
                 Name = dto.Name,
                 MaterialNumber = dto.MaterialNumber,
                 Density = dto.Density,
-                ColdStretchYieldStrength = dto.ColdStretchYieldStrength,
-                ElasticModulus = dto.ElasticModulus,
-                YieldFactorK = dto.YieldFactorK,
                 Notes = dto.Notes
             };
 
             await _materialRepository.AddMaterialAsync(entity);
             await _materialRepository.SaveChangeAsync();
 
-            return new MaterialDetailDto
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                MaterialNumber = entity.MaterialNumber,
-                Density = entity.Density,
-                ColdStretchYieldStrength = entity.ColdStretchYieldStrength,
-                ElasticModulus = entity.ElasticModulus,
-                YieldFactorK = entity.YieldFactorK,
-                Notes = entity.Notes
-            };
+            return MapDetailDto(entity);
         }
 
         public async Task<MaterialDetailDto> UpdateAsync(MaterialUpdateDto dto)
@@ -112,25 +77,12 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
             entity.Name = dto.Name;
             entity.MaterialNumber = dto.MaterialNumber;
             entity.Density = dto.Density;
-            entity.ColdStretchYieldStrength = dto.ColdStretchYieldStrength;
-            entity.ElasticModulus = dto.ElasticModulus;
-            entity.YieldFactorK = dto.YieldFactorK;
             entity.Notes = dto.Notes;
 
             await _materialRepository.UpdateAsync(entity);
             await _materialRepository.SaveChangeAsync();
 
-            return new MaterialDetailDto
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                MaterialNumber = entity.MaterialNumber,
-                Density = entity.Density,
-                ColdStretchYieldStrength = entity.ColdStretchYieldStrength,
-                ElasticModulus = entity.ElasticModulus,
-                YieldFactorK = entity.YieldFactorK,
-                Notes = entity.Notes
-            };
+            return MapDetailDto(entity);
         }
 
         public async Task DeleteAsync(Guid id)
@@ -140,6 +92,18 @@ namespace MVC.ProductManagement.Application.Services.MaterialServices
 
             await _materialRepository.DeleteAsync(entity);
             await _materialRepository.SaveChangeAsync();
+        }
+
+        private static MaterialDetailDto MapDetailDto(Material material)
+        {
+            return new MaterialDetailDto
+            {
+                Id = material.Id,
+                Name = material.Name,
+                MaterialNumber = material.MaterialNumber,
+                Density = material.Density,
+                Notes = material.Notes
+            };
         }
     }
 }
