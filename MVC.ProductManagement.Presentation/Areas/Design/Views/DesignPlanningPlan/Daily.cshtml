@@ -1,0 +1,52 @@
+@model MVC.ProductManagement.Presentation.Areas.Admin.Models.DesignPlanning.PlanFilterVm
+@using TaskStatus = DesignPlanning.Entities.TaskStatus
+@{
+    ViewData["Title"] = "Günlük Dizayn Planı";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h2 class="mb-1">@ViewData["Title"]</h2>
+        <p class="text-muted mb-0">Dizayn müdürü günlük planı görüntüleyip Excel olarak paylaşabilir.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a asp-action="Weekly" asp-route-date="@Model.Date.ToString("yyyy-MM-dd")" class="btn btn-outline-primary">Haftalık Plan</a>
+        <a asp-action="ExportDaily" asp-route-date="@Model.Date.ToString("yyyy-MM-dd")" class="btn btn-success"><i class="bi bi-file-earmark-excel"></i> Excel Al</a>
+    </div>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <input name="date" value="@Model.Date.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary">Göster</button>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered align-middle">
+    <thead>
+        <tr>
+            <th>Proje</th>
+            <th>Görev</th>
+            <th>Atanan</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th>Durum</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Tasks)
+        {
+            var badge = task.Status == TaskStatus.Completed ? "bg-success" : task.Status == TaskStatus.Delayed ? "bg-danger" : task.IsPassive ? "bg-info text-dark" : "bg-secondary";
+            <tr>
+                <td>@task.Project?.ProjectCode<br /><small>@task.Project?.ProjectName</small></td>
+                <td>@task.SequenceNo - @task.TaskName @if (task.IsPassive) { <span class="badge bg-info text-dark">Pasif</span> }</td>
+                <td>@(task.AssignedEmployee?.FullName ?? "-")</td>
+                <td>@task.PlannedStart.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@task.PlannedEnd.ToString("dd.MM.yyyy HH:mm")</td>
+                <td><span class="badge @badge">@task.Status</span></td>
+            </tr>
+        }
+    </tbody>
+</table>
