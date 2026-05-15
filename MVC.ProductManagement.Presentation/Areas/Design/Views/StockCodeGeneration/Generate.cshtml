@@ -43,7 +43,7 @@
     <div class="col-12 col-md-3">
         <div class="border rounded-3 p-3 h-100 bg-white shadow-sm">
             <div class="fw-semibold"><span class="badge bg-success me-2">4</span>Kaydet</div>
-            <div class="small text-muted mt-2">Fiyat, birim ve dosyaları kontrol edip kaydı tamamlayın.</div>
+            <div class="small text-muted mt-2">Birim ve dosyaları kontrol edip kaydı tamamlayın.</div>
         </div>
     </div>
 </div>
@@ -96,20 +96,9 @@
             </div>
 
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">4) Fiyat ve birim bilgileri</div>
+                <div class="card-header bg-success-subtle text-success-emphasis fw-semibold">4) Birim bilgileri</div>
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label asp-for="UnitPrice" class="form-label fw-semibold">Alış / stok birim fiyatı</label>
-                            <input id="unit-price" asp-for="UnitPrice" type="number" min="0" step="0.01" class="form-control" />
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="TargetPrice" class="form-label fw-semibold">Hedef satış fiyatı</label>
-                            <input id="target-price" asp-for="TargetPrice" type="number" min="0" step="0.01" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="row g-3 mt-1">
                         <div class="col-md-6">
                             <label asp-for="PrimaryUnitType" class="form-label">1. Birim</label>
                             <select asp-for="PrimaryUnitType" class="form-select" asp-items="Html.GetEnumSelectList<MVC.ProductManagement.Domain.Enums.PrimaryUnitType>()"></select>
@@ -187,8 +176,6 @@
     const customDescriptionWrapper = document.getElementById('custom-description-wrapper');
     const includeCustomDescriptionCheckbox = document.getElementById('include-custom-description');
     const generatedCodeInput = document.getElementById('generated-code');
-    const unitPriceInput = document.getElementById('unit-price');
-    const targetPriceInput = document.getElementById('target-price');
     const stockSubCodeRuleIdInput = document.getElementById('stock-sub-code-rule-id');
     const infoText = document.getElementById('generate-info');
 
@@ -335,8 +322,6 @@
             const customText = includeCustomDescriptionCheckbox.checked ? (customDescriptionInput.value ?? '').trim() : '';
             descriptionHiddenInput.value = customText ? `${data.description}${data.description ? ' | ' : ''}${customText}` : data.description;
         }
-        if (data.unitPrice != null) unitPriceInput.value = data.unitPrice;
-        if (data.targetPrice != null) targetPriceInput.value = data.targetPrice;
         infoText.textContent = data.isExisting ? 'Bu stok kodu daha önce üretilmiş.' : 'Yeni stok kodu hazır.';
         renderSelectedRuleInputs();
     });
