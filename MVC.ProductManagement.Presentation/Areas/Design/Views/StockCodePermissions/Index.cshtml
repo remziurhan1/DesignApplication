@@ -1,0 +1,72 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.StockCodes.Permissions.StockCodePermissionListVm
+
+@{
+    ViewData["Title"] = "Stok Kodu Yetkileri";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1">Stok Kodu Yetkilendirme</h4>
+        <p class="text-muted mb-0">Dizayn müdürü; mühendis, şef ve ekip üyelerinin stok kodu oluşturma, düzenleme ve grup/kural yönetimi yetkilerini buradan açıp kapatabilir.</p>
+    </div>
+    <a asp-area="Design" asp-controller="StockCodeGeneration" asp-action="Index" class="btn btn-outline-secondary">Stok Kodlarına Dön</a>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Personel</th>
+                        <th>Görev</th>
+                        <th class="text-center">Stok kodu oluşturma</th>
+                        <th class="text-center">Stok kodu düzenleme</th>
+                        <th class="text-center">Ana/alt grup ve kural yönetimi</th>
+                        <th class="text-end">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model.Employees)
+                    {
+                        var formId = $"stock-code-permission-{employee.EmployeeProfileId:N}";
+                        <tr>
+                            <td>
+                                <form id="@formId" asp-action="Update" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="EmployeeProfileId" value="@employee.EmployeeProfileId" />
+                                </form>
+                                <div class="fw-semibold">@employee.FullName</div>
+                                <div class="text-muted small">@employee.Email</div>
+                            </td>
+                            <td>
+                                <div>@employee.DepartmentRole</div>
+                                <div class="text-muted small">@employee.Title</div>
+                            </td>
+                            <td class="text-center">
+                                <input form="@formId" class="form-check-input" type="checkbox" name="CanCreateStockCodes" value="true" @(employee.CanCreateStockCodes ? "checked" : string.Empty) />
+                                <input form="@formId" type="hidden" name="CanCreateStockCodes" value="false" />
+                            </td>
+                            <td class="text-center">
+                                <input form="@formId" class="form-check-input" type="checkbox" name="CanEditStockCodes" value="true" @(employee.CanEditStockCodes ? "checked" : string.Empty) />
+                                <input form="@formId" type="hidden" name="CanEditStockCodes" value="false" />
+                            </td>
+                            <td class="text-center">
+                                <input form="@formId" class="form-check-input" type="checkbox" name="CanManageStockCodeDefinitions" value="true" @(employee.CanManageStockCodeDefinitions ? "checked" : string.Empty) />
+                                <input form="@formId" type="hidden" name="CanManageStockCodeDefinitions" value="false" />
+                            </td>
+                            <td class="text-end">
+                                <button form="@formId" class="btn btn-sm btn-primary" type="submit">Yetkileri Kaydet</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
