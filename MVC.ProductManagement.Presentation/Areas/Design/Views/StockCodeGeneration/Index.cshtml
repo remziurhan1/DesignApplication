@@ -13,6 +13,11 @@
     <div class="col-md-6 text-md-end">
         <button class="btn btn-outline-primary" type="submit">Filtrele</button>
         <a asp-action="Generate" class="btn btn-primary">Yeni Kod Üret</a>
+        <a asp-controller="StockMainCodeGroup" asp-action="Index" class="btn btn-outline-info">Ana Gruplar</a>
+        <a asp-controller="StockSubCodeGroup" asp-action="Index" class="btn btn-outline-info">Alt Gruplar</a>
+        <a asp-controller="StockSubCodeRule" asp-action="Index" class="btn btn-outline-info">Kurallar</a>
+        <a asp-controller="StockProductGroup" asp-action="Create" class="btn btn-outline-success">Ürün Grubu Oluştur</a>
+        <a asp-controller="StockProductGroup" asp-action="Index" class="btn btn-outline-secondary">Ürün Grupları</a>
     </div>
 </form>
 

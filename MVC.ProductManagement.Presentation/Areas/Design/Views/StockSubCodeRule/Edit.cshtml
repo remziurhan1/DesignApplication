@@ -1,0 +1,13 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.StockCodes.Catalog.StockSubCodeRuleVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+<h4>Alt Grup Kuralı Düzenle</h4>
+<form asp-action="Edit" method="post">
+    <input asp-for="Id" type="hidden" />
+    <div class="mb-3"><label asp-for="StockSubCodeGroupId" class="form-label">Alt Grup</label><select asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select"></select></div>
+    <div class="mb-3"><label asp-for="RuleCode" class="form-label"></label><input asp-for="RuleCode" class="form-control" /></div>
+    <div class="mb-3"><label asp-for="RuleName" class="form-label">Kural Grubu Adı</label><input asp-for="RuleName" class="form-control" /></div>
+    <div class="mb-3"><label asp-for="Description" class="form-label">Kural Seçeneği Açıklaması</label><textarea asp-for="Description" class="form-control"></textarea></div>
+    <div class="mb-3"><label asp-for="SortOrder" class="form-label">İsimlendirme Sırası</label><input asp-for="SortOrder" type="number" min="1" class="form-control" /></div>
+    <div class="form-check mb-3"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">Kural Aktif</label></div>
+    <button class="btn btn-primary" type="submit">Güncelle</button>
+</form>

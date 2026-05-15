@@ -1,0 +1,11 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.StockCodes.Catalog.StockSubCodeGroupVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+<h4>Alt Kod Grubu Düzenle</h4>
+<form asp-action="Edit" method="post">
+    <input asp-for="Id" type="hidden" />
+    <div class="mb-3"><label asp-for="StockMainCodeGroupId" class="form-label">Ana Grup</label><select asp-for="StockMainCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.MainGroups" class="form-select"></select><span asp-validation-for="StockMainCodeGroupId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Code" class="form-label"></label><input asp-for="Code" class="form-control" /><span asp-validation-for="Code" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /><span asp-validation-for="Name" class="text-danger"></span></div>
+    <div class="form-check mb-3"><input asp-for="IsEnabled" class="form-check-input" /><label asp-for="IsEnabled" class="form-check-label">Kod Açık</label></div>
+    <button class="btn btn-primary" type="submit">Güncelle</button>
+</form>
