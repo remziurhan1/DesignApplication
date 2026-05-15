@@ -1,4 +1,5 @@
-@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Html
+@using System.Text.Encodings.Web
 @using MVC.ProductManagement.Domain.Enums
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailVm
 @{
@@ -31,22 +32,13 @@
         };
 
     string TextOrDash(object? value) => string.IsNullOrWhiteSpace(value?.ToString()) ? "-" : value.ToString()!;
+    string Encode(object? value) => HtmlEncoder.Default.Encode(TextOrDash(value));
 
-    void RenderFact(string label, object? value, string columnClass = "col-md-4")
-    {
-        <div class="@columnClass">
-            <div class="detail-label">@label</div>
-            <div class="detail-value">@TextOrDash(value)</div>
-        </div>
-    }
+    IHtmlContent RenderFact(string label, object? value, string columnClass = "col-md-4")
+        => new HtmlString($"<div class='{Encode(columnClass)}'><div class='detail-label'>{Encode(label)}</div><div class='detail-value'>{Encode(value)}</div></div>");
 
-    void RenderLongFact(string label, string? value)
-    {
-        <div class="col-12">
-            <div class="detail-label">@label</div>
-            <div class="detail-note">@TextOrDash(value)</div>
-        </div>
-    }
+    IHtmlContent RenderLongFact(string label, string? value)
+        => new HtmlString($"<div class='col-12'><div class='detail-label'>{Encode(label)}</div><div class='detail-note'>{Encode(value)}</div></div>");
 
     void RenderItem(MVC.ProductManagement.Presentation.Areas.Admin.Models.SalesRequestVMs.SalesRequestDetailItemVm item, int depth)
     {
@@ -70,12 +62,12 @@
             <div class="line-section">
                 <div class="line-section-title">A) Temel istek</div>
                 <div class="row g-3">
-                    @{ RenderFact("Akışkan / Ürün", item.ProductCode); }
-                    @{ RenderFact("Kapasite", item.RequestCategory == SalesRequestCategory.Tank ? $"{item.CapacityM3:0.##} m³" : "-"); }
-                    @{ RenderFact("Dizayn basıncı", item.DesignPressureBar?.ToString("0.##")); }
-                    @{ RenderFact("Dizayn standardı", item.DesignStandardCode); }
-                    @{ RenderFact("Dizayn sıcaklığı", $"{TextOrDash(item.DesignTemperatureMin)} / {TextOrDash(item.DesignTemperatureMax)}"); }
-                    @{ RenderFact("Tüketim", item.ConsumptionCapacity?.ToString("0.##")); }
+                    @RenderFact("Akışkan / Ürün", item.ProductCode)
+                    @RenderFact("Kapasite", item.RequestCategory == SalesRequestCategory.Tank ? $"{item.CapacityM3:0.##} m³" : "-")
+                    @RenderFact("Dizayn basıncı", item.DesignPressureBar?.ToString("0.##"))
+                    @RenderFact("Dizayn standardı", item.DesignStandardCode)
+                    @RenderFact("Dizayn sıcaklığı", $"{TextOrDash(item.DesignTemperatureMin)} / {TextOrDash(item.DesignTemperatureMax)}")
+                    @RenderFact("Tüketim", item.ConsumptionCapacity?.ToString("0.##"))
                 </div>
             </div>
 
@@ -84,12 +76,12 @@
                 <div class="line-section">
                     <div class="line-section-title">B) Tank bilgileri</div>
                     <div class="row g-3">
-                        @{ RenderFact("Tank tipi", item.TankType); }
-                        @{ RenderFact("Depolama", item.StorageOption); }
-                        @{ RenderFact("Transport", item.TransportOption); }
-                        @{ RenderFact("Kurulum", item.PlacementType); }
-                        @{ RenderFact("STD/OPS/SPC", item.StdOpsSelection); }
-                        @{ RenderLongFact("SPC teknik bilgileri", item.SpcTechnicalDetails); }
+                        @RenderFact("Tank tipi", item.TankType)
+                        @RenderFact("Depolama", item.StorageOption)
+                        @RenderFact("Transport", item.TransportOption)
+                        @RenderFact("Kurulum", item.PlacementType)
+                        @RenderFact("STD/OPS/SPC", item.StdOpsSelection)
+                        @RenderLongFact("SPC teknik bilgileri", item.SpcTechnicalDetails)
                     </div>
                 </div>
             }
@@ -99,8 +91,8 @@
                 <div class="line-section">
                     <div class="line-section-title">B) Evaporatör bilgileri</div>
                     <div class="row g-3">
-                        @{ RenderFact("Ortam sıcaklığı", $"{TextOrDash(item.AmbientTemperatureMin)} / {TextOrDash(item.AmbientTemperatureMax)}"); }
-                        @{ RenderFact("Tank tüketim kapasitesi", item.HasTankConsumptionCapacity ? "Aktif" : "Pasif"); }
+                        @RenderFact("Ortam sıcaklığı", $"{TextOrDash(item.AmbientTemperatureMin)} / {TextOrDash(item.AmbientTemperatureMax)}")
+                        @RenderFact("Tank tüketim kapasitesi", item.HasTankConsumptionCapacity ? "Aktif" : "Pasif")
                     </div>
                 </div>
             }
@@ -110,14 +102,14 @@
                 <div class="line-section">
                     <div class="line-section-title">B) Tesis bilgileri</div>
                     <div class="row g-3">
-                        @{ RenderFact("Tesis tipi", item.FacilityType); }
-                        @{ RenderFact("Basınç (G/Ç)", $"{TextOrDash(item.FacilityInletPressureBar)} / {TextOrDash(item.FacilityOutletPressureBar)}"); }
-                        @{ RenderFact("Sıcaklık (G/Ç)", $"{TextOrDash(item.FacilityInletTemperature)} / {TextOrDash(item.FacilityOutletTemperature)}"); }
-                        @{ RenderFact("Tesis kapasitesi", item.FacilityCapacityNm3h); }
-                        @{ RenderFact("Pompa", item.HasPump ? "Var" : "Yok"); }
-                        @{ RenderFact("Elektrikli ısıtıcı", item.HasElectricHeater ? "Var" : "Yok"); }
-                        @{ RenderLongFact("Pompa detay", item.PumpDetails); }
-                        @{ RenderLongFact("Isıtıcı detay", item.ElectricHeaterDetails); }
+                        @RenderFact("Tesis tipi", item.FacilityType)
+                        @RenderFact("Basınç (G/Ç)", $"{TextOrDash(item.FacilityInletPressureBar)} / {TextOrDash(item.FacilityOutletPressureBar)}")
+                        @RenderFact("Sıcaklık (G/Ç)", $"{TextOrDash(item.FacilityInletTemperature)} / {TextOrDash(item.FacilityOutletTemperature)}")
+                        @RenderFact("Tesis kapasitesi", item.FacilityCapacityNm3h)
+                        @RenderFact("Pompa", item.HasPump ? "Var" : "Yok")
+                        @RenderFact("Elektrikli ısıtıcı", item.HasElectricHeater ? "Var" : "Yok")
+                        @RenderLongFact("Pompa detay", item.PumpDetails)
+                        @RenderLongFact("Isıtıcı detay", item.ElectricHeaterDetails)
                     </div>
                 </div>
             }
@@ -127,9 +119,9 @@
                 <div class="line-section">
                     <div class="line-section-title">C) Notlar</div>
                     <div class="row g-3">
-                        @{ RenderLongFact("Ek sorular / cevaplar", item.AdditionalQuestionsJson); }
-                        @{ RenderLongFact("Minimum teknik veri", item.MinimumTechnicalNotes); }
-                        @{ RenderLongFact("Teknik özet", item.DesignDetails); }
+                        @RenderLongFact("Ek sorular / cevaplar", item.AdditionalQuestionsJson)
+                        @RenderLongFact("Minimum teknik veri", item.MinimumTechnicalNotes)
+                        @RenderLongFact("Teknik özet", item.DesignDetails)
                     </div>
                 </div>
             }
@@ -164,10 +156,10 @@
                         }
                         @if (Model.IsManagerView)
                         {
-                            @{ RenderFact("Maliyet", item.EstimatedCost.HasValue ? $"{item.EstimatedCost:N2} ₺" : "-"); }
-                            @{ RenderFact("Minimum satış fiyatı", item.MinimumSalesPrice.HasValue ? $"{item.MinimumSalesPrice:N2} ₺" : "-"); }
-                            @{ RenderFact("Satış fiyatı", item.ApprovedSalesPrice.HasValue ? $"{item.ApprovedSalesPrice:N2} ₺" : "-"); }
-                            @{ RenderLongFact("İç açıklama", item.SalesEngineeringNotes); }
+                            @RenderFact("Maliyet", item.EstimatedCost.HasValue ? $"{item.EstimatedCost:N2} ₺" : "-")
+                            @RenderFact("Minimum satış fiyatı", item.MinimumSalesPrice.HasValue ? $"{item.MinimumSalesPrice:N2} ₺" : "-")
+                            @RenderFact("Satış fiyatı", item.ApprovedSalesPrice.HasValue ? $"{item.ApprovedSalesPrice:N2} ₺" : "-")
+                            @RenderLongFact("İç açıklama", item.SalesEngineeringNotes)
                         }
                     </div>
                 </div>
@@ -350,13 +342,13 @@
                             <div class="detail-label">Müşteri</div>
                             <div class="detail-value"><a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.CustomerId">@Model.CustomerName</a></div>
                         </div>
-                        @{ RenderFact("Yetkili", Model.CustomerContact); }
+                        @RenderFact("Yetkili", Model.CustomerContact)
                         <div class="col-md-4">
                             <div class="detail-label">İletişim</div>
                             <div class="detail-value">@TextOrDash(Model.CustomerEmail)<br />@TextOrDash(Model.CustomerPhone)</div>
                         </div>
-                        @{ RenderFact("Satışçı", Model.RequestedByName); }
-                        @{ RenderFact("Departman", Model.RequestedByDepartment); }
+                        @RenderFact("Satışçı", Model.RequestedByName)
+                        @RenderFact("Departman", Model.RequestedByDepartment)
                         <div class="col-md-4">
                             <div class="detail-label">Durum</div>
                             <div><span class="badge bg-@StatusClass(Model.WorkflowStatus)">@Model.WorkflowStatus</span></div>
@@ -375,12 +367,12 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
-                        @{ RenderFact("Talep oluşturma", Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")); }
-                        @{ RenderFact("Talep alma", Model.RequestReceivedAt.HasValue ? Model.RequestReceivedAt.Value.ToString("dd.MM.yyyy") : "-"); }
-                        @{ RenderFact("İhtiyaç tarihi", Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy")); }
-                        @{ RenderFact("Talep kaynağı", Model.RequestSource); }
-                        @{ RenderFact("Müşteri bildirimi", Model.CustomerQuoteStatus); }
-                        @{ RenderFact("Revizyon", Model.RevisionCode); }
+                        @RenderFact("Talep oluşturma", Model.SalesOpenedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm"))
+                        @RenderFact("Talep alma", Model.RequestReceivedAt.HasValue ? Model.RequestReceivedAt.Value.ToString("dd.MM.yyyy") : "-")
+                        @RenderFact("İhtiyaç tarihi", Model.NeededByDate.ToLocalTime().ToString("dd.MM.yyyy"))
+                        @RenderFact("Talep kaynağı", Model.RequestSource)
+                        @RenderFact("Müşteri bildirimi", Model.CustomerQuoteStatus)
+                        @RenderFact("Revizyon", Model.RevisionCode)
                     </div>
                 </div>
             </div>
@@ -395,13 +387,13 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
-                        @{ RenderFact("Sevk ülkesi", Model.ShipmentCountry); }
-                        @{ RenderFact("Kurulum ülkesi", Model.InstallationCountry); }
-                        @{ RenderFact("Nakliye", Model.IsTransportByCustomer ? "Müşteri" : "Biz"); }
-                        @{ RenderFact("Müşteri sektörü", Model.CustomerSector); }
-                        @{ RenderFact("Ana bayi ülkesi", Model.CustomerMainDealerCountry); }
-                        @{ RenderFact("Bölge", Model.CustomerRegion); }
-                        @{ RenderLongFact("Satış özeti", Model.SummaryNotes); }
+                        @RenderFact("Sevk ülkesi", Model.ShipmentCountry)
+                        @RenderFact("Kurulum ülkesi", Model.InstallationCountry)
+                        @RenderFact("Nakliye", Model.IsTransportByCustomer ? "Müşteri" : "Biz")
+                        @RenderFact("Müşteri sektörü", Model.CustomerSector)
+                        @RenderFact("Ana bayi ülkesi", Model.CustomerMainDealerCountry)
+                        @RenderFact("Bölge", Model.CustomerRegion)
+                        @RenderLongFact("Satış özeti", Model.SummaryNotes)
                     </div>
                 </div>
             </div>
@@ -417,7 +409,7 @@
                 <div class="card-body">
                     @if (Model.Items.Any())
                     {
-                        @foreach (var item in Model.Items)
+                        foreach (var item in Model.Items)
                         {
                             RenderItem(item, 0);
                         }
