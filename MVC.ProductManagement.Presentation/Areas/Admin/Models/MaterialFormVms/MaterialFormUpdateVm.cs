@@ -19,6 +19,8 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Models.MaterialFormVms
         public double UnitPrice { get; set; }
         public double? TargetPrice { get; set; }
         public double? ColdStretchYieldStrength { get; set; }
+        public double? ElasticModulus { get; set; }
+        public double? YieldFactorK { get; set; }
 
     }
 }

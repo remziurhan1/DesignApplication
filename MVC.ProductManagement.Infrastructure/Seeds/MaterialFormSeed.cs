@@ -89,6 +89,8 @@ namespace MVC.ProductManagement.Infrastructure.Seeds
                     ProductStandard = "EN 10025-2",
                     Notes = "S235JR kutu profil 40x40x3 mm",
                     UnitPrice = 1.2,
+                    ElasticModulus = 206000,
+                    YieldFactorK = 235,
                     SectionArea = 444,
                     MomentOfInertia = 101700,
                     SectionModulus = 5080,
