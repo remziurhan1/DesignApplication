@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             // Design-time connection string
             optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.UseSqlServer(
-@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=MVCProductManagementDb;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Application Name=""SQL Server Management Studio"";Command Timeout=0");
+@"Data Source=DIZAYN-REMZI\MSSQLSERVER02;Initial Catalog=dap34;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
 
             return new AppDbContext(optionsBuilder.Options);
         }

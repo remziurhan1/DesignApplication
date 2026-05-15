@@ -1,0 +1,25 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.MaterialVMs.MaterialDetailVm
+
+@{
+    ViewData["Title"] = "Malzeme Sil";
+}
+
+<h2>Malzeme Sil</h2>
+
+<div class="alert alert-danger">
+    <strong>@Model.Name</strong> malzemesini silmek istediğinize emin misiniz?
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Malzeme No</dt>
+    <dd class="col-sm-9">@Model.MaterialNumber</dd>
+    <dt class="col-sm-3">Yoğunluk</dt>
+    <dd class="col-sm-9">@Model.Density</dd>
+</dl>
+
+<form asp-area="Design" asp-controller="Material" asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-area="Design" asp-controller="Material" asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+</form>

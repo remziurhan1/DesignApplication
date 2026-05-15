@@ -37,12 +37,32 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Malzeme ve Grup Yönetimi</h5>
+                <p class="card-text">Malzeme, malzeme formu, akma mukavemeti ve depolama tipi kayıtlarını yetkiye göre yönetin.</p>
+                <div class="d-flex gap-2 flex-wrap"><a asp-area="Design" asp-controller="Material" asp-action="Index" class="btn btn-outline-info">Malzemeler</a><a asp-area="Design" asp-controller="MaterialForm" asp-action="Index" class="btn btn-outline-secondary">Formlar</a></div>
+            </div>
+        </div>
+    </div>
     <div class="col-md-6 col-xl-3">
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-body">
                 <h5 class="card-title">Stok Kodları</h5>
                 <p class="card-text">Stok kodlarını listeleyin, yeni kod üretin ve mevcut kodları silmeden düzenleyin.</p>
                 <div class="d-flex gap-2 flex-wrap"><a asp-area="Design" asp-controller="StockCodeGeneration" asp-action="Index" class="btn btn-outline-info">Stok Kodları</a><a asp-area="Design" asp-controller="StockCodeGeneration" asp-action="Generate" class="btn btn-info text-white">Yeni Kod Üret</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Stok Grup ve Kural Yönetimi</h5>
+                <p class="card-text">Ana grup, alt grup, kural ve ürün grubu tanımlarını yetki verilen dizayn kullanıcıları yönetebilir.</p>
+                <div class="d-flex gap-2 flex-wrap"><a asp-area="Design" asp-controller="StockMainCodeGroup" asp-action="Index" class="btn btn-outline-info">Gruplar</a><a asp-area="Design" asp-controller="StockCodePermissions" asp-action="Index" class="btn btn-outline-secondary">Yetkiler</a></div>
             </div>
         </div>
     </div>

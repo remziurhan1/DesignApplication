@@ -59,6 +59,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CanManageDesignCalculations = true,
                 CanCreateStockCodes = true,
                 CanEditStockCodes = true,
+                CanManageStockCodeDefinitions = true,
                 CanAccessMaterialGroups = true,
                 CanManageMaterials = true
             });
@@ -125,6 +126,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CanManageDesignCalculations = vm.CanManageDesignCalculations,
                 CanCreateStockCodes = vm.CanCreateStockCodes,
                 CanEditStockCodes = vm.CanEditStockCodes,
+                CanManageStockCodeDefinitions = vm.CanManageStockCodeDefinitions,
                 CanAccessMaterialGroups = vm.CanAccessMaterialGroups,
                 CanManageMaterials = vm.CanManageMaterials
             });
@@ -164,6 +166,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
                 CanManageDesignCalculations = profile.CanManageDesignCalculations,
                 CanCreateStockCodes = profile.CanCreateStockCodes,
                 CanEditStockCodes = profile.CanEditStockCodes,
+                CanManageStockCodeDefinitions = profile.CanManageStockCodeDefinitions,
                 CanAccessMaterialGroups = profile.CanAccessMaterialGroups,
                 CanManageMaterials = profile.CanManageMaterials
             };
@@ -201,6 +204,7 @@ namespace MVC.ProductManagement.Presentation.Areas.Admin.Controllers
             profile.CanManageDesignCalculations = vm.CanManageDesignCalculations;
             profile.CanCreateStockCodes = vm.CanCreateStockCodes;
             profile.CanEditStockCodes = vm.CanEditStockCodes;
+            profile.CanManageStockCodeDefinitions = vm.CanManageStockCodeDefinitions;
             profile.CanAccessMaterialGroups = vm.CanAccessMaterialGroups;
             profile.CanManageMaterials = vm.CanManageMaterials;
 

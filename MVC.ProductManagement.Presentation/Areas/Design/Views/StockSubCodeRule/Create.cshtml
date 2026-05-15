@@ -1,0 +1,223 @@
+@model MVC.ProductManagement.Presentation.Areas.Design.Models.StockCodes.Catalog.StockSubCodeRuleVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Stok Kod Kuralı Ekle";
+}
+
+<div class="card border-0 shadow-sm mb-4 overflow-hidden">
+    <div class="card-body p-4 p-lg-5 bg-info-subtle">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div class="col-lg-8">
+                <span class="badge bg-info text-dark mb-3">Kural oluşturma sihirbazı</span>
+                <h2 class="mb-2">Stok kodu kuralı ekle</h2>
+                <p class="lead text-info-emphasis mb-0">
+                    Kural, stok kodu üretirken kullanıcıya gösterilen seçim kutusudur. Örneğin “Basınç Sınıfı” bir kural grubu, “PN40” ise bu grubun seçeneğidir.
+                </p>
+            </div>
+            <a asp-controller="StockCodeGeneration" asp-action="Generate" class="btn btn-light border">
+                <i class="bi bi-magic me-1"></i>Stok kodu üretme ekranına git
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-primary d-flex gap-3 align-items-start" role="alert">
+    <i class="bi bi-info-circle fs-4"></i>
+    <div>
+        <strong>Nasıl doldurulur?</strong>
+        <ol class="mb-0 mt-2">
+            <li><strong>Alt grup</strong>: Kuralın hangi ürün ailesinde görüneceğini seçin.</li>
+            <li><strong>Kural grubu</strong>: Aynı başlık altında toplanacak özellik adını seçin veya yeni başlık açın.</li>
+            <li><strong>Seçenek açıklaması</strong>: Kullanıcının stok kodu üretirken seçeceği değeri yazın.</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-8">
+        <form asp-action="Create" method="post" id="rule-form" class="card border-0 shadow-sm">
+            @Html.AntiForgeryToken()
+            <div class="card-header bg-white fw-semibold">Yeni kural bilgileri</div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <label asp-for="StockSubCodeGroupId" class="form-label fw-semibold">1) Alt grup / ürün ailesi <span class="text-danger">*</span></label>
+                    <select id="StockSubCodeGroupId" asp-for="StockSubCodeGroupId" asp-items="(IEnumerable<SelectListItem>)ViewBag.SubGroups" class="form-select"></select>
+                    <div class="form-text">Bu kural yalnızca seçtiğiniz alt grup için stok kodu üretirken görünür.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="RuleCode" class="form-label fw-semibold">2) Kural kodu</label>
+                    <input asp-for="RuleCode" class="form-control" placeholder="Boş bırakabilirsiniz; sistem otomatik 6 haneli kod üretir" />
+                    <div class="form-text">Özel bir kod zorunlu değilse bu alanı boş bırakın.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">3) Kural grubu adı <span class="text-danger">*</span></label>
+                    <select id="existing-rule-name" class="form-select"></select>
+                    <div class="form-text">Örnek gruplar: Çap, Basınç Sınıfı, Malzeme, Bağlantı Tipi.</div>
+                </div>
+
+                <div class="form-check mb-3 p-3 border rounded bg-light-subtle">
+                    <input class="form-check-input ms-0 me-2" type="checkbox" id="is-new-rule-group" />
+                    <label class="form-check-label fw-semibold" for="is-new-rule-group">Listede yoksa yeni kural grubu adı ekle</label>
+                    <div class="small text-muted mt-1">Aynı başlık altında birden fazla seçenek toplamak için mevcut grubu seçin.</div>
+                </div>
+
+                <div id="new-rule-name-wrapper" class="mb-4" style="display:none;">
+                    <label class="form-label fw-semibold" for="new-rule-name">Yeni kural grubu adı</label>
+                    <input id="new-rule-name" class="form-control" placeholder="Örn: Basınç Sınıfı" />
+                </div>
+
+                <input id="rule-name-hidden" asp-for="RuleName" type="hidden" />
+
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label fw-semibold">4) Seçenek açıklaması <span class="text-danger">*</span></label>
+                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Örn: PN40 veya DN40"></textarea>
+                    <div class="form-text">Bu metin stok kodu üretme ekranındaki açılır listede kullanıcıya görünür.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="SortOrder" class="form-label fw-semibold">5) Görünme sırası</label>
+                    <input asp-for="SortOrder" type="number" min="1" class="form-control" placeholder="Örn: 1" />
+                    <div class="form-text">Boş bırakırsanız sistem varsayılan sıralamayı kullanır.</div>
+                </div>
+
+                <div class="form-check form-switch mb-4">
+                    <input asp-for="IsEnabled" class="form-check-input" />
+                    <label asp-for="IsEnabled" class="form-check-label fw-semibold">Kural aktif olsun</label>
+                    <div class="form-text">Pasif yaparsanız stok kodu üretirken kullanıcıya gösterilmez.</div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        <i class="bi bi-save me-1"></i>Kuralı kaydet
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Vazgeç</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 col-xl-4">
+        <div class="card border-0 shadow-sm sticky-xl-top" style="top: 90px;">
+            <div class="card-header bg-light fw-semibold">Seçili alt gruptaki mevcut kurallar</div>
+            <div class="card-body">
+                <p class="small text-muted">Aynı seçenek daha önce açılmış mı diye buradan kontrol edin. Tekrar açmak karışıklığa neden olabilir.</p>
+                <div id="existing-rules" class="border rounded p-2 bg-body-tertiary" style="max-height: 420px; overflow:auto;">
+                    <span class="text-muted">Alt grup seçiniz...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const subGroupSelect = document.getElementById('StockSubCodeGroupId');
+    const existingRulesContainer = document.getElementById('existing-rules');
+    const existingRuleNameSelect = document.getElementById('existing-rule-name');
+    const isNewRuleGroupCheckbox = document.getElementById('is-new-rule-group');
+    const newRuleNameWrapper = document.getElementById('new-rule-name-wrapper');
+    const newRuleNameInput = document.getElementById('new-rule-name');
+    const ruleNameHiddenInput = document.getElementById('rule-name-hidden');
+
+    function syncRuleName() {
+        const useNew = isNewRuleGroupCheckbox.checked;
+        const value = useNew ? (newRuleNameInput.value ?? '').trim() : (existingRuleNameSelect.value ?? '').trim();
+        ruleNameHiddenInput.value = value;
+    }
+
+    function toggleRuleNameMode() {
+        const useNew = isNewRuleGroupCheckbox.checked;
+        newRuleNameWrapper.style.display = useNew ? 'block' : 'none';
+        existingRuleNameSelect.disabled = useNew;
+        syncRuleName();
+    }
+
+    async function loadExistingRules() {
+        const subGroupId = subGroupSelect?.value;
+        if (!subGroupId) {
+            existingRulesContainer.innerHTML = '<span class="text-muted">Alt grup seçiniz...</span>';
+            existingRuleNameSelect.innerHTML = '<option value="">Önce alt grup seçiniz...</option>';
+            syncRuleName();
+            return;
+        }
+
+        existingRulesContainer.innerHTML = '<span class="text-muted">Yükleniyor...</span>';
+        const response = await fetch(`@Url.Action("ExistingRulesBySubGroup", "StockSubCodeRule")?subGroupId=${subGroupId}`);
+
+        if (!response.ok) {
+            existingRulesContainer.innerHTML = '<span class="text-danger">Kurallar yüklenemedi.</span>';
+            existingRuleNameSelect.innerHTML = '<option value="">Kurallar yüklenemedi</option>';
+            syncRuleName();
+            return;
+        }
+
+        const rules = await response.json();
+        const uniqueGroups = [...new Set(rules.map(x => (x.ruleName ?? '').trim()).filter(x => x))]
+            .sort((a, b) => a.localeCompare(b, 'tr'));
+
+        if (!uniqueGroups.length) {
+            existingRuleNameSelect.innerHTML = '<option value="">Mevcut kural grubu yok</option>';
+            isNewRuleGroupCheckbox.checked = true;
+            toggleRuleNameMode();
+        } else {
+            existingRuleNameSelect.innerHTML = uniqueGroups.map(x => `<option value="${x}">${x}</option>`).join('');
+            if (!isNewRuleGroupCheckbox.checked) {
+                existingRuleNameSelect.disabled = false;
+            }
+            syncRuleName();
+        }
+
+        if (!rules.length) {
+            existingRulesContainer.innerHTML = '<span class="text-muted">Bu alt grupta henüz kural yok.</span>';
+            return;
+        }
+
+        const grouped = new Map();
+        for (const rule of rules) {
+            const key = (rule.ruleName ?? '').trim() || 'Tanımsız Kural Grubu';
+            if (!grouped.has(key)) grouped.set(key, []);
+            grouped.get(key).push(rule);
+        }
+
+        const html = Array.from(grouped.entries())
+            .sort((a, b) => a[0].localeCompare(b[0], 'tr'))
+            .map(([groupName, items]) => {
+                const lines = items
+                    .sort((a, b) => {
+                        const aOrder = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                        const bOrder = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
+                        if (aOrder !== bOrder) return aOrder - bOrder;
+                        return (a.ruleCode ?? '').localeCompare(b.ruleCode ?? '');
+                    })
+                    .map(x => `<li>${x.description ?? '-'} <span class="text-muted">(${x.ruleCode})</span></li>`)
+                    .join('');
+
+                return `
+                    <div class="border rounded px-2 py-2 mb-2 bg-light-subtle">
+                        <div><strong>${groupName}</strong></div>
+                        <ul class="mb-0 ps-3">${lines}</ul>
+                    </div>
+                `;
+            })
+            .join('');
+
+        existingRulesContainer.innerHTML = html;
+    }
+
+    isNewRuleGroupCheckbox?.addEventListener('change', toggleRuleNameMode);
+    existingRuleNameSelect?.addEventListener('change', syncRuleName);
+    newRuleNameInput?.addEventListener('input', syncRuleName);
+    subGroupSelect?.addEventListener('change', loadExistingRules);
+
+    document.getElementById('rule-form')?.addEventListener('submit', function (event) {
+        syncRuleName();
+        if (!ruleNameHiddenInput.value?.trim()) {
+            event.preventDefault();
+            alert('Lütfen bir kural grubu seçin veya yeni kural grubu adı girin.');
+        }
+    });
+
+    loadExistingRules();
+    toggleRuleNameMode();
+</script>

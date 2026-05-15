@@ -1,0 +1,125 @@
+@model IEnumerable<MVC.ProductManagement.Presentation.Areas.Design.Models.YieldStrengthListVMs.YieldStrengthListVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Yield Strengths</h1>
+
+<form method="get" asp-action="Index">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label>Material</label>
+            <select class="form-control" asp-items="ViewBag.Materials" name="materialId" onchange="this.form.submit()">
+                <option value="">-- Select Material --</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label>Form</label>
+            <select class="form-control" asp-items="ViewBag.Forms" name="materialFormId" onchange="this.form.submit()">
+                <option value="">-- Select Form --</option>
+            </select>
+        </div>
+    </div>
+</form>
+<div class="mb-3">
+    <a asp-action="CalculateDual"
+       asp-route-materialFormId="@ViewBag.MaterialFormId"
+       class="btn btn-success">
+        Interpolasyon Yap
+    </a>
+</div>
+
+
+<!-- 🔽 İki ayrı dropdown -->
+<div class="mb-3 d-flex gap-4">
+    <div>
+        <label for="tempSort">Temperature Sort:</label>
+        <select id="tempSort" class="form-select" style="width:180px;">
+            <option value="">Default</option>
+            <option value="asc">Temperature ↑</option>
+            <option value="desc">Temperature ↓</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="thickSort">Thickness Sort:</label>
+        <select id="thickSort" class="form-select" style="width:200px;">
+            <option value="">Default</option>
+            <option value="thmin_asc">ThicknessMin ↑</option>
+            <option value="thmin_desc">ThicknessMin ↓</option>
+            <option value="thmax_asc">ThicknessMax ↑</option>
+            <option value="thmax_desc">ThicknessMax ↓</option>
+        </select>
+    </div>
+</div>
+
+<table class="table" id="yieldStrengthTable">
+    <thead>
+        <tr>
+            @* <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.MaterialFormId)</th> *@
+            <th>@Html.DisplayNameFor(model => model.Temperature)</th>
+            <th>@Html.DisplayNameFor(model => model.ThicknessMin)</th>
+            <th>@Html.DisplayNameFor(model => model.ThicknessMax)</th>
+            <th>@Html.DisplayNameFor(model => model.Rp02)</th>
+            <th>@Html.DisplayNameFor(model => model.Rm)</th>
+            <th>@Html.DisplayNameFor(model => model.MaterialName)</th>
+            <th>@Html.DisplayNameFor(model => model.MaterialFormName)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+           @*      <td>@item.Id</td>
+                <td>@item.MaterialFormId</td> *@
+                <td>@item.Temperature</td>
+                <td>@item.ThicknessMin</td>
+                <td>@item.ThicknessMax</td>
+                <td>@item.Rp02</td>
+                <td>@item.Rm</td>
+                <td>@item.MaterialName</td>
+                <td>@item.MaterialFormName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tableBody = document.querySelector("#yieldStrengthTable tbody");
+            const tempSort = document.getElementById("tempSort");
+            const thickSort = document.getElementById("thickSort");
+
+            // tabloyu seçilen sütuna göre sırala
+            function sortBy(colIndex, asc = true) {
+                let rows = Array.from(tableBody.rows);
+                rows.sort((a, b) => {
+                    let av = parseFloat(a.cells[colIndex].innerText) || 0;
+                    let bv = parseFloat(b.cells[colIndex].innerText) || 0;
+                    return asc ? av - bv : bv - av;
+                });
+                rows.forEach(r => tableBody.appendChild(r));
+            }
+
+            // 🔥 sıcaklık sıralama
+            tempSort.addEventListener("change", function () {
+                if (this.value === "asc") sortBy(2, true);      // 3. sütun = Temperature
+                else if (this.value === "desc") sortBy(2, false);
+            });
+
+            // 🔥 kalınlık sıralama
+            thickSort.addEventListener("change", function () {
+                switch (this.value) {
+                    case "thmin_asc":  sortBy(3, true); break;   // 4. sütun = ThicknessMin
+                    case "thmin_desc": sortBy(3, false); break;
+                    case "thmax_asc":  sortBy(4, true); break;   // 5. sütun = ThicknessMax
+                    case "thmax_desc": sortBy(4, false); break;
+                }
+            });
+        });
+    </script>
+}
