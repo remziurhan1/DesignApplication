@@ -13,9 +13,15 @@ namespace MVC.ProductManagement.Domain.Entities
         public Guid MaterialId { get; set; }
         public virtual Material Material { get; set; }
 
+        // Yeni katalog master alanları. Mevcut detay kayıtlarını bozmamak için nullable/opsiyonel kullanılır.
+        public string? Name { get; set; }
+        public string? Code { get; set; }
+        public string? Description { get; set; }
+        public bool IsActive { get; set; } = true;
+
         public MaterialFormType FormType { get; set; }                // Plate, Pipe, Forging, Bar
         public string MaterialClass { get; set; } = string.Empty;     // Carbon Steel, Stainless Steel...
-        public MaterialFamily MaterialFamily { get; set; } = MaterialFamily.Unknown;
+        public MVC.ProductManagement.Domain.Enums.MaterialFamily MaterialFamily { get; set; } = MVC.ProductManagement.Domain.Enums.MaterialFamily.Unknown;
         public string Norm { get; set; } = string.Empty;              // ASME II, EN10028-2...
         public string? SymbolicName { get; set; }                     // P355GH vb.
         public string? StockCode { get; set; }                        // nullable stok kodu
@@ -35,5 +41,7 @@ namespace MVC.ProductManagement.Domain.Entities
 
         public virtual ICollection<YieldStrength> YieldStrengths { get; set; } = new List<YieldStrength>();
         public virtual ICollection<AllowableStress> AllowableStresses { get; set; } = new List<AllowableStress>();
+        public virtual ICollection<MaterialCatalog.MaterialStandard> MaterialStandards { get; set; } = new List<MaterialCatalog.MaterialStandard>();
+        public virtual ICollection<Material> CatalogMaterials { get; set; } = new List<Material>();
     }
 }

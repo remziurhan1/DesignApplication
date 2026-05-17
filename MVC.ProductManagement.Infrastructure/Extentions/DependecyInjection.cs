@@ -10,6 +10,7 @@ using MVC.ProductManagement.Infrastructure.Repositories.DesignPlanningRepositori
 using MVC.ProductManagement.Infrastructure.Repositories.IAllowableStressRepository;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialFormRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.MaterialRepositories;
+using MVC.ProductManagement.Infrastructure.Repositories.MaterialCatalogRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.SalesRequestRepositories;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Common;
 using MVC.ProductManagement.Infrastructure.Repositories.StockCodeRepositories.Catalog;
@@ -39,6 +40,7 @@ namespace MVC.ProductManagement.Infrastructure.Extentions
 
             services.AddScoped<IMaterialRepository, MaterialRepository>();
             services.AddScoped<IMaterialFormRepository, MaterialFormRepository>();
+            services.AddScoped<IMaterialCatalogRepository, MaterialCatalogRepository>();
             services.AddScoped<IYieldStrengthRepository, YieldStrengthRepository>();
             services.AddScoped<IAllowableStressRepository, AllowableStressRepository>();
             services.AddScoped<IEN13458Repository, EN13458Repository>();

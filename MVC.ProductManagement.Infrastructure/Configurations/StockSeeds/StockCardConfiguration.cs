@@ -17,6 +17,15 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
                    .HasMaxLength(8)
                    .IsRequired();
 
+            builder.Property(x => x.StockCode)
+                   .HasMaxLength(100);
+
+            builder.Property(x => x.Unit)
+                   .HasMaxLength(20);
+
+            builder.Property(x => x.IsActive)
+                   .HasDefaultValue(true);
+
             builder.Property(x => x.Prefix4)
                    .HasMaxLength(4)
                    .IsRequired();
@@ -36,6 +45,14 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
             builder.HasIndex(x => x.StockCode8)
                    .IsUnique();
 
+            builder.HasIndex(x => x.StockCode)
+                   .IsUnique()
+                   .HasFilter("[StockCode] IS NOT NULL");
+
+            builder.HasIndex(x => new { x.MaterialId, x.StockCode })
+                   .IsUnique()
+                   .HasFilter("[MaterialId] IS NOT NULL AND [StockCode] IS NOT NULL");
+
             // ❌ ESKİ UNIQUE (bunu kaldırıyoruz)
             // builder.HasIndex(x => new
             // {
@@ -52,6 +69,12 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockSeeds
                 x.SProductId,
                 x.OptionKey
             }).IsUnique();
+
+            builder.HasOne(x => x.Material)
+                   .WithMany(x => x.StockCards)
+                   .HasForeignKey(x => x.MaterialId)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .IsRequired(false);
 
             builder.HasOne(x => x.Fluid)
                    .WithMany(x => x.StockCards)

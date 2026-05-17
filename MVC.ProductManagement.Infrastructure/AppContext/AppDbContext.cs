@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MVC.ProductManagement.Domain.Core.BaseEntities;
 using MVC.ProductManagement.Domain.Entities;
+using MaterialFamilyEntity = MVC.ProductManagement.Domain.Entities.MaterialCatalog.MaterialFamily;
+using MaterialStandardEntity = MVC.ProductManagement.Domain.Entities.MaterialCatalog.MaterialStandard;
+using MaterialMechanicalPropertyEntity = MVC.ProductManagement.Domain.Entities.MaterialCatalog.MaterialMechanicalProperty;
 using MVC.ProductManagement.Domain.Entities.Costing;
 using MVC.ProductManagement.Domain.Entities.MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
@@ -32,6 +35,9 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
 
         public virtual DbSet<Admin> Admins { get; set; }
         public DbSet<Material> Materials { get; set; }
+        public DbSet<MaterialFamilyEntity> MaterialFamilies { get; set; }
+        public DbSet<MaterialStandardEntity> MaterialStandards { get; set; }
+        public DbSet<MaterialMechanicalPropertyEntity> MaterialMechanicalProperties { get; set; }
         public DbSet<MaterialForm> MaterialForms { get; set; }
         public DbSet<YieldStrength> YieldStrengths { get; set; }
         public DbSet<AllowableStress> AllowableStresses { get; set; }
@@ -108,6 +114,9 @@ namespace MVC.ProductManagement.Infrastructure.AppContext
             base.OnModelCreating(builder);
 
             // en sonda seed dataları ekle
+            builder.Entity<MaterialFamilyEntity>().HasData(MaterialCatalogSeed.MaterialFamilies());
+            builder.Entity<MaterialStandardEntity>().HasData(MaterialCatalogSeed.MaterialStandards());
+            builder.Entity<MaterialMechanicalPropertyEntity>().HasData(MaterialCatalogSeed.MechanicalProperties());
             builder.Entity<Material>().HasData(MaterialSeed.Get());
             builder.Entity<MaterialForm>().HasData(MaterialFormSeed.Get());
             builder.Entity<YieldStrength>().HasData(YieldStrengthSeed.Get());

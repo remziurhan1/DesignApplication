@@ -19,6 +19,15 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
                    .IsRequired()
                    .HasMaxLength(100);
 
+            builder.Property(m => m.Grade)
+                   .HasMaxLength(100);
+
+            builder.Property(m => m.Description)
+                   .HasMaxLength(500);
+
+            builder.Property(m => m.IsActive)
+                   .HasDefaultValue(true);
+
             builder.Property(m => m.MaterialNumber)
                    .HasMaxLength(50);
 
@@ -28,11 +37,33 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.HasIndex(m => new { m.MaterialNumber, m.Name })
                    .IsUnique();
 
+            builder.HasIndex(m => new { m.MaterialFamilyId, m.MaterialFormId, m.MaterialStandardId, m.Grade })
+                   .IsUnique()
+                   .HasFilter("[MaterialFamilyId] IS NOT NULL AND [MaterialFormId] IS NOT NULL AND [MaterialStandardId] IS NOT NULL AND [Grade] IS NOT NULL AND [Grade] <> ''");
+
+
+            builder.HasOne(m => m.MaterialFamily)
+                   .WithMany(f => f.Materials)
+                   .HasForeignKey(m => m.MaterialFamilyId)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .IsRequired(false);
+
+            builder.HasOne(m => m.MaterialForm)
+                   .WithMany(f => f.CatalogMaterials)
+                   .HasForeignKey(m => m.MaterialFormId)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .IsRequired(false);
+
+            builder.HasOne(m => m.MaterialStandard)
+                   .WithMany(s => s.Materials)
+                   .HasForeignKey(m => m.MaterialStandardId)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .IsRequired(false);
 
             builder.HasMany(m => m.Forms)
                    .WithOne(f => f.Material)
                    .HasForeignKey(f => f.MaterialId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

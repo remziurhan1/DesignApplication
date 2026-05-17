@@ -15,6 +15,18 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
         {
             builder.HasKey(f => f.Id);
 
+            builder.Property(f => f.Name)
+                   .HasMaxLength(100);
+
+            builder.Property(f => f.Code)
+                   .HasMaxLength(30);
+
+            builder.Property(f => f.Description)
+                   .HasMaxLength(500);
+
+            builder.Property(f => f.IsActive)
+                   .HasDefaultValue(true);
+
             builder.Property(f => f.ProductStandard)
                    .HasMaxLength(100);
 
@@ -61,15 +73,19 @@ namespace MVC.ProductManagement.Infrastructure.Configurations
             builder.HasIndex(f => new { f.MaterialId, f.FormType, f.Norm, f.ProductStandard, f.ThicknessMin, f.ThicknessMax })
                    .IsUnique();
 
+            builder.HasIndex(f => f.Code)
+                   .IsUnique()
+                   .HasFilter("[Code] IS NOT NULL");
+
             builder.HasMany(f => f.YieldStrengths)
                    .WithOne(y => y.MaterialForm)
                    .HasForeignKey(y => y.MaterialFormId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(f => f.AllowableStresses)
                    .WithOne(a => a.MaterialForm)
                    .HasForeignKey(a => a.MaterialFormId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

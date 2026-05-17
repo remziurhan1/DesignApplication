@@ -1,4 +1,5 @@
 ﻿using MVC.ProductManagement.Domain.Core.BaseEntities;
+using MVC.ProductManagement.Domain.Entities;
 using MVC.ProductManagement.Domain.Entities.StockCodes;
 using MVC.ProductManagement.Domain.Entities.StockCodes.Features;
 using System;
@@ -26,6 +27,13 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes.Common
         /// </summary>
         public string? DeletedBy { get; set; }
         public string StockCode8 { get; set; } = default!;
+        public string? StockCode { get; set; }
+        public string? Unit { get; set; }
+        public bool IsActive { get; set; } = true;
+
+        public Guid? MaterialId { get; set; }
+        public virtual Material? Material { get; set; }
+
         public string Prefix4 { get; set; } = default!;
         public int Serial4 { get; set; }
         public string OptionKey { get; set; } = default!;

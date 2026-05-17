@@ -31,6 +31,8 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes
         /// <summary>
         /// Geçerlilik başlangıç tarihi
         /// </summary>
+        public DateTime PriceDate { get; set; }
+
         public DateTime ValidFrom { get; set; }
 
         /// <summary>
@@ -46,6 +48,9 @@ namespace MVC.ProductManagement.Domain.Entities.StockCodes
         /// <summary>
         /// Notlar
         /// </summary>
+        public Guid? SupplierId { get; set; }
+        public string? SupplierName { get; set; }
+
         public string Notes { get; set; }
 
         // ✅ Mevcut property'lerin ALTINA EKLE

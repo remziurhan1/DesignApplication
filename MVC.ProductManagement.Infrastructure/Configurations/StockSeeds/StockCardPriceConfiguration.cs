@@ -24,6 +24,9 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockCodes
                 .IsRequired(false)
                 .HasColumnType("decimal(18,4)");
 
+            builder.Property(x => x.PriceDate)
+                .IsRequired();
+
             builder.Property(x => x.ValidFrom)
                 .IsRequired();
 
@@ -32,6 +35,9 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockCodes
 
             builder.Property(x => x.IsActive)
                 .HasDefaultValue(true);
+
+            builder.Property(x => x.SupplierName)
+                .HasMaxLength(200);
 
             builder.Property(x => x.Notes)
                 .HasMaxLength(500);
@@ -48,6 +54,7 @@ namespace MVC.ProductManagement.Infrastructure.Configurations.StockCodes
             builder.HasIndex(x => x.Status); // ✅ Ekle
             builder.HasIndex(x => x.ValidFrom);
             builder.HasIndex(x => new { x.StockCardId, x.IsActive, x.ValidFrom });
+            builder.HasIndex(x => new { x.StockCardId, x.Currency, x.ValidFrom, x.ValidTo }).IsUnique();
         }
     }
 }

@@ -12,6 +12,7 @@ using MVC.ProductManagement.Application.Services.EN13458.MaterialAdapter;
 using MVC.ProductManagement.Application.Services.Export;
 using MVC.ProductManagement.Application.Services.IYieldStrengthServices;
 using MVC.ProductManagement.Application.Services.MaterialFormServices;
+using MVC.ProductManagement.Application.Services.MaterialCatalogServices;
 using MVC.ProductManagement.Application.Services.MaterialServices;
 using MVC.ProductManagement.Application.Services.SalesRequestServices;
 using MVC.ProductManagement.Application.Services.StockCodes.Common;
@@ -33,6 +34,7 @@ namespace MVC.ProductManagement.Application.Extentions
         {
             services.AddScoped<IMaterialService, MaterialService>();
             services.AddScoped<IMaterialFormService, MaterialFormService>();
+            services.AddScoped<IMaterialCatalogService, MaterialCatalogService>();
             services.AddScoped<IYieldStrengthService, YieldStrengthService>();
             services.AddScoped<IAllowableStressService, AllowableStressService>();
             services.AddScoped<IStorageTypeService, StorageTypeService>();

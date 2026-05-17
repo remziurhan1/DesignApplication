@@ -61,9 +61,12 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 Currency = PriceCurrency,
                 UnitPrice = createDto.UnitPrice,
                 TargetPrice = createDto.TargetPrice,
+                PriceDate = (createDto.PriceDate ?? createDto.ValidFrom).Date,
                 ValidFrom = createDto.ValidFrom.Date,
                 ValidTo = createDto.ValidTo?.Date,
                 IsActive = true,
+                SupplierId = createDto.SupplierId,
+                SupplierName = createDto.SupplierName,
                 Notes = createDto.Notes ?? string.Empty,
                 CreatedBy = userName,
                 CreatedDate = DateTime.UtcNow,
@@ -93,9 +96,12 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
 
             price.UnitPrice = updateDto.UnitPrice;
             price.TargetPrice = updateDto.TargetPrice;
+            price.PriceDate = (updateDto.PriceDate ?? updateDto.ValidFrom).Date;
             price.ValidFrom = updateDto.ValidFrom.Date;
             price.ValidTo = updateDto.ValidTo?.Date;
             price.IsActive = updateDto.IsActive;
+            price.SupplierId = updateDto.SupplierId;
+            price.SupplierName = updateDto.SupplierName;
             price.Notes = updateDto.Notes ?? string.Empty;
             price.ModifiedBy = userName;
             price.ModifiedDate = DateTime.UtcNow;
@@ -189,8 +195,11 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 Currency = price.Currency,
                 UnitPrice = price.UnitPrice,
                 TargetPrice = price.TargetPrice,
+                PriceDate = price.PriceDate,
                 ValidFrom = price.ValidFrom,
                 ValidTo = price.ValidTo,
+                SupplierId = price.SupplierId,
+                SupplierName = price.SupplierName,
                 Notes = price.Notes
             };
         }
@@ -205,9 +214,12 @@ namespace MVC.ProductManagement.Infrastructure.Services.StockCards
                 Currency = price.Currency,
                 UnitPrice = price.UnitPrice,
                 TargetPrice = price.TargetPrice,
+                PriceDate = price.PriceDate,
                 ValidFrom = price.ValidFrom,
                 ValidTo = price.ValidTo,
                 IsActive = price.IsActive,
+                SupplierId = price.SupplierId,
+                SupplierName = price.SupplierName,
                 Notes = price.Notes,
                 CreatedDate = price.CreatedDate,
                 CreatedBy = price.CreatedBy
