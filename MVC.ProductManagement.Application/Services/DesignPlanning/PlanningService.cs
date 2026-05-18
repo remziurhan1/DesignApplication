@@ -112,8 +112,7 @@ public class PlanningService : IPlanningService
     {
         var start = StartOfWeek(weekStartDate);
         var end = start.AddDays(7);
-        var tasks = await _planningRepository.GetPlannedTasksForRangeAsync(start, end, orderByEmployee: true);
-        return tasks.Where(x => x.PlannedStart >= start && x.PlannedStart < end).ToList();
+        return await _planningRepository.GetPlannedTasksStartingInRangeAsync(start, end, orderByEmployee: true);
     }
 
 

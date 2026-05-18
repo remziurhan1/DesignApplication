@@ -15,8 +15,8 @@ public static class DesignPlanningPlanExcelExporter
         "Sıra",
         "Görev",
         "Sorumlu Rol",
-        "Başlangıç",
-        "Bitiş",
+        "Gerçekleşen Başlangıç",
+        "Gerçekleşen Bitiş",
         "Planlanan Başlangıç",
         "Planlanan Bitiş",
         "Süre",
@@ -110,8 +110,10 @@ public static class DesignPlanningPlanExcelExporter
         worksheet.Cells[row, 4].Value = task.SequenceNo;
         worksheet.Cells[row, 5].Value = task.TaskName;
         worksheet.Cells[row, 6].Value = task.ResponsibleRole;
-        worksheet.Cells[row, 7].Value = task.PlannedStart;
-        worksheet.Cells[row, 8].Value = task.PlannedEnd;
+        worksheet.Cells[row, 7].Value = task.ActualStart;
+        worksheet.Cells[row, 8].Value = task.ActualEnd;
+        worksheet.Cells[row, 9].Value = task.PlannedStart;
+        worksheet.Cells[row, 10].Value = task.PlannedEnd;
         worksheet.Cells[row, 11].Value = $"{task.DurationValue:N2} {task.DurationUnit}";
         worksheet.Cells[row, 12].Value = task.IsPassive ? "Evet" : "Hayır";
         worksheet.Cells[row, 13].Value = GetStatusText(task.Status);

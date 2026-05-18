@@ -73,7 +73,7 @@ public class PlanningRepository : IPlanningRepository
             : query.Where(x => x.PlannedStart < end && x.PlannedEnd >= start);
 
         query = orderByEmployee
-            ? query.OrderBy(x => x.PlannedStart).ThenBy(x => x.AssignedEmployee!.FullName)
+            ? query.OrderBy(x => x.AssignedEmployee!.FullName).ThenBy(x => x.PlannedStart).ThenBy(x => x.SequenceNo)
             : query.OrderBy(x => x.PlannedStart).ThenBy(x => x.SequenceNo);
 
         return await query.ToListAsync();
