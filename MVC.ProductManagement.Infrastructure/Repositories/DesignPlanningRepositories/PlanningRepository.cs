@@ -61,7 +61,7 @@ public class PlanningRepository : IPlanningRepository
             .FirstOrDefaultAsync(x => x.Id == projectTaskId);
     }
 
-    public async Task<IReadOnlyList<ProjectTask>> GetPlannedTasksForRangeAsync(DateTime start, DateTime end, bool orderByEmployee)
+    public async Task<IReadOnlyList<ProjectTask>> GetPlannedTasksForRangeAsync(DateTime start, DateTime end, bool orderByEmployee, bool matchStartOnly = false)
     {
         return await GetPlannedTasksForRangeAsync(start, end, orderByEmployee, matchStartOnly: false);
     }
