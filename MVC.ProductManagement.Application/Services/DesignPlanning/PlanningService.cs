@@ -6,6 +6,7 @@ namespace DesignPlanning.Business;
 
 public class PlanningService : IPlanningService
 {
+    private const string DesignEngineerRole = "Dizayn Mühendisi";
     private static readonly TimeSpan WorkStart = new(8, 0, 0);
     private readonly IPlanningRepository _planningRepository;
 
@@ -70,7 +71,7 @@ public class PlanningService : IPlanningService
             }
             else
             {
-                var employee = await SelectEmployeeAsync(task.ResponsibleRole, project.ProjectType?.Name, cursor);
+                var employee = await SelectEmployeeAsync(task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads);
                 task.AssignedEmployeeId = employee?.Id;
                 task.PlannedStart = await FindStartWithCapacityAsync(employee, cursor, inMemoryLoads);
                 task.PlannedEnd = await PlanActiveTaskAsync(employee, task.PlannedStart, ToHours(task.DurationValue, task.DurationUnit, employee), inMemoryLoads);
@@ -116,7 +117,7 @@ public class PlanningService : IPlanningService
     }
 
 
-    private async Task<Employee?> SelectEmployeeAsync(string role, string? projectTypeName, DateTime plannedDate)
+    private async Task<Employee?> SelectEmployeeAsync(string role, string? projectTypeName, DateTime plannedDate, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads)
     {
         var candidates = await GetCandidatesByPriorityAsync(role, projectTypeName);
 
@@ -128,8 +129,9 @@ public class PlanningService : IPlanningService
         var loads = await _planningRepository.GetEmployeeLoadsByWeekAsync(weekStart, weekEnd);
 
         return candidates
-            .OrderBy(x => loads.TryGetValue(x.Id, out var hours) ? hours : 0)
-            .ThenBy(x => x.Expertises.Where(e => expertiseKeys.Contains(e.ExpertiseName)).Min(e => (int?)e.Priority) ?? int.MaxValue)
+            .OrderBy(x => GetExpertiseRank(x, expertiseKeys))
+            .ThenBy(x => (loads.TryGetValue(x.Id, out var hours) ? hours : 0) + GetInMemoryLoadForWeek(x.Id, weekStart, weekEnd, inMemoryLoads))
+            .ThenBy(x => GetExpertisePriority(x, expertiseKeys))
             .ThenBy(x => x.FullName)
             .First();
     }
@@ -140,18 +142,34 @@ public class PlanningService : IPlanningService
             ? new List<Employee>()
             : await _planningRepository.GetActiveEmployeesByExpertiseAsync(new[] { role });
 
+        var projectTypeCandidates = string.IsNullOrWhiteSpace(projectTypeName)
+            ? new List<Employee>()
+            : await _planningRepository.GetActiveEmployeesByExpertiseAsync(new[] { projectTypeName });
+
+        if (IsDesignEngineerRole(role) && projectTypeCandidates.Any())
+        {
+            return projectTypeCandidates
+                .Concat(roleCandidates)
+                .GroupBy(x => x.Id)
+                .Select(x => x.First())
+                .ToList();
+        }
+
         if (roleCandidates.Any())
         {
             return roleCandidates;
         }
 
-        return string.IsNullOrWhiteSpace(projectTypeName)
-            ? new List<Employee>()
-            : await _planningRepository.GetActiveEmployeesByExpertiseAsync(new[] { projectTypeName });
+        return projectTypeCandidates;
     }
 
     private static IReadOnlyCollection<string> GetSelectionExpertiseKeys(string role, string? projectTypeName, IReadOnlyList<Employee> candidates)
     {
+        if (IsDesignEngineerRole(role) && !string.IsNullOrWhiteSpace(projectTypeName) && candidates.Any(x => x.Expertises.Any(e => e.ExpertiseName == projectTypeName)))
+        {
+            return new[] { projectTypeName, role };
+        }
+
         var roleMatches = candidates.Any(x => x.Expertises.Any(e => e.ExpertiseName == role));
         if (roleMatches)
         {
@@ -159,6 +177,34 @@ public class PlanningService : IPlanningService
         }
 
         return string.IsNullOrWhiteSpace(projectTypeName) ? Array.Empty<string>() : new[] { projectTypeName };
+    }
+
+    private static int GetExpertiseRank(Employee employee, IReadOnlyCollection<string> expertiseKeys)
+    {
+        if (!expertiseKeys.Any()) return int.MaxValue;
+
+        return expertiseKeys
+            .Select((key, index) => employee.Expertises.Any(e => e.ExpertiseName == key) ? index : int.MaxValue)
+            .Min();
+    }
+
+    private static int GetExpertisePriority(Employee employee, IReadOnlyCollection<string> expertiseKeys)
+    {
+        return employee.Expertises
+            .Where(e => expertiseKeys.Contains(e.ExpertiseName))
+            .Min(e => (int?)e.Priority) ?? int.MaxValue;
+    }
+
+    private static decimal GetInMemoryLoadForWeek(Guid employeeId, DateTime weekStart, DateTime weekEnd, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads)
+    {
+        return inMemoryLoads
+            .Where(x => x.Key.EmployeeId == employeeId && x.Key.Date >= weekStart && x.Key.Date < weekEnd)
+            .Sum(x => x.Value);
+    }
+
+    private static bool IsDesignEngineerRole(string role)
+    {
+        return string.Equals(role, DesignEngineerRole, StringComparison.OrdinalIgnoreCase);
     }
 
     private async Task<DateTime> FindStartWithCapacityAsync(Employee? employee, DateTime start, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads)
