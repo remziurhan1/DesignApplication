@@ -63,7 +63,7 @@ public class PlanningRepository : IPlanningRepository
 
     public async Task<IReadOnlyList<ProjectTask>> GetPlannedTasksForRangeAsync(DateTime start, DateTime end, bool orderByEmployee)
     {
-        var query = _context.DesignPlanningProjectTasks
+        IQueryable<ProjectTask> query = _context.DesignPlanningProjectTasks
             .AsNoTracking()
             .Include(x => x.Project).ThenInclude(x => x!.ProjectType)
             .Include(x => x.AssignedEmployee)
