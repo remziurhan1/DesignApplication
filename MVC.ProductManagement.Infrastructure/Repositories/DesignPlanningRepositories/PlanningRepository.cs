@@ -79,6 +79,11 @@ public class PlanningRepository : IPlanningRepository
         return await query.ToListAsync();
     }
 
+    async Task<IReadOnlyList<ProjectTask>> IPlanningRepository.GetPlannedTasksForRangeAsync(DateTime start, DateTime end, bool orderByEmployee)
+    {
+        return await GetPlannedTasksForRangeAsync(start, end, orderByEmployee);
+    }
+
     public async Task<IReadOnlyList<Employee>> GetActiveEmployeesByExpertiseAsync(IReadOnlyCollection<string> expertiseNames)
     {
         return await _context.DesignPlanningEmployees
