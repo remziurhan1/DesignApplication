@@ -17,6 +17,8 @@ public static class DesignPlanningPlanExcelExporter
         "Sorumlu Rol",
         "Başlangıç",
         "Bitiş",
+        "Planlanan Başlangıç",
+        "Planlanan Bitiş",
         "Süre",
         "Pasif",
         "Durum"
@@ -82,6 +84,8 @@ public static class DesignPlanningPlanExcelExporter
         worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
         worksheet.Column(7).Style.Numberformat.Format = "dd.mm.yyyy hh:mm";
         worksheet.Column(8).Style.Numberformat.Format = "dd.mm.yyyy hh:mm";
+        worksheet.Column(9).Style.Numberformat.Format = "dd.mm.yyyy hh:mm";
+        worksheet.Column(10).Style.Numberformat.Format = "dd.mm.yyyy hh:mm";
 
         return package.GetAsByteArray();
     }
@@ -108,9 +112,9 @@ public static class DesignPlanningPlanExcelExporter
         worksheet.Cells[row, 6].Value = task.ResponsibleRole;
         worksheet.Cells[row, 7].Value = task.PlannedStart;
         worksheet.Cells[row, 8].Value = task.PlannedEnd;
-        worksheet.Cells[row, 9].Value = $"{task.DurationValue:N2} {task.DurationUnit}";
-        worksheet.Cells[row, 10].Value = task.IsPassive ? "Evet" : "Hayır";
-        worksheet.Cells[row, 11].Value = GetStatusText(task.Status);
+        worksheet.Cells[row, 11].Value = $"{task.DurationValue:N2} {task.DurationUnit}";
+        worksheet.Cells[row, 12].Value = task.IsPassive ? "Evet" : "Hayır";
+        worksheet.Cells[row, 13].Value = GetStatusText(task.Status);
     }
 
     private static string GetEmployeeGroupName(ProjectTask task)

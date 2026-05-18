@@ -408,50 +408,254 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("40000000-0000-0000-2221-000000000004"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 4,
+                            TaskName = "GÖVDE BOMBE ORYANTASYON HAZIRLAMA"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000005"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 5,
+                            TaskName = "KRİTİK AKSESUAR LİSTESİ YAYINLAMA"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000006"),
                             DurationUnit = 3,
                             DurationValue = 1m,
                             IsActive = true,
                             IsPassive = true,
                             ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
                             ResponsibleRole = "Dizayn Mühendisi",
-                            SequenceNo = 4,
-                            TaskName = "TUV Tip Onay Süreci"
+                            SequenceNo = 6,
+                            TaskName = "TUV Tip Onay Süreci (Tüm Projeler İçin)"
                         },
                         new
                         {
-                            Id = new Guid("40000000-0000-0000-2221-000000000005"),
+                            Id = new Guid("40000000-0000-0000-2221-000000000007"),
                             DurationUnit = 1,
                             DurationValue = 6m,
                             IsActive = true,
                             IsPassive = false,
                             ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
                             ResponsibleRole = "Dizayn Mühendisi",
-                            SequenceNo = 5,
+                            SequenceNo = 7,
                             TaskName = "Genel Tip Onay Resmi"
                         },
                         new
                         {
-                            Id = new Guid("40000000-0000-0000-2221-000000000006"),
+                            Id = new Guid("40000000-0000-0000-2221-000000000008"),
+                            DurationUnit = 3,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = true,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 8,
+                            TaskName = "Onay ve kontrol süreci (TUV)"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000009"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 9,
+                            TaskName = "TANK BOMBE MONTAJ RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000010"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 10,
+                            TaskName = "TANK PUL ÇAPI KONTROL"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000011"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 11,
+                            TaskName = "TANK GÖVDE BOMBE KESİM RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000012"),
                             DurationUnit = 1,
                             DurationValue = 4m,
                             IsActive = true,
                             IsPassive = false,
                             ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
                             ResponsibleRole = "Dizayn Mühendisi",
-                            SequenceNo = 6,
+                            SequenceNo = 12,
                             TaskName = "TANK MONTAJ TASARIMI"
                         },
                         new
                         {
-                            Id = new Guid("40000000-0000-0000-2221-000000000007"),
+                            Id = new Guid("40000000-0000-0000-2221-000000000013"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 13,
+                            TaskName = "TANK REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000014"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 14,
+                            TaskName = "TANK AYAK TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000015"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 15,
+                            TaskName = "TANK AYAK REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000016"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 16,
+                            TaskName = "BOYA GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000017"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 17,
+                            TaskName = "ETİKET GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000018"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 18,
+                            TaskName = "ETİKET TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000019"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 19,
+                            TaskName = "Tank Manuel Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000020"),
                             DurationUnit = 1,
                             DurationValue = 2m,
                             IsActive = true,
                             IsPassive = false,
                             ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
                             ResponsibleRole = "Teknik Ressam",
-                            SequenceNo = 7,
+                            SequenceNo = 20,
                             TaskName = "TANK KESİM RESİMLERİNİN VE LİSTELERİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000021"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 21,
+                            TaskName = "TANK GÖVDE MONTAJ & NOZUL& DABLİN & TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000022"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 22,
+                            TaskName = "TANK AYAK TEKNİK RESİMLERİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000023"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 23,
+                            TaskName = "TANK AKSESUAR TEKNİK RESİMLERİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2221-000000000024"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222221"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 24,
+                            TaskName = "NAKLİYE RESMİ"
                         },
                         new
                         {
@@ -547,44 +751,1689 @@ namespace MVC.ProductManagement.Infrastructure.Migrations
                             ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
                             ResponsibleRole = "Dizayn Mühendisi",
                             SequenceNo = 8,
-                            TaskName = "TUV Tip Onay Süreci"
+                            TaskName = "TUV Tip Onay Süreci (Tüm Projeler İçin)"
                         },
                         new
                         {
                             Id = new Guid("40000000-0000-0000-2222-000000000009"),
                             DurationUnit = 1,
-                            DurationValue = 4m,
+                            DurationValue = 1m,
                             IsActive = true,
                             IsPassive = false,
                             ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
                             ResponsibleRole = "Dizayn Mühendisi",
                             SequenceNo = 9,
-                            TaskName = "İÇ TANK MONTAJ TASARIMI"
+                            TaskName = "İÇ TANK BOMBE MONTAJ RESMİ"
                         },
                         new
                         {
                             Id = new Guid("40000000-0000-0000-2222-000000000010"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 10,
+                            TaskName = "İÇ TANK PUL ÇAPI KONTROL"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000011"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 11,
+                            TaskName = "İÇ TANK GÖVDE BOMBE KESİM RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000012"),
                             DurationUnit = 1,
                             DurationValue = 4m,
                             IsActive = true,
                             IsPassive = false,
                             ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
                             ResponsibleRole = "Dizayn Mühendisi",
-                            SequenceNo = 10,
+                            SequenceNo = 12,
+                            TaskName = "İÇ TANK MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000013"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 13,
+                            TaskName = "İÇ TANK REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000014"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 14,
+                            TaskName = "İÇ TANK BORULAMA TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000015"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 15,
+                            TaskName = "İÇ TANK BORULAMA REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000016"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 16,
+                            TaskName = "DIŞ TANK BOMBE MONTAJ TEKNİK RESİM"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000017"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 17,
+                            TaskName = "DIŞ TANK PUL ÇAPI KONTROL"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000018"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 18,
+                            TaskName = "DIŞ TANK GÖVDE BOMBE KESİM RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000019"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 19,
                             TaskName = "DIŞ TANK MONTAJ TASARIMI"
                         },
                         new
                         {
-                            Id = new Guid("40000000-0000-0000-2222-000000000011"),
+                            Id = new Guid("40000000-0000-0000-2222-000000000020"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 20,
+                            TaskName = "DIŞ TANK REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000021"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 21,
+                            TaskName = "İGM MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000022"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 22,
+                            TaskName = "DIŞ BORULAMA TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000023"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 23,
+                            TaskName = "DIŞ BORULAMA REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000024"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 24,
+                            TaskName = "BUHARLIŞTIRICI TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000025"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 25,
+                            TaskName = "BUHARLIŞTIRICI REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000026"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 26,
+                            TaskName = "İZOLASYON GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000027"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 27,
+                            TaskName = "BOYA GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000028"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 28,
+                            TaskName = "ETİKET GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000029"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 29,
+                            TaskName = "ETİKET TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000030"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 30,
+                            TaskName = "Tank Manuel Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000031"),
                             DurationUnit = 1,
                             DurationValue = 2m,
                             IsActive = true,
                             IsPassive = false,
                             ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
                             ResponsibleRole = "Teknik Ressam",
-                            SequenceNo = 11,
+                            SequenceNo = 31,
                             TaskName = "DIŞ TANK KESİM RESİMLERİNİN VE LİSTELERİNİN HAZIRLANMASI"
-                        });
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000032"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 32,
+                            TaskName = "DIŞ TANK GÖVDE MONTAJ teknik resmi ( dış tank ring& ring sarımı & mapa yerleşimi & dablinler)"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000033"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 33,
+                            TaskName = "PROFİL AYAK MONTAJ RESMİNİN HAZIRLANMASI TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000034"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 34,
+                            TaskName = "İÇ TANK BORULAMA TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000035"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 35,
+                            TaskName = "İÇ TANK KESİM RESİMLERİNİN VE LİSTELERİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000036"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 36,
+                            TaskName = "İÇ TANK GÖVDE MONTAJ& NOZUL& DABLİN & TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000037"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 37,
+                            TaskName = "İGM MONTAJ TEKNİK RESİM"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000038"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 38,
+                            TaskName = "DIŞ BORULAMA  TEKNİK RESİM"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000039"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 39,
+                            TaskName = "EVAP KESİM RESİMLERİNİN VE LİSTELERİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000040"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 40,
+                            TaskName = "EVAP TEKNİK RESİM"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000041"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 41,
+                            TaskName = "NAKLİYE RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2222-000000000042"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 42,
+                            TaskName = "ASBUILT RESMİ HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000001"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 1,
+                            TaskName = "Hesaplamalar"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000002"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 2,
+                            TaskName = "GÖVDE BOMBE ORYANTASYON HAZIRLAMA"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000003"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 3,
+                            TaskName = "KRİTİK AKSESUAR LİSTESİ YAYINLAMA"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000004"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 4,
+                            TaskName = "P&ID HAZIRLAMA"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000005"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 5,
+                            TaskName = "GAD RESMİ ÇİZİMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000006"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 6,
+                            TaskName = "GAD RESMİ ÇİZİM ONAYI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000007"),
+                            DurationUnit = 1,
+                            DurationValue = 6m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 7,
+                            TaskName = "Genel Tip Onay Resmi"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000008"),
+                            DurationUnit = 3,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = true,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 8,
+                            TaskName = "TUV Tip Onay Süreci (Tüm Projeler İçin)"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000009"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 9,
+                            TaskName = "TANK BOMBE MONTAJ RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000010"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 10,
+                            TaskName = "TANK PUL ÇAPI KONTROL"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000011"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 11,
+                            TaskName = "TANK GÖVDE BOMBE KESİM RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000012"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 12,
+                            TaskName = "TANK MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000013"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 13,
+                            TaskName = "TANK MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000014"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 14,
+                            TaskName = "DALGAKIRAN TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000015"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 15,
+                            TaskName = "DALGAKIRAN REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000016"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 16,
+                            TaskName = "ŞASE MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000017"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 17,
+                            TaskName = "ŞASE MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000018"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 18,
+                            TaskName = "TANK AYAK MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000019"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 19,
+                            TaskName = "TANK AYAK MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000020"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 20,
+                            TaskName = "KİNG PİN & MEKANİK AYAK TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000021"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 21,
+                            TaskName = "KİNG PİN & MEKANİK AYAK REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000022"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 22,
+                            TaskName = "KONSOL MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000023"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 23,
+                            TaskName = "KONSOL MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000024"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 24,
+                            TaskName = "ŞASE MONTAJ SON MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000025"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 25,
+                            TaskName = "DIŞ BORULAMA TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000026"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 26,
+                            TaskName = "DIŞ BORULAMA REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000027"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 27,
+                            TaskName = "DOLAP TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000028"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 28,
+                            TaskName = "DOLAP REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000029"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 29,
+                            TaskName = "BOYA GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000030"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 30,
+                            TaskName = "ETİKET GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000031"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 31,
+                            TaskName = "ETİKET TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000032"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 32,
+                            TaskName = "Tank Manuel Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000033"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 33,
+                            TaskName = "TANK KESİM RESİMLERİNİN VE LİSTELERİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000034"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 34,
+                            TaskName = "Şase Kesim Resimlerinin Listelerinin Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000035"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 35,
+                            TaskName = "Şase Teknik Resmi"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000036"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 36,
+                            TaskName = "DALGAKIRAN KESİM LİSTESİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000037"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 37,
+                            TaskName = "TANK GÖVDE MONTAJ & NOZUL& DABLİN & TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000038"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 38,
+                            TaskName = "DALGAKIRAN TEKNİK RESİMLERİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000039"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 39,
+                            TaskName = "KİNG PİN & MEKANİK AYAK KESİM LİSTESİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000040"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 40,
+                            TaskName = "TANK AYAK MONTAJ TASARIMI & KİNG PİN & MEKANİK AYAK KESİM LİSTESİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000041"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 41,
+                            TaskName = "TANK AYAK MONTAJ TASARIMI & KİNG PİN & MEKANİK AYAK TEKNİK RESMİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000042"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 42,
+                            TaskName = "KONSOL MONTAJ TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000043"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 43,
+                            TaskName = "DOLAP TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000044"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 44,
+                            TaskName = "BORULAMA TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000045"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 45,
+                            TaskName = "NAKLİYE RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2223-000000000046"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 46,
+                            TaskName = "ASBUİLT"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000001"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 1,
+                            TaskName = "Hesaplamalar"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000002"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 2,
+                            TaskName = "GÖVDE BOMBE ORYANTASYON HAZIRLAMA"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000003"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 3,
+                            TaskName = "KRİTİK AKSESUAR LİSTESİ YAYINLAMA"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000004"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 4,
+                            TaskName = "P&ID HAZIRLAMA"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000005"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 5,
+                            TaskName = "GAD RESMİ ÇİZİMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000006"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teklif Hazırlama",
+                            SequenceNo = 6,
+                            TaskName = "GAD RESMİ ÇİZİM ONAYI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000007"),
+                            DurationUnit = 1,
+                            DurationValue = 6m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 7,
+                            TaskName = "Genel Tip Onay Resmi"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000008"),
+                            DurationUnit = 3,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = true,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 8,
+                            TaskName = "TUV Tip Onay Süreci (Tüm Projeler İçin)"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000009"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 9,
+                            TaskName = "İÇ TANK BOMBE MONTAJ RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000010"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 10,
+                            TaskName = "İÇ TANK PUL ÇAPI KONTROL"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000011"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 11,
+                            TaskName = "İÇ TANK GÖVDE BOMBE KESİM RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000012"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 12,
+                            TaskName = "DIŞ TANK BOMBE MONTAJ RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000013"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 13,
+                            TaskName = "DIŞ TANK PUL ÇAPI KONTROL"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000014"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 14,
+                            TaskName = "DIŞ TANK GÖVDE BOMBE KESİM RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000015"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 15,
+                            TaskName = "İÇ TANK MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000016"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 16,
+                            TaskName = "DALGAKIRAN TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000017"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 17,
+                            TaskName = "DALGAKIRAN REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000018"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 18,
+                            TaskName = "İÇ TANK MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000019"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 19,
+                            TaskName = "İÇ TANK İÇ BORULAMA MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000020"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 20,
+                            TaskName = "İÇ TANK İÇ BORULAMA MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000021"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 21,
+                            TaskName = "DIŞ TANK MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000022"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 22,
+                            TaskName = "DIŞ TANK MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000023"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 23,
+                            TaskName = "İGM MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000024"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 24,
+                            TaskName = "İGM MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000025"),
+                            DurationUnit = 1,
+                            DurationValue = 6m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 25,
+                            TaskName = "DIŞ BORULAMA TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000026"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 26,
+                            TaskName = "DIŞ BORULAMA REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000027"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 27,
+                            TaskName = "TANK AYAK MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000028"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 28,
+                            TaskName = "TANK AYAK MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000029"),
+                            DurationUnit = 1,
+                            DurationValue = 6m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 29,
+                            TaskName = "ŞASE MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000030"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 30,
+                            TaskName = "ŞASE MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000031"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 31,
+                            TaskName = "KİNG PİN & MEKANİK AYAK TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000032"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 32,
+                            TaskName = "KİNG PİN & MEKANİK AYAK REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000033"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 33,
+                            TaskName = "KONSOL MONTAJ TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000034"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 34,
+                            TaskName = "KONSOL MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000035"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 35,
+                            TaskName = "ŞASE MONTAJ SON MONTAJ REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000036"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 36,
+                            TaskName = "DOLAP TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000037"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 37,
+                            TaskName = "DOLAP REÇETESİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000038"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 38,
+                            TaskName = "BOYA GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000039"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 39,
+                            TaskName = "ETİKET GRUBU REÇETE GİRİŞ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000040"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 40,
+                            TaskName = "ETİKET TASARIMI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000041"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Dizayn Mühendisi",
+                            SequenceNo = 41,
+                            TaskName = "Tank Manuel Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000042"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 42,
+                            TaskName = "İç Tank Kesim Listelerinin Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000043"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 43,
+                            TaskName = "DALGAKIRAN KESİM LİSTESİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000044"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 44,
+                            TaskName = "DALGAKIRAN TEKNİK RESİMLERİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000045"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 45,
+                            TaskName = "İÇ TANK GÖVDE MONTAJ & NOZUL& DABLİN & TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000046"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 46,
+                            TaskName = "İç BORULAMA TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000047"),
+                            DurationUnit = 1,
+                            DurationValue = 1m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 47,
+                            TaskName = "Dış Tank Kesim Listelerinin Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000048"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 48,
+                            TaskName = "Dış TANK GÖVDE MONTAJ & NOZUL& DABLİN & TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000049"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 49,
+                            TaskName = "İGM MONTAJ TEKNİK RESİM"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000050"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 50,
+                            TaskName = "KİNG PİN & MEKANİK AYAK KESİM LİSTESİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000051"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 51,
+                            TaskName = "KİNG PİN & MEKANİK AYAK Teknik Resimlerinin HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000052"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 52,
+                            TaskName = "TANK AYAK MONTAJ TASARIMI & KİNG PİN & MEKANİK AYAK KESİM LİSTESİNİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000053"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 53,
+                            TaskName = "TANK AYAK MONTAJ TASARIMI & KİNG PİN & MEKANİK AYAK TEKNİK RESMİN HAZIRLANMASI"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000054"),
+                            DurationUnit = 1,
+                            DurationValue = 4m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 54,
+                            TaskName = "Şase Teknik Resimlerinin Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000055"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 55,
+                            TaskName = "KONSOL MONTAJ TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000056"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 56,
+                            TaskName = "Dolap Kesim Listelerinin Hazırlanması"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000057"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 57,
+                            TaskName = "DOLAP TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000058"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 58,
+                            TaskName = "Dış BORULAMA TEKNİK RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000059"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 59,
+                            TaskName = "NAKLİYE RESMİ"
+                        },
+                        new
+                        {
+                            Id = new Guid("40000000-0000-0000-2224-000000000060"),
+                            DurationUnit = 1,
+                            DurationValue = 2m,
+                            IsActive = true,
+                            IsPassive = false,
+                            ProjectTypeId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ResponsibleRole = "Teknik Ressam",
+                            SequenceNo = 60,
+                            TaskName = "ASBUİLT"
+                        }
+                    );
                 });
 
             modelBuilder.Entity("MVC.ProductManagement.Domain.Entities.AD2000Calculation", b =>

@@ -61,13 +61,16 @@ public class PlanningRepository : IPlanningRepository
             .FirstOrDefaultAsync(x => x.Id == projectTaskId);
     }
 
-    public async Task<IReadOnlyList<ProjectTask>> GetPlannedTasksForRangeAsync(DateTime start, DateTime end, bool orderByEmployee)
+    public async Task<IReadOnlyList<ProjectTask>> GetPlannedTasksForRangeAsync(DateTime start, DateTime end, bool orderByEmployee, bool matchStartOnly = false)
     {
-        var query = _context.DesignPlanningProjectTasks
+        IQueryable<ProjectTask> query = _context.DesignPlanningProjectTasks
             .AsNoTracking()
             .Include(x => x.Project).ThenInclude(x => x!.ProjectType)
-            .Include(x => x.AssignedEmployee)
-            .Where(x => x.PlannedStart < end && x.PlannedEnd >= start);
+            .Include(x => x.AssignedEmployee);
+
+        query = matchStartOnly
+            ? query.Where(x => x.PlannedStart >= start && x.PlannedStart < end)
+            : query.Where(x => x.PlannedStart < end && x.PlannedEnd >= start);
 
         query = orderByEmployee
             ? query.OrderBy(x => x.PlannedStart).ThenBy(x => x.AssignedEmployee!.FullName)
