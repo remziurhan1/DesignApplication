@@ -63,7 +63,7 @@ public class PlanningRepository : IPlanningRepository
 
     public async Task<IReadOnlyList<ProjectTask>> GetPlannedTasksForRangeAsync(DateTime start, DateTime end, bool orderByEmployee)
     {
-        var query = _context.DesignPlanningProjectTasks
+        IQueryable<ProjectTask> query = _context.DesignPlanningProjectTasks
             .AsNoTracking()
             .Include(x => x.Project).ThenInclude(x => x!.ProjectType)
             .Include(x => x.AssignedEmployee)
@@ -74,6 +74,11 @@ public class PlanningRepository : IPlanningRepository
             : query.OrderBy(x => x.PlannedStart).ThenBy(x => x.SequenceNo);
 
         return await query.ToListAsync();
+    }
+
+    async Task<IReadOnlyList<ProjectTask>> IPlanningRepository.GetPlannedTasksForRangeAsync(DateTime start, DateTime end, bool orderByEmployee)
+    {
+        return await GetPlannedTasksForRangeAsync(start, end, orderByEmployee);
     }
 
     public async Task<IReadOnlyList<Employee>> GetActiveEmployeesByExpertiseAsync(IReadOnlyCollection<string> expertiseNames)
