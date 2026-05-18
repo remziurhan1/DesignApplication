@@ -111,26 +111,53 @@ public class PlanningService : IPlanningService
     {
         var start = StartOfWeek(weekStartDate);
         var end = start.AddDays(7);
-        return await _planningRepository.GetPlannedTasksForRangeAsync(start, end, orderByEmployee: true);
+        return await _planningRepository.GetPlannedTasksForRangeAsync(start, end, orderByEmployee: true, matchStartOnly: true);
     }
 
 
     private async Task<Employee?> SelectEmployeeAsync(string role, string? projectTypeName, DateTime plannedDate)
     {
-        var keys = new[] { role, projectTypeName ?? string.Empty }.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-        var candidates = await _planningRepository.GetActiveEmployeesByExpertiseAsync(keys);
+        var candidates = await GetCandidatesByPriorityAsync(role, projectTypeName);
 
         if (!candidates.Any()) return null;
 
+        var expertiseKeys = GetSelectionExpertiseKeys(role, projectTypeName, candidates);
         var weekStart = StartOfWeek(plannedDate);
         var weekEnd = weekStart.AddDays(7);
         var loads = await _planningRepository.GetEmployeeLoadsByWeekAsync(weekStart, weekEnd);
 
         return candidates
             .OrderBy(x => loads.TryGetValue(x.Id, out var hours) ? hours : 0)
-            .ThenBy(x => x.Expertises.Where(e => keys.Contains(e.ExpertiseName)).Min(e => (int?)e.Priority) ?? int.MaxValue)
+            .ThenBy(x => x.Expertises.Where(e => expertiseKeys.Contains(e.ExpertiseName)).Min(e => (int?)e.Priority) ?? int.MaxValue)
             .ThenBy(x => x.FullName)
             .First();
+    }
+
+    private async Task<IReadOnlyList<Employee>> GetCandidatesByPriorityAsync(string role, string? projectTypeName)
+    {
+        var roleCandidates = string.IsNullOrWhiteSpace(role)
+            ? new List<Employee>()
+            : await _planningRepository.GetActiveEmployeesByExpertiseAsync(new[] { role });
+
+        if (roleCandidates.Any())
+        {
+            return roleCandidates;
+        }
+
+        return string.IsNullOrWhiteSpace(projectTypeName)
+            ? new List<Employee>()
+            : await _planningRepository.GetActiveEmployeesByExpertiseAsync(new[] { projectTypeName });
+    }
+
+    private static IReadOnlyCollection<string> GetSelectionExpertiseKeys(string role, string? projectTypeName, IReadOnlyList<Employee> candidates)
+    {
+        var roleMatches = candidates.Any(x => x.Expertises.Any(e => e.ExpertiseName == role));
+        if (roleMatches)
+        {
+            return new[] { role };
+        }
+
+        return string.IsNullOrWhiteSpace(projectTypeName) ? Array.Empty<string>() : new[] { projectTypeName };
     }
 
     private async Task<DateTime> FindStartWithCapacityAsync(Employee? employee, DateTime start, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads)
