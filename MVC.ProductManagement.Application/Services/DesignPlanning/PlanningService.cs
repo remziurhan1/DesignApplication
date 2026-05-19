@@ -53,6 +53,7 @@ public class PlanningService : IPlanningService
 
         var cursor = NextWorkStart(project.StartDate);
         var inMemoryLoads = new Dictionary<(Guid EmployeeId, DateTime Date), decimal>();
+        var preferredAssignees = new Dictionary<(Guid ProjectId, string Role), Guid>();
         foreach (var task in tasks)
         {
             if (task.Status == TaskStatus.Completed)
@@ -71,7 +72,11 @@ public class PlanningService : IPlanningService
             }
             else
             {
-                var employee = await SelectEmployeeAsync(task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads);
+                var employee = await SelectEmployeeAsync(project.Id, task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads, preferredAssignees);
+                if (employee != null)
+                {
+                    preferredAssignees[(project.Id, NormalizeRoleKey(task.ResponsibleRole))] = employee.Id;
+                }
                 task.AssignedEmployeeId = employee?.Id;
                 task.PlannedStart = await FindStartWithCapacityAsync(employee, cursor, inMemoryLoads);
                 task.PlannedEnd = await PlanActiveTaskAsync(employee, task.PlannedStart, ToHours(task.DurationValue, task.DurationUnit, employee), inMemoryLoads);
@@ -112,15 +117,26 @@ public class PlanningService : IPlanningService
     {
         var start = StartOfWeek(weekStartDate);
         var end = start.AddDays(7);
-        return await _planningRepository.GetPlannedTasksStartingInRangeAsync(start, end, orderByEmployee: true);
+        return await _planningRepository.GetPlannedTasksForRangeAsync(start, end, orderByEmployee: true);
     }
 
 
-    private async Task<Employee?> SelectEmployeeAsync(string role, string? projectTypeName, DateTime plannedDate, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads)
+    private async Task<Employee?> SelectEmployeeAsync(Guid projectId, string role, string? projectTypeName, DateTime plannedDate, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads, Dictionary<(Guid ProjectId, string Role), Guid> preferredAssignees)
     {
         var candidates = await GetCandidatesByPriorityAsync(role, projectTypeName);
 
         if (!candidates.Any()) return null;
+
+
+        var roleKey = NormalizeRoleKey(role);
+        if (preferredAssignees.TryGetValue((projectId, roleKey), out var preferredEmployeeId))
+        {
+            var preferred = candidates.FirstOrDefault(x => x.Id == preferredEmployeeId);
+            if (preferred != null)
+            {
+                return preferred;
+            }
+        }
 
         var expertiseKeys = GetSelectionExpertiseKeys(role, projectTypeName, candidates);
         var weekStart = StartOfWeek(plannedDate);
@@ -137,9 +153,10 @@ public class PlanningService : IPlanningService
 
     private async Task<IReadOnlyList<Employee>> GetCandidatesByPriorityAsync(string role, string? projectTypeName)
     {
-        var roleCandidates = string.IsNullOrWhiteSpace(role)
-            ? new List<Employee>()
-            : await _planningRepository.GetActiveEmployeesByExpertiseAsync(new[] { role });
+        var roleKeys = ExpandExpertiseKeys(role);
+        var roleCandidates = roleKeys.Any()
+            ? await _planningRepository.GetActiveEmployeesByExpertiseAsync(roleKeys)
+            : new List<Employee>();
 
         var projectTypeCandidates = string.IsNullOrWhiteSpace(projectTypeName)
             ? new List<Employee>()
@@ -164,15 +181,17 @@ public class PlanningService : IPlanningService
 
     private static IReadOnlyCollection<string> GetSelectionExpertiseKeys(string role, string? projectTypeName, IReadOnlyList<Employee> candidates)
     {
-        if (IsDesignEngineerRole(role) && !string.IsNullOrWhiteSpace(projectTypeName) && candidates.Any(x => x.Expertises.Any(e => e.ExpertiseName == projectTypeName)))
+        var roleKeys = ExpandExpertiseKeys(role);
+
+        if (IsDesignEngineerRole(role) && !string.IsNullOrWhiteSpace(projectTypeName) && candidates.Any(x => x.Expertises.Any(e => EqualsText(e.ExpertiseName, projectTypeName))))
         {
-            return new[] { projectTypeName, role };
+            return new[] { projectTypeName!, role };
         }
 
-        var roleMatches = candidates.Any(x => x.Expertises.Any(e => e.ExpertiseName == role));
+        var roleMatches = candidates.Any(x => x.Expertises.Any(e => roleKeys.Any(k => EqualsText(e.ExpertiseName, k))));
         if (roleMatches)
         {
-            return new[] { role };
+            return roleKeys;
         }
 
         return string.IsNullOrWhiteSpace(projectTypeName) ? Array.Empty<string>() : new[] { projectTypeName };
@@ -183,15 +202,50 @@ public class PlanningService : IPlanningService
         if (!expertiseKeys.Any()) return int.MaxValue;
 
         return expertiseKeys
-            .Select((key, index) => employee.Expertises.Any(e => e.ExpertiseName == key) ? index : int.MaxValue)
+            .Select((key, index) => employee.Expertises.Any(e => EqualsText(e.ExpertiseName, key)) ? index : int.MaxValue)
             .Min();
     }
 
     private static int GetExpertisePriority(Employee employee, IReadOnlyCollection<string> expertiseKeys)
     {
         return employee.Expertises
-            .Where(e => expertiseKeys.Contains(e.ExpertiseName))
+            .Where(e => expertiseKeys.Any(x => EqualsText(x, e.ExpertiseName)))
             .Min(e => (int?)e.Priority) ?? int.MaxValue;
+    }
+
+
+    private static string NormalizeRoleKey(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim().ToLowerInvariant();
+    }
+
+    private static IReadOnlyCollection<string> ExpandExpertiseKeys(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return Array.Empty<string>();
+
+        var rawKeys = value
+            .Split(new[] { ',', ';', '/', '|', '+', '-' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x.Trim())
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToList();
+
+        if (value.Contains(" ve ", StringComparison.OrdinalIgnoreCase))
+        {
+            rawKeys.AddRange(value.Split(" ve ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        var normalized = new HashSet<string>(rawKeys, StringComparer.OrdinalIgnoreCase);
+
+        if (value.Contains("dizayn", StringComparison.OrdinalIgnoreCase)) normalized.Add("Dizayn Mühendisi");
+        if (value.Contains("teknik ressam", StringComparison.OrdinalIgnoreCase)) normalized.Add("Teknik Ressam");
+        if (value.Contains("teklif", StringComparison.OrdinalIgnoreCase)) normalized.Add("Teklif Hazırlama");
+
+        return normalized.ToList();
+    }
+
+    private static bool EqualsText(string left, string right)
+    {
+        return string.Equals(left?.Trim(), right?.Trim(), StringComparison.OrdinalIgnoreCase);
     }
 
     private static decimal GetInMemoryLoadForWeek(Guid employeeId, DateTime weekStart, DateTime weekEnd, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads)
