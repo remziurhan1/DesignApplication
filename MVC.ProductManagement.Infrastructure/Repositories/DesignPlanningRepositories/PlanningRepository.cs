@@ -91,9 +91,17 @@ public class PlanningRepository : IPlanningRepository
 
     public async Task<IReadOnlyList<Employee>> GetActiveEmployeesByExpertiseAsync(IReadOnlyCollection<string> expertiseNames)
     {
+        var normalized = expertiseNames
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => x.Trim().ToLower())
+            .Distinct()
+            .ToList();
+
+        if (!normalized.Any()) return new List<Employee>();
+
         return await _context.DesignPlanningEmployees
             .Include(x => x.Expertises)
-            .Where(x => x.IsActive && x.Expertises.Any(e => expertiseNames.Contains(e.ExpertiseName)))
+            .Where(x => x.IsActive && x.Expertises.Any(e => normalized.Contains(e.ExpertiseName.Trim().ToLower())))
             .ToListAsync();
     }
 
