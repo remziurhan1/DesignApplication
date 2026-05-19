@@ -53,6 +53,7 @@ public class PlanningService : IPlanningService
 
         var cursor = NextWorkStart(project.StartDate);
         var inMemoryLoads = new Dictionary<(Guid EmployeeId, DateTime Date), decimal>();
+        var preferredAssignees = new Dictionary<(Guid ProjectId, string Role), Guid>();
         foreach (var task in tasks)
         {
             if (task.Status == TaskStatus.Completed)
@@ -71,7 +72,11 @@ public class PlanningService : IPlanningService
             }
             else
             {
-                var employee = await SelectEmployeeAsync(task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads);
+                var employee = await SelectEmployeeAsync(project.Id, task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads, preferredAssignees);
+                if (employee != null)
+                {
+                    preferredAssignees[(project.Id, NormalizeRoleKey(task.ResponsibleRole))] = employee.Id;
+                }
                 task.AssignedEmployeeId = employee?.Id;
                 task.PlannedStart = await FindStartWithCapacityAsync(employee, cursor, inMemoryLoads);
                 task.PlannedEnd = await PlanActiveTaskAsync(employee, task.PlannedStart, ToHours(task.DurationValue, task.DurationUnit, employee), inMemoryLoads);
@@ -116,11 +121,22 @@ public class PlanningService : IPlanningService
     }
 
 
-    private async Task<Employee?> SelectEmployeeAsync(string role, string? projectTypeName, DateTime plannedDate, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads)
+    private async Task<Employee?> SelectEmployeeAsync(Guid projectId, string role, string? projectTypeName, DateTime plannedDate, Dictionary<(Guid EmployeeId, DateTime Date), decimal> inMemoryLoads, Dictionary<(Guid ProjectId, string Role), Guid> preferredAssignees)
     {
         var candidates = await GetCandidatesByPriorityAsync(role, projectTypeName);
 
         if (!candidates.Any()) return null;
+
+
+        var roleKey = NormalizeRoleKey(role);
+        if (preferredAssignees.TryGetValue((projectId, roleKey), out var preferredEmployeeId))
+        {
+            var preferred = candidates.FirstOrDefault(x => x.Id == preferredEmployeeId);
+            if (preferred != null)
+            {
+                return preferred;
+            }
+        }
 
         var expertiseKeys = GetSelectionExpertiseKeys(role, projectTypeName, candidates);
         var weekStart = StartOfWeek(plannedDate);
@@ -197,6 +213,11 @@ public class PlanningService : IPlanningService
             .Min(e => (int?)e.Priority) ?? int.MaxValue;
     }
 
+
+    private static string NormalizeRoleKey(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim().ToLowerInvariant();
+    }
 
     private static IReadOnlyCollection<string> ExpandExpertiseKeys(string value)
     {
