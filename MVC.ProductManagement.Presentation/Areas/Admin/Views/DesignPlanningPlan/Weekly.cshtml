@@ -1,6 +1,47 @@
 @model MVC.ProductManagement.Presentation.Areas.Admin.Models.DesignPlanning.PlanFilterVm
 @using TaskStatus = DesignPlanning.Entities.TaskStatus
 @{ ViewData["Title"] = "Haftalık Dizayn Planı"; }
-<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"><h2>@ViewData["Title"]</h2><div class="d-flex flex-wrap gap-2"><a asp-action="Daily" asp-route-date="@Model.Date.ToString("yyyy-MM-dd")" class="btn btn-outline-primary">Günlük Plan</a><a asp-action="ExportWeekly" asp-route-date="@Model.Date.ToString("yyyy-MM-dd")" class="btn btn-success"><i class="bi bi-file-earmark-excel"></i> Excel Al</a><a asp-controller="DesignPlanningProjects" asp-action="Index" class="btn btn-secondary">Projeler</a></div></div>
-<form method="get" class="row g-2 mb-3"><div class="col-md-3"><input name="date" value="@Model.Date.ToString("yyyy-MM-dd")" type="date" class="form-control" /></div><div class="col-md-2"><button class="btn btn-primary">Göster</button></div></form>
-<table class="table table-striped table-bordered align-middle"><thead><tr><th>Atanan</th><th>Proje</th><th>Görev</th><th>Başlangıç</th><th>Bitiş</th><th>Durum</th></tr></thead><tbody>@foreach (var task in Model.Tasks) { var badge = task.Status == TaskStatus.Completed ? "bg-success" : task.Status == TaskStatus.Delayed ? "bg-danger" : task.IsPassive ? "bg-info text-dark" : "bg-secondary"; <tr><td>@(task.AssignedEmployee?.FullName ?? "Pasif takip")</td><td>@task.Project?.ProjectCode<br /><small>@task.Project?.ProjectName</small></td><td>@task.SequenceNo - @task.TaskName @if (task.IsPassive) {<span class="badge bg-info text-dark">Pasif</span>}</td><td>@task.PlannedStart.ToString("dd.MM.yyyy HH:mm")</td><td>@task.PlannedEnd.ToString("dd.MM.yyyy HH:mm")</td><td><span class="badge @badge">@task.Status</span></td></tr>}</tbody></table>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h2>@ViewData["Title"]</h2>
+    <div class="d-flex flex-wrap gap-2">
+        <a asp-action="Daily" asp-route-date="@Model.Date.ToString("yyyy-MM-dd")" class="btn btn-outline-primary">Günlük Plan</a>
+        <a asp-action="ExportWeekly" asp-route-week="@Model.WeekInput" class="btn btn-success"><i class="bi bi-file-earmark-excel"></i> Excel Al</a>
+        <a asp-controller="DesignPlanningProjects" asp-action="Index" class="btn btn-secondary">Projeler</a>
+    </div>
+</div>
+
+<form method="get" class="row g-2 mb-3 align-items-end">
+    <div class="col-md-3">
+        <label class="form-label">Hafta seç</label>
+        <input name="week" value="@Model.WeekInput" type="week" class="form-control" />
+    </div>
+    <div class="col-md-2"><button class="btn btn-primary">Göster</button></div>
+</form>
+
+@if (Model.WeekStart.HasValue && Model.WeekEnd.HasValue)
+{
+    <div class="alert alert-info py-2">
+        Seçili hafta: <strong>@Model.WeekStart.Value.ToString("dd.MM.yyyy")</strong> - <strong>@Model.WeekEnd.Value.ToString("dd.MM.yyyy")</strong>
+    </div>
+}
+
+<div class="table-responsive">
+<table class="table table-striped table-bordered align-middle">
+    <thead><tr><th>Atanan</th><th>Proje</th><th>Görev</th><th>Başlangıç</th><th>Bitiş</th><th>Durum</th></tr></thead>
+    <tbody>
+    @foreach (var task in Model.Tasks)
+    {
+        var badge = task.Status == TaskStatus.Completed ? "bg-success" : task.Status == TaskStatus.Delayed ? "bg-danger" : task.IsPassive ? "bg-info text-dark" : "bg-secondary";
+        <tr>
+            <td>@(task.AssignedEmployee?.FullName ?? "Pasif takip")</td>
+            <td>@task.Project?.ProjectCode<br /><small>@task.Project?.ProjectName</small></td>
+            <td>@task.SequenceNo - @task.TaskName @if (task.IsPassive) {<span class="badge bg-info text-dark">Pasif</span>}</td>
+            <td>@task.PlannedStart.ToString("dd.MM.yyyy HH:mm")</td>
+            <td>@task.PlannedEnd.ToString("dd.MM.yyyy HH:mm")</td>
+            <td><span class="badge @badge">@task.Status</span></td>
+        </tr>
+    }
+    </tbody>
+</table>
+</div>
+
