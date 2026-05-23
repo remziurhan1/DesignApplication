@@ -37,12 +37,20 @@
         html, body {
             margin: 0;
             padding: 0;
+            height: auto;
+            min-height: 100%;
+        }
+
+        body {
+            overflow-y: auto;
         }
 
         /* Header fixed olduğu için içerik aşağıdan başlasın */
         #main {
             margin-top: 80px; /* header yüksekliğine göre ayarla (70–90px arası) */
-            min-height: calc(100vh - 80px);
+            min-height: calc(100vh - 140px);
+            height: auto;
+            overflow: visible;
             padding-bottom: 24px;
         }
 
