@@ -18,13 +18,13 @@ public class PlanningService : IPlanningService
     public async Task GenerateProjectTasksAsync(Guid projectId)
     {
         var project = await _planningRepository.GetProjectByIdAsync(projectId) ?? throw new InvalidOperationException("Proje bulunamadı.");
-        var hasTasks = await _planningRepository.HasProjectTasksAsync(projectId);
-        if (hasTasks) return;
-
         var templates = await _planningRepository.GetActiveTaskTemplatesAsync(project.ProjectTypeId);
+        var existingTasks = await _planningRepository.GetProjectTasksOrderedAsync(projectId);
 
-        var projectTasks = templates.Select(template => new ProjectTask
+        if (existingTasks.Count == 0)
         {
+            var projectTasks = templates.Select(template => new ProjectTask
+            {
                 Id = Guid.NewGuid(),
                 ProjectId = project.Id,
                 TaskTemplateId = template.Id,
@@ -37,9 +37,43 @@ public class PlanningService : IPlanningService
                 PlannedStart = project.StartDate.Date.Add(WorkStart),
                 PlannedEnd = project.StartDate.Date.Add(WorkStart),
                 Status = TaskStatus.Waiting
-        });
+            });
 
-        await _planningRepository.AddProjectTasksAsync(projectTasks);
+            await _planningRepository.AddProjectTasksAsync(projectTasks);
+            await _planningRepository.CommitAsync();
+            return;
+        }
+
+        var existingTemplateIds = existingTasks
+            .Where(x => x.TaskTemplateId != Guid.Empty)
+            .Select(x => x.TaskTemplateId)
+            .ToHashSet();
+
+        var missingTasks = templates
+            .Where(template => !existingTemplateIds.Contains(template.Id))
+            .Select(template => new ProjectTask
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = project.Id,
+                TaskTemplateId = template.Id,
+                SequenceNo = template.SequenceNo,
+                ResponsibleRole = template.ResponsibleRole,
+                TaskName = template.TaskName,
+                DurationValue = template.DurationValue,
+                DurationUnit = template.DurationUnit,
+                IsPassive = template.IsPassive,
+                PlannedStart = project.StartDate.Date.Add(WorkStart),
+                PlannedEnd = project.StartDate.Date.Add(WorkStart),
+                Status = TaskStatus.Waiting
+            })
+            .ToList();
+
+        if (!missingTasks.Any())
+        {
+            return;
+        }
+
+        await _planningRepository.AddProjectTasksAsync(missingTasks);
         await _planningRepository.CommitAsync();
     }
 
