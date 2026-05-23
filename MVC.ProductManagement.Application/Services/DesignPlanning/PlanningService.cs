@@ -69,18 +69,19 @@ public class PlanningService : IPlanningService
             {
                 task.AssignedEmployeeId = null;
                 task.PlannedEnd = NextWorkStart(AddPassiveDuration(cursor, task.DurationValue, task.DurationUnit));
+                task.Status = task.PlannedEnd.Date < DateTime.Today && task.Status != TaskStatus.Completed ? TaskStatus.Delayed : TaskStatus.Planned;
+                continue;
             }
-            else
+
+            var employee = await SelectEmployeeAsync(project.Id, task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads, preferredAssignees);
+            if (employee != null)
             {
-                var employee = await SelectEmployeeAsync(project.Id, task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads, preferredAssignees);
-                if (employee != null)
-                {
-                    preferredAssignees[(project.Id, NormalizeRoleKey(task.ResponsibleRole))] = employee.Id;
-                }
-                task.AssignedEmployeeId = employee?.Id;
-                task.PlannedStart = await FindStartWithCapacityAsync(employee, cursor, inMemoryLoads);
-                task.PlannedEnd = await PlanActiveTaskAsync(employee, task.PlannedStart, ToHours(task.DurationValue, task.DurationUnit, employee), inMemoryLoads);
+                preferredAssignees[(project.Id, NormalizeRoleKey(task.ResponsibleRole))] = employee.Id;
             }
+
+            task.AssignedEmployeeId = employee?.Id;
+            task.PlannedStart = await FindStartWithCapacityAsync(employee, cursor, inMemoryLoads);
+            task.PlannedEnd = await PlanActiveTaskAsync(employee, task.PlannedStart, ToHours(task.DurationValue, task.DurationUnit, employee), inMemoryLoads);
 
             task.Status = task.PlannedEnd.Date < DateTime.Today && task.Status != TaskStatus.Completed ? TaskStatus.Delayed : TaskStatus.Planned;
             cursor = task.PlannedEnd;
