@@ -25,6 +25,7 @@
     </div>
 }
 
+<div class="table-responsive">
 <table class="table table-striped table-bordered align-middle">
     <thead><tr><th>Atanan</th><th>Proje</th><th>Görev</th><th>Başlangıç</th><th>Bitiş</th><th>Durum</th></tr></thead>
     <tbody>
@@ -42,3 +43,16 @@
     }
     </tbody>
 </table>
+</div>
+
+@section Styles {
+    <style>
+        body {
+            overflow-y: auto !important;
+        }
+
+        #main {
+            overflow: visible !important;
+        }
+    </style>
+}
