@@ -37,13 +37,27 @@
         html, body {
             margin: 0;
             padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         /* Header fixed olduğu için içerik aşağıdan başlasın */
         #main {
-            margin-top: 80px; /* header yüksekliğine göre ayarla (70–90px arası) */
-            min-height: calc(100vh - 80px);
-            padding-bottom: 24px;
+            margin-top: 80px;
+            min-height: auto;
+            height: auto;
+            overflow: visible;
+            padding-bottom: 32px;
+        }
+
+        #footer.footer {
+            position: static !important;
+            width: auto;
+            margin-top: 16px;
         }
 
         .footer {
@@ -54,23 +68,11 @@
             text-align: center;
         }
 
-        /* Sidebar collapse düzeni */
-        .nav-content {
-            padding-left: 20px;
-        }
+        .nav-content { padding-left: 20px; }
+        .nav-content li a { padding: 8px 0 8px 30px; font-size: 14px; }
+        .nav-content li a:hover { background-color: #f6f9ff; }
 
-            .nav-content li a {
-                padding: 8px 0 8px 30px;
-                font-size: 14px;
-            }
-
-                .nav-content li a:hover {
-                    background-color: #f6f9ff;
-                }
-
-        .container, .container-fluid {
-            margin-bottom: 40px;
-        }
+        .container, .container-fluid { margin-bottom: 40px; }
     </style>
 
 </head>

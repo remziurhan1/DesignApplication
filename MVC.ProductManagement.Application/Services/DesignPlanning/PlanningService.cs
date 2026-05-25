@@ -18,13 +18,13 @@ public class PlanningService : IPlanningService
     public async Task GenerateProjectTasksAsync(Guid projectId)
     {
         var project = await _planningRepository.GetProjectByIdAsync(projectId) ?? throw new InvalidOperationException("Proje bulunamadı.");
-        var hasTasks = await _planningRepository.HasProjectTasksAsync(projectId);
-        if (hasTasks) return;
-
         var templates = await _planningRepository.GetActiveTaskTemplatesAsync(project.ProjectTypeId);
+        var existingTasks = await _planningRepository.GetProjectTasksOrderedAsync(projectId);
 
-        var projectTasks = templates.Select(template => new ProjectTask
+        if (existingTasks.Count == 0)
         {
+            var projectTasks = templates.Select(template => new ProjectTask
+            {
                 Id = Guid.NewGuid(),
                 ProjectId = project.Id,
                 TaskTemplateId = template.Id,
@@ -37,9 +37,43 @@ public class PlanningService : IPlanningService
                 PlannedStart = project.StartDate.Date.Add(WorkStart),
                 PlannedEnd = project.StartDate.Date.Add(WorkStart),
                 Status = TaskStatus.Waiting
-        });
+            });
 
-        await _planningRepository.AddProjectTasksAsync(projectTasks);
+            await _planningRepository.AddProjectTasksAsync(projectTasks);
+            await _planningRepository.CommitAsync();
+            return;
+        }
+
+        var existingTemplateIds = existingTasks
+            .Where(x => x.TaskTemplateId != Guid.Empty)
+            .Select(x => x.TaskTemplateId)
+            .ToHashSet();
+
+        var missingTasks = templates
+            .Where(template => !existingTemplateIds.Contains(template.Id))
+            .Select(template => new ProjectTask
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = project.Id,
+                TaskTemplateId = template.Id,
+                SequenceNo = template.SequenceNo,
+                ResponsibleRole = template.ResponsibleRole,
+                TaskName = template.TaskName,
+                DurationValue = template.DurationValue,
+                DurationUnit = template.DurationUnit,
+                IsPassive = template.IsPassive,
+                PlannedStart = project.StartDate.Date.Add(WorkStart),
+                PlannedEnd = project.StartDate.Date.Add(WorkStart),
+                Status = TaskStatus.Waiting
+            })
+            .ToList();
+
+        if (!missingTasks.Any())
+        {
+            return;
+        }
+
+        await _planningRepository.AddProjectTasksAsync(missingTasks);
         await _planningRepository.CommitAsync();
     }
 
@@ -51,39 +85,58 @@ public class PlanningService : IPlanningService
 
         var tasks = await _planningRepository.GetProjectTasksOrderedAsync(projectId);
 
-        var cursor = NextWorkStart(project.StartDate);
+        var projectCursor = NextWorkStart(project.StartDate);
+        var designCursor = projectCursor;
         var inMemoryLoads = new Dictionary<(Guid EmployeeId, DateTime Date), decimal>();
         var preferredAssignees = new Dictionary<(Guid ProjectId, string Role), Guid>();
         foreach (var task in tasks)
         {
             if (task.Status == TaskStatus.Completed)
             {
-                cursor = task.PlannedEnd == default ? cursor : task.PlannedEnd;
+                if (task.PlannedEnd != default)
+                {
+                    if (IsDesignTask(task))
+                    {
+                        designCursor = task.PlannedEnd;
+                    }
+                    else
+                    {
+                        projectCursor = task.PlannedEnd;
+                    }
+                }
                 continue;
             }
 
-            cursor = NextWorkStart(cursor);
-            task.PlannedStart = cursor;
+            var taskCursor = NextWorkStart(IsDesignTask(task) ? designCursor : projectCursor);
+            task.PlannedStart = taskCursor;
 
             if (task.IsPassive)
             {
                 task.AssignedEmployeeId = null;
-                task.PlannedEnd = NextWorkStart(AddPassiveDuration(cursor, task.DurationValue, task.DurationUnit));
+                task.PlannedEnd = NextWorkStart(AddPassiveDuration(taskCursor, task.DurationValue, task.DurationUnit));
+                task.Status = task.PlannedEnd.Date < DateTime.Today && task.Status != TaskStatus.Completed ? TaskStatus.Delayed : TaskStatus.Planned;
+                continue;
+            }
+
+            var employee = await SelectEmployeeAsync(project.Id, task.ResponsibleRole, project.ProjectType?.Name, taskCursor, inMemoryLoads, preferredAssignees);
+            if (employee != null)
+            {
+                preferredAssignees[(project.Id, NormalizeRoleKey(task.ResponsibleRole))] = employee.Id;
+            }
+
+            task.AssignedEmployeeId = employee?.Id;
+            task.PlannedStart = await FindStartWithCapacityAsync(employee, taskCursor, inMemoryLoads);
+            task.PlannedEnd = await PlanActiveTaskAsync(employee, task.PlannedStart, ToHours(task.DurationValue, task.DurationUnit, employee), inMemoryLoads);
+
+            task.Status = task.PlannedEnd.Date < DateTime.Today && task.Status != TaskStatus.Completed ? TaskStatus.Delayed : TaskStatus.Planned;
+            if (IsDesignTask(task))
+            {
+                designCursor = task.PlannedEnd;
             }
             else
             {
-                var employee = await SelectEmployeeAsync(project.Id, task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads, preferredAssignees);
-                if (employee != null)
-                {
-                    preferredAssignees[(project.Id, NormalizeRoleKey(task.ResponsibleRole))] = employee.Id;
-                }
-                task.AssignedEmployeeId = employee?.Id;
-                task.PlannedStart = await FindStartWithCapacityAsync(employee, cursor, inMemoryLoads);
-                task.PlannedEnd = await PlanActiveTaskAsync(employee, task.PlannedStart, ToHours(task.DurationValue, task.DurationUnit, employee), inMemoryLoads);
+                projectCursor = task.PlannedEnd;
             }
-
-            task.Status = task.PlannedEnd.Date < DateTime.Today && task.Status != TaskStatus.Completed ? TaskStatus.Delayed : TaskStatus.Planned;
-            cursor = task.PlannedEnd;
         }
 
         project.Status = ProjectStatus.Planned;
@@ -341,6 +394,14 @@ public class PlanningService : IPlanningService
         var result = value.Date == date && value.TimeOfDay > WorkStart ? value : date.Add(WorkStart);
         while (result.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday) result = result.Date.AddDays(1).Add(WorkStart);
         return result;
+    }
+
+
+    private static bool IsDesignTask(ProjectTask task)
+    {
+        return task.ResponsibleRole.Contains("Dizayn", StringComparison.OrdinalIgnoreCase)
+            || task.TaskName.Contains("TASARIM", StringComparison.OrdinalIgnoreCase)
+            || task.TaskName.Contains("TIP", StringComparison.OrdinalIgnoreCase);
     }
 
     private static DateTime StartOfWeek(DateTime value)
