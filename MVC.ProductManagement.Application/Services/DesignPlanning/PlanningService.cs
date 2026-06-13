@@ -85,40 +85,58 @@ public class PlanningService : IPlanningService
 
         var tasks = await _planningRepository.GetProjectTasksOrderedAsync(projectId);
 
-        var cursor = NextWorkStart(project.StartDate);
+        var projectCursor = NextWorkStart(project.StartDate);
+        var designCursor = projectCursor;
         var inMemoryLoads = new Dictionary<(Guid EmployeeId, DateTime Date), decimal>();
         var preferredAssignees = new Dictionary<(Guid ProjectId, string Role), Guid>();
         foreach (var task in tasks)
         {
             if (task.Status == TaskStatus.Completed)
             {
-                cursor = task.PlannedEnd == default ? cursor : task.PlannedEnd;
+                if (task.PlannedEnd != default)
+                {
+                    if (IsDesignTask(task))
+                    {
+                        designCursor = task.PlannedEnd;
+                    }
+                    else
+                    {
+                        projectCursor = task.PlannedEnd;
+                    }
+                }
                 continue;
             }
 
-            cursor = NextWorkStart(cursor);
-            task.PlannedStart = cursor;
+            var taskCursor = NextWorkStart(IsDesignTask(task) ? designCursor : projectCursor);
+            task.PlannedStart = taskCursor;
 
             if (task.IsPassive)
             {
                 task.AssignedEmployeeId = null;
-                task.PlannedEnd = NextWorkStart(AddPassiveDuration(cursor, task.DurationValue, task.DurationUnit));
+                task.PlannedEnd = NextWorkStart(AddPassiveDuration(taskCursor, task.DurationValue, task.DurationUnit));
                 task.Status = task.PlannedEnd.Date < DateTime.Today && task.Status != TaskStatus.Completed ? TaskStatus.Delayed : TaskStatus.Planned;
                 continue;
             }
 
-            var employee = await SelectEmployeeAsync(project.Id, task.ResponsibleRole, project.ProjectType?.Name, cursor, inMemoryLoads, preferredAssignees);
+            var employee = await SelectEmployeeAsync(project.Id, task.ResponsibleRole, project.ProjectType?.Name, taskCursor, inMemoryLoads, preferredAssignees);
             if (employee != null)
             {
                 preferredAssignees[(project.Id, NormalizeRoleKey(task.ResponsibleRole))] = employee.Id;
             }
 
             task.AssignedEmployeeId = employee?.Id;
-            task.PlannedStart = await FindStartWithCapacityAsync(employee, cursor, inMemoryLoads);
+            task.PlannedStart = await FindStartWithCapacityAsync(employee, taskCursor, inMemoryLoads);
             task.PlannedEnd = await PlanActiveTaskAsync(employee, task.PlannedStart, ToHours(task.DurationValue, task.DurationUnit, employee), inMemoryLoads);
 
             task.Status = task.PlannedEnd.Date < DateTime.Today && task.Status != TaskStatus.Completed ? TaskStatus.Delayed : TaskStatus.Planned;
-            cursor = task.PlannedEnd;
+            if (IsDesignTask(task))
+            {
+                designCursor = task.PlannedEnd;
+            }
+            else
+            {
+                projectCursor = task.PlannedEnd;
+            }
         }
 
         project.Status = ProjectStatus.Planned;
@@ -376,6 +394,14 @@ public class PlanningService : IPlanningService
         var result = value.Date == date && value.TimeOfDay > WorkStart ? value : date.Add(WorkStart);
         while (result.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday) result = result.Date.AddDays(1).Add(WorkStart);
         return result;
+    }
+
+
+    private static bool IsDesignTask(ProjectTask task)
+    {
+        return task.ResponsibleRole.Contains("Dizayn", StringComparison.OrdinalIgnoreCase)
+            || task.TaskName.Contains("TASARIM", StringComparison.OrdinalIgnoreCase)
+            || task.TaskName.Contains("TIP", StringComparison.OrdinalIgnoreCase);
     }
 
     private static DateTime StartOfWeek(DateTime value)
